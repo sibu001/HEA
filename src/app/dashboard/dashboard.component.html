@@ -1,0 +1,223 @@
+<section class="space-top">
+    <div class="container-fluid">
+        <div class="row">
+            <input #inp1 id="myInput" type="text" class="inputhide">
+            <div class="messages_responsive" *ngIf="users.customerMailList!=null&&users.customerMailList!=undefined&&hideMsgs">
+                <p class="messages">You have {{users.customerMailList.length}} unread messages.
+                    <a class="view" [routerLink]="['/MailArchiveList']">View</a>
+                    <span class="icon_wrong" (click)="hideMsg()">
+                        <i class="fa fa-close shift"></i>
+                    </span>
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="back color">
+                    <!-- leak view -->
+                    <div class="back-color-silver">
+                        <br>
+                        <p class="views_leaks" *ngIf="leakList!=null&&leakList!=undefined&&leakList.length>0">
+                            <span class="leaks">
+                            <a class="anchorTag" (click)="leakView(1)">View {{users.leakList.length}} leaks</a>
+                        </span> wasting
+                            <span class="dollar">${{ leakPriceValueSum | number : '1.2-2' }}</span> per year
+                        </p>
+                        <div class="row number">
+                            <!-- <ul class="demoleaks1" *ngIf="leakList!=null&&leakList!=undefined&&leakList.length>0">
+                                <ng-container *ngFor="let leaks of users.leakList;">
+                                    <li>
+                                        <button type="button" class="btn btn-primary button leaksdiscovery" (click)="leakView(1)">
+                                            <img src="assets/images/{{leaks.recommendation.takebackIcon}}" class="leak_img">
+                                        </button>
+                                        <span class="leak_count">{{leaks.repeat}}</span>
+                                    </li>
+                                </ng-container>
+                                
+                            </ul> -->
+                            <div class="containercss">
+                                <ng-container *ngFor="let leaks of leakList;index as i">
+                                    <p>
+                                        <button type="button" class="btn btn-primary button leaksdiscovery" (click)="leakView(1)">
+                                            <img src="assets/images/{{leaks.recommendation.takebackIcon}}" class="leak_img">
+                                        
+                                        </button>
+                                        <span class="leak_count">{{leaks.repeat}}</span>
+                                    </p>
+                                </ng-container>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- show recommndation -->
+                    <div class="show_recommd" *ngIf="recommendationList!=null&&recommendationList!=undefined&&recommendationList.length>0">
+                        <p class="recommendations">
+                            <span class="leaks">
+                                <a class="anchorTag" [routerLink]="['/surveyRecommendationList']">View {{users.recommendationList.length}}
+                                    recommendations</a>
+                            </span> 
+                                <!-- saving
+                            <span class="dollar">${{ recommendationPriceValueSum | number : '1.2-2' }}</span> per year -->
+                        </p>
+                        <ng-container *ngFor="let item of recommendationList | sortgrid:'-priceValue';index as i">
+                            <div class="row responsiveRecomendation" *ngIf="i<3">
+                                <div class="col-sm-1 col-xs-2 status-img">
+                                    <span *ngIf="item.status=='N'">
+                                        <img src="assets/images/status-unchecked.png" class="status-unchecked">
+                                    </span>
+                                    <!-- <span *ngIf="item.status=='Y'">
+                                        <img src="assets/images/colorbox.png" class="status-unchecked">
+                                    </span> -->
+                                    <span *ngIf="item.status=='L'">
+                                        <img src="assets/images/lightcheck.png" class="status-unchecked">
+                                    </span>
+                                    <!-- <span *ngIf="item.status=='D'">
+                                        <img src="assets/images/status-notapplicable.png" class="status-unchecked">
+                                    </span> -->
+                                </div>
+                                <div class="col-sm-10 col-xs-10 sch">
+                                    <a class="Schedule" (click)="surveyRecommendationList(8)">{{item.recommendation.takebackLabel}}</a>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <!-- next topic -->
+                    <hr class="nextTopicHr">
+                    <div class="nextTopic">
+                    <br>
+                    <p class="resume_topic">Resume Next Topic
+                        <!-- <a [routerLink]="['/topicshistory']" class="topic_list">Topic</a> -->
+                    </p>
+                    <h4 class="title_topic">
+                        <a class="anchorTag" (click)="surveyView(surveyCode,surveyId)">{{nextTopic}}</a>
+                        <p *ngIf="nextTopic==undefined">no new topic at this time</p>
+                    </h4>
+                    <p class="Description" *ngIf="topicdescription != undefined">{{topicdescription}}</p>
+                    <br>
+                    </div>
+                    <hr class="nextTopicHr">
+                    <!-- my reports name -->
+                    <div class="Reports_responsive" *ngIf="myReportsList!=null&&myReportsList!=undefined">
+                        <p class="Reports">My Reports</p>
+                        <ul class="demo">
+                            <li class="Reports_title" *ngFor="let reportList of myReportsList">
+                                <a class="anchorTagTitle" target="_blank" href="{{reportList.reportLink}}">{{reportList.reportLabel}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-9">
+                <!-- show message -->
+                <div class="messages_top" *ngIf="users.customerMailList!=null&&users.customerMailList!=undefined&&hideMsgs">
+                    <p class="messages">You have {{users.customerMailList.length}} unread messages.
+                        <a class="view" [routerLink]="['/MailArchiveList']">View</a>
+                        <span class="icon_wrong" (click)="hideMsg()" style="cursor:pointer;">
+                            <i class="fa fa-close shift"></i>
+                        </span>
+                    </p>
+                </div>
+                <!-- show recommndation -->
+                <div class="show_recommdations" *ngIf="recommendationList!=null&&recommendationList!=undefined&&recommendationList.length>0">
+                    <p class="recommendations">
+                        <span class="leaks">
+                            <a class="anchorTag" [routerLink]="['/surveyRecommendationList']">View {{users.recommendationList.length}}
+                                recommendations</a>
+                        </span>
+                             <!-- saving
+                        <span class="dollar">${{ recommendationPriceValueSum | number : '1.2-2' }}</span> per year -->
+                    </p>
+                    <ng-container *ngFor="let item of recommendationList | sortgrid:'-priceValue';index as i">
+                        <p *ngIf="i<3">
+                            <span hidden>{{ calculateFunction() }}</span>
+                            <span *ngIf="item.status=='N'">
+                                <img src="assets/images/status-unchecked.png" class="status-unchecked">
+                            </span>
+                            <!-- <span *ngIf="item.status=='Y'">
+                                <img src="assets/images/colorbox.png" class="status-unchecked">
+                            </span> -->
+                            <span *ngIf="item.status=='L'">
+                                <img src="assets/images/lightcheck.png" class="status-unchecked">
+                            </span>
+                            <!-- <span *ngIf="item.status=='D'">
+                                <img src="assets/images/status-notapplicable.png" class="status-unchecked">
+                            </span>  -->
+                            &nbsp;
+                            <span class="recommendations_color">
+                                <a class="anchorTagTitle" (click)="surveyRecommendationList(8)">{{item.recommendation.takebackLabel}}</a>
+                            </span>
+                        </p>
+                    </ng-container>
+                </div>
+                <hr class="hr_space">
+                <p class="trend">
+                    <a class="anchorTag" [routerLink]="['/trendingPartsView']">View trend details</a>
+                </p>
+                <!-- trend chart -->
+                <div class="row view_trend" *ngIf="trendingParts.length>0">
+                    <div class="view trend space">
+                        <ng-container *ngFor="let chartData of trendingParts[0].trendingCharts">
+                            <div *ngIf="chartData.chart.freeChartConfigurationJS!=null" [innerHTML]="chartData.chart.freeChartDiv | safeHtml"></div>
+                        </ng-container>
+                    </div>
+                </div>
+                <hr class="hr_space">
+
+                <div class="row">
+                    <div class="col-sm-8">
+                        <p class="trendProfile">
+                            <a class="anchorTag" [routerLink]="['/trendingProfileView']">View profile details</a>
+                            <img src="assets/images/icon_help.svg" (click)="hideHelps=true" class="question">
+                        </p>
+                        <div class="hide_backgroundsmall" *ngIf="hideHelps">
+                            <p class="help">Help text goes here. It no longer is a pop-up, but is now an expanded section. The help section
+                                text could get somewhat long and would just wrap around like this.</p>
+                            <p class="hide_text" (click)="hideHelps=false">hide</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <p class="question_icon">
+                            <img src="assets/images/icon_help.svg" class="question_mark" (click)="hideHelps=true" style="cursor:pointer">
+                        </p>
+                        <!-- <div class="hide_background" *ngIf="hideHelps">
+                            <p class="help">Help text goes here. It no longer is a pop-up, but is now an expanded section. The help section
+                                text could get somewhat long and would just wrap around like this.</p>
+                            <p class="hide_text" (click)="hideHelps=false">hide</p>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="row" *ngIf="hideHelps">
+                     <div class="col-sm-12">
+                      <div class="hide_background" >
+                            <p class="help">Help text goes here. It no longer is a pop-up, but is now an expanded section. The help section
+                                text could get somewhat long and would just wrap around like this.</p>
+                            <p class="hide_text" (click)="hideHelps=false">hide</p>
+                        </div>
+                     </div>
+                </div>
+                <!-- help text and area chart -->
+                <div class="row">
+                    <div class="col-sm-12" *ngIf="trendingHomeChart!=undefined">
+                        <div [innerHTML]="trendingHomeChart.chart.freeChartDiv | safeHtml" class="chartDiv"></div>
+                    </div>
+                </div>
+
+                <!-- topic name -->
+                <div class="row back_color">
+                    <div class="Reportstitle_responsive">
+                        <p class="Reports">My Reports</p>
+                        <ul class="demo" *ngIf="myReportsList!=null&&myReportsList!=undefined">
+                            <li class="Reports_title" *ngFor="let reportList of myReportsList">
+                                <a class="anchorTagTitle" target="_blank" href="{{reportList.reportLink}}">{{reportList.reportLabel}}</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="tooltipsnorms2"></div>
+            </div>
+        </div>
+    </div>
+</section>

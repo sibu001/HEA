@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>SmartAudit</title>
+    <base href="/">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+    <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width,height=device-height">
+    <link rel="stylesheet" href="assets/js/outdatedbrowser.min.css">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" type="text/css" href="assets/lib/material-design-icons/css/material-design-iconic-font.min.css" />
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css" />
+    <link rel="stylesheet" type="text/css" hrf="assets/jqplot1/jquery.jqplot.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+        (function () {
+            var url = window.location;
+            console.log("urls" + url);
+            var users = localStorage.getItem("users");
+            if (users == undefined) {
+                if (url == "https://sandbox.hea.com/" || url == "https://sandbox.hea.com/#"  || url == "https://sandbox.hea.com/#/" || url == "https://sandbox.hea.com/#/login") {
+                    window.location.href = "#/login?theme=MBL";
+                }
+            }
+        })();;
+
+        (function () {
+            var url = window.location;
+            console.log("urls =" + url);
+            var pair = url.search.substring(1).split("=");
+            if (pair != null && pair.length >= 2) {
+                var code = pair[1];
+                var routing = url.search.substring(1).split("?");
+                window.location.href = "#/login/" + code;
+            } else {
+            }
+        }
+        )();
+
+    </script>
+
+</head>
+
+<body>
+
+    <div class="loader" id="loader">
+        <!-- <div class="loaderimg"></div> -->
+        <img class="loaderimg center-block" src="./assets/images/loader.gif">
+    </div>
+    <app-root>
+        <div class="center">please wait. app is loading...</div>
+    </app-root>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/jquery.cookie.js"></script>
+      <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script> -->
+      <script src="assets/js/d3.min.js"></script> 
+    <script src="assets/js/NumberFormat.js"></script>
+    <script src="assets/js/hashtable.js"></script>
+    <script src="assets/js/jquery.numberformatter-1.2.4.min.js"></script>
+    <!-- <script src="assets/js/moment.min.js"></script> -->
+    <script src="assets/js/fullcalendar.min.js"></script>
+    <script src="assets/js/overlib_mini.js"></script>
+    <script src="assets/js/jquery.heaplot.js"></script>
+    <script src="assets/js/jquery.indicatorPart.plot.js"></script>
+    <script src="assets/js/CanvasHack.js"></script>
+    <script src="assets/js/excanvas.js"></script>
+    <script src="assets/js/outdatedbrowser.min.js"></script>
+    <script src="assets/js/loader.js"></script>
+  
+    <div id="outdated">This browser or browser version is not supported. Please use the latest version of Chrome, Firefox, IE or Safari</div>
+   
+    <script>
+        //event listener form DOM ready
+        function addLoadEvent(func) {
+            var oldonload = window.onload;
+            if (typeof window.onload != 'function') {
+                window.onload = func;
+            } else {
+                window.onload = function () {
+                    if (oldonload) {
+                        oldonload();
+                    }
+                    func();
+                }
+            }
+        }
+        //call function after DOM ready
+        addLoadEvent(function () {
+            outdatedBrowser({
+                bgColor: '#f25648',
+                color: '#ffffff',
+                lowerThan: 'transform',
+                languagePath: '../app/assets/js/en.html'
+            })
+        });
+
+    </script>
+
+
+</body>
+
+</html>

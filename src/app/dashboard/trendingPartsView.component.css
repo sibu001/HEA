@@ -1,0 +1,312 @@
+section.space-top{
+    margin-top: 4em;
+}
+.backcolor{
+    background-color: #fbfbfb;
+    padding: 19px 19px 6px 19px;
+    font-family: 'Montserrat';
+    margin-bottom: 26px;
+}
+.select_next{
+    font-size: 17px;
+    font-weight: 600;
+    color: #000;
+}
+p.rolling.responsive {
+    color: #202020;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: justify;
+}
+
+.col-sm-9.month {
+    padding-left: 82px;
+}
+p.accurate{
+    color: rgb(50%, 51%, 52%);
+    font-weight: bold;
+    font-size: 14px;
+    text-align: justify;
+    margin-top: 0px;
+    padding-left:44px;
+}
+span.menu1 {
+    border-right: 1px solid #929292;
+    padding-right: 12px;
+    color: #9b9b9b;
+    font-weight: 600;
+    font-size: 24px;
+}
+span.Household {
+    /* border-right: 1px solid #929292; */
+    padding-right: 12px;
+    color: #9b9b9b;
+    font-weight: 600;
+}
+span.Trendswithoutline {
+    padding-right: 12px;
+    color: #9b9b9b;
+    font-weight: 600;
+}
+span.water{
+    color: #9b9b9b;
+    font-weight: 600;
+}
+span.menu2 {
+    border-right: 1px solid #929292;
+    padding-right: 12px;
+    padding-left: 12px;
+    color: #76ba19;
+    font-weight: 600;
+}
+span.Natural:hover {
+    border-bottom: 1px solid #76ba19;
+    cursor: pointer;
+}
+span.menu3 {
+    border-right: 1px solid #929292;
+    padding-right: 12px;
+    padding-left: 12px;
+    color: #76ba19;
+    font-weight: 600;
+}
+span.menu4{
+    padding-left: 12px;
+}
+span.use{
+    color: #76ba19;
+    font-weight: 600;
+    cursor: pointer;
+}
+span.use:hover{
+    text-decoration: underline;
+}
+span.Energy {
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    border-right: 1px solid #929292;
+    padding-right: 12px;
+}
+span.title{
+    border-right: 1px solid #929292;
+    padding-right: 12px;
+}
+span.Energy:hover {
+   text-decoration: underline;
+}
+ul.saving {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+ul.savingmenu {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    margin-top: 5px;
+}
+ul.saving li {
+    float: left;
+}
+ul.savingmenu li {
+    float: left;
+}
+ul.saving li a {
+    display: block;
+    padding: 0px 0px 8px 0px;
+    text-decoration: none;
+}
+ul.savingmenu li a {
+    display: block;
+    padding: 8px 0px 8px 0px;
+    text-decoration: none;
+}
+span.Trends {
+    color: #000;
+    font-size: 23px;
+    padding-left: 12px;
+}
+span.home {
+    color: #76ba19;
+    cursor: pointer;
+    font-size: 23px;
+}
+span.home:hover{
+   text-decoration: underline;
+}
+@media only screen and (min-width : 320px) and (max-width : 767px) {
+    section.space-top{
+        margin-top: 3em!important;
+    }
+    .col-sm-9.month {
+        padding-left: 15px!important;
+    }
+    .row.responsive {
+        display: none;
+    }
+    .row.small{
+        display: block!important;
+    }
+    p.trendsmall{
+        color: #9b9b9b;
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+    p.Energy {
+        color: #000;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    p.Energy:hover {
+        text-decoration: underline;
+    }
+    p.title{
+        cursor: pointer;
+        color: #76ba19;
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+    p.title:hover {
+       text-decoration: underline;
+    }
+    hr.small{
+        display: block!important;
+        margin-bottom: 0px;
+    }
+    p.rolling.responsive {
+        color: #000;
+        font-size: 14px;
+        text-align: justify;
+        display:none!important;
+    }
+    p.rolling.small{
+        color: #000;
+        font-size: 14px;
+        text-align: justify;
+        display: block!important;
+        margin-top: 20px;
+    }
+    .backcolor{
+        padding: 25px 19px 5px 19px!important;
+        margin-bottom: 20px;
+    }
+}
+@media only screen and (min-width :768px) and (max-width :1024px){
+span.total{
+    font-size: 44px!important;
+}
+}
+.row.small{
+    display:none;
+}
+hr.small{
+    display: none;
+}
+h3.plugged {
+    color: #373737;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 6px;
+    text-align: center;
+    line-height: 18px;
+}
+.col-sm-3.list {
+    padding-left: 0px;
+}
+.col-sm-6.trend_details{
+    color: #509a74;
+}
+p.trend_dollar {
+    font-size: 15px;
+    font-weight: 600;
+}
+p.img_green {
+    margin-top: -23px;
+}
+img.green_arrow {
+    margin-top: -29px;
+}
+span.total {
+    font-size: 56px;
+}
+span.percentage {
+    font-size: 22px;
+    font-weight: 600;
+}
+p.since {
+    margin-top: -26px;
+    font-weight: 700;
+    font-size: 15px;
+}
+p.last {
+    margin-top: -15px;
+    font-size: 15px;
+    font-weight: 700;
+}
+p.rolling_total {
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 0px;
+}
+span.month {
+    color: #a1a1a1;
+    font-weight: 600;
+}
+span.dollar{
+    font-weight: 600;
+    color: #000;
+}
+hr.gap {
+    margin-top: 25px;
+    margin-bottom: 9px;
+}
+span.greendollar {
+    color: #509a74;
+    font-weight: 600;
+}
+.col-sm-6.trend_detailsred{
+    color: #c75f60;
+}
+span.reddollar{
+    color: #c75f60;
+    font-weight: 600;
+}
+a.month {
+    color: #76ba19;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: none;
+}
+a.month:hover {
+   background-color: #76ba19;
+   color:#5c940f;
+}
+.form-control{
+    font-weight: 600;
+    font-size: 15px;
+    color: #000;
+}
+@media only screen and (max-width : 320px) {
+    .trendingChartDiv > div {
+        width:320px !important;
+    }
+}
+.row.responsive {
+    margin-top: 2px;
+}
+p.rolling.small{
+    color: #000;
+    font-size: 14px;
+    text-align: justify;
+    display: none;
+}

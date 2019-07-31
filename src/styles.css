@@ -1,0 +1,775 @@
+.loader {
+    /* z-index: 10000;
+    position: fixed;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    margin-top: -57px;
+    padding-top: 35vh;
+    background: rgba(0, 0, 0, 0.36);
+    visibility: hidden; */
+
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background: rgba(0, 0, 0, 0.36);
+    visibility: hidden;
+    z-index: 10000;
+    padding-top: 35vh;
+} 
+img{
+    font-family: "Roboto"!important;
+}
+.trendingProfileChart >  :nth-child(1)> :nth-child(2) > center >  :nth-child(2){
+        width:300px !important;
+        margin-left: -104px !important;
+    }
+
+.loading {
+   visibility: visible;
+} 
+
+.loaderimg {
+    width: 100px;
+    background: rgba(0, 0, 0, 0.29);
+    border-radius: 8px;
+}
+ div#dtBasicExample_filter {
+    display: none !important;
+}
+ img.question path {
+    fill: #000;
+}
+.home_energy > p {
+    font-size: 23px !important;
+    color: #4550a1 !important;
+    font-weight: 500 !important;
+    margin-bottom: 30px;
+}
+div.energy_analytic > p {
+    font-size: 16px;
+}
+div.energy_analytic > span {
+    font-size: 16px;
+}
+div.energy_analytic > span > p {
+    font-size: 16px;
+}
+div.energy_analytic > p >span{
+    font-size: 16px;
+}
+.footers > div{
+    font-size: 16px!important;
+    line-height: 1.4!important;
+}
+div.factoid > p{
+    font-size: 16px !important;
+    margin-bottom: 20px !important;
+    color: #4550a1 !important;
+    line-height: 22px !important;
+    font-weight: 500 !important;
+}
+div.factoid > div > p{
+    font-size: 16px !important;
+    margin-bottom: 20px !important;
+    color: #4550a1 !important;
+    line-height: 22px !important;
+    font-weight: 500 !important;
+}
+
+#chartSeasonalPie{
+    margin-left: 0%!important;
+}
+
+#chartThreeNorms1{
+   margin-top: 15px !important;
+   margin-left: 10px!important;
+   /* width: 225px !important; */
+}
+#chartThreeNorms2{
+    margin-top: 15px !important;
+     margin-left: 10px!important;
+     /* width: 225px !important; */
+}  
+#chartThreeNorms3{
+    margin-top: 15px !important;
+     margin-left: 10px!important;
+     /* width: 225px !important; */
+}  
+.surveyChartDiv > div{
+    width:95% !important;
+}
+.accurate > p >img{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+@media only screen and (min-device-width : 769px) and (max-device-width : 900px) {
+    .accurate > p > img{
+        width: 400px !important;
+    } 
+}
+@media only screen and (min-device-width : 901px) and (max-device-width : 1300px) {
+    .accurate > p > img{
+        width: 600px !important;
+    } 
+}
+
+ @media only screen and (max-width: 768px){
+     .chartDiv > div> :nth-child(2)> :nth-child(2) {
+                height: 200px !important;
+            }
+              .accurate > p > img{
+            width:290px !important;
+        } 
+  
+    .chartDiv > div> :nth-child(2) {
+        height: auto !important;
+    }
+    .trendingProfileChart >  :nth-child(1)> :nth-child(2) > center >  :nth-child(2){
+        width:auto !important;
+        margin-left: 0px !important;
+    }
+     #chartDailyVariableLoad{
+          width: 100% !important;
+     }
+        .accurate > div{
+    width: auto !important;
+}
+  #chartSeasonalStack{
+    width: 100% !important;
+  } 
+.surveyChartDiv > div > div{
+    margin-left:0px !important;
+}
+#chartRepeatingLoad{
+    width: 100% !important;
+}
+#chartDailyVariableLoad{
+    width: 100% !important;
+}
+#chartMovAvg{
+     width: 100% !important;
+}
+#chartMonthByMonth{
+     width: 100% !important;
+}
+.table-responsive {
+    border: 0px solid #ddd!important;
+    margin-top: 15px;
+}
+ 
+
+}
+.surveyChartDiv > div > :nth-child(2){
+     height:300px !important;
+     height: auto !important;
+     margin-left: 0px !important;
+}
+    @media only screen and (min-device-width : 300px) and (max-device-width : 350px) {
+        /*dashboard chart css  */
+       
+        .chartDiv > div{
+            width:300px !important;
+            height: auto !important;
+        }
+      
+        
+        /* #chartThreeNorms1{
+            width: 180px !important;
+        }  
+        #chartThreeNorms2{
+            width: 180px !important;
+        }  
+        #chartThreeNorms3{
+            width: 180px !important;
+        }  */
+
+
+
+
+/*Tranding chart css  */
+    .trendingChartDiv > div {
+        width:300px !important;
+   }
+   .trendingChartDiv > :nth-child(2) {
+       width:300px !important;
+   }
+   .trendingChartDiv > div >div{
+       width:300px !important;
+   }
+   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) {
+        width:250px !important;
+   }
+   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) > :nth-child(1) {
+        width:100px !important;
+   }
+   .trendingChartDiv > div > :nth-child(2) > :nth-child(2) > :nth-child(1) {
+        width:100px !important;
+   }
+   .trendingChartDiv > div > :nth-child(2) > :nth-child(2){
+       width:250px !important;
+   }
+
+}
+@media only screen and (min-device-width : 351px) and (max-device-width : 400px) {
+ /*dashboard chart css  */
+       
+    .chartDiv > div{
+     width:318px !important;
+     height: auto !important;
+    }
+
+    /*trending chart div  */
+    .trendingChartDiv > div {
+        width:320px !important;
+   }
+   .trendingChartDiv > :nth-child(2) {
+       width:320px !important;
+   }
+   .trendingChartDiv > div >div{
+       width:320px !important;
+   }
+   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) {
+        width:280px !important;
+   }
+   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) > :nth-child(1) {
+        width:130px !important;
+   }
+   .trendingChartDiv > div > :nth-child(2) > :nth-child(2) > :nth-child(1) {
+        width:130px !important;
+   }
+   .trendingChartDiv > div > :nth-child(2) > :nth-child(2){
+       width:280px !important;
+   }
+
+}
+@media only screen and (min-device-width : 401px) and (max-device-width : 480px) {
+    /*dashboard chart css  */
+       
+    .chartDiv > div{
+     width:370px !important;
+     height: auto !important;
+    }
+
+    /*trending chart div  */
+    .trendingChartDiv > div {
+        width:370px !important;
+   }
+   .trendingChartDiv > :nth-child(2) {
+       width:370px !important;
+   }
+   .trendingChartDiv > div >div{
+       width:370px !important;
+   }
+   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) {
+        width:345px !important;
+   }
+   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) > :nth-child(1) {
+        width:170px !important;
+   }
+   .trendingChartDiv > div > :nth-child(2) > :nth-child(2) > :nth-child(1) {
+        width:170px !important;
+   }
+   .trendingChartDiv > div > :nth-child(2) > :nth-child(2){
+       width:345px !important;
+   }
+
+}
+@media only screen and (min-device-width : 481px) and (max-device-width : 520px) {
+
+      /*dashboard chart css  */
+       
+    .chartDiv > div{
+     width:450px !important;
+     height: auto !important;
+    }
+
+    /*trending chart div  */
+    .trendingChartDiv > div {
+        width:450px !important;
+   }
+   .trendingChartDiv > :nth-child(2) {
+       width:450px !important;
+   }
+   .trendingChartDiv > div >div{
+       width:450px !important;
+   }
+   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) {
+        width:415px !important;
+   }
+   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) > :nth-child(1) {
+        width:170px !important;
+   }
+   .trendingChartDiv > div > :nth-child(2) > :nth-child(2) > :nth-child(1) {
+        width:170px !important;
+   }
+   .trendingChartDiv > div > :nth-child(2) > :nth-child(2){
+       width:415px !important;
+   }
+
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 767px) {
+    /* #chartSeasonalPie{
+        width:125px !important;
+    } */
+.energy_analytic > p > img{
+    border: 1px solid #efefef;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2){
+    margin-top: 20px !important;
+    margin-bottom: 20px;
+}
+}
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+.qtip.qtip-default {
+    left: 170px !important;
+}
+div#trendingProfileChartTrends {
+    margin-left: 106px !important;
+}
+div#trendingProfileChartTrends> :nth-child(1){
+    width: 50%!important;
+}
+.view.trend.space >:nth-child(1) {
+    margin-left: 20px!important;
+    margin-right: 10px!important;
+}
+.view.trend.space >:nth-child(2){
+    margin-left: 20px!important;
+    margin-right: 10px!important;
+}
+#chartThreeNorms2> :nth-child(3) > :nth-child(2) {
+    left:14.6715px!important;
+}
+#chartThreeNorms1> :nth-child(3) > :nth-child(2) {
+    left: 12.7771px!important;
+}
+td> #chartThreeNorms1 {
+    width : 140px !important;
+} 
+ td>#chartThreeNorms2{
+    width : 140px !important;
+} 
+#chartThreeNorms3>:nth-child(3)>:nth-child(2){
+    left : 15.542px!important;
+}
+ td>#chartThreeNorms3{
+    width : 140px !important;
+} 
+}
+
+ div#trendingProfileChartTrends {
+    height: 137px !important;
+}
+a {
+/* color: #76ba19!important; */
+text-decoration: none;
+font-weight: 500!important;
+}
+.view.trend.space >:nth-child(1) {
+    margin-left: 30px;
+    margin-right: 30px;
+}
+.view.trend.space >:nth-child(1)>:nth-child(1){
+    width: 300px!important;
+}
+.view.trend.space >:nth-child(2){
+    margin-left: 30px;
+    margin-right: 30px;
+ }
+ .view.trend.space >:nth-child(2)>:nth-child(1){
+    width: 300px!important;
+ }
+.view.trend.space >:nth-child(2)>:nth-child(1)>:nth-child(2) {
+   width: 40%!important;
+}
+.tablemailarchive >:nth-child(3){
+    width: 500px!important;
+}
+div#trendingProfileChartTrends>:nth-child(1)>:nth-child(1){
+   color: #000;
+}
+div#trendingProfileChartTrends>:nth-child(2)>:nth-child(1)>:nth-child(1){
+    color: #000;
+ }
+@media only screen  and (min-width : 1224px) {
+    .trendingProfileChart>:nth-child(1){
+        width:950px !important;
+   }
+   .trendingProfileChart>:nth-child(2){
+    width:950px !important;
+    margin-top: 7.5em!important;
+   }
+   .trendingProfileChart>:nth-child(2)>:nth-child(1)>:nth-child(1){
+    padding-top: 1.1em;
+   }
+}
+@media only screen  and (min-width : 1824px) {
+    .trendingProfileChart>:nth-child(1){
+        width:950px !important;
+   }
+   .trendingProfileChart>:nth-child(2){
+    width:950px !important;
+    margin-top: 3em!important;
+   }
+   .trendingProfileChart>:nth-child(2)>:nth-child(1)>:nth-child(1){
+    padding-top: 1.1em;
+   }
+}
+td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
+    margin-left: 12px !important;
+}
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+div.back.color{
+    background-color: #fbfbfb !important;
+    padding: 28px 0px 28px 0px !important;
+    margin-top: -9px !important;
+}
+ul.demoleaks1{
+    padding: 0px;
+}
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 350px) {
+.trendingProfileChart > div {
+    width:285px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:285px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 4em!important;
+}
+div#trendingProfileChartTrends> :nth-child(2){
+    width: 45%!important;
+}
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(1){
+    width:180px !important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(2){
+    width:180px !important;
+}
+}
+@media only screen and (min-device-width : 351px) and (max-device-width : 375px) {
+.trendingProfileChart > div {
+    width:322px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:322px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 4em!important;
+}
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(1){
+    width:220px !important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(2){
+    width:220px !important;
+}
+}
+@media only screen and (min-device-width : 376px) and (max-device-width : 414px) {
+.trendingProfileChart > div {
+    width:345px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:345px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 4em!important;
+}
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(1){
+    width:250px !important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(2){
+    width:250px !important;
+}
+}
+@media only screen and (min-device-width : 415px) and (max-device-width : 480px) {
+.trendingProfileChart > div {
+    width:375px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:375px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 4em!important;
+}
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(1){
+    width:300px !important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(2){
+    width:300px !important;
+}
+}
+@media only screen and (min-device-width : 481px) and (max-device-width : 515px) {
+ .trendingProfileChart > div {
+    width:460px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:460px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 4em!important;
+} 
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(1){
+    width:300px !important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(2){
+    width:300px !important;
+}
+}
+@media only screen and (min-device-width : 516px) and (max-device-width : 580px) {
+
+      /*dashboard chart css  */
+       
+    .chartDiv > div{
+     width:450px !important;
+     height: auto !important;
+    }
+
+    /*trendingPrfile chart div  */
+
+ .trendingProfileChart > div {
+    width:485px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:485px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 4em!important;
+} 
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(1){
+    width:300px !important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(2){
+    width:300px !important;
+}
+}
+@media only screen and (min-device-width : 581px) and (max-device-width : 615px) {
+      /*dashboard chart css  */
+       
+    .chartDiv > div{
+     width:540px !important;
+     height: auto !important;
+    }
+
+    /*trendingPrfile chart div  */
+
+ .trendingProfileChart > div {
+    width:460px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:460px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 4em!important;
+} 
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(1){
+    width:300px !important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(2){
+    width:300px !important;
+}
+}
+@media only screen and (min-device-width : 616px) and (max-device-width : 768px) {
+    /*dashboard chart css  */
+       
+    .chartDiv > div{
+     width:550px !important;
+     height: auto !important;
+    }
+
+    /*trendingPrfile chart div  */
+ .trendingProfileChart > div {
+    width:585px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:585px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 6em!important;
+} 
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+.trendingProfileChart>:nth-child(2)>:nth-child(1)>table{
+ margin-top: 20px!important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(1){
+    width:300px !important;
+}
+.trendingProfileChart>:nth-child(1)>:nth-child(2)>:nth-child(1)>:nth-child(2)>:nth-child(2){
+    width:300px !important;
+}
+}
+@media only screen and (min-device-width : 769px) and (max-device-width : 815px) {
+    .chartDiv>div>:nth-child(2){
+        float: unset!important;
+    }
+ .trendingProfileChart > div {
+    width:660px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:660px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 6em!important;
+} 
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+div#chartSeasonalStack{
+        margin-bottom: 20px;    
+}
+    .trendingProfileChart>:nth-child(2)>:nth-child(1)>table{
+ margin-top: 20px!important;
+}
+}
+@media only screen and (min-device-width : 816px) and (max-device-width : 930px) {
+     .chartDiv>div>:nth-child(2){
+        float: unset!important;
+    }
+     .chartDiv > div{
+     width:585px !important;
+     height: auto !important;
+    }
+ .trendingProfileChart > div {
+    width:685px !important;
+    height: 100% !important;
+}
+.trendingProfileChart>:nth-child(2){
+    width:685px !important;
+}
+.trendingProfileChart>:nth-child(2){
+    margin-top: 6em!important;
+} 
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+div#chartSeasonalStack{
+    /* float: right !important; */
+        margin-bottom: 20px;    
+}
+.trendingProfileChart>:nth-child(2)>:nth-child(1)>table{
+ margin-top: 20px!important;
+}
+}
+@media only screen and (min-device-width : 931px) and (max-device-width : 980px) {
+.chartDiv>div>:nth-child(2){
+        float: unset!important;
+    }
+     .chartDiv > div{
+     width:685px !important;
+     height: auto !important;
+    }
+}
+@media only screen and (min-device-width : 931px) and (max-device-width : 1223px) {
+  
+.trendingProfileChart>:nth-child(2){
+    width: 132%!important;
+    margin-top: 6em!important;
+} 
+div#trendingProfileChartTrends> :nth-child(2){
+    margin-left: 0px!important;
+}
+ div#trendingProfileChartTrends {
+   width: 350px !important;
+}
+div#chartSeasonalStack{
+        margin-bottom: 20px;    
+}
+.trendingProfileChart>:nth-child(2)>:nth-child(1)>table{
+ margin-top: 20px!important;
+}
+.trendingProfileChart >  :nth-child(1)> :nth-child(2) > center >  :nth-child(2){
+        margin-left: -40px !important;
+    }
+    #chartThreeNorms1{
+   margin-left: 0px!important;
+   
+}
+#chartThreeNorms2{
+     margin-left: 0px!important;
+}  
+}
+.glyphicon {
+    color: #76ba19!important;
+}
+.text-nowrap{
+ color: black;
+    font-size: 18px;
+}
+.dataTables_filter{
+    display: none;
+}
+.dataTables_length{
+    display: none;
+}
+.dataTables_info{
+    display: none;
+}
+#example_paginate>span {
+    display: none;
+}
+#example_paginate> .paginate_button.previous{
+    color: #76ba19;
+    margin-right: 76px;
+    font-size: 16px;
+    cursor: pointer;
+}
+#example_paginate> .paginate_button.next{
+    font-size: 16px;
+    color: #76ba19;
+    cursor: pointer;
+    margin-right: 76px;
+}
+
+#example_paginate> .paginate_button.first{
+    color: #76ba19;
+    margin-right: 76px;
+    font-size: 16px;
+    cursor: pointer;
+}
+#example_paginate> .paginate_button.last{
+    color: #76ba19;
+    font-size: 16px;
+    cursor: pointer;
+}

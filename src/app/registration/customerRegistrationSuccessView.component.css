@@ -1,0 +1,41 @@
+@media (min-width: 320px) and (max-width: 767px){
+img.dashboard_img {
+    margin-top: 11px!important;
+    width:200px!important;
+    margin-bottom: 10px!important;
+}
+.navbar-header {
+    border-bottom: 7px solid #d8d8d8;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+}
+img.dashboard_img {
+    margin-top: 8px;
+    width: 300px;
+    margin-bottom: 7px;
+}
+hr.header-hr {
+    margin-top: 0px;
+    margin-bottom: -1px;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-top: 7px solid #d8d8d8;
+}
+section.space-top{
+    margin-top: 5em;
+}
+h3.heading {
+    font-weight: 600;
+    font-size: 22px;
+}
+.leftspace {
+    margin-left: 4em;
+    margin-top: 2.5em;
+    color: #000;
+}
+.leftspaceborder {
+    border: 5px solid #2f1e18;
+    padding: 20px 18px 11px 18px;
+    color: #000;
+}

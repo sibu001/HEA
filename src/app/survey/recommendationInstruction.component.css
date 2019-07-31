@@ -1,0 +1,128 @@
+.select_next{
+    font-size: 24px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 0px;
+    /* border-bottom: 1px solid #7f7f7f; */
+}
+section.space-top{
+    margin-top: 5em;
+    margin-bottom: 1em;
+}
+span.leak {
+    font-weight: bold;
+    font-size: 14px;
+    color: rgb(50%, 51%, 52%);
+    display: block;
+    margin-top: 8px;
+    margin-bottom: 20px;
+}
+h3.outdoor{
+    font-size: 16px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 0px;
+}
+span.Ideas{
+    font-weight: bold;
+    font-size: 13px;
+    color: #000;
+    display: block;
+}
+p.timer {
+    font-size: 14px;
+    color: #000;
+    font-weight: 600;
+    margin-top: 2em;
+}
+img.dot {
+    margin-top: -2px;
+}
+p.accurate{
+    color: rgb(50%, 51%, 52%);
+    font-weight: bold;
+    font-size: 14px;
+    text-align: justify;
+    margin-top: 0px;
+}
+ol.standby {
+    color: rgb(50%, 51%, 52%);
+    font-weight: bold;
+    font-size: 14px;
+}
+ol.standby li{
+    padding-bottom: 0px;
+}
+ul.standby {
+    color: rgb(50%, 51%, 52%);
+    font-weight: bold;
+    font-size: 14px;
+}
+ul.standby li{
+    padding-bottom: 0px;
+    color: rgb(50%, 51%, 52%);
+}
+ul.standby li span.standbysub{
+    color: rgb(50%, 51%, 52%);
+}
+ul.good li{
+    color: #000;
+}
+ul.good li span.see{
+    padding-bottom: 0px;
+    font-weight: bold;
+    font-size: 14px;
+    color: rgb(50%, 51%, 52%);
+}
+a.devices{
+    cursor: pointer;
+    color: rgb(50%, 51%, 52%);
+}
+h3.Strips{
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 0px;
+    font-size: x-large;
+}
+a.power{
+    font-size: 18px;
+    color: #000;
+    cursor: pointer;
+}
+h3.power_tap{
+    margin-top: 5px;
+    margin-bottom: 0px;
+}
+.table { border: 1px solid #000; }
+
+.table thead > tr > th { border-bottom: none; }
+
+.table thead > tr > th, .table tbody > tr > th, .table tfoot > tr > th, .table thead > tr > td, .table tbody > tr > td, .table tfoot > tr > td { border: 1px solid #000; }
+
+th,td{
+    font-weight: normal!important;
+    color: #000;
+    font-size: 14px;
+}
+a.power_a {
+    text-decoration: underline;
+    color: rgb(50%, 51%, 52%);
+    font-weight: bold;
+    cursor: pointer;
+}
+a.remote{
+    text-decoration: underline;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+}
+a.timer{
+    color: rgb(50%, 51%, 52%);
+    font-weight: bold;
+    cursor: pointer;
+}
+span.pool {
+    font-size: 16px;
+    color: #000;
+}

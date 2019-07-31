@@ -1,0 +1,76 @@
+<section class="space-top">
+    <div class="container-fluid">
+        <div class="row" id="headers">
+            <div class="col-sm-4 col-xs-4">
+                <p class="backArrow"><img src="assets/images/right-.svg" class="back_img" (click)="back()"></p>
+            </div>
+            <div class="col-sm-4 col-xs-4">
+                <p class="menuresponsive">MENU</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-xs-12" id="backcolor">
+                <ul class="demo" id="main-menu">
+                    <li>
+                        <a class="main-menu" [routerLink]="['/accountDetail']"><span class="menu">Hi {{users.outhMeResponse.user.name}}</span></a>
+                    </li>
+                    <li>
+                        <a class="main-menu" (click)="hide(1)">
+                            <img src="assets/images/menu_icon_home.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Home</span></a>
+                    </li>
+                    <li>
+                        <a class="main-menu" (click)="hide(2)">
+                            <img src="assets/images/menu_icon_admin.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Topic</span></a>
+                    </li>
+                    <li>
+                        <a class="main-menu" (click)="logouts()">
+                            <img src="assets/images/menu_icon_logout.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Logout</span></a>
+                    </li>
+
+                    <!-- <div class="history"> -->
+                    <li>
+                        <a class="history_a" (click)="hide(2)">Topics history</a>
+                    </li>
+                    <li>
+                        <a class="history_a" [routerLink]="['/customerEventList']">Events history</a>
+                    </li>
+                    <li>
+                        <a class="history_a" [routerLink]="['/MailArchiveList']">Mail archive</a>
+                    </li>
+                    <li>
+                        <a class="history_a" [routerLink]="['/surveyRecommendationList']">Recommadations</a>
+                    </li>
+                    <!-- <li>
+                        <a class="history_a">Usage history</a>
+                    </li> -->
+                    <li>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle history_a" id="menu1" data-toggle="dropdown">Usage history
+                                </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas charge</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,198 @@
+<div class="container-fluid">
+    <div class="row top">
+        <div class="col-sm-2">
+             <input #inp1 id="myInput" type="text" class="inputhide">
+            <p class="registrationTextHIresponsive">Build for Sandbox</p>
+        </div>
+        <div class="col-sm-8">
+            <div>
+                <p *ngIf="theme=='HEA'">
+                    <img src="assets/images/healogo.png" class="dr_center-block2P4P center-block"> </p>
+                <p *ngIf="theme=='CEC'">
+                    <img src="assets/images/acterra-logo2.gif" class="dr_center-block2P4P center-block"> </p>
+                <p *ngIf="theme=='P4P'">
+                    <img src="assets/images/HI_02-03.png" class="dr_center-block2P4P center-block"> </p>
+                <p *ngIf="theme=='AC'">
+                    <img src="assets/images/AC/logo_gahhe.png" class="dr_center-block2AC center-block"> </p>
+                <p *ngIf="theme=='EF'">
+                    <img src="assets/images/EF/logo-ef.png" class="dr_center-block2EF center-block"> </p>
+                <p *ngIf="theme=='HET'||theme=='TST'">
+                    <img src="assets/images/HET/CenValleyVert.png" class="dr_center-block2HET center-block"> </p>
+                <p *ngIf="theme=='MV'">
+                    <img src="assets/images/MV/logo_gahhe.png" class="dr_center-block2MV center-block"> </p>
+                <p *ngIf="theme=='SNV'">
+                    <img src="assets/images/SNV/logo_snv.png" class="dr_center-block2SNV center-block"> </p>
+                <p *ngIf="theme=='VT'">
+                    <img src="assets/images/VT/logo_ev.gif" class="dr_center-block2VT center-block"> </p>
+                <p *ngIf="theme=='CL'">
+                    <img src="assets/images/CL/logo_cl.png" class="dr_center-block2CL center-block"> </p>
+
+                <p class="smartAuditTextHI" *ngIf="theme=='P4P'">Lets get started with a Smart Audit of
+                    <br> your home's energy use.</p>
+                <p class="smartAuditTextHI" *ngIf="theme=='AC'">Congratulations! You're on you way to
+                    <br> becoming a home energy saver!</p>
+                <p class="smartAuditTextHI" *ngIf="theme=='EF'">Home Energy Profile</p>
+                <p class="smartAuditTextHI" *ngIf="theme=='HET'||theme=='TST'">Let's get started with a Smart Audit
+                    <br> of your home's energy use.</p>
+                <p class="smartAuditTextHI" *ngIf="theme=='MV'">Welcome to the EUMV Navigator</p>
+                <p class="smartAuditTextHI" *ngIf="theme=='SNV'">Smart Audit</p>
+                <p class="smartAuditTextHI" *ngIf="theme=='VT'">Welcome to the Efficiency Vermont Smart Home Explorer</p>
+                <p class="smartAuditTextHI" *ngIf="theme=='CL'">Let's get started with your online energy audit.</p>
+                <p class="registersmartAuditTextHI">register for smart audit</p>
+                <p class="registartiontextHI">
+                    <span class="Alreadyreg">Already registered? </span>
+                    <a class="anchor" [routerLink]="['/login']" [queryParams]="{'theme':theme}">Login</a>
+                </p>
+            </div>
+            <div class="mainLoginHI">
+                <p class="errorTextHI">
+                    <span *ngIf="errorMessage!=null" [innerHTML]="errorMessage"></span>
+                </p>
+                <form class="form-horizontal center-block" action="" style="margin-left:3%;">
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="email">email</label>
+                        <div class="col-sm-7">
+                            <input type="email" class="form-control" id="email" name="email" [(ngModel)]="users.email" (keyup.enter)="login()">
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="username" *ngIf="theme!='CL'">PG&E username</label>
+                        <label class="control-label col-sm-4" for="username" *ngIf="theme=='CL'">SC&E username</label>
+                        <div class="col-sm-7">
+                            <input type="email" class="form-control" id="username" name="username" [(ngModel)]="users.username" (keyup.enter)="login()">
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="pwd" *ngIf="theme!='CL'">PG&E password</label>
+                        <label class="control-label col-sm-4" for="pwd" *ngIf="theme=='CL'">SC&E password</label>
+                        <div class="col-sm-7">
+                            <input [type]="show ? 'password':'text'" pInputText class="form-control" id="pwd" name="pwd" [(ngModel)]="users.password"
+                                (keyup.enter)="login()" #inp />
+                            <div class="pll">
+                                <a (click)="toggleShow()" *ngIf="show">
+                                    <img src="assets/images/eyes_img1.png" class="eye">
+                                </a>
+                                <a (click)="toggleShow()" *ngIf="hide">
+                                    <img src="assets/images/eyes_img2.png" class="eye">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group" *ngIf="theme=='CL'">
+                        <label class="control-label col-sm-4" for="socalusername">SoCalGas username</label>
+                        <div class="col-sm-7">
+                            <input type="email" class="form-control" id="socalusername" name="socalusername" [(ngModel)]="users.socolUsername" (keyup.enter)="login()">
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group" *ngIf="theme=='CL'">
+                        <label class="control-label col-sm-4" for="socalpwd">SoCalGas password</label>
+                        <div class="col-sm-7">
+                            <input [type]="showSoCal ? 'password':'text'" pInputText class="form-control" id="socalpwd" name="socalpwd" [(ngModel)]="users.socolPassword"
+                                (keyup.enter)="login()" #inp />
+                            <div class="pll">
+                                <a (click)="toggleShowSoCal()" *ngIf="showSoCal">
+                                    <img src="assets/images/eyes_img1.png" class="eye">
+                                </a>
+                                <a (click)="toggleShowSoCal()" *ngIf="hideSoCal">
+                                    <img src="assets/images/eyes_img2.png" class="eye">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4" for="phone">phone</label>
+                        <div class="col-sm-7">
+                             <input type="number" class="form-control" id="phone" name="phone" [(ngModel)]="users.phone" (keyup.enter)="login()"> 
+                       <!-- <input type="text"  id="Search" value="(___) ___-____" data-mask="(___)___-____" onmouseover="this.setSelectionRange(this.value.length,this.value.length);"/> -->
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                    <!-- <div class="form-group">
+                            <div class="col-sm-11">
+                                <p class="registarHI"> Don't have a login? <a>Register here</a></p>
+                            </div>
+                            <div class="col-sm-1">
+                            </div>
+                        </div> -->
+                    <div class="form-group">
+                        <label class="checkbox_text col-sm-1 col-xs-2">
+                            <input type="checkbox" name="checkboxs" [(ngModel)]="checkBox">
+                            <span class="checkmark"></span>
+                        </label>
+                        <!-- <label class="control-label col-sm-2 col-xs-2" for="checkbox"><input type="checkbox" name="remember"></label>    -->
+                        <div class="col-sm-10 col-xs-10 checkboxHI" *ngIf="theme!='HEA'">
+                            I authorize Home Energy Analitics to access and use my PG&E Energy uses data solely for the purpose of creating my Smart
+                            Audit and providing it to me.
+                        </div>
+                        <div class="col-sm-10 col-xs-10 checkboxHI" *ngIf="theme=='HEA'">
+                            I agree to <a class="anchor" (click)="allLinks(1)">terms and conditions</a>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-11">
+                            <button type="button" class="btn btn-primary" (click)="login()">register</button>
+                        </div>
+                        <div class="col-sm-1">
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="mainLoginBottumHI">
+                <p class="registartiontextHIresponsive">
+                    <span class="Alreadyreg">Already registered? </span>
+                    <a class="anchor" [routerLink]="['/login']" [queryParams]="{'theme':'P4P'}">Login</a>
+                </p>
+                <p class="LinkHI" *ngIf="theme!='CL'">
+                    <span class="Alreadyreg" >How do i </span>
+                    <a class="anchor" (click)="allLinks(2)">get an online PG&E account?</a>
+                </p>
+                <p class="LinkHI" *ngIf="theme!='CL'">
+                    <span class="Alreadyreg" >How will my PG&E </span>
+                    <a class="anchor" (click)="allLinks(3)">account to be used?</a>
+                </p>
+                <p class="LinkHI" *ngIf="theme=='HEA'||theme=='CL'||theme=='AC'||theme=='CEC'||theme=='MV'||theme=='SNV'||theme=='VT'">
+                    <a class="anchor" (click)="allLinks(4)">FAQ about signing up</a>
+                </p>
+                <p class="LinkHI" *ngIf="theme=='P4P'">
+                    <span class="Alreadyreg">FAQ about </span>
+                    <a class="anchor" (click)="allLinks(5)">HomeIntel and Smart Audit</a>
+                </p>
+                <p class="LinkHI" *ngIf="theme=='CL'">
+                    <span class="Alreadyreg">How do I </span>
+                    <a class="anchor" (click)="allLinks(6)">get online SCE or SoCalGas accounts?</a>
+                </p>
+                <p class="LinkHI" *ngIf="theme=='CL'">
+                    <span class="Alreadyreg">How will my </span>
+                    <a class="anchor" (click)="allLinks(7)">SCE and SoCalGas accounts be used?</a>
+                </p>
+                <br>
+                <div class="row">
+                    <div class="col-sm-2 col-xs-3">
+                        <img src="assets/images/PGE_Spot_full_rgb_pos_sm.jpg" class="footerImgHI" (click)="login()">
+                    </div>
+                    <div class="col-sm-10 col-xs-9" style="padding-left: 0px;">
+                        <p class="footerimageHI">
+                            PG&E refers to Pacific Gas and Electric Company, a subsidiary of PG&E Corporation 2017, Pacific Gas and Electric Company.
+                            All rights reserved,These offerings are funded by California Utility customers and admistered
+                            by PG&E under the auspices of the California Public Utility Commissio HEA offers energy efficiency
+                            programs on behalf of Pacific Gas and Electric Company to its customers.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <p class="registrationTextHI">Build for Sandbox</p>
+        </div>
+    </div>
+
+</div>
+<br/>
+<br/>

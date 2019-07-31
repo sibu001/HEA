@@ -1,0 +1,116 @@
+<section class="space-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12 sidebar">
+                <div class="backcolor">
+                    <h3 class="select_next">
+                        <img src="assets/images/right-.svg" class="back_img" (click)="back()">&nbsp;&nbsp;<span class="recommdationheadingcss">My Leaks</span></h3>
+                    <p class="Unnecessary">Unnecessary leaks in my home</p>
+                </div>
+            </div>
+        </div>
+        <br>
+        <!-------------------- First ------------------------------------>
+        <div class="row" *ngFor="let leak of users.leakList;index as i">
+            <div class="col-lg-10 col-sm-10 border_bottom">
+                <div class="row">
+                    <div class="col-lg-1 col-sm-1 col-xs-3 leaks_img">
+                        <button type="button" class="btn btn-primary button leaksdiscovery">
+                            <img src="assets/images/{{leak.recommendation.takebackIcon}}" class="leaksdiscovery" style="width: 48px;">
+                            <p class="mo">{{leak.count}} {{leak.unit}}</p>
+                        </button>
+                    </div>
+                    <div class="col-lg-6 col-sm-6 col-xs-9 leaksdata" #first>
+                        <input #inp1 id="myInput" type="text" class="inputhide">
+                        <p class="leaks_text" style="margin-top: -21px;">{{leak.recommendation.takebackLabel}}</p>
+                        <div class="row progressbar">
+                            <div class="col-lg-5 col-sm-5">
+                                <div class="progress">
+                                    <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" [style.width.%]="leak.recommendation.count*100/leak.totalSurveys"></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-7 col-sm-7">
+                                <p class="leak_percentage">
+                                    <span style="font-weight:600">{{leak.recommendation.count*100/leak.totalSurveys | number:'1.0-0'}}</span>% participants have this leak</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 waste">
+                        <p class="waste"> wasted per year:
+                            <span class="dollarwaste">${{leak.priceValue}}</span>
+                            <span class="unitsperyear">{{leak.recommendation.count}} {{leak.recommendation.unit}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row waste">
+                    <div class="col-lg-12 col-xs-12">
+                        <p class="waste"> wasted per year:
+                            <span class="dollarwaste">${{leak.priceValue}}</span>
+                            <!-- <span class="unitsperyear">{{leak.count}} {{leak.unit}}</span> -->
+                            <span class="unitsperyear">{{leak.recommendation.count}} {{leak.recommendation.unit}}</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="row progressbarsmall">
+                    <div class="col-lg-5 col-sm-5 col-xs-5">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100" [style.width.%]="leak.recommendation.count*100/leak.totalSurveys"></div>
+                        </div>
+                    </div>
+                    <div class="col-lg-7 col-sm-7 col-xs-7">
+                        <p class="leak_percentage">
+                            <span style="font-weight:600">{{leak.recommendation.count*100/leak.totalSurveys | number:'1.0-0'}}</span>% participants have this leak</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-11 col-sm-11 Recommendations">
+                        <p class="plug">Recommendations to plug this leak:</p>
+                        <div class="back" *ngIf="leak.recommendations!=null&&leak.recommendations!=undefined">
+                            <div class="row"  style="margin-bottom: 15px;" *ngFor="let recommendationsList of leak.recommendations">
+                                <div class="col-sm-1 col-xs-2 status-img" *ngIf="recommendationsList.status=='N'">
+                                    <img src="assets/images/status-unchecked.png" class="status-unchecked" align-right>
+                                </div>
+                                <div class="col-sm-1 col-xs-2 status-img" *ngIf="recommendationsList.status=='Y'">
+                                    <img src="assets/images/colorbox.png" class="status-unchecked" align-right>
+                                </div>
+                                <div class="col-sm-1 col-xs-2 status-img" *ngIf="recommendationsList.status=='L'">
+                                    <img src="assets/images/lightcheck.png" class="status-unchecked">
+                                </div>
+                                <div class="col-sm-1 col-xs-2 status-img" *ngIf="recommendationsList.status=='D'">
+                                    <img src="assets/images/status-notapplicable.png" class="status-unchecked" align-right>
+                                </div>
+                                <div class="col-sm-10 col-xs-10 sch" (click)="surveyRecommendationList(recommendationsList.recommendation.recommendationId)">
+                                    <a class="Schedule">{{recommendationsList.recommendation.takebackLabel}}</a>
+                                </div>
+                                <!-- <br>
+                                <br> -->
+                            </div>
+                        </div>
+                        <br>
+                        <div [innerHTML]="leak.recommendation.htmlText" class="accurate">
+                        </div>
+                        <div class="col-lg-1 col-sm-1"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-9" *ngIf="leak.flag"></div>
+                    <div class="col-lg-3 col-xs-12" *ngIf="leak.flag">
+                        <p class="help">
+                            <a (click)="leakHelp(i,leak.priceValue,leak.takebackValue,leak.recommendation.takebackLabel)" class="letter">
+                                <img src="assets/images/letter.png">&nbsp;
+                                <span class="leak-help">help with this leak</span>
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-lg-6"></div>
+                    <div class="col-lg-6">
+                        <span *ngIf="!leak.flag" class="helpMessage">A request has been sent to our audit support team, and you will be contacted via email to discuss
+                            this leak.</span>
+                    </div>
+                </div>
+                <hr>
+            </div>
+            <div class="col-lg-2 col-sm-2"></div>
+        </div>
+    </div>
+</section>

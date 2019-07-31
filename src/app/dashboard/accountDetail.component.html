@@ -1,0 +1,339 @@
+<section class="space-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-9">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <input #inp1 id="myInput" type="text" class="inputhide">
+                        <p class="Account">Account Settings</p>
+                        <form class="form-horizontal" action="/action_page.php">
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="Username">Username:</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="Username" name="username" [(ngModel)]="users.outhMeResponse.user.username">
+                                </div>
+                                <div class="col-sm-4">
+                                    <div style="float:right;">
+                                        <img src="assets/images/icon_help.svg" class="media-object" id="help_btn1" (click)="helpHide=!helpHide">
+                                    </div>
+                                </div>
+                                <div class="row" id="helpiconcontainresponsive" *ngIf="helpHide">
+                                    <div class="col-sm-12">
+                                        <p class="demo1">This is your user name for this service.
+                                            <span class="hidebuttondemo" (click)="helpHide=!helpHide">hide</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="mail">E-mail:</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="mail" name="email" [(ngModel)]="users.outhMeResponse.user.email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="name">Name:</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="name" name="Name" [(ngModel)]="users.outhMeResponse.user.name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="phone">Phone number:</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="users.outhMeResponse.phoneNumber">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="pwd">New password:</label>
+                                <div class="col-sm-6">
+                                    <input type="password" class="form-control" id="pwd">
+                                </div>
+                                <div class="col-sm-4">
+                                    <div style="float:right;">
+                                        <img src="assets/images/icon_help.svg" class="media-object" id="help_btn1" (click)="helpHide1=!helpHide1">
+                                    </div>
+                                </div>
+                                <div class="row" id="helpiconcontainresponsive" *ngIf="helpHide1">
+                                    <div class="col-sm-12">
+                                        <p class="demo1">This is where you can change your password for this service.
+                                            <span class="hidebuttondemo" (click)="helpHide1=!helpHide1">hide</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="newPwd">New password(repeat):</label>
+                                <div class="col-sm-6">
+                                    <input type="password" class="form-control" id="newPwd">
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label class="control-label col-sm-2" for="pwd">E-mail:</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="pwd">
+                                </div>
+                            </div> -->
+                            <div class="form-group" *ngIf="users.outhMeResponse.calWaterAccount!=null&&users.outhMeResponse.calWaterAccount!=undefined">
+                                <label class="control-label col-sm-2" for="pwd">CalWater account:</label>
+                                <div class="col-sm-6">
+                                    <p class="accountcss">{{users.outhMeResponse.calWaterAccount}}<a class="a_edit" (click)="edit(3)">Edit</a></p>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="users.outhMeResponse.purismaAccount!=null&&users.outhMeResponse.purismaAccount!=undefined">
+                                <label class="control-label col-sm-2" for="pwd">Purissima account:</label>
+                                <div class="col-sm-6">
+                                    <p class="accountcss">{{users.outhMeResponse.purismaAccount}}<a class="a_edit" (click)="edit(3)">Edit</a></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-sm-2" for="address">Address:</label>
+                                <div class="col-sm-6">
+                                    <p class="accountcss">{{users.outhMeResponse.pgeAddress}}</p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div style="float:right;">
+                                        <img src="assets/images/icon_help.svg" class="media-object" id="help_btn1" (click)="helpHide2=!helpHide2">
+                                    </div>
+                                </div>
+                                <div class="row" id="helpiconcontainresponsive" *ngIf="helpHide2">
+                                    <div class="col-sm-12">
+                                        <p class="demo1">Please contact your utility to change this address information.
+                                            <span class="hidebuttondemo" (click)="helpHide2=!helpHide2">hide</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr/>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3 class="Account">Home Profile</h3>
+                        <hr>
+                        <p>Sqft</p>
+                        <hr>
+                        <p>Lot size (sqft)</p>
+                        <hr>
+                        <p>Year built</p>
+                        <hr>
+                    </div>
+                    <div class="col-sm-3">
+                        <h3 class="Account">Data from Zillow</h3>
+                        <hr>
+                        <p *ngIf="users.outhMeResponse.zillowConstructionSQFT!=null&&users.outhMeResponse.zillowConstructionSQFT!=undefined">{{users.outhMeResponse.zillowConstructionSQFT}}</p>
+                        <p *ngIf="users.outhMeResponse.zillowConstructionSQFT==null||users.outhMeResponse.zillowConstructionSQFT==undefined" style="margin-top: 29%;"></p>
+                        <hr>
+                        <p *ngIf="users.outhMeResponse.zillowLotSize!=null&&users.outhMeResponse.zillowLotSize!=undefined">{{users.outhMeResponse.zillowLotSize}}</p>
+                        <p *ngIf="users.outhMeResponse.zillowLotSize==null||users.outhMeResponse.zillowLotSize==undefined" style="margin-top: 29%;"></p>
+                        <hr>
+                        <p *ngIf="users.outhMeResponse.zillowYearBuilt!=null&&users.outhMeResponse.zillowYearBuilt!=undefined">{{users.outhMeResponse.zillowYearBuilt}}</p>
+                        <p *ngIf="users.outhMeResponse.zillowYearBuilt==null||users.outhMeResponse.zillowYearBuilt==undefined" style="margin-top: 30%;"></p>
+                        <hr>
+                    </div>
+                    <div class="col-sm-3">
+                        <h3 class="Account">User entered data</h3>
+                        <hr>
+                        <p>{{users.outhMeResponse.constructionSQFT}}<a class="a_edit" (click)="edit(1)">Edit</a></p>
+                        <hr>
+                        <p>{{users.outhMeResponse.lotSize}}<a class="a_edit" (click)="edit(2)">Edit</a></p>
+                        <hr>
+                        <p>{{users.outhMeResponse.yearBuilt}}<a class="a_edit" (click)="edit(3)">Edit</a></p>
+                        <hr>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="utility"><img _ngcontent-c2="" class="dot" src="assets/images/dot03.gif">&nbsp;Utility Credentials</p>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr style="background: #000; color: #fff;">
+                                        <th>Credential Type</th>
+                                        <th>Active</th>
+                                        <th>Login</th>
+                                        <th>Last Usage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let credentialsList of customerCredentialsList">
+                                        <td>{{credentialsList.credentialTypeCode}}</td>
+                                        <td><span *ngIf="credentialsList.active"><img class="dot" src="assets/images/icon_check_orange.png"></span></td>
+                                        <td>{{credentialsList.login}}</td>
+                                        <td>{{credentialsList.lastSuccessfulUsageDate| date : "MM/dd/yyyy hh:mm:ss"}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 col-xs-3">
+                        <button class="btn btn-primary" type="button" [routerLink]="['/dashboard']">Cancel</button>
+                    </div>
+                    <div class="col-sm-6 col-xs-9" style="text-align:right;">
+                        <button class="btn btn-primary" type="button" (click)="postCustomerData()">Save</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3 rightColumn">
+                <p class="Energy_anaiytic">
+                    <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
+                <p class="feedback">Send feedback to</p>
+                <p class="link_hea">
+                    <a class="info_hea">info@hea.com</a>
+                </p>
+                <hr>
+                <ul class="leaks">
+                    <li>
+                        <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
+                    </li>
+                    <li>
+                        <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
+                    </li>
+                    <li>
+                        <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
+                    </li>
+                    <li>
+                        <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommadations</a>
+                    </li>
+                    <li>
+                        <div class="dropdown" style="margin-left: 20px;">
+                            <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
+                            </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas charge</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<br/><br/>
+<style>
+    .Account {
+        font-size: 21px;
+        color: #000;
+        font-weight: 600;
+    }
+
+    div#helpiconcontainresponsive {
+        margin-top: 49px;
+        display: block;
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .form-horizontal .control-label {
+        padding-top: 7px;
+        margin-bottom: 0;
+        text-align: left;
+    }
+
+    .a_history {
+        color: #4550a1;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: 20px;
+    }
+
+    .a_edit {
+        color: #76ba19;
+        font-weight: 600;
+        cursor: pointer;
+        /* margin-left: 20px; */
+        float: right;
+    }
+
+    img#help_btn1 {
+        width: 33px;
+        cursor: pointer;
+    }
+
+    p.demo1 {
+        background-color: #f9f9f9;
+        font-weight: 500;
+        padding: 15px 15px 15px 15px;
+        line-height: 1.4;
+        text-align: justify;
+        color: #000;
+        font-size: 16px;
+        margin-top: 12px;
+    }
+
+    span.hidebuttondemo {
+        color: #75ba18;
+        display: block;
+        text-align: right;
+        font-weight: 500;
+        margin-top: 3px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .accountcss {
+        margin-top: 8px;
+    }
+
+    p.utility {
+        color: #000;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .btn-primary {
+        color: #fff;
+        background-color: #76ba19;
+        border-color: #76ba19;
+        padding: 6px 25px;
+        font-size: 14px;
+        font-family: 'Montserrat';
+    }
+
+    @media only screen and (min-width: 320px) and (max-width: 767px) {
+        div#helpiconcontainresponsive {
+            margin-top: 42px;
+            display: block!important;
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+        img#help_btn1 {
+            width: 33px;
+            cursor: pointer;
+            margin-top: 11px;
+        }
+        .rightColumn {
+            min-height: 100%!important;
+            position: unset !important;
+        }
+    }
+
+    .rightColumn {
+        background-color: #fbfbfb;
+        padding: 0;
+        min-height: calc(100vh - 70px);
+        height: 100%;
+        position: absolute;
+        right: 0;
+    }
+</style>

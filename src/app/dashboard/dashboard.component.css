@@ -1,0 +1,541 @@
+section.space-top {
+    margin-top: 4em;
+}
+
+span.leaks{
+    color:#75ba18;
+    font-weight: 600;
+}
+span.dollar{
+    font-weight: 600;
+}
+div.back.color {
+    background-color: #fbfbfb;
+    /* padding: 28px; */
+}
+div.back-color-silver{
+     background-color: #fbfbfb;
+    /* margin-top: -10px;
+    margin-bottom: 7px; */
+}
+p.views_leaks {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #4550a1;
+    border-color: #4550a1;
+}
+.btn-primary.active.focus, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary:active.focus, .btn-primary:active:focus, .btn-primary:active:hover, .open>.dropdown-toggle.btn-primary.focus, .open>.dropdown-toggle.btn-primary:focus, .open>.dropdown-toggle.btn-primary:hover {
+    color: #fff;
+    background-color: #4550a1;
+    border-color: #4550a1;
+}
+.btn {
+    display: inline-block;
+    padding: 16px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.row.number {
+    text-align: center;
+    margin-top: 1.5em;
+}
+p.resume_topic {
+    text-align: center;
+    /* margin-top: 2em; */
+    font-weight: 600;
+    margin-bottom: 0.5em;
+}
+h4.title_topic {
+    text-align: center;
+    color: #75ba18;
+}
+p.Description{
+    text-align: center;
+    margin-bottom: 1.8em;
+    margin-top: 0.5em;
+}
+ul.demo {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    margin-bottom: 10em;
+}
+p.Reports {
+    text-align: center;
+    font-weight: 600;
+    margin-top: 2em;
+    margin-bottom: 1.3em;
+}
+li.Reports_title {
+    margin-bottom: 1em;
+}
+ .areaChart{
+         height:400px;
+         width:100%;
+     }
+.nextTopicHr{
+         margin-top: 0px;
+         margin-bottom: 0px;
+     }
+ @media (min-width: 320px) and (max-width: 767px){
+     p.views_leaks{ 
+        margin-top: 0px;
+    }
+     .nextTopic{
+    background-color: #fbfbfb;
+    margin-left: -15px;
+    margin-right: -15px;
+     }
+    div.back-color-silver{
+     background-color: #fbfbfb;
+    margin-left: -15px;
+    margin-right: -15px;
+}
+     .areaChart{
+         height:250px;
+         width:100%;
+     }
+    p.Description{
+        text-align: justify;
+        margin-bottom: 1.8em;
+        margin-top: 0.5em;
+        font-size: 14px;
+        padding: 0px 15px 0px 15px;
+    }
+    .show_recommdations {
+        display: none;
+    }
+    .show_recommd {
+        display: block!important;
+        background: #fff;
+        margin-left: -22px;
+        margin-right: -15px;
+        padding: 2px 23px 15px 23px;
+    }
+    .responsiveRecomendation{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    p.recommendations {
+        text-align: center;
+        margin-top: 2em;
+    }
+    hr.hr_space {
+        display: none;
+    }
+    hr.chartSpace {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    }
+    .Reports_responsive {
+        display: none;
+    }
+    .Reportstitle_responsive{
+        display: block!important;
+    }
+    .row.back_color {
+        background-color: #fbfbfb;
+        padding: 8px 28px;
+    }
+    .messages_top{
+        display: none;
+    }
+    .messages_responsive{
+        display: block!important;
+    }
+    p.messages{
+        margin-top: 13px!important;
+        background: #fffee7!important;
+        border: 0px solid #121211!important;
+        margin-bottom: 0px;
+    }
+    div.hide_backgroundsmall {
+        background: #f9f9f9;
+        padding: 15px 15px 15px 15px;
+        text-align: justify;
+        display:block!important;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        /* position: absolute; */
+        /* z-index: 1; */
+    }
+    div.hide_background{
+        /* background: #f9f9f9;
+        padding: 15px 15px 15px 15px;
+        text-align: justify;
+        margin-top: 10px;
+        margin-bottom: 10px; */
+display: none !important;
+         /* position: absolute; 
+        z-index: 1; */
+    }
+    img.question {
+        float: right;
+        width: 40px;
+        display: block!important;
+    }
+    img.question_mark{
+        display: none!important;
+    }
+    p.trend{
+        color: #75ba18;
+        text-align: center;
+        font-weight: 600;
+        margin-top: 18px;
+        margin-bottom: 18px;
+        margin-left: 0px;
+    }
+     p.trendProfile{
+        color: #75ba18;
+        text-align: center;
+        font-weight: 600;
+        margin-top: 18px;
+        margin-bottom: 18px;
+        margin-left: 37px;
+    }
+} 
+div.hide_backgroundsmall {
+    background: #f9f9f9;
+    padding: 15px 15px 15px 15px;
+    text-align: justify;
+    display:none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* position: absolute; */
+    /* z-index: 1; */
+}
+@media only screen and (max-width : 320px) {
+    p.views_leaks{
+        text-align: center;
+        font-size: 14px;
+        margin-top: 0px;
+    }
+    p.resume_topic {
+        text-align: center;
+        /* margin-top: 2em; */
+        font-weight: 600;
+        margin-bottom: 0.5em;
+        font-size: 14px;
+    }
+    h4.title_topic{
+        text-align: center;
+        color: #75ba18;
+        font-size: 17px;
+    }
+    
+}
+@media only screen and (max-width : 280px) {
+    img.dashboard_img {
+        margin-top: 10px;
+        display: block;
+        width: 162px;
+    }
+}
+@media only screen and (min-width : 768px) and (max-width : 1024px) {
+    p.Description{
+        text-align: justify;
+        margin-bottom: 1.8em;
+        margin-top: 0.5em;
+        font-size: 14px;
+    }
+}
+p.messages {
+    margin-top: 39px;
+    background: #fffeec;
+    border: 1px solid #ebe6ac;
+    padding: 8px 8px 8px 16px;
+    font-size: 13px;
+    color: #6c650d;
+    font-weight: 600;
+}
+a.view {
+    text-decoration: underline;
+    color: #6c650d;
+    cursor: pointer;
+}
+i.fa.fa-close.shift {
+    float: right;
+}
+p {
+    font-size: 14px;
+}
+.recommendations_title {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size:14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.recommendations_title input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 21px;
+    width: 22px;
+    background-color: #efefef;
+    border: 1px solid #9b9b9b;
+}
+
+/* On mouse-over, add a grey background color */
+.recommendations_title:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.recommendations_title input:checked ~ .checkmark {
+    background-color: #373737;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.recommendations_title input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.recommendations_title .checkmark:after {
+ 	top: 5px;
+	left: 6px;
+	width: 8px;
+	height: 8px;
+	background: white;
+}
+span.recommendations_color {
+    color: #4450a1;
+    font-weight: 600;
+}
+p.trend {
+    color: #75ba18;
+    font-weight: 600;
+}
+.show_recommd {
+    display: none;
+}
+.Reportstitle_responsive{
+    display:none;
+}
+.messages_responsive{
+    display: none;
+}
+.col-sm-6.trend_details{
+    text-align: center;
+    color: #509a74;
+}
+span.total {
+    font-size: 56px;
+}
+p.img_green {
+    margin-top: -23px;
+}
+img.green_arrow {
+    margin-top: -29px;
+}
+span.percentage {
+    font-size: 22px;
+    font-weight: 600;
+}
+p.trend_dollar {
+    font-size: 15px;
+    font-weight: 600;
+}
+p.since {
+    margin-top: -26px;
+    font-weight: 700;
+    font-size: 15px;
+}
+p.last {
+    margin-top: -15px;
+    font-size: 15px;
+    font-weight: 700;
+}
+.col-sm-6.trend_watt{
+    text-align: center;
+    color: #c65e5f;
+}
+.row.view_trend {
+    margin-top: 25px;
+}
+i.fa.fa-question {
+    font-size: 24px;
+    color: #374276;
+    border: 1px solid #374276;
+    padding: 6px 11px 6px 11px;
+    border-radius: 6px;
+}
+p.question_icon {
+    text-align: right;
+    margin-bottom: 0px;
+}
+div.hide_background {
+    background: #f9f9f9;
+    padding: 15px 15px 15px 15px;
+    text-align: justify;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /* position: absolute;
+    z-index: 1; */
+}
+p.hide_text {
+    text-align: right;
+    color: #75ba18;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: underline;
+    cursor: pointer;
+}
+p.help {
+    font-weight: 400;
+    color: #000;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 0px;
+}
+p.rolling_total {
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 0px;
+}
+p.home_load{
+    font-size: 16px;
+    color: #000;
+    margin-bottom: 0px;
+}
+img.question {
+    float: right;
+    width: 34px;
+    display: none;
+}
+img.question_mark{
+    width: 34px;
+}
+a.anchorTag {
+    color: #75ba18;
+    cursor: pointer;
+}
+a.anchorTagTitle {
+    color: #4550A1;
+    cursor: pointer;
+}
+
+ul.demoleaks {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+ul.demoleaks1 {
+    list-style-type: none;
+    margin: 0;
+    display: flex;
+}
+ul.demoleaks1 li {
+   -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+ .leak_img{
+    width: 45px;
+    cursor: pointer;
+} 
+button.btn.btn-primary.button.leaksdiscovery{
+    color: #fff;
+    background-color: #4550a1;
+    border-color: #4550a1;
+    letter-spacing: 0.3px;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 6px;
+    /* padding: 6px 9px 13px 9px; */
+    padding: 0px 0px 0px 0px;
+    margin-bottom: 9px;
+}
+span.leak_count {
+    display: block;
+}
+ul.li.a.anchorTag{
+    display: block;
+    padding: 8px;
+    float: left;
+}
+/* li a {
+    display: block;
+    padding: 8px;
+} */
+ul.li.a.leaksimg{
+    display: block;
+    padding: 8px;
+}
+a.topic_list {
+    color: #000;
+}
+.show_recommdations {
+    margin-top: 30px;
+}
+.col-sm-1.status-img {
+    padding-right: 0px;
+}
+.col-sm-10.sch {
+    padding-left: 0px;
+}
+a.Schedule {
+    color: #4550A1;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+}
+.row.number{
+    margin: 0 auto;
+}
+.containercss p {
+ float: left;
+ margin-left: 14px;
+     margin-top: 10px;
+    margin-bottom: 20px;
+}
+.inputhide{
+    width: 0px;
+    height: 0px;
+    padding: 0px 0px;
+    color: #fff!important;
+    border-width: 0px!important;
+}

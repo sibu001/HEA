@@ -1,0 +1,15 @@
+<section class="space-top">
+    <div class="container">
+        <!-------------------- First ------------------------------------>
+        <div class="row" *ngIf="users.instructionHtml!=null&&users.instructionHtml!=undefined">
+            <div class="col-sm-12">
+                <h3 class="select_next">
+                    Instructions
+                    <span class="leak">The way you can avoid this leak</span>
+                </h3>
+                <hr>
+                <div [innerHTML]="users.instructionHtml"></div>
+            </div>
+        </div>
+    </div>
+</section>

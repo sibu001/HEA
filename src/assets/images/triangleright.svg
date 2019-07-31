@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="27px" viewBox="0 0 15 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop-HD" transform="translate(-65.000000, -325.000000)">
+            <rect fill="#FFFFFF" x="0" y="0" width="1440" height="1127"></rect>
+            <path d="M85.3380671,331.327779 C85.0084369,330.997875 84.6176964,330.83306 84.1662106,330.83306 L60.8336982,330.83306 C60.38203,330.83306 59.9915631,330.997875 59.6616593,331.327779 C59.3317554,331.658047 59.1669403,332.048514 59.1669403,332.499909 C59.1669403,332.951212 59.3317554,333.341679 59.6616593,333.671674 L71.3279611,345.337976 C71.6582298,345.66788 72.0486966,345.83306 72.5,345.83306 C72.9513034,345.83306 73.342135,345.66788 73.6717653,345.337976 L85.3380671,333.671583 C85.6676061,333.341679 85.8330597,332.951212 85.8330597,332.499818 C85.8330597,332.048514 85.6676061,331.658047 85.3380671,331.327779 Z" id="Shape" fill="#75BA18" fill-rule="nonzero" transform="translate(72.500000, 338.333060) rotate(-90.000000) translate(-72.500000, -338.333060) "></path>
+        </g>
+    </g>
+</svg>

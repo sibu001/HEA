@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="70px" height="71px" viewBox="0 0 70 71" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51 (57462) - http://www.bohemiancoding.com/sketch -->
+    <title>Group</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+     <style>
+    @font-face {
+        font-family: font;
+        src: url(font.woff);
+    }
+    svg{
+        font-family: font, fallBackFonts, sans-serif;
+    }
+    </style>
+</defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group">
+            <rect id="Rectangle-3" stroke="#4550A1" stroke-width="2" x="1" y="1.77777778" width="68" height="68" rx="12"></rect>
+            <text id="?" font-family="Roboto!important" font-size="44" font-weight="500" fill="#4550A1">
+                <tspan x="20.9921875" y="51">?</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

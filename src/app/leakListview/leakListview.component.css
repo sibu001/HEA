@@ -1,0 +1,250 @@
+section.space-top{
+    margin-top: 3em;
+}
+.backcolor{
+    background-color: #fbfbfb;
+    padding: 18px 19px 8px 19px;
+    margin-top: 5px;
+}
+.select_next{
+    font-size: 23px;
+    color: #000;
+    margin-bottom: 0px;
+}
+div.accurate{
+    color: #202020;
+    font-weight: 400;
+    font-size: 16px;
+    text-align: justify;
+    line-height: 20px;
+}
+p.Unnecessary{
+    color: #929292;
+    margin-top: 6px;
+    padding-left: 44px;
+    font-weight: 400;
+    font-size: 16px;
+    text-align: justify;
+    line-height: 20px;
+}
+button.btn.btn-primary.button.leaksdiscovery{
+    color: #fff;
+    background-color: #4550a1;
+    border-color: #4550a1;
+    letter-spacing: 0.3px;
+    font-size: 14px;
+    font-weight: 400;
+    border-radius: 6px;
+    /* padding: 6px 9px 13px 9px; */
+    margin-bottom: 9px;
+    cursor: auto;
+}
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
+    outline: 0px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+p.mo {
+    font-size: 12px;
+    color: #000;
+    margin-bottom: -6px;
+    margin-top: 1px;
+}
+p.leaks_text {
+    color: #4550a0;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 22px;
+}
+p.help{
+    color: #4450a1;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: right;
+    margin-top: 20px;
+}
+.progress-bar {
+    background-color: #b0b0b0;
+    box-shadow: inset 0 0px 0 rgba(0,0,0,.15);
+}
+.progress {
+    border-radius: 0px;
+    background-color: #efefef;
+    box-shadow: inset 0 0px 0px rgba(0,0,0,.1);
+}
+p.leak_percentage {
+    color: #202020;
+    font-weight: 400;
+    font-size: 16px;
+    text-align: justify;
+    line-height: 20px;
+}
+p.waste {
+    color: #929292;
+    font-size: 15px;
+    text-align: right;
+}
+span.unitsperyear {
+    display: block;
+    color: #000;
+    font-weight: 600;
+    font-size: 15px;
+}
+span.dollarwaste {
+    font-size: 19px;
+    color: #000;
+    font-weight: 600;
+}
+a.Schedule {
+    color: #76ba19;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+.col-sm-1.status-img {
+    padding-right: 0px;
+}
+.col-sm-10.sch {
+    padding-left: 0px;
+}
+p.plug {
+    color: #929292;
+    font-size: 16px;
+}
+.back {
+    background-color: #fbfbfb;
+    padding: 17px;
+}
+button.btn.btn-primary.button.leaksdiscoverysmall{
+    display: none;
+}
+.row.progressbarsmall{
+    display: none;
+}
+.row.waste{
+    display: none;
+}
+.col-lg-5.waste {
+    display:block;
+ }
+ span.leak-help{
+    display:inline-block;
+    color: #4550a1;
+ }
+ .col-lg-6.col-xs-9.leaksdata {
+    padding-left: 30px;
+}
+.col-lg-11.col-sm-11.Recommendations {
+    padding-left: 104px;
+}
+button.btn.btn-primary.button.leaksfire{
+    color: #fff;
+    background-color: #4550a1;
+    border-color: #4550a1;
+    letter-spacing: 0.3px;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 6px 6px 6px 6px;
+    margin-bottom: 9px;
+}
+a.online {
+    color: #76ba19;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+button.btn.btn-primary.button{
+    color: #fff;
+    background-color: #4550a1;
+    border-color: #4550a1;
+    letter-spacing: 0.3px;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding:4px 1px 5px 1px;
+    margin-bottom: 9px;
+}
+hr {
+    margin-top: 3px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+@media only screen and (min-width : 320px) and (max-width : 767px) {
+    p.Unnecessary{
+       display: none;
+    }  
+    .col-lg-5.waste {
+       display: none!important;
+    }
+    .row.progressbar{
+       display: none; 
+    }
+    .row.progressbarsmall{
+        display:block!important;
+        margin-top: 9px;
+    }
+    .row.waste{
+        display:block!important;
+    }
+    span.leak-help{
+        display: none!important;
+     }
+     .col-lg-6.col-xs-9.leaksdata {
+        padding-left: 15px;
+    }
+    .col-lg-11.col-sm-11.Recommendations {
+        padding-left: 15px;
+    }
+    .backcolor{
+        padding: 5px 19px 15px 0px!important;
+    }
+    img.back_img {
+        width: 27px;
+    }
+    span.recommdationheadingcss {
+        font-size: 21px;
+    }
+    .select_next{
+        padding-left: 10px!important;
+            margin-top: 32px!important;
+    }
+}
+img.back_img {
+    cursor: pointer;
+    font-family: 'Montserrat';
+}
+span.problem{
+    font-weight: 600;
+}
+ul.standby {
+    color: #202020;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+}
+ul.standby li{
+    padding-bottom: 0px;
+}
+.inputhide{
+    width: 0px;
+    height: 0px;
+    padding: 0px 0px;
+    color: #fff!important;
+    border-width: 0px!important;
+}
+span.helpMessage{
+    color:rgb(47%, 59%, 60%);
+}
+.letter{
+    cursor: pointer;
+    text-decoration: none;
+}
+.col-sm-12.sidebar{
+    padding-left: 0px;
+    padding-right: 0px;
+}

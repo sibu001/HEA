@@ -1,0 +1,148 @@
+<section class="space-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-8">
+                <p class="accurate">
+                    Mail</p>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <form class="form-horizontal">
+                            <!-- <div class="form-group">
+                                <div class="col-lg-1 col-sm-1"></div>
+                                <label class="control-label col-lg-3 col-sm-3">
+                                    <span class="start">Subject:</span>
+                                </label>
+                                <div class="col-lg-3 col-sm-6">
+                                    <input type="text" class="form-control" name="Subject">
+                                </div>
+                            </div> -->
+                            <hr>
+                            <div class="form-group">
+                                <div class="col-lg-1 col-sm-1"></div>
+                                <label class="control-label col-lg-3 col-sm-3">
+                                    <span class="start">Subject:</span>
+                                </label>
+                                <div class="col-lg-8 col-sm-6 col-xs-12">
+                                    <p class="subject_text">{{subject}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <!-- <div class="form-group">
+                                <div class="col-lg-1 col-sm-1"></div>
+                                <label class="control-label col-lg-3 col-sm-3">
+                                    <span class="start">Date sent:</span>
+                                </label>
+                                <div class="col-lg-3 col-sm-6">
+                                    <input type="text" class="form-control" name="Date-sent">
+                                </div>
+                            </div>
+                            <hr> -->
+                            <div class="form-group">
+                                <div class="col-lg-1 col-sm-1"></div>
+                                <label class="control-label col-lg-3 col-sm-3">
+                                    <span class="start">Date sent:</span>
+                                </label>
+                                <div class="col-lg-8 col-sm-6 col-xs-12">
+                                    <p class="subject_text">{{sendDate | date : "dd/MM/y"}}</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <!-- <div class="form-group">
+                                <div class="col-lg-1 col-sm-1"></div>
+                                <label class="control-label col-lg-3 col-sm-3">
+                                    <span class="start">To address:</span>
+                                </label>
+                                <div class="col-lg-3 col-sm-6">
+                                    <input type="text" class="form-control" name="address">
+                                </div>
+                            </div>
+                            <hr> -->
+                            <div class="form-group">
+                                <div class="col-lg-1 col-sm-1"></div>
+                                <label class="control-label col-lg-3 col-sm-3">
+                                    <span class="start">To address:</span>
+                                </label>
+                                <div class="col-lg-8 col-sm-6 col-xs-12">
+                                    <p class="subject_text">{{addresh}}</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="back">
+                            <div class="row">
+                                <div class="col-sm-1"></div>
+                                <div class="col-sm-10">
+
+                                    <div style="overflow-x:auto;">
+                                        <div [innerHTML]="users.mailContaint | safeHtml"></div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-1"></div>
+                            </div>
+                        </div>
+                        <p class="list" style="margin-top:8px">In bounced list:</p>
+                        <hr class="bounced">
+                        <p class="list">Opened:</p>
+                        <hr class="bounced">
+                        <br>
+                        <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-4">
+                <div class="feedback">
+                    <p class="Energy_anaiytic">
+                        Powered by Home Energy Analytics, Inc.</p>
+                    <p class="feedback">Send feedback to</p>
+                    <p class="link_hea">
+                        <a class="info_hea">info@hea.com</a>
+                    </p>
+                    <hr>
+                    <ul class="leaks">
+                        <li>
+                            <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
+                        </li>
+                        <li>
+                            <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
+                        </li>
+                        <li>
+                            <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
+                        </li>
+                        <li>
+                            <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommadations</a>
+                        </li>
+                        <li>
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas charge</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

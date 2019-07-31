@@ -1,0 +1,121 @@
+<section class="space-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="backcolor">
+                    <ul class="saving">
+                        <li>
+                            <a>
+                                <span class="menu1">
+                                    <span class="home" (click)="home()">Home</span>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a>
+                                <span class="Trends">My Profile</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row responsive">
+                    <div class="col-sm-8">
+                        <ul class="saving" style="font-size: 15px;">
+                            <li>
+                                <span class="Trendswithoutline">Trends for</span>
+                            </li>
+                            <li *ngFor="let resource of users.trendingProfileResource;index as i">
+                                <span  *ngIf="resource.unitTypes[0].useTypes.length>0&&resource.unitTypes[1].useTypes.length>0&&resource.unitTypes[0].used&&resource.unitTypes[1].used">
+                                    <span class="Natural" [style.color]="colors1" (click)="energyChange(i)" *ngIf="resource.resourceType=='naturalGas'">Natural
+                                        Gas Only</span>
+                                    <span class="title" [style.color]="colors2" (click)="energyChange(i)" *ngIf="resource.resourceType=='electricity'">Electricity
+                                        Only </span>
+                                    <span class="Energy" [style.color]="colors3" (click)="energyChange(i)" *ngIf="resource.resourceType=='hhe'">Household
+                                        Energy </span>
+                                    <span class="GHG" (click)="energyChange(i)" *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='ghg'">GHG</span>
+                                    <span class="water" (click)="energyChange(i)" *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='water'">Water</span>
+                                </span>
+                                <span class="Household" *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='water'">
+                                    <span>Water</span>
+                                </span>
+                                <span class="GHG" *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='ghg'">GHG</span>
+                            </li>
+                            <li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-4">
+                        <ul class="saving" style="float:right;font-size: 15px;">
+                            <li>
+                                <span class="Trendswithoutline">Show</span>
+                            </li>
+                            <li *ngFor="let unitTypes of unitType;index as j">
+                                <span>
+                                    <span *ngIf="unitTypes.unitType=='use'" class="use" [style.color]="colors4" (click)="changeUnitType(j)">Use</span>
+                                    <span *ngIf="unitTypes.unitType=='cost'" class="Energy" [style.color]="colors5" (click)="changeUnitType(j)">Cost</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="row small">
+                    <div class="col-xs-6">
+                        <p class="trendsmall">Trends for</p>
+                        <ng-container *ngFor="let resource of users.trendingProfileResource;index as i">
+                            <div *ngIf="resource.unitTypes[0].used&&resource.unitTypes[1].used&&resource.unitTypes[1].useTypes.length>0&&resource.unitTypes[0].useTypes.length>0">
+                                <p *ngIf="resource.resourceType=='naturalGas'" class="title" [style.color]="colors1" (click)="energyChange(i)">Natural
+                                    Gas Only</p>
+                                <p *ngIf="resource.resourceType=='electricity'" class="title" [style.color]="colors2" (click)="energyChange(i)">Electricity
+                                    Only </p>
+                                <p *ngIf="resource.resourceType=='hhe'" class="Energy" [style.color]="colors3" (click)="energyChange(i)">Household
+                                    Energy </p>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="col-xs-6" style="text-align:right;">
+                        <p class="trendsmall">Show</p>
+                        <ng-container *ngFor="let unitTypes of unitType;index as j">
+                            <p *ngIf="unitTypes.unitType=='cost'" class="Energy" [style.color]="colors5" (click)="changeUnitType(j)">Cost</p>
+                            <p *ngIf="unitTypes.unitType=='use'" class="title" [style.color]="colors4" (click)="changeUnitType(j)">Use</p>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="media">
+                    <div class="media-left">
+                        <h3 class="plugged" style="width:73px">Use Type</h3>
+                    </div>
+                    <div class="media-body">
+                        <form>
+                            <div class="form-group">
+                                <select name="profileValue" [(ngModel)]="profileLookupValue" (change)="changeLookupValue(profileLookupValue)" class="form-control"
+                                    style="width:207px;">
+                                    <option *ngFor="let valuesName of useType" [value]=valuesName.lookupValue>{{valuesName.valueName}}</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-9 col-xs-7">
+                        <img src="assets/images/icon_help.svg" class="question" (click)="hideHelps=true">
+                        <div class="hide_background" *ngIf="hideHelps">
+                            <p class="help"><a href="https://hea-docs.s3.amazonaws.com/HomeChartHelp.html" target="_new">explain chart</a></p>
+                            <p class="hide_text" (click)="hideHelps=false">hide</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-xs-5">
+                        <p style="text-align:right;">
+                            <a class="trendsdetails" [routerLink]="['/trendingPartsView']">View trend details</a>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8" *ngIf="trendingProfileData!=null&&trendingProfileData!=undefined">
+                        <div [innerHTML]="trendingProfileData.chart.freeChartDiv | safeHtml" class="trendingProfileChart"></div>
+                    </div>
+                </div>
+                <br>
+            </div>
+        </div>
+    </div>
+</section>

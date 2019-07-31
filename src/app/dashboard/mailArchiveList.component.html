@@ -1,0 +1,164 @@
+<section class="space-top">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-9 col-md-9 col-sm-8">
+                <p class="accurate">Mail archive</p>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <form class="form-horizontal" action="/action_page.php">
+                            <div class="form-group">
+                                <p class="control-label col-lg-3 col-sm-4" for="start">
+                                    Period start:
+                                </p>
+                                <div class="col-lg-5 col-sm-6">
+                                    <!-- <input type="text" class="form-control" id="start" name="startdate"> -->
+                                    <p-calendar [(ngModel)]="startDate" name="start" [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <p class="control-label col-lg-3 col-sm-4" for="end">
+                                    Period end:
+                                </p>
+                                <div class="col-lg-5 col-sm-6">
+                                    <p-calendar [(ngModel)]="endDate" name="end" [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <form class="form-horizontal" action="/action_page.php">
+                            <div class="form-group">
+                                <p class="control-label col-lg-3 col-sm-4" for="sub">
+                                    Subject:
+                                </p>
+                                <div class="col-lg-5 col-sm-6">
+                                    <input type="text" class="form-control" id="sub" [(ngModel)]="subject" name="subject">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12" style="text-align:right;">
+                        <button type="button" class="btn btn-primary" (click)="showSearchList()">Show</button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="Messages">
+                            Messages</p>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered table-sm" cellspacing="0" id="dtBasicExample">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <img src="assets/images/whitebox.png" class="colorbox">
+                                </th>
+                                <th class="th-sm">Subject&nbsp;
+                                    <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                                </th>
+                                <th class="th-sm">Date sent&nbsp;
+                                    <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                                </th>
+                                <th class="th-sm">Sent to&nbsp;
+                                    <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                                </th>
+                                <th class="th-sm">Bounced</th>
+                                <th class="th-sm">Opened</th>
+                                <th class="th-sm">Permanent link</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let mailList of customerMailList | searchfilter :'subject' : subject; index as i">
+                                <td>
+                                    <!-- <label class="mail-check">
+                                        <input type="checkbox">
+                                        <span class="checkmark"></span>
+                                    </label> -->
+                                    <img src="assets/images/whitebox.png" class="colorbox">
+                                </td>
+                                <td>
+                                    <a class="link" (click)="mailView(i)">{{mailList.subject}}</a>
+                                </td>
+                                <td>{{ mailList.dateSent | date : "MM/dd/y" }}</td>
+                                <td>{{mailList.sentTo}}</td>
+                                <td></td>
+                                <td>*</td>
+                                <td>
+                                    <a class="link" (click)="mailView(i)">Permanent link</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn">
+                <div class="feedback">
+                    <p class="Energy_anaiytic">
+                        Powered by Home Energy Analytics, Inc.</p>
+                    <p class="feedback">Send feedback to</p>
+                    <p class="link_hea">
+                        <a class="info_hea">info@hea.com</a>
+                    </p>
+                    <hr>
+                    <ul class="leaks">
+                        <li>
+                            <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
+                        </li>
+                        <li>
+                            <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
+                        </li>
+                        <li>
+                            <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
+                        </li>
+                        <li>
+                            <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommadations</a>
+                        </li>
+                        <li>
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
+                                </a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas charge</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script>
+    $(document).ready(function () {
+        $('#dtBasicExample').DataTable();
+        $('.dataTables_length').addClass('bs-select');
+    });
+    $(document).ready(function () {
+        $('#dtOrderExample').DataTable({
+            "order": [[3, "desc"]]
+        });
+        $('.dataTables_length').addClass('bs-select');
+    });
+
+</script>

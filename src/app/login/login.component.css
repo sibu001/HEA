@@ -1,0 +1,428 @@
+img.dr_center-block {
+    width:33%;
+    border-radius: 7px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+img.dr_center-block2 {
+    width:100%;
+    height: 1%;
+    border-radius: 7px;
+    margin-bottom: 0px;
+    margin-top: -15px;
+   
+} 
+img.dr_center-blockCEC {
+    width:100%;
+     height: 7px;   
+    border-radius: 7px;
+    margin-bottom: 0px;
+    margin-top: -8px;
+    height: 7px;
+    float: left;
+} 
+.dash {
+    margin-top: 10px;
+}   
+.smartAuditText{
+    text-align: left;
+    float: left;
+    font-size: 24px;
+    color: rgb(19%, 14%, 13%);
+    font-weight: bold;
+}
+.registrationText{
+    text-align: right;
+    margin-right: 10%;
+    /* color:rgb(95%, 44%, 14%) !important; */
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+.mainLogin{
+    background: url(/assets/images/login_area.png) 0 0px no-repeat,scroll center 50%;
+    width: 71%;
+    background-size: 100% 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 43px 40px;
+}
+
+.errorText{
+    text-align:left;
+    color: red;
+    margin-left: 2%;
+}
+.googlelogin{
+    cursor: pointer;
+    width: 30px;
+}
+.fblogin{
+    margin-right: 10px;
+    cursor: pointer;
+    width: 30px;
+}
+label{
+    color: #312422!important;
+    font-size: 14px!important;
+    text-align: right!important;
+    padding-top: 4px!important;
+}
+input{
+    height: 32px!important;
+        border-radius: 0px!important;
+}
+    a.link {
+    color: rgb(95%, 44%, 14%);
+    font-weight: bold;
+    font-size: 12px;
+ }
+/*Home Intel Page CSS  */
+img.dr_center-blockHI {
+    width:33%;
+    border-radius: 7px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.dashHI {
+    margin-top: 10px;
+}   
+.smartAuditTextHI{
+   text-align: center;
+}
+.registrationTextHI{
+    /* color:rgb(95%, 44%, 14%) !important; */
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: right;
+}
+.mainLoginHI{
+  background: #f2f2f2; 
+    width:100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 36px 40px;
+    padding-bottom: 1em;
+}
+.mainLoginBottumHI{
+    margin-top: 2em;
+     width:100%;
+    margin-left: auto;
+    margin-right: auto;
+    
+    
+}
+.errorTextHI{
+    text-align:left;
+    color: red;
+    margin-left: 10%;
+}
+
+.loginHI{
+    float: right;
+    cursor: pointer;
+}
+labelHI{
+    color: #312422!important;
+    font-size: 14px!important;
+    text-align: right!important;
+    padding-top: 4px!important;
+}
+inputHI{
+    height: 32px!important;
+    border-radius: 0px!important;
+}
+    a.linkHI {
+    color: rgb(95%, 44%, 14%);
+    font-weight: bold;
+    font-size: 12px;
+    }
+.ui-inputtext:enabled{
+    border-color: #c0c0c0;
+    padding-left:13px;
+}
+img.eye {
+    position: absolute;
+    margin-top: -31px;
+    width:29px;
+}
+.pll {
+    text-align: right;
+    margin-right: 39px;
+}
+.pll1 {
+    text-align: right;
+    margin-right: 39px;
+}
+p.registarHI {
+    text-align: right;
+    margin-top: 1em;
+}
+p.socialImageHI {
+    float: right;
+}
+p.forgotPasswordHI {
+    float: left;
+}
+p.footertextHI {
+    margin-top: 1em;
+}
+p.footerimageHI {
+    font-size: 12px;
+    text-align: justify;
+}
+img.footerImgHI {
+  width:100%;
+}
+
+/*CL login Page CSS  */
+
+img.dr_center-blockCL {
+    width:33%;
+    border-radius: 7px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+/* img.dr_center-block2CL {
+    width: 18%;
+}
+img.dr_center-block2EF {
+    width: 18%;
+}
+img.dr_center-block2MV {
+    width: 20%;
+}
+img.dr_center-block2SNV{
+    width:38%;
+}
+img.dr_center-block2VT{
+    width:35%;
+}
+img.dr_center-block2P4P {
+    width: 16%;
+}
+img.dr_center-block2AC{
+    width:28%;
+} */
+img.dr_center-block2CL{
+    width: 145px;
+}
+img.dr_center-block2P4P{
+    width: 128px;
+}
+img.dr_center-block2AC{
+    width:235px;
+}
+img.dr_center-block2EF{
+    width: 145px;
+}
+img.dr_center-block2MV{
+    width: 155px;
+}
+img.dr_center-block2SNV{
+    width:296px;
+}
+img.dr_center-block2VT{
+    width:270px;
+}
+img.dr_center-block2HET{
+    width:204px;
+}
+.dashHI {
+    margin-top: 10px;
+}   
+.smartAuditTextCL{
+   text-align: center;
+}
+.registrationTextCL{
+    font-weight: bold;
+    font-size: 14px;
+    color: black;
+    text-align: right;
+}
+.mainLoginCL{
+    background: #fbfbfb; 
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 36px 40px;
+    padding-bottom: 1em;
+}
+.mainLoginBottumCL{
+    margin-top: 2em;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+.errorTextCL{
+    text-align:left;
+    color: red;
+    margin-left: 10%;
+}
+.loginCL{
+    float: right;
+    cursor: pointer;
+}
+labelCL{
+    color: #312422!important;
+    font-size: 14px!important;
+    text-align: right!important;
+    padding-top: 4px!important;
+}
+inputCL{
+    height: 32px!important;
+        border-radius: 0px!important;
+}
+    a.linkCL {
+    color: rgb(95%, 44%, 14%);
+    font-weight: bold;
+    font-size: 12px;
+    }
+
+p.registarCL {
+    text-align: right;
+        margin-top: 1em;
+        font-size: 15px;
+}
+p.socialImageCL {
+   text-align: right;
+}
+p.forgotPasswordCL {
+    float: left;
+    color: #929292;
+    font-size: 15px;
+}
+p.footertextCL {
+    margin-top: 1em;
+}
+p.footerimageCL {
+    font-size: 13px;
+    text-align: justify;
+    color: #929292;
+}
+
+.registrationTextHIresponsive{
+    text-align: center;
+    display: none;
+}
+@media screen and (max-width:767px) and (min-width: 320px) {
+    .errorTextCL{
+    margin-left: 5%;
+}
+.registrationTextCL{
+    text-align: center;
+}
+.mainLoginCL{
+    background: #fbfbfb; 
+    width:100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding:20px;
+}
+.mainLoginBottumCL{
+    margin-top: 2em;
+    width:100%;
+    margin-left: auto;
+    margin-right: auto;
+    
+}
+.errorTextHI{
+    margin-left: 5%;
+}
+.registrationTextHIresponsive{
+    text-align: center;
+    display: block;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+}
+/* img.dr_center-block2P4P {
+    width: 35%;
+}
+img.dr_center-block2CL {
+    width: 45%;
+}
+img.dr_center-block2EF {
+    width: 45%;
+}
+img.dr_center-block2AC{
+    width:70%;
+}
+img.dr_center-block2HET{
+    width:62%;
+}
+img.dr_center-block2MV{
+    width:54%;
+}
+img.dr_center-block2SNV{
+    width:75%;
+}
+img.dr_center-block2VT{
+    width:75%;
+} */
+.registrationTextHI{
+    /* color:rgb(95%, 44%, 14%) !important; */
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: right;
+    display: none;
+}
+}
+.row.top {
+    margin-top: 50px;
+}
+.btn-primary {
+    color: #fff;
+    background-color: #4550a1;
+    border-color: #4550a1;
+    float: right;
+}
+.btn-primary.active.focus, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary:active.focus, .btn-primary:active:focus, .btn-primary:active:hover, .open>.dropdown-toggle.btn-primary.focus, .open>.dropdown-toggle.btn-primary:focus, .open>.dropdown-toggle.btn-primary:hover {
+    color: #fff;
+    background-color: #4550a1;
+    border-color: #4550a1;
+}
+.btn {
+    padding: 6px 37px;
+    margin-bottom: 0;
+    letter-spacing: 0.3px;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 0;
+}
+a.anchor{
+    color: #4550a1;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+}
+span.dont {
+    color: #929292;
+    font-size: 15px;
+}
+.btn.active.focus, .btn.active:focus, .btn.focus, .btn:active.focus, .btn:active:focus, .btn:focus {
+    outline: 0px auto -webkit-focus-ring-color;
+    outline-offset: 0px;
+}
+.btn.active, .btn:active {
+    background-image: none;
+    outline: 0;
+    box-shadow: inset 0 0px 0px rgba(0,0,0,.125);
+}
