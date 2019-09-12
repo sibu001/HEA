@@ -50,17 +50,26 @@ export class DashboardComponent implements OnInit {
     if (this.users.customerMailList.length <= 0) {
       this.getMailList();
     }
-    if (this.users.recommendationList.length <= 0 || this.users.recommendationStatusChange) {
-      this.getRecommendation();
+    // if (this.users.recommendationList.length <= 0 || this.users.recommendationStatusChange) {
+    //   this.getRecommendation();
+    // } else {
+    //   this.getRecomendationList(this.users.recommendationList);
+    //   for (let index = 0; index < this.users.recommendationList.length; index++) {
+    //     this.recommendationPriceValueSum = this.users.recommendationList[index].priceValue + this.recommendationPriceValueSum;
+    //   }
+    // }
+    // if (this.users.leakList.length <= 0) {
+    //   this.getLeake();
+    // } else {
+    //   this.leakCalculation();
+    // }
+    if (this.users.recommendationList.length <= 0 || this.users.recommendationStatusChange||this.users.leakList.length <= 0) {
+      this.getLeaksAndRecommendation();
     } else {
       this.getRecomendationList(this.users.recommendationList);
       for (let index = 0; index < this.users.recommendationList.length; index++) {
         this.recommendationPriceValueSum = this.users.recommendationList[index].priceValue + this.recommendationPriceValueSum;
       }
-    }
-    if (this.users.leakList.length <= 0) {
-      this.getLeake();
-    } else {
       this.leakCalculation();
     }
 
@@ -232,6 +241,40 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+  getLeaksAndRecommendation() {
+    // document.getElementById("loader").classList.add('loading');
+    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/recommendationsAndLeaks").subscribe(
+      data => {
+        let response = JSON.parse(JSON.stringify(data));
+        // console.log(response.data);
+        var newList = _.reverse(response.data.recommendations);
+        var groups = _.groupBy(newList, "recommendationId");
+        var array = [];
+        _.forOwn(groups, function (value, key) {
+          array.push(value[0]);
+        });
+        let recommendationsList = array;
+        for (let index = 0; index < recommendationsList.length; index++) {
+          this.recommendationPriceValueSum = recommendationsList[index].priceValue + this.recommendationPriceValueSum;
+        }
+        this.users.recommendationList = array;
+        this.users.recommendationStatusChange = false;
+        // this.loginService.setUser(this.users);
+         this.getRecomendationList(this.users.recommendationList);
+         this.leakList = response.data.leaks;
+         this.users.leakList = response.data.leaks;
+         this.loginService.setUser(this.users);
+         this.leakCalculation();
+
+        document.getElementById("loader").classList.remove('loading');
+      },
+      error => {
+        document.getElementById("loader").classList.remove('loading');
+        console.log(JSON.parse(JSON.stringify(error)));
+      }
+    );
+  }
+
   getMailList() {
     document.getElementById("loader").classList.add('loading');
     this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/mails").subscribe(
@@ -339,6 +382,7 @@ export class DashboardComponent implements OnInit {
               eval(areaSeries.chart.freeChartConfigurationJS);
             }
           }
+          document.getElementById("loader").classList.remove('loading');
         }, 100);
       },
       error => {

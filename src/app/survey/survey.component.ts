@@ -2,10 +2,6 @@ import { Component, AfterViewInit, ElementRef, ViewChild, Renderer } from '@angu
 import { Users } from "src/app/models/user";
 import { LoginService } from "src/app/services/login.service";
 import { Router } from "@angular/router";
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CalendarModule } from 'primeng/calendar';
-import { FormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 declare var $: any;
 @Component({
   selector: 'app-survey',
@@ -30,7 +26,7 @@ export class SurveyComponent implements AfterViewInit {
   users: Users = new Users();
   constructor(private loginService: LoginService, private router: Router, private renderer: Renderer) {
     this.users = this.loginService.getUser();
-    // this.divHeight=500;
+
     if (this.users.currentPaneNumber.currentPane == null || this.users.currentPaneNumber.currentPane == undefined) {
       this.router.navigate(["/login"]);
     }
@@ -41,13 +37,15 @@ export class SurveyComponent implements AfterViewInit {
         this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
       }
     }
-    //  else {
-    //   this.border = "1px solid #e1e1e1";
-    // }
+    if(this.users.currentPaneNumber.survey.surveyDescription.surveyCode=="Profile"){
+        document.getElementById("_home").classList.add('header_menu_none');
+        document.getElementById("all_topic").classList.add('header_menu_none');
+        document.getElementById("menu_option").classList.add('header_menu_none');
+        document.getElementById("menu_option2").classList.add('header_menu_none');
+    }
     this.progressShow();
   }
   ngOnInit() {
-
     this.users = this.loginService.getUser();
     var fc = $.fullCalendar;
     var self = this;
@@ -141,6 +139,13 @@ export class SurveyComponent implements AfterViewInit {
             eval(news)
           );
         }
+        if (paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">') != -1) {
+          var scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf("</script>"));
+          var news = scriptTag.replace('<script type="text/javascript" language="javascript">', "");
+          $('#content').bind(
+            eval(news)
+          );
+        }
       }
     }
     if (this.users.currentPaneNumber.currentPane.htmPageText != null) {
@@ -159,6 +164,8 @@ export class SurveyComponent implements AfterViewInit {
   }
   next(id, paneNumber) {
     this.qusHide = false;
+    this.users.allSurveyCheck=true;
+    this.loginService.setUser(this.users);
     this.inputErrorMessage = undefined;
     if (this.users.currentPaneNumber.currentPane.paneCode == "fdb_Thanks") {
       this.router.navigate(["/topicshistory"]);
@@ -172,13 +179,14 @@ export class SurveyComponent implements AfterViewInit {
     }
   }
   prev(id, paneNumber) {
+    this.users.allSurveyCheck=true;
+    this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
       this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false);
     } else {
       this.previousPane(this.users.currentPaneNumber);
     }
     document.getElementById("loader").classList.add('loading');
-
   }
 
   surveyRecommendationList(number) {
@@ -189,11 +197,20 @@ export class SurveyComponent implements AfterViewInit {
   postSurveyAnswerData(currentPaneAnswers, currentPaneBlocks, id, value) {
     if ((id == 'change' && value) || id == 'next' || id == 'prev') {
       document.getElementById("loader").classList.add('loading');
-      var data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks };
+      var data;
+      if(id=='next'){
+        if(currentPaneAnswers.length>=1&&this.users.currentPaneNumber.firstPage&&this.users.currentPaneNumber.lastPage&&(currentPaneAnswers[0].value=='false'||currentPaneAnswers[0].value=='N'||currentPaneAnswers[0].value=='No'||currentPaneAnswers[0].value=='0')){
+          data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks,"nextPane":true,"skipAnswers":false };
+      }else{
+        data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks,"nextPane":true };
+        }
+      }else{
+       data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks };
+      }
       this.loginService.performPostMultiPartDataPost(data, "customers/" + this.users.currentPaneNumber.survey.customerId + "/surveys/" + this.users.currentPaneNumber.survey.surveyDescription.surveyCode + "/panes/" + this.users.currentPaneNumber.currentPane.paneCode + "/answers").subscribe(
         data => {
           let response = JSON.parse(JSON.stringify(data));
-          console.log(response);
+        //  console.log(response);
           if (response.data.errors != null) {
             this.users.currentPaneNumber.errors = response.data.errors;
             this.colors = "red";
@@ -204,7 +221,9 @@ export class SurveyComponent implements AfterViewInit {
             document.getElementById("loader").classList.remove('loading');
           } else {
             if (id == 'next') {
-              this.nextPane(response.data);
+              this.nextPaneWithAnswer(response.data);
+              document.getElementById("loader").classList.remove('loading');
+            //  this.nextPane(response.data);
             } else if (id == 'prev') {
               this.previousPane(response.data);
             } else if (id == 'change') {
@@ -227,13 +246,9 @@ export class SurveyComponent implements AfterViewInit {
     }
   }
 
-  nextPane(currentPaneNumber) {
-    var object = {};
-    this.loginService.performPostMultiPartDataPost(object, "customers/" + this.users.outhMeResponse.customerId + "/surveys/nextPane").subscribe(
-      data => {
-        let response = JSON.parse(JSON.stringify(data));
-        console.log(response);
-        this.users.currentPaneNumber = response.data;
+  nextPaneWithAnswer(data){
+        this.getSessionPendingMessage();
+        this.users.currentPaneNumber = data;
         this.loginService.setUser(this.users);
         if (this.users.currentPaneNumber.currentPane != null) {
           if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
@@ -243,6 +258,11 @@ export class SurveyComponent implements AfterViewInit {
           }
           if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "LeaksIntro") {
             this.getAllSurvey();
+          }else if(this.users.surveyLenght > 3&&this.users.currentPaneNumber.survey.surveyDescription.surveyCode!="Profile"){
+            document.getElementById("_home").classList.remove('header_menu_none');
+            document.getElementById("all_topic").classList.remove('header_menu_none');
+            document.getElementById("menu_option").classList.remove('header_menu_none');
+            document.getElementById("menu_option2").classList.remove('header_menu_none');
           }
           var self = this;
           setTimeout(function () {
@@ -254,6 +274,67 @@ export class SurveyComponent implements AfterViewInit {
         } else {
           this.router.navigate(["/topicshistory"]);
         }
+        if(this.users.currentPaneNumber.currentPane.paneCode=="fdb_Questions"){
+          for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
+            if (answer.dataField.inputType == 'hslider') {
+              $("#" + answer.field + " .hslider" + answer.value).addClass('active');
+              $(this).toggleClass('active');
+            }
+          }
+        }
+        if (this.users.currentPaneNumber.paneCode == "fdb_Intro") {
+          setTimeout(function () {
+            document.getElementById("fdbRecommendations").classList.add('table-responsive');
+          }, 100);
+        }
+        document.getElementById("loader").classList.remove('loading');
+        var self = this;
+        setTimeout(() => self.inp1.nativeElement.focus(), 0);
+        this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+        this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+       
+  }
+
+  nextPane(currentPaneNumber) {
+    var object = {};
+    this.loginService.performPostMultiPartDataPost(object, "customers/" + this.users.outhMeResponse.customerId + "/surveys/nextPane").subscribe(
+      data => {
+        let response = JSON.parse(JSON.stringify(data));
+        this.getSessionPendingMessage();
+        this.users.currentPaneNumber = response.data;
+        this.loginService.setUser(this.users);
+        if (this.users.currentPaneNumber.currentPane != null) {
+          if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
+            if (this.users.currentPaneNumber.firstPage) {
+              this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
+            }
+          }
+          if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "LeaksIntro") {
+            this.getAllSurvey();
+          }else if(this.users.surveyLenght > 3&&this.users.currentPaneNumber.survey.surveyDescription.surveyCode!="Profile"){
+            document.getElementById("_home").classList.remove('header_menu_none');
+            document.getElementById("all_topic").classList.remove('header_menu_none');
+            document.getElementById("menu_option").classList.remove('header_menu_none');
+            document.getElementById("menu_option2").classList.remove('header_menu_none');
+          }
+          var self = this;
+          setTimeout(function () {
+            self.chartDataConfiguration();
+          }, 500);
+
+          this.helpHides();
+          this.progressShow();
+        } else {
+          this.router.navigate(["/topicshistory"]);
+        }
+        if(this.users.currentPaneNumber.paneCode=="fdb_Questions"){
+          for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
+            if (answer.dataField.inputType == 'hslider') {
+              $("#" + answer.field + " .hslider" + answer.value).addClass('active');
+              $(this).toggleClass('active');
+            }
+          }
+        }
         if (this.users.currentPaneNumber.paneCode == "fdb_Intro") {
           setTimeout(function () {
             document.getElementById("fdbRecommendations").classList.add('table-responsive');
@@ -263,7 +344,6 @@ export class SurveyComponent implements AfterViewInit {
         setTimeout(() => self.inp1.nativeElement.focus(), 0);
         this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
         this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
-
         document.getElementById("loader").classList.remove('loading');
       },
       errors => {
@@ -283,7 +363,6 @@ export class SurveyComponent implements AfterViewInit {
       data => {
         let response = JSON.parse(JSON.stringify(data));
         console.log(response);
-
         if (response.data.currentPane != null) {
           if (response.data.currentPane.paneCode == this.users.currentPaneNumber.currentPane.paneCode) {
             this.router.navigate(["/topicshistory"]);
@@ -294,6 +373,12 @@ export class SurveyComponent implements AfterViewInit {
               if (this.users.currentPaneNumber.last) {
                 this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
               }
+            }
+            if(this.users.currentPaneNumber.survey.surveyDescription.surveyCode=="Profile"){
+              document.getElementById("_home").classList.add('header_menu_none');
+              document.getElementById("all_topic").classList.add('header_menu_none');
+              document.getElementById("menu_option").classList.add('header_menu_none');
+              document.getElementById("menu_option2").classList.add('header_menu_none');
             }
             var self = this;
             setTimeout(function () {
@@ -312,7 +397,7 @@ export class SurveyComponent implements AfterViewInit {
         setTimeout(() => self.inp1.nativeElement.focus(), 0);
         this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
         this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
-        if (this.users.currentPaneNumber.paneCode == "fdb_Intro") {
+        if (this.users.currentPaneNumber.currentPane.paneCode == "fdb_Intro") {
           setTimeout(function () {
             document.getElementById("fdbRecommendations").classList.add('table-responsive');
           }, 100);
@@ -352,15 +437,15 @@ export class SurveyComponent implements AfterViewInit {
   change(value) {
     if (value == 'true') {
       return value = 'false';
-    } else if (value = 'false') {
+    } else if (value == 'false') {
       return value = 'true';
-    } else if (value = '1') {
+    } else if (value == '1') {
       return value = '0';
-    } else if (value = '0') {
+    } else if (value == '0') {
       return value = '1';
-    } else if (value = 'Y') {
+    } else if (value == 'Y') {
       return value = 'N';
-    } else if (value = 'N') {
+    } else if (value == 'N') {
       return value = 'Y';
     }
   }
@@ -370,20 +455,33 @@ export class SurveyComponent implements AfterViewInit {
     this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/surveys").subscribe(
       data => {
         let response = JSON.parse(JSON.stringify(data));
-        // for (let surveyCodeList of response.data) {
-        //   this.users.surveyCode.push(surveyCodeList.surveyDescription.surveyCode);
-        // }
         document.getElementById("loader").classList.remove('loading');
         var surveylength = Object.keys(response.data).length;
         this.users.surveyLenght = surveylength;
         this.users.surveyList = response.data;
         this.loginService.setUser(this.users);
-        window.location.reload();
-        // this.router.navigate(["/topicshistory"]);
+        document.getElementById("_home").classList.remove('header_menu_none');
+        document.getElementById("all_topic").classList.remove('header_menu_none');
+        document.getElementById("menu_option").classList.remove('header_menu_none');
+        document.getElementById("menu_option2").classList.remove('header_menu_none');
       },
       error => {
-        let response1 = JSON.stringify(error);
-        let response = JSON.parse(response1);
+        let response = JSON.parse(JSON.stringify(error));
+        console.log(response);
+        document.getElementById("loader").classList.remove('loading');
+      }
+    );
+  }
+
+  getSessionPendingMessage() {
+    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/sessionPendingMessage").subscribe(
+      data => {
+        let response = JSON.parse(JSON.stringify(data));
+        document.getElementById("loader").classList.remove('loading');
+      },
+      errors => {
+        console.log(errors);
+        let response = JSON.parse(JSON.stringify(errors))._body;
         document.getElementById("loader").classList.remove('loading');
       }
     );
@@ -420,137 +518,4 @@ export class SurveyComponent implements AfterViewInit {
       );
     }
   }
-
-
-  // getCurrentPane(PaneList, survey, paneNumber) {
-  //   let object = {};
-  //   this.loginService.performPostMultiPartDataPost(object, "customers/" + this.users.outhMeResponse.customerId + "/surveys/" + this.users.currentPaneNumber.survey.surveyDescription.surveyCode + "/panes/" + PaneList[paneNumber].pane.paneCode).subscribe(
-  //     data => {
-  //       let response = JSON.parse(JSON.stringify(data));
-  //       this.users.paneNumber = paneNumber;
-  //       this.users.currentPaneNumber = response.data;
-  //       if (this.users.currentPaneNumber.currentPane.paneCode == 'w_hardscapeData' || this.users.currentPaneNumber.currentPane.paneCode == 'w_landscapeDetails') {
-  //         this.imageFirstStyle = "text-align: center; vertical-align: middle; border-radius: 5px; overflow: hidden; color: rgb(255, 255, 255); background-color: rgb(0, 103, 0); background-image: url(assets/images/Asphalt-Background-2310395.jpg); background-position: center center; background-size: cover;  position: absolute; line-height: 138px; top: 209px; left: 0px; height:" + 138 + "px; width: " + 341 + "px;";
-  //         // this.imageSecondStyle="text-align: center; vertical-align: middle; border-radius: 5px; overflow: hidden; color: rgb(255, 255, 255); background-color: rgb(0, 103, 0); background-image: url(assets/images/Asphalt-Background-2310395.jpg); background-position: center center; background-size: cover;  position: absolute; line-height: 138px; top: 209px; left: 0px; height:"+138+"px; width: "+341+"px;";
-  //         // this.imageThiredStyle="text-align: center; vertical-align: middle; border-radius: 5px; overflow: hidden; color: rgb(255, 255, 255); background-color: rgb(0, 103, 0); background-image: url(assets/images/Asphalt-Background-2310395.jpg); background-position: center center; background-size: cover;  position: absolute; line-height: 138px; top: 209px; left: 0px; height:"+138+"px; width: "+341+"px;";
-  //         // this.imageFoureStyle="text-align: center; vertical-align: middle; border-radius: 5px; overflow: hidden; color: rgb(255, 255, 255); background-color: rgb(0, 103, 0); background-image: url(assets/images/Asphalt-Background-2310395.jpg); background-position: center center; background-size: cover;  position: absolute; line-height: 138px; top: 209px; left: 0px; height:"+138+"px; width: "+341+"px;";
-  //       }
-  //       this.loginService.setUser(this.users);
-  //       if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
-  //         this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
-  //         this.border = "";
-  //       } else {
-  //         this.border = "1px solid #e1e1e1";
-  //       }
-  //       var self = this;
-  //       setTimeout(function () {
-  //         self.chartDataConfiguration();
-  //       }, 200);
-  //       if (!this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
-  //         document.getElementById("loader").classList.remove('loading');
-  //       }
-  //       this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
-  //       this.progressShow();
-  //       this.helpHides();
-  //     },
-  //     errors => {
-  //       console.log(errors);
-  //       let response = JSON.parse(JSON.stringify(errors))._body;
-  //       document.getElementById("loader").classList.remove('loading');
-  //     }
-  //   );
-  // }
-  // getSurvey(surveyId, id) {
-  //   this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/surveys/" + surveyId).subscribe(
-  //     data => {
-  //       let response = JSON.parse(JSON.stringify(data));
-  //       console.log(response);
-  //       if (id == "prev") {
-  //         this.users.paneNumber = response.data.panes.length - 1;
-  //         this.paneList = response.data.panes;
-  //         this.loginService.setUser(this.users);
-  //         this.getCurrentPane(this.paneList, response.data.survey, this.users.paneNumber);
-  //       } else {
-  //         this.users.paneNumber = 0;
-  //         this.users.currentPaneNumber = response.data;
-  //         this.loginService.setUser(this.users);
-  //         var self = this;
-  //         setTimeout(function () {
-  //           self.chartDataConfiguration();
-  //         }, 200);
-  //       }
-  //       this.progressShow();
-  //       this.helpHides();
-
-  //       document.getElementById("loader").classList.remove('loading');
-  //     },
-  //     errors => {
-  //       console.log(errors);
-  //       let response = JSON.parse(JSON.stringify(errors))._body;
-  //       document.getElementById("loader").classList.remove('loading');
-  //       // document.getElementById("loader").classList.remove('loading');
-  //       // this.errorMessage = response.error;
-  //     }
-  //   );
-  // }
-  // getPendingMessage() {
-  //   var body = {};
-  //   this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/sessionPendingMessage").subscribe(
-  //     data => {
-  //       let response = JSON.parse(JSON.stringify(data));
-  //       document.getElementById("loader").classList.remove('loading');
-  //     },
-  //     errors => {
-  //       console.log(errors);
-  //       let response = JSON.parse(JSON.stringify(errors))._body;
-  //       document.getElementById("loader").classList.remove('loading');
-  //     }
-  //   );
-  // }
-
-  // postPane(currentPaneAnswers, currentPaneBlocks, id) {
-  //   var data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks }
-  //   this.loginService.performPostMultiPartDataPost(data, "customers/" + this.users.outhMeResponse.customerId + "/surveys/" + this.users.currentPaneNumber.survey.surveyDescription.surveyCode + "/" + this.users.currentPaneNumber.survey.surveyId + "/panes/" + this.users.currentPaneNumber.currentPane.paneCode).subscribe(
-  //     data => {
-  //       let response = JSON.parse(JSON.stringify(data));
-  //       console.log(response);
-  //       this.getCurrentSurvey();
-  //       document.getElementById("loader").classList.remove('loading');
-  //     },
-  //     errors => {
-  //       console.log(errors);
-  //       let response = JSON.parse(JSON.stringify(errors))._body;
-  //       document.getElementById("loader").classList.remove('loading');
-  //     }
-  //   );
-  // }
-  // getCurrentSurvey() {
-  //   this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/surveys/current").subscribe(
-  //     data => {
-  //       let response = JSON.parse(JSON.stringify(data));
-  //       console.log(response);
-  //       document.getElementById("loader").classList.remove('loading');
-  //     },
-  //     errors => {
-  //       console.log(errors);
-  //       let response = JSON.parse(JSON.stringify(errors))._body;
-  //       document.getElementById("loader").classList.remove('loading');
-  //     }
-  //   );
-  // }
-  // getSurveyUsingIdCode(surveyCode, surveyId) {
-  //   this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/surveys/" + surveyCode + "/" + surveyId).subscribe(
-  //     data => {
-  //       let response = JSON.parse(JSON.stringify(data));
-  //       console.log("response of survey");
-  //       console.log(response);
-  //       document.getElementById("loader").classList.remove('loading');
-  //     },
-  //     errors => {
-  //       console.log(errors);
-  //       let response = JSON.parse(JSON.stringify(errors))._body;
-  //       document.getElementById("loader").classList.remove('loading');
-  //     }
-  //   );
-  // }
 }

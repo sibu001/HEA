@@ -12,22 +12,22 @@
             <div class="col-sm-12 col-xs-12" id="backcolor">
                 <ul class="demo" id="main-menu">
                     <li>
-                        <a class="main-menu" [routerLink]="['/accountDetail']"><span class="menu">Hi {{users.outhMeResponse.user.name}}</span></a>
+                        <a class="main-menu" (click)="hide(3)"><span class="menu">Hi {{users.outhMeResponse.user.name}}</span></a>
                     </li>
-                    <li>
+                    <li id="_home">
                         <a class="main-menu" (click)="hide(1)">
                             <img src="assets/images/menu_icon_home.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Home</span></a>
                     </li>
-                    <li>
+                    <li id="all_topic">
                         <a class="main-menu" (click)="hide(2)">
                             <img src="assets/images/menu_icon_admin.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Topic</span></a>
                     </li>
                     <li>
-                        <a class="main-menu" (click)="logouts()">
+                        <a class="main-menu" (click)="logouts()" id="_logout">
                             <img src="assets/images/menu_icon_logout.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Logout</span></a>
                     </li>
 
-                    <!-- <div class="history"> -->
+                    <div id="menu_option"> 
                     <li>
                         <a class="history_a" (click)="hide(2)">Topics history</a>
                     </li>
@@ -40,10 +40,8 @@
                     <li>
                         <a class="history_a" [routerLink]="['/surveyRecommendationList']">Recommadations</a>
                     </li>
-                    <!-- <li>
-                        <a class="history_a">Usage history</a>
-                    </li> -->
-                    <li>
+                    </div>
+                    <li id="menu_option2">
                         <div class="dropdown">
                             <a class="dropdown-toggle history_a" id="menu1" data-toggle="dropdown">Usage history
                                 </a>

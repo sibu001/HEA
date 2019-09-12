@@ -44,11 +44,12 @@ export class Users {
     public resourceType:number=0;
     public lookupValue:string;
     public trendingProfileData:any;
-     public mailContaint:string;
-     public mailDetail:any;
+    public mailContaint:string;
+    public mailDetail:any;
     public recommendationStatusChange:boolean;
     public types:string;
     public customerEventDetail:object;
     public addEvent:boolean;
+    public allSurveyCheck:boolean;
 
 }

@@ -1862,9 +1862,10 @@ span.inputfieldcss {
 }
 .form-control {
     font-weight: 500;
-    font-size: 19px;
+    font-size: 24px;
     color: #000;
-    height: 40px
+    height: 40px;
+    padding: 3px 12px 3px 12px;
 }
 .media:first-child {
     margin-top: 6px;

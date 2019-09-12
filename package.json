@@ -35,6 +35,7 @@
     "qtip2": "^3.0.3",
     "rxjs": "^6.2.2",
     "rxjs-compat": "^6.2.2",
+    "safe-pipe": "^0.3.0",
     "zone.js": "^0.8.26"
   },
   "devDependencies": {

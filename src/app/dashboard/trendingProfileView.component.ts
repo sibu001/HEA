@@ -15,12 +15,15 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
   colors3: string = "#76ba19";
   colors4: string = "#000";
   colors5: string = "#76ba19";
+  colors6: string = "#76ba19";
+  colors7: string = "#76ba19";
   hideHelps: boolean = false;
   useType: any[] = [];
   unitType: any[] = [];
   unitTypeNumber: number = 0;
   resourceTypeNumber: number = 0;
   typeNumber: number;
+  typeName: string;
   profileUnitType: string;
   profileUseType: string;
   profileLookupValue: string;
@@ -39,32 +42,44 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
 
   }
   home() {
-     this.router.navigate(["/dashboard"]);
+    this.router.navigate(["/dashboard"]);
   }
   changeLookupValue(value) {
     this.getTrendingPart(this.profileResourceType, this.profileUnitType, value);
   }
-  energyChange(number) {
-    if (number == 0) {
+  energyChange(resourceType,number) {
+    this.typeNumber = number;
+    this.typeName=resourceType;
+    if (resourceType == "naturalGas") {
       this.colors1 = "#000"
       this.colors2 = "#76ba19";
       this.colors3 = "#76ba19";
-    } else if (number == 1) {
-      this.colors1 = "#000"
+      this.colors6 = "#76ba19";
+      this.colors7 = "#76ba19";
+    } else if (resourceType == "electricity") {
+      this.colors2 = "#000"
+      this.colors1 = "#76ba19";
+      this.colors3 = "#76ba19";
+      this.colors6 = "#76ba19";
+      this.colors7 = "#76ba19";
+    } else if (resourceType == "hhe") {
       this.colors2 = "#76ba19";
-      this.colors3 = "#76ba19";
-    } else if (number == 2) {
-      this.colors3 = "#76ba19";
-      this.colors2 = "#000";
-      this.colors1 = "#76ba19";
-    } else if (number == 3) {
-      this.colors2 = "#000";
-      this.colors1 = "#76ba19";
-      this.colors3 = "#76ba19";
-    } else if (number == 4) {
       this.colors3 = "#000";
+      this.colors1 = "#76ba19";
+      this.colors6 = "#76ba19";
+      this.colors7 = "#76ba19";
+    } else if (resourceType == "ghg") {
+      this.colors6 = "#000";
+      this.colors1 = "#76ba19";
+      this.colors3 = "#76ba19";
+      this.colors2 = "#76ba19";
+      this.colors7 = "#76ba19";
+    } else if (resourceType == "water") {
+      this.colors7 = "#000";
       this.colors2 = "#76ba19";
       this.colors1 = "#76ba19";
+      this.colors6 = "#76ba19";
+      this.colors3 = "#76ba19";
     }
     this.profileResourceType = this.users.trendingProfileResource[number].resourceType;
     this.profileUnitType = this.users.trendingProfileResource[number].unitTypes[this.unitTypeNumber].unitType;
@@ -81,7 +96,7 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
     }
     this.unitTypeNumber = number;
     this.resourceTypeNumber = 0;
-    this.energyChange(this.typeNumber);
+    this.energyChange(this.typeName,this.typeNumber);
   }
   getTrendingProfileResource() {
     this.useType = new Array;
@@ -91,10 +106,15 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
       data => {
         let response = JSON.parse(JSON.stringify(data));
         console.log(response);
-        this.users.trendingProfileResource = response.data;
+        let arrayObject = response.data.reverse();
+        this.users.trendingProfileResource = arrayObject.sort(function (a, b) {
+          return b.unitTypes[0].used - a.unitTypes[0].used || b.unitTypes[1].used - a.unitTypes[1].used;
+        })
+        // this.users.trendingProfileResource = response.data;
         for (var i = 0; i < response.data.length; i++) {
           if (response.data[i].unitTypes[0].used && response.data[i].unitTypes[1].used) {
             this.typeNumber = i;
+            this.typeName=response.data[i].resourceType;
             this.unitType = response.data[i].unitTypes;
             this.useType = response.data[i].unitTypes[this.unitTypeNumber].useTypes;
             this.profileResourceType = response.data[i].resourceType;
@@ -114,15 +134,7 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
   }
   getTrendingPart(resourcesUse, unitType, useType) {
     document.getElementById("loader").classList.add('loading');
-    // let content = new URLSearchParams();
-    // content.set('resourceType', resourcesUse);
-    // content.set('unitType', unitType);
-    // content.set('useType', useType);
-    // let body = content.toString();
-   var param = "resourceType=" + resourcesUse + "&unitType=" + unitType + "&useType=" + useType;
-  //  console.log(body);
-
-  //  console.log(param);
+    var param = "resourceType=" + resourcesUse + "&unitType=" + unitType + "&useType=" + useType;
     this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/trendingProfileChart?" + param).subscribe(
       data => {
         let response = JSON.parse(JSON.stringify(data));
@@ -170,7 +182,7 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
         }
         setTimeout(function () {
           eval(response.data.chart.freeChartConfigurationJS);
-             document.getElementById("trendingProfileChartLegendSection").classList.add('table-responsive');
+          document.getElementById("trendingProfileChartLegendSection").classList.add('table-responsive');
         }, 100);
         document.getElementById("loader").classList.remove('loading');
       },
@@ -178,7 +190,6 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
         console.log(errors);
         let response = JSON.parse(JSON.stringify(errors))._body;
         document.getElementById("loader").classList.remove('loading');
-
       }
     );
   }

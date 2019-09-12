@@ -1,20 +1,9 @@
-import { Component, OnInit, ContentChild, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, ContentChild} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from "src/app/models/user";
 import { LoginService } from './../services/login.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { GrowlModule, SelectItem } from 'primeng/primeng';
-import { Validators, FormControl, FormBuilder } from '@angular/forms';
-import { AccordionModule } from 'primeng/primeng';     //accordion and accordion tab
-import { MenuItem } from 'primeng/primeng';
-import { Tree, TreeNode } from 'primeng/primeng';
-import { NgModel } from '@angular/forms';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { error } from 'util';
-import { Location } from '@angular/common';
-import { Http, RequestOptions, Headers, HttpModule } from '@angular/http';
+import { Http } from '@angular/http';
 import { AppConstants } from "src/app/utility/constant";
-declare var $: any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -62,7 +51,7 @@ export class LoginComponent implements OnInit {
         this.users.token = response.access_token;
         this.users.refreshToken = response.refresh_token;
         this.loginService.setUser(this.users);
-        this.performOuthMe(response.access_token);
+        this.performOuthMe();
         }
       },
         error => {
@@ -75,7 +64,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  performOuthMe(token) {
+  performOuthMe() {
     this.loginService.performGetMultiPartData("oauth/me").subscribe(
       data => { 
         let response = JSON.parse(JSON.stringify(data));
@@ -90,7 +79,7 @@ export class LoginComponent implements OnInit {
     );
   }
    performGetUserRole(userId) {
-     var uId=userId;
+    var uId=userId;
     this.loginService.performGetMultiPartData("/users/"+userId+"/roles").subscribe(
       data => { 
         let response = JSON.parse(JSON.stringify(data));
@@ -103,7 +92,7 @@ export class LoginComponent implements OnInit {
         }
         }
       if(role!='ADMIN'){
-      this.postGetCustomeData(uId);
+        this.postGetCustomeData(uId);
       }
       },
       error => {
@@ -165,16 +154,18 @@ export class LoginComponent implements OnInit {
   }
   getCurrentSurvey() {
     document.getElementById("loader").classList.add('loading');
-    var Object = {};
     this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/surveys/current").subscribe(
       data => {
         document.getElementById("loader").classList.remove('loading');
         let response = JSON.parse(JSON.stringify(data));
         if(response.errorMessage==null){
         if (response.data.currentPane == null || response.data.currentPane == undefined) {
+          this.users.allSurveyCheck=false;
+          this.loginService.setUser(this.users);
           this.router.navigate(['dashboard']);
         } else {
           this.users.currentPaneNumber = response.data;
+          this.users.allSurveyCheck=true;
           this.loginService.setUser(this.users);
           this.router.navigate(['surveyView']);
           // console.log(response);

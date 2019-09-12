@@ -38,14 +38,14 @@
 		}
 		
 		
-		indicatorValues =  
-			[
-				{value:150,name:'not so good',color:'#C56060'},
-				{value:110,name:'below average',color:'#69B08D'},
-				{value:90,name:'norm',color:'#69B08D'},
-				{value:60,name:'good',color:'#69B08D'},
-				{value:0,name:'great',color:'#69B08D'},
-			]
+		// indicatorValues =  
+		// 	[
+		// 		{value:150,name:'not so good',color:'#C56060'},
+		// 		{value:110,name:'below average',color:'#69B08D'},
+		// 		{value:90,name:'norm',color:'#69B08D'},
+		// 		{value:60,name:'good',color:'#69B08D'},
+		// 		{value:0,name:'great',color:'#69B08D'},
+		// 	]
 		
 		
 		var normingPosition = 96;

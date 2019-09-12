@@ -1,3 +1,11 @@
+<div class="feedbackDiv" id="feedback3">
+    <div data-qa="popup-mode-drawer_right" mode="drawer_right" width="800" class="feedbackCss" open="true" id="feedback2">
+        <img alt="close-typeform" data-qa="popup-close-button" mode="drawer_right" src="./assets/images/cross.gif" class="feedbackiframe" (click)="closefeedbackpage()" id="feedback1">
+        <iframe [src]="iframeUrl | safe: 'resourceUrl'" data-qa="iframe" frameborder="0" height="100%" width="100%" style="border: 0px;">
+        </iframe>
+    </div>
+</div>
+<button class="feedbackButton" (click)="openfeedbackpage()">FeedBack</button>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
     <div class="container-fluid">
         <div class="row">
@@ -48,7 +56,7 @@
                 <div class="collapse navbar-collapse" id="main-menu">
                     <ul class="nav navbar-nav navbar-right header">
                         <li class="active hi">
-                            <a [routerLink]="['/accountDetail']"><span class="userName" >Hi {{users.outhMeResponse.user.name}}</span></a>
+                            <a (click)="hide(3)"><span class="userName" >Hi {{users.outhMeResponse.user.name}}</span></a>
                         </li>
                         <li>
                             <a (click)="hide(2)" class="main-menu" id="_home">
@@ -56,56 +64,27 @@
                         </li>
                         <li>
                             <a class="main-menu" (click)="hide(4)" id="all_topic">
-                                <img src="assets/images/menu_icon_admin.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Topic</span></a>
+                                <img src="assets/images/menu_icon_admin.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Topics</span></a>
                         </li>
 
                         <li>
                             <a (click)="logouts()" class="main-menu" id="_logout">
                                 <img src="assets/images/menu_icon_logout.svg" class="icon_size">&nbsp;&nbsp;<span class="admin">Logout</span></a>
                         </li>
-
-                        <li *ngIf="users.surveyLenght>3">
-                            <a (click)="hide(5)" class="history_a">Topics history</a>
-                        </li>
-                        <li *ngIf="users.surveyLenght>3">
-                            <a (click)="hide(6)" class="history_a">Events history</a>
-                        </li>
-                        <li *ngIf="users.surveyLenght>3">
-                            <a (click)="hide(7)" class="history_a">Mail archive</a>
-                        </li>
-                        <li *ngIf="users.surveyLenght>3">
-                            <a (click)="hide(8)" class="history_a">Recommadations</a>
-                        </li>
-                        <!-- <li *ngIf="users.surveyLenght>3">
-                            <a (click)="hide(9)" class="history_a">Usage history</a>
-                        </li> -->
-                        <!-- <li>
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
-                                </a>
-                                   <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" href="#" [routerLink]="['/gasList/gas']">Gas</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" href="#" [routerLink]="['/gasList/gas']" >Gas charge</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" href="#" [routerLink]="['/gasList/electricity']">Electricity</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" href="#" [routerLink]="['/gasList/electricity']">Electricity charge</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" href="#" [routerLink]="['/gasList/electricity']" >Electric smart meter</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" href="#" [routerLink]="['/gasList/water']">Gas smart meter</a>
-                                </li>
-                            </ul>
-                            </div>
-                        </li> -->
-                        <!-- </div> -->
+                        <div id="menu_option">
+                            <li>
+                                <a (click)="hide(5)" class="history_a">Topics history</a>
+                            </li>
+                            <li>
+                                <a (click)="hide(6)" class="history_a">Events history</a>
+                            </li>
+                            <li>
+                                <a (click)="hide(7)" class="history_a">Mail archive</a>
+                            </li>
+                            <li>
+                                <a (click)="hide(8)" class="history_a">Recommadations</a>
+                            </li>
+                        </div>
                     </ul>
                 </div>
             </div>

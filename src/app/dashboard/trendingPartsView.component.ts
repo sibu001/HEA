@@ -14,11 +14,14 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
   colors3: string = "#76ba19";
   colors4: string = "#000";
   colors5: string = "#76ba19";
+  colors6: string = "#76ba19";
+  colors7: string = "#76ba19";
 
   useType: any[] = [];
   useTypeUse: any[] = [];
   trendingData: any[] = [];
-
+  typeNumber: number;
+  typeName: string;
   unitType: any[] = [];
   users: Users = new Users();
 
@@ -34,36 +37,56 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     this.location.back();
   }
   changesLookupValue(value) {
-   this.users.lookupValue=value;
-   this.loginService.setUser(this.users);
-   this.getTrendingPart(this.users.trendingPartResource[this.users.resourceType].resourceType, this.users.trendingPartResource[this.users.resourceType].unitTypes[this.users.unitType].unitType,this.users.lookupValue)
+    this.users.lookupValue = value;
+    this.loginService.setUser(this.users);
+    this.getTrendingPart(this.users.trendingPartResource[this.users.resourceType].resourceType, this.users.trendingPartResource[this.users.resourceType].unitTypes[this.users.unitType].unitType, this.users.lookupValue)
   }
-  changeUnitType(number){
-     if (number == 0) {
+  changeUnitType(number) {
+    if (number == 0) {
       this.colors4 = "#000";
       this.colors5 = "#76ba19";
     } else if (number == 1) {
       this.colors5 = "#000";
       this.colors4 = "#76ba19";
     }
-    this.users.unitType=number;
-    this.changeResource(0);
+    this.users.unitType = number;
+    this.changeResource(this.typeName,this.typeNumber);
   }
-  changeResource(number) {
-     if (number == 0) {
+  changeResource(resourceType,number) {
+    this.typeName=resourceType;
+    this.typeNumber=number;
+    if (resourceType == "electricity") {
       this.colors1 = "#000"
       this.colors2 = "#76ba19";
       this.colors3 = "#76ba19";
-    } else if (number == 1) {
+      this.colors6 = "#76ba19";
+      this.colors7 = "#76ba19";
+    } else if (resourceType == "hhe") {
       this.colors2 = "#000"
       this.colors1 = "#76ba19";
       this.colors3 = "#76ba19";
-    } else if (number == 2) {
+      this.colors6 = "#76ba19";
+      this.colors7 = "#76ba19";
+    } else if (resourceType == "naturalGas") {
       this.colors3 = "#000";
       this.colors2 = "#76ba19";
       this.colors1 = "#76ba19";
+      this.colors6 = "#76ba19";
+      this.colors7 = "#76ba19";
+    } else if (resourceType == "ghg") {
+      this.colors6 = "#000";
+      this.colors1 = "#76ba19";
+      this.colors3 = "#76ba19";
+      this.colors2 = "#76ba19";
+      this.colors7 = "#76ba19";
+    } else if (resourceType == "water") {
+      this.colors7 = "#000";
+      this.colors2 = "#76ba19";
+      this.colors1 = "#76ba19";
+      this.colors6 = "#76ba19";
+      this.colors3 = "#76ba19";
     }
-    this.users.resourceType=number;
+    this.users.resourceType = number;
     this.loginService.setUser(this.users);
     this.useType = this.users.trendingPartResource[this.users.resourceType].unitTypes[this.users.unitType].useTypes;
     this.unitType = this.users.trendingPartResource[this.users.resourceType].unitTypes;
@@ -76,11 +99,16 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/trendingParts/resources").subscribe(
       data => {
         let response = JSON.parse(JSON.stringify(data));
-        console.log(response);
-        this.users.trendingPartResource = response.data;
+        let arrayObject = response.data;
+        this.users.trendingPartResource = arrayObject.sort(function (a, b) {
+          return b.unitTypes[0].used - a.unitTypes[0].used || b.unitTypes[1].used - a.unitTypes[1].used;
+        })
+        // this.users.trendingPartResource = response.data;
+        this.typeNumber = this.users.resourceType;
+        this.typeName=response.data[this.users.resourceType].resourceType;
         this.useType = response.data[this.users.resourceType].unitTypes[this.users.unitType].useTypes;
         this.unitType = response.data[this.users.resourceType].unitTypes;
-        this.users.treadingLoadsValue=response.data[this.users.resourceType].unitTypes[this.users.unitType].useTypes[0].lookupValue;
+        this.users.treadingLoadsValue = response.data[this.users.resourceType].unitTypes[this.users.unitType].useTypes[0].lookupValue;
         this.getTrendingPart(response.data[this.users.resourceType].resourceType, response.data[this.users.resourceType].unitTypes[this.users.unitType].unitType, response.data[this.users.resourceType].unitTypes[this.users.unitType].useTypes[0].lookupValue);
       },
       errors => {
@@ -91,18 +119,11 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     );
   }
   getTrendingPart(resourcesUse, unitType, useType) {
-     document.getElementById("loader").classList.add('loading');
-    // let content = new URLSearchParams();
-    // content.set('resourceUse', resourcesUse);
-    // content.set('unitType', unitType);
-    // content.set('useType', useType);
-    // let body = content.toString();
-    // let body="resourceUse="+resourcesUse+"&unitType="+unitType+"&unitType="+useType;
-        var param = "resourceUse=" + resourcesUse + "&unitType=" + unitType + "&useType=" + useType;
+    document.getElementById("loader").classList.add('loading');
+    var param = "resourceUse=" + resourcesUse + "&unitType=" + unitType + "&useType=" + useType;
     this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/trendingParts?" + param).subscribe(
       data => {
         let response = JSON.parse(JSON.stringify(data));
-        console.log(response);
         this.trendingData = response.data;
         for (let data of response.data) {
           setTimeout(function () {
@@ -117,7 +138,6 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
         console.log(errors);
         let response = JSON.parse(JSON.stringify(errors))._body;
         document.getElementById("loader").classList.remove('loading');
-
       }
     );
   }

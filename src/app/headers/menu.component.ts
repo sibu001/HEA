@@ -17,17 +17,16 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-   
+    if(this.users.surveyLenght<=3){
+      document.getElementById("_home").classList.add('header_menu_none');
+      document.getElementById("all_topic").classList.add('header_menu_none');
+      document.getElementById("menu_option").classList.add('header_menu_none');
+      document.getElementById("menu_option2").classList.add('header_menu_none');
+    } 
   }
   back(){
       this.location.back();
   }
-  // goToPage(number){
-  //   if(number==1){
-  //     this.router.navigate(["/dashboard"]);
-  //   }
-
-  // }
    logouts() {
     this.loginService.logout();
   }
@@ -42,6 +41,10 @@ export class MenuComponent implements OnInit {
       if (this.users.surveyLenght > 3) {
         this.router.navigate(["/topicshistory"]);
       }
-    }
+    } else if (numbers == 3) {
+      if (this.users.surveyLenght > 3) {
+      this.router.navigate(["/accountDetail"]);
+      }
+    } 
   }
 }

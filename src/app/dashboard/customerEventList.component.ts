@@ -78,12 +78,14 @@ export class customerEventListComponent implements OnInit {
     this.router.navigate(["/customerEventView"]);
   }
   searchFilter() {
-    this.usesEventNewList = this.usesEventList;
+    this.usesEventNewList =new Array;
+    this.usesEventNewList== this.usesEventList;
     document.getElementById("loader").classList.add('loading');
     if (this.startDate != undefined && this.startDate != null && this.endDate != undefined && this.endDate != null || (this.eventCode != undefined && this.eventCode != null) || (this.eventType != undefined && this.eventType != null)) {
       var startMilliseconds = new Date(this.startDate).getTime();
       var endMilliseconds = new Date(this.endDate).getTime();
       this.usesEventList = new Array;
+      let self=this;
      $("#example").dataTable().fnDestroy();
       for (let eventList of this.usesEventNewList) {
         if (eventList.eventDatetime >= startMilliseconds && eventList.eventDatetime <= endMilliseconds) {
@@ -101,7 +103,7 @@ export class customerEventListComponent implements OnInit {
           }],
           "retrieve": true
         });
-        self.usesEventList = self.usesEventNewList;
+      //  self.usesEventList = self.usesEventNewList;
       }, 100);
       console.log(this.usesEventList);
     } else {

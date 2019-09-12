@@ -15,9 +15,11 @@ export class HeadersComponent implements OnInit {
   float: string;
   mobHeight: number;
   screenWidth: any;
+  iframeUrl:string;
   users: Users = new Users();
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
+    this.iframeUrl="https://heasmartaudit.typeform.com/to/C3KCyo?auditId="+this.users.outhMeResponse.auditId+"&amp;typeform-embed=popup-drawer";
     this.screenWidth = window.screen.width;
   }
 
@@ -37,8 +39,15 @@ export class HeadersComponent implements OnInit {
       });
     });
 
+    if(this.users.surveyLenght<=3){
+      document.getElementById("_home").classList.add('header_menu_none');
+      document.getElementById("all_topic").classList.add('header_menu_none');
+      document.getElementById("menu_option").classList.add('header_menu_none');
+    } 
+
   }
   hide(numbers) {
+    this.users = this.loginService.getUser();
     if (numbers == 1) {
       this.router.navigate(["/menu"]);
     } else if (numbers == 2) {
@@ -48,6 +57,9 @@ export class HeadersComponent implements OnInit {
         this.router.navigate(["/dashboard"]);
       }
     } else if (numbers == 3) {
+      if (this.users.surveyLenght > 3) {
+      this.router.navigate(["/accountDetail"]);
+      }
     } else if (numbers == 4) {
       if (this.users.surveyLenght > 3) {
         this.router.navigate(["/topicshistory"]);
@@ -69,5 +81,15 @@ export class HeadersComponent implements OnInit {
   }
   logouts() {
     this.loginService.logout();
+  }
+  openfeedbackpage(){
+    document.getElementById("feedback1").classList.add('feedbackDivCss');
+    document.getElementById("feedback2").classList.add('feedbackiframeCss');
+    document.getElementById("feedback3").classList.add('feedBackDiv1');
+  }
+  closefeedbackpage(){
+    document.getElementById("feedback1").classList.remove('feedbackDivCss');
+    document.getElementById("feedback2").classList.remove('feedbackiframeCss');
+    document.getElementById("feedback3").classList.remove('feedBackDiv1');
   }
 }

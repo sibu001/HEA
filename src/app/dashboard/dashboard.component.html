@@ -26,17 +26,6 @@
                             <span class="dollar">${{ leakPriceValueSum | number : '1.2-2' }}</span> per year
                         </p>
                         <div class="row number">
-                            <!-- <ul class="demoleaks1" *ngIf="leakList!=null&&leakList!=undefined&&leakList.length>0">
-                                <ng-container *ngFor="let leaks of users.leakList;">
-                                    <li>
-                                        <button type="button" class="btn btn-primary button leaksdiscovery" (click)="leakView(1)">
-                                            <img src="assets/images/{{leaks.recommendation.takebackIcon}}" class="leak_img">
-                                        </button>
-                                        <span class="leak_count">{{leaks.repeat}}</span>
-                                    </li>
-                                </ng-container>
-                                
-                            </ul> -->
                             <div class="containercss">
                                 <ng-container *ngFor="let leaks of leakList;index as i">
                                     <p>
@@ -49,7 +38,6 @@
                                 </ng-container>
                             </div>
                         </div>
-
                     </div>
                     <!-- show recommndation -->
                     <div class="show_recommd" *ngIf="recommendationList!=null&&recommendationList!=undefined&&recommendationList.length>0">
@@ -170,26 +158,23 @@
                     <div class="col-sm-8">
                         <p class="trendProfile">
                             <a class="anchorTag" [routerLink]="['/trendingProfileView']">View profile details</a>
-                            <img src="assets/images/icon_help.svg" (click)="hideHelps=true" class="question">
+                            <img src="assets/images/icon_help.svg"  class="question">
+                            <!-- (click)="hideHelps=true" -->
                         </p>
-                        <div class="hide_backgroundsmall" *ngIf="hideHelps">
-                            <p class="help">Help text goes here. It no longer is a pop-up, but is now an expanded section. The help section
-                                text could get somewhat long and would just wrap around like this.</p>
-                            <p class="hide_text" (click)="hideHelps=false">hide</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <p class="question_icon">
-                            <img src="assets/images/icon_help.svg" class="question_mark" (click)="hideHelps=true" style="cursor:pointer">
-                        </p>
-                        <!-- <div class="hide_background" *ngIf="hideHelps">
+                        <!-- <div class="hide_backgroundsmall" *ngIf="hideHelps">
                             <p class="help">Help text goes here. It no longer is a pop-up, but is now an expanded section. The help section
                                 text could get somewhat long and would just wrap around like this.</p>
                             <p class="hide_text" (click)="hideHelps=false">hide</p>
                         </div> -->
                     </div>
+                    <div class="col-sm-4">
+                        <p class="question_icon">
+                            <img src="assets/images/icon_help.svg" class="question_mark" style="cursor:pointer">
+                            <!-- (click)="hideHelps=true"  -->
+                        </p>
+                    </div>
                 </div>
-                <div class="row" *ngIf="hideHelps">
+                <!-- <div class="row" *ngIf="hideHelps">
                      <div class="col-sm-12">
                       <div class="hide_background" >
                             <p class="help">Help text goes here. It no longer is a pop-up, but is now an expanded section. The help section
@@ -197,7 +182,7 @@
                             <p class="hide_text" (click)="hideHelps=false">hide</p>
                         </div>
                      </div>
-                </div>
+                </div> -->
                 <!-- help text and area chart -->
                 <div class="row">
                     <div class="col-sm-12" *ngIf="trendingHomeChart!=undefined">

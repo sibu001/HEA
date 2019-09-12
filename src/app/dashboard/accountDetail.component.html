@@ -134,11 +134,11 @@
                     <div class="col-sm-3">
                         <h3 class="Account">User entered data</h3>
                         <hr>
-                        <p>{{users.outhMeResponse.constructionSQFT}}<a class="a_edit" (click)="edit(1)">Edit</a></p>
+                        <p>{{users.outhMeResponse.constructionSQFT}}<a  *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(1)">Edit</a></p>
                         <hr>
-                        <p>{{users.outhMeResponse.lotSize}}<a class="a_edit" (click)="edit(2)">Edit</a></p>
+                        <p>{{users.outhMeResponse.lotSize}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(2)">Edit</a></p>
                         <hr>
-                        <p>{{users.outhMeResponse.yearBuilt}}<a class="a_edit" (click)="edit(3)">Edit</a></p>
+                        <p>{{users.outhMeResponse.yearBuilt}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(3)">Edit</a></p>
                         <hr>
                     </div>
                 </div>

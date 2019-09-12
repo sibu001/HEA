@@ -1,4 +1,4 @@
-<section class="space-top"  #panel>
+<section class="space-top" #panel>
   <!-------------------------------- First Slider -------------------------------------------------->
   <div class="container-fluid" *ngIf="users.currentPaneNumber.currentPane!=null">
     <div class="row" id="leftColumn">
@@ -6,12 +6,13 @@
         <div class="background_leaksresponsive" *ngIf="users.currentPaneNumber.survey.surveyDescription.showLeaks">
           <ng-container *ngFor="let leak of users.leakList;index as i">
             <span *ngIf="i<=6">
-            <button type="button" class="btn btn-primary button" (click)="leakView()" >
-             <img src="assets/images/{{leak.recommendation.takebackIcon}}" class="leaksdiscovery">
-          </button>&nbsp;
+              <button type="button" class="btn btn-primary button" (click)="leakView()">
+                <img src="assets/images/{{leak.recommendation.takebackIcon}}" class="leaksdiscovery">
+              </button>&nbsp;
             </span>
           </ng-container>
-          <p class="total_leaksResponsive"><a style="cursor:pointer;" [routerLink]="['/leakListView']">See All {{users.leakList.length}}
+          <p class="total_leaksResponsive"><a style="cursor:pointer;" [routerLink]="['/leakListView']">See All
+              {{users.leakList.length}}
               leaks
             </a></p>
         </div>
@@ -19,8 +20,8 @@
         <div class="row" *ngIf="users.currentPaneNumber.currentPane!=null">
           <div class="col-sm-12">
             <input #inp1 id="myInput" type="text" class="inputhide">
-            <div *ngIf="users.currentPaneNumber.currentPane.htmFactoid!=null" [innerHTML]="users.currentPaneNumber.currentPane.htmFactoid | safeHtml"
-              class="factoid"></div>
+            <div *ngIf="users.currentPaneNumber.currentPane.htmFactoid!=null"
+              [innerHTML]="users.currentPaneNumber.currentPane.htmFactoid | safeHtml" class="factoid"></div>
             <div *ngIf="users.currentPaneNumber.errors!=null">
               <ng-container *ngFor="let errors of users.currentPaneNumber.errors">
                 <div style="color:red;font-size: 18px;" [innerHTML]="errors.errorCode | safeHtml"></div>
@@ -32,42 +33,43 @@
             <hr class="hr_space">
             <div class="row">
               <div class="col-sm-3 col-xs-3">
-                <p class="paneLabel" *ngIf="users.currentPaneNumber.currentPane.paneLabel!=null">{{users.currentPaneNumber.currentPane.paneLabel}}</p>
+                <p class="paneLabel" *ngIf="users.currentPaneNumber.currentPane.paneLabel!=null">
+                  {{users.currentPaneNumber.currentPane.paneLabel}}</p>
               </div>
               <div class="col-sm-9 col-xs-9">
                 <p class="pane_help">{{users.currentPaneNumber.currentPane.label}}&nbsp;
-                  <span *ngIf="users.currentPaneNumber.currentPane.htmHelp!=null&&users.currentPaneNumber.currentPane.htmHelp.length>1">
+                  <span
+                    *ngIf="users.currentPaneNumber.currentPane.htmHelp!=null&&users.currentPaneNumber.currentPane.htmHelp.length>1">
                     <img src="assets/images/icon_help.svg" class="question" (click)="qusHide=!qusHide"></span>
                 </p>
               </div>
             </div>
-
             <div class="row " *ngIf="qusHide">
               <div class="col-sm-2"></div>
               <div class="col-sm-10 questionHelp">
                 <div [innerHTML]="users.currentPaneNumber.currentPane.htmHelp | safeHtml">
-
                 </div>
                 <span class="hidebuttondemo" (click)="qusHide=!qusHide">hide</span>
               </div>
             </div>
-
-
             <div class="row">
               <div class="col-sm-1"></div>
               <div class="col-sm-11">
                 <div class="home_energy" [innerHTML]="users.currentPaneNumber.currentPane.htmHeader | safeHtml"></div>
-                <div *ngIf="users.currentPaneNumber.currentPane.htmPageText!=null&&users.currentPaneNumber.currentPane.htmPageText.length>0">
-                  <div [innerHTML]="users.currentPaneNumber.currentPane.htmPageText | safeHtml" class="accurate top"></div>
+                <div  *ngIf="users.currentPaneNumber.currentPane.htmPageText!=null&&users.currentPaneNumber.currentPane.htmPageText.length>0">
+                  <div [innerHTML]="users.currentPaneNumber.currentPane.htmPageText | safeHtml" class="accurate top">
+                  </div>
                   <hr class="bottomLineTop">
                 </div>
                 <!--chart div  -->
-                <div class="row chartPortion" *ngIf="users.currentPaneNumber.paneCharts!=null&&users.currentPaneNumber.paneCharts.length>0">
+                <div class="row chartPortion"
+                  *ngIf="users.currentPaneNumber.paneCharts!=null&&users.currentPaneNumber.paneCharts.length>0">
                   <div class="col-sm-12 border_class">
                     <ng-container *ngFor="let charts of users.currentPaneNumber.paneCharts">
                       <div class="row">
                         <div class="col-lg-12 col-sm-12">
-                          <div [innerHTML]="charts.chart.freeChartDiv | safeHtml" class="surveyChartDiv" id="content"></div>
+                          <div [innerHTML]="charts.chart.freeChartDiv | safeHtml" class="surveyChartDiv" id="content">
+                          </div>
                           <div [innerHTML]="charts.chart.htmFooter | safeHtml" class="footers"></div>
                         </div>
                       </div>
@@ -113,11 +115,15 @@
                                 <td>{{i+1}}</td>
                                 <ng-container *ngFor="let surveyAnswerValue of surveyAnswer.surveyAnswers">
                                   <td *ngIf="surveyAnswerValue.dataField.userDisplay">
-                                    <span *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='select'">{{surveyAnswerValue.value}}</span>
-                                    <span *ngIf="surveyAnswerValue.dataField.dataType=='text'&&surveyAnswerValue.dataField.inputType=='text'">{{surveyAnswerValue.value}}</span>
-                                    <form *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='text'">
+                                    <span
+                                      *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='select'">{{surveyAnswerValue.value}}</span>
+                                    <span
+                                      *ngIf="surveyAnswerValue.dataField.dataType=='text'&&surveyAnswerValue.dataField.inputType=='text'">{{surveyAnswerValue.value}}</span>
+                                    <form
+                                      *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='text'">
                                       <div class="form-group">
-                                        <input type="text" name="jan" class="form-control" id="input_gallons" [(ngModel)]="surveyAnswerValue.value">
+                                        <input type="text" name="jan" class="form-control" id="input_gallons"
+                                          [(ngModel)]="surveyAnswerValue.value">
                                       </div>
                                     </form>
                                   </td>
@@ -153,88 +159,76 @@
                 <!-------------------------Current Pane Answer -------------------------->
                 <div *ngIf="users.currentPaneNumber.currentPaneAnswers!=null">
                   <!----------------------Lawn and Hardscape info ------------------------>
-                  <div class="row" *ngIf="users.currentPaneNumber.currentPane.paneCode=='w_hardscapeData'||users.currentPaneNumber.currentPane.paneCode=='w_landscapeDetails'">
-
+                  <div class="row"
+                    *ngIf="users.currentPaneNumber.currentPane.paneCode=='w_hardscapeData'||users.currentPaneNumber.currentPane.paneCode=='w_landscapeDetails'">
                     <div class="col-lg-12 col-sm-12 col-xs-12" id="scrollhardscape">
                       <table class="surveyAnswers" style="width:100%;">
                         <thead>
                           <div class="row">
                             <div class="col-lg-8 col-sm-12 col-xs-12">
                               <ng-container *ngFor="let answersListLawn of users.currentPaneNumber.currentPaneAnswers">
-                                <div class="row" *ngIf="answersListLawn.dataField.userDisplay&&answersListLawn.dataField.inputType=='text'&&answersListLawn.viewable">
+                                <div class="row"
+                                  *ngIf="answersListLawn.dataField.userDisplay&&answersListLawn.dataField.inputType=='text'&&answersListLawn.viewable">
                                   <div class="col-lg-11 col-md-11 col-sm-11">
                                     <div class="form-group" id="house">
                                       <h3 class="accessors">{{answersListLawn.dataField.label}}</h3>
-                                      <p class="USD" *ngIf="answersListLawn.helpHide" id="helpiconcontaindesktop">{{answersListLawn.dataField.helpText}}
-                                        <span class="hidebuttondemo" (click)="answersListLawn.helpHide=!answersListLawn.helpHide">hide</span>
+                                      <p class="USD" *ngIf="answersListLawn.helpHide" id="helpiconcontaindesktop">
+                                        {{answersListLawn.dataField.helpText}}
+                                        <span class="hidebuttondemo"
+                                          (click)="answersListLawn.helpHide=!answersListLawn.helpHide">hide</span>
                                       </p>
-                                      <input type="text" [name]="answersListLawn.dataField.field" [attr.style]="answersListLawn.dataField.valueCssStyle | safe"
-                                        class="form-control box" [id]="'field'+answersListLawn.id" [(ngModel)]="answersListLawn.value"
-                                        [readonly]="answersListLawn.dataField.readOnly" [value]="answersListLawn.value">&nbsp;
-                                      <span class="square_feet" *ngIf="answersListLawn.dataField.unit!=null&&answersListLawn.dataField.unit.length>0">({{answersListLawn.dataField.unit}})</span>&nbsp;&nbsp;
-
+                                      <input type="text" [name]="answersListLawn.dataField.field"
+                                        [attr.style]="answersListLawn.dataField.valueCssStyle | safe"
+                                        class="form-control box" [id]="'field'+answersListLawn.id"
+                                        [(ngModel)]="answersListLawn.value"
+                                        [readonly]="answersListLawn.dataField.readOnly"
+                                        [value]="answersListLawn.value">&nbsp;
+                                      <span class="square_feet"
+                                        *ngIf="answersListLawn.dataField.unit!=null&&answersListLawn.dataField.unit.length>0">({{answersListLawn.dataField.unit}})</span>&nbsp;&nbsp;
                                     </div>
-
                                   </div>
                                   <div class="col-lg-1 col-md-1 col-sm-1">
                                     <div class="responsiveHelpIcon">
-                                      <span *ngIf="answersListLawn.dataField.helpText!=null&&answersListLawn.dataField.helpText.length>1">
-                                    <img src="assets/images/icon_help.svg" class="help-img" (click)="answersListLawn.helpHide=!answersListLawn.helpHide">
-                                  </span>
+                                      <span
+                                        *ngIf="answersListLawn.dataField.helpText!=null&&answersListLawn.dataField.helpText.length>1">
+                                        <img src="assets/images/icon_help.svg" class="help-img"
+                                          (click)="answersListLawn.helpHide=!answersListLawn.helpHide">
+                                      </span>
                                     </div>
                                   </div>
-                                  <div class="row" id="helpiconcontainresponsiveLawn" *ngIf="answersListLawn.dataField.helpText!=null&&answersListLawn.dataField.helpText.length>1">
+                                  <div class="row" id="helpiconcontainresponsiveLawn"
+                                    *ngIf="answersListLawn.dataField.helpText!=null&&answersListLawn.dataField.helpText.length>1">
                                     <div class="col-lg-12 col-md-12 col-sm-12">
-                                      <p class="demo1" *ngIf="answersListLawn.helpHide">{{answersListLawn.dataField.helpText}}
-                                        <span class="hidebuttondemo" (click)="answersListLawn.helpHide=!answersListLawn.helpHide">hide</span>
+                                      <p class="demo1" *ngIf="answersListLawn.helpHide">
+                                        {{answersListLawn.dataField.helpText}}
+                                        <span class="hidebuttondemo"
+                                          (click)="answersListLawn.helpHide=!answersListLawn.helpHide">hide</span>
                                       </p>
                                     </div>
                                   </div>
                                 </div>
                               </ng-container>
-
                             </div>
                             <div class="col-lg-4 col-sm-12 col-xs-12">
                               <div [innerHTML]="users.currentPaneNumber.currentPane.htmPageText | safeHtml"></div>
-                              <div id="lotview" style="top: 86.1875px; left: 0.641px; width: 280px; height: 300px; margin-bottom: 20px;">
+                              <div id="lotview"
+                                style="top: 86.1875px; left: 0.641px; width: 280px; height: 300px; margin-bottom: 20px;">
                               </div>
                             </div>
                           </div>
                         </thead>
                         <tbody>
-
                           <tr>
                             <td>
-                              <!-- <ng-container *ngFor="let answersListLawn of users.currentPaneNumber.currentPaneAnswers">
-                                  <div class="form-group" id="house" *ngIf="answersListLawn.dataField.userDisplay&&answersListLawn.dataField.inputType=='text'&&answersListLawn.viewable">
-                                    <label class="control-label col-sm-7">
-                                <h3 class="accessors" [attr.style]="answersListLawn.dataField.labelCssStyle | safe">{{answersListLawn.dataField.label}}</h3>
-                              </label>
-                                    <div class="col-sm-5">
-                                      <input type="text" [name]="answersListLawn.dataField.field" [attr.style]="answersListLawn.dataField.valueCssStyle | safe"
-                                        class="form-control box" [id]="'field'+answersListLawn.id" [(ngModel)]="answersListLawn.value"
-                                        [readonly]="answersListLawn.dataField.readOnly" [value]="answersListLawn.value">&nbsp;
-                                      <span class="square_feet" *ngIf="answersListLawn.dataField.unit!=null&&answersListLawn.dataField.unit.length>1">({{answersListLawn.dataField.unit}})</span>&nbsp;&nbsp;
-                                      <span *ngIf="answersListLawn.dataField.helpText!=null&&answersListLawn.dataField.helpText.length>1">
-                                  <img src="assets/images/icon_help.svg" class="help-img" (click)="answersListLawn.helpHide=!answersListLawn.helpHide">
-                                  <label class="USD" *ngIf="answersListLawn.helpHide">{{answersListLawn.dataField.helpText}}
-                                  </label>
-                                </span>
-                                    </div>
-                                    <br>
-                                  </div>
-                                </ng-container> -->
-
                             </td>
                           </tr>
-
                         </tbody>
                       </table>
                     </div>
                   </div>
 
                   <!--------------------first------------------------>
-                  <div *ngIf="users.currentPaneNumber.currentPane.paneCode!='w_hardscapeData'&&users.currentPaneNumber.currentPane.paneCode!='w_landscapeDetails'">
+                  <div  *ngIf="users.currentPaneNumber.currentPane.paneCode!='w_hardscapeData'&&users.currentPaneNumber.currentPane.paneCode!='w_landscapeDetails'">
                     <ng-container *ngFor="let answersList of users.currentPaneNumber.currentPaneAnswers;index as j">
                       <!----------------------vradiobutton ------------------------>
                       <div *ngIf="answersList.dataField.inputType=='vradiobutton'&&answersList.dataField.userDisplay&&answersList.viewable">
@@ -243,12 +237,15 @@
                             <div class="radio_buttonfirst">
                               <!--datafield lable-->
                               <div [innerHTML]="answersList.dataField.label | safeHtml" class="agree"></div>
-                              <label class="secondpage" *ngFor="let dataFieldValue of answersList.dataField.fieldValues;index as k">
-                              <div [innerHTML]="dataFieldValue.name | safeHtml" class="silvercolorsecond"></div>
-                              <input type="radio" [name]="answersList.dataField.field" [id]="k" [value]="dataFieldValue.value" [(ngModel)]="answersList.value"
-                                [checked]="'Y'==dataFieldValue.value">
-                              <span class="checkmark1"></span>
-                            </label>
+                              <label class="secondpage"
+                                *ngFor="let dataFieldValue of answersList.dataField.fieldValues;index as k">
+                                <div [innerHTML]="dataFieldValue.name | safeHtml" class="silvercolorsecond"></div>
+                                <input type="radio" [name]="answersList.dataField.field" [id]="k"
+                                  [value]="dataFieldValue.value" [(ngModel)]="answersList.value"
+                                  [checked]="'Y'==dataFieldValue.value"
+                                  (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh)">
+                                <span class="checkmark1"></span>
+                              </label>
                             </div>
                           </div>
                           <!-- <div class="col-lg-2 col-sm-3"></div> -->
@@ -267,35 +264,85 @@
                               <label class="control-label" for="YourName">
                                 <span class="inputfieldcss">{{answersList.dataField.label}}</span>
                               </label>
-                              <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
-                                <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                              <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                                {{answersList.dataField.helpText}}
+                                <span class="hidebuttondemo"
+                                  (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                               </p>
                               <div class="row">
                                 <div class="col-lg-4 col-md-4 col-sm-6 col-xs-8">
                                   <form>
                                     <div class="form-group">
-                                      <input type="text" class="form-control" id="YourName" name="name" [(ngModel)]="answersList.value">
+                                      <input type="text" class="form-control" id="YourName" name="name"
+                                        [(ngModel)]="answersList.value">
                                     </div>
                                   </form>
                                 </div>
                               </div>
                             </div>
                             <div class="col-md-1 col-sm-1">
-                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1" style="float:right;">
-                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn1" (click)="answersList.helpHide=!answersList.helpHide">
+                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                                style="float:right;">
+                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn1"
+                                  (click)="answersList.helpHide=!answersList.helpHide">
                               </div>
                             </div>
-                            <div class="row" id="helpiconcontainresponsive" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                            <div class="row" id="helpiconcontainresponsive"
+                              *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
                               <div class="col-lg-12 col-md-12 col-sm-12">
                                 <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                  <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                  <span class="hidebuttondemo"
+                                    (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
                               </div>
                             </div>
                           </div>
                           <hr class="bottom">
                         </div>
-                        <div *ngIf="answersList.dataField.fieldValues.length>0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
+
+                        <div class="form-group thiredPane" *ngIf="answersList.dataField.fieldValues.length>0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
+                          <div class="row">
+                            <div class="col-lg-11 col-sm-11">
+                              <label class="control-label" for="YourName">
+                                <span class="inputfieldcss">{{answersList.dataField.label}}</span>
+                              </label>
+                              <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                                {{answersList.dataField.helpText}}
+                                <span class="hidebuttondemo"
+                                  (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                              </p>
+                              <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-6 col-xs-8">
+                                  <form>
+                                    <div class="form-group">
+                                      <input type="text" class="form-control" id="YourName" name="name"
+                                        [(ngModel)]="answersList.value">
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-1 col-sm-1">
+                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                                style="float:right;">
+                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn1"
+                                  (click)="answersList.helpHide=!answersList.helpHide">
+                              </div>
+                            </div>
+                            <div class="row" id="helpiconcontainresponsive"
+                              *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                              <div class="col-lg-12 col-md-12 col-sm-12">
+                                <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
+                                  <span class="hidebuttondemo"
+                                    (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <hr class="bottom">
+                        </div>
+
+                        <!-- <div *ngIf="answersList.dataField.fieldValues.length>0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
                           <div class="row secondspage">
                             <div class="col-sm-12">
                               <h3 class="about_program" [style.color]="colors">{{answersList.dataField.label}}</h3>
@@ -313,16 +360,19 @@
                             <br>
                           </div>
                           <hr class="bottom">
-                        </div>
+                        </div> -->
 
                         <div class="fourethPane" *ngIf="answersList.dataField.fieldValues.length==0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
                           <div class="row">
                             <div class="col-lg-11 col-sm-11">
-                              <div [innerHTML]="answersList.dataField.label | safeHtml" class="address fourthPaneLable"></div>
+                              <div [innerHTML]="answersList.dataField.label | safeHtml" class="address fourthPaneLable">
+                              </div>
                               <div class="row">
                                 <div class="col-sm-12">
-                                  <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
-                                    <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                  <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                                    {{answersList.dataField.helpText}}
+                                    <span class="hidebuttondemo"
+                                      (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                   </p>
                                 </div>
                               </div>
@@ -331,165 +381,102 @@
                                   : 'USD':true:'0.0-1'}}</span>
                                 <span *ngIf="answersList.dataField.displayPattern=='#,###'">{{answersList.value | number
                                   : '1.0-0' }}</span>
-                                <span *ngIf="answersList.dataField.displayPattern==null||answersList.dataField.displayPattern.length<1"><div
-                                    [innerHTML]="answersList.value | safeHtml"></div></span>
+                                <span
+                                  *ngIf="answersList.dataField.displayPattern==null||answersList.dataField.displayPattern.length<1">
+                                  <div [innerHTML]="answersList.value | safeHtml"></div>
+                                </span>
 
-                                <span *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</span>
+                                <span
+                                  *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</span>
                               </p>
 
                             </div>
                             <div class="col-lg-1 col-sm-1">
-                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1" style="float:right;">
-                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
+                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                                style="float:right;">
+                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn"
+                                  (click)="answersList.helpHide=!answersList.helpHide">
                               </div>
                             </div>
-                            <div class="row" id="helpiconcontainresponsive" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                            <div class="row" id="helpiconcontainresponsive"
+                              *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
                               <div class="col-lg-12 col-md-12 col-sm-12">
                                 <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                  <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                  <span class="hidebuttondemo"
+                                    (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
                               </div>
                             </div>
                           </div>
                           <hr class="bottom" *ngIf="answersList.value!=null&&answersList.value.length>1">
                         </div>
-                        <!-- new end-->
-                        <!-- <div class="form-group second" *ngIf="answersList.valueEntered&&answersList.dataField.fieldValues.length==0&&answersList.dataField.dataType!='number'&&answersList.dataField.field!='w_CalWaterAccountNumber'&&answersList.numberValue>0&&users.currentPaneNumber.currentPane.paneCode!='prf_utilityAccountValidated'">
-                                <br>
-                                <div class="col-sm-6">
-                                  <label class="control-label" for="YourName">
-                                    <span class="inputfieldcss">{{answersList.dataField.label}}</span>
-                                  </label>
-                                </div>
-                                <div class="col-sm-3">
-                                  <input type="text" class="form-control" id="YourName" name="name" [(ngModel)]="answersList.value">
-                                </div>
-                                <div class="col-sm-3">
-                                  <div class="media" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                                    <div class="media-left media-top">
-                                      <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
-                                    </div>
-                                    <div class="media-body">
-                                      <p class="demo" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}</p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div> -->
-
-                        <!-- <div class="row third" *ngIf="answersList.dataField.dataType=='text'&&answersList.dataField.inputType=='text'&&answersList.valueEntered&&answersList.dataField.fieldValues.length>0&&answersList.dataField.field=='w_CalWaterAccountNumber'">
-                                <div class="col-sm-12">
-                                  <h3 class="about_program">{{answersList.dataField.label}}</h3>
-                                  <br>
-                                  <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-3"></div>
-                                    <div class="col-lg-4 col-md-4 col-sm-6">
-                                      <form>
-                                        <div class="form-group">
-                                          <input type="text" name="people" class="form-control" [(ngModel)]="answersList.value">
-                                          <p *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</p>
-                                        </div>
-                                      </form>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-3">
-                                      <div class="media" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                                        <div class="media-left media-top">
-                                          <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
-                                        </div>
-                                        <div class="media-body">
-                                          <p class="demo" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div> -->
-
-                        <!-- <div class="surveyPageText six" *ngIf="!answersList.valueEntered">
-                                <div [innerHTML]="answersList.dataField.label | safeHtml"></div>
-                              </div> -->
-
-                        <!-- <div class="row seven" *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.onChangeRefresh&&answersList.dataField.fieldValues.length==0&&users.currentPaneNumber.currentPane.paneCode=='w_hardscapeData'">
-                                <div class="col-sm-12">
-                                  <h3 class="about_program">{{answersList.dataField.label}}</h3>
-                                  <br>
-                                  <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-3"></div>
-                                    <div class="col-lg-4 col-md-4 col-sm-6">
-                                      <form>
-                                        <div class="form-group">
-                                          <input type="text" name="people" class="form-control" [(ngModel)]="answersList.value">
-                                          <p *ngIf="answersList.dataField.unit!=null">&nbsp;({{answersList.dataField.unit}})</p>
-                                        </div>
-                                      </form>
-                                    </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-3">
-                                      <div class="media" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                                        <div class="media-left media-top">
-                                          <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
-                                        </div>
-                                        <div class="media-body">
-                                          <p class="demo" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div> -->
-                        <div *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&(answersList.dataField.fieldValues.length==0||answersList.dataField.fieldValues.length>0)&&answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer">
+                        <!-- Old condition answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length>=0&&answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer -->
+                        <div *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length>=0&&answersList.dataField.nextRowAnswer">
                           <div class="row seven">
                             <div class="col-lg-11 col-md-11 col-sm-11">
                               <h3 class="about_program">{{answersList.dataField.label}}</h3>
-                              <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
-                                <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                              <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                                {{answersList.dataField.helpText}}
+                                <span class="hidebuttondemo"
+                                  (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                               </p>
                               <div class="row">
-                                <!-- <div class="col-lg-4 col-md-4 col-sm-6">
-                                  <form>
-                                    <div class="form-group">
-                                      <input type="text" name="people" class="form-control" [(ngModel)]="answersList.value">
-                                      <span *ngIf="answersList.dataField.unit!=null">&nbsp;({{answersList.dataField.unit}})</span>
-                                    </div>
-                                  </form>
-                                </div> -->
                                 <div class="col-lg-5 col-md-5 col-sm-8 col-xs-12">
                                   <form>
                                     <div class="form-group">
-
                                       <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                          <form>
-                                            <input type="text" name="people" class="form-control" [(ngModel)]="answersList.value">
+                                          <form *ngIf="answersList.field!='vl_EVannualCost'&&answersList.field!='vl_EVkWh'">
+                                            <input type="text" name="people" class="form-control"
+                                              [(ngModel)]="answersList.value">
                                           </form>
+
+                                          <p class="address"  *ngIf="users.currentPaneNumber.currentPane.paneCode!='rl_poolSizeGals'&&users.currentPaneNumber.currentPane.paneCode!='w_lawnEquivalent'&&(answersList.field=='vl_EVannualCost'||answersList.field=='vl_EVkWh')">
+                                            <span *ngIf="answersList.dataField.displayPattern=='$#,###'">{{answersList.value | currency
+                                              : 'USD':true:'0.0-1'}}</span>
+                                            <span *ngIf="answersList.dataField.displayPattern=='#,###'">{{answersList.value | number
+                                              : '1.0-0' }}</span>
+                                            <span *ngIf="answersList.dataField.displayPattern=='#,##0'">{{answersList.value | number
+                                              : '1.0-0' }}</span>
+                                            <span *ngIf="answersList.dataField.displayPattern=='###,###'">{{answersList.value | number
+                                              : '1.0-0' }}</span>
+                                            <span
+                                              *ngIf="answersList.dataField.displayPattern==null||answersList.dataField.displayPattern.length<1">
+                                              <div [innerHTML]="answersList.value | safeHtml"></div>
+                                            </span>
+                                             <span *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</span> 
+                                          </p>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding-left: 0px;">
-                                          <label *ngIf="answersList.dataField.unit!=null" class="unitcss">&nbsp;({{answersList.dataField.unit}})</label>
+                                          <label *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1&&answersList.field!='vl_EVannualCost'&&answersList.field!='vl_EVkWh'"
+                                            class="unitcss">&nbsp;({{answersList.dataField.unit}})</label>
                                         </div>
                                       </div>
-
                                     </div>
                                   </form>
                                 </div>
                               </div>
                             </div>
                             <div class="col-lg-1 col-md-1 col-sm-1">
-                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1" style="float:right;">
-                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
+                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                                style="float:right;">
+                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn"
+                                  (click)="answersList.helpHide=!answersList.helpHide">
                               </div>
                             </div>
                             <div class="row" id="helpiconcontainresponsive">
                               <div class="col-lg-12 col-md-12 col-sm-12">
                                 <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                  <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                  <span class="hidebuttondemo"
+                                    (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
                               </div>
                             </div>
-
                           </div>
                           <hr class="bottom">
                         </div>
-                        <div *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length>0&&!answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer">
+
+                        <!-- <div *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length>0&&!answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer">
                           <div class="row sevenSecond">
                             <div class="col-sm-11">
                               <div class="row">
@@ -536,10 +523,9 @@
                                 </p>
                               </div>
                             </div>
-
                           </div>
                           <hr class="bottom">
-                        </div>
+                        </div> -->
 
                         <div class="form-group thiredPaneNumber" *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.nextRowAnswer">
                           <div class="row">
@@ -549,47 +535,65 @@
                                   <label class="control-label" for="YourName">
                                     <span class="inputfieldcss">{{answersList.dataField.label}}</span>
                                   </label>
-                                  <p class="demo1" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
-                                    <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                  <p class="demo1" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                                    {{answersList.dataField.helpText}}
+                                    <span class="hidebuttondemo"
+                                      (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                   </p>
                                 </div>
                               </div>
                               <div class="row">
-                                <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6">
+                                <div class="col-lg-5 col-md-5 col-sm-8 col-xs-12">
                                   <form>
                                     <div class="form-group">
-                                      <input type="text" class="form-control" id="YourName" name="name" [(ngModel)]="answersList.value">
+                                      <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                          <form>
+                                            <input type="text" class="form-control" id="YourName" name="name"
+                                              [(ngModel)]="answersList.value">
+                                          </form>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding-left: 0px;">
+                                          <label *ngIf="answersList.dataField.unit!=null"
+                                            class="unitcss">&nbsp;({{answersList.dataField.unit}})</label>
+                                        </div>
+                                      </div>
                                     </div>
                                   </form>
                                 </div>
                               </div>
                             </div>
                             <div class="col-lg-1 col-md-1 col-sm-1">
-                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1" style="float:right;">
-                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn1" (click)="answersList.helpHide=!answersList.helpHide">
+                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                                style="float:right;">
+                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn1"
+                                  (click)="answersList.helpHide=!answersList.helpHide">
                               </div>
                             </div>
                             <div class="row" id="helpiconcontainresponsive">
                               <div class="col-lg-12 col-md-12 col-sm-12">
                                 <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                  <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                  <span class="hidebuttondemo"
+                                    (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
                               </div>
                             </div>
                           </div>
                           <hr class="bottom">
                         </div>
-
-                        <div class="fourethPaneNumberPane" *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer">
+                        <!-- for testing purpus commnet this div -->
+                       <!-- <div class="fourethPaneNumberPane" *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer&&users.currentPaneNumber.currentPane.paneCode=='vl_ElectricVehicle'">
                           <div class="row">
                             <div class="col-lg-11 col-sm-11">
                               <p [innerHTML]="answersList.dataField.label | safeHtml" class="address"></p>
-                              <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
-                                <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                              <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                                {{answersList.dataField.helpText}}
+                                <span class="hidebuttondemo"
+                                  (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                               </p>
                               <div class="row">
                                 <div class="col-lg-12 col-sm-12">
-                                  <p class="address" *ngIf="users.currentPaneNumber.currentPane.paneCode!='rl_poolSizeGals'&&users.currentPaneNumber.currentPane.paneCode!='w_lawnEquivalent'">
+                                  <p class="address"  *ngIf="users.currentPaneNumber.currentPane.paneCode!='rl_poolSizeGals'&&users.currentPaneNumber.currentPane.paneCode!='w_lawnEquivalent'">
                                     <span *ngIf="answersList.dataField.displayPattern=='$#,###'">{{answersList.value | currency
                                       : 'USD':true:'0.0-1'}}</span>
                                     <span *ngIf="answersList.dataField.displayPattern=='#,###'">{{answersList.value | number
@@ -598,10 +602,13 @@
                                       : '1.0-0' }}</span>
                                     <span *ngIf="answersList.dataField.displayPattern=='###,###'">{{answersList.value | number
                                       : '1.0-0' }}</span>
-                                    <span *ngIf="answersList.dataField.displayPattern==null||answersList.dataField.displayPattern.length<1"><div
-                                        [innerHTML]="answersList.value | safeHtml"></div></span>
+                                    <span
+                                      *ngIf="answersList.dataField.displayPattern==null||answersList.dataField.displayPattern.length<1">
+                                      <div [innerHTML]="answersList.value | safeHtml"></div>
+                                    </span>
 
-                                    <span *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</span>
+                                    <span
+                                      *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</span>
                                   </p>
 
                                   <div class="row" *ngIf="users.currentPaneNumber.currentPane.paneCode=='rl_poolSizeGals'||users.currentPaneNumber.currentPane.paneCode=='w_lawnEquivalent'">
@@ -610,10 +617,12 @@
                                         <div class="form-group">
                                           <div class="row">
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                              <input type="text" name="people" class="form-control" [(ngModel)]="answersList.value">
+                                              <input type="text" name="people" class="form-control"
+                                                [(ngModel)]="answersList.value">
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding-left: 0px;">
-                                              <label class="unitcss" *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</label>
+                                              <label class="unitcss"
+                                                *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</label>
                                             </div>
                                           </div>
                                         </div>
@@ -624,38 +633,49 @@
                               </div>
                             </div>
                             <div class="col-lg-1 col-sm-1">
-                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1" style="float:right;">
-                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
+                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                                style="float:right;">
+                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn"
+                                  (click)="answersList.helpHide=!answersList.helpHide">
                               </div>
                             </div>
                             <div class="row" id="helpiconcontainresponsive">
                               <div class="col-lg-12 col-md-12 col-sm-12">
                                 <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                  <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                  <span class="hidebuttondemo"
+                                    (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
                               </div>
                             </div>
                           </div>
                           <hr class="bottom">
-                        </div>
+                        </div>  -->
                       </form>
+
                       <!--------------------hslider------------------------>
                       <div *ngIf="answersList.dataField.inputType=='hslider'&&answersList.viewable">
                         <div class="row">
                           <div class="col-sm-11 understand">
                             <h3 class="select_nextfeedback" style="margin-top:0px;">{{answersList.dataField.label}}</h3>
-                            <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
-                              <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                            <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                              {{answersList.dataField.helpText}}
+                              <span class="hidebuttondemo"
+                                (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                             </p>
                             <div class="row">
                               <div class="col-sm-12 hsliderDiv" id="{{answersList.field}}">
                                 <!-- <input type="range" min="1" max="5" step='1' [(ngModel)]="answersList.value" (ngModelChange)="answersList.value=answersList.value+''"
                                 class="slider" id="myRange" /> -->
-                                <button type="button" class="btn btn-primary hslider1" (click)="answersList.value=hover(1,answersList.field)">1</button>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-primary hslider2" (click)="answersList.value=hover(2,answersList.field)">2</button>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-primary hslider3" (click)="answersList.value=hover(3,answersList.field)">3</button>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-primary hslider4" (click)="answersList.value=hover(4,answersList.field)">4</button>&nbsp;&nbsp;
-                                <button type="button" class="btn btn-primary hslider5" (click)="answersList.value=hover(5,answersList.field)">5</button>
+                                <button type="button" class="btn btn-primary hslider1"
+                                  (click)="answersList.value=hover(1,answersList.field)">1</button>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-primary hslider2"
+                                  (click)="answersList.value=hover(2,answersList.field)">2</button>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-primary hslider3"
+                                  (click)="answersList.value=hover(3,answersList.field)">3</button>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-primary hslider4"
+                                  (click)="answersList.value=hover(4,answersList.field)">4</button>&nbsp;&nbsp;
+                                <button type="button" class="btn btn-primary hslider5"
+                                  (click)="answersList.value=hover(5,answersList.field)">5</button>
                                 <!-- <br/> -->
                               </div>
                               <!-- <div class="col-sm-6" class="inputButton">
@@ -664,52 +684,36 @@
                             </div>
                           </div>
                           <div class="col-sm-1">
-                            <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1" style="float:right;">
-                              <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
+                            <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                              style="float:right;">
+                              <img src="assets/images/icon_help.svg" class="media-object" id="help_btn"
+                                (click)="answersList.helpHide=!answersList.helpHide">
                             </div>
                           </div>
-                          <div class="row" id="helpiconcontainresponsive" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                          <div class="row" id="helpiconcontainresponsive"
+                            *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
                             <div class="col-lg-12 col-md-12 col-sm-12">
                               <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                <span class="hidebuttondemo"
+                                  (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                               </p>
                             </div>
                           </div>
-
                         </div>
                         <hr class="bottom">
                       </div>
-                      <!--------------------number------------------------>
-                      <!-- <div class="row" *ngIf="answersList.dataField.inputType=='number'&&answersList.dataField.userDisplay&&answersList.viewable">
-                          <h3 class="survey TH">What is the size of your home?</h3>
-                          <div class="col-lg-4 col-md-3 col-sm-3"></div>
-                          <div class="col-lg-4 col-md-6 col-sm-6" style="text-align:center;">
-                            <div class="form-group">
-                              <input type="number" name="size" class="form-control" [(ngModel)]="users.paneAns3" style="width:91px;display: inline-block;">&nbsp;
-                              <span class="square_feet">(in square feet)</span>
-                            </div>
-                          </div>
-                          <div class="col-lg-4 col-md-3 col-sm-3">
-                            <div class="media">
-                              <div class="media-left media-top">
-                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
-                              </div>
-                              <div class="media-body">
-                                <p class="demo" *ngIf="answersList.helpHide">Include all conditioned space, but not your
-                                  garage.
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div> -->
+
                       <!--------------------select------------------------>
-                      <div *ngIf="answersList.dataField.inputType=='select'&&answersList.dataField.userDisplay&&answersList.viewable">
+                      <div
+                        *ngIf="answersList.dataField.inputType=='select'&&answersList.dataField.userDisplay&&answersList.viewable">
                         <div class="row select">
                           <div class="col-sm-11">
                             <h3 class="survey TH">{{answersList.dataField.label}}</h3>
                             <div class="row">
                               <div class="col-sm-12">
-                                <p class="demo1" *ngIf="answersList.helpHide" (click)="answersList.helpHide=!answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
+                                <p class="demo1" *ngIf="answersList.helpHide"
+                                  (click)="answersList.helpHide=!answersList.helpHide" id="helpiconcontaindesktop">
+                                  {{answersList.dataField.helpText}}
                                   <span class="hidebuttondemo">hide</span>
                                 </p>
                               </div>
@@ -718,9 +722,11 @@
                               <div class="col-lg-5 col-md-5 col-sm-7 col-xs-12">
                                 <form class="form-tag">
                                   <div class="form-group" style="height: 34px;">
-                                    <select name="pool/spa" class="form-control" [(ngModel)]="answersList.value" (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh)">
-                                    <option *ngFor="let optionList of answersList.dataField.fieldValues" [value]="optionList.value" class="options">{{optionList.name}}</option>
-                                  </select>&nbsp;
+                                    <select name="pool/spa" class="form-control" [(ngModel)]="answersList.value"
+                                      (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh)">
+                                      <option *ngFor="let optionList of answersList.dataField.fieldValues"
+                                        [value]="optionList.value" class="options">{{optionList.name}}</option>
+                                    </select>&nbsp;
                                   </div>
                                 </form>
                               </div>
@@ -728,13 +734,16 @@
                           </div>
                           <div class="col-sm-1">
                             <div *ngIf="answersList.dataField.helpText!=null" style="float:right;">
-                              <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
+                              <img src="assets/images/icon_help.svg" class="media-object" id="help_btn"
+                                (click)="answersList.helpHide=!answersList.helpHide">
                             </div>
                           </div>
-                          <div class="row" id="helpiconcontainresponsive" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                          <div class="row" id="helpiconcontainresponsive"
+                            *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
                             <div class="col-lg-12 col-md-12 col-sm-12">
                               <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                <span class="hidebuttondemo"
+                                  (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                               </p>
                             </div>
                           </div>
@@ -743,34 +752,41 @@
                         <hr class="bottom">
                       </div>
                       <!--------------------radiobutton------------------------>
-                      <div *ngIf="answersList.dataField.inputType=='radiobutton'&&answersList.dataField.userDisplay&&answersList.viewable">
+                      <div
+                        *ngIf="answersList.dataField.inputType=='radiobutton'&&answersList.dataField.userDisplay&&answersList.viewable">
                         <div class="row">
                           <div class="col-sm-4">
                             <h3 class="survey TH" *ngIf="answersList.dataField.label!=null">
-                              <abbr title="A duplex is a multi-family complex with 2-4 units; an apartment has 5 or more units.">{{answersList.dataField.label}}</abbr>
+                              <abbr
+                                title="A duplex is a multi-family complex with 2-4 units; an apartment has 5 or more units.">{{answersList.dataField.label}}</abbr>
                             </h3>
                           </div>
                           <div class="col-sm-8 radio_button">
-                            <div class="radio" *ngFor="let radioButtonList of answersList.dataField.fieldValues;index as L">
+                            <div class="radio"
+                              *ngFor="let radioButtonList of answersList.dataField.fieldValues;index as L">
                               <label class="secondpage">
-                              <input type="radio" [name]="answersList.dataField.field" [id]="L" [value]="radioButtonList.value" [(ngModel)]="answersList.value"
-                                [checked]="radioButtonList.value==answersList.value">
+                                <input type="radio" [name]="answersList.dataField.field" [id]="L"
+                                  [value]="radioButtonList.value" [(ngModel)]="answersList.value"
+                                  [checked]="radioButtonList.value==answersList.value">
                                 <span class="checkmark1"></span>
-                              <div [innerHTML]="radioButtonList.name | safeHtml"></div>
-                            </label>
+                                <div [innerHTML]="radioButtonList.name | safeHtml"></div>
+                              </label>
                             </div>
                             <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
                               <div style="float: right;">
-                                <img src="assets/images/icon_help.svg" style="margin-bottom: 12px;" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
+                                <img src="assets/images/icon_help.svg" style="margin-bottom: 12px;" class="media-object"
+                                  id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
                               </div>
                               <!-- <p class="demo" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
                                 <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                               </p> -->
                             </div>
-                            <div class="row helpIconCss" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                            <div class="row helpIconCss"
+                              *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
                               <div class="col-lg-12 col-md-12 col-sm-12">
                                 <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                  <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                  <span class="hidebuttondemo"
+                                    (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
                               </div>
                             </div>
@@ -781,22 +797,42 @@
                         <hr class="bottom">
                       </div>
                       <!--------------------check box------------------------>
-                      <div class="row checkBox" *ngIf="answersList.dataField.inputType=='checkbox'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='boolean'&&answersList.viewable">
-                        <div class="col-lg-1 col-sm-1 col-xs-1">
-                          <!-- <input type="checkbox" [id]="answersList.field" [name]="answersList.field" class="return" [checked]="answersList.value=='true'||answersList.value=='1'||answersList.value=='Y'||answersList.value=='Yes'"
-                              (change)="answersList.value=change(answersList.value)"> -->
-                          <!-- <label class="mail-check">
-                            <input type="checkbox" [id]="answersList.field" [name]="answersList.field" class="return" [checked]="answersList.value=='true'||answersList.value=='1'||answersList.value=='Y'||answersList.value=='Yes'"
-                              (change)="answersList.value=change(answersList.value)">
-                            <span class="checkmark"></span>
-                          </label> -->
-                          <div class="checkbox">
-                            <input [id]="answersList.field" type="checkbox" [name]="answersList.field" [checked]="answersList.value=='true'||answersList.value=='1'||answersList.value=='Y'||answersList.value=='Yes'" (change)="answersList.value=change(answersList.value)">
-                            <label [for]="answersList.field"></label>
+                      <div class="row checkBox"
+                        *ngIf="answersList.dataField.inputType=='checkbox'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='boolean'&&answersList.viewable">
+                        <div class="col-lg-11 col-md-11 col-sm-11">
+                          <div class="row">
+                            <div class="col-lg-1 col-sm-1 col-xs-1">
+                              <div class="checkbox">
+                                <input [id]="answersList.field" type="checkbox" [name]="answersList.field"
+                                  [checked]="answersList.value=='true'||answersList.value=='1'||answersList.value=='Y'||answersList.value=='Yes'"
+                                  (change)="answersList.value=change(answersList.value)">
+                                <label [for]="answersList.field"></label>
+                              </div>
+                            </div>
+                            <div class="col-lg-11 col-sm-11 col-xs-11">
+                              <div [innerHTML]="answersList.dataField.label | safeHtml" class="skin_topic"></div>
+                              <p class="demo1" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                                {{answersList.dataField.helpText}}
+                                <span class="hidebuttondemo"
+                                  (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                              </p>
+                            </div>
                           </div>
                         </div>
-                        <div class="col-lg-11 col-sm-11 col-xs-11">
-                          <div [innerHTML]="answersList.dataField.label | safeHtml" class="skin_topic"></div>
+                        <div class="col-lg-1 col-md-1 col-sm-1">
+                          <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                            style="float:right;">
+                            <img src="assets/images/icon_help.svg" class="media-object" id="help_btn1"
+                              (click)="answersList.helpHide=!answersList.helpHide">
+                          </div>
+                        </div>
+                        <div class="row" id="helpiconcontainresponsive">
+                          <div class="col-lg-12 col-md-12 col-sm-12">
+                            <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
+                              <span class="hidebuttondemo"
+                                (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                            </p>
+                          </div>
                         </div>
                         <br>
                         <!-- <hr class="bottom"> -->
@@ -805,55 +841,68 @@
                       <div class="row dateType" *ngIf="answersList.dataField.inputType=='date'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='datetime'&&answersList.viewable">
                         <div class="col-md-11 col-sm-11">
                           <h3 class="electronics_item">{{answersList.dataField.label}}</h3>
-                          <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
-                            <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                          <p class="demo" style="margin-bottom: 12px;" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                            {{answersList.dataField.helpText}}
+                            <span class="hidebuttondemo"
+                              (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                           </p>
                           <div class="row">
                             <div class="col-lg-5 col-sm-8 col-xs-12">
-                              <p-calendar [(ngModel)]="answersList.value" dataType="string" [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
+                              <p-calendar [(ngModel)]="answersList.value" dataType="string" [showIcon]="true"
+                                dateFormat="mm/dd/yy"></p-calendar>
                             </div>
                           </div>
                         </div>
                         <div class="col-md-1 col-sm-1">
-                          <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1" style="float:right;">
-
-                            <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
+                          <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                            style="float:right;">
+                            <img src="assets/images/icon_help.svg" class="media-object" id="help_btn"
+                              (click)="answersList.helpHide=!answersList.helpHide">
                           </div>
                         </div>
-                        <div class="row" id="helpiconcontainresponsive" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                        <div class="row" id="helpiconcontainresponsive"
+                          *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
                           <div class="col-lg-12 col-md-12 col-sm-12">
                             <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                              <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                              <span class="hidebuttondemo"
+                                (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                             </p>
                           </div>
                         </div>
-                        <hr class="bottom">
                       </div>
                       <!--------------------Text Area------------------------>
-                      <div *ngIf="answersList.dataField.inputType=='textarea'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='text'&&answersList.viewable">
+                      <div
+                        *ngIf="answersList.dataField.inputType=='textarea'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='text'&&answersList.viewable">
                         <div class="row">
                           <div class="col-sm-11">
                             <h3 class="survey TH">{{answersList.dataField.label}}</h3>
-                            <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
-                              <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                            <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                              {{answersList.dataField.helpText}}
+                              <span class="hidebuttondemo"
+                                (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                             </p>
                             <div class="row">
                               <div class="col-sm-12">
                                 <div class="form-group">
-                                  <textarea class="form-control textarea_scroll" rows="3" id="comment" [name]="answersList.dataField.field" [(ngModel)]="answersList.value"></textarea>
+                                  <textarea class="form-control textarea_scroll" rows="3" id="comment"
+                                    [name]="answersList.dataField.field" [(ngModel)]="answersList.value"></textarea>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div class="col-sm-1">
-                            <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1" style="float:right;">
-                              <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
+                            <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
+                              style="float:right;">
+                              <img src="assets/images/icon_help.svg" class="media-object" id="help_btn"
+                                (click)="answersList.helpHide=!answersList.helpHide">
                             </div>
                           </div>
-                          <div class="row" id="helpiconcontainresponsive" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                          <div class="row" id="helpiconcontainresponsive"
+                            *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
                             <div class="col-lg-12 col-md-12 col-sm-12">
                               <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                <span class="hidebuttondemo"
+                                  (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                               </p>
                             </div>
                           </div>
@@ -888,31 +937,39 @@
           </div>
           <div class="col-sm-6 col-xs-6 next_button">
             <a *ngIf="users.currentPaneNumber.currentPane.showNext" class="right">
-              <button type="button" class="btn btn-primary" id="_next" (click)="next('next',users.paneNumber)">next</button>
+              <button type="button" class="btn btn-primary" id="_next"
+                (click)="next('next',users.paneNumber)">next</button>
               <span class="sr-only">Next</span>
             </a>
           </div>
         </div>
         <hr class="bottomLine">
         <div class="row" *ngIf="users.currentPaneNumber.survey!=null">
-          <div class="col-sm-12" style="text-align: center;" *ngIf="users.currentPaneNumber.survey.surveyDescription.showProgressIndicator">
+          <div class="col-sm-12" style="text-align: center;"
+            *ngIf="users.currentPaneNumber.survey.surveyDescription.showProgressIndicator">
             <ng-container *ngFor="let totalPaneNumber of totalPanes;index as i">
               <img src="assets/images/lightsilverbox.png" *ngIf="i>users.currentPaneNumber.currentPaneProgress">
-              <img src="assets/images/silverbox.png" (click)="goToSurvey(users.currentPaneNumber.survey.surveyDescription.surveyCode,users.currentPaneNumber.survey.surveyId,users.currentPaneNumber.survey.surveyDescription.panes,i)"
+              <img src="assets/images/silverbox.png"
+                (click)="goToSurvey(users.currentPaneNumber.survey.surveyDescription.surveyCode,users.currentPaneNumber.survey.surveyId,users.currentPaneNumber.survey.surveyDescription.panes,i)"
                 *ngIf="i<=users.currentPaneNumber.currentPaneProgress">&nbsp;&nbsp;
             </ng-container>
             <p class="topic_title">{{users.currentPaneNumber.survey.surveyDescription.label}}</p>
           </div>
         </div>
-        <br/>
+        <br />
       </div>
 
-      <div class="col-md-3 col-sm-4 rightColumn" *ngIf="users.currentPaneNumber.currentPane!=null" [style.height.px]="divHeight">
+      <div class="col-md-3 col-sm-4 rightColumn" *ngIf="users.currentPaneNumber.currentPane!=null"
+        [style.height.px]="divHeight">
         <!-------------------- Html RightTop And RightBottm Text ------------------------------------>
-        <div *ngIf="users.currentPaneNumber.currentPane.htmRightTop!=null" class="rightColumnDiv" [style.height.px]="divHeight">&nbsp;
-          <div [innerHTML]="users.currentPaneNumber.currentPane.htmRightTop | safeHtml" class="energy_analytic" style="margin-top: 17px;"></div>
+        <div *ngIf="users.currentPaneNumber.currentPane.htmRightTop!=null" class="rightColumnDiv"
+          [style.height.px]="divHeight">&nbsp;
+          <div [innerHTML]="users.currentPaneNumber.currentPane.htmRightTop | safeHtml" class="energy_analytic"
+            style="margin-top: 17px;"></div>
         </div>
-        <!-- <div [innerHTML]="users.currentPaneNumber.currentPane.htmRightBottom | safeHtml" class="energy_analytic"></div> -->
+        <div *ngIf="users.currentPaneNumber.currentPane.htmRightBottom!=null" >
+        <div [innerHTML]="users.currentPaneNumber.currentPane.htmRightBottom | safeHtml" class="energy_analytic"></div>
+        </div>
         <!-------------------- Leak List ------------------------------------>
         <div class="background_leaks" *ngIf="users.currentPaneNumber.survey.surveyDescription.showLeaks">
           <ng-container *ngFor="let leak of users.leakList;index as i">
@@ -921,7 +978,8 @@
               | number:'1.0-0'}} {{leak.recommendation.unit}}
             </p>
           </ng-container>
-          <p class="total_leaks"><a style="cursor:pointer;" [routerLink]="['/leakListView']">See All {{users.leakList.length}}
+          <p class="total_leaks"><a style="cursor:pointer;" [routerLink]="['/leakListView']">See All
+              {{users.leakList.length}}
               leaks
             </a></p>
         </div>
@@ -945,7 +1003,7 @@
             <li>
               <div class="dropdown">
                 <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
-                            </a>
+                </a>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                   <li role="presentation" style="padding-bottom: 5px;">
                     <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
@@ -960,7 +1018,8 @@
                     <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
                   </li>
                   <li role="presentation" style="padding-bottom: 5px;">
-                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart
+                      meter</a>
                   </li>
                   <li role="presentation" style="padding-bottom: 5px;">
                     <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
@@ -975,35 +1034,37 @@
   </div>
 </section>
 <style>
-/* checkboxes */
-.checkbox label {
-		  cursor: pointer;
-	    display: inline-block;
-	    position: relative;
-	    padding-left: 25px; /* 10 px padding right + 15px input type*/
+  /* checkboxes */
+  .checkbox label {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    /* 10 px padding right + 15px input type*/
 
-  margin-right: 10px;
-  /* margin between inputs types */
-}
+    margin-right: 10px;
+    /* margin between inputs types */
+  }
 
-.checkbox label:before {
-  content: "";
-  width: 27px;
-  height: 27px;
-  position: absolute;
-  left: 0;
-}
-input[type=checkbox] {
-  display: none;
-}
+  .checkbox label:before {
+    content: "";
+    width: 27px;
+    height: 27px;
+    position: absolute;
+    left: 0;
+  }
 
-.checkbox label:before {
-  background: url('assets/images/white-Blank.png') left center no-repeat;
-  border: 1px solid;
-}
+  input[type=checkbox] {
+    display: none;
+  }
 
-input[type=checkbox]:checked+label:before {
-  background: url('assets/images/white-checkmarkNew.png') left center no-repeat;
-  
-}
+  .checkbox label:before {
+    background: url('assets/images/white-Blank.png') left center no-repeat;
+    border: 1px solid;
+  }
+
+  input[type=checkbox]:checked+label:before {
+    background: url('assets/images/white-checkmarkNew.png') left center no-repeat;
+
+  }
 </style>

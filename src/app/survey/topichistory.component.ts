@@ -15,8 +15,13 @@ export class TopicHistoryComponent implements OnInit {
 
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
+    if(this.users.allSurveyCheck){
     this.users.surveyList=new Array;
     this.getAllSurvey();
+    }else{
+      this.users.allSurveyCheck=false;
+      this.loginService.setUser(this.users);
+    }
   }
 
   ngOnInit() {
@@ -59,6 +64,7 @@ export class TopicHistoryComponent implements OnInit {
         var surveylength = Object.keys(response.data).length;
         this.users.surveyLenght = surveylength;
         this.users.surveyList = response.data;
+        this.users.allSurveyCheck=false;
         this.loginService.setUser(this.users);
       },
       error => {

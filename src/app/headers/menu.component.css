@@ -79,3 +79,7 @@ p.menuresponsive {
     outline: 0;
     box-shadow: inset 0 0px 0px rgba(0,0,0,.125);
 }
+
+.header_menu_none{
+    display:none;
+}
