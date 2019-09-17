@@ -103,7 +103,7 @@ export class customerEventListComponent implements OnInit {
           }],
           "retrieve": true
         });
-      //  self.usesEventList = self.usesEventNewList;
+        self.usesEventList = self.usesEventNewList;
       }, 100);
       console.log(this.usesEventList);
     } else {

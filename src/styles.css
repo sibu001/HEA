@@ -859,3 +859,6 @@ div#chartSeasonalStack{
         left: 0px;
         right: auto;
     }
+    button.feedbackButton:hover {
+        right: -1px;
+    }

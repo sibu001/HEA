@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarModule } from 'primeng/calendar';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Users } from "src/app/models/user";
 import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
@@ -33,7 +31,7 @@ export class gasListComponent implements OnInit {
          "responsive": true,
         "pagingType": "full",
         "columnDefs": [{
-          "targets": 'no-sort', // column or columns numbers
+          "targets": [0,3,4,5], // column or columns numbers
           "orderable": false,  // set orderable for selected columns
         }],
       });

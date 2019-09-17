@@ -23,9 +23,7 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
     this.customerMailList = this.users.customerMailList;
     //this.getMailList();
   }
-
   ngOnInit() {
-
   }
   ngAfterViewInit() {
     // Basic example
@@ -40,7 +38,9 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
       $('.dataTables_length').addClass('bs-select');
      
   });
-
+  if (this.startDate != undefined && this.startDate != null && this.endDate != undefined && this.endDate != null || (this.subject != undefined && this.subject != null)) {
+  this.showSearchList();
+  }
   }
   back() {
     this.location.back();
@@ -80,8 +80,16 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
           this.customerMailList.push(mailList);
         }
       }
+      if(this.subject != undefined && this.subject != null){
+        const filterValue = this.subject.toLowerCase();
+        this.customerMailList.filter(l => l.subject.toLowerCase().indexOf(filterValue) === 0);
+      }
       console.log(this.customerMailList);
+    }else{
+      this.customerMailList=this.users.customerMailList;
     }
     document.getElementById("loader").classList.remove('loading');
   }
+
+ 
 }

@@ -5,7 +5,7 @@
                 <p class="accurate">Mail archive</p>
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
-                        <form class="form-horizontal" action="/action_page.php">
+                        <form class="form-horizontal" >
                             <div class="form-group">
                                 <p class="control-label col-lg-3 col-sm-4" for="start">
                                     Period start:
@@ -26,7 +26,7 @@
                         </form>
                     </div>
                     <div class="col-md-6 col-sm-12">
-                        <form class="form-horizontal" action="/action_page.php">
+                        <form class="form-horizontal">
                             <div class="form-group">
                                 <p class="control-label col-lg-3 col-sm-4" for="sub">
                                     Subject:
@@ -72,12 +72,9 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let mailList of customerMailList | searchfilter :'subject' : subject; index as i">
+                            <!--  | searchfilter :'subject' : subject -->
+                            <tr *ngFor="let mailList of customerMailList; index as i">
                                 <td>
-                                    <!-- <label class="mail-check">
-                                        <input type="checkbox">
-                                        <span class="checkmark"></span>
-                                    </label> -->
                                     <img src="assets/images/whitebox.png" class="colorbox">
                                 </td>
                                 <td>
@@ -115,7 +112,7 @@
                             <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
                         </li>
                         <li>
-                            <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommadations</a>
+                            <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
                         </li>
                         <li>
                             <div class="dropdown">
@@ -136,6 +133,9 @@
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                    </li>
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>

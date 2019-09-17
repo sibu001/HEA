@@ -37,11 +37,23 @@ export class SurveyComponent implements AfterViewInit {
         this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
       }
     }
-    if(this.users.currentPaneNumber.survey.surveyDescription.surveyCode=="Profile"){
-        document.getElementById("_home").classList.add('header_menu_none');
-        document.getElementById("all_topic").classList.add('header_menu_none');
-        document.getElementById("menu_option").classList.add('header_menu_none');
+    if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "Profile") {
+      document.getElementById("_home").classList.add('header_menu_none');
+      document.getElementById("all_topic").classList.add('header_menu_none');
+      document.getElementById("menu_option").classList.add('header_menu_none');
+      document.getElementById("menu_option2").classList.add('header_menu_none');
+      if (document.getElementById("_home1")) {
+        document.getElementById("_home1").classList.add('header_menu_none');
+      }
+      if (document.getElementById("all_topic1")) {
+        document.getElementById("all_topic1").classList.add('header_menu_none');
+      }
+      if (document.getElementById("menu_option1")) {
+        document.getElementById("menu_option1").classList.add('header_menu_none');
+      }
+      if (document.getElementById("menu_option2")) {
         document.getElementById("menu_option2").classList.add('header_menu_none');
+      }
     }
     this.progressShow();
   }
@@ -164,7 +176,7 @@ export class SurveyComponent implements AfterViewInit {
   }
   next(id, paneNumber) {
     this.qusHide = false;
-    this.users.allSurveyCheck=true;
+    this.users.allSurveyCheck = true;
     this.loginService.setUser(this.users);
     this.inputErrorMessage = undefined;
     if (this.users.currentPaneNumber.currentPane.paneCode == "fdb_Thanks") {
@@ -179,7 +191,7 @@ export class SurveyComponent implements AfterViewInit {
     }
   }
   prev(id, paneNumber) {
-    this.users.allSurveyCheck=true;
+    this.users.allSurveyCheck = true;
     this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
       this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false);
@@ -198,19 +210,19 @@ export class SurveyComponent implements AfterViewInit {
     if ((id == 'change' && value) || id == 'next' || id == 'prev') {
       document.getElementById("loader").classList.add('loading');
       var data;
-      if(id=='next'){
-        if(currentPaneAnswers.length>=1&&this.users.currentPaneNumber.firstPage&&this.users.currentPaneNumber.lastPage&&(currentPaneAnswers[0].value=='false'||currentPaneAnswers[0].value=='N'||currentPaneAnswers[0].value=='No'||currentPaneAnswers[0].value=='0')){
-          data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks,"nextPane":true,"skipAnswers":false };
-      }else{
-        data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks,"nextPane":true };
+      if (id == 'next') {
+        if (currentPaneAnswers.length >= 1 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.lastPage && (currentPaneAnswers[0].value == 'false' || currentPaneAnswers[0].value == 'N' || currentPaneAnswers[0].value == 'No' || currentPaneAnswers[0].value == '0')) {
+          data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks, "nextPane": true, "skipAnswers": false };
+        } else {
+          data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks, "nextPane": true };
         }
-      }else{
-       data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks };
+      } else {
+        data = { "currentPaneAnswers": currentPaneAnswers, "currentPaneBlocks": currentPaneBlocks };
       }
       this.loginService.performPostMultiPartDataPost(data, "customers/" + this.users.currentPaneNumber.survey.customerId + "/surveys/" + this.users.currentPaneNumber.survey.surveyDescription.surveyCode + "/panes/" + this.users.currentPaneNumber.currentPane.paneCode + "/answers").subscribe(
         data => {
           let response = JSON.parse(JSON.stringify(data));
-        //  console.log(response);
+          //  console.log(response);
           if (response.data.errors != null) {
             this.users.currentPaneNumber.errors = response.data.errors;
             this.colors = "red";
@@ -223,7 +235,7 @@ export class SurveyComponent implements AfterViewInit {
             if (id == 'next') {
               this.nextPaneWithAnswer(response.data);
               document.getElementById("loader").classList.remove('loading');
-            //  this.nextPane(response.data);
+              //  this.nextPane(response.data);
             } else if (id == 'prev') {
               this.previousPane(response.data);
             } else if (id == 'change') {
@@ -246,53 +258,65 @@ export class SurveyComponent implements AfterViewInit {
     }
   }
 
-  nextPaneWithAnswer(data){
-        this.getSessionPendingMessage();
-        this.users.currentPaneNumber = data;
-        this.loginService.setUser(this.users);
-        if (this.users.currentPaneNumber.currentPane != null) {
-          if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
-            if (this.users.currentPaneNumber.firstPage) {
-              this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
-            }
-          }
-          if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "LeaksIntro") {
-            this.getAllSurvey();
-          }else if(this.users.surveyLenght > 3&&this.users.currentPaneNumber.survey.surveyDescription.surveyCode!="Profile"){
-            document.getElementById("_home").classList.remove('header_menu_none');
-            document.getElementById("all_topic").classList.remove('header_menu_none');
-            document.getElementById("menu_option").classList.remove('header_menu_none');
-            document.getElementById("menu_option2").classList.remove('header_menu_none');
-          }
-          var self = this;
-          setTimeout(function () {
-            self.chartDataConfiguration();
-          }, 500);
+  nextPaneWithAnswer(data) {
+    this.getSessionPendingMessage();
+    this.users.currentPaneNumber = data;
+    this.loginService.setUser(this.users);
+    if (this.users.currentPaneNumber.currentPane != null) {
+      if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
+        if (this.users.currentPaneNumber.firstPage) {
+          this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
+        }
+      }
+      if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "LeaksIntro") {
+        this.getAllSurvey();
+      } else if (this.users.surveyLenght > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile") {
+        document.getElementById("_home").classList.remove('header_menu_none');
+        document.getElementById("all_topic").classList.remove('header_menu_none');
+        document.getElementById("menu_option").classList.remove('header_menu_none');
+        document.getElementById("menu_option2").classList.remove('header_menu_none');
+        if (document.getElementById("_home1")) {
+          document.getElementById("_home1").classList.remove('header_menu_none');
+        }
+        if (document.getElementById("all_topic1")) {
+          document.getElementById("all_topic1").classList.remove('header_menu_none');
+        }
+        if (document.getElementById("menu_option1")) {
+          document.getElementById("menu_option1").classList.remove('header_menu_none');
+        }
+        if (document.getElementById("menu_option2")) {
+          document.getElementById("menu_option2").classList.remove('header_menu_none');
+        }
+      }
+      var self = this;
+      setTimeout(function () {
+        self.chartDataConfiguration();
+      }, 500);
 
-          this.helpHides();
-          this.progressShow();
-        } else {
-          this.router.navigate(["/topicshistory"]);
+      this.helpHides();
+      this.progressShow();
+    } else {
+      this.router.navigate(["/topicshistory"]);
+    }
+    if (this.users.currentPaneNumber.currentPane.paneCode == "fdb_Questions") {
+      for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
+        if (answer.dataField.inputType == 'hslider') {
+          $("#" + answer.field + " .hslider" + answer.value).addClass('active');
+          $(this).toggleClass('active');
         }
-        if(this.users.currentPaneNumber.currentPane.paneCode=="fdb_Questions"){
-          for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
-            if (answer.dataField.inputType == 'hslider') {
-              $("#" + answer.field + " .hslider" + answer.value).addClass('active');
-              $(this).toggleClass('active');
-            }
-          }
-        }
-        if (this.users.currentPaneNumber.paneCode == "fdb_Intro") {
-          setTimeout(function () {
-            document.getElementById("fdbRecommendations").classList.add('table-responsive');
-          }, 100);
-        }
-        document.getElementById("loader").classList.remove('loading');
-        var self = this;
-        setTimeout(() => self.inp1.nativeElement.focus(), 0);
-        this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-        this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
-       
+      }
+    }
+    if (this.users.currentPaneNumber.paneCode == "fdb_Intro") {
+      setTimeout(function () {
+        document.getElementById("fdbRecommendations").classList.add('table-responsive');
+      }, 100);
+    }
+    document.getElementById("loader").classList.remove('loading');
+    var self = this;
+    setTimeout(() => self.inp1.nativeElement.focus(), 0);
+    this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+    this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+
   }
 
   nextPane(currentPaneNumber) {
@@ -311,11 +335,22 @@ export class SurveyComponent implements AfterViewInit {
           }
           if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "LeaksIntro") {
             this.getAllSurvey();
-          }else if(this.users.surveyLenght > 3&&this.users.currentPaneNumber.survey.surveyDescription.surveyCode!="Profile"){
+          } else if (this.users.surveyLenght > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile") {
             document.getElementById("_home").classList.remove('header_menu_none');
             document.getElementById("all_topic").classList.remove('header_menu_none');
             document.getElementById("menu_option").classList.remove('header_menu_none');
-            document.getElementById("menu_option2").classList.remove('header_menu_none');
+            if (document.getElementById("_home1")) {
+              document.getElementById("_home1").classList.remove('header_menu_none');
+            }
+            if (document.getElementById("all_topic1")) {
+              document.getElementById("all_topic1").classList.remove('header_menu_none');
+            }
+            if (document.getElementById("menu_option1")) {
+              document.getElementById("menu_option1").classList.remove('header_menu_none');
+            }
+            if (document.getElementById("menu_option2")) {
+              document.getElementById("menu_option2").classList.remove('header_menu_none');
+            }
           }
           var self = this;
           setTimeout(function () {
@@ -327,7 +362,7 @@ export class SurveyComponent implements AfterViewInit {
         } else {
           this.router.navigate(["/topicshistory"]);
         }
-        if(this.users.currentPaneNumber.paneCode=="fdb_Questions"){
+        if (this.users.currentPaneNumber.paneCode == "fdb_Questions") {
           for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
             if (answer.dataField.inputType == 'hslider') {
               $("#" + answer.field + " .hslider" + answer.value).addClass('active');
@@ -374,11 +409,23 @@ export class SurveyComponent implements AfterViewInit {
                 this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
               }
             }
-            if(this.users.currentPaneNumber.survey.surveyDescription.surveyCode=="Profile"){
+            if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "Profile") {
               document.getElementById("_home").classList.add('header_menu_none');
               document.getElementById("all_topic").classList.add('header_menu_none');
               document.getElementById("menu_option").classList.add('header_menu_none');
               document.getElementById("menu_option2").classList.add('header_menu_none');
+              if (document.getElementById("_home1")) {
+                document.getElementById("_home1").classList.add('header_menu_none');
+              }
+              if (document.getElementById("all_topic1")) {
+                document.getElementById("all_topic1").classList.add('header_menu_none');
+              }
+              if (document.getElementById("menu_option1")) {
+                document.getElementById("menu_option1").classList.add('header_menu_none');
+              }
+              if (document.getElementById("menu_option2")) {
+                document.getElementById("menu_option2").classList.add('header_menu_none');
+              }
             }
             var self = this;
             setTimeout(function () {
@@ -464,6 +511,18 @@ export class SurveyComponent implements AfterViewInit {
         document.getElementById("all_topic").classList.remove('header_menu_none');
         document.getElementById("menu_option").classList.remove('header_menu_none');
         document.getElementById("menu_option2").classList.remove('header_menu_none');
+        if (document.getElementById("_home1")) {
+          document.getElementById("_home1").classList.remove('header_menu_none');
+        }
+        if (document.getElementById("all_topic1")) {
+          document.getElementById("all_topic1").classList.remove('header_menu_none');
+        }
+        if (document.getElementById("menu_option1")) {
+          document.getElementById("menu_option1").classList.remove('header_menu_none');
+        }
+        if (document.getElementById("menu_option2")) {
+          document.getElementById("menu_option2").classList.remove('header_menu_none');
+        }
       },
       error => {
         let response = JSON.parse(JSON.stringify(error));

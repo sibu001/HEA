@@ -18,9 +18,9 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
     if(this.users.surveyLenght<=3){
-      document.getElementById("_home").classList.add('header_menu_none');
-      document.getElementById("all_topic").classList.add('header_menu_none');
-      document.getElementById("menu_option").classList.add('header_menu_none');
+      document.getElementById("_home1").classList.add('header_menu_none');
+      document.getElementById("all_topic1").classList.add('header_menu_none');
+      document.getElementById("menu_option1").classList.add('header_menu_none');
       document.getElementById("menu_option2").classList.add('header_menu_none');
     } 
   }
