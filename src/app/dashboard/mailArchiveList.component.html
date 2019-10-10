@@ -5,14 +5,15 @@
                 <p class="accurate">Mail archive</p>
                 <div class="row">
                     <div class="col-md-6 col-sm-12">
-                        <form class="form-horizontal" >
+                        <form class="form-horizontal">
                             <div class="form-group">
                                 <p class="control-label col-lg-3 col-sm-4" for="start">
                                     Period start:
                                 </p>
                                 <div class="col-lg-5 col-sm-6">
                                     <!-- <input type="text" class="form-control" id="start" name="startdate"> -->
-                                    <p-calendar [(ngModel)]="startDate" name="start" [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
+                                    <p-calendar [(ngModel)]="startDate" name="start" [showIcon]="true"
+                                        dateFormat="mm/dd/yy"></p-calendar>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -20,7 +21,8 @@
                                     Period end:
                                 </p>
                                 <div class="col-lg-5 col-sm-6">
-                                    <p-calendar [(ngModel)]="endDate" name="end" [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
+                                    <p-calendar [(ngModel)]="endDate" name="end" [showIcon]="true"
+                                        dateFormat="mm/dd/yy"></p-calendar>
                                 </div>
                             </div>
                         </form>
@@ -32,7 +34,8 @@
                                     Subject:
                                 </p>
                                 <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="sub" [(ngModel)]="subject" name="subject">
+                                    <input type="text" class="form-control" id="sub" [(ngModel)]="subject"
+                                        name="subject">
                                 </div>
                             </div>
                         </form>
@@ -78,14 +81,14 @@
                                     <img src="assets/images/whitebox.png" class="colorbox">
                                 </td>
                                 <td>
-                                    <a class="link" (click)="mailView(i)">{{mailList.subject}}</a>
+                                    <a (click)="mailView(i)" style="cursor: pointer">{{mailList.subject}}</a>
                                 </td>
                                 <td>{{ mailList.dateSent | date : "MM/dd/y" }}</td>
                                 <td>{{mailList.sentTo}}</td>
                                 <td></td>
                                 <td>*</td>
                                 <td>
-                                    <a class="link" (click)="mailView(i)">Permanent link</a>
+                                    <a (click)="mailView(i)" style="cursor: pointer">Permanent link</a>
                                 </td>
                             </tr>
                         </tbody>
@@ -123,22 +126,29 @@
                                         <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas charge</a>
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas
+                                            charge</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricityList']">Electricity</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricityChargeList']">Electricity charge</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart
+                                            meter</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart
+                                            meter</a>
                                     </li>
                                 </ul>
                             </div>

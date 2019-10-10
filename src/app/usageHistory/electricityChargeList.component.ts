@@ -5,6 +5,7 @@ import { Users } from "src/app/models/user";
 import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
 import { Router } from "@angular/router";
+import { DatePipe } from '@angular/common';
 declare var $: any;
 
 @Component({
@@ -17,32 +18,42 @@ export class electricityChargeListComponent implements OnInit {
   errorMessage: string;
   useTypes: string;
   usageHistoryList: any[] = [];
+  userObj: any;
+  userObj2: any;
   year: any;
   month: any;
+  startDateView: any;
+  endDateView: any;
+  startDateOrigView: any;
+  endDateOrigView: any;
+  billingDateView: any;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.users = this.loginService.getUser();
     // $(document).ready(function () {
     //   //  $('#example').DataTable().ajax.reload();
     //   $('#example').DataTable().draw();
     // });
-          this.usageHistoryList = new Array;
-          this.usageHistoryList = this.users.gesChargeList;
-          this.perFormGetList("electricityCharge");
-     
+    this.usageHistoryList = new Array;
+    this.usageHistoryList = this.users.gesChargeList;
+    this.getGasList()
+
   }
   ngOnInit() {
     // $(document).ready(function () {
     //   $('#example').DataTable();
     // });
 
-  
+
+  }
+  getGasList() {
+    this.perFormGetList("electricityCharge");
   }
   ngAfterViewInit() {
     setTimeout(function () {
       $('#example').DataTable({
         "pagingType": "full",
         "columnDefs": [{
-           "targets": 'no-sort', // column or columns numbers
+          "targets": 'no-sort', // column or columns numbers
           "orderable": false,  // set orderable for selected columns
         }],
       });
@@ -55,18 +66,18 @@ export class electricityChargeListComponent implements OnInit {
       $("#month").on('keyup click', function () {
         table.column(2).search($(this).val()).draw();
       });
-     
+
     }, 1000);
   }
 
 
   perFormGetList1(useTypes) {
-   
+
     this.router.navigate(["/gasList/" + useTypes]);
     //  window.location.reload();
   }
   perFormGetList(useTypes) {
-   
+
     document.getElementById("loader").classList.add('loading');
     this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/usage/" + useTypes).subscribe(
       data => {
@@ -89,6 +100,49 @@ export class electricityChargeListComponent implements OnInit {
     );
 
   }
+  i: number = 0;
+  increment(i) {
+    this.i = i;
+    this.userObj = this.usageHistoryList[i];
+    var date;
+    if (this.usageHistoryList[i].startDate != null && this.usageHistoryList[i].startDate != undefined) {
+      date = new Date(this.usageHistoryList[i].startDate);
+      var datePipe = new DatePipe('en-US');
+      this.startDateView = datePipe.transform(date, 'yyyy-MM-dd');
+      this.userObj.startDate = this.startDateView;
+
+    }
+    if (this.usageHistoryList[i].endDate != null && this.usageHistoryList[i].endDate != undefined) {
+      date = new Date(this.usageHistoryList[i].endDate);
+      var datePipe = new DatePipe('en-US');
+      this.endDateView = datePipe.transform(date, 'yyyy-MM-dd');
+      this.userObj.endDate = this.endDateView;
+
+    }
+    if (this.usageHistoryList[i].startDateOrig != null && this.usageHistoryList[i].startDateOrig != undefined) {
+      date = new Date(this.usageHistoryList[i].startDateOrig);
+      var datePipe = new DatePipe('en-US');
+      this.startDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
+      this.userObj.startDateOrig = this.startDateOrigView;
+
+    }
+    if (this.usageHistoryList[i].endDateOrig != null && this.usageHistoryList[i].endDateOrig != undefined) {
+      date = new Date(this.usageHistoryList[i].endDateOrig);
+      var datePipe = new DatePipe('en-US');
+      this.endDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
+      this.userObj.endDateOrig = this.endDateOrigView;
+
+    }
+    if (this.usageHistoryList[i].billingDate != null && this.usageHistoryList[i].billingDate != undefined) {
+      date = new Date(this.usageHistoryList[i].billingDate);
+      var datePipe = new DatePipe('en-US');
+      this.billingDateView = datePipe.transform(date, 'yyyy-MM-dd');
+      this.userObj.billingDate = this.billingDateView;
+
+    }
+    this.userObj2 = $.extend(true, [], this.userObj)
+  }
+
   searchData() {
 
     //   document.getElementById("loader").classList.add('loading');

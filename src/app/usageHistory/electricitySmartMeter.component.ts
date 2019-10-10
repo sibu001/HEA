@@ -19,30 +19,27 @@ export class electricitySmartMeterComponent implements OnInit {
   usageHistoryList: any[] = [];
   year: any;
   month: any;
+  day: any;
+  hour: any;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.users = this.loginService.getUser();
     // $(document).ready(function () {
     //   //  $('#example').DataTable().ajax.reload();
     //   $('#example').DataTable().draw();
     // });
-          this.usageHistoryList = new Array;
-          this.usageHistoryList = this.users.gesChargeList;
-          this.perFormGetList("electricityCharge");
-     
+    // this.usageHistoryList = new Array;
+    //this.usageHistoryList = this.users.gesChargeList;
+    this.perFormGetList("smartMeterElectric");
+
   }
   ngOnInit() {
-    // $(document).ready(function () {
-    //   $('#example').DataTable();
-    // });
-
-  
   }
   ngAfterViewInit() {
     setTimeout(function () {
       $('#example').DataTable({
         "pagingType": "full",
         "columnDefs": [{
-           "targets": 'no-sort', // column or columns numbers
+          "targets": 'no-sort', // column or columns numbers
           "orderable": false,  // set orderable for selected columns
         }],
       });
@@ -55,7 +52,14 @@ export class electricitySmartMeterComponent implements OnInit {
       $("#month").on('keyup click', function () {
         table.column(2).search($(this).val()).draw();
       });
-     
+      $("#day").on('keyup click', function () {
+        table.column(3).search($(this).val()).draw();
+      });
+
+      $("#hour").on('keyup click', function () {
+        table.column(4).search($(this).val()).draw();
+      });
+
     }, 1000);
   }
 
@@ -82,13 +86,13 @@ export class electricitySmartMeterComponent implements OnInit {
     //     $('#example').DataTable().draw();
     //       });
     document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/usage/" + useTypes).subscribe(
+    this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/" + useTypes).subscribe(
       data => {
         document.getElementById("loader").classList.remove('loading');
         let response = JSON.parse(JSON.stringify(data));
         this.users.types = useTypes;
-        this.users.gesChargeList = new Array;
-        this.users.gesChargeList = response.data;
+        this.users.electricSmartMeterList = new Array;
+        this.users.electricSmartMeterList = response.data;
         this.loginService.setUser(this.users);
         this.usageHistoryList = new Array;
         this.usageHistoryList = response.data;

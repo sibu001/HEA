@@ -856,8 +856,8 @@ function findTickIntervalBase(max, min, numTicks) {
 				);
 		}
 
-		scaleCanvas($('#' + chartSeasonalStackDiv));
-		scaleCanvas($('#' + chartSeasonalPieDiv));
+		//scaleCanvas($('#' + chartSeasonalStackDiv));
+		//scaleCanvas($('#' + chartSeasonalPieDiv));
 	};
 
 	/**

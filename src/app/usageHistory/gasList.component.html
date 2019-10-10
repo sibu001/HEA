@@ -67,13 +67,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let usageList of usageHistoryList">
+                            <tr *ngFor="let usageList of usageHistoryList;index as i">
                                 <td> <img src="assets/images/whitebox.png" class="colorbox"></td>
-                                <td> {{usageList.year}} </td>
-                                <td>{{usageList.month}}</td>
-                                <td>{{usageList.startDate | date : "dd-MMM-y"}} - {{usageList.endDate | date : "dd-MMM-y"}}</td>
-                                <td>{{usageList.billingDate | date : "dd-MMM-y"}}</td>
-                                <td>{{usageList.value}}</td>
+                                <td data-toggle="modal"  data-target="#myModal" (click)="increment(i)"> {{usageList.year}}</td>
+                                <td data-toggle="modal"  data-target="#myModal" (click)="increment(i)">{{usageList.month}}</td>
+                                <td data-toggle="modal"  data-target="#myModal" (click)="increment(i)">{{usageList.startDate | date : "dd-MMM-y"}} - {{usageList.endDate | date : "dd-MMM-y"}}</td>
+                                <td data-toggle="modal"  data-target="#myModal" (click)="increment(i)">{{usageList.billingDate | date : "dd-MMM-y"}}</td>
+                                <td data-toggle="modal"  data-target="#myModal" (click)="increment(i)">{{usageList.value}}</td>
                             </tr>
                         </tbody>
                     </table> 
@@ -136,3 +136,9 @@
         </div>
     </div>
 </section>
+<div id="myModal" class="modal fade" role="dialog">
+    <ng-container *ngIf="userObj != undefined && userObj != null">
+        <app-usage-history-detail [usageModelObj]="userObj2" (onModelSave)="getGasList()"></app-usage-history-detail>
+    </ng-container>
+    
+</div>

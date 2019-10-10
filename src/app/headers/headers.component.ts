@@ -15,11 +15,11 @@ export class HeadersComponent implements OnInit {
   float: string;
   mobHeight: number;
   screenWidth: any;
-  iframeUrl:string;
+  iframeUrl: string;
   users: Users = new Users();
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
-    this.iframeUrl="https://heasmartaudit.typeform.com/to/C3KCyo?auditId="+this.users.outhMeResponse.auditId+"&amp;typeform-embed=popup-drawer";
+    this.iframeUrl = "https://heasmartaudit.typeform.com/to/C3KCyo?auditId=" + this.users.outhMeResponse.auditId + "&amp;typeform-embed=popup-drawer";
     this.screenWidth = window.screen.width;
   }
 
@@ -39,11 +39,23 @@ export class HeadersComponent implements OnInit {
       });
     });
 
-    if(this.users.surveyLenght<=3){
+    if (this.users.surveyLenght <= 3 || (this.users.currentPaneNumber != null && this.users.currentPaneNumber != undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "Profile")) {
       document.getElementById("_home").classList.add('header_menu_none');
       document.getElementById("all_topic").classList.add('header_menu_none');
       document.getElementById("menu_option").classList.add('header_menu_none');
-    } 
+      if (document.getElementById("_home1")) {
+        document.getElementById("_home1").classList.add('header_menu_none');
+      }
+      if (document.getElementById("all_topic1")) {
+        document.getElementById("all_topic1").classList.add('header_menu_none');
+      }
+      if (document.getElementById("menu_option1")) {
+        document.getElementById("menu_option1").classList.add('header_menu_none');
+      }
+      if (document.getElementById("menu_option2")) {
+        document.getElementById("menu_option2").classList.add('header_menu_none');
+      }
+    }
 
   }
   hide(numbers) {
@@ -58,7 +70,7 @@ export class HeadersComponent implements OnInit {
       }
     } else if (numbers == 3) {
       if (this.users.surveyLenght > 3) {
-      this.router.navigate(["/accountDetail"]);
+        this.router.navigate(["/accountDetail"]);
       }
     } else if (numbers == 4) {
       if (this.users.surveyLenght > 3) {
@@ -69,7 +81,7 @@ export class HeadersComponent implements OnInit {
         this.router.navigate(["/topicshistory"]);
       }
     } else if (numbers == 6) {
-       if (this.users.surveyLenght > 3) {
+      if (this.users.surveyLenght > 3) {
         this.router.navigate(["/customerEventList"]);
       }
     } else if (numbers == 7) {
@@ -82,12 +94,12 @@ export class HeadersComponent implements OnInit {
   logouts() {
     this.loginService.logout();
   }
-  openfeedbackpage(){
+  openfeedbackpage() {
     document.getElementById("feedback1").classList.add('feedbackDivCss');
     document.getElementById("feedback2").classList.add('feedbackiframeCss');
     document.getElementById("feedback3").classList.add('feedBackDiv1');
   }
-  closefeedbackpage(){
+  closefeedbackpage() {
     document.getElementById("feedback1").classList.remove('feedbackDivCss');
     document.getElementById("feedback2").classList.remove('feedbackiframeCss');
     document.getElementById("feedback3").classList.remove('feedBackDiv1');

@@ -82,7 +82,7 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
       }
       if(this.subject != undefined && this.subject != null){
         const filterValue = this.subject.toLowerCase();
-        this.customerMailList.filter(l => l.subject.toLowerCase().indexOf(filterValue) === 0);
+       this.customerMailList= this.customerMailList.filter(l => l.subject.toLowerCase().indexOf(filterValue) === 0);
       }
       console.log(this.customerMailList);
     }else{

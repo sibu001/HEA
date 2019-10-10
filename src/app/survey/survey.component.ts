@@ -41,7 +41,6 @@ export class SurveyComponent implements AfterViewInit {
       document.getElementById("_home").classList.add('header_menu_none');
       document.getElementById("all_topic").classList.add('header_menu_none');
       document.getElementById("menu_option").classList.add('header_menu_none');
-      document.getElementById("menu_option2").classList.add('header_menu_none');
       if (document.getElementById("_home1")) {
         document.getElementById("_home1").classList.add('header_menu_none');
       }
@@ -274,7 +273,6 @@ export class SurveyComponent implements AfterViewInit {
         document.getElementById("_home").classList.remove('header_menu_none');
         document.getElementById("all_topic").classList.remove('header_menu_none');
         document.getElementById("menu_option").classList.remove('header_menu_none');
-        document.getElementById("menu_option2").classList.remove('header_menu_none');
         if (document.getElementById("_home1")) {
           document.getElementById("_home1").classList.remove('header_menu_none');
         }
@@ -413,7 +411,6 @@ export class SurveyComponent implements AfterViewInit {
               document.getElementById("_home").classList.add('header_menu_none');
               document.getElementById("all_topic").classList.add('header_menu_none');
               document.getElementById("menu_option").classList.add('header_menu_none');
-              document.getElementById("menu_option2").classList.add('header_menu_none');
               if (document.getElementById("_home1")) {
                 document.getElementById("_home1").classList.add('header_menu_none');
               }
@@ -510,7 +507,6 @@ export class SurveyComponent implements AfterViewInit {
         document.getElementById("_home").classList.remove('header_menu_none');
         document.getElementById("all_topic").classList.remove('header_menu_none');
         document.getElementById("menu_option").classList.remove('header_menu_none');
-        document.getElementById("menu_option2").classList.remove('header_menu_none');
         if (document.getElementById("_home1")) {
           document.getElementById("_home1").classList.remove('header_menu_none');
         }

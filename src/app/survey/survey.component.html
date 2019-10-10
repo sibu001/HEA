@@ -32,11 +32,11 @@
             </div>
             <hr class="hr_space">
             <div class="row">
-              <div class="col-sm-3 col-xs-3">
+              <!-- <div class="col-sm-3 col-xs-3">
                 <p class="paneLabel" *ngIf="users.currentPaneNumber.currentPane.paneLabel!=null">
                   {{users.currentPaneNumber.currentPane.paneLabel}}</p>
-              </div>
-              <div class="col-sm-9 col-xs-9">
+              </div> -->
+              <div class="col-sm-12 col-xs-12">
                 <p class="pane_help">{{users.currentPaneNumber.currentPane.label}}&nbsp;
                   <span
                     *ngIf="users.currentPaneNumber.currentPane.htmHelp!=null&&users.currentPaneNumber.currentPane.htmHelp.length>1">
@@ -55,8 +55,15 @@
             <div class="row">
               <div class="col-sm-1"></div>
               <div class="col-sm-11">
+                <hr class="bottomLineTop">
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-1"></div>
+              <div class="col-sm-11">
                 <div class="home_energy" [innerHTML]="users.currentPaneNumber.currentPane.htmHeader | safeHtml"></div>
-                <div  *ngIf="users.currentPaneNumber.currentPane.htmPageText!=null&&users.currentPaneNumber.currentPane.htmPageText.length>0">
+                <div
+                  *ngIf="users.currentPaneNumber.currentPane.htmPageText!=null&&users.currentPaneNumber.currentPane.htmPageText.length>0">
                   <div [innerHTML]="users.currentPaneNumber.currentPane.htmPageText | safeHtml" class="accurate top">
                   </div>
                   <hr class="bottomLineTop">
@@ -228,10 +235,12 @@
                   </div>
 
                   <!--------------------first------------------------>
-                  <div  *ngIf="users.currentPaneNumber.currentPane.paneCode!='w_hardscapeData'&&users.currentPaneNumber.currentPane.paneCode!='w_landscapeDetails'">
+                  <div
+                    *ngIf="users.currentPaneNumber.currentPane.paneCode!='w_hardscapeData'&&users.currentPaneNumber.currentPane.paneCode!='w_landscapeDetails'">
                     <ng-container *ngFor="let answersList of users.currentPaneNumber.currentPaneAnswers;index as j">
                       <!----------------------vradiobutton ------------------------>
-                      <div *ngIf="answersList.dataField.inputType=='vradiobutton'&&answersList.dataField.userDisplay&&answersList.viewable">
+                      <div
+                        *ngIf="answersList.dataField.inputType=='vradiobutton'&&answersList.dataField.userDisplay&&answersList.viewable">
                         <div class="row">
                           <div class="col-lg-12 col-sm-12">
                             <div class="radio_buttonfirst">
@@ -255,10 +264,12 @@
                       </div>
 
                       <!--------------------second------------------------>
-                      <form class="form-horizontal" *ngIf="answersList.dataField.inputType=='text'&&answersList.dataField.userDisplay&&answersList.viewable">
+                      <form class="form-horizontal"
+                        *ngIf="answersList.dataField.inputType=='text'&&answersList.dataField.userDisplay&&answersList.viewable">
 
                         <!-- new start-->
-                        <div class="form-group thiredPane" *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
+                        <div class="form-group thiredPane"
+                          *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
                           <div class="row">
                             <div class="col-lg-11 col-sm-11">
                               <label class="control-label" for="YourName">
@@ -300,7 +311,8 @@
                           <hr class="bottom">
                         </div>
 
-                        <div class="form-group thiredPane" *ngIf="answersList.dataField.fieldValues.length>0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
+                        <div class="form-group thiredPane"
+                          *ngIf="answersList.dataField.fieldValues.length>0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
                           <div class="row">
                             <div class="col-lg-11 col-sm-11">
                               <label class="control-label" for="YourName">
@@ -362,7 +374,8 @@
                           <hr class="bottom">
                         </div> -->
 
-                        <div class="fourethPane" *ngIf="answersList.dataField.fieldValues.length==0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
+                        <div class="fourethPane"
+                          *ngIf="answersList.dataField.fieldValues.length==0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
                           <div class="row">
                             <div class="col-lg-11 col-sm-11">
                               <div [innerHTML]="answersList.dataField.label | safeHtml" class="address fourthPaneLable">
@@ -411,7 +424,8 @@
                           <hr class="bottom" *ngIf="answersList.value!=null&&answersList.value.length>1">
                         </div>
                         <!-- Old condition answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length>=0&&answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer -->
-                        <div *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length>=0&&answersList.dataField.nextRowAnswer">
+                        <div
+                          *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length>=0&&answersList.dataField.nextRowAnswer">
                           <div class="row seven">
                             <div class="col-lg-11 col-md-11 col-sm-11">
                               <h3 class="about_program">{{answersList.dataField.label}}</h3>
@@ -426,12 +440,14 @@
                                     <div class="form-group">
                                       <div class="row">
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                          <form *ngIf="answersList.field!='vl_EVannualCost'&&answersList.field!='vl_EVkWh'">
+                                          <form
+                                            *ngIf="answersList.field!='vl_EVannualCost'&&answersList.field!='vl_EVkWh'">
                                             <input type="text" name="people" class="form-control"
                                               [(ngModel)]="answersList.value">
                                           </form>
 
-                                          <p class="address"  *ngIf="users.currentPaneNumber.currentPane.paneCode!='rl_poolSizeGals'&&users.currentPaneNumber.currentPane.paneCode!='w_lawnEquivalent'&&(answersList.field=='vl_EVannualCost'||answersList.field=='vl_EVkWh')">
+                                          <p class="address"
+                                            *ngIf="users.currentPaneNumber.currentPane.paneCode!='rl_poolSizeGals'&&users.currentPaneNumber.currentPane.paneCode!='w_lawnEquivalent'&&(answersList.field=='vl_EVannualCost'||answersList.field=='vl_EVkWh')">
                                             <span *ngIf="answersList.dataField.displayPattern=='$#,###'">{{answersList.value | currency
                                               : 'USD':true:'0.0-1'}}</span>
                                             <span *ngIf="answersList.dataField.displayPattern=='#,###'">{{answersList.value | number
@@ -444,11 +460,13 @@
                                               *ngIf="answersList.dataField.displayPattern==null||answersList.dataField.displayPattern.length<1">
                                               <div [innerHTML]="answersList.value | safeHtml"></div>
                                             </span>
-                                             <span *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</span> 
+                                            <span
+                                              *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</span>
                                           </p>
                                         </div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding-left: 0px;">
-                                          <label *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1&&answersList.field!='vl_EVannualCost'&&answersList.field!='vl_EVkWh'"
+                                          <label
+                                            *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1&&answersList.field!='vl_EVannualCost'&&answersList.field!='vl_EVkWh'"
                                             class="unitcss">&nbsp;({{answersList.dataField.unit}})</label>
                                         </div>
                                       </div>
@@ -527,7 +545,8 @@
                           <hr class="bottom">
                         </div> -->
 
-                        <div class="form-group thiredPaneNumber" *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.nextRowAnswer">
+                        <div class="form-group thiredPaneNumber"
+                          *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.nextRowAnswer">
                           <div class="row">
                             <div class="col-lg-11 col-md-11 col-sm-11">
                               <div class="row">
@@ -582,7 +601,7 @@
                           <hr class="bottom">
                         </div>
                         <!-- for testing purpus commnet this div -->
-                       <!-- <div class="fourethPaneNumberPane" *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer&&users.currentPaneNumber.currentPane.paneCode=='vl_ElectricVehicle'">
+                        <!-- <div class="fourethPaneNumberPane" *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer&&users.currentPaneNumber.currentPane.paneCode=='vl_ElectricVehicle'">
                           <div class="row">
                             <div class="col-lg-11 col-sm-11">
                               <p [innerHTML]="answersList.dataField.label | safeHtml" class="address"></p>
@@ -838,10 +857,12 @@
                         <!-- <hr class="bottom"> -->
                       </div>
                       <!--------------------Date Type------------------------>
-                      <div class="row dateType" *ngIf="answersList.dataField.inputType=='date'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='datetime'&&answersList.viewable">
+                      <div class="row dateType"
+                        *ngIf="answersList.dataField.inputType=='date'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='datetime'&&answersList.viewable">
                         <div class="col-md-11 col-sm-11">
                           <h3 class="electronics_item">{{answersList.dataField.label}}</h3>
-                          <p class="demo" style="margin-bottom: 12px;" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">
+                          <p class="demo" style="margin-bottom: 12px;" *ngIf="answersList.helpHide"
+                            id="helpiconcontaindesktop">
                             {{answersList.dataField.helpText}}
                             <span class="hidebuttondemo"
                               (click)="answersList.helpHide=!answersList.helpHide">hide</span>
@@ -915,7 +936,8 @@
               </div>
             </div>
             <!-------------------- Footer text ------------------------------------>
-            <div *ngIf="users.currentPaneNumber.currentPane.htmFooter!=null&&users.currentPaneNumber.currentPane.htmFooter.length>1">
+            <div
+              *ngIf="users.currentPaneNumber.currentPane.htmFooter!=null&&users.currentPaneNumber.currentPane.htmFooter.length>1">
               <div class="row">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10">
@@ -967,8 +989,9 @@
           <div [innerHTML]="users.currentPaneNumber.currentPane.htmRightTop | safeHtml" class="energy_analytic"
             style="margin-top: 17px;"></div>
         </div>
-        <div *ngIf="users.currentPaneNumber.currentPane.htmRightBottom!=null" >
-        <div [innerHTML]="users.currentPaneNumber.currentPane.htmRightBottom | safeHtml" class="energy_analytic"></div>
+        <div *ngIf="users.currentPaneNumber.currentPane.htmRightBottom!=null">
+          <div [innerHTML]="users.currentPaneNumber.currentPane.htmRightBottom | safeHtml" class="energy_analytic">
+          </div>
         </div>
         <!-------------------- Leak List ------------------------------------>
         <div class="background_leaks" *ngIf="users.currentPaneNumber.survey.surveyDescription.showLeaks">
@@ -1022,7 +1045,8 @@
                       meter</a>
                   </li>
                   <li role="presentation" style="padding-bottom: 5px;">
-                      <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
+                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily
+                      smart meter</a>
                   </li>
                   <li role="presentation" style="padding-bottom: 5px;">
                     <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>

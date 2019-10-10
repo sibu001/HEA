@@ -5,6 +5,7 @@ import { Users } from "src/app/models/user";
 import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
 import { Router } from "@angular/router";
+import { DatePipe } from '@angular/common';
 declare var $: any;
 
 @Component({
@@ -19,6 +20,13 @@ export class gasChargeListComponent implements OnInit {
     usageHistoryList: any[] = [];
     year: any;
     month: any;
+    userObj: any;
+    userObj2: any;
+    startDateView: any;
+    endDateView: any;
+    startDateOrigView: any;
+    endDateOrigView: any;
+    billingDateView: any;
     constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
         this.users = this.loginService.getUser();
         // $(document).ready(function () {
@@ -26,9 +34,13 @@ export class gasChargeListComponent implements OnInit {
         //   $('#example').DataTable().draw();
         // });
         this.usageHistoryList = new Array;
-        this.usageHistoryList = this.users.gasList;
-        this.perFormGetList("gasCharge");
+        //   this.usageHistoryList = this.users.gasList;
+        this.getGasList()
+        // this.perFormGetList("gasCharge");
 
+    }
+    getGasList() {
+        this.perFormGetList("gasCharge");
     }
     ngOnInit() {
         // $(document).ready(function () {
@@ -71,7 +83,7 @@ export class gasChargeListComponent implements OnInit {
 
 
     perFormGetList1(useTypes) {
-      
+
 
         this.router.navigate(["/gasList/" + useTypes]);
         //  window.location.reload();
@@ -92,8 +104,10 @@ export class gasChargeListComponent implements OnInit {
                 document.getElementById("loader").classList.remove('loading');
                 let response = JSON.parse(JSON.stringify(data));
                 this.users.types = useTypes;
-                this.users.gasList = new Array;
-                this.users.gasList = response.data;
+                this.users.gesChargeList = new Array;
+                this.users.gesChargeList = response.data
+                // this.users.gasList = new Array;
+                // this.users.gasList = response.data;
                 this.loginService.setUser(this.users);
                 this.usageHistoryList = new Array;
                 this.usageHistoryList = response.data;
@@ -112,6 +126,49 @@ export class gasChargeListComponent implements OnInit {
         );
 
     }
+    i: number = 0;
+    increment(i) {
+        this.i = i;
+        this.userObj = this.usageHistoryList[i];
+        var date;
+        if (this.usageHistoryList[i].startDate != null && this.usageHistoryList[i].startDate != undefined) {
+            date = new Date(this.usageHistoryList[i].startDate);
+            var datePipe = new DatePipe('en-US');
+            this.startDateView = datePipe.transform(date, 'yyyy-MM-dd');
+            this.userObj.startDate = this.startDateView;
+
+        }
+        if (this.usageHistoryList[i].endDate != null && this.usageHistoryList[i].endDate != undefined) {
+            date = new Date(this.usageHistoryList[i].endDate);
+            var datePipe = new DatePipe('en-US');
+            this.endDateView = datePipe.transform(date, 'yyyy-MM-dd');
+            this.userObj.endDate = this.endDateView;
+
+        }
+        if (this.usageHistoryList[i].startDateOrig != null && this.usageHistoryList[i].startDateOrig != undefined) {
+            date = new Date(this.usageHistoryList[i].startDateOrig);
+            var datePipe = new DatePipe('en-US');
+            this.startDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
+            this.userObj.startDateOrig = this.startDateOrigView;
+
+        }
+        if (this.usageHistoryList[i].endDateOrig != null && this.usageHistoryList[i].endDateOrig != undefined) {
+            date = new Date(this.usageHistoryList[i].endDateOrig);
+            var datePipe = new DatePipe('en-US');
+            this.endDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
+            this.userObj.endDateOrig = this.endDateOrigView;
+
+        }
+        if (this.usageHistoryList[i].billingDate != null && this.usageHistoryList[i].billingDate != undefined) {
+            date = new Date(this.usageHistoryList[i].billingDate);
+            var datePipe = new DatePipe('en-US');
+            this.billingDateView = datePipe.transform(date, 'yyyy-MM-dd');
+            this.userObj.billingDate = this.billingDateView;
+
+        }
+        this.userObj2 = $.extend(true, [], this.userObj)
+    }
+
     searchData() {
 
         //   document.getElementById("loader").classList.add('loading');
