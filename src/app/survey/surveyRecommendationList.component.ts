@@ -67,7 +67,7 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
   questionHelp(instruction) {
     this.users.instructionHtml = instruction;
     this.loginService.setUser(this.users);
-    window.open("https://sandbox.hea.com/#/recommendationInstruction");
+    window.open("https://sandbox.hea.com/smartAudit/#/recommendationInstruction");
     return;
   }
   getRecommendation() {

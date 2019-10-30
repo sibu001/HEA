@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LoginService } from "src/app/services/login.service";
 import { Users } from "src/app/models/user";
 import { Router } from "@angular/router";
+import { Filter } from '../models/filter';
 declare var $: any;
 declare var moment: any;
 @Component({
@@ -19,15 +20,33 @@ export class customerEventListComponent implements OnInit {
   startDate: Date;
   endDate: Date;
   eventCode: string;
-  eventType: string;
+  eventName: string;
+  startcheck: boolean;
+  endcheck: boolean;
+  startendcheck: boolean;
+  eventCodecheck: boolean;
+  eventNamecheck: boolean;
+  filter: Filter = new Filter();
   users: Users = new Users();
+
   constructor(private loginService: LoginService, private router: Router) {
     this.users = this.loginService.getUser();
-    this.perFormGetList();
+    this.filter = JSON.parse(localStorage.getItem('filter'));
+    if (this.filter == null || this.filter == undefined) {
+      this.filter = new Filter();
+    }
+    if (!this.filter.back) {
+      this.perFormGetList();
+    }
   }
 
   ngOnInit() {
-
+    if (this.filter.back || ((this.filter.startDate != undefined && this.filter.startDate != null) || (this.filter.endDate != undefined && this.filter.endDate != null) || (this.filter.eventCode != "" && this.filter.eventCode != undefined) || (this.filter.eventName != "" && this.filter.eventName != undefined))) {
+      this.searchFilter();
+    } else {
+      this.filter = new Filter();
+      localStorage.removeItem('filter');
+    }
   }
   ngAfterViewInit() {
     var self = this;
@@ -37,12 +56,11 @@ export class customerEventListComponent implements OnInit {
         "pagingType": "full",
         "columnDefs": [{
           "targets": [0], // column or columns numbers
-          "orderable": false,  // set orderable for selected columns
+          "orderable": false, // set orderable for selected columns
         }],
+        "retrieve": true
       });
-
-
-    }, 1000);
+    }, 1500);
   }
 
   perFormGetList() {
@@ -53,6 +71,7 @@ export class customerEventListComponent implements OnInit {
         let response = JSON.parse(JSON.stringify(data));
         this.usesEventList = new Array;
         this.usesEventList = response.data;
+        this.users.userEventList = this.usesEventList;
         console.log(response.data);
       },
       error => {
@@ -63,7 +82,6 @@ export class customerEventListComponent implements OnInit {
 
       }
     );
-
   }
   customerEventView(customerEventDetail) {
     this.users.customerEventDetail = customerEventDetail;
@@ -77,53 +95,70 @@ export class customerEventListComponent implements OnInit {
     this.loginService.setUser(this.users);
     this.router.navigate(["/customerEventView"]);
   }
+
+
   searchFilter() {
-    this.usesEventNewList =new Array;
-    this.usesEventNewList== this.usesEventList;
-    document.getElementById("loader").classList.add('loading');
-    if (this.startDate != undefined && this.startDate != null && this.endDate != undefined && this.endDate != null || (this.eventCode != undefined && this.eventCode != null) || (this.eventType != undefined && this.eventType != null)) {
-      var startMilliseconds = new Date(this.startDate).getTime();
-      var endMilliseconds = new Date(this.endDate).getTime();
+    this.usesEventNewList = new Array;
+    this.usesEventNewList = this.users.userEventList;
+    if ((this.filter.startDate != undefined && this.filter.startDate != null) || (this.filter.endDate != undefined && this.filter.endDate != null) || (this.filter.eventCode != "" && this.filter.eventCode != undefined) || (this.filter.eventName != "" && this.filter.eventName != undefined)) {
+      document.getElementById("loader").classList.add('loading');
       this.usesEventList = new Array;
-      let self=this;
-     $("#example").dataTable().fnDestroy();
+      var startMilliseconds = new Date(this.filter.startDate).getTime();
+      var endMilliseconds = new Date(this.filter.endDate).getTime();
       for (let eventList of this.usesEventNewList) {
-        if (eventList.eventDatetime >= startMilliseconds && eventList.eventDatetime <= endMilliseconds) {
+        this.startendcheck = true;
+        this.startcheck = true;
+        this.endcheck = true;
+        this.eventCodecheck = true;
+        this.eventNamecheck = true;
+        if (this.filter.startDate != undefined && this.filter.endDate != undefined) {
+          this.startendcheck = false;
+          if (eventList.eventDatetime >= startMilliseconds && eventList.eventDatetime <= endMilliseconds) {
+            this.startendcheck = true;
+          }
+        }
+        else if (this.filter.startDate != undefined) {
+          this.startcheck = false;
+          if (eventList.eventDatetime >= startMilliseconds)
+            this.startcheck = true;
+        }
+        else if (this.filter.endDate != undefined) {
+          this.endcheck = false;
+          if (eventList.eventDatetime <= endMilliseconds) {
+            this.endcheck = true;
+          }
+        }
+
+        if (this.filter.eventCode != "" && this.filter.eventCode != undefined) {
+          this.eventCodecheck = false;
+          if (eventList.customerEventType.eventCode == this.filter.eventCode) {
+            this.eventCodecheck = true;
+          }
+        }
+        if (this.filter.eventName != "" && this.filter.eventName != undefined) {
+          this.eventNamecheck = false;
+          if (eventList.customerEventType.eventName == this.filter.eventName) {
+            this.eventNamecheck = true;
+          }
+        }
+
+        if ((this.startendcheck == true && this.startcheck == true && this.endcheck == true) && (this.eventCodecheck == true) && (this.eventNamecheck == true)) {
           this.usesEventList.push(eventList);
         }
       }
-       setTimeout(function () {
-        $('#example').DataTable().draw();
-        $('#example').DataTable({
-          "responsive": true,
-          "pagingType": "full",
-          "columnDefs": [{
-            "targets": [0], // column or columns numbers
-            "orderable": false,  // set orderable for selected columns
-          }],
-          "retrieve": true
-        });
-        self.usesEventList = self.usesEventNewList;
-      }, 100);
-      console.log(this.usesEventList);
-    } else {
-      var self = this;
-      $("#example").dataTable().fnDestroy();
-      this.usesEventList = new Array;
-      setTimeout(function () {
-        $('#example').DataTable().draw();
-        $('#example').DataTable({
-          "responsive": true,
-          "pagingType": "full",
-          "columnDefs": [{
-            "targets": [0], // column or columns numbers
-            "orderable": false,  // set orderable for selected columns
-          }],
-          "retrieve": true
-        });
-        self.usesEventList = self.usesEventNewList;
-      }, 100);
+      localStorage.setItem('filter', JSON.stringify(this.filter));
+      if (!this.filter.back) {
+
+      } else {
+        this.filter.back = false;
+        localStorage.setItem('filter', JSON.stringify(this.filter));
+      }
+      document.getElementById("loader").classList.remove('loading');
     }
-    document.getElementById("loader").classList.remove('loading');
+    else {
+      localStorage.setItem('filter', JSON.stringify(this.filter));
+      this.usesEventList = this.users.userEventList;
+      document.getElementById("loader").classList.remove('loading');
+    }
   }
 }

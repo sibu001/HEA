@@ -29,66 +29,74 @@ export class electricityChargeListComponent implements OnInit {
   billingDateView: any;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.users = this.loginService.getUser();
-    // $(document).ready(function () {
-    //   //  $('#example').DataTable().ajax.reload();
-    //   $('#example').DataTable().draw();
-    // });
     this.usageHistoryList = new Array;
-    this.usageHistoryList = this.users.gesChargeList;
-    this.getGasList()
-
+    this.getGasList();
   }
   ngOnInit() {
     // $(document).ready(function () {
-    //   $('#example').DataTable();
+    // $('#example').DataTable();
     // });
-
+    if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+      this.searchData();
+    }
 
   }
+  ngAfterViewInit() {
+    $(document).ready(function () {
+      setTimeout(function () {
+        $('#example').DataTable({
+          "responsive": true,
+          "pagingType": "full",
+          "columnDefs": [{
+            "targets": 'no-sort', // column or columns numbers
+            "orderable": false, // set orderable for selected columns
+          }],
+          "retrieve": true
+        });
+      }, 1500);
+    });
+  }
+
   getGasList() {
     this.perFormGetList("electricityCharge");
   }
-  ngAfterViewInit() {
-    setTimeout(function () {
-      $('#example').DataTable({
-        "pagingType": "full",
-        "columnDefs": [{
-          "targets": 'no-sort', // column or columns numbers
-          "orderable": false,  // set orderable for selected columns
-        }],
-      });
-      var table = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
-
-      $("#year").on('keyup click', function () {
-        table.columns([1]).search($(this).val()).draw();
-      });
-
-      $("#month").on('keyup click', function () {
-        table.column(2).search($(this).val()).draw();
-      });
-
-    }, 1000);
-  }
-
 
   perFormGetList1(useTypes) {
 
     this.router.navigate(["/gasList/" + useTypes]);
-    //  window.location.reload();
+    // window.location.reload();
   }
   perFormGetList(useTypes) {
 
     document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/usage/" + useTypes).subscribe(
+    this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/usage/electricity?type=" + useTypes).subscribe(
       data => {
         document.getElementById("loader").classList.remove('loading');
         let response = JSON.parse(JSON.stringify(data));
         this.users.types = useTypes;
-        this.users.gesChargeList = new Array;
-        this.users.gesChargeList = response.data;
+        this.users.electricityChargeList = new Array;
+        this.users.electricityChargeList = response.data;
         this.loginService.setUser(this.users);
         this.usageHistoryList = new Array;
         this.usageHistoryList = response.data;
+        if ((this.year != undefined && this.year != null) || (this.month != undefined && this.month != null)) {
+          this.searchData();
+        }
+        $(document).ready(function () {
+          $("#example").dataTable().fnDestroy();
+          setTimeout(function () {
+            $('#example').DataTable({
+              "responsive": true,
+              "pagingType": 'full',
+              "columnDefs": [{
+                "targets": 'no-sort', // column or columns numbers
+                "orderable": false, // set orderable for selected columns
+              }],
+              "retrieve": true
+            });
+          }, 1500);
+        });
+
       },
       error => {
         document.getElementById("loader").classList.remove('loading');
@@ -145,34 +153,53 @@ export class electricityChargeListComponent implements OnInit {
 
   searchData() {
 
-    //   document.getElementById("loader").classList.add('loading');
-    //   this.usageHistoryList = new Array;
-
-    //   console.log(this.users.usesList);
-    //   for (let useList of this.users.usesList) {
-    //     if (this.month != undefined && this.month != null && this.year != undefined && this.year != null) {
-    //       if (useList.year == this.year && useList.month == this.month) {
-    //         this.usageHistoryList.push(useList);
-    //       }
-    //     } else if (this.year != undefined && this.year != null) {
-    //       if (useList.year == this.year) {
-    //         this.usageHistoryList.push(useList);
-    //       }
-    //     } else if (this.month != undefined && this.month != null) {
-    //       if (useList.month == this.month) {
-    //         this.usageHistoryList.push(useList);
-    //       }
-    //     } else {
-    //       this.usageHistoryList.push(useList);
-    //     }
-    //   }
-    //   $(document).ready(function () {
-
-    //     $('#example').on('draw.dt', function () {
-
-    //     });
-    //   });
-    //   console.log(this.usageHistoryList);
-    //   document.getElementById("loader").classList.remove('loading');
+    document.getElementById("loader").classList.add('loading');
+    if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+      this.usageHistoryList = new Array;
+      for (let eChargeList of this.users.electricityChargeList) {
+        if (eChargeList.year == this.year && eChargeList.month == this.month) {
+          this.usageHistoryList.push(eChargeList);
+        } else if (eChargeList.year == this.year) {
+          this.usageHistoryList.push(eChargeList);
+        } else if (eChargeList.month == this.month) {
+          this.usageHistoryList.push(eChargeList);
+        }
+      }
+      $("#example").dataTable().fnDestroy();
+      $(document).ready(function () {
+        $("#example").dataTable().fnDestroy();
+        setTimeout(function () {
+          $('#example').DataTable({
+            "responsive": true,
+            "pagingType": "full",
+            "columnDefs": [{
+              "targets": 'no-sort', // column or columns numbers
+              "orderable": false, // set orderable for selected columns
+            }],
+            "retrieve": true
+          });
+        }, 1500);
+      });
+      console.log(this.usageHistoryList);
+      document.getElementById("loader").classList.remove('loading');
+    } else {
+      this.usageHistoryList = this.users.electricityChargeList;
+      $("#example").dataTable().fnDestroy();
+      $(document).ready(function () {
+        $("#example").dataTable().fnDestroy();
+        setTimeout(function () {
+          $('#example').DataTable({
+            "responsive": true,
+            "pagingType": "full",
+            "columnDefs": [{
+              "targets": 'no-sort', // column or columns numbers
+              "orderable": false, // set orderable for selected columns
+            }],
+            "retrieve": true
+          });
+        }, 1500);
+      });
+      document.getElementById("loader").classList.remove('loading');
+    }
   }
 }

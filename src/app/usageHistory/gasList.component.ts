@@ -4,6 +4,7 @@ import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
 import { Router } from "@angular/router";
 import { DatePipe } from '@angular/common';
+import { Filter } from '../models/filter';
 declare var $: any;
 
 @Component({
@@ -12,7 +13,6 @@ declare var $: any;
   styleUrls: ['./gasList.component.css']
 })
 export class gasListComponent implements OnInit {
- 
   users: Users = new Users();
   errorMessage: string;
   useTypes: string;
@@ -26,46 +26,44 @@ export class gasListComponent implements OnInit {
   startDateOrigView: any;
   endDateOrigView: any;
   billingDateView: any;
-
-
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.users = this.loginService.getUser();
     this.usageHistoryList = new Array;
-    //this.usageHistoryList = this.users.gasList;
     this.getGasList()
+
+
   }
-  ngOnInit() { }
+  ngOnInit() {
+    if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+      this.searchData();
+    }
+  }
   ngAfterViewInit() {
-    setTimeout(function () {
-      $('#example').DataTable({
-        "responsive": true,
-        "pagingType": "full",
-        "columnDefs": [{
-          "targets": [0, 3, 4, 5], // column or columns numbers
-          "orderable": false,  // set orderable for selected columns
-        }],
-      });
-      var table = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
-
-      $("#year").on('keyup click', function () {
-        table.columns([1]).search($(this).val()).draw();
-      });
-
-      $("#month").on('keyup click', function () {
-        table.column(2).search($(this).val()).draw();
-      });
-    }, 1500);
+    $(document).ready(function () {
+      setTimeout(function () {
+        $('#example').DataTable({
+          "responsive": true,
+          "pagingType": "full",
+          "columnDefs": [{
+            "targets": [0, 3, 4, 5], // column or columns numbers
+            "orderable": false, // set orderable for selected columns
+          }],
+          "retrieve": true
+        });
+      }, 1500);
+    });
   }
 
-  getGasList(){
+  getGasList() {
     this.perFormGetList("gas");
+
   }
 
   perFormGetList(useTypes) {
     document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/usage/" + useTypes).subscribe(
+    this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/usage/gas?type=" + useTypes).subscribe(
       data => {
-        document.getElementById("loader").classList.remove('loading');
+
         let response = JSON.parse(JSON.stringify(data));
         this.users.types = useTypes;
         this.users.gasList = new Array;
@@ -73,6 +71,27 @@ export class gasListComponent implements OnInit {
         this.loginService.setUser(this.users);
         this.usageHistoryList = new Array;
         this.usageHistoryList = response.data;
+        document.getElementById("loader").classList.remove('loading');
+        if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+          this.searchData();
+        }
+        //else {
+        $(document).ready(function () {
+          $("#example").dataTable().fnDestroy();
+          setTimeout(function () {
+            $('#example').DataTable({
+              "responsive": true,
+              "pagingType": "full",
+              "columnDefs": [{
+                "targets": [0, 3, 4, 5], // column or columns numbers
+                "orderable": false, // set orderable for selected columns
+              }],
+              "retrieve": true
+            });
+          }, 1500);
+        });
+        // }
+
       },
       error => {
         document.getElementById("loader").classList.remove('loading');
@@ -81,13 +100,14 @@ export class gasListComponent implements OnInit {
         this.errorMessage = response.error_description;
 
       }
+
     );
 
   }
   i: number = 0;
   increment(i) {
     this.i = i;
-    this.userObj = this.usageHistoryList[i]; 
+    this.userObj = this.usageHistoryList[i];
     var date;
     if (this.usageHistoryList[i].startDate != null && this.usageHistoryList[i].startDate != undefined) {
       date = new Date(this.usageHistoryList[i].startDate);
@@ -127,41 +147,54 @@ export class gasListComponent implements OnInit {
     this.userObj2 = $.extend(true, [], this.userObj)
   }
 
-  // t:number
-  // formatDate( t:number){
-  //   var date = new Date(t);
-  //   date.toString(); // "Dec 20"
-  // }
   searchData() {
+    document.getElementById("loader").classList.add('loading');
+    if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+      this.usageHistoryList = new Array;
+      for (let gesList of this.users.gasList) {
+        if (gesList.year == this.year && gesList.month == this.month) {
+          this.usageHistoryList.push(gesList);
+        } else if (gesList.year == this.year) {
+          this.usageHistoryList.push(gesList);
+        } else if (gesList.month == this.month) {
+          this.usageHistoryList.push(gesList);
+        }
+      }
+      $("#example").dataTable().fnDestroy();
+      $(document).ready(function () {
+        $("#example").dataTable().fnDestroy();
+        setTimeout(function () {
+          $('#example').DataTable({
+            "responsive": true,
+            "pagingType": "full",
+            "columnDefs": [{
+              "targets": [0, 3, 4, 5], // column or columns numbers
+              "orderable": false, // set orderable for selected columns
+            }],
+            "retrieve": true
+          });
+        }, 1500);
+      });
 
-    //   document.getElementById("loader").classList.add('loading');
-    //   this.usageHistoryList = new Array;
-
-    //   console.log(this.users.usesList);
-    //   for (let useList of this.users.usesList) {
-    //     if (this.month != undefined && this.month != null && this.year != undefined && this.year != null) {
-    //       if (useList.year == this.year && useList.month == this.month) {
-    //         this.usageHistoryList.push(useList);
-    //       }
-    //     } else if (this.year != undefined && this.year != null) {
-    //       if (useList.year == this.year) {
-    //         this.usageHistoryList.push(useList);
-    //       }
-    //     } else if (this.month != undefined && this.month != null) {
-    //       if (useList.month == this.month) {
-    //         this.usageHistoryList.push(useList);
-    //       }
-    //     } else {
-    //       this.usageHistoryList.push(useList);
-    //     }
-    //   }
-    //   $(document).ready(function () {
-
-    //     $('#example').on('draw.dt', function () {
-
-    //     });
-    //   });
-    //   console.log(this.usageHistoryList);
-    //   document.getElementById("loader").classList.remove('loading');
+      document.getElementById("loader").classList.remove('loading');
+    } else {
+      this.usageHistoryList = this.users.gasList;
+      $("#example").dataTable().fnDestroy();
+      $(document).ready(function () {
+        $("#example").dataTable().fnDestroy();
+        setTimeout(function () {
+          $('#example').DataTable({
+            "responsive": true,
+            "pagingType": "full",
+            "columnDefs": [{
+              "targets": [0, 3, 4, 5], // column or columns numbers
+              "orderable": false, // set orderable for selected columns
+            }],
+            "retrieve": true
+          });
+        }, 1500);
+      });
+      document.getElementById("loader").classList.remove('loading');
+    }
   }
 }

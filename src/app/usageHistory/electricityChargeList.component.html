@@ -89,7 +89,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let usageList of usageHistoryList">
+                            <tr *ngFor="let usageList of usageHistoryList;index as i">
                                 <td> <img src="assets/images/whitebox.png" class="colorbox"></td>
                                 <td data-toggle="modal"  data-target="#myModal" (click)="increment(i)"> {{usageList.year}} </td>
                                 <td data-toggle="modal"  data-target="#myModal" (click)="increment(i)">{{usageList.month}}</td>

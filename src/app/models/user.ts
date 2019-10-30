@@ -32,7 +32,7 @@ export class Users {
     public gasList: any[] = [];
     public electricityList: any[] = [];
     public electricityChargeList: any[] = [];
-    public gesChargeList: any[] = [];
+    public gasChargeList: any[] = [];
     public waterList: any[] = [];
     public surveyList: any[] = [];
     public trendingPartResource: any[] = [];
@@ -54,5 +54,6 @@ export class Users {
     public electricSmartMeterList: any[] = [];
     public electricDailySmartMeterList: any[] = [];
     public gasSmartMeterList: any[] = [];
+    public userEventList : any[] = [];
 
 }

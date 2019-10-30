@@ -5,6 +5,7 @@ import { LoginService } from "src/app/services/login.service";
 import { Users } from "src/app/models/user";
 import { Router } from "@angular/router";
 import { Location } from '@angular/common';
+import { Filter } from '../models/filter';
 
 @Component({
   selector: 'customerEventView',
@@ -12,7 +13,7 @@ import { Location } from '@angular/common';
   styleUrls: ['../survey/topichistory.component.css']
 })
 export class customerEventViewComponent implements OnInit {
-   @ViewChild('inp1') inp1: ElementRef;
+  @ViewChild('inp1') inp1: ElementRef;
   errorMessage: any;
   value: Date;
   customerEventList: any[] = [];
@@ -20,7 +21,8 @@ export class customerEventViewComponent implements OnInit {
   endDate: Date;
   customerEventDetails: any;
   users: Users = new Users();
-  constructor(private loginService: LoginService,private renderer: Renderer, private router: Router, private location: Location) {
+  filter: Filter = new Filter();
+  constructor(private loginService: LoginService, private renderer: Renderer, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
     this.perFormGetEventType();
     this.customerEventDetails = this.users.customerEventDetail;
@@ -30,8 +32,8 @@ export class customerEventViewComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.filter = JSON.parse(localStorage.getItem('filter'));
     this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
-
   }
 
   perFormGetEventType() {
@@ -89,8 +91,8 @@ export class customerEventViewComponent implements OnInit {
       }
     );
   }
-  addEvent(customerEventDetails){
-     var id = Number(customerEventDetails.customerEventType.customerEventTypeId);
+  addEvent(customerEventDetails) {
+    var id = Number(customerEventDetails.customerEventType.customerEventTypeId);
 
     customerEventDetails.user = this.users.outhMeResponse.user;
     customerEventDetails.eventDatetime = this.creatDate.getTime();
@@ -101,10 +103,10 @@ export class customerEventViewComponent implements OnInit {
       data => {
         document.getElementById("loader").classList.remove('loading');
         let response = JSON.parse(JSON.stringify(data));
-        this.users.addEvent=false;
-        this.users.customerEventDetail=response.data;
-        this.customerEventDetails=this.users.customerEventDetail;
-         this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime));
+        this.users.addEvent = false;
+        this.users.customerEventDetail = response.data;
+        this.customerEventDetails = this.users.customerEventDetail;
+        this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime));
         this.loginService.setUser(this.users);
       },
       error => {
@@ -115,6 +117,11 @@ export class customerEventViewComponent implements OnInit {
     );
   }
   back() {
+    if (this.filter == null) {
+      this.filter = new Filter;
+    }
+    this.filter.back = true;
+    localStorage.setItem('filter', JSON.stringify(this.filter));
     this.location.back();
   }
 

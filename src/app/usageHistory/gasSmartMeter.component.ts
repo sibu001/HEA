@@ -61,7 +61,7 @@ export class gasSmartMeterComponent implements OnInit {
         table.column(4).search($(this).val()).draw();
       });
 
-    }, 100);
+    }, 1000);
   }
 
   perFormGetList(useTypes) {

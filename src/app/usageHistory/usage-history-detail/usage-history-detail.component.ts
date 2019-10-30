@@ -24,23 +24,44 @@ export class UsageHistoryDetailComponent implements OnInit {
   }
 
   save() {
-    var datePipe = new DatePipe('en-US');
     this.usageModelObj2 = Object.assign({}, this.usageModelObj);
     this.useTypes = this.usageModelObj2.type;
     this.usageHistoryId = this.usageModelObj2.id;
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performPut(this.usageModelObj2, "users/" + this.usageModelObj2.userId + "/usage/" + this.useTypes + "/" + this.usageHistoryId).subscribe(
-      data => {
-        document.getElementById("loader").classList.remove('loading');
-        let response = JSON.parse(JSON.stringify(data));
-        this.onModelSave.emit();
-      },
-      error => {
-        document.getElementById("loader").classList.remove('loading');
-        console.log(error);
-
+    if ((this.useTypes == "smartMeterElectric") || (this.useTypes == "smartMeterElectricDaily ") || (this.useTypes == "smartMeterGas")) {
+      document.getElementById("loader").classList.add('loading');
+      this.loginService.performPut(this.usageModelObj2, "users/" + this.usageModelObj2.userId + "/" + this.useTypes + "/" + this.usageHistoryId).subscribe(
+        data => {
+          document.getElementById("loader").classList.remove('loading');
+          let response = JSON.parse(JSON.stringify(data));
+          this.onModelSave.emit();
+          // console.log(response);
+          // this.customerEventList = response.data;
+        },
+        error => {
+          document.getElementById("loader").classList.remove('loading');
+          console.log(error);
+        }
+      );
+    } else {
+      if (this.useTypes == "gasCharge") {
+        this.useTypes = "gas";
+      } else if (this.useTypes == "electricityCharge") {
+        this.useTypes = "electricity";
       }
-    );
+      document.getElementById("loader").classList.add('loading');
+      this.loginService.performPut(this.usageModelObj2, "users/" + this.usageModelObj2.userId + "/usage/" + this.useTypes + "/" + this.usageHistoryId).subscribe(
+        data => {
+          document.getElementById("loader").classList.remove('loading');
+          let response = JSON.parse(JSON.stringify(data));
+          this.onModelSave.emit();
+          // console.log(response);
+          // this.customerEventList = response.data;
+        },
+        error => {
+          document.getElementById("loader").classList.remove('loading');
+          console.log(error);
+        }
+      );
+    }
   }
-
 }

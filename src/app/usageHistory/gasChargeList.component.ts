@@ -6,6 +6,7 @@ import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
 import { Router } from "@angular/router";
 import { DatePipe } from '@angular/common';
+import { Filter } from '../models/filter';
 declare var $: any;
 
 @Component({
@@ -30,90 +31,91 @@ export class gasChargeListComponent implements OnInit {
     constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
         this.users = this.loginService.getUser();
         // $(document).ready(function () {
-        //   //  $('#example').DataTable().ajax.reload();
-        //   $('#example').DataTable().draw();
+        // // $('#example').DataTable().ajax.reload();
+        // $('#example').DataTable().draw();
         // });
         this.usageHistoryList = new Array;
-        //   this.usageHistoryList = this.users.gasList;
+        // this.usageHistoryList = this.users.gasList;
         this.getGasList()
-        // this.perFormGetList("gasCharge");
-
-    }
-    getGasList() {
-        this.perFormGetList("gasCharge");
     }
     ngOnInit() {
+        if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+            this.searchData();
+        }
         // $(document).ready(function () {
-        //   $('#example').DataTable();
+        // $('#example').DataTable();
         // });
 
 
     }
     ngAfterViewInit() {
-        setTimeout(function () {
-            $('#example').DataTable({
-                "pagingType": "full",
-                "columnDefs": [{
-                    "targets": 'no-sort', // column or columns numbers
-                    "orderable": false,  // set orderable for selected columns
-                }],
-            });
-            var table = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
-
-            $("#year").on('keyup click', function () {
-                table.columns([1]).search($(this).val()).draw();
-            });
-
-            $("#month").on('keyup click', function () {
-                table.column(2).search($(this).val()).draw();
-            });
-            //      $(document).ready(function () {
-            //     $('#example').DataTable({
-            //       "pagingType": "full",// "simple" option for 'Previous' and 'Next' buttons only
-            //       "columnDefs": [{
-            //       "targets": [0,4,5,6],
-            //       "orderable": false
-            //     }]
-            //     });
-            //     $('.dataTables_length').addClass('bs-select');
-
-            // });
-        }, 1000);
+        $(document).ready(function () {
+            setTimeout(function () {
+                $('#example').DataTable({
+                    "responsive": true,
+                    "pagingType": "full",
+                    "columnDefs": [{
+                        "targets": [0, 3, 4, 5], // column or columns numbers
+                        "orderable": false, // set orderable for selected columns
+                    }],
+                    "retrieve": true
+                });
+            }, 1500);
+        });
     }
 
+    getGasList() {
+        this.perFormGetList("gasCharge");
+    }
 
     perFormGetList1(useTypes) {
 
 
         this.router.navigate(["/gasList/" + useTypes]);
-        //  window.location.reload();
+        // window.location.reload();
     }
     perFormGetList(useTypes) {
         // var table = $('#example').DataTable();
         // $('#example').on('click', function () {
-        //   table.clear().draw();
+        // table.clear().draw();
         // });
 
         // $(document).ready(function () {
-        //     //  $('#example').DataTable().ajax.reload();
-        //     $('#example').DataTable().draw();
-        //       });
+        // // $('#example').DataTable().ajax.reload();
+        // $('#example').DataTable().draw();
+        // });
         document.getElementById("loader").classList.add('loading');
-        this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/usage/" + useTypes).subscribe(
+        this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/usage/gas?type=" + useTypes).subscribe(
             data => {
                 document.getElementById("loader").classList.remove('loading');
                 let response = JSON.parse(JSON.stringify(data));
                 this.users.types = useTypes;
-                this.users.gesChargeList = new Array;
-                this.users.gesChargeList = response.data
-                // this.users.gasList = new Array;
-                // this.users.gasList = response.data;
+                this.users.gasChargeList = new Array;
+                this.users.gasChargeList = response.data;
                 this.loginService.setUser(this.users);
                 this.usageHistoryList = new Array;
                 this.usageHistoryList = response.data;
+                if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+                    this.searchData();
+                }
+                $(document).ready(function () {
+                    $("#example").dataTable().fnDestroy();
+                    setTimeout(function () {
+                        $('#example').DataTable({
+                            "responsive": true,
+                            "pagingType": "full",
+                            "columnDefs": [{
+                                "targets": [0, 3, 4, 5], // column or columns numbers
+                                "orderable": false, // set orderable for selected columns
+                            }],
+                            "retrieve": true
+                        });
+                    }, 1500);
+                });
+
                 // $(document).ready(function () {
-                //    // $('#example').DataTable().ajax.reload();
-                //   $('#example').DataTable().draw();
+                // // $('#example').DataTable().ajax.reload();
+                // $('#example').DataTable().draw();
                 // });
             },
             error => {
@@ -171,34 +173,54 @@ export class gasChargeListComponent implements OnInit {
 
     searchData() {
 
-        //   document.getElementById("loader").classList.add('loading');
-        //   this.usageHistoryList = new Array;
-
-        //   console.log(this.users.usesList);
-        //   for (let useList of this.users.usesList) {
-        //     if (this.month != undefined && this.month != null && this.year != undefined && this.year != null) {
-        //       if (useList.year == this.year && useList.month == this.month) {
-        //         this.usageHistoryList.push(useList);
-        //       }
-        //     } else if (this.year != undefined && this.year != null) {
-        //       if (useList.year == this.year) {
-        //         this.usageHistoryList.push(useList);
-        //       }
-        //     } else if (this.month != undefined && this.month != null) {
-        //       if (useList.month == this.month) {
-        //         this.usageHistoryList.push(useList);
-        //       }
-        //     } else {
-        //       this.usageHistoryList.push(useList);
-        //     }
-        //   }
-        //   $(document).ready(function () {
-
-        //     $('#example').on('draw.dt', function () {
-
-        //     });
-        //   });
-        //   console.log(this.usageHistoryList);
-        //   document.getElementById("loader").classList.remove('loading');
+        document.getElementById("loader").classList.add('loading');
+        if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+            this.usageHistoryList = new Array;
+            // console.log(this.users.usesList);
+            for (let gesChargeList of this.users.gasChargeList) {
+                if (gesChargeList.year == this.year && gesChargeList.month == this.month) {
+                    this.usageHistoryList.push(gesChargeList);
+                } else if (gesChargeList.year == this.year) {
+                    this.usageHistoryList.push(gesChargeList);
+                } else if (gesChargeList.month == this.month) {
+                    this.usageHistoryList.push(gesChargeList);
+                }
+            }
+            $("#example").dataTable().fnDestroy();
+            $(document).ready(function () {
+                $("#example").dataTable().fnDestroy();
+                setTimeout(function () {
+                    $('#example').DataTable({
+                        "responsive": true,
+                        "pagingType": "full",
+                        "columnDefs": [{
+                            "targets": [0, 3, 4, 5], // column or columns numbers
+                            "orderable": false, // set orderable for selected columns
+                        }],
+                        "retrieve": true
+                    });
+                }, 1500);
+            });
+            console.log(this.usageHistoryList);
+            document.getElementById("loader").classList.remove('loading');
+        } else {
+            this.usageHistoryList = this.users.gasChargeList;
+            $("#example").dataTable().fnDestroy();
+            $(document).ready(function () {
+                $("#example").dataTable().fnDestroy();
+                setTimeout(function () {
+                    $('#example').DataTable({
+                        "responsive": true,
+                        "pagingType": "full",
+                        "columnDefs": [{
+                            "targets": [0, 3, 4, 5], // column or columns numbers
+                            "orderable": false, // set orderable for selected columns
+                        }],
+                        "retrieve": true
+                    });
+                }, 1500);
+            });
+            document.getElementById("loader").classList.remove('loading')
+        }
     }
 }

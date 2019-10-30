@@ -391,5 +391,8 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-
+  questionHelp(){
+    window.open("https://hea-docs.s3.amazonaws.com/HomeChartHelp.html");
+    return;
+    }
 }

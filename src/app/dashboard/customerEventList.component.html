@@ -11,7 +11,8 @@
                                     <span class="start">Period start:</span>
                                 </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <p-calendar [(ngModel)]="startDate" id="start" name="start" [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
+                                    <p-calendar [(ngModel)]="filter.startDate" id="start" name="start" [showIcon]="true"
+                                        dateFormat="mm/dd/yy"></p-calendar>
                                     <!-- <p-calendar [(ngModel)]="users.value" [showIcon]="true"></p-calendar> -->
                                 </div>
                             </div>
@@ -20,7 +21,8 @@
                                     <span class="start">Period end:</span>
                                 </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <p-calendar [(ngModel)]="endDate" name="end" id="end" [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
+                                    <p-calendar [(ngModel)]="filter.endDate" name="end" id="end" [showIcon]="true"
+                                        dateFormat="mm/dd/yy"></p-calendar>
                                     <!-- <p-calendar [(ngModel)]="users.value" [showIcon]="true"></p-calendar> -->
                                 </div>
                             </div>
@@ -34,7 +36,8 @@
                                     <span class="start">Event code:</span>
                                 </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="eventCode" name="eventcode">
+                                    <input type="text" class="form-control" id="code" [(ngModel)]="filter.eventCode"
+                                        name="eventcode">
                                 </div>
                             </div>
                             <div class="form-group">
@@ -42,15 +45,19 @@
                                     <span class="start">Event name:</span>
                                 </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="eventName" name="eventname">
+                                    <input type="text" class="form-control" id="name" [(ngModel)]="filter.eventName"
+                                        name="eventname">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-lg-5 col-md-5 col-sm-4" style="text-align:left;">
+                                <div class="control-label col-lg-5 col-sm-5">
                                     <span class="start">Upload file with events:</span>
-                                </label>
-                                <div class="col-lg-5 col-sm-6" style="margin-top:8px;">
+                                </div>
+                                <div class="col-lg-5 col-sm-5" style="margin-top:8px;">
                                     <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                                </div>
+                                <div class="col-lg-2 col-sm-2" style="margin-top:8px;">
+                                    <input type="submit" id="uploadFile" class="button-right" value="upload">
                                 </div>
                             </div>
                         </form>
@@ -65,7 +72,8 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <p class="Messages">
-                            <img src="assets/images/dot03.gif" class="dot">&nbsp;Events history list (Number of Records =
+                            <img src="assets/images/dot03.gif" class="dot">&nbsp;Events history list (Number of Records
+                            =
                             {{usesEventList.length}})
                         </p>
                     </div>
@@ -73,12 +81,14 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="table-responsive">
-                            <table id="example" class="table table-striped table-bordered table-sm" data-source="data-source" [mfData]="usesEventList"
-                                #mf="mfDataTable" [mfRowsOnPage]="10">
+                            <table id="example" class="table table-striped table-bordered table-sm"
+                                data-source="data-source" [mfData]="usesEventList" #mf="mfDataTable"
+                                [mfRowsOnPage]="10">
                                 <thead>
                                     <tr>
                                         <th class="th-sm no-sort">
-                                            <mfDefaultSorter by="img"><img src="assets/images/whitebox.png" class="colorbox"></mfDefaultSorter>
+                                            <mfDefaultSorter by="img"><img src="assets/images/whitebox.png"
+                                                    class="colorbox"></mfDefaultSorter>
                                         </th>
                                         <th class="th-sm">
                                             <mfDefaultSorter by="year">Event code</mfDefaultSorter>
@@ -100,11 +110,19 @@
                                 <tbody>
                                     <tr *ngFor="let usageList of usesEventList">
                                         <td> <img src="assets/images/whitebox.png" class="colorbox"></td>
-                                        <td> <a (click)="customerEventView(usageList)" style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.customerEventType.eventCode}} </a></td>
-                                        <td> <a (click)="customerEventView(usageList)" style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.customerEventType.eventName}}</a></td>
+                                        <td> <a (click)="customerEventView(usageList)"
+                                                style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.customerEventType.eventCode}}
+                                            </a></td>
+                                        <td> <a (click)="customerEventView(usageList)"
+                                                style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.customerEventType.eventName}}</a>
+                                        </td>
                                         <!-- <td>{{usageList.date | date : "dd-MMM-y"}} - {{usageList.endDate | date : "dd-MMM-y"}}</td> -->
-                                        <td> <a (click)="customerEventView(usageList)" style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.eventDatetime | date : "dd-MMM-y"}} </a></td>
-                                        <td> <a (click)="customerEventView(usageList)" style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.linkedPersonName}} </a></td>
+                                        <td> <a (click)="customerEventView(usageList)"
+                                                style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.eventDatetime | date : "dd-MMM-y"}}
+                                            </a></td>
+                                        <td> <a (click)="customerEventView(usageList)"
+                                                style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.linkedPersonName}}
+                                            </a></td>
                                     </tr>
                                 </tbody>
 
@@ -123,7 +141,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn" >
+            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn">
                 <div class="feedback">
                     <p class="Energy_anaiytic">
                         <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
@@ -148,31 +166,40 @@
                         <li>
                             <div class="dropdown">
                                 <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
-                                   </a>
+                                </a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                     <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas charge</a>
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas
+                                            charge</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricityList']">Electricity</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricityChargeList']">Electricity charge</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart
+                                            meter</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                            <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart
+                                            meter</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart
+                                            meter</a>
                                     </li>
                                 </ul>
                             </div>

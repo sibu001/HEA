@@ -12,7 +12,7 @@
                                 </p>
                                 <div class="col-lg-5 col-sm-6">
                                     <!-- <input type="text" class="form-control" id="start" name="startdate"> -->
-                                    <p-calendar [(ngModel)]="startDate" name="start" [showIcon]="true"
+                                    <p-calendar [(ngModel)]="filter.startDate" name="start" [showIcon]="true"
                                         dateFormat="mm/dd/yy"></p-calendar>
                                 </div>
                             </div>
@@ -21,7 +21,7 @@
                                     Period end:
                                 </p>
                                 <div class="col-lg-5 col-sm-6">
-                                    <p-calendar [(ngModel)]="endDate" name="end" [showIcon]="true"
+                                    <p-calendar [(ngModel)]="filter.endDate" name="end" [showIcon]="true"
                                         dateFormat="mm/dd/yy"></p-calendar>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
                                     Subject:
                                 </p>
                                 <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="sub" [(ngModel)]="subject"
+                                    <input type="text" class="form-control" id="sub" [(ngModel)]="filter.subject"
                                         name="subject">
                                 </div>
                             </div>
@@ -54,20 +54,21 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-striped table-bordered table-sm" cellspacing="0" id="dtBasicExample">
+                    <table id="example" class="table table-striped table-bordered table-sm" data-source="data-source"
+                        [mfData]="customerMailList" #mf="mfDataTable" [mfRowsOnPage]="10">
                         <thead>
                             <tr>
-                                <th>
+                                <th class="th-sm no sort">
                                     <img src="assets/images/whitebox.png" class="colorbox">
                                 </th>
-                                <th class="th-sm">Subject&nbsp;
-                                    <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                                <th class="th-sm">
+                                    <mfDefaultSorter by="subject">Subject</mfDefaultSorter>
                                 </th>
-                                <th class="th-sm">Date sent&nbsp;
-                                    <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                                <th class="th-sm">
+                                    <mfDefaultSorter by="dateSent">Date sent</mfDefaultSorter>
                                 </th>
-                                <th class="th-sm">Sent to&nbsp;
-                                    <i class="fa fa-sort float-right" aria-hidden="true"></i>
+                                <th class="th-sm">
+                                    <mfDefaultSorter by="sentTo">Sent to</mfDefaultSorter>
                                 </th>
                                 <th class="th-sm">Bounced</th>
                                 <th class="th-sm">Opened</th>
@@ -161,11 +162,11 @@
 </section>
 <script>
     $(document).ready(function () {
-        $('#dtBasicExample').DataTable();
+        $('#example').DataTable();
         $('.dataTables_length').addClass('bs-select');
     });
     $(document).ready(function () {
-        $('#dtOrderExample').DataTable({
+        $('#example').DataTable({
             "order": [[3, "desc"]]
         });
         $('.dataTables_length').addClass('bs-select');
