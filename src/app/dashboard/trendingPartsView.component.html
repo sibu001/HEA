@@ -26,26 +26,39 @@
                             </li>
                             <li *ngFor="let resource of users.trendingPartResource;index as i">
                                 <a *ngIf="resource.unitTypes[0].used&&resource.unitTypes[1].used">
-                                    <span class="Household" *ngIf="resource.unitTypes[0].useTypes.length>0&&resource.unitTypes[1].useTypes.length>0">
-                                        <span class="title" [style.color]="colors1" (click)="changeResource(resource.resourceType,i)" *ngIf="resource.resourceType=='electricity'">Electricity
+                                    <span class="Household"
+                                        *ngIf="resource.unitTypes[0].useTypes.length>0&&resource.unitTypes[1].useTypes.length>0">
+                                        <span class="title" [style.color]="colors.colors1"
+                                            (click)="changeResource(resource.resourceType,i)"
+                                            *ngIf="resource.resourceType=='electricity'">Electricity
                                             Only
                                         </span>
-                                        <span class="Energy" [style.color]="colors2" (click)="changeResource(resource.resourceType,i)" *ngIf="resource.resourceType=='hhe'">Household
+                                        <span class="Energy" [style.color]="colors.colors2"
+                                            (click)="changeResource(resource.resourceType,i)"
+                                            *ngIf="resource.resourceType=='hhe'">Household
                                             Energy
                                         </span>
-                                        <span class="Energy" [style.color]="colors3" (click)="changeResource(resource.resourceType,i)" *ngIf="resource.resourceType=='naturalGas'">Natural
+                                        <span class="Energy" [style.color]="colors.colors3"
+                                            (click)="changeResource(resource.resourceType,i)"
+                                            *ngIf="resource.resourceType=='naturalGas'">Natural
                                             Gas Only</span>
-                                        
-                                        <span class="GHG" [style.color]="colors6" (click)="changeResource(resource.resourceType,i)" *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='ghg'">GHG</span>
-                                        <span class="water" [style.color]="colors7" (click)="changeResource(resource.resourceType,i)" *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='water'">Water</span>
+
+                                        <span class="GHG" [style.color]="colors.colors6"
+                                            (click)="changeResource(resource.resourceType,i)"
+                                            *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='ghg'">GHG</span>
+                                        <span class="water" [style.color]="colors.colors7"
+                                            (click)="changeResource(resource.resourceType,i)"
+                                            *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='water'">Water</span>
                                     </span>
-                                    <span class="Household" *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='water'">
+                                    <span class="Household"
+                                        *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='water'">
                                         <span>Water</span>
                                     </span>
-                                    <span class="GHG" *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='ghg'">GHG</span>
+                                    <span class="GHG"
+                                        *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='ghg'">GHG</span>
                                     <!-- <span class="Household" *ngIf="resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0">
-                                        <span class="water">{{resource.resourceType}}</span>
-                                    </span> -->
+    <span class="water">{{resource.resourceType}}</span>
+    </span> -->
                                 </a>
                             </li>
                         </ul>
@@ -58,8 +71,12 @@
                             <li *ngFor="let unitTypes of unitType;index as j">
                                 <a>
                                     <span class="Household">
-                                        <span *ngIf="unitTypes.unitType=='cost'" class="Energy" [style.color]="colors4" (click)="changeUnitType(j)">Cost</span>
-                                        <span *ngIf="unitTypes.unitType=='use'" class="use" [style.color]="colors5" (click)="changeUnitType(j)">Use</span>
+                                        <span *ngIf="unitTypes.unitType=='cost'" class="Energy"
+                                            [style.color]="this.trendingParts.unitTypecolor1"
+                                            (click)="changeUnitType(j)">Cost</span>
+                                        <span *ngIf="unitTypes.unitType=='use'" class="use"
+                                            [style.color]="this.trendingParts.unitTypecolor2"
+                                            (click)="changeUnitType(j)">Use</span>
                                     </span>
                                 </a>
                             </li>
@@ -70,29 +87,43 @@
                     <div class="col-xs-6">
                         <p class="trendsmall">Trends for</p>
                         <ng-container *ngFor="let resource of users.trendingPartResource;index as i">
-                            <div *ngIf="resource.unitTypes[0].used&&resource.unitTypes[1].used&&resource.unitTypes[1].useTypes.length>0&&resource.unitTypes[0].useTypes.length>0">
-                                <p *ngIf="resource.resourceType=='hhe'" class="Energy" [style.color]="colors2" (click)="changeResource(resource.resourceType,i)">Household
+                            <div
+                                *ngIf="resource.unitTypes[0].used&&resource.unitTypes[1].used&&resource.unitTypes[1].useTypes.length>0&&resource.unitTypes[0].useTypes.length>0">
+                                <p *ngIf="resource.resourceType=='hhe'" class="Energy" [style.color]="colors.colors2"
+                                    (click)="changeResource(resource.resourceType,i)">Household
                                     Energy </p>
-                                <p *ngIf="resource.resourceType=='electricity'" class="title" [style.color]="colors1" (click)="changeResource(resource.resourceType,i)">Electricity
+                                <p *ngIf="resource.resourceType=='electricity'" class="title"
+                                    [style.color]="colors.colors1" (click)="changeResource(resource.resourceType,i)">
+                                    Electricity
                                     Only </p>
-                                <p *ngIf="resource.resourceType=='naturalGas'" class="title" [style.color]="colors3" (click)="changeResource(resource.resourceType,i)">Natural
+                                <p *ngIf="resource.resourceType=='naturalGas'" class="title"
+                                    [style.color]="colors.colors3" (click)="changeResource(resource.resourceType,i)">
+                                    Natural
                                     Gas Only</p>
-                                <p *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='ghg'" class="title" [style.color]="colors6" (click)="changeResource(resource.resourceType,i)">GHG
-                                    </p>
-                                <p *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='water'" class="title" [style.color]="colors7" (click)="changeResource(resource.resourceType,i)">Water
-                                     </p>
-                                <p *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='ghg'" class="title" style="color: #929292">GHG
-                                    </p>
-                                <p *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='water'" class="title" style="color: #929292">Water
-                                     </p>
+                                <p *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='ghg'"
+                                    class="title" [style.color]="colors.colors6"
+                                    (click)="changeResource(resource.resourceType,i)">GHG
+                                </p>
+                                <p *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='water'"
+                                    class="title" [style.color]="colors.colors7"
+                                    (click)="changeResource(resource.resourceType,i)">Water
+                                </p>
+                                <p *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='ghg'"
+                                    class="title" style="color: #929292">GHG
+                                </p>
+                                <p *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='water'"
+                                    class="title" style="color: #929292">Water
+                                </p>
                             </div>
                         </ng-container>
                     </div>
                     <div class="col-xs-6" style="text-align:right;">
                         <p class="trendsmall">Show</p>
                         <ng-container *ngFor="let unitTypes of unitType;index as j">
-                            <p *ngIf="unitTypes.unitType=='cost'" class="Energy" [style.color]="colors4" (click)="changeUnitType(j)">Cost</p>
-                            <p *ngIf="unitTypes.unitType=='use'" class="title" [style.color]="colors5" (click)="changeUnitType(j)">Use</p>
+                            <p *ngIf="unitTypes.unitType=='cost'" class="Energy"
+                                [style.color]="this.trendingParts.unitTypecolor1 " (click)="changeUnitType(j)">Cost</p>
+                            <p *ngIf="unitTypes.unitType=='use'" class="title"
+                                [style.color]="this.trendingParts.unitTypecolor2" (click)="changeUnitType(j)">Use</p>
                         </ng-container>
                     </div>
                 </div>
@@ -103,9 +134,11 @@
                     <div class="media-body" *ngIf="users.trendId==1">
                         <form>
                             <div class="form-group">
-                                <select name="load" [(ngModel)]="users.treadingLoadsValue" (change)="changesLookupValue(users.treadingLoadsValue)" class="form-control"
+                                <select name="load" [(ngModel)]="partLookupValue"
+                                    (change)="changesLookupValue(partLookupValue)" class="form-control"
                                     style="width:207px;">
-                                    <option *ngFor="let valuesName of useType" [value]=valuesName.lookupValue>{{valuesName.valueName}}</option>
+                                    <option *ngFor="let valuesName of useType" [value]=valuesName.lookupValue>
+                                        {{valuesName.valueName}}</option>
                                 </select>
                             </div>
                         </form>
@@ -121,7 +154,8 @@
                             <br>
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div [innerHTML]="dataList.trendingCharts[0].chart.freeChartDiv | safeHtml" class="trendingChartDiv"></div>
+                                    <div [innerHTML]="dataList.trendingCharts[0].chart.freeChartDiv | safeHtml"
+                                        class="trendingChartDiv"></div>
                                 </div>
                             </div>
 

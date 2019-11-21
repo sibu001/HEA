@@ -90,8 +90,8 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
   }
   mailView(number) {
 
-    this.users.mailContaint = this.users.customerMailList[number].content;
-    this.users.mailDetail = this.users.customerMailList[number];
+    this.users.mailContaint = this.customerMailList[number].content;
+    this.users.mailDetail = this.customerMailList[number];
     this.loginService.setUser(this.users);
     this.router.navigate(["/MailArchiveView"]);
   }

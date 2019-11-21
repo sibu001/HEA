@@ -354,26 +354,6 @@
                           <hr class="bottom">
                         </div>
 
-                        <!-- <div *ngIf="answersList.dataField.fieldValues.length>0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
-                          <div class="row secondspage">
-                            <div class="col-sm-12">
-                              <h3 class="about_program" [style.color]="colors">{{answersList.dataField.label}}</h3>
-                              <div class="row">
-                                <div class="col-lg-2 col-md-2 col-sm-2 col-xs-8">
-                                  <form>
-                                    <div class="form-group">
-                                      <input type="text" name="people" class="form-control" [(ngModel)]="answersList.value">
-                                      <p *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</p>
-                                    </div>
-                                  </form>
-                                </div>
-                              </div>
-                            </div>
-                            <br>
-                          </div>
-                          <hr class="bottom">
-                        </div> -->
-
                         <div class="fourethPane"
                           *ngIf="answersList.dataField.fieldValues.length==0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
                           <div class="row">
@@ -493,57 +473,6 @@
                           </div>
                           <hr class="bottom">
                         </div>
-
-                        <!-- <div *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length>0&&!answersList.dataField.onChangeRefresh&&answersList.dataField.nextRowAnswer">
-                          <div class="row sevenSecond">
-                            <div class="col-sm-11">
-                              <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                  <h3 class="about_program">{{answersList.dataField.label}}</h3>
-                                  <p class="demo" *ngIf="answersList.helpHide" id="helpiconcontaindesktop">{{answersList.dataField.helpText}}
-                                    <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
-                                  </p>
-                                </div>
-                              </div>
-                              <div class="row">
-                                <div class="col-lg-2 col-md-2 col-sm-4 col-xs-6" *ngIf="answersList.dataField.unit==null||answersList.dataField.unit.length==0">
-                                  <form>
-                                    <div class="form-group">
-                                      <input type="text" name="people" class="form-control" [(ngModel)]="answersList.value">
-                                    </div>
-                                  </form>
-                                </div>
-                                <div class="col-lg-5 col-md-5 col-sm-8 col-xs-12" *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">
-                                  <form>
-                                    <div class="form-group">
-                                      <div class="row">
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                          <input type="text" name="people" class="form-control" [(ngModel)]="answersList.value">
-                                        </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6" style="padding-left: 0px;">
-                                          <label class="unitcss" *ngIf="answersList.dataField.unit!=null&&answersList.dataField.unit.length>1">&nbsp;({{answersList.dataField.unit}})</label>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </form>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-sm-1">
-                              <div *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1" style="float:right;">
-                                <img src="assets/images/icon_help.svg" class="media-object" id="help_btn" (click)="answersList.helpHide=!answersList.helpHide">
-                              </div>
-                            </div>
-                            <div class="row" id="helpiconcontainresponsive" *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                              <div class="col-lg-12 col-md-12 col-sm-12">
-                                <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                  <span class="hidebuttondemo" (click)="answersList.helpHide=!answersList.helpHide">hide</span>
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                          <hr class="bottom">
-                        </div> -->
 
                         <div class="form-group thiredPaneNumber"
                           *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.nextRowAnswer">
@@ -971,8 +900,8 @@
             *ngIf="users.currentPaneNumber.survey.surveyDescription.showProgressIndicator">
             <ng-container *ngFor="let totalPaneNumber of totalPanes;index as i">
               <img src="assets/images/lightsilverbox.png" *ngIf="i>users.currentPaneNumber.currentPaneProgress">
-              <img src="assets/images/silverbox.png"
-                (click)="goToSurvey(users.currentPaneNumber.survey.surveyDescription.surveyCode,users.currentPaneNumber.survey.surveyId,users.currentPaneNumber.survey.surveyDescription.panes,i)"
+              <img src="assets/images/silverbox.png" style="cursor: pointer;"
+                (click)="goToSurvey(users.currentPaneNumber.survey.surveyDescription.surveyCode,users.currentPaneNumber.survey.surveyId,users.currentPaneNumber.panes,i)"
                 *ngIf="i<=users.currentPaneNumber.currentPaneProgress">&nbsp;&nbsp;
             </ng-container>
             <p class="topic_title">{{users.currentPaneNumber.survey.surveyDescription.label}}</p>

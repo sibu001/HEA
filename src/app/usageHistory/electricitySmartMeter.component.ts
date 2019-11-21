@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarModule } from 'primeng/calendar';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Users } from "src/app/models/user";
 import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
@@ -23,12 +21,6 @@ export class electricitySmartMeterComponent implements OnInit {
   hour: any;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.users = this.loginService.getUser();
-    // $(document).ready(function () {
-    //   //  $('#example').DataTable().ajax.reload();
-    //   $('#example').DataTable().draw();
-    // });
-    // this.usageHistoryList = new Array;
-    //this.usageHistoryList = this.users.gesChargeList;
     this.perFormGetList("smartMeterElectric");
 
   }
@@ -60,46 +52,22 @@ export class electricitySmartMeterComponent implements OnInit {
         table.column(4).search($(this).val()).draw();
       });
 
-    }, 1000);
+    }, 6000);
   }
 
 
   perFormGetList1(useTypes) {
-    // $('#example').on('draw.dt', function () {
-    // });
-    // $('#example').DataTable().clear();
-    // $(document).ready(function () {
-    //   $('#example').DataTable().destroy();
-    // });
-
     this.router.navigate(["/gasList/" + useTypes]);
-    //  window.location.reload();
   }
   perFormGetList(useTypes) {
-    // var table = $('#example').DataTable();
-    // $('#example').on('click', function () {
-    //   table.clear().draw();
-    // });
-
-    // $(document).ready(function () {
-    //     //  $('#example').DataTable().ajax.reload();
-    //     $('#example').DataTable().draw();
-    //       });
     document.getElementById("loader").classList.add('loading');
     this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/" + useTypes).subscribe(
       data => {
         document.getElementById("loader").classList.remove('loading');
-        let response = JSON.parse(JSON.stringify(data));
         this.users.types = useTypes;
         this.users.electricSmartMeterList = new Array;
-        this.users.electricSmartMeterList = response.data;
-        this.loginService.setUser(this.users);
         this.usageHistoryList = new Array;
-        this.usageHistoryList = response.data;
-        // $(document).ready(function () {
-        //    // $('#example').DataTable().ajax.reload();
-        //   $('#example').DataTable().draw();
-        // });
+        this.usageHistoryList = (JSON.parse(JSON.stringify(data)).data).splice(0, 1000);
       },
       error => {
         document.getElementById("loader").classList.remove('loading');

@@ -92,6 +92,7 @@ span.Energy {
 span.title{
     border-right: 1px solid #929292;
     padding-right: 12px;
+    cursor: pointer;
 }
 span.Energy:hover {
    text-decoration: underline;
@@ -174,6 +175,7 @@ span.home:hover{
         font-weight: 600;
         font-size: 13px;
         margin-bottom: 4px;
+        text-decoration: underline;
     }
     p.title:hover {
        text-decoration: underline;
@@ -309,4 +311,7 @@ p.rolling.small{
     font-size: 14px;
     text-align: justify;
     display: none;
+}
+span.title:hover {
+    text-decoration: underline;
 }

@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarModule } from 'primeng/calendar';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Users } from "src/app/models/user";
 import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
@@ -23,12 +21,6 @@ export class gasSmartMeterComponent implements OnInit {
   hour: any;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.users = this.loginService.getUser();
-    // $(document).ready(function () {
-    //   //  $('#example').DataTable().ajax.reload();
-    //   $('#example').DataTable().draw();
-    // });
-    //  this.usageHistoryList = new Array;
-    //     this.usageHistoryList = this.users.gasList;
     this.perFormGetList("smartMeterGas");
 
   }
@@ -61,7 +53,7 @@ export class gasSmartMeterComponent implements OnInit {
         table.column(4).search($(this).val()).draw();
       });
 
-    }, 1000);
+    }, 1500);
   }
 
   perFormGetList(useTypes) {

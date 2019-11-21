@@ -55,5 +55,6 @@ export class Users {
     public electricDailySmartMeterList: any[] = [];
     public gasSmartMeterList: any[] = [];
     public userEventList : any[] = [];
+    public customerEventList : any[] = [];
 
 }

@@ -12,9 +12,13 @@
                                 <div class="col-sm-8">
                                     <form class="form-tag">
                                         <div class="form-group" style="height: 34px;">
-                                            <select name="pool/spa" class="form-control css" [(ngModel)]="customerEventDetails.customerEventTypeId">
-                                              <option *ngFor="let optionList of customerEventList" [value]="optionList.customerEventTypeId" class="options">{{optionList.eventName}}</option>
-                                             </select>&nbsp;
+                                            <select name="pool/spa" class="form-control css"
+                                                [(ngModel)]="customerEventDetails.customerEventTypeId"
+                                                (change)="changeValue($event.target.value)" [disabled]="!modifyAllow">
+                                                <option *ngFor="let optionList of customerEventList"
+                                                    [value]="optionList.customerEventTypeId" class="options">
+                                                    {{optionList.eventName}}</option>
+                                            </select>&nbsp;
                                         </div>
                                     </form>
                                 </div>
@@ -34,7 +38,8 @@
                             <div class="form-group">
                                 <label class="control-label col-sm-3" id="label-font">Event Date:</label>
                                 <div class="col-sm-8">
-                                    <p-calendar [(ngModel)]="creatDate" name="end" [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
+                                    <p-calendar [disabled]="!modifyAllow" [(ngModel)]="creatDate" name="end"
+                                        [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
                                     <span class="event-date">(MM/dd/yyyy)</span>
                                 </div>
                             </div>
@@ -42,25 +47,30 @@
                                 <label class="control-label col-sm-3" id="label-font">Additional Comments:</label>
                                 <div class="col-sm-8">
                                     <div class="form-group">
-                                        <textarea class="form-control" rows="4" id="comment" name="textarea" [(ngModel)]="customerEventDetails.description"></textarea>
+                                        <textarea class="form-control" rows="4" id="comment" name="textarea"
+                                            [(ngModel)]="customerEventDetails.description"
+                                            [readonly]="!modifyAllow"></textarea>
                                     </div>
                                 </div>
                             </div>
 
                         </form>
-                        <hr/>
+                        <hr />
                         <div class="row">
                             <div class="col-sm-6 col-xs-3">
                                 <button class="btn btn-primary" type="button" (click)="back()">Back</button>
                             </div>
                             <div class="col-sm-6 col-xs-9" style="text-align:right;">
-                                <button *ngIf="!users.addEvent" class="btn btn-primary" type="button" (click)="deleteEvent(customerEventDetails.customerEventId)">Delete</button>&nbsp;
-                                <button *ngIf="!users.addEvent" class="btn btn-primary" type="button" (click)="saveEvent(customerEventDetails)">Save</button>
-                                <button *ngIf="users.addEvent" class="btn btn-primary" type="button" (click)="addEvent(customerEventDetails)">Save</button>
+                                <button *ngIf="!users.addEvent && modifyAllow" class="btn btn-primary" type="button"
+                                    (click)="deleteEvent(customerEventDetails.customerEventId)">Delete</button>&nbsp;
+                                <button *ngIf="!users.addEvent && modifyAllow" class="btn btn-primary" type="button"
+                                    (click)="saveEvent(customerEventDetails)">Save</button>
+                                <button *ngIf="users.addEvent && modifyAllow" class="btn btn-primary" type="button"
+                                    (click)="addEvent(customerEventDetails)">Save</button>
                             </div>
                         </div>
                     </div>
-                    <hr/>
+                    <hr />
                 </div>
             </div>
             <div class="col-sm-3 rightColumn">
@@ -68,7 +78,7 @@
                     <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
                 <p class="feedback">Send feedback to</p>
                 <p class="link_hea">
-                    <a class="info_hea">info@hea.com</a>
+                    <a href = "mailto:info@hea.com" class="info_hea">info@hea.com</a>
                 </p>
                 <hr>
                 <ul class="leaks">
@@ -99,16 +109,20 @@
                                     <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricityChargeList']">Electricity charge</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart
+                                        meter</a>
                                 </li>
                             </ul>
                         </div>
@@ -242,13 +256,13 @@
     @media only screen and (min-width: 320px) and (max-width: 767px) {
         div#helpiconcontainresponsive {
             margin-top: 42px;
-            display: block!important;
+            display: block !important;
             margin-left: 0px;
             margin-right: 0px;
         }
 
         .rightColumn {
-            min-height: 100%!important;
+            min-height: 100% !important;
             position: unset !important;
         }
     }

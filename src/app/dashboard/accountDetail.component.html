@@ -136,7 +136,8 @@
                         <hr>
                         <p>{{users.outhMeResponse.constructionSQFT}}<a  *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(1)">Edit</a></p>
                         <hr>
-                        <p>{{users.outhMeResponse.lotSize}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(2)">Edit</a></p>
+                        <!-- <p>{{users.outhMeResponse.lotSize}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(2)">Edit</a></p> -->
+                        <p>{{users.outhMeResponse.lotSize}}</p>
                         <hr>
                         <p>{{users.outhMeResponse.yearBuilt}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(3)">Edit</a></p>
                         <hr>
@@ -191,7 +192,7 @@
                     <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
                 <p class="feedback">Send feedback to</p>
                 <p class="link_hea">
-                    <a class="info_hea">info@hea.com</a>
+                    <a  href = "mailto:info@hea.com" class="info_hea">info@hea.com</a>
                 </p>
                 <hr>
                 <ul class="leaks">

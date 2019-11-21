@@ -46,6 +46,9 @@
                     <div *ngIf="users.theme=='VT'">
                         <img height="52" src="assets/images/VT/logo_ev.gif" class="dashboard_img">
                     </div>
+                    <div *ngIf="users.theme=='RS'">
+                        <img height="52" src="assets/images/dashboard/logo_hi_horizontal.png" class="dashboard_img">
+                    </div>
                     <!-- <p class="menu" *ngIf="!hides">MENU</p> -->
                 </div>
             </div>
@@ -56,7 +59,7 @@
                 <div class="collapse navbar-collapse" id="main-menu">
                     <ul class="nav navbar-nav navbar-right header">
                         <li class="active hi">
-                            <a (click)="hide(3)"><span class="userName" >Hi {{users.outhMeResponse.user.name}}</span></a>
+                            <a (click)="hide(3)"><span class="username" >Hi {{users.outhMeResponse.user.name}}</span></a>
                         </li>
                         <li>
                             <a (click)="hide(2)" class="main-menu" id="_home">

@@ -4,7 +4,6 @@ import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
 import { Router } from "@angular/router";
 import { DatePipe } from '@angular/common';
-import { Filter } from '../models/filter';
 declare var $: any;
 
 @Component({
@@ -113,37 +112,43 @@ export class gasListComponent implements OnInit {
       date = new Date(this.usageHistoryList[i].startDate);
       var datePipe = new DatePipe('en-US');
       this.startDateView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.startDate = this.startDateView;
+      this.userObj.startTime = datePipe.transform(date, 'HH:mm:ss');
+      this.userObj.startDateView = this.startDateView;
 
     }
     if (this.usageHistoryList[i].endDate != null && this.usageHistoryList[i].endDate != undefined) {
       date = new Date(this.usageHistoryList[i].endDate);
       var datePipe = new DatePipe('en-US');
       this.endDateView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.endDate = this.endDateView;
+      this.userObj.endTime = datePipe.transform(date, 'HH:mm:ss');
+      this.userObj.endDateView = this.endDateView;
 
     }
     if (this.usageHistoryList[i].startDateOrig != null && this.usageHistoryList[i].startDateOrig != undefined) {
       date = new Date(this.usageHistoryList[i].startDateOrig);
       var datePipe = new DatePipe('en-US');
       this.startDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.startDateOrig = this.startDateOrigView;
+      this.userObj.startTimeOrig = datePipe.transform(date, 'HH:mm:ss');
+      this.userObj.startDateOrigView = this.startDateOrigView;
 
     }
     if (this.usageHistoryList[i].endDateOrig != null && this.usageHistoryList[i].endDateOrig != undefined) {
       date = new Date(this.usageHistoryList[i].endDateOrig);
       var datePipe = new DatePipe('en-US');
       this.endDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.endDateOrig = this.endDateOrigView;
+      this.userObj.endTimeOrig = datePipe.transform(date, 'HH:mm:ss');
+      this.userObj.endDateOrigView = this.endDateOrigView;
 
     }
     if (this.usageHistoryList[i].billingDate != null && this.usageHistoryList[i].billingDate != undefined) {
       date = new Date(this.usageHistoryList[i].billingDate);
       var datePipe = new DatePipe('en-US');
       this.billingDateView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.billingDate = this.billingDateView;
+      this.userObj.billingTime = datePipe.transform(date, 'HH:mm:ss');
+      this.userObj.billingDateView = this.billingDateView;
 
     }
+    this.userObj.forceStore = true;
     this.userObj2 = $.extend(true, [], this.userObj)
   }
 

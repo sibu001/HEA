@@ -42,6 +42,7 @@ export class customerEventListComponent implements OnInit {
 
   ngOnInit() {
     if (this.filter.back || ((this.filter.startDate != undefined && this.filter.startDate != null) || (this.filter.endDate != undefined && this.filter.endDate != null) || (this.filter.eventCode != "" && this.filter.eventCode != undefined) || (this.filter.eventName != "" && this.filter.eventName != undefined))) {
+      this.perFormGetList();
       this.searchFilter();
     } else {
       this.filter = new Filter();
@@ -85,12 +86,12 @@ export class customerEventListComponent implements OnInit {
   }
   customerEventView(customerEventDetail) {
     this.users.customerEventDetail = customerEventDetail;
+    this.users.addEvent = false;
     this.loginService.setUser(this.users);
     this.router.navigate(["/customerEventView"]);
   }
 
   addEvent() {
-    this.users.customerEventDetail = this.usesEventList[0];
     this.users.addEvent = true;
     this.loginService.setUser(this.users);
     this.router.navigate(["/customerEventView"]);

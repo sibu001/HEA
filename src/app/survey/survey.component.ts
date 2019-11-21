@@ -548,7 +548,7 @@ export class SurveyComponent implements AfterViewInit {
   goToSurvey(surveyCode, surveyId, paneList, index) {
     var paneCode;
     if (index < this.users.currentPaneNumber.currentPaneProgress) {
-      paneCode = paneList[index].paneCode;
+      paneCode = paneList[index].pane.paneCode;
       document.getElementById("loader").classList.add('loading');
       var object = {};
       this.loginService.performPostMultiPartData(object, "customers/" + this.users.outhMeResponse.customerId + "/surveys/" + surveyCode + "/" + surveyId + "/panes/" + paneCode).subscribe(

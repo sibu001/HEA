@@ -10,13 +10,12 @@ declare var $: any;
   styleUrls: ['./trendingProfileView.component.css']
 })
 export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
-  colors1: string = "#000";
-  colors2: string = "#76ba19";
-  colors3: string = "#76ba19";
-  colors4: string = "#000";
-  colors5: string = "#76ba19";
-  colors6: string = "#76ba19";
-  colors7: string = "#76ba19";
+  // colors1: string = "#000";
+  // colors2: string = "#76ba19";
+  // colors3: string = "#76ba19";
+  // colors6: string = "#76ba19";
+  // colors7: string = "#76ba19";
+  colors: any = {};
   hideHelps: boolean = false;
   useType: any[] = [];
   unitType: any[] = [];
@@ -29,17 +28,21 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
   profileLookupValue: string;
   profileResourceType: string;
   trendingProfileData: any;
+  trendingProfile: any;
   users: Users = new Users();
   constructor(private location: Location, private loginService: LoginService, private router: Router) {
     this.users = this.loginService.getUser();
     this.getTrendingProfileResource();
+    this.colors.colors1 = "#000";
+    this.colors.colors2 = "#76ba19";
+    this.colors.colors3 = "#76ba19";
+    this.colors.colors6 = "#76ba19";
+    this.colors.colors7 = "#76ba19";
   }
 
   ngOnInit() {
-
   }
   ngAfterViewInit() {
-
   }
   home() {
     this.router.navigate(["/dashboard"]);
@@ -47,56 +50,74 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
   changeLookupValue(value) {
     this.getTrendingPart(this.profileResourceType, this.profileUnitType, value);
   }
-  energyChange(resourceType,number) {
+  energyChange(resourceType, number) {
     this.typeNumber = number;
-    this.typeName=resourceType;
+    this.typeName = resourceType;
     if (resourceType == "naturalGas") {
-      this.colors1 = "#000"
-      this.colors2 = "#76ba19";
-      this.colors3 = "#76ba19";
-      this.colors6 = "#76ba19";
-      this.colors7 = "#76ba19";
+      this.colors.colors1 = "#000"
+      this.colors.colors2 = "#76ba19";
+      this.colors.colors3 = "#76ba19";
+      this.colors.colors6 = "#76ba19";
+      this.colors.colors7 = "#76ba19";
+      this.trendingProfile.color = this.colors;
     } else if (resourceType == "electricity") {
-      this.colors2 = "#000"
-      this.colors1 = "#76ba19";
-      this.colors3 = "#76ba19";
-      this.colors6 = "#76ba19";
-      this.colors7 = "#76ba19";
+      this.colors.colors2 = "#000"
+      this.colors.colors1 = "#76ba19";
+      this.colors.colors3 = "#76ba19";
+      this.colors.colors6 = "#76ba19";
+      this.colors.colors7 = "#76ba19";
+      this.trendingProfile.color = this.colors;
     } else if (resourceType == "hhe") {
-      this.colors2 = "#76ba19";
-      this.colors3 = "#000";
-      this.colors1 = "#76ba19";
-      this.colors6 = "#76ba19";
-      this.colors7 = "#76ba19";
+      this.colors.colors2 = "#76ba19";
+      this.colors.colors3 = "#000";
+      this.colors.colors1 = "#76ba19";
+      this.colors.colors6 = "#76ba19";
+      this.colors.colors7 = "#76ba19";
+      this.trendingProfile.color = this.colors;
     } else if (resourceType == "ghg") {
-      this.colors6 = "#000";
-      this.colors1 = "#76ba19";
-      this.colors3 = "#76ba19";
-      this.colors2 = "#76ba19";
-      this.colors7 = "#76ba19";
+      this.colors.colors6 = "#000";
+      this.colors.colors1 = "#76ba19";
+      this.colors.colors3 = "#76ba19";
+      this.colors.colors2 = "#76ba19";
+      this.colors.colors7 = "#76ba19";
+      this.trendingProfile.color = this.colors;
     } else if (resourceType == "water") {
-      this.colors7 = "#000";
-      this.colors2 = "#76ba19";
-      this.colors1 = "#76ba19";
-      this.colors6 = "#76ba19";
-      this.colors3 = "#76ba19";
+      this.colors.colors7 = "#000";
+      this.colors.colors2 = "#76ba19";
+      this.colors.colors1 = "#76ba19";
+      this.colors.colors6 = "#76ba19";
+      this.colors.colors3 = "#76ba19";
+      this.trendingProfile.color = this.colors;
     }
+
     this.profileResourceType = this.users.trendingProfileResource[number].resourceType;
     this.profileUnitType = this.users.trendingProfileResource[number].unitTypes[this.unitTypeNumber].unitType;
     this.profileLookupValue = this.users.trendingProfileResource[number].unitTypes[this.unitTypeNumber].useTypes[this.resourceTypeNumber].lookupValue;
+    this.unitType = this.users.trendingProfileResource[number].unitTypes;
+    this.useType = this.users.trendingProfileResource[number].unitTypes[this.unitTypeNumber].useTypes;
+
+    // set data to localstorage
+    this.trendingProfile.profileResourceType = this.profileResourceType;
+    this.trendingProfile.profileUnitType = this.profileUnitType;
+    this.trendingProfile.profileLookupValue = this.profileLookupValue;
+    this.trendingProfile.useType = this.useType;
+    this.trendingProfile.unitType = this.unitType;
+    this.trendingProfile.typeName = this.typeName;
+    this.trendingProfile.typeNumber = this.typeNumber;
+    localStorage.setItem('trendingProfile', JSON.stringify(this.trendingProfile));
     this.getTrendingPart(this.profileResourceType, this.profileUnitType, this.profileLookupValue);
   }
   changeUnitType(number) {
     if (number == 0) {
-      this.colors4 = "#000";
-      this.colors5 = "#76ba19";
+      this.trendingProfile.unitTypecolor1 = "#000";
+      this.trendingProfile.unitTypecolor2 = "#76ba19";
     } else if (number == 1) {
-      this.colors5 = "#000";
-      this.colors4 = "#76ba19";
+      this.trendingProfile.unitTypecolor1 = "#76ba19";
+      this.trendingProfile.unitTypecolor2 = "#000";
     }
     this.unitTypeNumber = number;
     this.resourceTypeNumber = 0;
-    this.energyChange(this.typeName,this.typeNumber);
+    this.energyChange(this.typeName, this.typeNumber);
   }
   getTrendingProfileResource() {
     this.useType = new Array;
@@ -110,19 +131,58 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
         this.users.trendingProfileResource = arrayObject.sort(function (a, b) {
           return b.unitTypes[0].used - a.unitTypes[0].used || b.unitTypes[1].used - a.unitTypes[1].used;
         })
-        // this.users.trendingProfileResource = response.data;
-        for (var i = 0; i < response.data.length; i++) {
-          if (response.data[i].unitTypes[0].used && response.data[i].unitTypes[1].used) {
-            this.typeNumber = i;
-            this.typeName=response.data[i].resourceType;
-            this.unitType = response.data[i].unitTypes;
-            this.useType = response.data[i].unitTypes[this.unitTypeNumber].useTypes;
-            this.profileResourceType = response.data[i].resourceType;
-            this.profileUnitType = response.data[i].unitTypes[this.unitTypeNumber].unitType;
-            this.profileLookupValue = response.data[i].unitTypes[this.unitTypeNumber].useTypes[0].lookupValue;
-            break;
+        this.trendingProfile = JSON.parse(localStorage.getItem('trendingProfile'));
+        if (this.trendingProfile != null && this.trendingProfile != undefined) {
+          this.profileResourceType = this.trendingProfile.profileResourceType;
+          this.profileUnitType = this.trendingProfile.profileUnitType;
+          this.profileLookupValue = this.trendingProfile.profileLookupValue;
+          this.useType = this.trendingProfile.useType;
+          this.unitType = this.trendingProfile.unitType;
+          this.typeName = this.trendingProfile.typeName;
+          this.typeNumber = this.trendingProfile.typeNumber;
+          this.colors = this.trendingProfile.color;
+        }
+        else {
+          for (var i = 0; i < response.data.length; i++) {
+            if (response.data[i].unitTypes[0].used && response.data[i].unitTypes[1].used) {
+              this.typeNumber = i;
+              this.typeName = response.data[i].resourceType;
+              this.unitType = response.data[i].unitTypes;
+              this.useType = response.data[i].unitTypes[this.unitTypeNumber].useTypes;
+              this.profileResourceType = response.data[i].resourceType;
+              this.profileUnitType = response.data[i].unitTypes[this.unitTypeNumber].unitType;
+              this.profileLookupValue = response.data[i].unitTypes[this.unitTypeNumber].useTypes[0].lookupValue;
+              if (this.profileResourceType == "hhe") {
+                this.colors.colors3 = "#000";
+                this.colors.colors1 = "#76ba19";
+              } else if (this.profileResourceType == "electricity") {
+                this.colors.colors2 = "#000";
+                this.colors.colors1 = "#76ba19";
+              } else if (this.profileResourceType == "ghg") {
+                this.colors.colors6 = "#000";
+                this.colors.colors1 = "#76ba19";
+              } else if (this.profileResourceType == "water") {
+                this.colors.colors7 = "#000";
+                this.colors.colors1 = "#76ba19";
+              }
+              // setting data to localstorage 
+              this.trendingProfile = {};
+              this.trendingProfile.profileResourceType = this.profileResourceType;
+              this.trendingProfile.profileUnitType = this.profileUnitType;
+              this.trendingProfile.profileLookupValue = this.profileLookupValue;
+              this.trendingProfile.useType = this.useType;
+              this.trendingProfile.unitType = this.unitType;
+              this.trendingProfile.typeName = this.typeName;
+              this.trendingProfile.typeNumber = this.typeNumber;
+              this.trendingProfile.unitTypecolor1 = "#000";
+              this.trendingProfile.unitTypecolor2 = "#76ba19";
+              this.trendingProfile.color = this.colors;
+              localStorage.setItem('trendingProfile', JSON.stringify(this.trendingProfile));
+              break;
+            }
           }
         }
+        document.getElementById("loader").classList.remove('loading');
         this.getTrendingPart(this.profileResourceType, this.profileUnitType, this.profileLookupValue);
       },
       errors => {
@@ -192,5 +252,7 @@ export class TrendingProfileViewComponent implements OnInit, AfterViewInit {
         document.getElementById("loader").classList.remove('loading');
       }
     );
+    this.trendingProfile.profileLookupValue = useType;
+    localStorage.setItem('trendingProfile', JSON.stringify(this.trendingProfile));
   }
 }
