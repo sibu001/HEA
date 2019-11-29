@@ -17,7 +17,7 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.users.surveyLenght<=3||this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "Profile"){
+    if(this.users.surveyLenght<=3||(this.users.currentPaneNumber != undefined ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "Profile": false)){
       document.getElementById("_home1").classList.add('header_menu_none');
       document.getElementById("all_topic1").classList.add('header_menu_none');
       document.getElementById("menu_option1").classList.add('header_menu_none');
@@ -41,7 +41,7 @@ export class MenuComponent implements OnInit {
       if (this.users.surveyLenght > 3) {
         this.router.navigate(["/topicshistory"]);
       }
-    } else if (numbers == 3) {
+    } else if (numbers == 3 && (this.users.currentPaneNumber != null && this.users.currentPaneNumber != undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile")) {
       if (this.users.surveyLenght > 3) {
       this.router.navigate(["/accountDetail"]);
       }

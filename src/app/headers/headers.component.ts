@@ -69,7 +69,7 @@ export class HeadersComponent implements OnInit {
         this.router.navigate(["/dashboard"]);
       }
     } else if (numbers == 3) {
-      if (this.users.surveyLenght > 3) {
+      if (this.users.surveyLenght > 3 && (this.users.currentPaneNumber != null && this.users.currentPaneNumber != undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile")) {
         this.router.navigate(["/accountDetail"]);
       }
     } else if (numbers == 4) {

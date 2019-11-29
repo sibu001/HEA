@@ -134,7 +134,7 @@ export class DashboardComponent implements OnInit {
     }
   }
   leakView(id) {
-    this.users.leakFocusNo = id;
+    this.users.leakFocusId = id;
     this.loginService.setUser(this.users);
     this.router.navigate(["leakListView"]);
   }

@@ -20,14 +20,9 @@ export class SortGridPipe implements PipeTransform {
                 return (direction === "-") ? right - left : left - right;
             });
         } else if (column == "status") {
+            var sortingArr = [ 'N', 'L', 'Y', 'D' ];
             array.sort((a: any, b: any) => {
-                if (a[column] < b[column]) {
-                    return -1;
-                } else if (a[column] > b[column]) {
-                    return 1;
-                } else {
-                    return 0;
-                }
+                return sortingArr.indexOf(a[column]) - sortingArr.indexOf(b[column]);
             });
         } else if (column == "recommendation") {
             let column2 = "takebackLabel";

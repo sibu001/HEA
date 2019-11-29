@@ -542,7 +542,9 @@ export class SurveyComponent implements AfterViewInit {
     );
   }
 
-  leakView() {
+  leakView(id: number) {
+    this.users.leakFocusId = id;
+    this.loginService.setUser(this.users);
     this.router.navigate(["/leakListView"]);
   }
   goToSurvey(surveyCode, surveyId, paneList, index) {

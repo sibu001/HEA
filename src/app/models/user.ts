@@ -15,7 +15,7 @@ export class Users {
     public paneNumber: number = 0;
     public surveyLenght: number;
 
-    public leakFocusNo: number = 1;
+    public leakFocusId: number = 1;
 
     public recomandationNo: number;
     public dates: Date;

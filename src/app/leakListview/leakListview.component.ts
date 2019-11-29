@@ -13,12 +13,7 @@ declare var $: any;
   styleUrls: ['./leakListview.component.css']
 })
 export class leakListViewComponent implements OnInit, AfterViewInit {
-  // @ViewChild('inp1') inp1: ElementRef;
-  // @ViewChild('inp2') inp2: ElementRef;
-  // @ViewChild('inp3') inp3: ElementRef;
-  // @ViewChild('inp4') inp4: ElementRef;
-  // @ViewChild('inp5') inp5: ElementRef;
-  // @ViewChild('inp6') inp6: ElementRef;
+   @ViewChild('inp') inp: ElementRef;
   users: Users = new Users();
   constructor(private location: Location, private router: Router, private element: ElementRef, private renderer: Renderer, private loginService: LoginService) {
     this.users = this.loginService.getUser();
@@ -31,21 +26,9 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
   ngOnInit() {
   }
   ngAfterViewInit() {
-    // switch (this.users.leakFocusNo) {
-    //   case 1: this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus'); $("inp2").scrollTop();
-    //     break;
-    //   case 2: this.renderer.invokeElementMethod(this.inp2.nativeElement, 'focus');
-    //     break;
-    //   case 3: this.renderer.invokeElementMethod(this.inp3.nativeElement, 'focus');
-    //     break;
-    //   case 4: this.renderer.invokeElementMethod(this.inp4.nativeElement, 'focus');
-    //     break;
-    //   case 5: this.renderer.invokeElementMethod(this.inp5.nativeElement, 'focus');
-    //     break;
-    //   case 6: this.renderer.invokeElementMethod(this.inp6.nativeElement, 'focus');
-    //     break;
-    //   default: this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
-    // }
+    if(this.inp != null && this.inp != undefined){
+        this.renderer.invokeElementMethod(this.inp.nativeElement, 'focus');
+      }
   }
   back() {
     this.location.back();

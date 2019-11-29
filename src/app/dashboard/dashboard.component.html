@@ -29,7 +29,7 @@
                             <div class="containercss">
                                 <ng-container *ngFor="let leaks of leakList;index as i">
                                     <p>
-                                        <button type="button" class="btn btn-primary button leaksdiscovery" (click)="leakView(1)">
+                                        <button type="button" class="btn btn-primary button leaksdiscovery" (click)="leakView(leaks.recommendationId)">
                                             <img src="assets/images/{{leaks.recommendation.takebackIcon}}" class="leak_img">
                                         
                                         </button>
@@ -158,14 +158,8 @@
                     <div class="col-sm-8">
                         <p class="trendProfile">
                             <a class="anchorTag" [routerLink]="['/trendingProfileView']">View profile details</a>
-                            <img src="assets/images/icon_help.svg"  class="question">
-                            <!-- (click)="hideHelps=true" -->
+                            <img src="assets/images/icon_help.svg"  class="question" (click) ="questionHelp()">
                         </p>
-                        <!-- <div class="hide_backgroundsmall" *ngIf="hideHelps">
-                            <p class="help">Help text goes here. It no longer is a pop-up, but is now an expanded section. The help section
-                                text could get somewhat long and would just wrap around like this.</p>
-                            <p class="hide_text" (click)="hideHelps=false">hide</p>
-                        </div> -->
                     </div>
                     <div class="col-sm-4">
                         <p class="question_icon">
@@ -173,15 +167,6 @@
                         </p>
                     </div>
                 </div>
-                <!-- <div class="row" *ngIf="hideHelps">
-                     <div class="col-sm-12">
-                      <div class="hide_background" >
-                            <p class="help">Help text goes here. It no longer is a pop-up, but is now an expanded section. The help section
-                                text could get somewhat long and would just wrap around like this.</p>
-                            <p class="hide_text" (click)="hideHelps=false">hide</p>
-                        </div>
-                     </div>
-                </div> -->
                 <!-- help text and area chart -->
                 <div class="row">
                     <div class="col-sm-12" *ngIf="trendingHomeChart!=undefined">

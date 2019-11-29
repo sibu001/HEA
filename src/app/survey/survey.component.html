@@ -6,7 +6,7 @@
         <div class="background_leaksresponsive" *ngIf="users.currentPaneNumber.survey.surveyDescription.showLeaks">
           <ng-container *ngFor="let leak of users.leakList;index as i">
             <span *ngIf="i<=6">
-              <button type="button" class="btn btn-primary button" (click)="leakView()">
+              <button type="button" class="btn btn-primary button" (click)="leakView(leak.recommendationId)">
                 <img src="assets/images/{{leak.recommendation.takebackIcon}}" class="leaksdiscovery">
               </button>&nbsp;
             </span>
@@ -925,7 +925,7 @@
         <!-------------------- Leak List ------------------------------------>
         <div class="background_leaks" *ngIf="users.currentPaneNumber.survey.surveyDescription.showLeaks">
           <ng-container *ngFor="let leak of users.leakList;index as i">
-            <p class="leaks_button" *ngIf="i<=6" (click)="leakView()">
+            <p class="leaks_button" *ngIf="i<=6" (click)="leakView(leak.recommendationId)">
               <img src="assets/images/{{leak.recommendation.takebackIcon}}" class="leaksdiscovery" style="width:50px">&nbsp;&nbsp;{{leak.takebackValue
               | number:'1.0-0'}} {{leak.recommendation.unit}}
             </p>
