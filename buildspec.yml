@@ -1,0 +1,57 @@
+    # Browse to:
+    # After updating this file:
+    # Browse to https://us-west-2.console.aws.amazon.com/codesuite/codebuild/projects/HEA-WebApp/edit/buildspec?region=us-west-2
+    # and paste the content of this file in the editor.
+
+    version: 0.2
+    env:
+      variables:
+        PROJECT_NAME: "HEA-WebApp"
+      parameter-store:
+         SSH_KEY: "/codebuild/xpdev/GIT/Key"
+         SSH_HOST: "/codebuild/xpdev/GIT/Host"
+    phases:
+      pre_build:
+        commands:
+          - GIT_TAG="${GIT_TAG:-origin/master}"
+          - DRY_RUN="${DRY_RUN:-false}"
+          # Prepare access to xp-dev repositories through SSH
+          - mkdir -p ~/.ssh/
+          - ( echo "-----BEGIN RSA PRIVATE KEY-----" && echo "$SSH_KEY" | base64 -d | base64 -w 64 && echo "-----END RSA PRIVATE KEY-----" ) > ~/.ssh/id_rsa
+          - chmod 500 ~/.ssh/id_rsa
+          - echo "$SSH_HOST" > ~/.ssh/known_hosts
+          - chmod 544 ~/.ssh/known_hosts
+          # Checking out project repository
+          - mkdir -p src && cd src
+          - if [ ! -d "${PROJECT_NAME}" ] ; then git clone --no-checkout -v "ssh://xp-dev.com/${PROJECT_NAME}" ; fi
+          - cd "${PROJECT_NAME}"
+          # Fetch origin
+          - git fetch
+          # Update working directory to GIT_TAG (master by default)
+          - git checkout --detach --force ${GIT_TAG}
+          # Using git hash to identify this build
+          - GIT_SHORT_HASH="$(git rev-parse --short HEAD)"
+          - GIT_LAST_MESSAGE="$(git log -1 --pretty=%s)"
+      build:
+        commands:
+          # Build the project.
+          - npm install
+          - node_modules/.bin/ng build --prod
+          # Prepare the distribution for AWS CodeDeploy
+          - cd "${CODEBUILD_SRC_DIR}"
+          # Get deployment scripts from the git repository.
+          - cp -fRT "${CODEBUILD_SRC_DIR}/src/${PROJECT_NAME}/CodeDeploy" dist
+          # Copy built artifact to dist folder
+          - cp -fRT "${CODEBUILD_SRC_DIR}/src/${PROJECT_NAME}/dist/smartAudit/" dist/ROOT
+          # Echo the content of the dist folder for logging purpose.
+          - ls -l dist/
+          # Garde-fou - Check if built artifact exists in the dist folder.
+          - "[ -f dist/ROOT/index.html ] || exit 1"
+          # Push the files to AWS CodeDeploy
+          - if [ "${DRY_RUN}" = "false" ] ; then aws deploy push --application-name "${PROJECT_NAME}" --description "git revision ${GIT_SHORT_HASH} ${GIT_LAST_MESSAGE}" --source "dist/" --s3-location "s3://devops.hea.com/${PROJECT_NAME}/builds/${GIT_SHORT_HASH}.zip" && echo "Pushed application revision with git hash ${GIT_SHORT_HASH}" ; else echo "Build completed" ; fi
+    cache:
+      paths:
+        - src/**/*
+    artifacts:
+      files:
+        - dist/**/*
