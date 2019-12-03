@@ -47,9 +47,9 @@ function deploy() {
   echo Deploying to $TOMCAT_DIR/webapps/$GBA_WEBAPP/
   rm -rf $TOMCAT_DIR/webapps/$GBA_WEBAPP/*
   cp -r $MAIN_HOME/gba-web/target.$INSTANCE/gba-web-0.0.0.1/* $TOMCAT_DIR/webapps/$GBA_WEBAPP/
-#  echo Deploying to $TOMCAT_DIR/webapps/$SA_WEBAPP/
-#  rm -rf $TOMCAT_DIR/webapps/$SA_WEBAPP/*
-#  cp -r /home/hea/projects/HEA-WebApp/dist/* $TOMCAT_DIR/webapps/$SA_WEBAPP/
+  echo Deploying to $TOMCAT_DIR/webapps/$SA_WEBAPP/
+  rm -rf $TOMCAT_DIR/webapps/$SA_WEBAPP/*
+  cp -r /home/hea/projects/HEA-WebApp/dist/* $TOMCAT_DIR/webapps/$SA_WEBAPP/
   return 0
 }
 
