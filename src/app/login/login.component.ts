@@ -87,7 +87,8 @@ export class LoginComponent implements OnInit {
         for(let roles of response){
         if(roles.roleCode=='ADMIN'){
           role=roles.roleCode;
-          window.open("https://sandbox.hea.com/hea-web/customerList.do","_self");
+          window.open(window.location.origin+"/hea-web/customerList.do","_self");
+          //window.open("https://sandbox.hea.com/hea-web/customerList.do","_self");
           break;
         }
         }
