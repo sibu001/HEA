@@ -9,7 +9,7 @@ export class Users {
     public id: number;
     public username: string;
     public password: string;
-    public token: string;
+    public token: string=null;
     public socolUsername: string;
     public socolPassword: string
     public paneNumber: number = 0;

@@ -1,10 +1,11 @@
-import { Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { RegistrationComponent } from "src/app/registration/registration.component";
 import { CustomerRegistrationComponent } from "src/app/registration/customerRegistration.component";
 import { SurveyComponent } from "src/app/survey/survey.component";
 import {TopicHistoryComponent} from "src/app/survey/topichistory.component";
 import {surveyRecommendationListComponent} from "src/app/survey/surveyRecommendationList.component";
 import {RecommendationInstructionComponent} from "src/app/survey/recommendationInstruction.component";
+import { NgModule } from '@angular/core';
 
 export const SurveyRoutes: Routes = [
     { path: 'surveyView', component: SurveyComponent },
@@ -12,3 +13,9 @@ export const SurveyRoutes: Routes = [
     { path: 'surveyRecommendationList', component: surveyRecommendationListComponent },
     { path: 'recommendationInstruction', component: RecommendationInstructionComponent}
 ];
+
+@NgModule({
+    imports: [RouterModule.forChild(SurveyRoutes)],
+    exports: [RouterModule]
+  })
+  export class SurveyRoutingModule { }

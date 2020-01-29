@@ -117,18 +117,50 @@
 		var divTag = document.getElementById('content');
 		var graphDiv = document.createElement('div');
 		var innerHtml = ""
-		innerHtml += '<div style="width: 360px; height: 172px; font-size: 12px; font-family:Roboto; font-weight: normal; color: black; background-color: #EFEFEF; position: relative; float: left;"><div style="width: 320px; height: 25px; margin: 14px 14px 14px 27px; float: left;"><div style="width: 290px; height: 25px; font-size: 16px; float: left;">'+indicator.name+'</div>';
+		var screenWidth = screen.width;
+		var firstDivWidth=360;
+		var secondDivWidth = 320;
+		var secondDivMargin = '14px 14px 14px 27px';
+		var thirdDivWidth = 290;
+		var fifthDivWidth =  360;
+		var sixDivWidth = 86;
+		var eightDivWidth = 350;
+		var eightDivMargin = '0px 5px 0px 5px';
+		var nineDivWidth = 110;
+		var elevenDivWidth = 212;
+		var thirteenDivWidth = 360;
+		var fifteenDivWidth = 40;
+		var sixteenDivwidth = 340;
+		var normingPosition2 = 128;
+		if(screenWidth<390){
+			firstDivWidth=292;
+			secondDivWidth = 250;
+			seconDivMargin = '14px 8px 14px 8px';
+			thirdDivWidth = 225;
+			fifthDivWidth = 292;
+			sixDivWidth = 55;
+			eightDivWidth = 287;
+			eightDivMargin = '0px 5px 0px 0px';
+			nineDivWidth = 62;
+			elevenDivWidth = 205;
+			thirteenDivWidth = 288;
+			fifteenDivWidth = 10;
+			sixteenDivwidth = 289;
+			normingPosition = 50;
+			normingPosition2 = 123;
+		}
+		innerHtml += '<div style="width:'+firstDivWidth+'px; height: 172px; font-size: 12px; font-family:Roboto; font-weight: normal; color: black; background-color: #EFEFEF; position: relative; float: left;"><div style="width:'+secondDivWidth+'px; height: 25px; margin:'+secondDivMargin+' ; float: left;"><div style="width: '+thirdDivWidth+'px; height: 25px; font-size: 16px; float: left;">'+indicator.name+'</div>';
 		if(indicator.help != null && indicator.help != '')
 		{
 			innerHtml += '<div style="width: 25px; height: 25px; float: right;"><a href="javascript:void(0);" style="text-decoration: none; color: black; border-bottom: none;" onmouseover="return overlib('+"'"+indicator.help+"'"+ ', STICKY, MOUSEOFF, WRAP, CELLPAD, 5);" onmouseout="return nd();"><img style="width: 25px; height: 25px;" src="assets/images/helpbtn_grey.png" /></a></div>';
 		}
-		innerHtml += '</div><div style="width: 360px; height: 20px; float: left;"><div style="width: 86px; height: 20px; font-size: 30px; text-align: right; float: left;"></div>';
+		innerHtml += '</div><div style="width: '+fifthDivWidth+'px; height: 20px; float: left;"><div style="width: '+sixDivWidth+'px; height: 20px; font-size: 30px; text-align: right; float: left;"></div>';
 		innerHtml += '<div style="width: 100px; margin-left:' + normingPosition +'px; height: 20px; text-align: center; float: left;">'+ indicator.normingValueName + '</div>';
-		innerHtml += '<div style="width: 350px; height: 40px; margin: 0px 5px 0px 5px; verical-align:middle; float: left;"><div style="width: 110px; height: 40px; margin-top: 3px; font-size: 30px; text-align: right; float: left;">'+fv+'</div>';
-		innerHtml += '<div style="position: absolute; width: 3px; height: 10px; margin-left:' + (normingPosition + 128) + 'px; background-color:black;"></div>';
-		innerHtml += '<div style="width: 212px; height: 30px; margin-top: 10px; margin-right: 14px; background-color:white; float: right;"><div style="width: ' + indicatorWidth + 'px; height: 20px; background-color: ' + indicatorColor + '; margin: 5px 5px 5px 5px; float: left;"></div></div></div>';
-		innerHtml += '<div style="width: 360px; height: 20px; float: left;"><div style="width: 115px; height: 20px; font-size: 30px; text-align: right; float: left;"></div><div style="width: 40px; margin-left:' + normingPosition + 'px; height: 20px; text-align: center; float: left;">'+ fiv+'</div></div>';
-		innerHtml += '<div style="width: 340px; height: 30px;  font-size: 16px; color: ' + indicatorColor + '; text-align:right; float: left;">';
+		innerHtml += '<div style="width: '+eightDivWidth+'px; height: 40px; margin:'+eightDivMargin+' ; verical-align:middle; float: left;"><div style="width: '+nineDivWidth+'px; height: 40px; margin-top: 3px; font-size: 30px; text-align: right; float: left;">'+fv+'</div>';
+		innerHtml += '<div style="position: absolute; width: 3px; height: 10px; margin-left:' + (normingPosition + normingPosition2) + 'px; background-color:black;"></div>';
+		innerHtml += '<div style="width: '+elevenDivWidth+'px; height: 30px; margin-top: 10px; margin-right: 14px; background-color:white; float: right;"><div style="width: ' + indicatorWidth + 'px; height: 20px; background-color: ' + indicatorColor + '; margin: 5px 5px 5px 5px; float: left;"></div></div></div>';
+		innerHtml += '<div style="width: '+thirteenDivWidth+'px; height: 20px; float: left;"><div style="width: 115px; height: 20px; font-size: 30px; text-align: right; float: left;"></div><div style="width: '+fifteenDivWidth+'px; margin-left:' + normingPosition + 'px; height: 20px; text-align: center; float: left;">'+ fiv+'</div></div>';
+		innerHtml += '<div style="width: '+sixteenDivwidth+'px; height: 30px;  font-size: 16px; color: ' + indicatorColor + '; text-align:right; float: left;">';
 		if(showNormingIndicator)
 		{
 			innerHtml += indicatorValueName;

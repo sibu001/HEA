@@ -16,10 +16,12 @@
     <script>
         (function () {
             var url = window.location;
-            console.log("urls" + url);
             var users = localStorage.getItem("users");
-            if (users == undefined) {
-                if (url == url.origin + "/smartAudit" || url == url.origin + "/smartAudit/#" || url == url.origin + "/smartAudit/#/" || url == url.origin + "/smartAudit/#/login") {
+            if (typeof (users) == "string") {
+                users = JSON.parse(users);
+            }
+            if (users == undefined || users.token == null) {
+                if (url.href == url.origin + "/" || url.href == url.origin + "/#" || url.href == url.origin + "/#/" || url.href == url.origin + "/#/login") {
                     window.location.href = "#/login?theme=MBL";
                 }
             }

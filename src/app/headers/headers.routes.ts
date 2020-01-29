@@ -1,8 +1,14 @@
-import { Routes } from '@angular/router';
-import { HeadersComponent } from "src/app/headers/headers.component";
+import { Routes, RouterModule } from '@angular/router';
 import { MenuComponent } from "src/app/headers/menu.component";
+import { NgModule } from '@angular/core';
 
 export const HeaderRoutes: Routes = [
-    { path: 'header', component: HeadersComponent },
     { path: 'menu', component: MenuComponent },
 ];
+
+
+@NgModule({
+    imports: [RouterModule.forChild(HeaderRoutes)],
+    exports: [RouterModule]
+  })
+  export class HeaderRoutingModule { }

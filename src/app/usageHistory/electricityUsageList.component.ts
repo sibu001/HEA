@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarModule } from 'primeng/calendar';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Users } from "src/app/models/user";
 import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
@@ -27,6 +25,7 @@ export class electricityUsageListComponent implements OnInit {
   startDateOrigView: any;
   endDateOrigView: any;
   billingDateView: any;
+  filterCheck: boolean;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.users = this.loginService.getUser();
     this.usageHistoryList = new Array;
@@ -150,16 +149,27 @@ export class electricityUsageListComponent implements OnInit {
     this.userObj2 = $.extend(true, [], this.userObj)
   }
   searchData() {
-
     document.getElementById("loader").classList.add('loading');
     if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
       this.usageHistoryList = new Array;
       for (let elList of this.users.electricityList) {
-        if (elList.year == this.year && elList.month == this.month) {
-          this.usageHistoryList.push(elList);
-        } else if (elList.year == this.year) {
-          this.usageHistoryList.push(elList);
-        } else if (elList.month == this.month) {
+        this.filterCheck = true;
+        if ((this.year != undefined && this.year != "") && (this.month != undefined && this.month != "")) {
+          this.filterCheck = false;
+          if (elList.year == this.year && elList.month == this.month) {
+            this.filterCheck = true;
+          }
+        } else if (this.year != undefined && this.year != "") {
+          this.filterCheck = false;
+          if (elList.year == this.year) {
+            this.filterCheck = true;
+          }
+        } else if (this.month != undefined && this.month != "") {
+          this.filterCheck = false;
+          if (elList.month == this.month) {
+            this.filterCheck = true;
+          }
+        } if (this.filterCheck) {
           this.usageHistoryList.push(elList);
         }
       }

@@ -19,7 +19,7 @@
         <!-------------------- page 1 ------------------------------------>
         <div class="row" *ngIf="users.currentPaneNumber.currentPane!=null">
           <div class="col-sm-12">
-            <input #inp1 id="myInput" type="text" class="inputhide">
+            <!-- <input #inp1 id="myInput" type="text" class="inputhide"> -->
             <div *ngIf="users.currentPaneNumber.currentPane.htmFactoid!=null"
               [innerHTML]="users.currentPaneNumber.currentPane.htmFactoid | safeHtml" class="factoid"></div>
             <div *ngIf="users.currentPaneNumber.errors!=null">

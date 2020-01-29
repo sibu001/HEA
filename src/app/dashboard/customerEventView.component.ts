@@ -93,8 +93,7 @@ export class customerEventViewComponent implements OnInit {
       data => {
         document.getElementById("loader").classList.remove('loading');
         let response = JSON.parse(JSON.stringify(data));
-        // console.log(response);
-        // this.customerEventList = response.data;
+        this.customerEventDetails=response.data;
       },
       error => {
         document.getElementById("loader").classList.remove('loading');
@@ -107,18 +106,14 @@ export class customerEventViewComponent implements OnInit {
     var id = Number(customerEventDetails.customerEventType.customerEventTypeId);
     // customerEventDetails.user = this.users.outhMeResponse.user;
     customerEventDetails.eventDatetime = this.creatDate.getTime();
-    var data = { customerEventDetails };
-    console.log(data);
+    var data = { customerEventDetails };;
     document.getElementById("loader").classList.add('loading');
     this.loginService.performPostMultiPartDataPost(customerEventDetails, "customers/" + this.users.outhMeResponse.customerId + "/customerEvents").subscribe(
       data => {
         document.getElementById("loader").classList.remove('loading');
         let response = JSON.parse(JSON.stringify(data));
-        // this.users.addEvent = false;
-        this.users.customerEventDetail = response.data;
-        this.customerEventDetails = this.users.customerEventDetail;
+        this.customerEventDetails = response.data;
         this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime));
-        this.loginService.setUser(this.users);
       },
       error => {
         document.getElementById("loader").classList.remove('loading');

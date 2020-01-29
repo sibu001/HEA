@@ -25,6 +25,7 @@ export class electricityChargeListComponent implements OnInit {
   startDateOrigView: any;
   endDateOrigView: any;
   billingDateView: any;
+  filterCheck: boolean;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.users = this.loginService.getUser();
     this.usageHistoryList = new Array;
@@ -155,54 +156,67 @@ export class electricityChargeListComponent implements OnInit {
     this.userObj2 = $.extend(true, [], this.userObj)
   }
   searchData() {
-
     document.getElementById("loader").classList.add('loading');
     if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
-      this.usageHistoryList = new Array;
-      for (let eChargeList of this.users.electricityChargeList) {
-        if (eChargeList.year == this.year && eChargeList.month == this.month) {
-          this.usageHistoryList.push(eChargeList);
-        } else if (eChargeList.year == this.year) {
-          this.usageHistoryList.push(eChargeList);
-        } else if (eChargeList.month == this.month) {
-          this.usageHistoryList.push(eChargeList);
+      if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+        this.usageHistoryList = new Array;
+        for (let eChargeList of this.users.electricityChargeList) {
+          this.filterCheck = true;
+          if ((this.year != undefined && this.year != "") && (this.month != undefined && this.month != "")) {
+            this.filterCheck = false;
+            if (eChargeList.year == this.year && eChargeList.month == this.month) {
+              this.filterCheck = true;
+            }
+          } else if (this.year != undefined && this.year != "") {
+            this.filterCheck = false;
+            if (eChargeList.year == this.year) {
+              this.filterCheck = true;
+            }
+          } else if (this.month != undefined && this.month != "") {
+            this.filterCheck = false;
+            if (eChargeList.month == this.month) {
+              this.filterCheck = true;
+            }
+          } if (this.filterCheck) {
+            this.usageHistoryList.push(eChargeList);
+          }
         }
+        $("#example").dataTable().fnDestroy();
+        $(document).ready(function () {
+          $("#example").dataTable().fnDestroy();
+          setTimeout(function () {
+            $('#example').DataTable({
+              "responsive": true,
+              "pagingType": "full",
+              "columnDefs": [{
+                "targets": 'no-sort', // column or columns numbers
+                "orderable": false, // set orderable for selected columns
+              }],
+              "retrieve": true
+            });
+          }, 1500);
+        });
+        console.log(this.usageHistoryList);
+        document.getElementById("loader").classList.remove('loading');
+      } else {
+        this.usageHistoryList = this.users.electricityChargeList;
+        $("#example").dataTable().fnDestroy();
+        $(document).ready(function () {
+          $("#example").dataTable().fnDestroy();
+          setTimeout(function () {
+            $('#example').DataTable({
+              "responsive": true,
+              "pagingType": "full",
+              "columnDefs": [{
+                "targets": 'no-sort', // column or columns numbers
+                "orderable": false, // set orderable for selected columns
+              }],
+              "retrieve": true
+            });
+          }, 1500);
+        });
+        document.getElementById("loader").classList.remove('loading');
       }
-      $("#example").dataTable().fnDestroy();
-      $(document).ready(function () {
-        $("#example").dataTable().fnDestroy();
-        setTimeout(function () {
-          $('#example').DataTable({
-            "responsive": true,
-            "pagingType": "full",
-            "columnDefs": [{
-              "targets": 'no-sort', // column or columns numbers
-              "orderable": false, // set orderable for selected columns
-            }],
-            "retrieve": true
-          });
-        }, 1500);
-      });
-      console.log(this.usageHistoryList);
-      document.getElementById("loader").classList.remove('loading');
-    } else {
-      this.usageHistoryList = this.users.electricityChargeList;
-      $("#example").dataTable().fnDestroy();
-      $(document).ready(function () {
-        $("#example").dataTable().fnDestroy();
-        setTimeout(function () {
-          $('#example').DataTable({
-            "responsive": true,
-            "pagingType": "full",
-            "columnDefs": [{
-              "targets": 'no-sort', // column or columns numbers
-              "orderable": false, // set orderable for selected columns
-            }],
-            "retrieve": true
-          });
-        }, 1500);
-      });
-      document.getElementById("loader").classList.remove('loading');
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent} from 'src/app/dashboard/dashboard.component'
 import {TrendingPartsViewComponent} from 'src/app/dashboard/trendingPartsView.component';
 import {TrendingProfileViewComponent} from 'src/app/dashboard/trendingProfileView.component';
@@ -7,6 +7,7 @@ import {mailArchiveViewComponent} from 'src/app/dashboard/mailArchiveView.compon
 import {customerEventListComponent} from 'src/app/dashboard/customerEventList.component';
 import { AccountDetailComponent } from "src/app/dashboard/accountDetail.component";
 import { customerEventViewComponent } from "src/app/dashboard/customerEventView.component";
+import { NgModule } from '@angular/core';
 
 export const DashboardRoutes: Routes = [
     { path: '', component: DashboardComponent },
@@ -19,3 +20,9 @@ export const DashboardRoutes: Routes = [
     { path: 'accountDetail', component: AccountDetailComponent },
     { path: 'customerEventView', component: customerEventViewComponent },
 ];
+
+@NgModule({
+    imports: [RouterModule.forChild(DashboardRoutes)],
+    exports: [RouterModule]
+  })
+  export class DashboardRoutingModule { }

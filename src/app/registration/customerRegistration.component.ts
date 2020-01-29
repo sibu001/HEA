@@ -2,16 +2,6 @@ import { Component, OnInit, ContentChild, ViewChild, ElementRef, Renderer } from
 import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from "src/app/models/user";
 import { LoginService } from './../services/login.service';
-import { ReactiveFormsModule } from '@angular/forms';
-import { GrowlModule, SelectItem } from 'primeng/primeng';
-import { Validators, FormControl, FormBuilder } from '@angular/forms';
-import { AccordionModule } from 'primeng/primeng';     //accordion and accordion tab
-import { MenuItem } from 'primeng/primeng';
-import { Tree, TreeNode } from 'primeng/primeng';
-import { NgModel } from '@angular/forms';
-import { Message } from '@angular/compiler/src/i18n/i18n_ast';
-import { error } from 'util';
-import { Location } from '@angular/common';
 import { Http } from "@angular/http";
 declare var $: any;
 
@@ -32,12 +22,11 @@ export class CustomerRegistrationComponent implements OnInit {
    @ViewChild('inp1') inp1: ElementRef;
   constructor(private router: Router, private route: ActivatedRoute, private renderer: Renderer, private _http: Http, private loginService: LoginService) {
     this.users = this.loginService.getUser();
-    this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
   }
 
 
   ngOnInit() {
-    console.log("theme");
+    this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
     this.route.queryParams.subscribe(params => {
       this.theme = params['theme'] || null;
     });

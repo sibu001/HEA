@@ -67,12 +67,6 @@
                                     <input type="password" class="form-control" id="newPwd">
                                 </div>
                             </div>
-                            <!-- <div class="form-group">
-                                <label class="control-label col-sm-2" for="pwd">E-mail:</label>
-                                <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="pwd">
-                                </div>
-                            </div> -->
                             <div class="form-group" *ngIf="users.outhMeResponse.calWaterAccount!=null&&users.outhMeResponse.calWaterAccount!=undefined">
                                 <label class="control-label col-sm-2" for="pwd">CalWater account:</label>
                                 <div class="col-sm-6">
@@ -139,7 +133,7 @@
                         <!-- <p>{{users.outhMeResponse.lotSize}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(2)">Edit</a></p> -->
                         <p>{{users.outhMeResponse.lotSize}}</p>
                         <hr>
-                        <p>{{users.outhMeResponse.yearBuilt}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(3)">Edit</a></p>
+                        <p>{{users.outhMeResponse.yearBuilt}}</p>
                         <hr>
                     </div>
                 </div>
@@ -170,10 +164,10 @@
                     </div>
                 </div>
                 <div class="row">
-                     <div class="col-sm-6 col-xs-3">
+                     <div class="col-sm-6 col-xs-7">
                         <p class="utility">Connect your account with:</p>
                     </div>
-                    <div class="col-sm-6 col-xs-9" style="/* text-align:right; */">
+                    <div class="col-sm-6 col-xs-5" style="/* text-align:right; */">
                         <img src="assets/images/facebook.png">
                          <img src="assets/images/google.png">
                     </div>

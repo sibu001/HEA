@@ -25,6 +25,7 @@ export class gasChargeListComponent implements OnInit {
     startDateOrigView: any;
     endDateOrigView: any;
     billingDateView: any;
+    filtercheck: boolean;
     constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
         this.users = this.loginService.getUser();
         this.usageHistoryList = new Array;
@@ -150,13 +151,24 @@ export class gasChargeListComponent implements OnInit {
         document.getElementById("loader").classList.add('loading');
         if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
             this.usageHistoryList = new Array;
-            // console.log(this.users.usesList);
             for (let gesChargeList of this.users.gasChargeList) {
-                if (gesChargeList.year == this.year && gesChargeList.month == this.month) {
-                    this.usageHistoryList.push(gesChargeList);
-                } else if (gesChargeList.year == this.year) {
-                    this.usageHistoryList.push(gesChargeList);
-                } else if (gesChargeList.month == this.month) {
+                this.filtercheck = true;
+                if ((this.year != undefined && this.year != "") && (this.month != undefined && this.month != "")) {
+                    this.filtercheck = false;
+                    if (gesChargeList.year == this.year && gesChargeList.month == this.month) {
+                        this.filtercheck = true;
+                    }
+                } else if (this.year != undefined && this.year != "") {
+                    this.filtercheck = false;
+                    if (gesChargeList.year == this.year) {
+                        this.filtercheck = true;
+                    }
+                } else if (this.month != undefined && this.month != "") {
+                    this.filtercheck = false;
+                    if (gesChargeList.month == this.month) {
+                        this.filtercheck = true;
+                    }
+                } if (this.filtercheck) {
                     this.usageHistoryList.push(gesChargeList);
                 }
             }

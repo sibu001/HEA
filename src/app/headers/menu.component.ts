@@ -7,27 +7,31 @@ import { LoginService } from "src/app/services/login.service";
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
-  styleUrls: ['./headers.component.css','./menu.component.css']
+  styleUrls: ['./headers.component.css', './menu.component.css']
 })
 export class MenuComponent implements OnInit {
- 
-    users: Users = new Users();
-  constructor(private loginService: LoginService, private router: Router,private location: Location) {
+
+  users: Users = new Users();
+  constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
   }
 
   ngOnInit() {
-    if(this.users.surveyLenght<=3||(this.users.currentPaneNumber != undefined ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "Profile": false)){
+    let surveyCode;
+    if (this.users.currentPaneNumber != undefined) {
+      surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
+    }
+    if (this.users.surveyLenght <= 3 || (this.users.currentPaneNumber != undefined ? surveyCode == "Profile" : false)) {
       document.getElementById("_home1").classList.add('header_menu_none');
       document.getElementById("all_topic1").classList.add('header_menu_none');
       document.getElementById("menu_option1").classList.add('header_menu_none');
       document.getElementById("menu_option2").classList.add('header_menu_none');
-    } 
+    }
   }
-  back(){
-      this.location.back();
+  back() {
+    this.location.back();
   }
-   logouts() {
+  logouts() {
     this.loginService.logout();
   }
   hide(numbers) {
@@ -43,8 +47,8 @@ export class MenuComponent implements OnInit {
       }
     } else if (numbers == 3 && (this.users.currentPaneNumber != null && this.users.currentPaneNumber != undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile")) {
       if (this.users.surveyLenght > 3) {
-      this.router.navigate(["/accountDetail"]);
+        this.router.navigate(["/accountDetail"]);
       }
-    } 
+    }
   }
 }

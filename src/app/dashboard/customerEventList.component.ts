@@ -35,33 +35,28 @@ export class customerEventListComponent implements OnInit {
     if (this.filter == null || this.filter == undefined) {
       this.filter = new Filter();
     }
-    if (!this.filter.back) {
-      this.perFormGetList();
-    }
+    this.perFormGetList();
   }
 
   ngOnInit() {
-    if (this.filter.back || ((this.filter.startDate != undefined && this.filter.startDate != null) || (this.filter.endDate != undefined && this.filter.endDate != null) || (this.filter.eventCode != "" && this.filter.eventCode != undefined) || (this.filter.eventName != "" && this.filter.eventName != undefined))) {
-      this.perFormGetList();
-      this.searchFilter();
-    } else {
-      this.filter = new Filter();
-      localStorage.removeItem('filter');
-    }
   }
   ngAfterViewInit() {
     var self = this;
-    setTimeout(function () {
-      $('#example').DataTable({
-        "responsive": true,
-        "pagingType": "full",
-        "columnDefs": [{
-          "targets": [0], // column or columns numbers
-          "orderable": false, // set orderable for selected columns
-        }],
-        "retrieve": true
-      });
-    }, 1500);
+    $(document).ready(function () {
+      $("#example").dataTable().fnDestroy();
+      setTimeout(function () {
+        $('#example').DataTable({
+          "responsive": true,
+          "pagingType": "full",
+          "columnDefs": [{
+            "targets": [0, 1, 2, 3], // column or columns numbers
+            "orderable": false, // set orderable for selected columns
+          }],
+          "retrieve": true
+        });
+        $('.dataTables_length').addClass('bs-select');
+      }, 1500);
+    });
   }
 
   perFormGetList() {
@@ -73,7 +68,7 @@ export class customerEventListComponent implements OnInit {
         this.usesEventList = new Array;
         this.usesEventList = response.data;
         this.users.userEventList = this.usesEventList;
-        console.log(response.data);
+        this.searchFilter();
       },
       error => {
         document.getElementById("loader").classList.remove('loading');
@@ -103,7 +98,7 @@ export class customerEventListComponent implements OnInit {
     this.usesEventNewList = this.users.userEventList;
     if ((this.filter.startDate != undefined && this.filter.startDate != null) || (this.filter.endDate != undefined && this.filter.endDate != null) || (this.filter.eventCode != "" && this.filter.eventCode != undefined) || (this.filter.eventName != "" && this.filter.eventName != undefined)) {
       document.getElementById("loader").classList.add('loading');
-      this.usesEventList = new Array;
+      this.usesEventList = [];
       var startMilliseconds = new Date(this.filter.startDate).getTime();
       var endMilliseconds = new Date(this.filter.endDate).getTime();
       for (let eventList of this.usesEventNewList) {
@@ -147,18 +142,41 @@ export class customerEventListComponent implements OnInit {
           this.usesEventList.push(eventList);
         }
       }
+      $("#example").dataTable().fnDestroy();
+      $(document).ready(function () {
+        setTimeout(function () {
+          $('#example').DataTable({
+            "responsive": true,
+            "pagingType": "full",
+            "columnDefs": [{
+              "targets": [0, 1, 2, 3], // column or columns numbers
+              "orderable": false, // set orderable for selected columns
+            }],
+            "retrieve": true
+          });
+        }, 1000);
+      });
+      this.filter.back = false;
       localStorage.setItem('filter', JSON.stringify(this.filter));
-      if (!this.filter.back) {
-
-      } else {
-        this.filter.back = false;
-        localStorage.setItem('filter', JSON.stringify(this.filter));
-      }
       document.getElementById("loader").classList.remove('loading');
     }
     else {
       localStorage.setItem('filter', JSON.stringify(this.filter));
       this.usesEventList = this.users.userEventList;
+      $("#example").dataTable().fnDestroy();
+      $(document).ready(function () {
+        setTimeout(function () {
+          $('#example').DataTable({
+            "responsive": true,
+            "pagingType": "full",
+            "columnDefs": [{
+              "targets": [0, 1, 2, 3], // column or columns numbers
+              "orderable": false, // set orderable for selected columns
+            }],
+            "retrieve": true
+          });
+        }, 500);
+      });
       document.getElementById("loader").classList.remove('loading');
     }
   }

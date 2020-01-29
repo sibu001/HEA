@@ -25,6 +25,7 @@ export class gasListComponent implements OnInit {
   startDateOrigView: any;
   endDateOrigView: any;
   billingDateView: any;
+  filtercheck:boolean;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.users = this.loginService.getUser();
     this.usageHistoryList = new Array;
@@ -157,11 +158,23 @@ export class gasListComponent implements OnInit {
     if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
       this.usageHistoryList = new Array;
       for (let gesList of this.users.gasList) {
-        if (gesList.year == this.year && gesList.month == this.month) {
-          this.usageHistoryList.push(gesList);
-        } else if (gesList.year == this.year) {
-          this.usageHistoryList.push(gesList);
-        } else if (gesList.month == this.month) {
+        this.filtercheck = true;
+        if ((this.year != undefined && this.year != "") && (this.month != undefined && this.month != "")) {
+          this.filtercheck = false;
+          if (gesList.year == this.year && gesList.month == this.month) {
+            this.filtercheck = true;
+          }
+        } else if (this.year != undefined && this.year != "") {
+          this.filtercheck = false;
+          if (gesList.year == this.year) {
+            this.filtercheck = true;
+          }
+        } else if (this.month != undefined && this.month != "") {
+          this.filtercheck = false;
+          if (gesList.month == this.month) {
+            this.filtercheck = true;
+          }
+        } if (this.filtercheck) {
           this.usageHistoryList.push(gesList);
         }
       }

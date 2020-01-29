@@ -66,9 +66,10 @@ export class SurveyComponent implements AfterViewInit {
   }
   ngAfterViewInit() {
     var self = this;
-    setTimeout(() => self.inp1.nativeElement.focus(), 0);
-    this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-    this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+    // setTimeout(() => self.inp1.nativeElement.focus(), 0);
+    // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+    // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+    this.scrollTop();
     for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
       if (answer.dataField.inputType == 'hslider') {
         $("#" + answer.field + " .hslider" + answer.value).addClass('active');
@@ -104,6 +105,7 @@ export class SurveyComponent implements AfterViewInit {
     var line4;
     var line5;
     var line6;
+    var line7;
     if (this.users.currentPaneNumber.paneCharts.length > 0) {
       var panechart = this.users.currentPaneNumber.paneCharts;
       var j = 0;
@@ -114,6 +116,7 @@ export class SurveyComponent implements AfterViewInit {
         line4 = new Array;
         line5 = new Array;
         line6 = new Array;
+        line7 = new Array;
         for (let areaSeries of paneCharts.chart.series) {
           if (areaSeries.chartSeries.field == "line1") {
             for (let areaSeriesValue of areaSeries.seriesValues) {
@@ -138,6 +141,10 @@ export class SurveyComponent implements AfterViewInit {
           } else if (areaSeries.chartSeries.field == "line6") {
             for (let areaSeriesValue of areaSeries.seriesValues) {
               line6.push([areaSeriesValue.label, areaSeriesValue.value]);
+            }
+          } else if (areaSeries.chartSeries.field == "line7") {
+            for (let areaSeriesValue of areaSeries.seriesValues) {
+              line7.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
           }
         }
@@ -226,9 +233,10 @@ export class SurveyComponent implements AfterViewInit {
             this.users.currentPaneNumber.errors = response.data.errors;
             this.colors = "red";
             var self = this;
-            setTimeout(() => self.inp1.nativeElement.focus(), 0);
-            this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-            this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+            // setTimeout(() => self.inp1.nativeElement.focus(), 0);
+            // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+            // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+            this.scrollTop();
             document.getElementById("loader").classList.remove('loading');
           } else {
             if (id == 'next') {
@@ -247,9 +255,10 @@ export class SurveyComponent implements AfterViewInit {
         errors => {
           console.log(errors);
           var self = this;
-          setTimeout(() => self.inp1.nativeElement.focus(), 0);
-          this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-          this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+          // setTimeout(() => self.inp1.nativeElement.focus(), 0);
+          // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+          // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+          this.scrollTop();
           this.inputErrorMessage = errors.error.errorMessage;
           document.getElementById("loader").classList.remove('loading');
         }
@@ -311,9 +320,10 @@ export class SurveyComponent implements AfterViewInit {
     }
     document.getElementById("loader").classList.remove('loading');
     var self = this;
-    setTimeout(() => self.inp1.nativeElement.focus(), 0);
-    this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-    this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+    // setTimeout(() => self.inp1.nativeElement.focus(), 0);
+    // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+    // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+    this.scrollTop();
 
   }
 
@@ -374,17 +384,19 @@ export class SurveyComponent implements AfterViewInit {
           }, 100);
         }
         var self = this;
-        setTimeout(() => self.inp1.nativeElement.focus(), 0);
-        this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-        this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+        // setTimeout(() => self.inp1.nativeElement.focus(), 0);
+        // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+        // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+        this.scrollTop();
         document.getElementById("loader").classList.remove('loading');
       },
       errors => {
         console.log(errors);
         var self = this;
-        setTimeout(() => self.inp1.nativeElement.focus(), 0);
-        this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-        this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+        // setTimeout(() => self.inp1.nativeElement.focus(), 0);
+        // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+        // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+        this.scrollTop();
         this.inputErrorMessage = errors.error.errorMessage;
         document.getElementById("loader").classList.remove('loading');
       }
@@ -428,9 +440,10 @@ export class SurveyComponent implements AfterViewInit {
             setTimeout(function () {
               self.chartDataConfiguration();
             }, 500);
-            setTimeout(() => self.inp1.nativeElement.focus(), 0);
-            this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-            this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+            // setTimeout(() => self.inp1.nativeElement.focus(), 0);
+            // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+            // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+            this.scrollTop();
             this.helpHides();
             this.progressShow();
           }
@@ -438,9 +451,10 @@ export class SurveyComponent implements AfterViewInit {
           this.router.navigate(["/topicshistory"]);
         }
         var self = this;
-        setTimeout(() => self.inp1.nativeElement.focus(), 0);
-        this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-        this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+        // setTimeout(() => self.inp1.nativeElement.focus(), 0);
+        // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+        // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+        this.scrollTop();
         if (this.users.currentPaneNumber.currentPane.paneCode == "fdb_Intro") {
           setTimeout(function () {
             document.getElementById("fdbRecommendations").classList.add('table-responsive');
@@ -452,10 +466,10 @@ export class SurveyComponent implements AfterViewInit {
       errors => {
         console.log(errors);
         var self = this;
-        setTimeout(() => self.inp1.nativeElement.focus(), 0);
-        this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-        this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
-
+        // setTimeout(() => self.inp1.nativeElement.focus(), 0);
+        // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
+        // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
+        this.scrollTop();
         this.inputErrorMessage = errors.error.errorMessage;
         document.getElementById("loader").classList.remove('loading');
       }
@@ -562,6 +576,10 @@ export class SurveyComponent implements AfterViewInit {
             this.users.currentPaneNumber = response.data;
             this.users.paneNumber = index;
             this.loginService.setUser(this.users);
+            var self = this;
+            setTimeout(function () {
+              self.chartDataConfiguration();
+            }, 500);
           } else {
             this.inputErrorMessage = response.errorMessage;
           }
@@ -574,5 +592,8 @@ export class SurveyComponent implements AfterViewInit {
         }
       );
     }
+  }
+  scrollTop() {
+    window.scroll(0, 0);
   }
 }
