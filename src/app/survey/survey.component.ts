@@ -13,6 +13,7 @@ export class SurveyComponent implements AfterViewInit {
   @ViewChild('panel') public panel: ElementRef;
   inputErrorMessage: string;
   qusHide: boolean;
+  chartHelpHide: boolean;
   hideBlockArrow: boolean;
   chartDiv: any;
   chartDivSecond: any;
@@ -65,17 +66,8 @@ export class SurveyComponent implements AfterViewInit {
     }, 100);
   }
   ngAfterViewInit() {
-    var self = this;
-    // setTimeout(() => self.inp1.nativeElement.focus(), 0);
-    // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-    // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
     this.scrollTop();
-    for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
-      if (answer.dataField.inputType == 'hslider') {
-        $("#" + answer.field + " .hslider" + answer.value).addClass('active');
-        $(this).toggleClass('active');
-      }
-    }
+    this.hsSliderValue();
     if (this.users.currentPaneNumber.paneCode == "fdb_Intro") {
       setTimeout(function () {
         document.getElementById("fdbRecommendations").classList.add('table-responsive');
@@ -182,6 +174,7 @@ export class SurveyComponent implements AfterViewInit {
   }
   next(id, paneNumber) {
     this.qusHide = false;
+    this.chartHelpHide = false;
     this.users.allSurveyCheck = true;
     this.loginService.setUser(this.users);
     this.inputErrorMessage = undefined;
@@ -198,6 +191,7 @@ export class SurveyComponent implements AfterViewInit {
   }
   prev(id, paneNumber) {
     this.users.allSurveyCheck = true;
+    this.chartHelpHide = false;
     this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
       this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false);
@@ -230,12 +224,10 @@ export class SurveyComponent implements AfterViewInit {
           let response = JSON.parse(JSON.stringify(data));
           //  console.log(response);
           if (response.data.errors != null) {
-            this.users.currentPaneNumber.errors = response.data.errors;
+            // this.users.currentPaneNumber.errors = response.data.errors;
+            this.users.currentPaneNumber = response.data;
+            this.loginService.setUser(this.users);
             this.colors = "red";
-            var self = this;
-            // setTimeout(() => self.inp1.nativeElement.focus(), 0);
-            // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-            // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
             this.scrollTop();
             document.getElementById("loader").classList.remove('loading');
           } else {
@@ -254,10 +246,6 @@ export class SurveyComponent implements AfterViewInit {
         },
         errors => {
           console.log(errors);
-          var self = this;
-          // setTimeout(() => self.inp1.nativeElement.focus(), 0);
-          // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-          // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
           this.scrollTop();
           this.inputErrorMessage = errors.error.errorMessage;
           document.getElementById("loader").classList.remove('loading');
@@ -268,61 +256,57 @@ export class SurveyComponent implements AfterViewInit {
 
   nextPaneWithAnswer(data) {
     this.getSessionPendingMessage();
+    let currentPaneCode = this.users.currentPaneNumber.currentPane.paneCode;
     this.users.currentPaneNumber = data;
     this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPane != null) {
-      if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
-        if (this.users.currentPaneNumber.firstPage) {
-          this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
+      if (currentPaneCode == this.users.currentPaneNumber.currentPane.paneCode) {
+        this.router.navigate(["/topicshistory"]);
+      } else {
+        if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
+          if (this.users.currentPaneNumber.firstPage) {
+            this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
+          }
         }
-      }
-      if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "LeaksIntro") {
-        this.getAllSurvey();
-      } else if (this.users.surveyLenght > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile") {
-        document.getElementById("_home").classList.remove('header_menu_none');
-        document.getElementById("all_topic").classList.remove('header_menu_none');
-        document.getElementById("menu_option").classList.remove('header_menu_none');
-        if (document.getElementById("_home1")) {
-          document.getElementById("_home1").classList.remove('header_menu_none');
+        if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "LeaksIntro") {
+          this.getAllSurvey();
+        } else if (this.users.surveyLenght > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile") {
+          document.getElementById("_home").classList.remove('header_menu_none');
+          document.getElementById("all_topic").classList.remove('header_menu_none');
+          document.getElementById("menu_option").classList.remove('header_menu_none');
+          if (document.getElementById("_home1")) {
+            document.getElementById("_home1").classList.remove('header_menu_none');
+          }
+          if (document.getElementById("all_topic1")) {
+            document.getElementById("all_topic1").classList.remove('header_menu_none');
+          }
+          if (document.getElementById("menu_option1")) {
+            document.getElementById("menu_option1").classList.remove('header_menu_none');
+          }
+          if (document.getElementById("menu_option2")) {
+            document.getElementById("menu_option2").classList.remove('header_menu_none');
+          }
         }
-        if (document.getElementById("all_topic1")) {
-          document.getElementById("all_topic1").classList.remove('header_menu_none');
-        }
-        if (document.getElementById("menu_option1")) {
-          document.getElementById("menu_option1").classList.remove('header_menu_none');
-        }
-        if (document.getElementById("menu_option2")) {
-          document.getElementById("menu_option2").classList.remove('header_menu_none');
-        }
-      }
-      var self = this;
-      setTimeout(function () {
-        self.chartDataConfiguration();
-      }, 500);
+        var self = this;
+        setTimeout(function () {
+          self.chartDataConfiguration();
+        }, 500);
 
-      this.helpHides();
-      this.progressShow();
+        this.helpHides();
+        this.progressShow();
+      }
     } else {
       this.router.navigate(["/topicshistory"]);
     }
-    if (this.users.currentPaneNumber.currentPane.paneCode == "fdb_Questions") {
-      for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
-        if (answer.dataField.inputType == 'hslider') {
-          $("#" + answer.field + " .hslider" + answer.value).addClass('active');
-          $(this).toggleClass('active');
-        }
-      }
-    }
+    setTimeout(function () {
+      self.hsSliderValue();
+    }, 500);
     if (this.users.currentPaneNumber.paneCode == "fdb_Intro") {
       setTimeout(function () {
         document.getElementById("fdbRecommendations").classList.add('table-responsive');
       }, 100);
     }
     document.getElementById("loader").classList.remove('loading');
-    var self = this;
-    // setTimeout(() => self.inp1.nativeElement.focus(), 0);
-    // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-    // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
     this.scrollTop();
 
   }
@@ -370,32 +354,19 @@ export class SurveyComponent implements AfterViewInit {
         } else {
           this.router.navigate(["/topicshistory"]);
         }
-        if (this.users.currentPaneNumber.paneCode == "fdb_Questions") {
-          for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
-            if (answer.dataField.inputType == 'hslider') {
-              $("#" + answer.field + " .hslider" + answer.value).addClass('active');
-              $(this).toggleClass('active');
-            }
-          }
-        }
+        setTimeout(function () {
+          self.hsSliderValue();
+        }, 500);
         if (this.users.currentPaneNumber.paneCode == "fdb_Intro") {
           setTimeout(function () {
             document.getElementById("fdbRecommendations").classList.add('table-responsive');
           }, 100);
         }
-        var self = this;
-        // setTimeout(() => self.inp1.nativeElement.focus(), 0);
-        // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-        // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
         this.scrollTop();
         document.getElementById("loader").classList.remove('loading');
       },
       errors => {
         console.log(errors);
-        var self = this;
-        // setTimeout(() => self.inp1.nativeElement.focus(), 0);
-        // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-        // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
         this.scrollTop();
         this.inputErrorMessage = errors.error.errorMessage;
         document.getElementById("loader").classList.remove('loading');
@@ -440,9 +411,6 @@ export class SurveyComponent implements AfterViewInit {
             setTimeout(function () {
               self.chartDataConfiguration();
             }, 500);
-            // setTimeout(() => self.inp1.nativeElement.focus(), 0);
-            // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-            // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
             this.scrollTop();
             this.helpHides();
             this.progressShow();
@@ -450,10 +418,6 @@ export class SurveyComponent implements AfterViewInit {
         } else {
           this.router.navigate(["/topicshistory"]);
         }
-        var self = this;
-        // setTimeout(() => self.inp1.nativeElement.focus(), 0);
-        // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-        // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
         this.scrollTop();
         if (this.users.currentPaneNumber.currentPane.paneCode == "fdb_Intro") {
           setTimeout(function () {
@@ -465,10 +429,6 @@ export class SurveyComponent implements AfterViewInit {
       },
       errors => {
         console.log(errors);
-        var self = this;
-        // setTimeout(() => self.inp1.nativeElement.focus(), 0);
-        // this.renderer.invokeElementMethod(self.inp1.nativeElement, 'focus');
-        // this.inp1.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end', inline: 'start' });
         this.scrollTop();
         this.inputErrorMessage = errors.error.errorMessage;
         document.getElementById("loader").classList.remove('loading');
@@ -595,5 +555,16 @@ export class SurveyComponent implements AfterViewInit {
   }
   scrollTop() {
     window.scroll(0, 0);
+  }
+
+  hsSliderValue() {
+    if (this.users.currentPaneNumber.paneCode == "fdb_Questions") {
+      for (let answer of this.users.currentPaneNumber.currentPaneAnswers) {
+        if (answer.dataField.inputType == 'hslider') {
+          $("#" + answer.field + " .hslider" + answer.value).addClass('active');
+          $(this).toggleClass('active');
+        }
+      }
+    }
   }
 }

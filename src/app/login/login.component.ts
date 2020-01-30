@@ -3,7 +3,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from "src/app/models/user";
 import { LoginService } from './../services/login.service';
 import { Http } from '@angular/http';
-import { AppConstants } from "src/app/utility/constant";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -34,7 +33,6 @@ export class LoginComponent implements OnInit {
   }
   @ContentChild('showhideinput') input;
   login() {
-    var url = AppConstants.webBaseUrl + "oauth/authorize?response_type=code&scope=read&client_id=pldb@hea.com&redirect_uri=http://localhost:4200/#/login";
     if (this.users.username == undefined || this.users.username.length == 0) {
       this.errorMessage = "please enter user name";
     } else if (this.users.password == undefined || this.users.password.length == 0) {

@@ -73,6 +73,32 @@
                   *ngIf="users.currentPaneNumber.paneCharts!=null&&users.currentPaneNumber.paneCharts.length>0">
                   <div class="col-sm-12 border_class">
                     <ng-container *ngFor="let charts of users.currentPaneNumber.paneCharts">
+                      <!-- help icon -->
+                      <div class="row"
+                        *ngIf="charts.chart.helpText!=null&&charts.chart.helpText!=undefined&&charts.chart.helpText.length>1">
+                        <div class="row">
+                          <div class="col-lg-11 col-md-11 col-sm-11"></div>
+                          <div class="col-lg-1 col-md-1 col-sm-1">
+                            <div class="responsiveHelpIcon">
+                              <span>
+                                <img src="assets/images/icon_help.svg" class="help-img"
+                                  (click)="chartHelpHide=!chartHelpHide">
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row" *ngIf="chartHelpHide">
+                          <div class="col-lg-11 col-md-11 col-sm-11">
+                            <p class="demo1" >
+                              {{charts.chart.helpText}}
+                              <span class="hidebuttondemo"
+                                (click)="chartHelpHide=!chartHelpHide">hide</span>
+                            </p>
+                          </div>
+                          <div class="col-lg-11 col-md-11 col-sm-11"></div>
+                        </div>
+                      </div>
+                      <!-- help icon end -->
                       <div class="row">
                         <div class="col-lg-12 col-sm-12">
                           <div [innerHTML]="charts.chart.freeChartDiv | safeHtml" class="surveyChartDiv" id="content">

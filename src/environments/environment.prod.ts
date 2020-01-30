@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  webBaseUrl:"https://sandbox.hea.com/hea-web/",
 };

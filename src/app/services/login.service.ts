@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Users } from "src/app/models/user";
 import { AppUtility } from "src/app/utility/app.utility";
-import { AppConstants } from "src/app/utility/constant";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 declare var converse: any;
 @Injectable()
 export class LoginService {
@@ -83,7 +83,7 @@ export class LoginService {
     }
 
     getFormattedUrl(endpoint) {
-        return AppConstants.webBaseUrl + endpoint;
+        return environment.webBaseUrl + endpoint;
     }
     performPost(object, endpoint) {
         let url = this.getFormattedUrl(endpoint);
