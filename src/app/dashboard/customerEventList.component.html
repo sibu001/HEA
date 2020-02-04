@@ -11,7 +11,7 @@
                                     <span class="start">Period start:</span>
                                 </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <p-calendar [(ngModel)]="filter.startDate" id="start" name="start" [showIcon]="true"
+                                    <p-calendar [(ngModel)]="startDate" id="start" name="start" [showIcon]="true"
                                         dateFormat="mm/dd/yy"></p-calendar>
                                     <!-- <p-calendar [(ngModel)]="users.value" [showIcon]="true"></p-calendar> -->
                                 </div>
@@ -21,7 +21,7 @@
                                     <span class="start">Period end:</span>
                                 </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <p-calendar [(ngModel)]="filter.endDate" name="end" id="end" [showIcon]="true"
+                                    <p-calendar [(ngModel)]="endDate" name="end" id="end" [showIcon]="true"
                                         dateFormat="mm/dd/yy"></p-calendar>
                                     <!-- <p-calendar [(ngModel)]="users.value" [showIcon]="true"></p-calendar> -->
                                 </div>
@@ -87,28 +87,29 @@
                                 <thead>
                                     <tr>
                                         <th class="th-sm no-sort">
-                                            <mfDefaultSorter by="img"><img src="assets/images/whitebox.png"
-                                                    class="colorbox"></mfDefaultSorter>
+                                            <img src="assets/images/whitebox.png" class="colorbox">
                                         </th>
                                         <th class="th-sm">
-                                            <mfDefaultSorter by="year">Event code</mfDefaultSorter>
+                                            <mfDefaultSorter by="customerEventType.eventCode}">Event code
+                                            </mfDefaultSorter>
                                         </th>
                                         <th class="th-sm">
-                                            <mfDefaultSorter by="month">Event name</mfDefaultSorter>
+                                            <mfDefaultSorter by="customerEventType.eventName">Event name
+                                            </mfDefaultSorter>
                                         </th>
-                                        <th class="th-sm no-sort">
-                                            <mfDefaultSorter by="bilingperiod">Date</mfDefaultSorter>
+                                        <th class="th-sm">
+                                            <mfDefaultSorter by="eventDatetime">Date</mfDefaultSorter>
                                         </th>
-                                        <th class="th-sm no-sort">
-                                            <mfDefaultSorter by="bilingdate">Author</mfDefaultSorter>
+                                        <th class="th-sm">
+                                            <mfDefaultSorter by="linkedPersonName">Author</mfDefaultSorter>
                                         </th>
                                         <!-- <th class="th-sm no-sort">
                                         <mfDefaultSorter by="value">Value</mfDefaultSorter>
-                                    </th> -->
+                                        </th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let usageList of usesEventList">
+                                    <tr *ngFor="let usageList of usesEventList;">
                                         <td> <img src="assets/images/whitebox.png" class="colorbox"></td>
                                         <td> <a (click)="customerEventView(usageList)"
                                                 style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.customerEventType.eventCode}}
@@ -118,7 +119,7 @@
                                         </td>
                                         <!-- <td>{{usageList.date | date : "dd-MMM-y"}} - {{usageList.endDate | date : "dd-MMM-y"}}</td> -->
                                         <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.eventDatetime | date : "dd-MMM-y"}}
+                                            style="cursor:pointer;color:#000;text-decoration:underline"><span style="display:none;">{{usageList.eventDatetime}}</span>{{usageList.eventDatetime | date : "dd-MMM-y"}}
                                             </a></td>
                                         <td> <a (click)="customerEventView(usageList)"
                                                 style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.linkedPersonName}}
@@ -147,7 +148,7 @@
                         <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
                     <p class="feedback">Send feedback to</p>
                     <p class="link_hea">
-                        <a  href = "mailto:info@hea.com" class="info_hea">info@hea.com</a>
+                        <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
                     </p>
                     <hr>
                     <ul class="leaks">

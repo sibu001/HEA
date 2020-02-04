@@ -112,6 +112,7 @@ export class customerEventViewComponent implements OnInit {
       data => {
         document.getElementById("loader").classList.remove('loading');
         let response = JSON.parse(JSON.stringify(data));
+        this.users.addEvent=false;
         this.customerEventDetails = response.data;
         this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime));
       },

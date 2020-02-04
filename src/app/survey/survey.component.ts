@@ -298,6 +298,7 @@ export class SurveyComponent implements AfterViewInit {
     } else {
       this.router.navigate(["/topicshistory"]);
     }
+    var self = this;
     setTimeout(function () {
       self.hsSliderValue();
     }, 500);
@@ -354,6 +355,7 @@ export class SurveyComponent implements AfterViewInit {
         } else {
           this.router.navigate(["/topicshistory"]);
         }
+        var self = this;
         setTimeout(function () {
           self.hsSliderValue();
         }, 500);

@@ -12,7 +12,7 @@
                                 </p>
                                 <div class="col-lg-5 col-sm-6">
                                     <!-- <input type="text" class="form-control" id="start" name="startdate"> -->
-                                    <p-calendar [(ngModel)]="filter.startDate" name="start" [showIcon]="true"
+                                    <p-calendar [(ngModel)]="startDate" name="start" [showIcon]="true"
                                         dateFormat="mm/dd/yy"></p-calendar>
                                 </div>
                             </div>
@@ -21,7 +21,7 @@
                                     Period end:
                                 </p>
                                 <div class="col-lg-5 col-sm-6">
-                                    <p-calendar [(ngModel)]="filter.endDate" name="end" [showIcon]="true"
+                                    <p-calendar [(ngModel)]="endDate" name="end" [showIcon]="true"
                                         dateFormat="mm/dd/yy"></p-calendar>
                                 </div>
                             </div>
@@ -84,7 +84,7 @@
                                 <td>
                                     <a (click)="mailView(i)" style="cursor: pointer">{{mailList.subject}}</a>
                                 </td>
-                                <td>{{ mailList.dateSent | date : "MM/dd/y" }}</td>
+                                <td><span style="display:none;">{{mailList.dateSent}}</span>{{ mailList.dateSent | date : "MM/dd/y" }}</td>
                                 <td>{{mailList.sentTo}}</td>
                                 <td></td>
                                 <td>*</td>

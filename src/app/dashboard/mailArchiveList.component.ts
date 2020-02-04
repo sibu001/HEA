@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { CalendarModule } from 'primeng/calendar';
 import { Users } from "src/app/models/user";
 import { Router } from "@angular/router";
 import { LoginService } from "src/app/services/login.service";
@@ -14,8 +13,6 @@ import { Filter } from '../models/filter';
 })
 export class MailArchiveListComponent implements OnInit, AfterViewInit {
   errorMessage: any;
-  startDate: Date;
-  endDate: Date;
   subject: string;
   users: Users = new Users();
   customerMailList: any[] = [];
@@ -25,6 +22,8 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
   startendcheck: boolean;
   subjectcheck: boolean;
   filter: Filter = new Filter();
+  startDate: Date = this.filter.startDate;
+  endDate: Date = this.filter.endDate;
   constructor(private location: Location, private router: Router, private loginService: LoginService) {
     // this.customerMailList = this.users.customerMailList;
     this.users = this.loginService.getUser();
@@ -34,10 +33,18 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
     }
     if (!this.filter.back) {
       this.getMailList();
+      this.filter.startDate = null;
+      this.filter.endDate = null;
+      this.filter.subject = "";
+      localStorage.setItem('filter', JSON.stringify(this.filter));
+    } else {
+      this.startDate = this.filter.startDate;
+      this.endDate = this.filter.endDate;
+      this.subject = this.filter.subject;
     }
   }
   ngOnInit() {
-    if (this.filter.back || ((this.filter.startDate != undefined && this.filter.startDate != null) || (this.filter.endDate != undefined && this.filter.endDate != null) || (this.filter.subject != "" && this.filter.subject != null))) {
+    if (this.filter.back || ((this.startDate != undefined && this.startDate != null) || (this.endDate != undefined && this.endDate != null) || (this.filter.subject != "" && this.filter.subject != null))) {
       this.showSearchList();
     } else {
       this.filter = new Filter();
@@ -58,7 +65,7 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
           "retrieve": true
         });
         $('.dataTables_length').addClass('bs-select');
-      }, 1500);
+      }, 1000);
     });
 
   }
@@ -98,9 +105,9 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
 
   showSearchList() {
     document.getElementById("loader").classList.add('loading');
-    if ((this.filter.startDate != undefined && this.filter.startDate != null) || (this.filter.endDate != undefined && this.filter.endDate != null) || (this.filter.subject != "" && this.filter.subject != undefined)) {
-      var startMilliseconds = new Date(this.filter.startDate).getTime();
-      var endMilliseconds = new Date(this.filter.endDate).getTime();
+    if ((this.startDate != undefined && this.startDate != null) || (this.endDate != undefined && this.endDate != null) || (this.filter.subject != "" && this.filter.subject != undefined)) {
+      var startMilliseconds = new Date(this.startDate).getTime();
+      var endMilliseconds = new Date(this.endDate).getTime();
       this.customerMailList = new Array;
       this.newMailList = this.users.customerMailList;
       var self = this;
@@ -109,18 +116,18 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
         this.startcheck = true;
         this.endcheck = true;
         this.subjectcheck = true;
-        if (this.filter.startDate != undefined && this.filter.endDate != undefined) {
+        if (this.startDate != undefined && this.endDate != undefined) {
           this.startendcheck = false;
           if (mailList.dateSent >= startMilliseconds && mailList.dateSent <= endMilliseconds) {
             this.startendcheck = true;
           }
         }
-        else if (this.filter.startDate != undefined) {
+        else if (this.startDate != undefined) {
           this.startcheck = false;
           if (mailList.dateSent >= startMilliseconds)
             this.startcheck = true;
         }
-        else if (this.filter.endDate != undefined) {
+        else if (this.endDate != undefined) {
           this.endcheck = false;
           if (mailList.dateSent <= endMilliseconds) {
             this.endcheck = true;
@@ -136,6 +143,10 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
           this.customerMailList.push(mailList);
         }
       }
+      if (this.startDate ? this.startDate = new Date(this.startDate) : false)
+        if (this.endDate ? this.endDate = new Date(this.endDate) : false)
+          this.filter.startDate = this.startDate;
+      this.filter.endDate = this.endDate;
       localStorage.setItem('filter', JSON.stringify(this.filter));
       $("#example").dataTable().fnDestroy();
       if (!this.filter.back) {
@@ -160,8 +171,7 @@ export class MailArchiveListComponent implements OnInit, AfterViewInit {
     }
     else {
       localStorage.setItem('filter', JSON.stringify(this.filter));
-      // this.ngAfterViewInit();
-      this.customerMailList = this.users.customerMailList;
+      this.getMailList();
       $("#example").dataTable().fnDestroy();
       $(document).ready(function () {
         setTimeout(function () {
