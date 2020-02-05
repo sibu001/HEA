@@ -1,7 +1,7 @@
 <section class="space-top">
     <div class="container-fluid">
         <div class="row">
-            <input #inp1 id="myInput" type="text" class="inputhide">
+            <!-- <input #inp1 id="myInput" type="text" class="inputhide"> -->
             <div class="messages_responsive" *ngIf="users.customerMailList!=null&&users.customerMailList!=undefined&&hideMsgs">
                 <p class="messages">You have {{users.customerMailList.length}} unread messages.
                     <a class="view" [routerLink]="['/MailArchiveList']">View</a>

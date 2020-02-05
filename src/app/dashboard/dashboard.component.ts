@@ -1,4 +1,4 @@
-import { Component, OnInit, ContentChild, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, Renderer } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from "src/app/models/user";
 import { LoginService } from './../services/login.service';
@@ -12,7 +12,7 @@ import * as _ from "lodash";
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  @ViewChild('inp1') inp1: ElementRef;
+  // @ViewChild('inp1') inp1: ElementRef;
   hides: boolean = true;
   count: number = 0;
   leakPriceValueSum: number = 0;
@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit {
     // } else {
     //   this.leakCalculation();
     // }
-    if (this.users.recommendationList.length <= 0 || this.users.recommendationStatusChange||this.users.leakList.length <= 0) {
+    if (this.users.recommendationList.length <= 0 || this.users.recommendationStatusChange || this.users.leakList.length <= 0) {
       this.getLeaksAndRecommendation();
     } else {
       this.getRecomendationList(this.users.recommendationList);
@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit {
         $(this).addClass('collapsed');
       }
     })
-    this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
+    this.scrollTop();
   }
   hideMsg() {
     this.hideMsgs = false;
@@ -186,7 +186,7 @@ export class DashboardComponent implements OnInit {
   getRecomendationList(recommendationList) {
     this.recommendationList = new Array;
     for (var index = 0; index < recommendationList.length; index++) {
-      if ((recommendationList[index].status == 'N' || recommendationList[index].status == 'L')&&recommendationList[index].parentLeakId!=null)
+      if ((recommendationList[index].status == 'N' || recommendationList[index].status == 'L') && recommendationList[index].parentLeakId != null)
         this.recommendationList.push(recommendationList[index]);
     }
   }
@@ -209,7 +209,7 @@ export class DashboardComponent implements OnInit {
         this.users.recommendationList = array;
         this.users.recommendationStatusChange = false;
         this.loginService.setUser(this.users);
-         this.getRecomendationList(this.users.recommendationList);
+        this.getRecomendationList(this.users.recommendationList);
         document.getElementById("loader").classList.remove('loading');
       },
       error => {
@@ -260,11 +260,11 @@ export class DashboardComponent implements OnInit {
         this.users.recommendationList = array;
         this.users.recommendationStatusChange = false;
         // this.loginService.setUser(this.users);
-         this.getRecomendationList(this.users.recommendationList);
-         this.leakList = response.data.leaks;
-         this.users.leakList = response.data.leaks;
-         this.loginService.setUser(this.users);
-         this.leakCalculation();
+        this.getRecomendationList(this.users.recommendationList);
+        this.leakList = response.data.leaks;
+        this.users.leakList = response.data.leaks;
+        this.loginService.setUser(this.users);
+        this.leakCalculation();
 
         document.getElementById("loader").classList.remove('loading');
       },
@@ -391,8 +391,12 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
-  questionHelp(){
+  questionHelp() {
     window.open("https://hea-docs.s3.amazonaws.com/HomeChartHelp.html");
     return;
-    }
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
+  }
 }
