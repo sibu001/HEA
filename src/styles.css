@@ -110,6 +110,23 @@ div.factoid > div > p{
     margin-top: 15px;
     margin-bottom: 15px;
 }
+
+@media screen and (min-width : 769px) and (max-width : 900px) {
+    .accurate > p > img{
+        width: 400px !important;
+    } 
+}
+@media screen and (min-width: 901px) and (max-width: 992px) {
+.accurate>p>img {
+    width: 525px!important;
+}
+}
+@media screen and (min-width : 993px) and (max-width : 1300px) {
+    .accurate > p > img{
+        width: 600px !important;
+    } 
+}
+
 @media only screen and (min-device-width : 769px) and (max-device-width : 900px) {
     .accurate > p > img{
         width: 400px !important;

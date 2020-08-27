@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Users } from "src/app/models/user";
+import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { LoginService } from "src/app/services/login.service";
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-menu',
@@ -18,14 +18,14 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
     let surveyCode;
-    if (this.users.currentPaneNumber != undefined) {
+    if (this.users.currentPaneNumber !== undefined) {
       surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
     }
-    if (this.users.surveyLenght <= 3 || (this.users.currentPaneNumber != undefined ? surveyCode == "Profile" : false)) {
-      document.getElementById("_home1").classList.add('header_menu_none');
-      document.getElementById("all_topic1").classList.add('header_menu_none');
-      document.getElementById("menu_option1").classList.add('header_menu_none');
-      document.getElementById("menu_option2").classList.add('header_menu_none');
+    if (this.users.surveyLenght <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false)) {
+      document.getElementById('_home1').classList.add('header_menu_none');
+      document.getElementById('all_topic1').classList.add('header_menu_none');
+      document.getElementById('menu_option1').classList.add('header_menu_none');
+      document.getElementById('menu_option2').classList.add('header_menu_none');
     }
   }
   back() {
@@ -35,20 +35,23 @@ export class MenuComponent implements OnInit {
     this.loginService.logout();
   }
   hide(numbers) {
-    if (numbers == 1) {
+    if (numbers === 1) {
       if (this.users.surveyLenght <= 3) {
-        this.router.navigate(["/surveyView"]);
+        this.router.navigate(['/surveyView']);
       } else {
-        this.router.navigate(["/dashboard"]);
+        this.router.navigate(['/dashboard']);
       }
-    } else if (numbers == 2) {
+    } else if (numbers === 2) {
       if (this.users.surveyLenght > 3) {
-        this.router.navigate(["/topicshistory"]);
+        this.router.navigate(['/topicshistory']);
       }
-    } else if (numbers == 3 && (this.users.currentPaneNumber != null && this.users.currentPaneNumber != undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile")) {
+    } else if (numbers === 3 && (this.users.currentPaneNumber != null && this.users.currentPaneNumber !==
+       undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile')) {
       if (this.users.surveyLenght > 3) {
-        this.router.navigate(["/accountDetail"]);
+        this.router.navigate(['/accountDetail']);
       }
+    } else if (numbers === 9) {
+      window.open('https://sandbox.hea.com/hea-web', '_self');
     }
   }
 }
