@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { Users } from "src/app/models/user";
 import { AppUtility } from "src/app/utility/app.utility";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Router } from "@angular/router";
 import { environment } from 'src/environments/environment';
 declare var converse: any;
 @Injectable()
 export class LoginService {
     private users: Users;
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient, private router: Router) {
     }
     public setUser(users: Users) {
         localStorage.setItem('users', JSON.stringify(users));
@@ -90,7 +91,7 @@ export class LoginService {
         return this.http.post(url, JSON.stringify(object), this.getOptions());
     }
     performPostMultiPart(endpoint) {
-        let object={};
+        let object = {};
         let url = this.getFormattedUrl(endpoint);
         return this.http.post(url, object, this.getOptionsMultiPart());
     }
@@ -137,25 +138,30 @@ export class LoginService {
         return this.http.get(url, this.getOptionsLogOut());
     }
     public logout(): void {
+        let theme = "";
         document.getElementById("loader").classList.add('loading');
         this.performGetLogOut("j_spring_security_logout").subscribe(
             data => {
                 let response = JSON.parse(JSON.stringify(data));
                 console.log(response);
+                this.users = this.getUser();
+                theme = this.users.theme;
                 this.users = new Users();
                 localStorage.removeItem('users');
                 localStorage.clear();
                 console.log("logged out");
-                window.location.reload();
+                this.router.navigate(["\login"], { queryParams: { "theme": theme } })
                 document.getElementById("loader").classList.remove('loading');
             },
             errors => {
                 console.log(errors);
+                this.users = this.getUser();
+                theme = this.users.theme;
                 this.users = new Users();
                 localStorage.removeItem('users');
                 localStorage.clear();
                 console.log("logged out");
-                window.location.reload();
+                this.router.navigate(["\login"], { queryParams: { "theme": theme } })
                 document.getElementById("loader").classList.remove('loading');
             }
         );

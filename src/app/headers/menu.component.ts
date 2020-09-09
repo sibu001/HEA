@@ -51,7 +51,7 @@ export class MenuComponent implements OnInit {
         this.router.navigate(['/accountDetail']);
       }
     } else if (numbers === 9) {
-      window.open('https://sandbox.hea.com/hea-web', '_self');
+      window.open('https://sandbox.hea.com/hea-web/trendingHome.do', '_self');
     }
   }
 }
