@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eo pipefail
 
 if [ $EUID -ne 0 ]; then
    echo "This command must run as root (try sudo hea ...)"
@@ -15,24 +16,14 @@ else
    TOMCAT_USER=hea-tomcat
 fi
 
-echo " $SUDO_USER is doing hea $CMD $INSTANCE" | wall -n
+echo "HEA-WebApp CodeDeploy: ${SUDO_USER:-$USER} is doing hea $CMD $INSTANCE" | wall -n
 
-function install() {
-  hea update
-  hea build $INSTANCE $BRANCH
-  hea stop $INSTANCE
-  hea deploy $INSTANCE $BRANCH
-  hea start $INSTANCE
-}
-
-function build() {
-  su - hea -c "/usr/local/sbin/hea-build $INSTANCE $BRANCH"
+function stop() {
+  # No Tomcat restart necessary for client-only smartAudit code
   return 0
 }
 
 function deploy() {
-  HEA_WEBAPP=hea-web
-  GBA_WEBAPP=gba-web
   SA_WEBAPP=smartAudit
 
   if [ "$BRANCH" = "" ]; then
@@ -41,12 +32,6 @@ function deploy() {
      MAIN_HOME=/home/hea/projects/HEA_Main/branches/$BRANCH/AppServer
   fi
 
-  echo Deploying to $TOMCAT_DIR/webapps/$HEA_WEBAPP/
-  rm -rf $TOMCAT_DIR/webapps/$HEA_WEBAPP/*
-  cp -r $MAIN_HOME/hea-web/target.$INSTANCE/hea-web-0.0.0.1/* $TOMCAT_DIR/webapps/$HEA_WEBAPP/
-  echo Deploying to $TOMCAT_DIR/webapps/$GBA_WEBAPP/
-  rm -rf $TOMCAT_DIR/webapps/$GBA_WEBAPP/*
-  cp -r $MAIN_HOME/gba-web/target.$INSTANCE/gba-web-0.0.0.1/* $TOMCAT_DIR/webapps/$GBA_WEBAPP/
   echo Deploying to $TOMCAT_DIR/webapps/$SA_WEBAPP/
   rm -rf $TOMCAT_DIR/webapps/$SA_WEBAPP/*
   cp -r /home/hea/projects/HEA-WebApp/dist/* $TOMCAT_DIR/webapps/$SA_WEBAPP/
@@ -54,30 +39,13 @@ function deploy() {
 }
 
 function start() {
-  service $SERVICE start
-  return 0
-}
-
-function stop() {
-  service $SERVICE stop
-  # Kill runaway Tomcat JVMs if service stop didn't work:
-  kill -9 `pgrep -u $TOMCAT_USER -f org.apache.catalina.startup.Bootstrap` 2> /dev/null
-  return 0
-}
-
-function remote-debug() {
-  service $SERVICE remote-debug
-  return 0
-}
-
-function update() {
-  su - hea -c "/usr/local/sbin/hea-update"
+  # No Tomcat restart necessary for client-only smartAudit code
   return 0
 }
 
 function usage() {
-
-  RETVAL="2"
+  echo "Usage: $0 {start|stop|deploy} {sandbox|live}"
+  exit 2
 }
 
 
@@ -96,30 +64,14 @@ fi
 
 
 case "$CMD" in
-    update)
-        update
-        ;;
     start)
         start
         ;;
     stop)
         stop
         ;;
-    restart)
-        stop
-        start
-        ;;
-    build)
-        build
-        ;;
     deploy)
         deploy
-        ;;
-    install)
-        install
-        ;;
-    remote-debug)
-        remote-debug
         ;;
     *)
         usage
