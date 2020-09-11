@@ -93,7 +93,7 @@ export class HeadersComponent implements OnInit {
     } else if (numbers === 8) {
       this.router.navigate(['/surveyRecommendationList']);
     } else if (numbers === 9) {
-      window.open('https://' + window.location.origin + '/hea-web/trendingHome.do', '_self');
+      window.open(window.location.origin + '/hea-web/trendingHome.do', '_self');
     }
   }
   logouts() {
