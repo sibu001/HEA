@@ -46,12 +46,12 @@ export class MenuComponent implements OnInit {
         this.router.navigate(['/topicshistory']);
       }
     } else if (numbers === 3 && (this.users.currentPaneNumber != null && this.users.currentPaneNumber !==
-       undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile')) {
+      undefined ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile' : true)) {
       if (this.users.surveyLenght > 3) {
         this.router.navigate(['/accountDetail']);
       }
     } else if (numbers === 9) {
-      window.open( window.location.origin + '/hea-web/trendingHome.do', '_self');
+      window.open(window.location.origin + '/hea-web/trendingHome.do', '_self');
     }
   }
 }
