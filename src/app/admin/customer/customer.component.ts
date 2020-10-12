@@ -19,7 +19,7 @@ export class CustomerComponent implements OnInit {
 
   @ViewChild(TableComponent) tableCmp: TableComponent;
 
-  private searchForm: FormGroup = this.fb.group({
+  public searchForm: FormGroup = this.fb.group({
     auditId: [''],
     customerGroup: [''],
     customerName: [''],
