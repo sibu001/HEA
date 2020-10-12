@@ -1,0 +1,13 @@
+{
+    "/hea-web/*": {
+      "_comment": "Try This",
+      "target": "https://sandbox.hea.com/hea-web/",
+      "secure": false,
+      "logLevel": "debug",
+      "pathRewrite": {
+        "^/hea-web": ""
+      },
+      "changeOrigin": true
+    }
+  }
+  

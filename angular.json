@@ -93,7 +93,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "smartAudit:build"
+            "browserTarget": "smartAudit:build",
+            "proxyConfig": "proxy.config.json"
           },
           "configurations": {
             "production": {
@@ -164,5 +165,8 @@
       }
     }
   },
-  "defaultProject": "smartAudit"
+  "defaultProject": "smartAudit",
+  "cli": {
+    "analytics": "509ca506-baaf-44a6-8a2b-c55d9e6283f2"
+  }
 }

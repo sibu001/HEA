@@ -39,9 +39,15 @@ export class SurveyComponent implements AfterViewInit {
       }
     }
     if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "Profile") {
-      document.getElementById("_home").classList.add('header_menu_none');
-      document.getElementById("all_topic").classList.add('header_menu_none');
-      document.getElementById("menu_option").classList.add('header_menu_none');
+      if (document.getElementById("_home")) {
+        document.getElementById("_home").classList.add('header_menu_none');
+      }
+      if (document.getElementById("all_topic")) {
+        document.getElementById("all_topic").classList.add('header_menu_none');
+      }
+      if (document.getElementById("menu_option")) {
+        document.getElementById("menu_option").classList.add('header_menu_none');
+      }
       if (document.getElementById("_home1")) {
         document.getElementById("_home1").classList.add('header_menu_none');
       }
@@ -271,9 +277,15 @@ export class SurveyComponent implements AfterViewInit {
         if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "LeaksIntro") {
           this.getAllSurvey();
         } else if (this.users.surveyLenght > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile") {
-          document.getElementById("_home").classList.remove('header_menu_none');
-          document.getElementById("all_topic").classList.remove('header_menu_none');
-          document.getElementById("menu_option").classList.remove('header_menu_none');
+          if (document.getElementById("_home")) {
+            document.getElementById("_home").classList.add('header_menu_none');
+          }
+          if (document.getElementById("all_topic")) {
+            document.getElementById("all_topic").classList.add('header_menu_none');
+          }
+          if (document.getElementById("menu_option")) {
+            document.getElementById("menu_option").classList.add('header_menu_none');
+          }
           if (document.getElementById("_home1")) {
             document.getElementById("_home1").classList.remove('header_menu_none');
           }
@@ -329,9 +341,15 @@ export class SurveyComponent implements AfterViewInit {
           if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "LeaksIntro") {
             this.getAllSurvey();
           } else if (this.users.surveyLenght > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != "Profile") {
-            document.getElementById("_home").classList.remove('header_menu_none');
-            document.getElementById("all_topic").classList.remove('header_menu_none');
-            document.getElementById("menu_option").classList.remove('header_menu_none');
+            if (document.getElementById("_home")) {
+              document.getElementById("_home").classList.add('header_menu_none');
+            }
+            if (document.getElementById("all_topic")) {
+              document.getElementById("all_topic").classList.add('header_menu_none');
+            }
+            if (document.getElementById("menu_option")) {
+              document.getElementById("menu_option").classList.add('header_menu_none');
+            }
             if (document.getElementById("_home1")) {
               document.getElementById("_home1").classList.remove('header_menu_none');
             }
@@ -393,9 +411,15 @@ export class SurveyComponent implements AfterViewInit {
               }
             }
             if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode == "Profile") {
-              document.getElementById("_home").classList.add('header_menu_none');
-              document.getElementById("all_topic").classList.add('header_menu_none');
-              document.getElementById("menu_option").classList.add('header_menu_none');
+              if (document.getElementById("_home")) {
+                document.getElementById("_home").classList.add('header_menu_none');
+              }
+              if (document.getElementById("all_topic")) {
+                document.getElementById("all_topic").classList.add('header_menu_none');
+              }
+              if (document.getElementById("menu_option")) {
+                document.getElementById("menu_option").classList.add('header_menu_none');
+              }
               if (document.getElementById("_home1")) {
                 document.getElementById("_home1").classList.add('header_menu_none');
               }
@@ -480,9 +504,15 @@ export class SurveyComponent implements AfterViewInit {
         this.users.surveyLenght = surveylength;
         this.users.surveyList = response.data;
         this.loginService.setUser(this.users);
-        document.getElementById("_home").classList.remove('header_menu_none');
-        document.getElementById("all_topic").classList.remove('header_menu_none');
-        document.getElementById("menu_option").classList.remove('header_menu_none');
+        if (document.getElementById("_home")) {
+          document.getElementById("_home").classList.add('header_menu_none');
+        }
+        if (document.getElementById("all_topic")) {
+          document.getElementById("all_topic").classList.add('header_menu_none');
+        }
+        if (document.getElementById("menu_option")) {
+          document.getElementById("menu_option").classList.add('header_menu_none');
+        }
         if (document.getElementById("_home1")) {
           document.getElementById("_home1").classList.remove('header_menu_none');
         }

@@ -1,0 +1,64 @@
+<!-- <div class="row">
+    <div class="col-md-4">
+        <mat-form-field>
+            <i class="fa fa-search css" aria-hidden="true">
+            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="search" type="search"></i>
+        </mat-form-field>
+    </div>
+</div> -->
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group" style="margin-top: 11px;">
+            <div class="input-group search">
+                <span class="input-group-addon search" id="basic-addon1">
+                    <i class="fa fa-search css" aria-hidden="true"></i>
+                </span>
+                <input type="text" class="form-control search" placeholder="search" aria-label="search"
+                    (keyup)="applyFilter($event.target.value)" aria-describedby="basic-addon1">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="example-container mat-elevation-z8">
+    <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+        <ng-container matColumnDef="select">
+            <mat-header-cell *matHeaderCellDef>
+                <mat-checkbox (change)="$event ? masterToggle() : null"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                </mat-checkbox>
+            </mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                </mat-checkbox>
+            </mat-cell>
+        </ng-container>
+        <ng-container *ngFor="let col of keys; let colIndex = index" matColumnDef="{{col.key}}">
+            <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" [id]="col.key" [disabled]="!col.sort">
+                {{col.displayName}}</mat-header-cell>
+            <mat-cell *matCellDef="let row">
+                <div *ngIf="!col.isAction">{{row[col.key]}}</div>
+                <div *ngIf="col.isAction && action">
+                    <button mat-icon-button [matMenuTriggerFor]="menu">
+                        <span class="selectButton">Select
+                            <mat-icon class="btnArrow">arrow_drop_down</mat-icon></span>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item *ngFor="let item of col.actionMenu" (click)="onClickMenuItem(item,row)">
+                            <span>{{item.displayName}}</span>
+                        </button>
+                    </mat-menu>
+                </div>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"
+            [ngClass]="{'border-left-green': sideBorder && !row.accountLocked, 'border-left-red': sideBorder && row.accountLocked}">
+        </mat-row>
+    </mat-table>
+    <mat-paginator #paginator style-paginator hidePageSize [length]="totalLength" [pageSize]="10" (page)="onChangePage($event)"
+        showFirstLastButtons class="paginatorcss"></mat-paginator>
+</div>

@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  webBaseUrl:  'https://localhost:8443/hea-web/',
+  webBaseUrl: window.location.origin + '/hea-web/',
 };
 
 /*

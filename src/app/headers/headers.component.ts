@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
@@ -16,11 +16,14 @@ export class HeadersComponent implements OnInit {
   mobHeight: number;
   screenWidth: any;
   iframeUrl: string;
+  isResponsive = false;
   users: Users = new Users();
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
-    this.iframeUrl = 'https://heasmartaudit.typeform.com/to/C3KCyo?auditId=' +
-      this.users.outhMeResponse.auditId + '&amp;typeform-embed=popup-drawer';
+    if (this.users.role === 'USERS') {
+      this.iframeUrl = 'https://heasmartaudit.typeform.com/to/C3KCyo?auditId=' +
+        this.users.outhMeResponse.auditId + '&amp;typeform-embed=popup-drawer';
+    }
     this.screenWidth = window.screen.width;
   }
 
@@ -40,30 +43,53 @@ export class HeadersComponent implements OnInit {
       });
     });
 
-    if (this.users.surveyLenght <= 3 || (this.users.currentPaneNumber !== null &&
+    if (this.users.role === 'USERS' && this.users.surveyLenght <= 3 || (this.users.currentPaneNumber !== null &&
       this.users.currentPaneNumber !== undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile')) {
-      document.getElementById('_home').classList.add('header_menu_none');
-      document.getElementById('all_topic').classList.add('header_menu_none');
-      document.getElementById('menu_option').classList.add('header_menu_none');
-      if (document.getElementById('_home1')) {
-        document.getElementById('_home1').classList.add('header_menu_none');
+        if (document.getElementById('_home')) {
+          document.getElementById('_home').classList.add('header_menu_none');
+        }  if (document.getElementById('all_topic')) {
+          document.getElementById('all_topic').classList.add('header_menu_none');
+        }  if (document.getElementById('menu_option')) {
+          document.getElementById('menu_option').classList.add('header_menu_none');
+        }
+      this.headerResposiveMenu();
+    }
+    this.hideResponsiveMenu();
+  }
+  hideResponsiveMenu() {
+    if (this.isResponsive) {
+      let surveyCode;
+      if (this.users.currentPaneNumber !== undefined) {
+        surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
       }
-      if (document.getElementById('all_topic1')) {
-        document.getElementById('all_topic1').classList.add('header_menu_none');
+      if (this.users.surveyLenght <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false)) {
+        setTimeout(() => {
+          this.headerResposiveMenu();
+        }, 300);
       }
-      if (document.getElementById('menu_option1')) {
-        document.getElementById('menu_option1').classList.add('header_menu_none');
-      }
-      if (document.getElementById('menu_option2')) {
-        document.getElementById('menu_option2').classList.add('header_menu_none');
-      }
+    }
+  }
+  headerResposiveMenu() {
+    if (document.getElementById('_home1')) {
+      document.getElementById('_home1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('all_topic1')) {
+      document.getElementById('all_topic1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('menu_option1')) {
+      document.getElementById('menu_option1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('menu_option2')) {
+      document.getElementById('menu_option2').classList.add('header_menu_none');
     }
 
   }
   hide(numbers) {
+    this.isResponsive = false;
     this.users = this.loginService.getUser();
     if (numbers === 1) {
-      this.router.navigate(['/menu']);
+      this.isResponsive = true;
+      this.hideResponsiveMenu();
     } else if (numbers === 2) {
       if (this.users.surveyLenght <= 3) {
         this.router.navigate(['/surveyView']);
@@ -99,6 +125,9 @@ export class HeadersComponent implements OnInit {
   logouts() {
     this.loginService.logout();
   }
+  back() {
+    this.isResponsive = false;
+  }
   openfeedbackpage() {
     document.getElementById('feedback1').classList.add('feedbackDivCss');
     document.getElementById('feedback2').classList.add('feedbackiframeCss');
@@ -108,5 +137,14 @@ export class HeadersComponent implements OnInit {
     document.getElementById('feedback1').classList.remove('feedbackDivCss');
     document.getElementById('feedback2').classList.remove('feedbackiframeCss');
     document.getElementById('feedback3').classList.remove('feedBackDiv1');
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    // this.innerWidth = window.innerWidth;
+    if (window.innerWidth >= 767) {
+      this.isResponsive = false;
+    }
+
   }
 }

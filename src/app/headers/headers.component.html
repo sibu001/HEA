@@ -1,4 +1,4 @@
-<div class="feedbackDiv" id="feedback3">
+<div class="feedbackDiv" id="feedback3" *ngIf="users?.role=='USERS'">
     <div data-qa="popup-mode-drawer_right" mode="drawer_right" width="800" class="feedbackCss" open="true" id="feedback2">
         <img alt="close-typeform" data-qa="popup-close-button" mode="drawer_right" src="./assets/images/cross.gif" class="feedbackiframe" (click)="closefeedbackpage()" id="feedback1">
         <iframe [src]="iframeUrl | safe: 'resourceUrl'" data-qa="iframe" frameborder="0" height="100%" width="100%" style="border: 0px;">
@@ -6,7 +6,7 @@
     </div>
 </div>
 <button class="feedbackButton" (click)="openfeedbackpage()">FeedBack</button>
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation" *ngIf="!isResponsive">
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-4">
@@ -16,61 +16,58 @@
                         <span class="bar2"></span>
                         <span class="bar3"></span>
                     </div>
-                    <div *ngIf="users.theme=='HEA'||users.theme=='CEC'||users.theme=='M'||users.theme=='PGE'||users.theme=='SCE'">
+                    <div *ngIf="users?.theme=='HEA'||users?.theme=='CEC'||users?.theme=='M'||users?.theme=='PGE'||users?.theme=='SCE'">
                         <img height="52" src="assets/images/HEA/highenergyhome-banner.gif" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='P4P'">
+                    <div *ngIf="users?.theme=='P4P'">
                         <img src="assets/images/P4P/hi_logo_banner.png" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='CL'">
+                    <div *ngIf="users?.theme=='CL'">
                         <img height="52" src="assets/images/CL/logo_gahhe.png" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='AC'">
+                    <div *ngIf="users?.theme=='AC'">
                         <img height="52" src="assets/images/AC/logo_highenergy.png" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='EF'">
+                    <div *ngIf="users?.theme=='EF'">
                         <img src="assets/images/EF/logo-ef.png" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='MBL'">
+                    <div *ngIf="users?.theme=='MBL'">
                         <img src="assets/images/hi_logo_banner.png" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='HET'||users.theme=='TST'">
+                    <div *ngIf="users?.theme=='HET'||users?.theme=='TST'">
                         <img height="52" src="assets/images/HET/logo_het.png" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='MV'">
+                    <div *ngIf="users?.theme=='MV'">
                         <img height="52" src="assets/images/MV/logo_highenergy.png" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='SNV'">
+                    <div *ngIf="users?.theme=='SNV'">
                         <img height="52" src="assets/images/SNV/logo_snv.png" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='VT'">
+                    <div *ngIf="users?.theme=='VT'">
                         <img height="52" src="assets/images/VT/logo_ev.gif" class="dashboard_img">
                     </div>
-                    <div *ngIf="users.theme=='RS'">
+                    <div *ngIf="users?.theme=='RS'">
                         <img height="52" src="assets/images/dashboard/logo_hi_horizontal.png" class="dashboard_img">
                     </div>
                     <!-- <p class="menu" *ngIf="!hides">MENU</p> -->
                 </div>
             </div>
-            <!-- <div class="col-sm-2 col-xs-4" *ngIf="!hides">
-                <p class="menu">MENU</p>
-            </div> -->
             <div class="col-sm-8 col-xs-12 responsive"> 
                 <div class="collapse navbar-collapse" id="main-menu">
                     <ul class="nav navbar-nav navbar-right header">
                         <li class="active hi">
-                            <a (click)="hide(3)"><span class="username" >Hi {{users.outhMeResponse.user.name}}</span></a>
+                            <a (click)="hide(3)"><span class="username" >Hi {{users?.outhMeResponse?.user?.name}}</span></a>
                         </li>
                         <li>
                             <a (click)="hide(2)" class="main-menu" id="_home">
                                 <img src="assets/images/menu_icon_home.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Home</span></a>
                         </li>
                         <li>
-                            <a class="main-menu" (click)="hide(4)" id="all_topic">
+                            <a class="main-menu" (click)="hide(4)" id="all_topic"  *ngIf="users?.role=='USERS'">
                                 <img src="assets/images/menu_icon_admin.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Topics</span></a>
                         </li>
                         <li id="_classic1">
-                            <a class="main-menu" (click)="hide(9)">
+                            <a class="main-menu" (click)="hide(9)" *ngIf="users?.role=='USERS'">
                                 <img src="assets/images/menu_icon_home.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Return to classic interface</span></a>
                         </li>
                         <li>
@@ -78,7 +75,7 @@
                                 <img src="assets/images/menu_icon_logout.svg" class="icon_size">&nbsp;&nbsp;<span class="admin">Logout</span></a>
                         </li>
                        
-                        <div id="menu_option">
+                        <div id="menu_option" *ngIf="users?.role=='USERS'">
                             <li>
                                 <a (click)="hide(5)" class="history_a">Topics history</a>
                             </li>
@@ -100,4 +97,88 @@
     <hr class="header-hr">
     
 </nav>
+
+
+<section class="space-top" *ngIf="isResponsive">
+    <div class="container-fluid responsiveMenu">
+        <div class="row" id="headers">
+            <div class="col-sm-4 col-xs-4">
+                <p class="backArrow"><img src="assets/images/right-.svg" class="back_img" (click)="back()"></p>
+            </div>
+            <div class="col-sm-4 col-xs-4">
+                <p class="menuresponsive">MENU</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-xs-12" id="backcolor">
+                <ul class="demo" id="main-menu">
+                    <li>
+                        <a class="main-menu" (click)="hide(3)"><span class="menu">Hi {{users?.outhMeResponse?.user?.name}}</span></a>
+                    </li>
+                    <li id="_home1">
+                        <a class="main-menu" (click)="hide(2)">
+                            <img src="assets/images/menu_icon_home.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Home</span></a>
+                    </li>
+                    <li id="all_topic1">
+                        <a class="main-menu" (click)="hide(4)"  *ngIf="users?.role=='USERS'">
+                            <img src="assets/images/menu_icon_admin.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Topics</span></a>
+                    </li>
+                    <li id="_classic1">
+                        <a class="main-menu" (click)="hide(9)"  *ngIf="users?.role=='USERS'">
+                            <img src="assets/images/menu_icon_home.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Return to classic interface</span></a>
+                    </li>
+                    <li>
+                        <a class="main-menu" (click)="logouts()" id="_logout">
+                            <img src="assets/images/menu_icon_logout.svg" class="icon_size">&nbsp;&nbsp;<span class="menu">Logout</span></a>
+                    </li>
+                    
+                    <div id="menu_option1"  *ngIf="users?.role=='USERS'"> 
+                    <li>
+                        <a class="history_a" (click)="hide(2)">Topics history</a>
+                    </li>
+                    <li>
+                        <a class="history_a" [routerLink]="['/customerEventList']">Events history</a>
+                    </li>
+                    <li>
+                        <a class="history_a" [routerLink]="['/MailArchiveList']">Mail archive</a>
+                    </li>
+                    <li>
+                        <a class="history_a" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
+                    </li>
+                    </div>
+                    <li id="menu_option2">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle history_a" id="menu1" data-toggle="dropdown">Usage history
+                                </a>
+                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas charge</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
+                                </li>
+                                <li role="presentation" style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
 <router-outlet></router-outlet>
