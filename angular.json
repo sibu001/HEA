@@ -28,6 +28,7 @@
               "node_modules/font-awesome/css/font-awesome.min.css",
               "node_modules/primeng/resources/themes/omega/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
+              "node_modules/primeicons/primeicons.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/jqplot/jquery.jqplot.min.css",
               "node_modules/qtip2/dist/jquery.qtip.min.css"

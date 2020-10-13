@@ -21,8 +21,8 @@
     </div>
 </div>
 
-<div class="example-container mat-elevation-z8">
-    <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
+<div class="example-container mat-elevation-z8 table-wrapper">
+    <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="table">
         <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef>
                 <mat-checkbox (change)="$event ? masterToggle() : null"

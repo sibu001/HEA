@@ -20,6 +20,26 @@
                         <div class="col-lg-4 col-sm-6">
                             <select class="form-control form-control-sm" id="customerGroup"
                                 formControlName="customerGroup">
+                                <option value="" selected="selected"></option>
+                                <option value="1">CEC</option>
+                                <option value="2">EUMV</option>
+                                <option value="5">HEA</option>
+                                <option value="6">Vermont VEIC (disabled)</option>
+                                <option value="7">Home Energy Tuneup</option>
+                                <option value="8">Test Accounts</option>
+                                <option value="9">Alameda</option>
+                                <option value="10">PG&amp;E Direct Pay (disabled)</option>
+                                <option value="11">SVEW (disabled)</option>
+                                <option value="12">CalWater (disabled)</option>
+                                <option value="13">Claremont</option>
+                                <option value="14">Purissima Water (disabled)</option>
+                                <option value="15">Energy Fitness (disabled)</option>
+                                <option value="16">Dr Power</option>
+                                <option value="17">Pay for Performance</option>
+                                <option value="18">Sunnyvale Green At Home (disabled)</option>
+                                <option value="20">ConSol PG&amp;E</option>
+                                <option value="23">SC High Energy</option>
+                                <option value="24">Rising Sun</option>
                             </select>
                         </div>
                     </div>
@@ -36,7 +56,26 @@
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <select class="form-control form-control-sm" id="customerPlace"
-                                formControlName="customerPlace"></select>
+                                formControlName="customerPlace">
+                                <option value="" selected="selected"></option>
+                                <option value="ALAMEDA">SF East Bay</option>
+                                <option value="ATHERTON">Atherton</option>
+                                <option value="CENTRAL VALLEY">Central Valley</option>
+                                <option value="CLAREMONT">Claremont</option>
+                                <option value="LOS ALTOS">Los Altos</option>
+                                <option value="LOS ALTOS HILLS">Los Altos Hills</option>
+                                <option value="MONTE SERENO">Monte Sereno</option>
+                                <option value="MOUNTAIN VIEW">Mountain View</option>
+                                <option value="NORTHCV">North Central Valley</option>
+                                <option value="OTHER">NorCal</option>
+                                <option value="PORTOLA VALLEY">Portola Valley</option>
+                                <option value="SF BAY AREA">SF Bay Area</option>
+                                <option value="SOCAL">SoCal</option>
+                                <option value="SUNNYVALE">Sunnyvale</option>
+                                <option value="TST-US">Anytown USA</option>
+                                <option value="VERMONT">Vermont</option>
+                                <option value="WOODSIDE">Woodside</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-row form-group">
@@ -52,8 +91,20 @@
                             <span class="start">Program:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
-                            <select class="form-control form-control-sm" id="program"
-                                formControlName="program"></select>
+                            <select class="form-control form-control-sm" id="program" formControlName="program">
+                                <option value=""></option>
+                                <option value="1">Much higher than normal Heating or Cooling Loads</option>
+                                <option value="2">Higher than normal Heating or Cooling Loads</option>
+                                <option value="3">Higher than normal Variable/Behavioral Loads</option>
+                                <option value="4">Higher than normal Plug Loads (vs. heating or cooling)</option>
+                                <option value="5">Opportunities for Online Analysis &amp; Recommendations</option>
+                                <option value="6">Higher than normal Recurring Electric Loads</option>
+                                <option value="7">Lower than normal Energy Use</option>
+                                <option value="8">Batch analysis of energy savings</option>
+                                <option value="9">Enrolled in a utility P4P program</option>
+                                <option value="10">Eligible for P4P enrollment (but not yet enrolled)</option>
+                                <option value="11">Not eligible for P4P enrollment</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-row form-group">
@@ -81,7 +132,16 @@
                             <span class="start">Status:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
-                            <select class="form-control form-control-sm" id="status" formControlName="status"></select>
+                            <select class="form-control form-control-sm" id="status" formControlName="status">
+                                <option value=""></option>
+                                <option value="0">Active (0)</option>
+                                <option value="10">In registration (10)</option>
+                                <option value="20">Bad utility credentials (20)</option>
+                                <option value="50">In progress (50)</option>
+                                <option value="80">Pending (80)</option>
+                                <option value="85">PG&amp;E account pending (85)</option>
+                                <option value="90">Blocked (90)</option>
+                            </select>
                         </div>
                     </div>
                     <div class="form-row form-group">
@@ -100,7 +160,23 @@
                         <div class="col-md-4 col-lg-4 col-sm-6 form-row form-group" style="padding-right: 0%;">
                             <div class="col-md-6 col-lg-6 col-sm-6" style="padding-right: 0%;">
                                 <select class="form-control form-control-sm" id="credentialTypeCode"
-                                    formControlName="credentialTypeCode"></select>
+                                    formControlName="credentialTypeCode">
+                                    <option value="" selected="selected"></option>
+                                    <option value="calwater">CalWater</option>
+                                    <option value="pge">PG&amp;E</option>
+                                    <option value="purissima">Purissima</option>
+                                    <option value="rypl">RYPL</option>
+                                    <option value="sce">SCE</option>
+                                    <option value="sce_s3">SCE_S3</option>
+                                    <option value="sdge">SDG&amp;E CMD</option>
+                                    <option value="smd">PG&amp;E SMD</option>
+                                    <option value="smd_offline">SMD Offline</option>
+                                    <option value="smd_sce">SCE SMD</option>
+                                    <option value="socalgas">SoCalGas</option>
+                                    <option value="socalgas_s3">SoCalGas_S3</option>
+                                    <option value="undefined">undefined</option>
+                                    <option value="utilityapi">UtilityAPI Json</option>
+                                </select>
                             </div>
                             <div class="col-md-6 col-lg-6 col-sm-6" style="padding-right: 0%;">
                                 <input type="text" class="form-control form-control-sm" id="credentialSubscriptionId"
@@ -113,7 +189,21 @@
                             <span class="start">Energy Coach:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
-                            <select class="form-control form-control-sm" formControlName="energyCoach"></select>
+                            <select class="form-control form-control-sm" formControlName="energyCoach">
+                                <option value=""></option>
+                                <option value="-1">Unassigned</option>
+                                <option value="8365">Andrew Negd</option>
+                                <option value="10726">Blake Hihara</option>
+                                <option value="7622">Chris Hunt</option>
+                                <option value="8252">Danny Nguyen</option>
+                                <option value="8173">David Coale</option>
+                                <option value="11080">Greg Bell</option>
+                                <option value="7574">James Tuleya</option>
+                                <option value="13005">Jay Gentry</option>
+                                <option value="2752">Patti Sexton</option>
+                                <option value="8366">Rob Starr</option>
+                                <option value="16">Steve Schmidt</option>
+                            </select>
                         </div>
                         <label class="control-label col-lg-2 col-sm-4">
                             <span class="start">Credential Account:</span>
@@ -140,169 +230,13 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12" *ngIf="CustomerData?.content?.length>0">
-                            <!-- <table *ngIf='searchForm.get("customerView").value== -1' id="example"
-                                class="table table-striped table-bordered table-sm" data-source="data-source"
-                                [mfData]="usesEventList" #mf="mfDataTable" [mfRowsOnPage]="10">
-                                <thead>
-                                    <tr>
-                                        <th class="th-sm no-sort">
-                                            <img src="assets/images/whitebox.png" class="colorbox">
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="customerEventType.eventCode">#
-                                            </mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="customerEventType.eventName">Audit Id
-                                            </mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="eventDatetime">Name</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm no-sort">
-                                            <mfDefaultSorter by="linkedPersonName">Links</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm no-sort">
-                                            <mfDefaultSorter by="linkedPersonName">Group</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="linkedPersonName">Notes</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="linkedPersonName">Place</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="linkedPersonName">JoinDate</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="linkedPersonName"></mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm no-sort">
-                                        <mfDefaultSorter by="value">Value</mfDefaultSorter>
-                                        </th> 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let customer of CustomerList;">
-                                        <td> <img src="assets/images/whitebox.png" class="colorbox"></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.auditId}}
-                                            </a></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.user.username}}</a>
-                                        </td>
-                                         <td>{{usageList.date | date : "dd-MMM-y"}} - {{usageList.endDate | date : "dd-MMM-y"}}</td> 
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline"><span
-                                                    style="display:none;">{{usageList.eventDatetime}}</span>{{usageList.eventDatetime | date : "dd-MMM-y"}}
-                                            </a></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.customerGroup.groupName}}
-                                            </a></td>
-
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.notes}}
-                                            </a></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.place.placeName}}
-                                            </a></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.activationDate}}
-                                            </a></td>
-
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.user.status}}
-                                            </a></td>
-                                    </tr>
-                                </tbody>
-
-                            </table>
-
-
-                            <table *ngIf="searchForm.get('customerView').value=== 1 " id="example"
-                                class="table table-striped table-bordered table-sm" data-source="data-source"
-                                [mfData]="usesEventList" #mf="mfDataTable" [mfRowsOnPage]="10">
-                                <thead>
-                                    <tr>
-                                        <th class="th-sm no-sort">
-                                            <img src="assets/images/whitebox.png" class="colorbox">
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="customerEventType.eventCode}">#
-                                            </mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="customerEventType.eventName">Audit Id
-                                            </mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="eventDatetime">Name</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm no-sort">
-                                            <mfDefaultSorter by="linkedPersonName">Links</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm no-sort">
-                                            <mfDefaultSorter by="linkedPersonName">Group</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="linkedPersonName">Notes</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="linkedPersonName">Place</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="linkedPersonName">JoinDate</mfDefaultSorter>
-                                        </th>
-                                        <th class="th-sm">
-                                            <mfDefaultSorter by="linkedPersonName"></mfDefaultSorter>
-                                        </th>
-                                         <th class="th-sm no-sort">
-                                        <mfDefaultSorter by="value">Value</mfDefaultSorter>
-                                        </th> 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let customer of CustomerList;">
-                                        <td> <img src="assets/images/whitebox.png" class="colorbox"></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.auditId}}
-                                            </a></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.user.username}}</a>
-                                        </td>
-                                        <td>{{usageList.date | date : "dd-MMM-y"}} - {{usageList.endDate | date : "dd-MMM-y"}}</td> 
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline"><span
-                                                    style="display:none;">{{usageList.eventDatetime}}</span>{{usageList.eventDatetime | date : "dd-MMM-y"}}
-                                            </a></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.customerGroup.groupName}}
-                                            </a></td>
-
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.notes}}
-                                            </a></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.place.placeName}}
-                                            </a></td>
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.activationDate}}
-                                            </a></td>
-
-                                        <td> <a (click)="customerEventView(usageList)"
-                                                style="cursor:pointer;color:#000;text-decoration:underline">{{customer.user.status}}
-                                            </a></td>
-                                    </tr>
-                                </tbody>
-
-                            </table> -->
-                            <app-table [(keys)]="keys" [data]="dataSource" [totalElement]="CustomerData.totalElements" (onChangePageEvent)="findCustomer($event)"></app-table>
+                       <app-table [(keys)]="keys" [data]="dataSource" [totalElement]="CustomerData.totalElements"
+                            (onChangePageEvent)="findCustomer($event)"></app-table>
                         <div class="row" style="margin-bottom: 5%;">
                             <div class="col-sm-6 col-xs-3">
-                                <!-- <button class="btn btn-primary" type="button" (click)="back()">Back</button> -->
+                              
                             </div>
                             <div class="col-sm-6 col-xs-9" style="text-align:right;">
-                                <!-- <button class="btn btn-primary" type="button" (click)="deleteEvent(customerEventDetails.customerEventId)">Delete</button>&nbsp; -->
                                 <button class="btn btn-primary" type="button" (click)="addEvent()">Add</button>
                             </div>
                         </div>

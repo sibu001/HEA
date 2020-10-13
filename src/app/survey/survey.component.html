@@ -89,10 +89,9 @@
                         </div>
                         <div class="row" *ngIf="chartHelpHide">
                           <div class="col-lg-11 col-md-11 col-sm-11">
-                            <p class="demo1" >
+                            <p class="demo1">
                               {{charts.chart.helpText}}
-                              <span class="hidebuttondemo"
-                                (click)="chartHelpHide=!chartHelpHide">hide</span>
+                              <span class="hidebuttondemo" (click)="chartHelpHide=!chartHelpHide">hide</span>
                             </p>
                           </div>
                           <div class="col-lg-11 col-md-11 col-sm-11"></div>
@@ -132,7 +131,8 @@
                                 </ng-container>
                                 <th>
                                   <p style="margin-bottom:0px;" *ngIf="hideBlockArrow">
-                                    <img src="assets/images/ico_add.gif" class="img-responsive">
+                                    <img src="assets/images/ico_add.gif" (click)="addDataBlockRow()"
+                                      class="img-responsive">
                                   </p>
                                 </th>
                                 <th>
@@ -159,10 +159,28 @@
                                           [(ngModel)]="surveyAnswerValue.value">
                                       </div>
                                     </form>
+                                    <div
+                                      *ngIf="surveyAnswerValue.dataField.dataType=='datetime'&&surveyAnswerValue.dataField.inputType=='date'"
+                                      class="form-group">
+                                      <!-- <div class="col-lg-5 col-sm-8 col-xs-12"> -->
+                                      <p-calendar [(ngModel)]="surveyAnswerValue.value" dataType="string"
+                                        [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
+                                      <!-- </div> -->
+                                    </div>
+                                    <div class="form-group" style="height: 34px;"
+                                      *ngIf="surveyAnswerValue.dataField.inputType=='select'">
+                                      <select name="pool/spa" class="form-control" [(ngModel)]="surveyAnswerValue.value"
+                                        (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',surveyAnswerValue.dataField.onChangeRefresh)">
+                                        <option *ngFor="let optionList of surveyAnswerValue.dataField.fieldValues"
+                                          [value]="optionList.value" class="options">{{optionList.name}}</option>
+                                      </select>&nbsp;
+                                    </div>
                                   </td>
                                 </ng-container>
                                 <td *ngIf="i==0&&hideBlockArrow">
-                                  <img src="assets/images/ico_minus.gif" class="img-responsive">
+                                  <!-- currentPaneBlock.blockCount>1 -->
+                                    <img src="assets/images/ico_minus.gif" (click)="deleteDataBlockRow(i)"
+                                      class="img-responsive">
                                 </td>
                                 <td *ngIf="i==13&&!hideBlockArrow">
                                   <img src="assets/images/ico_minus.gif" class="img-responsive">
@@ -175,7 +193,7 @@
                                 <td></td>
                                 <td></td>
                                 <td>
-                                  <img src="assets/images/ico_add.gif" class="img-responsive">
+                                  <img src="assets/images/ico_add.gif" (click)="addDataBlockRow()" class="img-responsive">
                                 </td>
                                 <td>
                                   <img src="assets/images/arrow-down-green.png" class="img-responsive">
