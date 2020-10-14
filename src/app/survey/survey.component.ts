@@ -187,7 +187,7 @@ export class SurveyComponent implements AfterViewInit {
     if (this.users.currentPaneNumber.currentPane.paneCode == 'fdb_Thanks') {
       this.router.navigate(['/topicshistory']);
     } else {
-      if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
+      if (this.users.currentPaneNumber.currentPaneAnswers.length > 0 || this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
         this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false);
       } else {
         this.nextPane(this.users.currentPaneNumber);
@@ -606,23 +606,25 @@ export class SurveyComponent implements AfterViewInit {
       if (element.blockCount <= element.dataBlock.maxRows) {
         const surveyBlock = JSON.parse(JSON.stringify(element.surveyAnswerBlocks[0]));
         surveyBlock.surveyAnswers.forEach(e => {
-          e.value = '';
+          e.value = null;
         });
+        element.blockCount = element.blockCount + 1;
         element.surveyAnswerBlocks.push(surveyBlock);
       }
     });
-    this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
-      'change', true);
+    // this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
+    //   'change', true);
   }
   deleteDataBlockRow(index) {
     console.log(this.users.currentPaneNumber.currentPaneBlocks);
     this.users.currentPaneNumber.currentPaneBlocks.forEach(element => {
       if (element.blockCount >= element.dataBlock.minRows) {
         element.surveyAnswerBlocks.splice(index, 1);
+        element.blockCount = element.blockCount - 1;
       }
     });
-    this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
-      'change', true);
+    // this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
+    //   'change', true);
   }
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {

@@ -177,10 +177,10 @@
                                     </div>
                                   </td>
                                 </ng-container>
-                                <td *ngIf="i==0&&hideBlockArrow">
-                                  <!-- currentPaneBlock.blockCount>1 -->
-                                    <img src="assets/images/ico_minus.gif" (click)="deleteDataBlockRow(i)"
-                                      class="img-responsive">
+                                <td *ngIf="currentPaneBlock.blockCount>1">
+                                  <!-- i==0&&hideBlockArrow -->
+                                  <img src="assets/images/ico_minus.gif" (click)="deleteDataBlockRow(i)"
+                                    class="img-responsive">
                                 </td>
                                 <td *ngIf="i==13&&!hideBlockArrow">
                                   <img src="assets/images/ico_minus.gif" class="img-responsive">
@@ -193,7 +193,8 @@
                                 <td></td>
                                 <td></td>
                                 <td>
-                                  <img src="assets/images/ico_add.gif" (click)="addDataBlockRow()" class="img-responsive">
+                                  <img src="assets/images/ico_add.gif" (click)="addDataBlockRow()"
+                                    class="img-responsive">
                                 </td>
                                 <td>
                                   <img src="assets/images/arrow-down-green.png" class="img-responsive">
