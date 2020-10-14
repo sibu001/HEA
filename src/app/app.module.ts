@@ -16,6 +16,7 @@ import { SafePipeModule } from 'safe-pipe';
 import { AppRoutingModule } from './app.routes';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeadersComponent } from './headers/headers.component';
+import { RoleGuard } from './role.guard';
 @NgModule({
   declarations: [
     AppComponent,
@@ -35,7 +36,7 @@ import { HeadersComponent } from './headers/headers.component';
     AppRoutingModule
   ],
   exports: [HeaderModule],
-  providers: [LoginService, AuthGuard, {
+  providers: [LoginService, AuthGuard, RoleGuard, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthorizationInterceptor,
     multi: true
@@ -43,21 +44,3 @@ import { HeadersComponent } from './headers/headers.component';
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
-// ReactiveFormsModule,
-//     RegistrationModule,
-//     DropdownModule,
-//     BreadcrumbModule,
-//     BrowserModule,
-//     BrowserAnimationsModule,
-//     HttpClientModule,
-//     HeaderModule,
-//     InputSwitchModule,
-//     DashboardModule,
-//     SurveyModule,
-//     leakListViewModule,
-//     DataTableModule,
-//     CalendarModule,
-//     UsageHistoryModule,
-//     SafePipeModule,
-//     AppRoutingModule

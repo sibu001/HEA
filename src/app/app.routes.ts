@@ -1,36 +1,8 @@
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth.guard';
-import { HeadersComponent } from "src/app/headers/headers.component";
+import { HeadersComponent } from 'src/app/headers/headers.component';
 import { NgModule } from '@angular/core';
-
-// export const ROUTES: Routes = [
-
-//      {
-//         path:'',
-//         component:HeadersComponent,
-//         canActivate:[AuthGuard],
-//         children:[
-//             ...DashboardRoutes,
-//             ...SurveyRoutes,
-//             ...leakListViewRoutes,
-//             ...UsageHistoryRoutes
-//         ]
-//     }, {
-//         path:'',
-//         canActivate:[AuthGuard],
-//         children:[
-//             ...HeaderRoutes
-//         ]
-//     },
-//     {
-//         path:'', 
-//         children:[
-//             ...LoginRoutes,
-//             ...RegistrationRoutes
-//         ]
-//     }
-// ]
-
+import { RoleGuard } from './role.guard';
 const ROUTES: Routes = [
   {
     path: '',
@@ -71,20 +43,17 @@ const ROUTES: Routes = [
       {
         path: '',
         loadChildren: './usageHistory/usageHistory.module#UsageHistoryModule',
-      },
-      {
-        path: 'admin',
-        loadChildren: './admin/admin.module#AdminModule',
       }
     ]
   },
   {
-    path: '',
-    canActivate: [AuthGuard],
+    path: 'admin',
+    component: HeadersComponent,
+    canActivate: [RoleGuard],
     children: [
       {
-        path: '',
-        loadChildren: './headers/header.module#HeaderModule'
+        path: 'customer',
+        loadChildren: './admin/customer/customer.module#CustomerModule',
       }
     ]
   },
@@ -95,7 +64,7 @@ const ROUTES: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(ROUTES, { useHash: true }),],
+  imports: [RouterModule.forRoot(ROUTES, { useHash: true })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

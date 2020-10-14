@@ -41,6 +41,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewChecked {
   @Input() checkbox: Boolean = false;
   @Output() onChangePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() onChangeActionMenuItem: EventEmitter<any> = new EventEmitter();
+  @Output() goToEditCustomer: EventEmitter<any> = new EventEmitter();
   page = new Page();
   url: String;
   totalLength: Number;
@@ -161,5 +162,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewChecked {
 
   refresh() {
     this.changeDetectorRefs.detectChanges();
+  }
+
+  goToEdit(event: any) {
+    console.log(event);
+    this.goToEditCustomer.emit(event);
   }
 }

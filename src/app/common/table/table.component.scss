@@ -1,102 +1,104 @@
-
-@media only screen and (max-width: 1026px){
-  .table-wrapper .table{
-  min-width: 870px;
+@media only screen and (max-width: 1026px) {
+  .table-wrapper .table {
+    min-width: 870px;
   }
   .table-wrapper {
-  overflow: auto;
+    overflow: auto;
   }
-  }
-  .table-wrapper .table{
+}
+.table-wrapper .table {
   width: 100%;
   background-color: transparent;
-  }
-  
-  .table-wrapper{
+}
+
+.table-wrapper {
   width: 100%;
-  }
-  
-  .mat-header-row {
+}
+
+.mat-header-row {
   color: black;
   font-weight: bold;
   background: none;
   border-left: 1px solid #ddd;
-  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-  }
-  
-  .mat-row:nth-child(even) {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.mat-row:nth-child(even) {
   background-color: #fff;
   border-left: 1px solid #ddd;
-  }
-  
-  .mat-row:nth-child(odd) {
+}
+
+.mat-row:nth-child(odd) {
   border-left: 1px solid #ddd;
   background-color: rgba(0, 0, 0, 0.05);
-  }
-  
-  span.selectButton {
+}
+
+span.selectButton {
   border: 1px solid #f2f2f2;
   background-color: #fff;
   padding: 7px 15px 7px 15px;
   vertical-align: top;
-  }
-  
-  mat-icon.btnArrow.mat-icon.material-icons {
+}
+
+mat-icon.btnArrow.mat-icon.material-icons {
   vertical-align: middle;
   margin-top: -2px;
   width: 16px;
-  }
-  
-  
-  .search {
+}
+
+.search {
   background-color: white;
   border: 1px solid #d4d4d4;
-  }
-  
-  .breadcrumb.css {
+}
+
+.breadcrumb.css {
   border: 0px;
   padding: 0;
   margin-bottom: 9px;
-  }
-  
-  .input-group-addon.search {
+}
+
+.input-group-addon.search {
   border: none;
   padding: 5px 0px 5px 9px;
-  }
-  
-  input.form-control.search {
+}
+
+input.form-control.search {
   border: none;
-  }
-  
-  i.css.fa.fa-search {
+}
+
+i.css.fa.fa-search {
   font-size: 15px;
   color: #b7b7b7;
-  }
-  
-  mat-paginator.paginatorcss.mat-paginator {
+}
+
+mat-paginator.paginatorcss.mat-paginator {
   color: #000;
   display: flex;
   float: left;
-  }
-  
-  .mat-cell {
+}
+
+.mat-cell {
   vertical-align: middle;
   border-right: 1px solid #ddd;
-  align-self: stretch
-  }
-  .mat-header-cell {
+  align-self: stretch;
+}
+.mat-header-cell {
   border-right: 1px solid #ddd;
   border-top: 1px solid #ddd;
-  }
-  mat-footer-row,
-  mat-header-row,
-  mat-row {
+}
+mat-footer-row,
+mat-header-row,
+mat-row {
   border-color: #ddd;
-  }
-  
-  mat-cell,
-  mat-footer-cell,
-  mat-header-cell {
+}
+
+mat-cell,
+mat-footer-cell,
+mat-header-cell {
   padding-left: 12px !important;
-  }
-  
+}
+
+mat-cell:first-of-type > div {
+  text-decoration: underline;
+  cursor: pointer;
+}

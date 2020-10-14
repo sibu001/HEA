@@ -609,6 +609,7 @@ export class SurveyComponent implements AfterViewInit {
           e.value = null;
         });
         element.blockCount = element.blockCount + 1;
+        element.currentBlockCount = element.currentBlockCount + 1;
         element.surveyAnswerBlocks.push(surveyBlock);
       }
     });
@@ -621,6 +622,7 @@ export class SurveyComponent implements AfterViewInit {
       if (element.blockCount >= element.dataBlock.minRows) {
         element.surveyAnswerBlocks.splice(index, 1);
         element.blockCount = element.blockCount - 1;
+        element.currentBlockCount = element.currentBlockCount - 1;
       }
     });
     // this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,

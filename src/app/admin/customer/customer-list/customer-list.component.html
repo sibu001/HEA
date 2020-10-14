@@ -1,23 +1,23 @@
 <section class="space-top">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-9 .col-lg-9 col-sm-12">
+            <div class="col-sm-12 col-md-9 col-lg-9">
                 <h3 class="select_next">
                     Search Options (use "%" as wildcard in searches)</h3>
                 <hr class="hr_space">
                 <form [formGroup]="searchForm" class="form-horizontal">
-                    <div class="form-row form-group">
-                        <label class="control-label col-lg-2 col-sm-4">
+                    <div class="row form-row form-group">
+                        <label class="control-label col-sm-4 col-md-2 col-lg-2">
                             <span class="start">Audit Id:</span>
                         </label>
-                        <div class="col-lg-4 col-sm-6">
+                        <div class="col-sm-6 col-md-4 col-lg-4">
                             <input type="text" class="form-control form-control-sm" id="auditId"
                                 formControlName="auditId">
                         </div>
-                        <label class="control-label col-lg-2 col-sm-4">
+                        <label class="control-label col-lg-2 col-md-2 col-sm-4">
                             <span class="start"> Customer Group:</span>
                         </label>
-                        <div class="col-lg-4 col-sm-6">
+                        <div class="col-lg-4 col-md-4 col-sm-6">
                             <select class="form-control form-control-sm" id="customerGroup"
                                 formControlName="customerGroup">
                                 <option value="" selected="selected"></option>
@@ -51,7 +51,7 @@
                             <input type="text" class="form-control form-control-sm" id="customerName"
                                 formControlName="customerName">
                         </div>
-                        <label class="control-label col-lg-2 col-sm-4">
+                        <label class="control-label col-lg-2 col-md-2 col-sm-4">
                             <span class="start"> Customer Place:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="form-row form-group">
-                        <label class="control-label col-lg-2 col-sm-4">
+                        <label class="control-label col-md-2 col-lg-2 col-sm-4">
                             <span class="start">Customer E-mail:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
@@ -87,7 +87,7 @@
                                 formControlName="customerEmail">
                         </div>
 
-                        <label class="control-label col-lg-2 col-sm-4">
+                        <label class="control-label col-md-2 col-lg-2 col-sm-4">
                             <span class="start">Program:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     <div class="form-row form-group">
-                        <label class="control-label col-lg-2 col-sm-4">
+                        <label class="control-label col-md-2 col-lg-2 col-sm-4">
                             <span class="start">Customer View:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
@@ -128,7 +128,7 @@
                             </select>
                         </div>
 
-                        <label class="control-label col-lg-2 col-sm-4">
+                        <label class="control-label col-md-2 col-lg-2 col-sm-4">
                             <span class="start">Status:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
@@ -145,7 +145,7 @@
                         </div>
                     </div>
                     <div class="form-row form-group">
-                        <label class="control-label col-lg-2 col-sm-4">
+                        <label class="control-label col-lg-2 col-md-2 col-sm-4">
                             <span class="start">Event/Alert Code:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
@@ -153,11 +153,11 @@
                                 formControlName="alertCode">
                         </div>
 
-                        <label class="control-label col-lg-2 col-sm-4 ">
+                        <label class="control-label col-lg-2 col-md-2 col-sm-4 ">
                             <span class="start">Credential Type:</span>
 
                         </label>
-                        <div class="col-md-4 col-lg-4 col-sm-6 form-row form-group" style="padding-right: 0%;">
+                        <div class="col-md-4 col-lg-4 col-sm-6 row form-row form-group" style="padding-right: 0%;">
                             <div class="col-md-6 col-lg-6 col-sm-6" style="padding-right: 0%;">
                                 <select class="form-control form-control-sm" id="credentialTypeCode"
                                     formControlName="credentialTypeCode">
@@ -184,8 +184,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-row form-group">
-                        <label class="control-label col-lg-2 col-sm-4">
+                    <div class="row form-row form-group">
+                        <label class="control-label col-md-2 col-lg-2 col-sm-4">
                             <span class="start">Energy Coach:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
@@ -205,7 +205,7 @@
                                 <option value="16">Steve Schmidt</option>
                             </select>
                         </div>
-                        <label class="control-label col-lg-2 col-sm-4">
+                        <label class="control-label col-md-2 col-lg-2 col-sm-4">
                             <span class="start">Credential Account:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
@@ -230,11 +230,12 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12" *ngIf="CustomerData?.content?.length>0">
-                       <app-table [(keys)]="keys" [data]="dataSource" [totalElement]="CustomerData.totalElements"
-                            (onChangePageEvent)="findCustomer($event)"></app-table>
+                        <app-table [(keys)]="keys" [data]="dataSource" [totalElement]="CustomerData.totalElements"
+                            (onChangePageEvent)="findCustomer($event)" (goToEditCustomer)="goToEditCustomer($event)">
+                        </app-table>
                         <div class="row" style="margin-bottom: 5%;">
                             <div class="col-sm-6 col-xs-3">
-                              
+
                             </div>
                             <div class="col-sm-6 col-xs-9" style="text-align:right;">
                                 <button class="btn btn-primary" type="button" (click)="addEvent()">Add</button>
@@ -246,15 +247,7 @@
             </div>
 
             <div class="col-md-3 .col-lg-3 col-sm-12">
-                <p class="Energy_anaiytic">
-                    <img src="assets/images/dot03.gif" class="dot">&nbsp;HEA Administrator's Home Page</p>
-                <p class="feedback">
-                    This page provides access to administrative functions for Home Energy Analytics' survey system.
-                </p>
-                <p class="feedback">
-                    Use the menu below to navigate to the appropriate administrative function.
-                </p>
-                <hr>
+                <app-sidebar></app-sidebar>
             </div>
         </div>
     </div>

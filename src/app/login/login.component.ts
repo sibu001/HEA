@@ -103,7 +103,8 @@ export class LoginComponent implements OnInit {
           for (let roles of response) {
             if (roles.roleCode === "ADMIN") {
               this.users.role = roles.roleCode;
-              this.router.navigate(["admin"]);
+              this.loginService.setUser(this.users);
+              this.router.navigate(['admin/customer']);
               // window.open(window.location.origin + '/hea-web/customerList.do', '_self');
               // window.open('https://sandbox.hea.com/hea-web/customerList.do','_self');
               break;

@@ -55,7 +55,7 @@
             </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row)"
+        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row);goToEdit(row);"
             [ngClass]="{'border-left-green': sideBorder && !row.accountLocked, 'border-left-red': sideBorder && row.accountLocked}">
         </mat-row>
     </mat-table>

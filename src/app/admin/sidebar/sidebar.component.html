@@ -1,3 +1,111 @@
-<p>
-  sidebar works!
-</p>
+<section class='space-top'>
+  <div class='container-fluid'>
+    <p class='Energy_anaiytic'>
+      <img src='assets/images/dot03.gif' class='dot'>&nbsp;HEA Administrator's Home Page</p>
+    <p class='feedback'>
+      This page provides access to administrative functions for Home Energy Analytics' survey system.
+    </p>
+    <p class='feedback'>
+      Use the menu below to navigate to the appropriate administrative function.
+    </p>
+    <hr>
+
+    <div class='feedback'>
+      <ul>
+        <li><a data-toggle='collapse' data-target='#collapseSystem' aria-expanded='false'
+            aria-controls='collapseSystem'>System</a>
+          <ul class='collapse' id='collapseSystem'>
+            <li><a href='{{apiURL+"roleList.do"}}'>Roles</a></li>
+            <li><a href='{{apiURL+"placeList.do"}}'>Places</a></li>
+            <li><a href='{{apiURL+"programGroupList.do"}}'>Program Groups</a></li>
+            <li><a href='{{apiURL+"customerGroupList.do"}}'>Customer Groups</a></li>
+            <li><a href='{{apiURL+"customerEventTypeList.do"}}'>Customer Event Types</a></li>
+            <li><a href='{{apiURL+"customerAlertTypeList.do"}}'>Customer Alert Types</a></li>
+            <li><a href='{{apiURL+"customerComparisonGroupList.do"}}'>Comparison Groups</a></li>
+            <li><a href='{{apiURL+"credentialTypeList.do"}}'>Credential Types</a></li>
+            <li><a href='{{apiURL+"factorList.do"}}'>Factors</a></li>
+            <li><a href='{{apiURL+"lookupList.do"}}'>Lookups</a></li>
+
+            <li><a href='{{apiURL+"systemParameterList.do"}}'>System parameter</a></li>
+            <li><a href='{{apiURL+"logList.do"}}'>Logs</a></li>
+            <li><a href='{{apiURL+"weatherStationList.do"}}'>Weather Stations</a></li>
+            <li><a href='{{apiURL+"degreeDayList.do"}}'>Degree days</a></li>
+            <li><a href='{{apiURL+"cimisStationList.do"}}'>CIMIS Stations</a></li>
+            <li><a href='{{apiURL+"cimisMeasurementList.do"}}'>CIMIS Measurements</a></li>
+            <li><a href='{{apiURL+"scriptDebugConsole.do"}}'>Script Console</a></li>
+            <li><a href='{{apiURL+"batchScriptList.do"}}'>Script batches</a></li>
+
+            <li><a href='{{apiURL+"systemJobList.do"}}'>System jobs</a></li>
+            <li><a href='{{apiURL+"jobServerManager.do"}}'>EC2 Instances</a></li>
+            <li><a href='{{apiURL+"alertMessageTypeView.do"}}'>Alert Messages</a></li>
+          </ul>
+        </li>
+        <li><a href='{{apiURL+"userList.do"}}'>Staff</a></li>
+        <li><a href='{{apiURL+"customerList.do"}}'>Customers</a></li>
+        <li><a href='{{apiURL+"registrationView.do"}}'>Prospects</a></li>
+        <li><a href='{{apiURL+"surveyDescriptionList.do"}}'>Topic descriptions</a></li>
+        <li><a href='{{apiURL+"surveyList.do"}}'>Topics</a></li>
+        <li><a href='{{apiURL+"reportList.do"}}'>Administrative Reports</a></li>
+        <!-- don't display historyList for admins since this moved to customers-> surveys link-->
+        <li><a href='{{apiURL+"customerEventList.do"}}'>Events history</a>
+        </li>
+        <li><a data-toggle='collapse' data-target='#collapseMail' aria-expanded='false'
+            aria-controls='collapseMail'>Mail definitions</a>
+          <ul class='collapse' id='collapseMail'>
+            <li>
+              <a href='{{apiURL+"mailDescriptionList.do"}}'>Mail Descriptions</a>
+            </li>
+            <li>
+              <a href='{{apiURL+"customerGroupMailPartList.do"}}'>Customer Group Mail Parts</a>
+            </li>
+          </ul>
+        </li>
+        <li><a href='{{apiURL+"userReportList.do"}}'>User report definitions</a>
+        </li>
+        <li><a data-toggle='collapse' data-target='#collapseDynamicView' aria-expanded='false'
+            aria-controls='collapseDynamicView'>Dynamic Views</a>
+          <ul class='collapse' id='collapseDynamicView'>
+            <li>
+              <a href='{{apiURL+"jsPageList.do"}}'>JS Pages</a>
+            </li>
+            <li>
+              <a href='{{apiURL+"viewConfigurationList.do"}}'>View Configurations</a>
+            </li>
+          </ul>
+        </li>
+        <li><a data-toggle='collapse' data-target='#collapseTrending' aria-expanded='false'
+            aria-controls='collapseTrending'>Trending definitions</a>
+          <ul class='collapse' id='collapseTrending'>
+            <li><a href='{{apiURL+"keyIndicatorList.do"}}'>Key Indicators</a></li>
+            <li><a href='{{apiURL+"trendingPartList.do"}}'>Trending chart definitions</a></li>
+          </ul>
+        </li>
+        <li><a href='{{apiURL+"summaryChartList.do"}}'>Summary chart definitions</a>
+        </li>
+        <li><a data-toggle='collapse' data-target='#collapseUsageHistory' aria-expanded='false'
+            aria-controls='collapseUsageHistory'>Usage history</a>
+          <ul class='collapse' id='collapseUsageHistory'>
+            <li><a href='{{apiURL+"shareMyDataCustomerListView.do"}}'>Share My Data</a></li>
+            <li><a href='{{apiURL+"gasList.do"}}'>Gas</a></li>
+            <li><a href='{{apiURL+"gasChargeList.do"}}'>Gas charge</a></li>
+            <li><a href='{{apiURL+"electricityList.do"}}'>Electricity</a></li>
+            <li><a href='{{apiURL+"electricityChargeList.do"}}'>Electricity charge</a></li>
+            <li><a href='{{apiURL+"waterList.do"}}'>Water</a></li>
+            <li><a href='{{apiURL+"waterChargeList.do"}}'>Water charge</a></li>
+            <li><a href='{{apiURL+"smartMeterElectricList.do"}}'>Electric smart meter</a></li>
+            <li><a href='{{apiURL+"smartMeterElectricDailyList.do"}}'>Electric Daily smart meter</a></li>
+            <li><a href='{{apiURL+"smartMeterGasList.do"}}'>Gas smart meter</a></li>
+            <li><a href='{{apiURL+"smartMeterWaterList.do"}}'>Water smart meter</a></li>
+          </ul>
+        </li>
+        <li><a data-toggle='collapse' data-target='#menuDashboard' aria-expanded='false'
+            aria-controls='menuDashboard'>Dashboards</a>
+          <ul class='collapse' id='menuDashboard'>
+            <li><a href='{{apiURL+"dashboard.jspage"}}' target='_blank'>Program Dashboard</a></li>
+            <li><a href='{{apiURL+"status.jspage"}}' target='_blank'>Summary of Customer Status</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>

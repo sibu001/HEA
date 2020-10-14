@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
 
+  apiURL = environment.webBaseUrl;
   constructor() { }
 
   ngOnInit() {

@@ -1,0 +1,12 @@
+section.space-top {
+    margin-top: 5.3em;
+}
+.borderTop{
+ border-top: 1px solid #ddd;
+} 
+.borderBottom{
+    border-bottom: 1px solid #ddd;
+}
+.rowPadding{
+    padding: 5px;
+}

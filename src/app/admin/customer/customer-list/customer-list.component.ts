@@ -1,14 +1,16 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
 import { TableComponent } from 'src/app/common/table/table.component';
 import { Page } from 'src/app/models/page';
 import { LoginService } from 'src/app/services/login.service';
+
 @Component({
-  selector: 'app-customer',
-  templateUrl: './customer.component.html',
-  styleUrls: ['./customer.component.css'],
+  selector: 'app-customer-list',
+  templateUrl: './customer-list.component.html',
+  styleUrls: ['./customer-list.component.css']
 })
-export class CustomerComponent implements OnInit {
+export class CustomerListComponent implements OnInit {
   public keys: any;
 
   public dataSource: any;
@@ -34,7 +36,7 @@ export class CustomerComponent implements OnInit {
     energyCoach: [''],
     credentialAccount: [''],
   });
-  constructor(private loginService: LoginService, private fb: FormBuilder) { }
+  constructor(private loginService: LoginService, private fb: FormBuilder, private readonly router: Router) { }
 
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');
@@ -152,4 +154,7 @@ export class CustomerComponent implements OnInit {
   addEvent() { }
 
   searchFilter() { }
+  goToEditCustomer(event){
+    this.router.navigate(['admin/customer/customerEdit']);
+  }
 }
