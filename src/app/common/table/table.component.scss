@@ -102,3 +102,7 @@ mat-cell:first-of-type > div {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.mat-paginator-range-label{
+  display: none;
+}

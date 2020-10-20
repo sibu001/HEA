@@ -21,25 +21,7 @@
                             <select class="form-control form-control-sm" id="customerGroup"
                                 formControlName="customerGroup">
                                 <option value="" selected="selected"></option>
-                                <option value="1">CEC</option>
-                                <option value="2">EUMV</option>
-                                <option value="5">HEA</option>
-                                <option value="6">Vermont VEIC (disabled)</option>
-                                <option value="7">Home Energy Tuneup</option>
-                                <option value="8">Test Accounts</option>
-                                <option value="9">Alameda</option>
-                                <option value="10">PG&amp;E Direct Pay (disabled)</option>
-                                <option value="11">SVEW (disabled)</option>
-                                <option value="12">CalWater (disabled)</option>
-                                <option value="13">Claremont</option>
-                                <option value="14">Purissima Water (disabled)</option>
-                                <option value="15">Energy Fitness (disabled)</option>
-                                <option value="16">Dr Power</option>
-                                <option value="17">Pay for Performance</option>
-                                <option value="18">Sunnyvale Green At Home (disabled)</option>
-                                <option value="20">ConSol PG&amp;E</option>
-                                <option value="23">SC High Energy</option>
-                                <option value="24">Rising Sun</option>
+                                <option *ngFor="let group of customerGroupList" [value]="group.customerGroupId">{{group.groupName}}</option>
                             </select>
                         </div>
                     </div>
@@ -93,17 +75,7 @@
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <select class="form-control form-control-sm" id="program" formControlName="program">
                                 <option value=""></option>
-                                <option value="1">Much higher than normal Heating or Cooling Loads</option>
-                                <option value="2">Higher than normal Heating or Cooling Loads</option>
-                                <option value="3">Higher than normal Variable/Behavioral Loads</option>
-                                <option value="4">Higher than normal Plug Loads (vs. heating or cooling)</option>
-                                <option value="5">Opportunities for Online Analysis &amp; Recommendations</option>
-                                <option value="6">Higher than normal Recurring Electric Loads</option>
-                                <option value="7">Lower than normal Energy Use</option>
-                                <option value="8">Batch analysis of energy savings</option>
-                                <option value="9">Enrolled in a utility P4P program</option>
-                                <option value="10">Eligible for P4P enrollment (but not yet enrolled)</option>
-                                <option value="11">Not eligible for P4P enrollment</option>
+                                <option *ngFor="let programGroup of programGroupList" [value]="programGroup.programGroupId">{{programGroup.programName}}</option>
                             </select>
                         </div>
                     </div>
@@ -114,17 +86,8 @@
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <select class="form-control form-control-sm" id="customerView"
                                 formControlName="customerView" value='-1'>
-                                <option value='-1'>Standard</option>
-                                <option value='1'>Basic Home Stats</option>
-                                <option value='2'>User Status View</option>
-                                <option value='3'>Energy View</option>
-                                <option value='4'>Hetu Slotting Criteria</option>
-                                <option value='5'>Program Assignment</option>
-                                <option value='6'>Pool Heating Check</option>
-                                <option value='7'>Energy Coach</option>
-                                <option value='8'>User Info</option>
-                                <option value='9'>Event Logging</option>
-
+                                <option value="-1">Standard</option>
+                                <option *ngFor="let viewConfiguration of viewConfigurationList" [value]="viewConfiguration.viewConfigurationId">{{viewConfiguration.configurationName}}</option>
                             </select>
                         </div>
 
@@ -162,20 +125,7 @@
                                 <select class="form-control form-control-sm" id="credentialTypeCode"
                                     formControlName="credentialTypeCode">
                                     <option value="" selected="selected"></option>
-                                    <option value="calwater">CalWater</option>
-                                    <option value="pge">PG&amp;E</option>
-                                    <option value="purissima">Purissima</option>
-                                    <option value="rypl">RYPL</option>
-                                    <option value="sce">SCE</option>
-                                    <option value="sce_s3">SCE_S3</option>
-                                    <option value="sdge">SDG&amp;E CMD</option>
-                                    <option value="smd">PG&amp;E SMD</option>
-                                    <option value="smd_offline">SMD Offline</option>
-                                    <option value="smd_sce">SCE SMD</option>
-                                    <option value="socalgas">SoCalGas</option>
-                                    <option value="socalgas_s3">SoCalGas_S3</option>
-                                    <option value="undefined">undefined</option>
-                                    <option value="utilityapi">UtilityAPI Json</option>
+                                    <option *ngFor="let credentialType of credentialTypeList" [value]="credentialType.credentialType">{{credentialType.credentialName}}</option>
                                 </select>
                             </div>
                             <div class="col-md-6 col-lg-6 col-sm-6" style="padding-right: 0%;">
@@ -191,18 +141,7 @@
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <select class="form-control form-control-sm" formControlName="energyCoach">
                                 <option value=""></option>
-                                <option value="-1">Unassigned</option>
-                                <option value="8365">Andrew Negd</option>
-                                <option value="10726">Blake Hihara</option>
-                                <option value="7622">Chris Hunt</option>
-                                <option value="8252">Danny Nguyen</option>
-                                <option value="8173">David Coale</option>
-                                <option value="11080">Greg Bell</option>
-                                <option value="7574">James Tuleya</option>
-                                <option value="13005">Jay Gentry</option>
-                                <option value="2752">Patti Sexton</option>
-                                <option value="8366">Rob Starr</option>
-                                <option value="16">Steve Schmidt</option>
+                                <option *ngFor="let coachUser of coachUserList" [value]="coachUser.userId">{{coachUser.name}}</option>
                             </select>
                         </div>
                         <label class="control-label col-md-2 col-lg-2 col-sm-4">
@@ -222,7 +161,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <p class="Messages">
-                            <img src="assets/images/dot03.gif" class="dot">&nbsp;Customers (Number of Records
+                            <img class="pointer" src="assets/images/dot03.gif" class="dot">Customers (Number of Records
                             =
                             {{this.CustomerData.totalElements}})
                         </p>
@@ -230,8 +169,9 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12" *ngIf="CustomerData?.content?.length>0">
-                        <app-table [(keys)]="keys" [data]="dataSource" [totalElement]="CustomerData.totalElements"
-                            (onChangePageEvent)="findCustomer($event)" (goToEditCustomer)="goToEditCustomer($event)">
+                        <app-table [keys]="keys" [isPaginate]="true" [isSearch]=true [data]="dataSource"
+                            [totalElement]="CustomerData.totalElements" (onChangePageEvent)="findCustomer($event)"
+                            (goToEditCustomer)="goToEditCustomer($event)">
                         </app-table>
                         <div class="row" style="margin-bottom: 5%;">
                             <div class="col-sm-6 col-xs-3">

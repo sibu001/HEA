@@ -8,7 +8,7 @@
 </div> -->
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4" *ngIf='isSearch'>
         <div class="form-group" style="margin-top: 11px;">
             <div class="input-group search">
                 <span class="input-group-addon search" id="basic-addon1">
@@ -21,7 +21,7 @@
     </div>
 </div>
 
-<div class="example-container mat-elevation-z8 table-wrapper">
+<div class="example-container mat-elevation-z0 table-wrapper">
     <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="table">
         <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef>
@@ -40,11 +40,20 @@
             <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" [id]="col.key" [disabled]="!col.sort">
                 {{col.displayName}}</mat-header-cell>
             <mat-cell *matCellDef="let row">
-                <div *ngIf="!col.isAction">{{row[col.key]}}</div>
-                <div *ngIf="col.isAction && action">
+                <div *ngIf="col.type!='image' && !col.isAction" (click)='goToEdit(row,col);'>{{row[col.key]}}</div>
+                <!-- row[col.key]===true &&  -->
+                <div *ngIf="col.type=='image' && col.changeable && !col.isAction">
+                    <img *ngIf='row[col.key]!==true' [src]='col.imagePath' (click)="imageClickEvent(col.event,null)">
+                    <div *ngIf='row[col.key]===true' (click)="imageClickEvent(col.event,row[col.key])"> {{row[col.key]}}
+                    </div>
+                </div>
+                <div *ngIf="col.type=='image' && !col.changeable && !col.isAction">
+                    <img [src]='col.imagePath' (click)="imageClickEvent(col.event,null)">
+                </div>
+                <div *ngIf="col.type!='image'&& col.isAction && action">
                     <button mat-icon-button [matMenuTriggerFor]="menu">
                         <span class="selectButton">Select
-                            <mat-icon class="btnArrow">arrow_drop_down</mat-icon></span>
+                            <mat-icon class="btnArrow">arrow _drop_down</mat-icon></span>
                     </button>
                     <mat-menu #menu="matMenu">
                         <button mat-menu-item *ngFor="let item of col.actionMenu" (click)="onClickMenuItem(item,row)">
@@ -54,11 +63,16 @@
                 </div>
             </mat-cell>
         </ng-container>
+        <ng-container matColumnDef="delete">
+            <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
+            <mat-cell *matCellDef="let element"> <img src="assets/images/ico_minus.gif" (click)="deleteRow($event)">
+            </mat-cell>
+        </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row);goToEdit(row);"
+        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row);"
             [ngClass]="{'border-left-green': sideBorder && !row.accountLocked, 'border-left-red': sideBorder && row.accountLocked}">
         </mat-row>
     </mat-table>
-    <mat-paginator #paginator style-paginator hidePageSize [length]="totalLength" [pageSize]="10" (page)="onChangePage($event)"
-        showFirstLastButtons class="paginatorcss"></mat-paginator>
+    <mat-paginator *ngIf="isPaginate" #paginator style-paginator hidePageSize [length]="totalLength" [pageSize]="10"
+        (page)="onChangePage($event)" showFirstLastButtons class="paginatorcss"></mat-paginator>
 </div>

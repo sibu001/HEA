@@ -6,14 +6,45 @@ import { CommonHEAModule } from 'src/app/common/common.module';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerViewComponent } from './customer-view/customer-view.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatDialogModule } from '@angular/material';
+import { AgmCoreModule } from '@agm/core';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { CustomerGroupListComponent } from './customer-group-list/customer-group-list.component';
+import { ProgramGroupListComponent } from './program-group-list/program-group-list.component';
+import { NgxsModule } from '@ngxs/store';
+import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
+import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
+import { environment } from 'src/environments/environment';
+import { CustomerEventComponent } from './customer-event/customer-event.component';
 
 @NgModule({
   imports: [
     CommonModule,
     CustomerRoutingModule,
     ReactiveFormsModule,
-    CommonHEAModule
+    CommonHEAModule,
+    MatDialogModule,
+    DragDropModule,
+    AgmCoreModule.forRoot({
+      apiKey: environment.googleMapAPIKey
+    }),
+    NgxsModule.forRoot([
+      SystemManagementState,
+      CustomerManagementState
+    ]),
   ],
-  declarations: [CustomerListComponent, CustomerViewComponent, SidebarComponent]
+  declarations: [
+    CustomerListComponent,
+    CustomerViewComponent,
+    SidebarComponent,
+    CustomerGroupListComponent,
+    ProgramGroupListComponent,
+    CustomerEventComponent
+  ],
+  providers: [SystemService, CustomerService],
+  entryComponents: [CustomerEventComponent]
 })
 export class CustomerModule { }

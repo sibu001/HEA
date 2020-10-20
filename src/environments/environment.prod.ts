@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
   webBaseUrl: window.location.origin + '/hea-web/',
-  // webBaseUrl:"https://www.hea.com/hea-web/",
+  googleMapAPIKey: 'AIzaSyDly0NlawS4lH4FHz3Zu_FScoKRcadr7TM'
 };

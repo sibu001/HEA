@@ -10,3 +10,12 @@ section.space-top {
 .rowPadding{
     padding: 5px;
 }
+
+.pointer{
+padding-left: 5px;
+}
+
+.checkbox{
+    margin-left: 10px;
+    display: inline;
+}

@@ -29,7 +29,7 @@ export interface UserData {
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
 })
-export class TableComponent implements OnInit, OnChanges, AfterViewChecked {
+export class TableComponent implements OnInit, OnChanges {
   displayedColumns = [];
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatSort) sort: MatSort;
@@ -39,9 +39,15 @@ export class TableComponent implements OnInit, OnChanges, AfterViewChecked {
   @Input() sideBorder: Boolean = false;
   @Input() action: Boolean = false;
   @Input() checkbox: Boolean = false;
+  @Input() isSearch: Boolean = false;
+  @Input() isDelete: Boolean = false;
+  @Input() isPaginate: Boolean = false;
   @Output() onChangePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() onChangeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditCustomer: EventEmitter<any> = new EventEmitter();
+  @Output() onDeleteEvent: EventEmitter<any> = new EventEmitter();
+  @Output() onImageEvent: EventEmitter<any> = new EventEmitter();
+
   page = new Page();
   url: String;
   totalLength: Number;
@@ -51,18 +57,20 @@ export class TableComponent implements OnInit, OnChanges, AfterViewChecked {
   constructor(private changeDetectorRefs: ChangeDetectorRef) { }
   ngOnInit() {
     this.changeDetectorRefs.detectChanges();
-  }
+    // }
 
-  ngAfterViewChecked() {
+    // ngAfterViewChecked() {
     const list = document.getElementsByClassName('mat-paginator-range-label');
     if (list.length > 0) {
       list[0].remove();
     }
     const wrapper = document.getElementsByClassName('mat-button-wrapper');
-    wrapper[0].innerHTML = 'First';
-    wrapper[1].innerHTML = 'Previous';
-    wrapper[2].innerHTML = 'Next';
-    wrapper[3].innerHTML = 'Last';
+    for (let i = 0; i < wrapper.length; i += 4) {
+      wrapper[i].innerHTML = 'First';
+      wrapper[i + 1].innerHTML = 'Previous';
+      wrapper[i + 2].innerHTML = 'Next';
+      wrapper[i + 3].innerHTML = 'Last';
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -80,6 +88,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewChecked {
       this.displayedColumns = this.keys.map((col) => col.key);
       if (this.checkbox) {
         this.displayedColumns.unshift('select');
+      }
+      if (this.isDelete) {
+        this.displayedColumns.push('delete');
       }
     }
   }
@@ -164,8 +175,19 @@ export class TableComponent implements OnInit, OnChanges, AfterViewChecked {
     this.changeDetectorRefs.detectChanges();
   }
 
-  goToEdit(event: any) {
+  goToEdit(event: any, col) {
+    if (col.isEdit) {
+      console.log(event);
+      this.goToEditCustomer.emit(event);
+    }
+  }
+
+  deleteRow(event: any) {
     console.log(event);
-    this.goToEditCustomer.emit(event);
+    this.onDeleteEvent.emit(event);
+  }
+
+  imageClickEvent(type, row) {
+    this.onImageEvent.emit({ type: type, row: row });
   }
 }

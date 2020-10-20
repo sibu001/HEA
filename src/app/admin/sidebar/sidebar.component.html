@@ -17,8 +17,8 @@
           <ul class='collapse' id='collapseSystem'>
             <li><a href='{{apiURL+"roleList.do"}}'>Roles</a></li>
             <li><a href='{{apiURL+"placeList.do"}}'>Places</a></li>
-            <li><a href='{{apiURL+"programGroupList.do"}}'>Program Groups</a></li>
-            <li><a href='{{apiURL+"customerGroupList.do"}}'>Customer Groups</a></li>
+            <li><a [routerLink]="['/admin/customer/programGroupList']">Program Groups</a></li>
+            <li><a [routerLink]="['/admin/customer/customerGroupList']">Customer Groups</a></li>
             <li><a href='{{apiURL+"customerEventTypeList.do"}}'>Customer Event Types</a></li>
             <li><a href='{{apiURL+"customerAlertTypeList.do"}}'>Customer Alert Types</a></li>
             <li><a href='{{apiURL+"customerComparisonGroupList.do"}}'>Comparison Groups</a></li>
@@ -41,7 +41,7 @@
           </ul>
         </li>
         <li><a href='{{apiURL+"userList.do"}}'>Staff</a></li>
-        <li><a href='{{apiURL+"customerList.do"}}'>Customers</a></li>
+        <li><a [routerLink]="['/admin/customer/customerList']">Customers</a></li>
         <li><a href='{{apiURL+"registrationView.do"}}'>Prospects</a></li>
         <li><a href='{{apiURL+"surveyDescriptionList.do"}}'>Topic descriptions</a></li>
         <li><a href='{{apiURL+"surveyList.do"}}'>Topics</a></li>
