@@ -13,5 +13,8 @@ export class CustomerEventComponent implements OnInit {
 
   ngOnInit() {
   }
+  onNoClick() {
+    this.dialogRef.close();
+  }
 
 }
