@@ -17,10 +17,15 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { GoogleMapComponent } from './google-map/google-map.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
     MatTableModule,
     MatSortModule,
     MatFormFieldModule,
@@ -37,8 +42,8 @@ import { GoogleMapComponent } from './google-map/google-map.component';
       apiKey: environment.googleMapAPIKey
     })
   ],
-  declarations: [TableComponent, GoogleMapComponent],
+  declarations: [TableComponent, GoogleMapComponent, SidebarComponent],
   entryComponents: [GoogleMapComponent],
-  exports: [TableComponent]
+  exports: [TableComponent, SidebarComponent]
 })
 export class CommonHEAModule { }

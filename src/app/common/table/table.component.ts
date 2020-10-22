@@ -15,6 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Router } from '@angular/router';
 
 export interface UserData {
   id: string;
@@ -47,6 +48,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() goToEditCustomer: EventEmitter<any> = new EventEmitter();
   @Output() onDeleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() onImageEvent: EventEmitter<any> = new EventEmitter();
+  @Output() onAddEvent: EventEmitter<any> = new EventEmitter();
 
   page = new Page();
   url: String;
@@ -54,7 +56,7 @@ export class TableComponent implements OnInit, OnChanges {
   pageEvent: PageEvent;
   selection = new SelectionModel<any>(true, []);
 
-  constructor(private changeDetectorRefs: ChangeDetectorRef) { }
+  constructor(private changeDetectorRefs: ChangeDetectorRef, private router: Router) { }
   ngOnInit() {
     this.changeDetectorRefs.detectChanges();
     // }
@@ -187,7 +189,16 @@ export class TableComponent implements OnInit, OnChanges {
     this.onDeleteEvent.emit(event);
   }
 
-  imageClickEvent(type, row) {
-    this.onImageEvent.emit({ type: type, row: row });
+  imageClickEvent(col, row) {
+    this.onImageEvent.emit({ key: col.key, eventType: col.event, row: row });
+  }
+
+
+  linkCall(routerLink, queryParam) {
+    this.router.navigate([routerLink], { queryParams: queryParam });
+  }
+
+  addEvent(event: any): any {
+    this.onAddEvent.emit(event);
   }
 }

@@ -50,8 +50,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     energyCoach: [''],
     credentialAccount: [''],
   });
-  constructor(private loginService: LoginService,
-    private fb: FormBuilder,
+  constructor(private fb: FormBuilder,
     private readonly router: Router,
     private readonly systemService: SystemService,
     private readonly customerService: CustomerService,
@@ -60,7 +59,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     this.systemService.loadViewConfigurationList(true);
     this.systemService.loadProgramGroupsList(true);
     this.systemService.loadGetCustomerAlertTypeList(true);
-    this.systemService.loadCredentialTypeList(true);
+    this.systemService.loadCredentialTypeList(true, '');
     this.systemService.loadCoachUserList(true, '?filter.withRole=COACH');
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
@@ -93,6 +92,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   ngOnInit() {
   }
   findCustomer(page: Page) {
+    document.getElementById('loader').classList.add('loading');
     this.keys = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value));
     document.getElementById('loader').classList.add('loading');
     let url = '?filter.pageSize=10' + this.getFilterUrl();
@@ -115,6 +115,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
           } else {
             this.CustomerData.totalElements = 20;
           }
+          document.getElementById('loader').classList.remove('loading');
         } else {
           if (page != null) {
             this.CustomerData.totalElements = (page.pageIndex + 1) * page.pageSize;
@@ -123,6 +124,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
           }
         }
         this.dataSource = [...this.CustomerData.content];
+        document.getElementById('loader').classList.remove('loading');
       }));
   }
 
@@ -154,9 +156,9 @@ export class CustomerListComponent implements OnInit, OnDestroy {
 
   addEditCustomerEvent() {
     const dialogRef = this.dialog.open(CustomerEventComponent, {
-      width: '515px',
-      height: '500px',
-      data: { }
+      width: '70vw',
+      height: '70vh',
+      data: {}
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed' + result);
@@ -164,5 +166,13 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+
+  onImageClickEvent(event) {
+    console.log(event);
+    if (event.eventType === 'addEditLog') {
+      this.addEditCustomerEvent();
+    }
+
   }
 }

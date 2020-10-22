@@ -54,6 +54,22 @@ const ROUTES: Routes = [
       {
         path: 'customer',
         loadChildren: './admin/customer/customer.module#CustomerModule',
+      },
+      {
+        path: 'program',
+        loadChildren: './admin/program-group/program-group.module#ProgramGroupModule'
+      },
+      {
+        path: 'customer-group',
+        loadChildren: './admin/customer-group/customer-group.module#CustomerGroupModule'
+      },
+      {
+        path: 'customer-alert',
+        loadChildren: './admin/customer-alert-types/customer-alert-types.module#CustomerAlertTypesModule'
+      },
+      {
+        path: 'credential-type',
+        loadChildren: './admin/credential-type/credential-type.module#CredentialTypeModule'
       }
     ]
   },

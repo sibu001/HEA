@@ -1,9 +1,10 @@
 <section class="space-top">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-md-9 col-lg-9">
-                <h3 class="select_next">
-                    Search Options (use "%" as wildcard in searches)</h3>
+            <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
+            padding-top: 35px;'>
+                <p class="accurate">
+                    Search Options (use "%" as wildcard in searches)</p>
                 <hr class="hr_space">
                 <form [formGroup]="searchForm" class="form-horizontal">
                     <div class="row form-row form-group">
@@ -21,7 +22,8 @@
                             <select class="form-control form-control-sm" id="customerGroup"
                                 formControlName="customerGroup">
                                 <option value="" selected="selected"></option>
-                                <option *ngFor="let group of customerGroupList" [value]="group.customerGroupId">{{group.groupName}}</option>
+                                <option *ngFor="let group of customerGroupList" [value]="group.customerGroupId">
+                                    {{group.groupName}}</option>
                             </select>
                         </div>
                     </div>
@@ -75,7 +77,8 @@
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <select class="form-control form-control-sm" id="program" formControlName="program">
                                 <option value=""></option>
-                                <option *ngFor="let programGroup of programGroupList" [value]="programGroup.programGroupId">{{programGroup.programName}}</option>
+                                <option *ngFor="let programGroup of programGroupList"
+                                    [value]="programGroup.programGroupId">{{programGroup.programName}}</option>
                             </select>
                         </div>
                     </div>
@@ -87,7 +90,9 @@
                             <select class="form-control form-control-sm" id="customerView"
                                 formControlName="customerView" value='-1'>
                                 <option value="-1">Standard</option>
-                                <option *ngFor="let viewConfiguration of viewConfigurationList" [value]="viewConfiguration.viewConfigurationId">{{viewConfiguration.configurationName}}</option>
+                                <option *ngFor="let viewConfiguration of viewConfigurationList"
+                                    [value]="viewConfiguration.viewConfigurationId">
+                                    {{viewConfiguration.configurationName}}</option>
                             </select>
                         </div>
 
@@ -122,10 +127,12 @@
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6 row form-row form-group" style="padding-right: 0%;">
                             <div class="col-md-6 col-lg-6 col-sm-6" style="padding-right: 0%;">
-                                <select class="form-control form-control-sm" id="credentialTypeCode"
+                                <select class="form-control form-control-sm padded-control" id="credentialTypeCode"
                                     formControlName="credentialTypeCode">
                                     <option value="" selected="selected"></option>
-                                    <option *ngFor="let credentialType of credentialTypeList" [value]="credentialType.credentialType">{{credentialType.credentialName}}</option>
+                                    <option *ngFor="let credentialType of credentialTypeList"
+                                        [value]="credentialType.credentialType">{{credentialType.credentialName}}
+                                    </option>
                                 </select>
                             </div>
                             <div class="col-md-6 col-lg-6 col-sm-6" style="padding-right: 0%;">
@@ -141,7 +148,8 @@
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <select class="form-control form-control-sm" formControlName="energyCoach">
                                 <option value=""></option>
-                                <option *ngFor="let coachUser of coachUserList" [value]="coachUser.userId">{{coachUser.name}}</option>
+                                <option *ngFor="let coachUser of coachUserList" [value]="coachUser.userId">
+                                    {{coachUser.name}}</option>
                             </select>
                         </div>
                         <label class="control-label col-md-2 col-lg-2 col-sm-4">
@@ -169,18 +177,11 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12" *ngIf="CustomerData?.content?.length>0">
-                        <app-table [keys]="keys" [isPaginate]="true" [isSearch]=true [data]="dataSource"
+                        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
                             [totalElement]="CustomerData.totalElements" (onChangePageEvent)="findCustomer($event)"
-                            (goToEditCustomer)="goToEditCustomer($event)">
+                            (goToEditCustomer)="goToEditCustomer($event)" (onImageEvent)='onImageClickEvent($event)'
+                            (onAddEvent)='addEvent()'>
                         </app-table>
-                        <div class="row" style="margin-bottom: 5%;">
-                            <div class="col-sm-6 col-xs-3">
-
-                            </div>
-                            <div class="col-sm-6 col-xs-9" style="text-align:right;">
-                                <button class="btn btn-primary" type="button" (click)="addEvent()">Add</button>
-                            </div>
-                        </div>
                     </div>
                 </div>
 

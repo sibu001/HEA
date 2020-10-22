@@ -23,12 +23,12 @@
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-.mat-row:nth-child(even) {
+.mat-row:nth-child(odd) {
   background-color: #fff;
   border-left: 1px solid #ddd;
 }
 
-.mat-row:nth-child(odd) {
+.mat-row:nth-child(even) {
   border-left: 1px solid #ddd;
   background-color: rgba(0, 0, 0, 0.05);
 }
@@ -103,6 +103,55 @@ mat-cell:first-of-type > div {
   cursor: pointer;
 }
 
-.mat-paginator-range-label{
+.mat-paginator-range-label {
   display: none;
+}
+
+.text-nowrap {
+  color: #000;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #76ba19;
+  border-color: #76ba19;
+  padding: 4px 23px 4px 23px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.btn-primary.active.focus,
+.btn-primary.active:focus,
+.btn-primary.active:hover,
+.btn-primary:active.focus,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.open > .dropdown-toggle.btn-primary.focus,
+.open > .dropdown-toggle.btn-primary:focus,
+.open > .dropdown-toggle.btn-primary:hover {
+  color: #fff;
+  background-color: #76ba19;
+  border-color: #76ba19;
+  padding: 4px 23px 4px 23px;
+  border-radius: 3px;
+}
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn:active:focus,
+.btn:focus {
+  outline: 0px auto -webkit-focus-ring-color;
+  outline-offset: 0px;
+}
+.btn.active,
+.btn:active {
+  background-image: none;
+  outline: 0;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
+}
+.mat-column-registrationUrl{
+  flex: none;
+  width: 213px;
 }

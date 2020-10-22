@@ -37,18 +37,27 @@
             </mat-cell>
         </ng-container>
         <ng-container *ngFor="let col of keys; let colIndex = index" matColumnDef="{{col.key}}">
-            <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" [id]="col.key" [disabled]="!col.sort">
+            <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" [id]="col.key" [disabled]="!col.sort"
+                class="text-nowrap">
                 {{col.displayName}}</mat-header-cell>
             <mat-cell *matCellDef="let row">
-                <div *ngIf="col.type!='image' && !col.isAction" (click)='goToEdit(row,col);'>{{row[col.key]}}</div>
+                <div *ngIf="col.type!='image' && col.isDate && !col.isAction" (click)='goToEdit(row,col);'>
+                    {{row[col.key]|date:'mediumDate'}}</div>
+                <div *ngIf="col.type!='image' && !col.isDate && !col.isAction" (click)='goToEdit(row,col);'>
+                    {{row[col.key]}}</div>
                 <!-- row[col.key]===true &&  -->
-                <div *ngIf="col.type=='image' && col.changeable && !col.isAction">
-                    <img *ngIf='row[col.key]!==true' [src]='col.imagePath' (click)="imageClickEvent(col.event,null)">
-                    <div *ngIf='row[col.key]===true' (click)="imageClickEvent(col.event,row[col.key])"> {{row[col.key]}}
+                <div *ngIf="col.type=='image' && col.changeable && !col.isAction" style="text-align: center;">
+                    <img *ngIf='row[col.key]!==true' [src]='col.imagePath' (click)="imageClickEvent(col,null)">
+                    <div *ngIf='row[col.key]===true' (click)="imageClickEvent(col,row[col.key])"> {{row[col.key]}}
                     </div>
                 </div>
-                <div *ngIf="col.type=='image' && !col.changeable && !col.isAction">
-                    <img [src]='col.imagePath' (click)="imageClickEvent(col.event,null)">
+                <div *ngIf="col.type=='image' && !col.changeable && !col.isAction" style="text-align: center;">
+                    <img [src]='col.imagePath' (click)="imageClickEvent(col,null)">
+                </div>
+                <div *ngIf="col.type=='link' && !col.isAction">
+                    <div *ngFor='let link of col.links'>
+                        <a (click)='linkCall(link.routerLink,link.queryParam)'>{{link.displayName}}</a>
+                    </div>
                 </div>
                 <div *ngIf="col.type!='image'&& col.isAction && action">
                     <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -64,7 +73,7 @@
             </mat-cell>
         </ng-container>
         <ng-container matColumnDef="delete">
-            <mat-header-cell *matHeaderCellDef>Delete</mat-header-cell>
+            <mat-header-cell *matHeaderCellDef class="text-nowrap"></mat-header-cell>
             <mat-cell *matCellDef="let element"> <img src="assets/images/ico_minus.gif" (click)="deleteRow($event)">
             </mat-cell>
         </ng-container>
@@ -73,6 +82,20 @@
             [ngClass]="{'border-left-green': sideBorder && !row.accountLocked, 'border-left-red': sideBorder && row.accountLocked}">
         </mat-row>
     </mat-table>
-    <mat-paginator *ngIf="isPaginate" #paginator style-paginator hidePageSize [length]="totalLength" [pageSize]="10"
-        (page)="onChangePage($event)" showFirstLastButtons class="paginatorcss"></mat-paginator>
+    <ng-container matColumnDef="noData">
+        <mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
+            No records found.
+        </mat-footer-cell>
+    </ng-container>
+    <div class="row" style="margin-bottom: 5%;">
+        <div class="col-sm-6 col-xs-3">
+            <mat-paginator disableRipple="true" *ngIf="isPaginate" #paginator style-paginator hidePageSize
+                [length]="totalLength" [pageSize]="10" (page)="onChangePage($event)" showFirstLastButtons
+                class="paginatorcss">
+            </mat-paginator>
+        </div>
+        <div class="col-sm-6 col-xs-9" style="text-align:right;">
+            <button class="btn btn-primary" type="button" (click)="addEvent($event)">Add</button>
+        </div>
+    </div>
 </div>

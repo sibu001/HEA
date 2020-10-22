@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ProgramGroupListComponent } from './program-group-list.component';
+import { CredentialTypeListComponent } from './credential-type-list.component';
 
-describe('CustomerGroupListComponent', () => {
-  let component: ProgramGroupListComponent;
-  let fixture: ComponentFixture<ProgramGroupListComponent>;
+describe('CredentialTypeListComponent', () => {
+  let component: CredentialTypeListComponent;
+  let fixture: ComponentFixture<CredentialTypeListComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ProgramGroupListComponent ]
+      declarations: [ CredentialTypeListComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProgramGroupListComponent);
+    fixture = TestBed.createComponent(CredentialTypeListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

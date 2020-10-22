@@ -7,9 +7,13 @@ import { AppConstant } from 'src/app/utility/app.constant';
 import {
     CustomerGroupError,
     GetCoachUserListAction,
+    GetCredentialTypeByIdAction,
     GetCredentialTypeListAction,
+    GetCustomerAlertTypeByIdAction,
     GetCustomerAlertTypeListAction,
+    GetCustomerGroupByIdAction,
     GetCustomerGroupListAction,
+    GetProgramGroupByIdAction,
     GetProgramGroupListAction,
     GetViewConfigurationListAction
 } from './system.action';
@@ -19,10 +23,14 @@ import { SystemManagementModel } from './system.model';
     name: 'systemManagement',
     defaults: {
         customerGroupList: undefined,
+        customerGroup: undefined,
         viewConfigurationList: undefined,
         programGroupList: undefined,
+        programGroup: undefined,
         customerAlertTypeList: undefined,
+        customerAlertType: undefined,
         credentialTypeList: undefined,
+        credentialType: undefined,
         coachUserList: undefined,
         error: undefined
     }
@@ -39,6 +47,11 @@ export class SystemManagementState {
     }
 
     @Selector()
+    static getCustomerGroupById(state: SystemManagementModel): any {
+        return state.customerGroup;
+    }
+
+    @Selector()
     static getViewConfigurationList(state: SystemManagementModel): any {
         return state.viewConfigurationList;
     }
@@ -49,13 +62,28 @@ export class SystemManagementState {
     }
 
     @Selector()
+    static getProgramGroupById(state: SystemManagementModel): any {
+        return state.programGroup;
+    }
+
+    @Selector()
     static getCustomerAlertTypeList(state: SystemManagementModel): any {
         return state.customerAlertTypeList;
     }
 
     @Selector()
+    static getCustomerAlertTypeById(state: SystemManagementModel): any {
+        return state.customerAlertType;
+    }
+
+    @Selector()
     static getCredentialTypeList(state: SystemManagementModel): any {
         return state.credentialTypeList;
+    }
+
+    @Selector()
+    static getCredentialTypeById(state: SystemManagementModel): any {
+        return state.credentialType;
     }
 
     @Selector()
@@ -81,6 +109,21 @@ export class SystemManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetCustomerGroupByIdAction)
+    getCustomerGroupById(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupByIdAction): void {
+        const customerGroupList = SystemManagementState.getCustomerGroupList(ctx.getState());
+        let customerGroup: any;
+        if (customerGroupList !== undefined) {
+            const i = customerGroupList.findIndex((item: any) => item.id === action.id);
+            if (i !== -1) {
+                customerGroup = customerGroupList[i];
+            }
+        }
+        ctx.patchState({
+            customerGroup: customerGroup
+        });
     }
 
     @Action(GetViewConfigurationListAction)
@@ -120,6 +163,22 @@ export class SystemManagementState {
         return result;
     }
 
+    @Action(GetProgramGroupByIdAction)
+    getAllProgramGroupById(ctx: StateContext<SystemManagementModel>, action: GetProgramGroupByIdAction): void {
+        const programGroupList = SystemManagementState.getProgramGroupList(ctx.getState());
+        let programGroup: any;
+        if (programGroupList !== undefined) {
+            const i = programGroupList.findIndex((item: any) => item.id === action.id);
+            if (i !== -1) {
+                programGroup = programGroupList[i];
+            }
+        }
+        ctx.patchState({
+            programGroup: programGroup
+        });
+    }
+
+
     @Action(GetCustomerAlertTypeListAction)
     getAllCustomerAlertType(ctx: StateContext<SystemManagementModel>, action: GetCustomerAlertTypeListAction): Actions {
         const force: boolean = action.force || SystemManagementState.getCustomerAlertTypeList(ctx.getState()) === undefined;
@@ -139,12 +198,28 @@ export class SystemManagementState {
         return result;
     }
 
+    @Action(GetCustomerAlertTypeByIdAction)
+    getCustomerAlertTypeById(ctx: StateContext<SystemManagementModel>, action: GetCustomerAlertTypeByIdAction): void {
+        const customerAlertTypesList = SystemManagementState.getCustomerAlertTypeList(ctx.getState());
+        let customerAlertType: any;
+        if (customerAlertTypesList !== undefined) {
+            const i = customerAlertTypesList.findIndex((item: any) => item.id === action.id);
+            if (i !== -1) {
+                customerAlertType = customerAlertTypesList[i];
+            }
+        }
+        ctx.patchState({
+            customerAlertType: customerAlertType
+        });
+    }
+
+
     @Action(GetCredentialTypeListAction)
     getAllCredentialType(ctx: StateContext<SystemManagementModel>, action: GetCredentialTypeListAction): Actions {
         const force: boolean = action.force || SystemManagementState.getCredentialTypeList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
-            result = this.loginService.performGet(AppConstant.credentialTypes)
+            result = this.loginService.performGet(AppConstant.credentialTypes + action.filter)
                 .pipe(
                     tap((response: any) => {
                         ctx.patchState({
@@ -156,6 +231,21 @@ export class SystemManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetCredentialTypeByIdAction)
+    getCredentialTypesById(ctx: StateContext<SystemManagementModel>, action: GetCredentialTypeByIdAction): void {
+        const credentialTypesList = SystemManagementState.getCredentialTypeList(ctx.getState());
+        let credentialType: any;
+        if (credentialTypesList !== undefined) {
+            const i = credentialTypesList.findIndex((item: any) => item.id === action.id);
+            if (i !== -1) {
+                credentialType = credentialTypesList[i];
+            }
+        }
+        ctx.patchState({
+            credentialType: credentialType
+        });
     }
 
     @Action(GetCoachUserListAction)

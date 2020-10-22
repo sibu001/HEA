@@ -1,0 +1,60 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="heading">Customer Groups</p>
+        <form [formGroup]="customerGroupForm" class="form-group">
+          <div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Group code</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" formControlName="groupCode"
+                class="form-control" />
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Group Name</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" formControlName="groupName"
+                class="form-control" />
+            </div>
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 show-button">
+              <button type="button" class="btn btn-primary"
+                (click)="findCustomerGroup()">Show</button>
+            </div>
+          </div>
+        </form>
+        <hr>
+        <div class="row">
+          <div class="col-sm-12">
+            <p class="messages">
+              <img class="pointer" src="assets/images/dot03.gif"
+                class="dot">
+              <span class="messageName">Customers Group List</span>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+              [data]="dataSource"
+              [totalElement]="customerGroupData.totalElements"
+              (onChangePageEvent)="findCustomerGroup()"
+              (goToEditCustomer)="gotoEditCustomerGroup($event)"  (onAddEvent)="addCustomerGroup()">
+            </app-table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

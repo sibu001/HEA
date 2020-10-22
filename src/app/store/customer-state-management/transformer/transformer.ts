@@ -1,3 +1,5 @@
+import { RouterLink } from '@angular/router';
+
 export class Transformer {
     static transformCustomerTableData(src: any, viewType: number): any {
         const dataSource: any = {
@@ -9,7 +11,7 @@ export class Transformer {
                 case -1:
                     dataSourceObj.auditId = element.auditId;
                     dataSourceObj.name = element.user.name;
-                    dataSourceObj.links = 'Topic Home User';
+                    // dataSourceObj.links = 'Topic Home User';
                     dataSourceObj.group = element.customerGroup.groupName;
                     dataSourceObj.notes = element.notes;
                     dataSourceObj.place = element.place.placeName;
@@ -146,6 +148,24 @@ export class Transformer {
                         key: 'links',
                         displayName: 'Links',
                         sort: 'links',
+                        type: 'link',
+                        links: [
+                            {
+                                routerLink: '/',
+                                displayName: 'Topic',
+                                queryParam: {}
+                            },
+                            {
+                                routerLink: '/',
+                                displayName: 'Home',
+                                queryParam: {}
+                            },
+                            {
+                                routerLink: '/',
+                                displayName: 'User History',
+                                queryParam: {}
+                            }
+                        ]
                     },
                     {
                         key: 'group',
@@ -164,7 +184,8 @@ export class Transformer {
                     {
                         key: 'joinDate',
                         displayName: 'Join Date',
-                        sort: 'joinDate'
+                        sort: 'joinDate',
+                        isDate: true
                     },
                     {
                         key: 'status',
@@ -279,7 +300,8 @@ export class Transformer {
                     {
                         key: 'lastSuccessfulUtilityReadDate',
                         displayName: 'LastMeterRead',
-                        sort: 'lastSuccessfulUtilityReadDate'
+                        sort: 'lastSuccessfulUtilityReadDate',
+                        isDate: true
                     },
                     {
                         key: 'optOutMail',
@@ -424,6 +446,7 @@ export class Transformer {
                         key: 'activated',
                         displayName: 'Activated',
                         sort: 'activated',
+                        isDate: true
                     },
                     {
                         key: 'completedHEP',
@@ -509,6 +532,7 @@ export class Transformer {
                     {
                         key: 'hheFinished',
                         displayName: 'hheFinished',
+                        isDate: true
                     },
                     {
                         key: 'notes',
@@ -567,30 +591,51 @@ export class Transformer {
                     {
                         key: 'activity',
                         displayName: 'Activity',
+                        type: 'image',
+                        imagePath: 'assets/images/ico_add.gif',
+                        event: 'addEditLog'
                     },
                     {
                         key: 'calls',
                         displayName: 'Calls',
+                        type: 'image',
+                        imagePath: 'assets/images/ico_add.gif',
+                        event: 'addEditLog'
                     },
                     {
                         key: 'visits',
                         displayName: 'Visits',
+                        type: 'image',
+                        imagePath: 'assets/images/ico_add.gif',
+                        event: 'addEditLog'
                     },
                     {
                         key: 'chgLog',
                         displayName: 'ChgLog',
+                        type: 'image',
+                        imagePath: 'assets/images/ico_add.gif',
+                        event: 'addEditLog'
                     },
                     {
                         key: 'devices',
                         displayName: 'Devices',
+                        type: 'image',
+                        imagePath: 'assets/images/ico_add.gif',
+                        event: 'addEditLog'
                     },
                     {
                         key: 'intNotes',
                         displayName: 'IntNotes',
+                        type: 'image',
+                        imagePath: 'assets/images/ico_add.gif',
+                        event: 'addEditLog'
                     },
                     {
                         key: 'files',
                         displayName: 'Files',
+                        type: 'image',
+                        imagePath: 'assets/images/ico_add.gif',
+                        event: 'addEditLog'
                     }
                 ];
                 break;
