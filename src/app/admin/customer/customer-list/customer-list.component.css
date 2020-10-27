@@ -9,7 +9,7 @@ section.space-top {
 }
 
 p.accurate {
-  color: #4550a1;
+  
   font-weight: 600;
   font-size: 21px;
   text-align: justify;
@@ -127,7 +127,6 @@ ul.leaks li {
 }
 
 .a_history {
-  color: #4550a1;
   font-weight: 600;
   cursor: pointer;
 }
@@ -228,7 +227,7 @@ img.back_img {
 
 .dropdown-menu > li > a:focus,
 .dropdown-menu > li > a:hover {
-  color: #4550a1;
+
   text-decoration: none;
   background-color: #fff;
 }
@@ -239,7 +238,6 @@ a:focus {
 }
 
 a#menu1 {
-  color: #4550a1;
   font-weight: 600;
   cursor: pointer;
 }
@@ -250,14 +248,14 @@ a#menu1 {
   clear: both;
   line-height: 1.42857143;
   white-space: nowrap;
-  color: #4550a1;
+
   font-weight: 600;
   cursor: pointer;
 }
 
 .dropdown-menu[_ngcontent-c2] > li[_ngcontent-c2] > a[_ngcontent-c2]:focus,
 .dropdown-menu[_ngcontent-c2] > li[_ngcontent-c2] > a[_ngcontent-c2]:hover {
-  color: #4550a1;
+  
   text-decoration: underline;
   background-color: #fff;
 }
@@ -345,7 +343,7 @@ span.start {
 }
 
 p.Messages {
-  color: #4550a1;
+  
   font-size: 17px;
   font-weight: 600;
 }
@@ -360,13 +358,61 @@ p.Messages {
   padding-top: 35px;
 }
 
-.form-control {
+/* .form-control {
   height: 25px !important;
   padding: 1px 1px !important;
   font-size: medium !important;
-}
+} */
 @media (max-width: 768px) {
   .padded-control {
     padding-bottom: 5px;
   }
+}
+
+.custom-file-input {
+  font-size: smaller !important;
+  width: 165px;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  -webkit-appearance: none;
+  margin: 1px 1px 1px 1px;
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
+}
+
+@media (max: 420) {
+  .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+
+  .custom-file-input::before {
+    content: "Select some files";
+    color: black;
+    display: inline-block;
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+  }
+  .custom-file-input:hover::before {
+    border-color: black;
+  }
+  .custom-file-input:active {
+    outline: 0;
+  }
+  .custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  }
+}
+
+input[type="file"] {
+  text-align: left;
 }

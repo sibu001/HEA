@@ -32,7 +32,6 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     totalElements: 0,
   };
 
-  @ViewChild(TableComponent) tableCmp: TableComponent;
   private readonly subscriptions: Subscription = new Subscription();
 
   public searchForm: FormGroup = this.fb.group({
@@ -49,6 +48,9 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     credentialSubscriptionId: [''],
     energyCoach: [''],
     credentialAccount: [''],
+  });
+  public fileUploadForm: FormGroup = this.fb.group({
+    customerFile: ['']
   });
   constructor(private fb: FormBuilder,
     private readonly router: Router,
@@ -94,35 +96,26 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   findCustomer(page: Page) {
     document.getElementById('loader').classList.add('loading');
     this.keys = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value));
-    document.getElementById('loader').classList.add('loading');
-    let url = '?filter.pageSize=10' + this.getFilterUrl();
-    if (page !== null && page.pageSize !== undefined) {
-      url =
-        '?filter.pageSize=' +
-        page.pageSize +
-        '&filter.startRow=' +
-        page.pageIndex * page.pageSize + this.getFilterUrl();
+    let url = '?filter.disableTotalSize=false&filter.pageSize=10' + this.getFilterUrl();
+    if (page !== null) {
+      if (page.pageSize !== undefined) {
+        url =
+          '?filter.disableTotalSize=false&filter.pageSize=' +
+          page.pageSize +
+          '&filter.startRow=' +
+          page.pageIndex * page.pageSize + this.getFilterUrl();
+      }
+      if (page.sort !== null && page.sort.active.length !== 0) {
+        url += '&formAction=sort&sortField=' + page.sort.active + '&sortOrder=' + page.sort.direction.toUpperCase();
+      }
     }
+
     this.customerService.loadCustomerList(true, url, Number(this.searchForm.controls['customerView'].value));
     this.subscriptions.add(this.customerService.getCustomerDataSource().pipe(skipWhile((item: any) => !item))
       .subscribe((customerList: any) => {
         document.getElementById('loader').classList.remove('loading');
         this.CustomerData.content = customerList.list;
-        if (customerList.hasNext) {
-          if (page != null) {
-            this.CustomerData.totalElements =
-              (page.pageIndex + 1) * page.pageSize + page.pageSize;
-          } else {
-            this.CustomerData.totalElements = 20;
-          }
-          document.getElementById('loader').classList.remove('loading');
-        } else {
-          if (page != null) {
-            this.CustomerData.totalElements = (page.pageIndex + 1) * page.pageSize;
-          } else {
-            this.CustomerData.totalElements = 10;
-          }
-        }
+        this.CustomerData.totalElements = customerList.totalSize;
         this.dataSource = [...this.CustomerData.content];
         document.getElementById('loader').classList.remove('loading');
       }));
@@ -131,8 +124,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
 
   getFilterUrl(): string {
     let url = '';
-    url = '&filter.auditId=' + this.searchForm.controls['auditId'].value +
-      '&filter.customerGroupId=' + this.searchForm.controls['customerGroup'].value
+    url = '&filter.auditId=' + this.searchForm.controls['auditId'].value
+      + '&filter.customerGroupId=' + this.searchForm.controls['customerGroup'].value
       + '&filter.customerName=' + this.searchForm.controls['customerName'].value
       + '&filter.place.place=' + this.searchForm.controls['customerPlace'].value
       + '&filter.customerEmail=' + this.searchForm.controls['customerEmail'].value
@@ -140,17 +133,19 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       + '&customerViewConfigurationId=' + this.searchForm.controls['customerView'].value
       + '&filter.user.status' + this.searchForm.controls['status'].value
       + '&filter.eventOrAlertCode=' + this.searchForm.controls['alertCode'].value
-      + '&filter.credentialTypeCode=' + this.searchForm.controls['credentialTypeCode'].value +
-      '&filter.credentialSubscriptionId=' + this.searchForm.controls['credentialSubscriptionId'].value
+      + '&filter.credentialTypeCode=' + this.searchForm.controls['credentialTypeCode'].value
+      + '&filter.credentialSubscriptionId=' + this.searchForm.controls['credentialSubscriptionId'].value
       + '&filter.coachUserId=' + this.searchForm.controls['energyCoach'].value
       + '&filter.credentialAccount=' + this.searchForm.controls['credentialAccount'].value;
     return url;
   }
 
-  addEvent() { }
-
   searchFilter() { }
-  goToEditCustomer(event) {
+  goToEditCustomer(event: any): void {
+    this.router.navigate(['admin/customer/customerEdit'], { queryParams: { id: event.customerId } });
+  }
+
+  addNewCustomer() {
     this.router.navigate(['admin/customer/customerEdit']);
   }
 

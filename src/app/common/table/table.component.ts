@@ -49,6 +49,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() onDeleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() onImageEvent: EventEmitter<any> = new EventEmitter();
   @Output() onAddEvent: EventEmitter<any> = new EventEmitter();
+  @Output() onBulkDeleteEvent: EventEmitter<any> = new EventEmitter();
 
   page = new Page();
   url: String;
@@ -105,47 +106,22 @@ export class TableComponent implements OnInit, OnChanges {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     console.log(filterValue);
-    this.url =
-      '?page=' +
-      this.page.pageIndex +
-      '&size=' +
-      this.page.pageSize +
-      '&sort=' +
-      this.page.sort +
-      '&search=' +
-      filterValue;
-    this.onChangePageEvent.emit(this.url);
+    this.page.search = filterValue;
+    this.onChangePageEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
   }
 
   onChangePage(event?: PageEvent) {
     this.page.pageSize = event.pageSize;
     this.page.pageIndex = event.pageIndex;
-    // this.url =
-    //   '?startRow=' +
-    //   this.page.pageIndex * this.page.pageSize +
-    //   '&pageSize=' +
-    //   this.page.pageSize +
-    //   '&sort=' +
-    //   this.page.sort;
     this.onChangePageEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
   }
 
   sortData(event?: Sort) {
     console.log(event);
-    this.page.sort =
-      event.direction != null && event.direction !== ''
-        ? event.active + ',' + event.direction
-        : '';
-    this.url =
-      '?page=' +
-      this.page.pageIndex +
-      '&size=' +
-      this.page.pageSize +
-      '&sort=' +
-      this.page.sort;
-    this.onChangePageEvent.emit(this.url);
+    this.page.sort = event;
+    this.onChangePageEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
   }
 
@@ -200,5 +176,13 @@ export class TableComponent implements OnInit, OnChanges {
 
   addEvent(event: any): any {
     this.onAddEvent.emit(event);
+  }
+
+  deleteEvent(): any {
+    this.onBulkDeleteEvent.emit(this.selection.selected);
+  }
+
+  logRow(row){
+    console.log(row);
   }
 }

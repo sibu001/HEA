@@ -5,7 +5,14 @@ import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { Transformer } from '../transformer/transformer';
-import { CustomerError, GetCustomerListAction } from './customer.action';
+import {
+    CustomerError,
+    DeleteCustomerByIdAction,
+    GetCustomerByIdAction,
+    GetCustomerListAction,
+    SaveCustomerAction,
+    UpdateCustomerAction
+} from './customer.action';
 import { CustomerManagementModel } from './customer.model';
 
 
@@ -13,6 +20,7 @@ import { CustomerManagementModel } from './customer.model';
     name: 'customerManagement',
     defaults: {
         customerList: undefined,
+        customer: undefined,
         customerDataSource: undefined,
         error: undefined
     }
@@ -33,8 +41,13 @@ export class CustomerManagementState {
         return state.customerDataSource;
     }
 
+    @Selector()
+    static getCustomerById(state: CustomerManagementModel): any {
+        return state.customer;
+    }
+
     @Action(GetCustomerListAction)
-    getAllCustomerGroup(ctx: StateContext<CustomerManagementModel>, action: GetCustomerListAction): Actions {
+    getAllCustomerList(ctx: StateContext<CustomerManagementModel>, action: GetCustomerListAction): Actions {
         const force: boolean = action.force || CustomerManagementState.getCustomerList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
@@ -53,6 +66,66 @@ export class CustomerManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetCustomerByIdAction)
+    getCustomerById(ctx: StateContext<CustomerManagementModel>, action: GetCustomerByIdAction): Actions {
+        return this.loginService.performGet(AppConstant.customer + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    ctx.patchState({
+                        customer: response,
+                    });
+                },
+                    error => {
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
+    @Action(DeleteCustomerByIdAction)
+    deleteCustomerById(ctx: StateContext<CustomerManagementModel>, action: DeleteCustomerByIdAction): Actions {
+        return this.loginService.performDelete(AppConstant.customer + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
+    @Action(SaveCustomerAction)
+    saveCustomer(ctx: StateContext<CustomerManagementModel>, action: SaveCustomerAction): Actions {
+        return this.loginService.performPost(action.customer, AppConstant.customer)
+            .pipe(
+                tap((response: any) => {
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        customer: response,
+                    });
+                },
+                    error => {
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
+    @Action(UpdateCustomerAction)
+    updateCustomer(ctx: StateContext<CustomerManagementModel>, action: UpdateCustomerAction): Actions {
+        return this.loginService.performPut(action.customer, AppConstant.customer + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        customer: response,
+                    });
+                },
+                    error => {
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
     }
 
     @Action(CustomerError)

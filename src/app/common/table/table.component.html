@@ -30,7 +30,8 @@
                     [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
                 </mat-checkbox>
             </mat-header-cell>
-            <mat-cell *matCellDef="let row">
+            <mat-cell *matCellDef="let row; let colIndex = index">
+
                 <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
                     [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
                 </mat-checkbox>
@@ -40,18 +41,30 @@
             <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" [id]="col.key" [disabled]="!col.sort"
                 class="text-nowrap">
                 {{col.displayName}}</mat-header-cell>
-            <mat-cell *matCellDef="let row">
-                <div *ngIf="col.type!='image' && col.isDate && !col.isAction" (click)='goToEdit(row,col);'>
+            <mat-cell *matCellDef="let row" style="display: grid;">
+                <div *ngIf="col.type!='image' && col.isDate && !col.isAction">
                     {{row[col.key]|date:'mediumDate'}}</div>
-                <div *ngIf="col.type!='image' && !col.isDate && !col.isAction" (click)='goToEdit(row,col);'>
+                <div *ngIf="col.type==='alert' && !col.isAction">
+                    <div class="redAlert" *ngIf="row[col.key]===10">
+                        <p id="alertCircle">&nbsp;</p>
+                    </div>
+                    <div class="yellowAlert" *ngIf="row[col.key]===5">
+                        <p class="alertCircle">&nbsp;</p>
+                    </div>
+                    <div class="greenAlert" *ngIf="row[col.key]===0">
+                        <p class="alertCircle">&nbsp;</p>
+                    </div>
+                </div>
+                <div *ngIf="col.type!='image' && col.type!='alert' && !col.isDate && !col.isAction"
+                    (click)='goToEdit(row,col);'>
                     {{row[col.key]}}</div>
                 <!-- row[col.key]===true &&  -->
-                <div *ngIf="col.type=='image' && col.changeable && !col.isAction" style="text-align: center;">
+                <div *ngIf="col.type=='image' && col.changeable && !col.isAction" class="center">
                     <img *ngIf='row[col.key]!==true' [src]='col.imagePath' (click)="imageClickEvent(col,null)">
                     <div *ngIf='row[col.key]===true' (click)="imageClickEvent(col,row[col.key])"> {{row[col.key]}}
                     </div>
                 </div>
-                <div *ngIf="col.type=='image' && !col.changeable && !col.isAction" style="text-align: center;">
+                <div *ngIf="col.type=='image' && !col.changeable && !col.isAction" class="center">
                     <img [src]='col.imagePath' (click)="imageClickEvent(col,null)">
                 </div>
                 <div *ngIf="col.type=='link' && !col.isAction">
@@ -71,6 +84,7 @@
                     </mat-menu>
                 </div>
             </mat-cell>
+
         </ng-container>
         <ng-container matColumnDef="delete">
             <mat-header-cell *matHeaderCellDef class="text-nowrap"></mat-header-cell>
@@ -78,16 +92,16 @@
             </mat-cell>
         </ng-container>
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-        <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="selection.toggle(row);"
+        <mat-row *matRowDef="let row; columns: displayedColumns;"
             [ngClass]="{'border-left-green': sideBorder && !row.accountLocked, 'border-left-red': sideBorder && row.accountLocked}">
         </mat-row>
     </mat-table>
-    <ng-container matColumnDef="noData">
-        <mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">
-            No records found.
-        </mat-footer-cell>
-    </ng-container>
-    <div class="row" style="margin-bottom: 5%;">
+    <div *ngIf='dataSource===undefined ||dataSource===null' class="row">
+        <div class='col-sm-12 col-xs-12' style='text-align: center;'>
+            <h5>No records found.</h5>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-sm-6 col-xs-3">
             <mat-paginator disableRipple="true" *ngIf="isPaginate" #paginator style-paginator hidePageSize
                 [length]="totalLength" [pageSize]="10" (page)="onChangePage($event)" showFirstLastButtons
@@ -98,4 +112,10 @@
             <button class="btn btn-primary" type="button" (click)="addEvent($event)">Add</button>
         </div>
     </div>
+    <div class="row">
+        <div *ngIf="checkbox" class="col-sm-2 col-xs-3">
+            <button class="btn btn-primary" type="button" (click)="deleteEvent($event)">Delete</button>
+        </div>
+    </div>
+
 </div>

@@ -1,0 +1,19 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
+          padding-top: 35px;'>
+        <p class="accurate">
+          <img src='assets/images/dot03.gif' class='dot'>Roles</p>
+        <hr class="hr_space">
+        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
+          [totalElement]="rolesData.totalElements" (onChangePageEvent)="findRole($event)"
+          (goToEditCustomer)="goToEditRole($event)" (onImageEvent)='onImageClickEvent($event)'
+          (onAddEvent)='addEvent()'></app-table>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

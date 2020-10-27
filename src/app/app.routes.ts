@@ -70,7 +70,16 @@ const ROUTES: Routes = [
       {
         path: 'credential-type',
         loadChildren: './admin/credential-type/credential-type.module#CredentialTypeModule'
+      },
+      {
+        path: 'role',
+        loadChildren: './admin/role/role.module#RoleModule'
+      },
+      {
+        path: 'place',
+        loadChildren: './admin/place/place.module#PlaceModule'
       }
+
     ]
   },
   // {

@@ -177,16 +177,28 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12" *ngIf="CustomerData?.content?.length>0">
-                        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
+                        <app-table [keys]="keys" [isPaginate]="true" [checkbox]=true [isSearch]="false" [data]="dataSource"
                             [totalElement]="CustomerData.totalElements" (onChangePageEvent)="findCustomer($event)"
                             (goToEditCustomer)="goToEditCustomer($event)" (onImageEvent)='onImageClickEvent($event)'
-                            (onAddEvent)='addEvent()'>
+                            (onAddEvent)='addNewCustomer()'>
                         </app-table>
+                        <form [formGroup]='fileUploadForm'>
+                            <div class="row">
+                                <div class='col-sm-7 col-xs-6' style="text-align:right">
+                                    <span>Upload file with new customers:</span>
+                                </div>
+                                <div class='col-sm-3 col-xs-6'>
+                                    <input type="file" class="custom-file-input" style='font-size: smaller;'
+                                        name="customerFile" id="customerFile" formControlName='customerFile'>
+                                </div>
+                                <div class='col-sm-1 col-xs-12' style='text-align: right;margin-bottom: 5%;' >
+                                    <button type="submit" class="btn btn-primary">Upload</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
-
             </div>
-
             <div class="col-md-3 .col-lg-3 col-sm-12">
                 <app-sidebar></app-sidebar>
             </div>

@@ -1,0 +1,49 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
+          padding-top: 35px;'>
+        <p class="heading">
+          Places
+        </p>
+        <form [formGroup]='placeForm'>
+          <div class="row">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">PlaceName:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='placeName'>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Zip code:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='zipCode'>
+            </div>
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
+              <button type="submit" class="btn btn-primary">Show</button>
+            </div>
+          </div>
+        </form>
+        <hr class=hr_space>
+        <p class="messages">
+          <img src='assets/images/dot03.gif' class='dot'>
+          <span class="messageName">Places</span></p>
+        <hr class="hr_space">
+        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
+          [totalElement]="rolesData.totalElements" (onChangePageEvent)="findPlace($event)"
+          (goToEditCustomer)="goToEditPlace($event)" (onImageEvent)='onImageClickEvent($event)'
+          (onAddEvent)='addPlace()'></app-table>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

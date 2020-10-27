@@ -6,7 +6,7 @@ import { CommonHEAModule } from 'src/app/common/common.module';
 import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerViewComponent } from './customer-view/customer-view.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { MatDialogModule } from '@angular/material';
+import { MatDialogModule, MAT_DIALOG_DATA } from '@angular/material';
 import { AgmCoreModule } from '@agm/core';
 import { NgxsModule } from '@ngxs/store';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
@@ -15,6 +15,7 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { environment } from 'src/environments/environment';
 import { CustomerEventComponent } from './customer-event/customer-event.component';
+import { UtilityCredentialsComponent } from './utility-credentials/utility-credentials.component';
 
 @NgModule({
   imports: [
@@ -35,9 +36,10 @@ import { CustomerEventComponent } from './customer-event/customer-event.componen
   declarations: [
     CustomerListComponent,
     CustomerViewComponent,
-    CustomerEventComponent
+    CustomerEventComponent,
+    UtilityCredentialsComponent
   ],
-  providers: [SystemService, CustomerService],
-  entryComponents: [CustomerEventComponent]
+  providers: [SystemService, CustomerService, { provide: MAT_DIALOG_DATA, useValue: {} }],
+  entryComponents: [CustomerEventComponent, UtilityCredentialsComponent]
 })
 export class CustomerModule { }

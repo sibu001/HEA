@@ -22,7 +22,7 @@ import { MatSnackBarModule } from '@angular/material';
 @NgModule({
   declarations: [
     AppComponent,
-    HeadersComponent
+    HeadersComponent,
   ],
   imports: [
     ReactiveFormsModule,

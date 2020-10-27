@@ -16,6 +16,7 @@ export class Transformer {
                     dataSourceObj.notes = element.notes;
                     dataSourceObj.place = element.place.placeName;
                     dataSourceObj.joinDate = new Date(element.createdDate);
+                    dataSourceObj.maxAlertLevel = element.maxAlertLevel;
                     break;
                 case 2:
                     dataSourceObj.auditId = element.auditId;
@@ -120,6 +121,7 @@ export class Transformer {
                 default:
                     break;
             }
+            dataSourceObj.customerId = element.customerId;
             dataSource.list.push(dataSourceObj);
         });
         dataSource.startRow = src.startRow;
@@ -188,11 +190,10 @@ export class Transformer {
                         isDate: true
                     },
                     {
-                        key: 'status',
+                        key: 'maxAlertLevel',
                         displayName: '',
-                        sort: 'status',
-                        type: 'image',
-                        imagePath: 'assets/images/circle.png',
+                        sort: 'maxAlertLevel',
+                        type: 'alert',
                         event: ''
                     },
                 ];

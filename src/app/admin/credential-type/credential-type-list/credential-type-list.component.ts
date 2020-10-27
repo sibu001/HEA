@@ -42,7 +42,6 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
         this.credentialTypeData.content = credentialTypeList;
         this.dataSource = [...this.credentialTypeData.content];
       }));
-
   }
 
   gotoEditCredentialType(event: any): void {

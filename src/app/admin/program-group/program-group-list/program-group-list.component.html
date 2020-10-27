@@ -37,7 +37,7 @@
             <p class="messages">
               <img class="pointer" src="assets/images/dot03.gif"
                 class="dot">
-                <span class="messageName">Program</span>
+              <span class="messageName">Program</span>
               Group List
             </p>
           </div>
@@ -48,7 +48,8 @@
               [data]="dataSource"
               [totalElement]="programGroupData.totalElements"
               (onChangePageEvent)="findProgramGroup()"
-              (goToEditCustomer)="gotoEditProgramGroup($event)" (onAddEvent)="addProgramGroup()">
+              (goToEditCustomer)="gotoEditProgramGroup($event)"
+              (onAddEvent)="addProgramGroup()">
             </app-table>
           </div>
         </div>

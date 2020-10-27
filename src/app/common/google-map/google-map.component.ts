@@ -11,7 +11,7 @@ import { DIALOGDATA, MARKER } from 'src/app/interface/google-map.interface';
 
 export class GoogleMapComponent implements OnInit {
   markers: MARKER[] = GoogleMapData.MARKER_DATA;
-  zoom = 19;
+  zoom = 20;
   lat = 51.673858;
   lng = 7.815982;
   constructor(public dialogRef: MatDialogRef<GoogleMapComponent>,

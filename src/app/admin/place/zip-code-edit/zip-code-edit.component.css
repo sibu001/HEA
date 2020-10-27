@@ -1,0 +1,49 @@
+section.space-top {
+    margin-top: 5.3em;
+  }
+  .borderTop {
+    border-top: 1px solid #ddd;
+  }
+  .borderBottom {
+    border-bottom: 1px solid #ddd;
+  }
+  .rowPadding {
+    padding: 5px;
+  }
+  
+  .checkbox {
+    margin-left: 10px;
+    display: inline;
+  }
+  
+  .dot {
+    padding: 10px;
+  }
+  
+  .btn {
+    color: #fff;
+    background-color: #76ba19;
+    border-color: #76ba19;
+  }
+  
+  .content {
+    text-align: left;
+    padding-left: 40px;
+    padding-top: 35px;
+  }
+  
+  .heading {
+    font-size: larger;
+  }
+  
+  .messages {
+    color: #4550a1;
+    font-size: larger;
+    font-weight: 600;
+  }
+  
+  .form-control{
+      padding: 5px;
+      margin-bottom: 5px;
+  }
+  

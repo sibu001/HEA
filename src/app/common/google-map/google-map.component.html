@@ -16,7 +16,7 @@ cdkDragHandle>Google Map <button (click)="onNoClick()" class="closeButton" cdkFo
   [zoomControl]="true"
   [mapTypeControl]='true'
   [mapTypeId]="'hybrid'"
-  [fullscreenControl]='true' [streetViewControl]="true" [rotateControl]="true">
+  [fullscreenControl]='true' [streetViewControl]="true" [rotateControl]="true" [tilt]='45'>
   
   <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
 </agm-map>

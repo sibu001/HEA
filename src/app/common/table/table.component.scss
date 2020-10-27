@@ -151,7 +151,48 @@ mat-cell:first-of-type > div {
   outline: 0;
   box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
 }
-.mat-column-registrationUrl{
+.mat-column-registrationUrl {
   flex: none;
   width: 213px;
+}
+
+.center {
+  text-align: center;
+}
+
+div .yellowAlert {
+  height: 1em;
+  width: 1em;
+  -webkit-border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  border-radius: 0.5em;
+  border: 0.01em solid #888943;
+  background-color: #e8c772 !important;
+  margin: auto;
+}
+
+div .redAlert {
+  height: 1em;
+  width: 1em;
+  -webkit-border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  border-radius: 0.5em;
+  border: 0.01em solid #888943;
+  background-color: #c5614a !important;
+  margin: auto;
+}
+
+div .greenAlert {
+  height: 1em;
+  width: 1em;
+  -webkit-border-radius: 0.5em;
+  -moz-border-radius: 0.5em;
+  border-radius: 0.5em;
+  border: 0.01em solid #888943;
+  background-color: #1798a3 !important;
+  margin: auto;
+}
+.mat-column-select{
+  flex: none;
+  width: 55px;
 }

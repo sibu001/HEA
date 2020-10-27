@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { GetCustomerListAction } from '../state/customer.action';
+import { DeleteCustomerByIdAction, GetCustomerByIdAction, GetCustomerListAction, SaveCustomerAction, UpdateCustomerAction } from '../state/customer.action';
 import { CustomerManagementState } from '../state/customer.state';
 
 @Injectable({
@@ -19,7 +19,27 @@ export class CustomerService {
     return this.store.select(CustomerManagementState.getCustomerDataSource);
   }
 
+  getCustomerById(): Observable<any> {
+    return this.store.select(CustomerManagementState.getCustomerById);
+  }
+
   loadCustomerList(force: boolean, filter: string, viewType: number): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetCustomerListAction(force, filter, viewType));
+  }
+
+  loadCustomerById(id: number): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetCustomerByIdAction(id));
+  }
+
+  saveCustomer(customer: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new SaveCustomerAction(customer));
+  }
+
+  updateCustomer(id: number, customer: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new UpdateCustomerAction(id, customer));
+  }
+
+  deleteCustomerById(id: number): Observable<CustomerManagementState> {
+    return this.store.dispatch(new DeleteCustomerByIdAction(id));
   }
 }
