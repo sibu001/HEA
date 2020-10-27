@@ -10,7 +10,6 @@ import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { Location } from '@angular/common';
-import { error } from 'protractor';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { UtilityCredentialsComponent } from '../utility-credentials/utility-credentials.component';
 
