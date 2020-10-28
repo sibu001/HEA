@@ -81,7 +81,7 @@ mat-paginator.paginatorcss.mat-paginator {
   vertical-align: middle;
   border-right: 1px solid #ddd;
   align-self: stretch;
-  overflow: visible;
+  word-break: break-all;
 }
 .mat-header-cell {
   max-height: 100%;

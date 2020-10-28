@@ -159,7 +159,7 @@ export class TableComponent implements OnInit, OnChanges {
     this.changeDetectorRefs.detectChanges();
   }
 
-  goToEdit({ event, col }: { event: any; col; }) {
+  goToEdit(event, col) {
     if (col.isEdit) {
       console.log(event);
       this.goToEditCustomer.emit(event);
