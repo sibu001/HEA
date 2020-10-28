@@ -57,10 +57,10 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     private readonly systemService: SystemService,
     private readonly customerService: CustomerService,
     public dialog: MatDialog) {
-    this.systemService.loadCustomerGroupList(true);
+    this.systemService.loadCustomerGroupList(true, '');
     this.systemService.loadViewConfigurationList(true);
     this.systemService.loadProgramGroupsList(true);
-    this.systemService.loadGetCustomerAlertTypeList(true);
+    this.systemService.loadGetCustomerAlertTypeList(true, '');
     this.systemService.loadCredentialTypeList(true, '');
     this.systemService.loadCoachUserList(true, '?filter.withRole=COACH');
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))

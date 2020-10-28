@@ -12,6 +12,9 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
 import { Location } from '@angular/common';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { UtilityCredentialsComponent } from '../utility-credentials/utility-credentials.component';
+import { CustomerAlertComponent } from '../customer-alert/customer-alert.component';
+import { CustomerEventTypeComponent } from '../customer-event-type/customer-event-type.component';
+import { StaffNoteComponent } from '../staff-note/staff-note.component';
 
 @Component({
   selector: 'app-customer-view',
@@ -90,7 +93,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   }
   loadCustomerGroup() {
     this.systemService.loadCoachUserList(true, '?filter.withRole=COACH');
-    this.systemService.loadCustomerGroupList(false);
+    this.systemService.loadCustomerGroupList(false, '');
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
         this.customerGroupList = customerGroupList;
@@ -236,6 +239,42 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       data: event,
       disableClose: false
     });
+  }
+
+  addCustomerAlert(event: any) {
+    this.dialog.open(CustomerAlertComponent, {
+      width: '50vw',
+      height: '50vh',
+      data: event,
+      disableClose: false
+    });
+  }
+
+  addCustomerEvent(event: any) {
+    this.dialog.open(CustomerEventTypeComponent, {
+      width: '50vw',
+      height: '50vh',
+      data: event,
+      disableClose: false
+    });
+  }
+
+  addStaffNote(event: any) {
+    this.dialog.open(StaffNoteComponent, {
+      width: '50vw',
+      height: '50vh',
+      data: event,
+      disableClose: false
+    });
+  }
+
+  addFile() {
+    const element: HTMLElement = document.querySelectorAll('#fileInput')[0] as HTMLElement;
+    element.click();
+  }
+  handle(e: any) {
+    console.log(e);
+    console.log('Change input file');
   }
 
   changeDropDownValue(event: any, type: any) {

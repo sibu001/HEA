@@ -64,4 +64,8 @@ export class UtilityCredentialsComponent implements OnInit {
     });
 
   }
+
+  onNoClick() {
+    this.dialogRef.close();
+  }
 }

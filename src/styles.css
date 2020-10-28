@@ -1087,11 +1087,38 @@ button.feedbackButton:hover {
 .mat-footer-row,
 .mat-header-row,
 .mat-row {
-    display: inline-flex;
-    min-width: 100%;
+  display: inline-flex;
+  min-width: 100%;
 }
 
 .btn-primary:active:hover {
   background-color: #76ba19;
   border-color: #76ba19;
+}
+
+.closeButton {
+  float: right;
+  height: 20px;
+  border: none;
+  margin-top: 6px;
+  border-radius: 3px;
+}
+.closeButton:focus {
+  border: none !important;
+}
+button.closeButton:focus {
+  outline: 0;
+}
+
+.borderTop {
+  border-top: 1px solid #ddd;
+}
+.borderBottom {
+  border-bottom: 1px solid #ddd;
+}
+.rowPadding {
+  padding: 5px;
+}
+.bottomButton{
+  text-align: right;
 }

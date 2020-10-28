@@ -471,7 +471,7 @@
             <app-table [keys]="credentialsKeys" [data]="credentialsDataSource"
               [isDelete]=true
               [totalElement]="credentialsData.totalElements" (goToEditCustomer)="openUtilityCredential($event)"
-              (onAddEvent)='openUtilityCredential(undefined)'>
+              (addEvent)='openUtilityCredential(undefined)' class="rowSize">
             </app-table>
           </div>
         </div>
@@ -491,7 +491,8 @@
           <div class="col-sm-12">
             <app-table [keys]="alertsKeys" [data]="alertsDataSource"
               [isDelete]=true
-              [totalElement]="alertsData.totalElements">
+              [totalElement]="alertsData.totalElements" 
+              (onAddEvent)="addCustomerAlert(undefined)">
             </app-table>
           </div>
         </div>
@@ -500,7 +501,7 @@
         <div class="row">
           <div class="col-sm-12">
             <p class="Messages">
-              <img class="pointer" src="assets/images/dot03.gif" class="dot
+              <img src="assets/images/dot03.gif" class="dot
                 pointer"><strong>Customer Events</strong>
             </p>
           </div>
@@ -509,7 +510,8 @@
           <div class="col-sm-12">
             <app-table [keys]="eventKeys" [data]="eventDataSource"
               [isDelete]=true
-              [totalElement]="eventData.totalElements">
+              [totalElement]="eventData.totalElements"
+              (onAddEvent)="addCustomerEvent(undefined)">
             </app-table>
           </div>
         </div>
@@ -519,8 +521,7 @@
         <div class="row">
           <div class="col-sm-12">
             <p class="Messages">
-              <img src="assets/images/dot03.gif" class="dot pointer"><strong>Customer
-                Events</strong>
+              <img src="assets/images/dot03.gif" class="dot pointer"><strong>Staff Notes</strong>
             </p>
           </div>
         </div>
@@ -528,7 +529,8 @@
           <div class="col-sm-12">
             <app-table [keys]="staffKeys" [data]="staffDataSource"
               [isDelete]=true
-              [totalElement]="staffData.totalElements">
+              [totalElement]="staffData.totalElements"
+              (onAddEvent)='addStaffNote(undefined)'>
             </app-table>
           </div>
         </div>
@@ -544,13 +546,15 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
+            <input type="file" id="fileInput" style="display:none" (change)="handle($event)">
             <app-table [keys]="filesKeys" [data]="filesDataSource"
               [isDelete]=true
-              [totalElement]="filesData.totalElements">
+              [totalElement]="filesData.totalElements"
+              (onAddEvent)='addFile()'>
             </app-table>
           </div>
         </div>
-        <div class="row">
+        <div class="row rowPadding">
           <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
             <button type="button" class="btn btn-primary" (click)="cancel()">Cancel</button>
           </div>

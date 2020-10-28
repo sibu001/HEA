@@ -1,0 +1,75 @@
+<div class="row">
+  <div class="col-sm-12">
+    <button (click)="onNoClick()" class="closeButton" cdkFocusInitial>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" width="8pt" height="8pt"
+        viewBox="0 0 8 8" version="1.1">
+        <g id="surface1">
+          <path
+            style="stroke:none;fill-rule:nonzero;fill:76ba19;fill-opacity:1;"
+            d="M 0.109375 0.644531 C -0.0351562 0.5 -0.0351562 0.257812 0.109375
+            0.109375 C 0.257812 -0.0351562 0.492188 -0.0351562 0.644531 0.109375
+            L 3.84375 3.3125 L 7.050781 0.109375 C 7.195312 -0.0351562 7.4375
+            -0.0351562 7.578125 0.109375 C 7.726562 0.257812 7.726562 0.5
+            7.578125 0.644531 L 4.378906 3.84375 L 7.578125 7.050781 C 7.726562
+            7.195312 7.726562 7.433594 7.578125 7.585938 C 7.433594 7.726562
+            7.195312 7.726562 7.050781 7.585938 L 3.84375 4.378906 L 0.644531
+            7.585938 C 0.492188 7.726562 0.257812 7.726562 0.109375 7.585938 C
+            -0.0351562 7.433594 -0.0351562 7.195312 0.109375 7.050781 L 3.3125
+            3.84375 Z M 0.109375 0.644531" />
+          </g>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 content">
+      <form [formGroup]="customerAlertForm" class="form-group">
+        <div class="row rowPadding">
+          <div class="control-label col-sm-4 col-xs-12">
+            Customer Alert Type:
+          </div>
+          <div class="control-label col-sm-8 col-xs-12">
+            <select class="form-control form-control-sm padded-control"
+              id="customerAlertTypeId"
+              formControlName="customerAlertTypeId">
+              <option value="" selected="selected"></option>
+              <option *ngFor="let customerAlert of customerAlertTypes"
+                [value]="customerAlert.customerAlertTypeId">{{customerAlert.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row rowPadding">
+          <div class="control-label col-sm-4 col-xs-12">
+            Alert Level:
+          </div>
+          <div class="control-label col-sm-8 col-xs-12">
+            <select class="form-control form-control-sm padded-control"
+              id="alertLevel"
+              formControlName="alertLevel">
+              <option value="" selected="selected"></option>
+              <option *ngFor="let level of alertLevels"
+                [value]="level.alertLevel">{{level.alertName}}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row rowPadding">
+          <div class="control-label col-sm-4 col-xs-12">
+            Notes:
+          </div>
+          <div class="control-label col-sm-8 col-xs-12">
+            <textarea class="form-control textarea_scroll" rows="3" id="comment"
+              name="notes" formControlName="note"></textarea>
+          </div>
+        </div>
+      </form>
+      <div class="row rowPadding">
+        <div class="col-sm-12 col-xs-12" style="text-align: end;">
+          <button type="button" class="btn btn-primary btn-padding">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>

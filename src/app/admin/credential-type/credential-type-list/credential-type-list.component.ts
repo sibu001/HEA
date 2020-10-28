@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -16,6 +16,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class CredentialTypeListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN>;
   public dataSource: any;
+  public force = false;
   public credentialTypeData = {
     content: [],
     totalElements: 0,
@@ -27,12 +28,16 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly systemService: SystemService,
-    private readonly router: Router) { }
+    private readonly router: Router,
+    private readonly activateRoute: ActivatedRoute) {
+    this.activateRoute.queryParams.subscribe(params => {
+      this.force = params['force'];
+    });
+  }
 
   ngOnInit() {
-    document.getElementById('loader').classList.remove('loading');
     this.keys = TableColumnData.CREDENTIAL_TYPE_COLUMN_DATA;
-    this.findCredentialType(false, '');
+    this.findCredentialType(this.force, '');
   }
 
   findCredentialType(force: boolean, filter: string): void {
@@ -50,9 +55,10 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
 
   search(event: any): void {
     const filter = '?filter.startRow=0&formAction='
-      + (event.active !== undefined ? 'sort' : '') + '&sortField='
-      + (event.active !== undefined ? event.active : '') + '&sortOrder='
-      + (event.direction !== undefined ? event.direction : 'ASC') + '&credentialTypeCode=&filter.credentialType='
+      + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
+      + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
+      + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction : 'ASC')
+      + '&credentialTypeCode=&filter.credentialType='
       + this.credentialTypeForm.value.credentialType + '&filter.credentialName='
       + this.credentialTypeForm.value.credentialName;
     this.findCredentialType(true, filter);

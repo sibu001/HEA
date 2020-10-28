@@ -24,7 +24,7 @@
           </div>
           <div class="row">
             <div class="col-sm-12 show-button">
-              <button type="button" class="btn btn-primary" (click)="findCustomerAlertType()">Show</button>
+              <button type="button" class="btn btn-primary" (click)="search(undefined)">Show</button>
             </div>
           </div>
         </form>
@@ -33,8 +33,7 @@
         <div class="row">
           <div class="col-sm-12">
             <p class="messages">
-              <img class="pointer" src="assets/images/dot03.gif"
-                class="dot">
+              <img class="pointer dot" src="assets/images/dot03.gif">
               <span class="messageName">Customer Alert Types</span>
             </p>
           </div>
@@ -42,9 +41,8 @@
         <div class="row">
           <div class="col-sm-12" >
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-              [totalElement]="customerAlertTypeData.totalElements" (onChangePageEvent)="findCustomerAlertType()"
-              (goToEditCustomer)="gotoEditCustomerAlertType($event)"
-              (goToEditCustomer)="gotoEditCustomerAlertType($event)"  (onAddEvent)="addCustomerAlertType()">
+              [totalElement]="customerAlertTypeData.totalElements" (changePageEvent)="search($event)"
+              (goToEditCustomer)="gotoEditCustomerAlertType($event)"  (addEvent)="addCustomerAlertType()">
             </app-table>
           </div>
         </div>

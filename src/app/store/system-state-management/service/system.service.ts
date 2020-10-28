@@ -2,6 +2,10 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
+  DeleteCredentialTypeByIdAction,
+  DeleteCustomerAlertTypeByIdAction,
+  DeleteCustomerGroupByIdAction,
+  DeleteProgramGroupByIdAction,
   GetCoachUserListAction,
   GetCredentialTypeByIdAction,
   GetCredentialTypeListAction,
@@ -11,7 +15,15 @@ import {
   GetCustomerGroupListAction,
   GetProgramGroupByIdAction,
   GetProgramGroupListAction,
-  GetViewConfigurationListAction
+  GetViewConfigurationListAction,
+  SaveCredentialTypeAction,
+  SaveCustomerAlertTypeAction,
+  SaveCustomerGroupAction,
+  SaveProgramGroupAction,
+  UpdateCredentialTypeAction,
+  UpdateCustomerAlertTypeAction,
+  UpdateCustomerGroupAction,
+  UpdateProgramGroupAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -62,12 +74,24 @@ export class SystemService {
     return this.store.select(SystemManagementState.getCoachUserList);
   }
 
-  loadCustomerGroupList(force: boolean): Observable<SystemManagementState> {
-    return this.store.dispatch(new GetCustomerGroupListAction(force));
+  loadCustomerGroupList(force: boolean, filter: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetCustomerGroupListAction(force, filter));
   }
 
   loadCustomerGroupById(id: number): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCustomerGroupByIdAction(id));
+  }
+
+  saveCustomerGroup(customerGroup: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new SaveCustomerGroupAction(customerGroup));
+  }
+
+  updateCustomerGroup(id: number, customerGroup: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new UpdateCustomerGroupAction(id, customerGroup));
+  }
+
+  deleteCustomerGroupById(id: number): Observable<SystemManagementState> {
+    return this.store.dispatch(new DeleteCustomerGroupByIdAction(id));
   }
 
   loadViewConfigurationList(force: boolean): Observable<SystemManagementState> {
@@ -82,12 +106,37 @@ export class SystemService {
     return this.store.dispatch(new GetProgramGroupByIdAction(id));
   }
 
-  loadGetCustomerAlertTypeList(force: boolean): Observable<SystemManagementState> {
-    return this.store.dispatch(new GetCustomerAlertTypeListAction(force));
+  saveProgramGroup(programGroup: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new SaveProgramGroupAction(programGroup));
+  }
+
+  updateProgramGroup(id: number, programGroup: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new UpdateProgramGroupAction(id, programGroup));
+  }
+
+  deleteProgramGroupById(id: number): Observable<SystemManagementState> {
+    return this.store.dispatch(new DeleteProgramGroupByIdAction(id));
+  }
+
+
+  loadGetCustomerAlertTypeList(force: boolean, filter: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetCustomerAlertTypeListAction(force, filter));
   }
 
   loadCustomerAlertTypeById(id: number): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCustomerAlertTypeByIdAction(id));
+  }
+
+  saveCustomerAlertType(customerAlertType: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new SaveCustomerAlertTypeAction(customerAlertType));
+  }
+
+  updateCustomerAlertType(id: number, customerAlertType: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new UpdateCustomerAlertTypeAction(id, customerAlertType));
+  }
+
+  deleteCustomerAlertTypeById(id: number): Observable<SystemManagementState> {
+    return this.store.dispatch(new DeleteCustomerAlertTypeByIdAction(id));
   }
 
   loadCredentialTypeList(force: boolean, filter: string): Observable<SystemManagementState> {
@@ -96,6 +145,18 @@ export class SystemService {
 
   loadCredentialTypeById(id: string): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCredentialTypeByIdAction(id));
+  }
+
+  saveCredentialType(credentialType: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new SaveCredentialTypeAction(credentialType));
+  }
+
+  updateCredentialType(id: number, credentialType: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new UpdateCredentialTypeAction(id, credentialType));
+  }
+
+  deleteCredentialTypeById(id: number): Observable<SystemManagementState> {
+    return this.store.dispatch(new DeleteCredentialTypeByIdAction(id));
   }
 
   loadCoachUserList(force: boolean, filter: string): Observable<SystemManagementState> {

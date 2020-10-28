@@ -17,6 +17,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="alertCode" formControlName="alertCode">
+                <div *ngIf="f.alertCode.invalid && (f.alertCode.dirty ||
+                f.alertCode.touched)">
+                <span class="error" *ngIf="f.alertCode.errors.required">
+                  Credential Type is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -27,6 +33,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="alertName" formControlName="alertName">
+                <div *ngIf="f.alertName.invalid && (f.alertName.dirty ||
+                f.alertName.touched)">
+                <span class="error" *ngIf="f.alertName.errors.required">
+                  Credential Type is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -242,7 +254,7 @@
               <button type="button" class="btn btn-primary"
                 (click)="delete()" *ngIf="id!==undefined&&id!==null">Delete</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4 bottomButton">
               <button type="button" class="btn btn-primary"
                 (click)="save()">Save</button>
             </div>

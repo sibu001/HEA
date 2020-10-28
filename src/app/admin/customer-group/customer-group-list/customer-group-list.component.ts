@@ -36,7 +36,7 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
   }
 
   findCustomerGroup() {
-    this.systemService.loadCustomerGroupList(false);
+    this.systemService.loadCustomerGroupList(false, '');
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
         this.customerGroupData.content = customerGroupList;

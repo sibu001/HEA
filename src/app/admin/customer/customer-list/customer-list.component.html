@@ -178,9 +178,9 @@
                 <div class="row">
                     <div class="col-sm-12" *ngIf="CustomerData?.content?.length>0">
                         <app-table [keys]="keys" [isPaginate]="true" [checkbox]=true [isSearch]="false" [data]="dataSource"
-                            [totalElement]="CustomerData.totalElements" (onChangePageEvent)="findCustomer($event)"
-                            (goToEditCustomer)="goToEditCustomer($event)" (onImageEvent)='onImageClickEvent($event)'
-                            (onAddEvent)='addNewCustomer()'>
+                            [totalElement]="CustomerData.totalElements" (changePageEvent)="findCustomer($event)"
+                            (goToEditCustomer)="goToEditCustomer($event)" (imageEvent)='onImageClickEvent($event)'
+                            (addEvent)='addNewCustomer()'>
                         </app-table>
                         <form [formGroup]='fileUploadForm'>
                             <div class="row">
@@ -191,7 +191,7 @@
                                     <input type="file" class="custom-file-input" style='font-size: smaller;'
                                         name="customerFile" id="customerFile" formControlName='customerFile'>
                                 </div>
-                                <div class='col-sm-1 col-xs-12' style='text-align: right;margin-bottom: 5%;' >
+                                <div class='col-sm-2 col-xs-12' style='text-align: right;' >
                                     <button type="submit" class="btn btn-primary">Upload</button>
                                 </div>
                             </div>

@@ -1,15 +1,6 @@
 section.space-top {
     margin-top: 5.3em;
   }
-  .borderTop {
-    border-top: 1px solid #ddd;
-  }
-  .borderBottom {
-    border-bottom: 1px solid #ddd;
-  }
-  .rowPadding {
-    padding: 5px;
-  }
   .form-padding {
     padding-left: 40px;
     padding-right: 40px;
@@ -31,4 +22,7 @@ section.space-top {
   }
   .paddingTop{
       padding-top: 3%;
+  }
+  .error {
+    color: red;
   }

@@ -43,14 +43,16 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() isSearch: Boolean = false;
   @Input() isDelete: Boolean = false;
   @Input() isPaginate: Boolean = false;
-  @Output() onChangePageEvent: EventEmitter<any> = new EventEmitter();
-  @Output() onChangeActionMenuItem: EventEmitter<any> = new EventEmitter();
+  @Input() isHideAdd: Boolean = false;
+  @Input() showDeleteButton: Boolean = false;
+  @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
+  @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditCustomer: EventEmitter<any> = new EventEmitter();
-  @Output() onDeleteEvent: EventEmitter<any> = new EventEmitter();
-  @Output() onImageEvent: EventEmitter<any> = new EventEmitter();
-  @Output() onAddEvent: EventEmitter<any> = new EventEmitter();
-  @Output() onBulkDeleteEvent: EventEmitter<any> = new EventEmitter();
-
+  @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
+  @Output() imageEvent: EventEmitter<any> = new EventEmitter();
+  @Output() addEvent: EventEmitter<any> = new EventEmitter();
+  @Output() bulkDeleteEvent: EventEmitter<any> = new EventEmitter();
+  @Output() checkBoxChangeEvent: EventEmitter<any> = new EventEmitter();
   page = new Page();
   url: String;
   totalLength: Number;
@@ -107,31 +109,31 @@ export class TableComponent implements OnInit, OnChanges {
     filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
     console.log(filterValue);
     this.page.search = filterValue;
-    this.onChangePageEvent.emit(this.page);
+    this.changePageEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
   }
 
   onChangePage(event?: PageEvent) {
     this.page.pageSize = event.pageSize;
     this.page.pageIndex = event.pageIndex;
-    this.onChangePageEvent.emit(this.page);
+    this.changePageEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
   }
 
   sortData(event?: Sort) {
     console.log(event);
     this.page.sort = event;
-    this.onChangePageEvent.emit(this.page);
+    this.changePageEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
   }
 
   onClickMenuItem(item: any, row: any) {
-    this.onChangeActionMenuItem.emit({ item: item, row: row });
+    this.changeActionMenuItem.emit({ item: item, row: row });
   }
 
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource !== undefined ? this.dataSource.data.length : 0;
     return numSelected === numRows;
   }
 
@@ -149,11 +151,15 @@ export class TableComponent implements OnInit, OnChanges {
       }`;
   }
 
+  checkBoxChange(): any {
+    this.checkBoxChangeEvent.emit(this.selection.selected);
+
+  }
   refresh() {
     this.changeDetectorRefs.detectChanges();
   }
 
-  goToEdit(event: any, col) {
+  goToEdit({ event, col }: { event: any; col; }) {
     if (col.isEdit) {
       console.log(event);
       this.goToEditCustomer.emit(event);
@@ -162,11 +168,11 @@ export class TableComponent implements OnInit, OnChanges {
 
   deleteRow(event: any) {
     console.log(event);
-    this.onDeleteEvent.emit(event);
+    this.deleteEvent.emit(event);
   }
 
   imageClickEvent(col, row) {
-    this.onImageEvent.emit({ key: col.key, eventType: col.event, row: row });
+    this.imageEvent.emit({ key: col.key, eventType: col.event, row: row });
   }
 
 
@@ -174,15 +180,15 @@ export class TableComponent implements OnInit, OnChanges {
     this.router.navigate([routerLink], { queryParams: queryParam });
   }
 
-  addEvent(event: any): any {
-    this.onAddEvent.emit(event);
+  onAddEvent(event: any): any {
+    this.addEvent.emit(event);
   }
 
-  deleteEvent(): any {
-    this.onBulkDeleteEvent.emit(this.selection.selected);
+  onDeleteEvent(): any {
+    this.bulkDeleteEvent.emit(this.selection.selected);
   }
 
-  logRow(row){
+  logRow(row) {
     console.log(row);
   }
 }

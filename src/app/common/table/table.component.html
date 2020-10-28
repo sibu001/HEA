@@ -25,14 +25,14 @@
     <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="table">
         <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggle() : null"
-                    [checked]="selection.hasValue() && isAllSelected()"
+                <mat-checkbox (change)="$event ? masterToggle() : null;checkBoxChange()"
+                    [checked]="selection.hasValue() && isAllSelected()" color="primary"
                     [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
                 </mat-checkbox>
             </mat-header-cell>
             <mat-cell *matCellDef="let row; let colIndex = index">
-
-                <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                <mat-checkbox (click)="$event.stopPropagation()"
+                    (change)="$event ? selection.toggle(row) : null;checkBoxChange()" color="primary"
                     [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
                 </mat-checkbox>
             </mat-cell>
@@ -108,13 +108,13 @@
                 class="paginatorcss">
             </mat-paginator>
         </div>
-        <div class="col-sm-6 col-xs-9" style="text-align:right;">
-            <button class="btn btn-primary" type="button" (click)="addEvent($event)">Add</button>
+        <div *ngIf="!isHideAdd" class="col-sm-6 col-xs-9" style="text-align:right;">
+            <button class="btn btn-primary" type="button" (click)="onAddEvent($event)">Add</button>
         </div>
     </div>
     <div class="row">
-        <div *ngIf="checkbox" class="col-sm-2 col-xs-3">
-            <button class="btn btn-primary" type="button" (click)="deleteEvent($event)">Delete</button>
+        <div *ngIf="showDeleteButton" class="col-sm-2 col-xs-3">
+            <button class="btn btn-primary" type="button" (click)="onDeleteEvent($event)">Delete</button>
         </div>
     </div>
 

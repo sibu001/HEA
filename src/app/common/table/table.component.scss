@@ -20,7 +20,7 @@
   font-weight: bold;
   background: none;
   border-left: 1px solid #ddd;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: Roboto;
 }
 
 .mat-row:nth-child(odd) {
@@ -81,10 +81,14 @@ mat-paginator.paginatorcss.mat-paginator {
   vertical-align: middle;
   border-right: 1px solid #ddd;
   align-self: stretch;
+  overflow: visible;
 }
 .mat-header-cell {
+  max-height: 100%;
+  overflow: visible;
   border-right: 1px solid #ddd;
   border-top: 1px solid #ddd;
+
 }
 mat-footer-row,
 mat-header-row,
@@ -98,10 +102,10 @@ mat-header-cell {
   padding-left: 12px !important;
 }
 
-mat-cell:first-of-type > div {
-  text-decoration: underline;
-  cursor: pointer;
-}
+// mat-cell:first-of-type > div {
+//   text-decoration: underline;
+//   cursor: pointer;
+// }
 
 .mat-paginator-range-label {
   display: none;
@@ -110,7 +114,7 @@ mat-cell:first-of-type > div {
 .text-nowrap {
   color: #000;
   font-size: 18px;
-  white-space: nowrap;
+  white-space:pre-line;
 }
 
 .btn-primary {

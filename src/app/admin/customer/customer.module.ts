@@ -16,6 +16,9 @@ import { CustomerService } from 'src/app/store/customer-state-management/service
 import { environment } from 'src/environments/environment';
 import { CustomerEventComponent } from './customer-event/customer-event.component';
 import { UtilityCredentialsComponent } from './utility-credentials/utility-credentials.component';
+import { CustomerAlertComponent } from './customer-alert/customer-alert.component';
+import { CustomerEventTypeComponent } from './customer-event-type/customer-event-type.component';
+import { StaffNoteComponent } from './staff-note/staff-note.component';
 
 @NgModule({
   imports: [
@@ -26,7 +29,8 @@ import { UtilityCredentialsComponent } from './utility-credentials/utility-crede
     MatDialogModule,
     DragDropModule,
     AgmCoreModule.forRoot({
-      apiKey: environment.googleMapAPIKey
+      apiKey: environment.googleMapAPIKey,
+      libraries: ['places']
     }),
     NgxsModule.forRoot([
       SystemManagementState,
@@ -37,9 +41,21 @@ import { UtilityCredentialsComponent } from './utility-credentials/utility-crede
     CustomerListComponent,
     CustomerViewComponent,
     CustomerEventComponent,
-    UtilityCredentialsComponent
+    UtilityCredentialsComponent,
+    CustomerAlertComponent,
+    CustomerEventTypeComponent,
+    StaffNoteComponent
   ],
-  providers: [SystemService, CustomerService, { provide: MAT_DIALOG_DATA, useValue: {} }],
-  entryComponents: [CustomerEventComponent, UtilityCredentialsComponent]
+  providers: [SystemService,
+    CustomerService,
+    { provide: MAT_DIALOG_DATA, useValue: {} }
+  ],
+  entryComponents: [
+    CustomerEventComponent,
+    UtilityCredentialsComponent,
+    CustomerAlertComponent,
+    CustomerEventTypeComponent,
+    StaffNoteComponent
+  ]
 })
 export class CustomerModule { }

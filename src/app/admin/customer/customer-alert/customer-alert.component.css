@@ -8,7 +8,11 @@
 }
 
 .btn-padding {
-    margin-left: 1px;
-    margin-right: 1px;
-    padding: 4px;
+  margin-left: 1px;
+  margin-right: 1px;
+  padding: 4px;
 }
+
+.rowPadding {
+    padding: 5px;
+  }

@@ -4,8 +4,13 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { SystemTransformer } from '../transformer/transformer';
 import {
     CustomerGroupError,
+    DeleteCredentialTypeByIdAction,
+    DeleteCustomerAlertTypeByIdAction,
+    DeleteCustomerGroupByIdAction,
+    DeleteProgramGroupByIdAction,
     GetCoachUserListAction,
     GetCredentialTypeByIdAction,
     GetCredentialTypeListAction,
@@ -15,7 +20,15 @@ import {
     GetCustomerGroupListAction,
     GetProgramGroupByIdAction,
     GetProgramGroupListAction,
-    GetViewConfigurationListAction
+    GetViewConfigurationListAction,
+    SaveCredentialTypeAction,
+    SaveCustomerAlertTypeAction,
+    SaveCustomerGroupAction,
+    SaveProgramGroupAction,
+    UpdateCredentialTypeAction,
+    UpdateCustomerAlertTypeAction,
+    UpdateCustomerGroupAction,
+    UpdateProgramGroupAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -96,15 +109,18 @@ export class SystemManagementState {
         const force: boolean = action.force || SystemManagementState.getCustomerGroupList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
-            result = this.loginService.performGet(AppConstant.customerGroups)
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.customerGroups + action.filter)
                 .pipe(
                     tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             customerGroupList: response,
                         });
                     },
                         error => {
-                            this.utilityService.showErrorMessage(error.message);
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.errorMessage);
                             ctx.dispatch(new CustomerGroupError(error));
                         }));
         }
@@ -112,18 +128,71 @@ export class SystemManagementState {
     }
 
     @Action(GetCustomerGroupByIdAction)
-    getCustomerGroupById(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupByIdAction): void {
-        const customerGroupList = SystemManagementState.getCustomerGroupList(ctx.getState());
-        let customerGroup: any;
-        if (customerGroupList !== undefined) {
-            const i = customerGroupList.findIndex((item: any) => item.id === action.id);
-            if (i !== -1) {
-                customerGroup = customerGroupList[i];
-            }
-        }
-        ctx.patchState({
-            customerGroup: customerGroup
-        });
+    getCustomerGroupById(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customerGroups + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(DeleteCustomerGroupByIdAction)
+    deleteCustomerGroupById(ctx: StateContext<SystemManagementModel>, action: DeleteCustomerGroupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.customerGroups + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(SaveCustomerGroupAction)
+    saveCustomerGroup(ctx: StateContext<SystemManagementModel>, action: SaveCustomerGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.customerGroup, AppConstant.customerGroups)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        customerGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(UpdateCustomerGroupAction)
+    updateCustomerGroup(ctx: StateContext<SystemManagementModel>, action: UpdateCustomerGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.customerGroup, AppConstant.customerGroups + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        customerGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
     @Action(GetViewConfigurationListAction)
@@ -131,15 +200,18 @@ export class SystemManagementState {
         const force: boolean = action.force || SystemManagementState.getViewConfigurationList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
+            document.getElementById('loader').classList.add('loading');
             result = this.loginService.performGet(AppConstant.viewConfigurations)
                 .pipe(
                     tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             viewConfigurationList: response,
                         });
                     },
                         error => {
-                            this.utilityService.showErrorMessage(error.message);
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
@@ -149,33 +221,89 @@ export class SystemManagementState {
         const force: boolean = action.force || SystemManagementState.getProgramGroupList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
+            document.getElementById('loader').classList.add('loading');
             result = this.loginService.performGet(AppConstant.programGroups)
                 .pipe(
                     tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             programGroupList: response,
                         });
                     },
                         error => {
-                            this.utilityService.showErrorMessage(error.message);
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
     }
 
     @Action(GetProgramGroupByIdAction)
-    getAllProgramGroupById(ctx: StateContext<SystemManagementModel>, action: GetProgramGroupByIdAction): void {
-        const programGroupList = SystemManagementState.getProgramGroupList(ctx.getState());
-        let programGroup: any;
-        if (programGroupList !== undefined) {
-            const i = programGroupList.findIndex((item: any) => item.id === action.id);
-            if (i !== -1) {
-                programGroup = programGroupList[i];
-            }
-        }
-        ctx.patchState({
-            programGroup: programGroup
-        });
+    getAllProgramGroupById(ctx: StateContext<SystemManagementModel>, action: GetProgramGroupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.programGroups + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        programGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(DeleteProgramGroupByIdAction)
+    deleteProgramGroupById(ctx: StateContext<SystemManagementModel>, action: DeleteProgramGroupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.programGroups + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(SaveProgramGroupAction)
+    saveProgramGroup(ctx: StateContext<SystemManagementModel>, action: SaveProgramGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.programGroup, AppConstant.programGroups)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        programGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(UpdateProgramGroupAction)
+    updateProgramGroup(ctx: StateContext<SystemManagementModel>, action: UpdateProgramGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.programGroup, AppConstant.programGroups + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        programGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
 
@@ -184,34 +312,91 @@ export class SystemManagementState {
         const force: boolean = action.force || SystemManagementState.getCustomerAlertTypeList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
-            result = this.loginService.performGet(AppConstant.customerAlertTypes)
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.customerAlertTypes + action.filter)
                 .pipe(
                     tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             customerAlertTypeList: response,
                         });
                     },
                         error => {
-                            this.utilityService.showErrorMessage(error.message);
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
     }
 
     @Action(GetCustomerAlertTypeByIdAction)
-    getCustomerAlertTypeById(ctx: StateContext<SystemManagementModel>, action: GetCustomerAlertTypeByIdAction): void {
-        const customerAlertTypesList = SystemManagementState.getCustomerAlertTypeList(ctx.getState());
-        let customerAlertType: any;
-        if (customerAlertTypesList !== undefined) {
-            const i = customerAlertTypesList.findIndex((item: any) => item.id === action.id);
-            if (i !== -1) {
-                customerAlertType = customerAlertTypesList[i];
-            }
-        }
-        ctx.patchState({
-            customerAlertType: customerAlertType
-        });
+    getCustomerAlertTypeById(ctx: StateContext<SystemManagementModel>, action: GetCustomerAlertTypeByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customerAlertTypes + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerAlertType: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
+
+    @Action(DeleteCustomerAlertTypeByIdAction)
+    deleteCustomerAlertTypeById(ctx: StateContext<SystemManagementModel>, action: DeleteCustomerAlertTypeByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.customerAlertTypes + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(SaveCustomerAlertTypeAction)
+    saveCustomerAlertType(ctx: StateContext<SystemManagementModel>, action: SaveCustomerAlertTypeAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.customerAlertType, AppConstant.customerAlertTypes)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        customerAlertType: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(UpdateCustomerAlertTypeAction)
+    updateCustomerAlertType(ctx: StateContext<SystemManagementModel>, action: UpdateCustomerAlertTypeAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.customerAlertType, AppConstant.customerAlertTypes + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        customerAlertType: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
 
 
     @Action(GetCredentialTypeListAction)
@@ -219,33 +404,92 @@ export class SystemManagementState {
         const force: boolean = action.force || SystemManagementState.getCredentialTypeList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
+            document.getElementById('loader').classList.add('loading');
             result = this.loginService.performGet(AppConstant.credentialTypes + action.filter)
                 .pipe(
                     tap((response: any) => {
+                        const res = SystemTransformer.transformCredentialType(response);
+                        document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            credentialTypeList: response,
+                            credentialTypeList: res,
                         });
                     },
                         error => {
-                            this.utilityService.showErrorMessage(error.message);
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
     }
 
     @Action(GetCredentialTypeByIdAction)
-    getCredentialTypesById(ctx: StateContext<SystemManagementModel>, action: GetCredentialTypeByIdAction): void {
-        const credentialTypesList = SystemManagementState.getCredentialTypeList(ctx.getState());
-        let credentialType: any;
-        if (credentialTypesList !== undefined) {
-            const i = credentialTypesList.findIndex((item: any) => item.id === action.id);
-            if (i !== -1) {
-                credentialType = credentialTypesList[i];
-            }
-        }
-        ctx.patchState({
-            credentialType: credentialType
-        });
+    getCredentialTypesById(ctx: StateContext<SystemManagementModel>, action: GetCredentialTypeByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.credentialTypes + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        credentialType: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+
+    }
+
+
+    @Action(DeleteCredentialTypeByIdAction)
+    deleteCredentialTypeById(ctx: StateContext<SystemManagementModel>, action: DeleteCredentialTypeByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.credentialTypes + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(SaveCredentialTypeAction)
+    saveCredentialType(ctx: StateContext<SystemManagementModel>, action: SaveCredentialTypeAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.credentialType, AppConstant.credentialTypes)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        credentialType: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(UpdateCredentialTypeAction)
+    updateCredentialType(ctx: StateContext<SystemManagementModel>, action: UpdateCredentialTypeAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.credentialType, AppConstant.credentialTypes + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        credentialType: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
     @Action(GetCoachUserListAction)
@@ -253,15 +497,18 @@ export class SystemManagementState {
         const force: boolean = action.force || SystemManagementState.getCoachUserList(ctx.getState()) !== undefined;
         let result: Actions;
         if (force) {
+            document.getElementById('loader').classList.add('loading');
             result = this.loginService.performGet(AppConstant.users + action.filter)
                 .pipe(
                     tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             coachUserList: response,
                         });
                     },
                         error => {
-                            this.utilityService.showErrorMessage(error.message);
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;

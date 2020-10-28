@@ -11,17 +11,6 @@ agm-map {
   border-radius: 10px;
   cursor: move;
 }
-.closeButton {
-  float: right;
-  height: 20px;
-  border: none;
-  margin-top: 6px;
-  border-radius: 3px;
-}
-.closeButton:focus {
-  border: none!important;
-}
-button.closeButton:focus {outline:0;}
 .mapButton {
   color: #76ba19 !important;
   border: 1px solid #ddd;
