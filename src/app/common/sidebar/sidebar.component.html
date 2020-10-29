@@ -1,12 +1,33 @@
 <div class='container-fluid'>
-  <p class='Energy_anaiytic'>
-    <img src='assets/images/dot03.gif' class='dot'>&nbsp;HEA Administrator's Home Page</p>
-  <p class='feedback'>
-    This page provides access to administrative functions for Home Energy Analytics' survey system.
-  </p>
-  <p class='feedback'>
-    Use the menu below to navigate to the appropriate administrative function.
-  </p>
+  <div *ngIf='showDetails'>
+    <p class='Energy_anaiytic'>
+      <img src='assets/images/dot03.gif' class='dot'>HEA Administrator's Home Page</p>
+    <p class='feedback'>
+      This page provides access to administrative functions for Home Energy Analytics' survey system.
+    </p>
+    <p class='feedback'>
+      Use the menu below to navigate to the appropriate administrative function.
+    </p>
+  </div>
+  <div *ngIf="showMethod" class="overflow">
+    <p class='Energy_anaiytic'>
+      <img src='assets/images/dot03.gif' class='dot'>Method list</p>
+    <table >
+      <thead>
+        <th>
+          Method name
+        </th>
+      </thead>
+      <tbody>
+        <tr class="bodderBottom" *ngFor="let method of methodName">
+          <td>
+            {{method}}
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
   <hr>
   <div class='feedback'>
     <ul>
@@ -17,9 +38,9 @@
           <li><a [routerLink]="['/admin/place/placeList']">Places</a></li>
           <li><a [routerLink]="['/admin/program/programGroupList']">Program Groups</a></li>
           <li><a [routerLink]="['/admin/customer-group/customerGroupList']">Customer Groups</a></li>
-          <li><a [routerLink]="['/admin/customer-event/customerEventList']">Customer Event Types</a></li>
+          <li><a [routerLink]="['/admin/customerEvent/customerEventTypeList']">Customer Event Types</a></li>
           <li><a [routerLink]="['/admin/customer-alert/customerAlertTypeList']">Customer Alert Types</a></li>
-          <li><a href='{{apiURL+"customerComparisonGroupList.do"}}'>Comparison Groups</a></li>
+          <li><a [routerLink]="['/admin/customerComparisonGroup/comparisonGroupList']">Comparison Groups</a></li>
           <li><a [routerLink]="['/admin/credential-type/credentialTypeList']">Credential Types</a></li>
           <li><a href='{{apiURL+"factorList.do"}}'>Factors</a></li>
           <li><a href='{{apiURL+"lookupList.do"}}'>Lookups</a></li>

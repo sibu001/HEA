@@ -14,6 +14,8 @@ import { ZipCodeEditComponent } from '../zip-code-edit/zip-code-edit.component';
 export class PlaceEditComponent implements OnInit {
 
   public keys: TABLECOLUMN[];
+  public placeStationId: Array<any> = TableColumnData.PLACE_STATION_ID;
+  public timezone: Array<any> = TableColumnData.TIMEZONE;
   public dataSource: any;
   public rolesData = {
     content: [],

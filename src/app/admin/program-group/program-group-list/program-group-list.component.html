@@ -47,9 +47,9 @@
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
               [data]="dataSource"
               [totalElement]="programGroupData.totalElements"
-              (onChangePageEvent)="findProgramGroup()"
+              (changePageEvent)="findProgramGroup()"
               (goToEditCustomer)="gotoEditProgramGroup($event)"
-              (onAddEvent)="addProgramGroup()">
+              (addEvent)="addProgramGroup()">
             </app-table>
           </div>
         </div>

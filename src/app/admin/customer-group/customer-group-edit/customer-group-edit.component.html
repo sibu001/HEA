@@ -8,7 +8,7 @@
             class="dot">
           <span class="messageName">Customer Group</span>
         </p>
-        <form [formGroup]="programGroupForm" class="form-group
+        <form [formGroup]="customerGroupForm" class="form-group
           form-padding">
           <div class="row borderTop borderBottom rowPadding"
             *ngIf="id!==undefined&&id!==null">
@@ -28,6 +28,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="groupCode" formControlName="groupCode">
+                <div *ngIf="f.groupCode.invalid && (f.groupCode.dirty ||
+                f.groupCode.touched)">
+                <span class="error" *ngIf="f.groupCode.errors.required">
+                  Group Code is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -38,6 +44,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="groupName" formControlName="groupName">
+                <div *ngIf="f.groupName.invalid && (f.groupName.dirty ||
+                f.groupName.touched)">
+                <span class="error" *ngIf="f.groupName.errors.required">
+                  Group Name is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -94,6 +106,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="registrationUrl" formControlName="registrationUrl">
+                <div *ngIf="f.registrationUrl.invalid && (f.registrationUrl.dirty ||
+                f.registrationUrl.touched)">
+                <span class="error" *ngIf="f.registrationUrl.errors.required">
+                  Registration Url is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -104,6 +122,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="baseDirectory" formControlName="baseDirectory">
+              <div *ngIf="f.baseDirectory.invalid && (f.baseDirectory.dirty ||
+                f.baseDirectory.touched)">
+                <span class="error" *ngIf="f.baseDirectory.errors.required">
+                  Base Directory is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -114,43 +138,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="auditIdPattern" formControlName="auditIdPattern">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Theme:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="theme" formControlName="theme">
-                <option
-                  value="AC">AC</option>
-                <option value="CEC" selected="selected">CEC</option>
-                <option
-                  value="CL">CL</option><option value="CLR">CLR</option>
-                <option
-                  value="CSP">CSP</option><option value="CW">CW</option>
-                <option
-                  value="EF">EF</option><option value="HEA">HEA</option>
-                <option
-                  value="HET">HET</option><option value="M">M</option>
-                <option
-                  value="MBL">MBL</option><option value="MV">MV</option>
-                <option
-                  value="P4P">P4P</option><option value="PGE">PGE</option>
-                <option
-                  value="PW">PW</option><option value="RS">RS</option>
-                <option
-                  value="RYPL">RYPL</option><option value="SC">SC</option>
-                <option
-                  value="SCB">SCB</option><option value="SNV">SNV</option>
-                <option
-                  value="SV">SV</option><option value="TST">TST</option>
-                <option
-                  value="VT">VT</option>
-              </select>
+              <div *ngIf="f.auditIdPattern.invalid && (f.auditIdPattern.dirty ||
+                f.auditIdPattern.touched)">
+                <span class="error" *ngIf="f.auditIdPattern.errors.required">
+                  Audit Id Pattern is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -162,8 +155,7 @@
               <select class="form-control form-control-sm"
                 id="scrapingUtility" formControlName="scrapingUtility">
                 <option value="calwater">CalWater</option><option
-                  value="gb">Green Button</option><option value="pge"
-                  selected="selected">PG&amp;E</option><option
+                  value="gb">Green Button</option><option value="pge">PG&amp;E</option><option
                   value="purissima">Purissima</option><option value="sce">SCE</option><option
                   value="socalgas">SoCalGas</option>
               </select>
@@ -177,8 +169,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm"
                 id="scrapingPeriod" formControlName="scrapingPeriod">
-                <option value="D"
-                  selected="selected">Daily</option>
+                <option value="D">Daily</option>
                 <option value="M">Monthly</option>
                 <option value="W">Weekly</option>
                 <option value="Y">Year</option>
@@ -559,10 +550,8 @@
               <select class="form-control form-control-sm"
                 id="customerRegistrationSuccessViewId"
                 formControlName="customerRegistrationSuccessViewId">
-                <option value="0"
-                  selected="selected">Smart Audit</option>
-                <option value="1">Dr
-                  Power</option>
+                <option value="0">Smart Audit</option>
+                <option value="1">Dr Power</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -578,7 +567,7 @@
             <div class="col-sm-12">
               <p class="messages">
                 <img src="assets/images/dot03.gif" class="dot pointer">
-                <span class="maasageName">
+                <span class="messageName">
                   Places
                 </span>
               </p>
@@ -587,9 +576,10 @@
 
           <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="placeKey" [data]="placeDataSource" [isDelete]="false" 
-              [totalElement]="placeData.totalElements">
-            </app-table>
+              <app-table [keys]="placeKey" [data]="placeDataSource"
+                [isDelete]=false
+                [totalElement]="placeData.totalElements" [checkbox]=true>
+              </app-table>
             </div>
           </div>
 
@@ -597,7 +587,7 @@
             <div class="col-sm-12">
               <p class="messages">
                 <img src="assets/images/dot03.gif" class="dot pointer">
-                <span class="maasageName">
+                <span class="messageName">
                   Program Group
                 </span>
               </p>
@@ -606,9 +596,10 @@
 
           <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="programGroupKey" [data]="programGroupDataSource" [isDelete]="false" 
-              [totalElement]="programGroupData.totalElements">
-            </app-table>
+              <app-table [keys]="programGroupKey"
+                [data]="programGroupDataSource" [isDelete]=false
+                [totalElement]="programGroupData.totalElements" [checkbox]=true>
+              </app-table>
             </div>
           </div>
 
@@ -624,7 +615,7 @@
               <button type="button" class="btn btn-primary"
                 (click)="delete()" *ngIf="id!==undefined&&id!==null">Delete</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4 bottomButton" >
               <button type="button" class="btn btn-primary"
                 (click)="save()">Save</button>
             </div>

@@ -244,6 +244,10 @@ img.back_img {
   background-color: #fff;
 }
 
+.dot {
+  padding: 10px;
+}
+
 a:focus {
   outline: 0px auto -webkit-focus-ring-color;
   outline-offset: 0px;
@@ -332,7 +336,7 @@ select {
 }
 
 @media (min-width: 768px) and (max-width: 992px) {
-  .form-control  {
+  .form-control {
     margin-bottom: 5% !important;
   }
   .form-row {
@@ -341,6 +345,16 @@ select {
   }
 }
 
-.pointer{
+.pointer {
   padding-left: 5px;
+}
+
+tr.bodderBottom {
+  border-bottom: 1px solid black;
+}
+
+.overflow {
+  height: 100vh;
+  width: 100%;
+  overflow: auto;
 }

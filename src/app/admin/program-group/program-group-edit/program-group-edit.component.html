@@ -17,6 +17,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="programCode" formControlName="programCode">
+                <div *ngIf="f.programCode.invalid && (f.programCode.dirty ||
+                f.programCode.touched)">
+                <span class="error" *ngIf="f.programCode.errors.required">
+                  Program Code is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -27,6 +33,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="programName" formControlName="programName">
+                <div *ngIf="f.programName.invalid && (f.programName.dirty ||
+                f.programName.touched)">
+                <span class="error" *ngIf="f.programName.errors.required">
+                  Program Name is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>

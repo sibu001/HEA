@@ -1,15 +1,6 @@
 section.space-top {
   margin-top: 5.3em;
 }
-.borderTop {
-  border-top: 1px solid #ddd;
-}
-.borderBottom {
-  border-bottom: 1px solid #ddd;
-}
-.rowPadding {
-  padding: 5px;
-}
 .heading {
   font-size: 21px;
   color: #000;
@@ -37,4 +28,7 @@ p.messages {
 .show-button {
   text-align: right;
   margin-top: 15px;
+}
+.error {
+  color: red;
 }

@@ -34,32 +34,9 @@
               <select formControlName="stationId" class="form-control form-control-sm" id="place.stationId"
                 name="place.stationId">
                 <option value="" selected="selected"></option>
-                <option value="KACV">CZ 01 (Arcata) (KACV)</option>
-                <option value="KCIC">Chico Municipal Airport (North Central Valley) (KCIC)</option>
-                <option value="KCQT">CZ 06 (Los Angeles Downtown) (KCQT)</option>
-                <option value="KFAT">CZ 13 (Fresno Yosemite International) (KFAT)</option>
-                <option value="KHAF">Half Moon Bay AirPort (KHAF)</option>
-                <option value="KLVK">Livermore Municipal Airport (instead of KCALIVER9) (KLVK)</option>
-                <option value="KMHS">CZ 16 (Mount Shasta) (KMHS)</option>
-                <option value="KMPV">Vermont (KMPV)</option>
-                <option value="KMYV">Olivehurst, CA (North Central Valley) (KMYV)</option>
-                <option value="KNID">CZ 14 (China Lake) (KNID)</option>
-                <option value="KNJK">CZ 15 (El Centro Naval Air Facility) (KNJK)</option>
-                <option value="KOAK">CZ 03 (Metro Oakland International) (KOAK)</option>
-                <option value="KONT">Ontario airport in SoCal (KONT)</option>
-                <option value="KRAL">CZ 10 (Riverside Municipal) (KRAL)</option>
-                <option value="KRBL">CZ 11 (Red Bluff Municipal) (KRBL)</option>
-                <option value="KSAC">CZ 12 (Sacramento Executive) (KSAC)</option>
-                <option value="KSAN">CZ 07 (San Diego International-Lindbergh) (KSAN)</option>
-                <option value="KSFO">San Francisco International (KSFO)</option>
-                <option value="KSJC">CZ 04 (San Jose Airport) (KSJC)</option>
-                <option value="KSMX">CZ 05 (Santa Maria Public Airport) (KSMX)</option>
-                <option value="KSNA">CZ 08 (John Wayne-Orange County) (KSNA)</option>
-                <option value="KSNS">Salinas Municipal Airport (KSNS)</option>
-                <option value="KSTS">CZ 02 (Sonoma County) (KSTS)</option>
-                <option value="KVTMONTP2">Vermont (old) (KVTMONTP2)</option>
-                <option value="RECYCLE-CZ12">C12 TMY for CEC "Urban Footprint" program (RECYCLE-CZ12)</option>
-                <option value="RECYCLE-US">Artificial weather data for TST accounts (RECYCLE-US)</option>
+                <option *ngFor="let stationId of placeStationId" [value]="stationId.key" selected="selected">
+                  {{stationId.value}}</option>
+
               </select>
             </div>
           </div>
@@ -811,13 +788,13 @@
             <img src='assets/images/dot03.gif' class='dot'>
             <span class='messageName'>Zip Codes</span></p>
           <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-            [totalElement]="rolesData.totalElements" (onChangePageEvent)="findZipcode($event)"
-            (goToEditCustomer)="goToEditZipcode($event)" (onImageEvent)='onImageClickEvent($event)'
-            (onAddEvent)='addZipCode()'></app-table>
+            [totalElement]="rolesData.totalElements" (changePageEvent)="findZipcode($event)"
+            (goToEditCustomer)="goToEditZipcode($event)" (imageEvent)='onImageClickEvent($event)'
+            (addEvent)='addZipCode()'></app-table>
           <hr class="hr_space">
           <div class="row rowPadding paddingTop">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <button type="reset" class="btn btn-primary" (click)='back()' >Cancel</button>
+              <button type="reset" class="btn btn-primary" (click)='back()'>Cancel</button>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 row" style="text-align: right;">
               <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" style="text-align: right;">

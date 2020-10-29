@@ -78,6 +78,20 @@ const ROUTES: Routes = [
       {
         path: 'place',
         loadChildren: './admin/place/place.module#PlaceModule'
+      },
+      {
+        path: 'customerEvent',
+        loadChildren: './admin/customer-event/customer-event.module#CustomerEventModule'
+      },
+      {
+        path: 'customerComparisonGroup',
+        loadChildren:
+          './admin/customer-comparison-groups/customer-comparison-groups.module#CustomerComparisonGroupsModule'
+      },
+      {
+        path: 'factor',
+        loadChildren:
+          './admin/factor/factor.module#FactorModule'
       }
 
     ]
