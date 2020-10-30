@@ -8,7 +8,7 @@
           <img src='assets/images/dot03.gif' class='dot'>Roles</p>
         <hr class="hr_space">
         <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-          [totalElement]="rolesData.totalElements" (changePageEvent)="findRole($event)"
+          [totalElement]="rolesData.totalElements" (changePageEvent)="findRole()"
           (goToEditEvent)="goToEditRole($event)"
           (addEvent)='addRole()'></app-table>
       </div>

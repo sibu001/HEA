@@ -34,7 +34,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');
     this.keys = TableColumnData.ROLE_KEY;
-    this.findRole(null);
+    this.findRole();
 
   }
 

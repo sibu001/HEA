@@ -29,7 +29,6 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     totalElements: 0,
   };
   placeForm: FormGroup;
-  id: any;
   isForce = false;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(

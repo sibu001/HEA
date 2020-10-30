@@ -54,7 +54,7 @@
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12 show-button">
-              <button type="button" class="btn btn-primary" (click)="findCustomerComparisonGroup()">Show</button>
+              <button type="button" class="btn btn-primary" (click)="findCustomerComparisonGroup(true,'')">Show</button>
             </div>
           </div>
         </form>
@@ -70,7 +70,7 @@
           <div class="col-sm-12">
             <app-table [isHideAdd]="true" [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
               [totalElement]="customerComparisonGroupData.totalElements"
-              (changePageEvent)="findCustomerComparisonGroup()" (goToEditEvent)="goToEditEventComparisonGroup($event)">
+              (changePageEvent)="findCustomerComparisonGroup(true,'')" (goToEditEvent)="gotoEditCustomerComparisonGroup($event)">
             </app-table>
           </div>
         </div>

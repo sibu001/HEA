@@ -19,7 +19,7 @@ export class RoleEditComponent implements OnInit, OnDestroy {
  isForce = false;
   private readonly subscriptions: Subscription = new Subscription();
 
-  constructor(private readonly fb: FormBuilder,
+  constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
     private readonly router: Router,
