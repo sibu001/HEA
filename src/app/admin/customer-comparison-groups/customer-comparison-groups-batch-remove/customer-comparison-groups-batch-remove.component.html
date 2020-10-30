@@ -8,16 +8,6 @@
         </p>
         <form [formGroup]="customerComparisonGroupForm" class="form-group
           form-padding">
-          <!-- <div class="row borderTop borderBottom rowPadding" *ngIf="id!==undefined&&id!==null">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Record Id:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="customerEventTypeId"
-                formControlName="customerEventTypeId">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div> -->
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Comparison code
@@ -53,9 +43,9 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row rowPadding">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6"><button type="button" class="btn btn-primary"
-                (click)="back()">Back</button></div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;">
               <button type="button" class="btn btn-primary" style="float:right;" (click)="delete()">
                 <!-- *ngIf="id!==undefined&&id!==null" -->
                 Delete</button>
@@ -64,7 +54,7 @@
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar></app-sidebar>
+        <app-sidebar [showDetails]=true></app-sidebar>
       </div>
     </div>
   </div>

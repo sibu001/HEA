@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   templateUrl: './customer-comparison-groups-batch-remove.component.html',
   styleUrls: ['./customer-comparison-groups-batch-remove.component.css']
 })
-export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit {
+export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit, OnDestroy {
 
   id: any;
   customerComparisonGroupForm: FormGroup;
@@ -39,7 +39,7 @@ export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit {
 
   setForm(event: any) {
     this.customerComparisonGroupForm = this.formBuilder.group({
-      comparisonCode: [event !== undefined ? event.comparisonCode : ''],
+      comparisonCode: [event !== undefined ? event.comparisonCode : 'Cooling'],
       order: [event !== undefined ? event.order : ''],
       weatherStationId: [event !== undefined ? event.weatherStationId : ''],
     });

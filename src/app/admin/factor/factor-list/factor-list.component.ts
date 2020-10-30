@@ -11,10 +11,11 @@ import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 })
 export class FactorListComponent implements OnInit {
 
+  id: any
   public keys: Array<TABLECOLUMN>;
   public dataSource: any;
   public totalElement = 0;
-  public rolesData = {
+  public factorData = {
     content: [],
     totalElements: 0,
   };
@@ -32,22 +33,18 @@ export class FactorListComponent implements OnInit {
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');
     this.keys = TableColumnData.FACTOR_KEY;
-    this.findPlace();
+    this.findFactor();
   }
 
-  findPlace(event?: any): any {
-
-  }
-
-  goToEditPlace(event: any): any {
-    this.router.navigate(['/admin/factor/factorEdit']);
-  }
-
-  onImageClickEvent(event: any): any {
+  findFactor(event?: any): any {
 
   }
 
-  addPlace(): any {
+  goToEditFactor(event: any): any {
+    this.router.navigate(['/admin/factor/factorEdit'], { queryParams: { 'id': event.id } });
+  }
+
+  addFactor(): any {
     this.router.navigate(['/admin/factor/factorEdit']);
   }
 }

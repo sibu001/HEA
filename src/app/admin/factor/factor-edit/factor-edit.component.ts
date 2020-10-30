@@ -35,9 +35,6 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  findProgramGroup(): void {
-  }
-
   setForm(event: any) {
     this.eventForm = this.formBuilder.group({
       // id: [event !== undefined ? event.id : ''],

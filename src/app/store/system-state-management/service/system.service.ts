@@ -6,6 +6,7 @@ import {
   DeleteCustomerAlertTypeByIdAction,
   DeleteCustomerGroupByIdAction,
   DeleteProgramGroupByIdAction,
+  DeleteRoleByIdAction,
   GetCoachUserListAction,
   GetCredentialTypeByIdAction,
   GetCredentialTypeListAction,
@@ -15,15 +16,19 @@ import {
   GetCustomerGroupListAction,
   GetProgramGroupByIdAction,
   GetProgramGroupListAction,
+  GetRoleByIdAction,
+  GetRoleListAction,
   GetViewConfigurationListAction,
   SaveCredentialTypeAction,
   SaveCustomerAlertTypeAction,
   SaveCustomerGroupAction,
   SaveProgramGroupAction,
+  SaveRoleAction,
   UpdateCredentialTypeAction,
   UpdateCustomerAlertTypeAction,
   UpdateCustomerGroupAction,
-  UpdateProgramGroupAction
+  UpdateProgramGroupAction,
+  UpdateRoleAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -68,6 +73,14 @@ export class SystemService {
 
   getCredentialTypeById(): Observable<any> {
     return this.store.select(SystemManagementState.getCredentialTypeById);
+  }
+
+  getRoleList(): Observable<any> {
+    return this.store.select(SystemManagementState.getRoleList);
+  }
+
+  getRoleById(): Observable<any> {
+    return this.store.select(SystemManagementState.getRoleById);
   }
 
   getCoachUserList(): Observable<any> {
@@ -161,6 +174,26 @@ export class SystemService {
 
   loadCoachUserList(force: boolean, filter: string): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCoachUserListAction(force, filter));
+  }
+
+  loadRoleList(force: boolean): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetRoleListAction(force));
+  }
+
+  loadRoleById(id: number): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetRoleByIdAction(id));
+  }
+
+  saveRole(role: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new SaveRoleAction(role));
+  }
+
+  updateRole(id: number, role: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new UpdateRoleAction(id, role));
+  }
+
+  deleteRoleById(id: number): Observable<SystemManagementState> {
+    return this.store.dispatch(new DeleteRoleByIdAction(id));
   }
 
 }

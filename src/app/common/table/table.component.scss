@@ -88,7 +88,6 @@ mat-paginator.paginatorcss.mat-paginator {
   overflow: visible;
   border-right: 1px solid #ddd;
   border-top: 1px solid #ddd;
-
 }
 mat-footer-row,
 mat-header-row,
@@ -102,10 +101,10 @@ mat-header-cell {
   padding-left: 12px !important;
 }
 
-// mat-cell:first-of-type > div {
-//   text-decoration: underline;
-//   cursor: pointer;
-// }
+.mat-cell-underline > div {
+  text-decoration: underline;
+  cursor: pointer;
+}
 
 .mat-paginator-range-label {
   display: none;
@@ -114,7 +113,7 @@ mat-header-cell {
 .text-nowrap {
   color: #000;
   font-size: 18px;
-  white-space:pre-line;
+  white-space: pre-line;
 }
 
 .btn-primary {
@@ -196,7 +195,12 @@ div .greenAlert {
   background-color: #1798a3 !important;
   margin: auto;
 }
-.mat-column-select{
+.mat-column-select {
   flex: none;
   width: 55px;
+}
+
+.removePadding {
+  padding: 5px;
+  display: inline-table;
 }

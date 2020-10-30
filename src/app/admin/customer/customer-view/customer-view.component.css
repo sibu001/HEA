@@ -27,21 +27,21 @@ section.space-top {
 }
 
 .messages {
-  color: #4550a1;
   font-size: larger;
   font-weight: 600;
-}
-.error {
-  color: red;
 }
 
 ::ng-deep .rowSize .mat-header-row {
   min-height: 77px !important;
 }
 ::ng-deep .rowSize .mat-sort-header-arrow {
-  display: none!important;
+  display: none !important;
 }
-::ng-deep .rowSize .mat-header-cell{
+::ng-deep .rowSize .mat-header-cell {
   justify-content: center;
   padding-left: 0px !important;
+}
+
+.paddingTop{
+  padding-top: 3%;
 }

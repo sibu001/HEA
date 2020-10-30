@@ -92,6 +92,26 @@ const ROUTES: Routes = [
         path: 'factor',
         loadChildren:
           './admin/factor/factor.module#FactorModule'
+      },
+      {
+        path: 'lookup',
+        loadChildren:
+          './admin/lookups/lookup.module#LookupModule'
+      },
+      {
+        path: 'systemParameter',
+        loadChildren:
+          './admin/system-parameter/system-parameter.module#SystemParameterModule'
+      },
+      {
+        path: 'weatherStation',
+        loadChildren:
+          './admin/weather-station/weather-station.module#WeatherStationModule'
+      },
+      {
+        path: 'logs',
+        loadChildren:
+          './admin/logs/logs.module#LogsModule'
       }
 
     ]

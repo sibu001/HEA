@@ -47,3 +47,19 @@ section.space-top {
   padding-left: 40px;
   padding-right: 40px;
 }
+
+select {
+  background: url("src/assets/images/up_downArrow.png") no-repeat right;
+  -webkit-appearance: none;
+  padding-right: 30px;
+  background-position-x: 98%;
+}
+
+.removePadding {
+  padding: 5px;
+  display: inline-table;
+}
+
+.float_right {
+  float: right;
+}

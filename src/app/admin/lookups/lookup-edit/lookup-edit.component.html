@@ -1,0 +1,73 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Lookup</span>
+        </p>
+        <form [formGroup]="lookupForm" class="form-group form-padding">
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Lookup code</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="lookupCode" formControlName="lookupCode">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Lookup Name:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="lookupName" id="lookupName">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Default Value:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="defaultValue" id="defaultValue">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row">
+            <p class="messages">
+              <img class="pointer" src="assets/images/dot03.gif" class="dot">
+              <span class="messageName">Lookup Values</span>
+            </p>
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
+              <app-table [keys]="lookupValueKey" [data]="lookupValueDataSource" [isDelete]=true
+                [totalElement]="lookupValueData.totalElements">
+              </app-table>
+            </div>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row">
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;"
+                *ngIf="id === undefined || id === null"></div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;"
+                *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
+                  Delete
+                </button>
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

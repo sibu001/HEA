@@ -1,43 +1,61 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
   selector: 'app-role-list',
   templateUrl: './role-list.component.html',
   styleUrls: ['./role-list.component.css']
 })
-export class RoleListComponent implements OnInit {
+export class RoleListComponent implements OnInit, OnDestroy {
 
-  public keys: Array<TABLECOLUMN>;
+  public keys: Array<TABLECOLUMN> = TableColumnData.ROLE_KEY;
   public dataSource: any;
+  public force = false;
   public rolesData = {
     content: [],
     totalElements: 0,
   };
-  constructor(public router: Router) { }
+  private readonly subscriptions: Subscription = new Subscription();
 
+  constructor(
+    private readonly systemService: SystemService,
+    private readonly router: Router,
+    private readonly activateRoute: ActivatedRoute) {
+    this.activateRoute.queryParams.subscribe(params => {
+      this.force = params['force'];
+    });
+  }
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');
     this.keys = TableColumnData.ROLE_KEY;
     this.findRole(null);
-    
+
   }
 
-  findRole(event: any): any {
-
+  findRole(): any {
+    this.systemService.loadRoleList(this.force);
+    this.subscriptions.add(this.systemService.getRoleList().pipe(skipWhile((item: any) => !item))
+      .subscribe((roleList: any) => {
+        this.rolesData.content = roleList;
+        this.dataSource = [...this.rolesData.content];
+      }));
   }
 
   goToEditRole(event: any): any {
+    this.router.navigate(['admin/role/roleEdit'], { queryParams: { 'id': event.id } });
+  }
+
+  addRole(): any {
     this.router.navigate(['admin/role/roleEdit']);
   }
 
-  onImageClickEvent(event: any): any {
-
-  }
-
-  addEvent(): any {
-    this.router.navigate(['admin/role/roleEdit']);
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }

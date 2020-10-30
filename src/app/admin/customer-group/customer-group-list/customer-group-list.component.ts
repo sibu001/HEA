@@ -63,7 +63,7 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
   }
 
 
-  gotoEditCustomerGroup(event: any) {
+  goToEditEventGroup(event: any) {
     this.router.navigate(['admin/customer-group/customerGroupEdit'], { queryParams: { 'id': event.id } });
   }
 

@@ -4,8 +4,7 @@
 
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif"
-            class="dot">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Program Group</span>
         </p>
         <form [formGroup]="programGroupForm" class="form-group
@@ -15,9 +14,8 @@
               Program code
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="programCode" formControlName="programCode">
-                <div *ngIf="f.programCode.invalid && (f.programCode.dirty ||
+              <input type="text" class="form-control form-control-sm" id="programCode" formControlName="programCode">
+              <div *ngIf="f.programCode.invalid && (f.programCode.dirty ||
                 f.programCode.touched)">
                 <span class="error" *ngIf="f.programCode.errors.required">
                   Program Code is required.
@@ -31,9 +29,8 @@
               Program Name:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="programName" formControlName="programName">
-                <div *ngIf="f.programName.invalid && (f.programName.dirty ||
+              <input type="text" class="form-control form-control-sm" id="programName" formControlName="programName">
+              <div *ngIf="f.programName.invalid && (f.programName.dirty ||
                 f.programName.touched)">
                 <span class="error" *ngIf="f.programName.errors.required">
                   Program Name is required.
@@ -47,60 +44,72 @@
               Assigned Event Type
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="inCustomerEventTypeId" class="form-control form-control-sm"
-                name="inCustomerEventTypeId"
+              <select id="inCustomerEventTypeId" class="form-control form-control-sm" name="inCustomerEventTypeId"
                 formControlName="inCustomerEventTypeId">
-                <option value=""></option><option
-                  value="1" selected="selected">Assigned to High Heating or
-                  Cooling Program Group</option><option value="2">Assigned to
-                  High Plug Loads Program Group</option><option value="3">Assigned
-                  to High Heating/Cooling Loads Program Group</option><option
-                  value="5">New real-time energy monitor was installed</option><option
-                  value="6">Completed a home energy consultation with an expert</option><option
-                  value="9">Started charging an electric vehicle at home</option><option
-                  value="10">Started charging an electric vehicle (sub-metered)</option><option
-                  value="11">Added, removed or updated a major appliance</option><option
-                  value="12">Change in average home occupancy</option><option
-                  value="13">Significant home remodel or retrofit</option><option
-                  value="14">Completed a simple Energy Efficiency measure</option><option
-                  value="15">Change in behavior affecting energy use</option><option
-                  value="16">Unassigned from High Heating/Cooling Loads Program
-                  Group</option><option value="17">Unassigned from High Plug
-                  Loads Program Group</option><option value="18">Unassigned from
-                  High Heating/Cooling Loads Program Group</option><option
-                  value="19">Assigned to High Variable Loads Program Group</option><option
-                  value="20">Unassigned from High Variable Loads Program Group</option><option
-                  value="21">Completed initial Home Energy Profile for EUMV</option><option
-                  value="22">Completed online smart meter audit for EUMV</option><option
-                  value="23">Assigned to High Recurring Loads Program Group</option><option
-                  value="24">Unassigned from High Recurring Loads Program Group</option><option
-                  value="25">Assigned to Low Energy Program Group</option><option
-                  value="26">Unassigned from Low Energy Program Group</option><option
-                  value="27">Assigned to Detailed Online Audit Program</option><option
-                  value="28">Unassigned from Online Program</option><option
-                  value="29">Temporary increase in energy use</option><option
-                  value="30">Solar PV system installed and generating
-                  electricity</option><option value="31">Problem with Energy
-                  Profile Detected</option><option value="32">Problem with
-                  Energy Profile now fixed</option><option value="33">Moved to a
-                  new home</option><option value="34">Opt-in for optional
-                  Program-specific Survey</option><option value="36">Received an
-                  energy saving device</option><option value="39">Air
-                  conditioning optimizer installed by home professional</option><option
-                  value="40">In-home energy audit performed by professional</option><option
-                  value="41">Account specific notes</option><option value="42">Double-counted
-                  recurring or base load detected and fixed</option><option
-                  value="43">Double-counted recurring or base load detected and
-                  fixed</option><option value="44">Enrolled into P4P Program</option><option
-                  value="45">Removed from P4P Program</option><option
-                  value="46">Determined Eligible for P4P Program</option><option
-                  value="47">Temporary decrease in energy use</option><option
-                  value="48">Stopped charging an electric vehicle at home</option><option
-                  value="49">Determined ineligible for P4P Program</option><option
-                  value="50">Applied for Peninsula Climate Comfort</option><option
-                  value="51">Completion date for Home Energy Profile topic</option><option
-                  value="52">Enrolled into P4P Program as Metered Reserve</option><option
-                  value="53">Log of miscellaneous Coaching Activity</option></select>
+                <option value=""></option>
+                <option value="1" selected="selected">Assigned to High Heating or
+                  Cooling Program Group</option>
+                <option value="2">Assigned to
+                  High Plug Loads Program Group</option>
+                <option value="3">Assigned
+                  to High Heating/Cooling Loads Program Group</option>
+                <option value="5">New real-time energy monitor was installed</option>
+                <option value="6">Completed a home energy consultation with an expert</option>
+                <option value="9">Started charging an electric vehicle at home</option>
+                <option value="10">Started charging an electric vehicle (sub-metered)</option>
+                <option value="11">Added, removed or updated a major appliance</option>
+                <option value="12">Change in average home occupancy</option>
+                <option value="13">Significant home remodel or retrofit</option>
+                <option value="14">Completed a simple Energy Efficiency measure</option>
+                <option value="15">Change in behavior affecting energy use</option>
+                <option value="16">Unassigned from High Heating/Cooling Loads Program
+                  Group</option>
+                <option value="17">Unassigned from High Plug
+                  Loads Program Group</option>
+                <option value="18">Unassigned from
+                  High Heating/Cooling Loads Program Group</option>
+                <option value="19">Assigned to High Variable Loads Program Group</option>
+                <option value="20">Unassigned from High Variable Loads Program Group</option>
+                <option value="21">Completed initial Home Energy Profile for EUMV</option>
+                <option value="22">Completed online smart meter audit for EUMV</option>
+                <option value="23">Assigned to High Recurring Loads Program Group</option>
+                <option value="24">Unassigned from High Recurring Loads Program Group</option>
+                <option value="25">Assigned to Low Energy Program Group</option>
+                <option value="26">Unassigned from Low Energy Program Group</option>
+                <option value="27">Assigned to Detailed Online Audit Program</option>
+                <option value="28">Unassigned from Online Program</option>
+                <option value="29">Temporary increase in energy use</option>
+                <option value="30">Solar PV system installed and generating
+                  electricity</option>
+                <option value="31">Problem with Energy
+                  Profile Detected</option>
+                <option value="32">Problem with
+                  Energy Profile now fixed</option>
+                <option value="33">Moved to a
+                  new home</option>
+                <option value="34">Opt-in for optional
+                  Program-specific Survey</option>
+                <option value="36">Received an
+                  energy saving device</option>
+                <option value="39">Air
+                  conditioning optimizer installed by home professional</option>
+                <option value="40">In-home energy audit performed by professional</option>
+                <option value="41">Account specific notes</option>
+                <option value="42">Double-counted
+                  recurring or base load detected and fixed</option>
+                <option value="43">Double-counted recurring or base load detected and
+                  fixed</option>
+                <option value="44">Enrolled into P4P Program</option>
+                <option value="45">Removed from P4P Program</option>
+                <option value="46">Determined Eligible for P4P Program</option>
+                <option value="47">Temporary decrease in energy use</option>
+                <option value="48">Stopped charging an electric vehicle at home</option>
+                <option value="49">Determined ineligible for P4P Program</option>
+                <option value="50">Applied for Peninsula Climate Comfort</option>
+                <option value="51">Completion date for Home Energy Profile topic</option>
+                <option value="52">Enrolled into P4P Program as Metered Reserve</option>
+                <option value="53">Log of miscellaneous Coaching Activity</option>
+              </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -109,88 +118,107 @@
               Leave Event Type
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                <select  class="form-control form-control-sm"
-                id="outCustomerEventTypeId"
-                formControlName="outCustomerEventTypeId"><option value=""></option><option
-                    value="1">Assigned to High Heating or Cooling Program Group</option><option
-                    value="2">Assigned to High Plug Loads Program Group</option><option
-                    value="3">Assigned to High Heating/Cooling Loads Program
-                    Group</option><option value="5">New real-time energy monitor
-                    was installed</option><option value="6">Completed a home
-                    energy consultation with an expert</option><option
-                    value="9">Started charging an electric vehicle at home</option><option
-                    value="10">Started charging an electric vehicle
-                    (sub-metered)</option><option value="11">Added, removed or
-                    updated a major appliance</option><option value="12">Change
-                    in average home occupancy</option><option value="13">Significant
-                    home remodel or retrofit</option><option value="14">Completed
-                    a simple Energy Efficiency measure</option><option
-                    value="15">Change in behavior affecting energy use</option><option
-                    value="16" selected="selected">Unassigned from High
-                    Heating/Cooling Loads Program Group</option><option
-                    value="17">Unassigned from High Plug Loads Program Group</option><option
-                    value="18">Unassigned from High Heating/Cooling Loads
-                    Program Group</option><option value="19">Assigned to High
-                    Variable Loads Program Group</option><option value="20">Unassigned
-                    from High Variable Loads Program Group</option><option
-                    value="21">Completed initial Home Energy Profile for EUMV</option><option
-                    value="22">Completed online smart meter audit for EUMV</option><option
-                    value="23">Assigned to High Recurring Loads Program Group</option><option
-                    value="24">Unassigned from High Recurring Loads Program
-                    Group</option><option value="25">Assigned to Low Energy
-                    Program Group</option><option value="26">Unassigned from Low
-                    Energy Program Group</option><option value="27">Assigned to
-                    Detailed Online Audit Program</option><option value="28">Unassigned
-                    from Online Program</option><option value="29">Temporary
-                    increase in energy use</option><option value="30">Solar PV
-                    system installed and generating electricity</option><option
-                    value="31">Problem with Energy Profile Detected</option><option
-                    value="32">Problem with Energy Profile now fixed</option><option
-                    value="33">Moved to a new home</option><option value="34">Opt-in
-                    for optional Program-specific Survey</option><option
-                    value="36">Received an energy saving device</option><option
-                    value="39">Air conditioning optimizer installed by home
-                    professional</option><option value="40">In-home energy audit
-                    performed by professional</option><option value="41">Account
-                    specific notes</option><option value="42">Double-counted
-                    recurring or base load detected and fixed</option><option
-                    value="43">Double-counted recurring or base load detected
-                    and fixed</option><option value="44">Enrolled into P4P
-                    Program</option><option value="45">Removed from P4P Program</option><option
-                    value="46">Determined Eligible for P4P Program</option><option
-                    value="47">Temporary decrease in energy use</option><option
-                    value="48">Stopped charging an electric vehicle at home</option><option
-                    value="49">Determined ineligible for P4P Program</option><option
-                    value="50">Applied for Peninsula Climate Comfort</option><option
-                    value="51">Completion date for Home Energy Profile topic</option><option
-                    value="52">Enrolled into P4P Program as Metered Reserve</option><option
-                    value="53">Log of miscellaneous Coaching Activity</option></select>
-              </div>
-              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+              <select class="form-control form-control-sm" id="outCustomerEventTypeId"
+                formControlName="outCustomerEventTypeId">
+                <option value=""></option>
+                <option value="1">Assigned to High Heating or Cooling Program Group</option>
+                <option value="2">Assigned to High Plug Loads Program Group</option>
+                <option value="3">Assigned to High Heating/Cooling Loads Program
+                  Group</option>
+                <option value="5">New real-time energy monitor
+                  was installed</option>
+                <option value="6">Completed a home
+                  energy consultation with an expert</option>
+                <option value="9">Started charging an electric vehicle at home</option>
+                <option value="10">Started charging an electric vehicle
+                  (sub-metered)</option>
+                <option value="11">Added, removed or
+                  updated a major appliance</option>
+                <option value="12">Change
+                  in average home occupancy</option>
+                <option value="13">Significant
+                  home remodel or retrofit</option>
+                <option value="14">Completed
+                  a simple Energy Efficiency measure</option>
+                <option value="15">Change in behavior affecting energy use</option>
+                <option value="16" selected="selected">Unassigned from High
+                  Heating/Cooling Loads Program Group</option>
+                <option value="17">Unassigned from High Plug Loads Program Group</option>
+                <option value="18">Unassigned from High Heating/Cooling Loads
+                  Program Group</option>
+                <option value="19">Assigned to High
+                  Variable Loads Program Group</option>
+                <option value="20">Unassigned
+                  from High Variable Loads Program Group</option>
+                <option value="21">Completed initial Home Energy Profile for EUMV</option>
+                <option value="22">Completed online smart meter audit for EUMV</option>
+                <option value="23">Assigned to High Recurring Loads Program Group</option>
+                <option value="24">Unassigned from High Recurring Loads Program
+                  Group</option>
+                <option value="25">Assigned to Low Energy
+                  Program Group</option>
+                <option value="26">Unassigned from Low
+                  Energy Program Group</option>
+                <option value="27">Assigned to
+                  Detailed Online Audit Program</option>
+                <option value="28">Unassigned
+                  from Online Program</option>
+                <option value="29">Temporary
+                  increase in energy use</option>
+                <option value="30">Solar PV
+                  system installed and generating electricity</option>
+                <option value="31">Problem with Energy Profile Detected</option>
+                <option value="32">Problem with Energy Profile now fixed</option>
+                <option value="33">Moved to a new home</option>
+                <option value="34">Opt-in
+                  for optional Program-specific Survey</option>
+                <option value="36">Received an energy saving device</option>
+                <option value="39">Air conditioning optimizer installed by home
+                  professional</option>
+                <option value="40">In-home energy audit
+                  performed by professional</option>
+                <option value="41">Account
+                  specific notes</option>
+                <option value="42">Double-counted
+                  recurring or base load detected and fixed</option>
+                <option value="43">Double-counted recurring or base load detected
+                  and fixed</option>
+                <option value="44">Enrolled into P4P
+                  Program</option>
+                <option value="45">Removed from P4P Program</option>
+                <option value="46">Determined Eligible for P4P Program</option>
+                <option value="47">Temporary decrease in energy use</option>
+                <option value="48">Stopped charging an electric vehicle at home</option>
+                <option value="49">Determined ineligible for P4P Program</option>
+                <option value="50">Applied for Peninsula Climate Comfort</option>
+                <option value="51">Completion date for Home Energy Profile topic</option>
+                <option value="52">Enrolled into P4P Program as Metered Reserve</option>
+                <option value="53">Log of miscellaneous Coaching Activity</option>
+              </select>
             </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
 
-            <div class="row rowPadding paddingTop">
-              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
-                <button type="button" class="btn btn-primary"
-                  (click)="back()">Back</button>
-              </div>
-              <div class="col-sm-6 col-md-6 col-lg-6">
-
-              </div>
-              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
-                <button type="button" class="btn btn-primary"
-                  (click)="delete()" *ngIf="id!==undefined&&id!==null">Delete</button>
-              </div>
-              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
-                <button type="button" class="btn btn-primary"
-                  (click)="save()">Save</button>
-              </div>
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
             </div>
-          </form>
-        </div>
-        <div class="col-md-3 .col-lg-3 col-sm-12">
-          <app-sidebar></app-sidebar>
-        </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
+              <button type="button" class="btn btn-primary" (click)="delete()"
+                *ngIf="id!==undefined&&id!==null">Delete</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
+              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]="true"></app-sidebar>
       </div>
     </div>
-  </section>
+  </div>
+</section>

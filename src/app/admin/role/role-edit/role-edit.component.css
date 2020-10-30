@@ -1,11 +1,6 @@
 section.space-top {
   margin-top: 5.3em;
 }
-.checkbox {
-  margin-left: 10px;
-  display: inline;
-}
-
 .dot {
   padding: 10px;
 }
@@ -21,13 +16,7 @@ section.space-top {
   padding-left: 40px;
   padding-top: 35px;
 }
-
-.heading {
-  font-size: larger;
-}
-
-.messages {
-  color: #4550a1;
+p.Messages {
   font-size: larger;
   font-weight: 600;
 }
@@ -43,4 +32,7 @@ section.space-top {
 .form-padding {
   padding-left: 40px;
   padding-right: 40px;
+}
+.paddingTop {
+  padding-top: 3%;
 }

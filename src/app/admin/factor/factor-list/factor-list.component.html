@@ -58,18 +58,16 @@
             </div>
           </div>
         </form>
-        <hr class=hr_space>
         <p class="messages">
           <img src='assets/images/dot03.gif' class='dot'>
           <span class="messageName">Factors (Number of Records = {{totalElement}})</span></p>
-        <hr class="hr_space">
         <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-          [totalElement]="rolesData.totalElements" (changePageEvent)="findPlace($event)"
-          (goToEditCustomer)="goToEditPlace($event)" (imageEvent)='onImageClickEvent($event)' (addEvent)='addPlace()'>
+          [totalElement]="factorData.totalElements" (changePageEvent)="findFactor($event)"
+          (goToEditEvent)="goToEditFactor($event)" (addEvent)='addFactor()'>
         </app-table>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar></app-sidebar>
+        <app-sidebar [showDetails]=true></app-sidebar>
       </div>
     </div>
   </div>

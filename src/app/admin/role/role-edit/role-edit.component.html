@@ -3,33 +3,48 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
           padding-top: 35px;'>
-        <p class="accurate">
-          <img src='assets/images/dot03.gif' class='dot'>
+          <p class='Messages'>
+              <img src='assets/images/dot03.gif' class='dot'>
           <span class="messageName">Role</span>
         </p>
         <form class="form-group" [formGroup]='roleForm'>
           <div class="row borderTop borderBottom rowPadding">
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              Role Code
+              Role Code:
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <input type="text" formControlName="roleCode" class="form-control form-control-sm">
+              <span *ngIf="id!==undefined">{{id}}</span>
+              <input  *ngIf="id===undefined" type="text" formControlName="roleCode" class="form-control
+                form-control-sm">
+              <div *ngIf="f.roleCode.invalid && (f.roleCode.dirty
+                ||
+                f.roleCode.touched)">
+                <span class="error" *ngIf="f.roleCode.errors.required">
+                   Role Code is required.
+                </span>
+              </div>
             </div>
           </div>
-          <div class="row borderTop borderBottom rowPadding">
+          <div class="row borderBottom rowPadding">
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              Description
+              Description:
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <input type="text" formControlName="description" class="form-control form-control-sm">
+              <input type="text" formControlName="description"
+                class="form-control form-control-sm">
             </div>
           </div>
-          <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+          <div class="row paddingTop rowPadding">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
               <button type="text" class="btn btn-primary" (click)='back()'>Cancel</button>
             </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: right;">
-              <button type="text" class="btn btn-primary">Save</button>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-4">
+              <button type="text" class="btn btn-primary" (click)="delete()"
+                *ngIf="id!=undefined">Delete</button>
+            </div>
+            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-4" style="text-align:
+              right;">
+              <button type="text" class="btn btn-primary" (click)="save()">Save</button>
             </div>
           </div>
 
@@ -37,7 +52,7 @@
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar></app-sidebar>
+        <app-sidebar [showDetails]="true"></app-sidebar>
       </div>
     </div>
   </div>

@@ -63,7 +63,7 @@ export class CustomerAlertTypeListComponent implements OnInit, OnDestroy {
   }
 
 
-  gotoEditCustomerAlertType(event: any): any {
+  goToEditEventAlertType(event: any): any {
     this.router.navigate(['admin/customer-alert/customerAlertTypeEdit'], { queryParams: { 'id': event.id } });
   }
 

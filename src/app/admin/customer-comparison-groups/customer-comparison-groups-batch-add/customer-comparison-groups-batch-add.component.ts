@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -12,7 +12,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   templateUrl: './customer-comparison-groups-batch-add.component.html',
   styleUrls: ['./customer-comparison-groups-batch-add.component.css']
 })
-export class CustomerComparisonGroupsBatchAddComponent implements OnInit {
+export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDestroy {
   id: any;
   customerComparisonGroupForm: FormGroup;
   public weatherStationIds: Array<any> = TableColumnData.PLACE_STATION_ID;
@@ -39,7 +39,7 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit {
 
   setForm(event: any) {
     this.customerComparisonGroupForm = this.formBuilder.group({
-      comparisonCode: [event !== undefined ? event.comparisonCode : ''],
+      comparisonCode: [event !== undefined ? event.comparisonCode : 'Cooling'],
       order: [event !== undefined ? event.order : ''],
       groupByWeather: [event !== undefined ? event.groupByWeather : ''],
       weatherStationId: [event !== undefined ? event.weatherStationId : ''],

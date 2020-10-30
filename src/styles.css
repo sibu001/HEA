@@ -1122,3 +1122,6 @@ button.closeButton:focus {
 .bottomButton{
   text-align: right;
 }
+.error {
+  color: red;
+}

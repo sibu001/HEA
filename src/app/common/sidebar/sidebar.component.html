@@ -9,10 +9,10 @@
       Use the menu below to navigate to the appropriate administrative function.
     </p>
   </div>
-  <div *ngIf="showMethod" class="overflow">
+  <div *ngIf="showMethod" [class.overflow]='methodName.length>0'>
     <p class='Energy_anaiytic'>
       <img src='assets/images/dot03.gif' class='dot'>Method list</p>
-    <table >
+    <table>
       <thead>
         <th>
           Method name
@@ -42,11 +42,11 @@
           <li><a [routerLink]="['/admin/customer-alert/customerAlertTypeList']">Customer Alert Types</a></li>
           <li><a [routerLink]="['/admin/customerComparisonGroup/comparisonGroupList']">Comparison Groups</a></li>
           <li><a [routerLink]="['/admin/credential-type/credentialTypeList']">Credential Types</a></li>
-          <li><a href='{{apiURL+"factorList.do"}}'>Factors</a></li>
-          <li><a href='{{apiURL+"lookupList.do"}}'>Lookups</a></li>
-          <li><a href='{{apiURL+"systemParameterList.do"}}'>System parameter</a></li>
-          <li><a href='{{apiURL+"logList.do"}}'>Logs</a></li>
-          <li><a href='{{apiURL+"weatherStationList.do"}}'>Weather Stations</a></li>
+          <li><a [routerLink]="['/admin/factor/factorList']">Factors</a></li>
+          <li><a [routerLink]="['/admin/lookup/lookupList']">Lookups</a></li>
+          <li><a [routerLink]="['/admin/systemParameter/systemParameterList']">System parameter</a></li>
+          <li><a [routerLink]="['/admin/logs/logsList']">Logs</a></li>
+          <li><a [routerLink]="['/admin/weatherStation/weatherStationList']">Weather Stations</a></li>
           <li><a href='{{apiURL+"degreeDayList.do"}}'>Degree days</a></li>
           <li><a href='{{apiURL+"cimisStationList.do"}}'>CIMIS Stations</a></li>
           <li><a href='{{apiURL+"cimisMeasurementList.do"}}'>CIMIS Measurements</a></li>

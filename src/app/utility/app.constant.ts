@@ -7,4 +7,8 @@ export class AppConstant {
     public static customerAlertTypes = 'customerAlertTypes';
     public static credentialTypes = 'credentialTypes';
     public static users = 'users';
+    public static roles = 'role';
+    public static places = '';
+    public static customerEventTypes = '';
+    public static customerComparisonGroups = '';
 }

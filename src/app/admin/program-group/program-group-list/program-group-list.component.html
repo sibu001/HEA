@@ -48,14 +48,14 @@
               [data]="dataSource"
               [totalElement]="programGroupData.totalElements"
               (changePageEvent)="findProgramGroup()"
-              (goToEditCustomer)="gotoEditProgramGroup($event)"
+              (goToEditEvent)="gotoEditProgramGroup($event)"
               (addEvent)="addProgramGroup()">
             </app-table>
           </div>
         </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar></app-sidebar>
+        <app-sidebar [showDetails]="true"></app-sidebar>
       </div>
     </div>
   </div>

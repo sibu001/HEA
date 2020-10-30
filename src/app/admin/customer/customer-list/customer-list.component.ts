@@ -141,7 +141,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   }
 
   searchFilter() { }
-  goToEditCustomer(event: any): void {
+  goToEditEvent(event: any): void {
     this.router.navigate(['admin/customer/customerEdit'], { queryParams: { id: event.customerId } });
   }
 

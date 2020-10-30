@@ -9,5 +9,7 @@ export interface SystemManagementModel {
     credentialTypeList: any;
     credentialType: any;
     coachUserList: any;
+    roleList: any;
+    role: any;
     error: Error;
 }

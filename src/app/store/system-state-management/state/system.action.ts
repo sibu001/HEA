@@ -21,11 +21,16 @@ export enum SystemActionTypes {
     SAVE_CREDENTIAL_TYPE = 'Save Credential Type',
     DELETE_CREDENTIAL_TYPE_BY_ID = 'Delete Credential Type By Id',
     GET_COACH_USER_LIST_LIST = 'Get Coach User List',
+    GET_ROLE_LIST = 'Get Role List',
+    GET_ROLE_BY_ID = 'Get Role By Id',
+    SAVE_ROLE = 'Save Role',
+    UPDATE_ROLE = 'Update Role',
+    DELETE_ROLE = 'Delete Role',
     CUSTOMER_GROUP_ERROR = 'Customer Error'
 }
 export class GetCustomerGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_LIST;
-    constructor(readonly force: boolean,readonly filter: any) {
+    constructor(readonly force: boolean, readonly filter: any) {
     }
 }
 
@@ -151,6 +156,36 @@ export class DeleteCredentialTypeByIdAction {
 export class GetCoachUserListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_COACH_USER_LIST_LIST;
     constructor(readonly force: boolean, readonly filter: string) {
+    }
+}
+
+export class GetRoleListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_ROLE_LIST;
+    constructor(readonly force: boolean) {
+    }
+}
+
+export class GetRoleByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_ROLE_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class UpdateRoleAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_ROLE;
+    constructor(readonly id: number, readonly role: any) {
+    }
+}
+
+export class SaveRoleAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_ROLE;
+    constructor(readonly role: any) {
+    }
+}
+
+export class DeleteRoleByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_ROLE;
+    constructor(readonly id: number) {
     }
 }
 

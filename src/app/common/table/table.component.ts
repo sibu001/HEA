@@ -47,7 +47,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() showDeleteButton: Boolean = false;
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
-  @Output() goToEditCustomer: EventEmitter<any> = new EventEmitter();
+  @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
   @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() imageEvent: EventEmitter<any> = new EventEmitter();
   @Output() addEvent: EventEmitter<any> = new EventEmitter();
@@ -159,10 +159,10 @@ export class TableComponent implements OnInit, OnChanges {
     this.changeDetectorRefs.detectChanges();
   }
 
-  goToEdit(event, col) {
+  goToEdit(event: any, col: any): any {
     if (col.isEdit) {
       console.log(event);
-      this.goToEditCustomer.emit(event);
+      this.goToEditEvent.emit(event);
     }
   }
 

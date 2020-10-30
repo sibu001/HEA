@@ -11,6 +11,7 @@ import {
     DeleteCustomerAlertTypeByIdAction,
     DeleteCustomerGroupByIdAction,
     DeleteProgramGroupByIdAction,
+    DeleteRoleByIdAction,
     GetCoachUserListAction,
     GetCredentialTypeByIdAction,
     GetCredentialTypeListAction,
@@ -20,15 +21,19 @@ import {
     GetCustomerGroupListAction,
     GetProgramGroupByIdAction,
     GetProgramGroupListAction,
+    GetRoleByIdAction,
+    GetRoleListAction,
     GetViewConfigurationListAction,
     SaveCredentialTypeAction,
     SaveCustomerAlertTypeAction,
     SaveCustomerGroupAction,
     SaveProgramGroupAction,
+    SaveRoleAction,
     UpdateCredentialTypeAction,
     UpdateCustomerAlertTypeAction,
     UpdateCustomerGroupAction,
-    UpdateProgramGroupAction
+    UpdateProgramGroupAction,
+    UpdateRoleAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -45,6 +50,8 @@ import { SystemManagementModel } from './system.model';
         credentialTypeList: undefined,
         credentialType: undefined,
         coachUserList: undefined,
+        roleList: undefined,
+        role: undefined,
         error: undefined
     }
 })
@@ -102,6 +109,16 @@ export class SystemManagementState {
     @Selector()
     static getCoachUserList(state: SystemManagementModel): any {
         return state.coachUserList;
+    }
+
+    @Selector()
+    static getRoleList(state: SystemManagementModel): any {
+        return state.roleList;
+    }
+
+    @Selector()
+    static getRoleById(state: SystemManagementModel): any {
+        return state.role;
     }
 
     @Action(GetCustomerGroupListAction)
@@ -512,6 +529,98 @@ export class SystemManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetRoleListAction)
+    getAllRole(ctx: StateContext<SystemManagementModel>, action: GetRoleListAction): Actions {
+        const force: boolean = action.force || SystemManagementState.getRoleList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.roles)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            roleList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetRoleByIdAction)
+    getRolesById(ctx: StateContext<SystemManagementModel>, action: GetRoleByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.roles + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        role: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+
+    }
+
+
+    @Action(DeleteRoleByIdAction)
+    deleteRoleById(ctx: StateContext<SystemManagementModel>, action: DeleteRoleByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.roles + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(SaveRoleAction)
+    saveRole(ctx: StateContext<SystemManagementModel>, action: SaveRoleAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.role, AppConstant.roles)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        role: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(UpdateRoleAction)
+    updateRole(ctx: StateContext<SystemManagementModel>, action: UpdateRoleAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.role, AppConstant.roles + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        role: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
     @Action(CustomerGroupError)

@@ -41,7 +41,7 @@
             <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" [id]="col.key" [disabled]="!col.sort"
                 class="text-nowrap">
                 {{col.displayName}}</mat-header-cell>
-            <mat-cell *matCellDef="let row" style="display: grid;">
+            <mat-cell [class.mat-cell-underline]='col.isEdit' *matCellDef="let row" style="display: grid;">
                 <div *ngIf="col.type!='image' && col.isDate && !col.isAction">
                     {{row[col.key]|date:'mediumDate'}}</div>
                 <div *ngIf="col.type==='alert' && !col.isAction">
@@ -102,18 +102,18 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-6 col-xs-3">
+        <div class="col-sm-6 col-xs-3 removePadding">
             <mat-paginator disableRipple="true" *ngIf="isPaginate" #paginator style-paginator hidePageSize
                 [length]="totalLength" [pageSize]="10" (page)="onChangePage($event)" showFirstLastButtons
                 class="paginatorcss">
             </mat-paginator>
         </div>
-        <div *ngIf="!isHideAdd" class="col-sm-6 col-xs-9" style="text-align:right;">
+        <div *ngIf="!isHideAdd" class="col-sm-6 col-xs-8 removePadding" style="text-align:right;">
             <button class="btn btn-primary" type="button" (click)="onAddEvent($event)">Add</button>
         </div>
     </div>
     <div class="row">
-        <div *ngIf="showDeleteButton" class="col-sm-2 col-xs-3">
+        <div *ngIf="showDeleteButton" class="col-sm-2 col-xs-3 ">
             <button class="btn btn-primary" type="button" (click)="onDeleteEvent($event)">Delete</button>
         </div>
     </div>
