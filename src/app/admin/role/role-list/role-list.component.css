@@ -1,16 +1,6 @@
 section.space-top {
   margin-top: 5.3em;
 }
-p.accurate {
-  font-weight: 600;
-  font-size: 21px;
-  text-align: justify;
-}
-
-hr.hr_space {
-  margin-top: 13px;
-  margin-bottom: 20px;
-}
 
 @media (min-width: 768px) and (max-width: 992px) {
   .form-control {
@@ -21,6 +11,11 @@ hr.hr_space {
     margin-bottom: 0% !important;
   }
 }
-.dot {
-  padding: 10px;
+
+p.messages{
+  font-size: 17px;
+  font-weight: 600;
+}
+.messageName{
+   margin-left: 4px;;
 }

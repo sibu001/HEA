@@ -47,18 +47,17 @@
           <li><a [routerLink]="['/admin/systemParameter/systemParameterList']">System parameter</a></li>
           <li><a [routerLink]="['/admin/logs/logsList']">Logs</a></li>
           <li><a [routerLink]="['/admin/weatherStation/weatherStationList']">Weather Stations</a></li>
-          <li><a href='{{apiURL+"degreeDayList.do"}}'>Degree days</a></li>
-          <li><a href='{{apiURL+"cimisStationList.do"}}'>CIMIS Stations</a></li>
-          <li><a href='{{apiURL+"cimisMeasurementList.do"}}'>CIMIS Measurements</a></li>
-          <li><a href='{{apiURL+"scriptDebugConsole.do"}}'>Script Console</a></li>
-          <li><a href='{{apiURL+"batchScriptList.do"}}'>Script batches</a></li>
-
+          <li><a [routerLink]="['/admin/degreeDays/degreeDayList']">Degree days</a></li>
+          <li><a [routerLink]="['/admin/cimisStation/cimisStationList']">CIMIS Stations</a></li>
+          <li><a [routerLink]="['/admin/cimisMeasurements/cimisMeasurementsList']">CIMIS Measurements</a></li>
+          <li><a [routerLink]="['/admin/debug/scriptDebugConsole']">Script Console</a></li>
+          <li><a [routerLink]="['/admin/batchScript/batchScriptList']">Script batches</a></li>
           <li><a href='{{apiURL+"systemJobList.do"}}'>System jobs</a></li>
           <li><a href='{{apiURL+"jobServerManager.do"}}'>EC2 Instances</a></li>
           <li><a href='{{apiURL+"alertMessageTypeView.do"}}'>Alert Messages</a></li>
         </ul>
       </li>
-      <li><a href='{{apiURL+"userList.do"}}'>Staff</a></li>
+      <li><a [routerLink]="['/admin/staff/staffList']">Staff</a></li>
       <li><a [routerLink]="['/admin/customer/customerList']">Customers</a></li>
       <li><a href='{{apiURL+"registrationView.do"}}'>Prospects</a></li>
       <li><a href='{{apiURL+"surveyDescriptionList.do"}}'>Topic descriptions</a></li>

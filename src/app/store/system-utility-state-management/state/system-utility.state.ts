@@ -7,19 +7,39 @@ import { AppConstant } from 'src/app/utility/app.constant';
 import {
     DeleteCustomerComparisonGroupByIdAction,
     DeleteCustomerEventTypeByIdAction,
+    DeleteFactorByIdAction,
+    DeleteLogsByIdAction,
+    DeleteLookupByIdAction,
     DeletePlaceByIdAction,
+    DeleteSystemParameterByIdAction,
     GetCustomerComparisonGroupByIdAction,
     GetCustomerComparisonGroupListAction,
     GetCustomerEventTypeByIdAction,
     GetCustomerEventTypeListAction,
+    GetFactorByIdAction,
+    GetFactorListAction,
+    GetLogsByIdAction,
+    GetLogsListAction,
+    GetLookupByIdAction,
+    GetLookupListAction,
     GetPlaceByIdAction,
     GetPlaceListAction,
+    GetSystemParameterByIdAction,
+    GetSystemParameterListAction,
     SaveCustomerComparisonGroupAction,
     SaveCustomerEventTypeAction,
+    SaveFactorAction,
+    SaveLogsAction,
+    SaveLookupAction,
     SavePlaceAction,
+    SaveSystemParameterAction,
     UpdateCustomerComparisonGroupAction,
     UpdateCustomerEventTypeAction,
-    UpdatePlaceAction
+    UpdateFactorAction,
+    UpdateLogsAction,
+    UpdateLookupAction,
+    UpdatePlaceAction,
+    UpdateSystemParameterAction
 } from './system-utility.action';
 import { SystemUtilityManagementModel } from './system-utility.model';
 
@@ -32,6 +52,14 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         customerEventType: undefined,
         customerComparisonGroupList: undefined,
         customerComparisonGroup: undefined,
+        factorList: undefined,
+        factor: undefined,
+        lookupList: undefined,
+        lookup: undefined,
+        systemParameterList: undefined,
+        systemParameter: undefined,
+        logList: undefined,
+        logs: undefined,
         error: undefined
     }
 })
@@ -71,6 +99,45 @@ export class SystemUtilityManagementState {
         return state.customerComparisonGroup;
     }
 
+    @Selector()
+    static getFactorList(state: SystemUtilityManagementModel): any {
+        return state.factorList;
+    }
+
+    @Selector()
+    static getFactorById(state: SystemUtilityManagementModel): any {
+        return state.factor;
+    }
+
+    @Selector()
+    static getLookupList(state: SystemUtilityManagementModel): any {
+        return state.lookupList;
+    }
+
+    @Selector()
+    static getLookupById(state: SystemUtilityManagementModel): any {
+        return state.lookup;
+    }
+
+    @Selector()
+    static getSystemParameterList(state: SystemUtilityManagementModel): any {
+        return state.systemParameterList;
+    }
+
+    @Selector()
+    static getSystemParameterById(state: SystemUtilityManagementModel): any {
+        return state.systemParameter;
+    }
+
+    @Selector()
+    static getLogList(state: SystemUtilityManagementModel): any {
+        return state.logList;
+    }
+
+    @Selector()
+    static getLogById(state: SystemUtilityManagementModel): any {
+        return state.logs;
+    }
 
     @Action(GetPlaceListAction)
     getAllPlace(ctx: StateContext<SystemUtilityManagementModel>, action: GetPlaceListAction): Actions {
@@ -343,5 +410,367 @@ export class SystemUtilityManagementState {
                     }));
     }
 
+    @Action(GetFactorListAction)
+    getAllFactorList(ctx: StateContext<SystemUtilityManagementModel>, action: GetFactorListAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getFactorList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.factor, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        // const res = Transformer.transformFactorTableData(response);
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            factorList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
 
+    @Action(GetFactorByIdAction)
+    getFactorById(ctx: StateContext<SystemUtilityManagementModel>, action: GetFactorByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.factor + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteFactorByIdAction)
+    deleteFactorById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteFactorByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.factor + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveFactorAction)
+    saveFactor(ctx: StateContext<SystemUtilityManagementModel>, action: SaveFactorAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.factor, AppConstant.factor)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateFactorAction)
+    updateFactor(ctx: StateContext<SystemUtilityManagementModel>, action: UpdateFactorAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.factor, AppConstant.factor + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetLookupListAction)
+    getAllLookupList(ctx: StateContext<SystemUtilityManagementModel>, action: GetLookupListAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getLookupList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.lookup, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        // const res = Transformer.transformLookupTableData(response);
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            factorList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetLookupByIdAction)
+    getLookupById(ctx: StateContext<SystemUtilityManagementModel>, action: GetLookupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookup + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteLookupByIdAction)
+    deleteLookupById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteLookupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.lookup + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveLookupAction)
+    saveLookup(ctx: StateContext<SystemUtilityManagementModel>, action: SaveLookupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.factor, AppConstant.lookup)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateLookupAction)
+    updateLookup(ctx: StateContext<SystemUtilityManagementModel>, action: UpdateLookupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.factor, AppConstant.lookup + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetSystemParameterListAction)
+    getAllSystemParameterList(ctx: StateContext<SystemUtilityManagementModel>, action: GetSystemParameterListAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getSystemParameterList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.systemParameter, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        // const res = Transformer.transformSystemParameterTableData(response);
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            factorList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetSystemParameterByIdAction)
+    getSystemParameterById(ctx: StateContext<SystemUtilityManagementModel>, action: GetSystemParameterByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.systemParameter + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteSystemParameterByIdAction)
+    deleteSystemParameterById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteSystemParameterByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.systemParameter + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveSystemParameterAction)
+    saveSystemParameter(ctx: StateContext<SystemUtilityManagementModel>, action: SaveSystemParameterAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.factor, AppConstant.systemParameter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateSystemParameterAction)
+    updateSystemParameter(ctx: StateContext<SystemUtilityManagementModel>, action: UpdateSystemParameterAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.factor, AppConstant.systemParameter + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetLogsListAction)
+    getAllLogsList(ctx: StateContext<SystemUtilityManagementModel>, action: GetLogsListAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getLogList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.logs, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        // const res = Transformer.transformLogTableData(response);
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            factorList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetLogsByIdAction)
+    getLogsById(ctx: StateContext<SystemUtilityManagementModel>, action: GetLogsByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.logs + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteLogsByIdAction)
+    deleteLogsById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteLogsByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.logs + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveLogsAction)
+    saveLogs(ctx: StateContext<SystemUtilityManagementModel>, action: SaveLogsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.factor, AppConstant.logs)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateLogsAction)
+    updateLogs(ctx: StateContext<SystemUtilityManagementModel>, action: UpdateLogsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.factor, AppConstant.logs + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        factor: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
 }

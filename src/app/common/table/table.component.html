@@ -27,13 +27,13 @@
             <mat-header-cell *matHeaderCellDef>
                 <mat-checkbox (change)="$event ? masterToggle() : null;checkBoxChange()"
                     [checked]="selection.hasValue() && isAllSelected()" color="primary"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
+                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()" class="tableCheckBox">
                 </mat-checkbox>
             </mat-header-cell>
             <mat-cell *matCellDef="let row; let colIndex = index">
                 <mat-checkbox (click)="$event.stopPropagation()"
                     (change)="$event ? selection.toggle(row) : null;checkBoxChange()" color="primary"
-                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
+                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)" class="tableCheckBox">
                 </mat-checkbox>
             </mat-cell>
         </ng-container>
@@ -101,15 +101,37 @@
             <h5>No records found.</h5>
         </div>
     </div>
+    <div class="row" *ngIf='showInput'>
+        <form [formGroup]='tableForm' (submit)='saveRow()'>
+            <div class="col-sm-{{12/(keys.length+1)|round:0:'down'}} col-md-{{12/(keys.length+1)|round:0:'down'}} col-xs-{{12/(keys.length+1)|round:0:'down'}} col-lg-{{(12)/(keys.length+1)|round:0:'down'}}"
+                *ngFor='let key of keys'>
+                <input type="text" class='form-control' [formControlName]='key.key' [id]="key.key">
+                <div *ngIf="f[key.key].invalid && (f[key.key].dirty ||
+                f[key.key].touched)">
+                    <span class="error" *ngIf="f[key.key].errors.required">
+                        {{key.displayName}} is required.
+                    </span>
+                </div>
+            </div>
+            <div class="align-center"
+                class="col-sm-{{12/(keys.length+1)|round:0:'down'}} col-md-{{12/(keys.length+1)|round:0:'down'}} col-xs-{{12/(keys.length+1)|round:0:'down'}} col-lg-{{(12)/(keys.length+1)|round:0:'down'}}">
+                <button class="btn btn-primary" type="submit">save</button>
+            </div>
+        </form>
+    </div>
     <div class="row">
-        <div class="col-sm-6 col-xs-3 removePadding">
+        <div class="col-sm-6 col-xs-12 removePadding">
             <mat-paginator disableRipple="true" *ngIf="isPaginate" #paginator style-paginator hidePageSize
                 [length]="totalLength" [pageSize]="10" (page)="onChangePage($event)" showFirstLastButtons
                 class="paginatorcss">
             </mat-paginator>
         </div>
-        <div *ngIf="!isHideAdd" class="col-sm-6 col-xs-8 removePadding" style="text-align:right;">
+        <div *ngIf="!isHideAdd" class="col-sm-6 col-xs-12" style="text-align:right;">
             <button class="btn btn-primary" type="button" (click)="onAddEvent($event)">Add</button>
+        </div>
+
+        <div *ngIf="showAddRowButton" class="col-sm-6 col-xs-8 removePadding" style="text-align:right;">
+            <button class="btn btn-primary" type="button" (click)="onAddRowEvent()">Add Row</button>
         </div>
     </div>
     <div class="row">

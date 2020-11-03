@@ -1,4 +1,11 @@
 @import "@angular/material/prebuilt-themes/deeppurple-amber.css";
+
+/* CodeMirrror */
+@import "~codemirror/lib/codemirror.css";
+@import "~codemirror/theme/idea.css";
+@import "~codemirror/addon/fold/foldgutter.css";
+@import "~codemirror/addon/lint/lint.css";
+
 .loader {
   /* z-index: 10000;
     position: fixed;
@@ -1119,9 +1126,14 @@ button.closeButton:focus {
 .rowPadding {
   padding: 5px;
 }
-.bottomButton{
+.bottomButton {
   text-align: right;
 }
 .error {
   color: red;
+}
+@media only screen and (max-width: 320px) {
+.btn-primary {
+  padding: 4px 15px;
+}
 }

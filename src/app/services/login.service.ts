@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Users } from "src/app/models/user";
 import { AppUtility } from "src/app/utility/app.utility";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { environment } from 'src/environments/environment';
 declare var converse: any;
@@ -40,6 +40,15 @@ export class LoginService {
                 'Content-Type': 'application/json'
             }), withCredentials: true,
         }
+        return httpOptions;
+    }
+    getHttpParamsOptions(parameter: HttpParams) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json'
+            }), withCredentials: true,
+            params: parameter
+        };
         return httpOptions;
     }
 
@@ -110,6 +119,10 @@ export class LoginService {
     performGet(endPoint) {
         let url = this.getFormattedUrl(endPoint);
         return this.http.get(url, this.getOptions());
+    }
+    performGetWithParams(endPoint, params?: HttpParams) {
+        const url = this.getFormattedUrl(endPoint);
+        return this.http.get(url, this.getHttpParamsOptions(params));
     }
     performGetMultiPartData(endPoint) {
         let url = this.getFormattedUrl(endPoint);

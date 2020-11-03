@@ -16,6 +16,7 @@ import { MatSort, Sort } from '@angular/material/sort';
 import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 
 export interface UserData {
   id: string;
@@ -45,6 +46,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() isPaginate: Boolean = false;
   @Input() isHideAdd: Boolean = false;
   @Input() showDeleteButton: Boolean = false;
+  @Input() showAddRowButton: Boolean = false;
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
@@ -53,13 +55,21 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() addEvent: EventEmitter<any> = new EventEmitter();
   @Output() bulkDeleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() checkBoxChangeEvent: EventEmitter<any> = new EventEmitter();
+  @Output() toggleSaveButtonEvent: EventEmitter<any> = new EventEmitter();
+  @Output() saveRowEvent: EventEmitter<any> = new EventEmitter();
+
+  showInput: Boolean = false;
   page = new Page();
   url: String;
   totalLength: Number;
   pageEvent: PageEvent;
   selection = new SelectionModel<any>(true, []);
-
-  constructor(private changeDetectorRefs: ChangeDetectorRef, private router: Router) { }
+  tableForm: FormGroup = this.formBuilder.group({});
+  constructor(
+    private changeDetectorRefs: ChangeDetectorRef,
+    private router: Router,
+    private formBuilder: FormBuilder
+  ) { }
   ngOnInit() {
     this.changeDetectorRefs.detectChanges();
     // }
@@ -98,8 +108,16 @@ export class TableComponent implements OnInit, OnChanges {
         this.displayedColumns.push('delete');
       }
     }
+    this.setForm();
   }
 
+  setForm() {
+    if (this.keys !== undefined) {
+      this.keys.forEach(key => {
+        this.tableForm.addControl(key.key, this.formBuilder.control('', Validators.required));
+      });
+    }
+  }
   loadPagination() {
     this.dataSource.sort = this.sort;
   }
@@ -184,6 +202,35 @@ export class TableComponent implements OnInit, OnChanges {
     this.addEvent.emit(event);
   }
 
+  onAddRowEvent(): any {
+    this.showInput = true;
+    this.toggleSaveButtonEvent.emit();
+  }
+
+  validateAllFormFields(formGroup: FormGroup): any {
+    let flag = true;
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+        if (this.tableForm.get(field).invalid && flag) {
+          document.getElementById(field).focus();
+          flag = false;
+        }
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
+  }
+
+  saveRow(): any {
+    if (this.tableForm.valid) {
+      this.saveRowEvent.emit(this.tableForm);
+      this.toggleSaveButtonEvent.emit();
+    } else {
+      this.validateAllFormFields(this.tableForm);
+    }
+  }
   onDeleteEvent(): any {
     this.bulkDeleteEvent.emit(this.selection.selected);
   }
@@ -191,4 +238,5 @@ export class TableComponent implements OnInit, OnChanges {
   logRow(row) {
     console.log(row);
   }
+  get f() { return this.tableForm.controls; }
 }

@@ -10,6 +10,7 @@ export class Users {
     public username: string;
     public password: string;
     public role: string;
+    public userId: string;
     public token: string=null;
     public socolUsername: string;
     public socolPassword: string

@@ -5,4 +5,5 @@ export interface TABLECOLUMN {
     type?: string;
     imagePath?: string;
     isEdit?: boolean;
+    isDate?: boolean;
 }

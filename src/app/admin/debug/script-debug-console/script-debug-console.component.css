@@ -1,0 +1,63 @@
+section.space-top {
+  margin-top: 5.3em;
+}
+.borderTop {
+  border-top: 1px solid #ddd;
+}
+.borderBottom {
+  border-bottom: 1px solid #ddd;
+}
+.rowPadding {
+  padding: 5px;
+}
+.form-padding {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+p.messages {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 1%;
+}
+.messageName {
+  margin-left: 4px;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #76ba19;
+  border-color: #76ba19;
+  padding: 4px 23px;
+  border-radius: 3px;
+}
+.paddingTop {
+  padding-top: 3%;
+}
+
+.debug {
+  text-decoration: underline;
+  display: inline;
+}
+select {
+  background: url("src/assets/images/up_downArrow.png") no-repeat right;
+  -webkit-appearance: none;
+  padding-right: 30px;
+  background-position-x: 98%;
+}
+
+.border {
+  border: 1px solid lightgray;
+}
+
+.code-mirror {
+  padding: 0%;
+  margin-left: 1.6%;
+  width: 46.6%;
+}
+
+@media only screen and (max-width: 767px) {
+  .code-mirror {
+    padding: 0%;
+    margin-left: 2%;
+    width: 96%;
+  }
+}

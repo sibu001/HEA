@@ -1,0 +1,188 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">CIMIS Station</span>
+        </p>
+        <form [formGroup]="cimisStationForm" class="form-group form-padding">
+          <div class="row borderTop borderBottom rowPadding" *ngIf="id!==undefined&&id!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Station Number:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="stationNumber"
+                formControlName="stationNumber" />
+              <div *ngIf="f.stationNumber.invalid && (f.stationNumber.dirty || f.stationNumber.touched)">
+                <span class="error" *ngIf="f.stationNumber.errors.required">
+                  Station Number is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Station Name:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="groupCode" formControlName="stationName" />
+              <div *ngIf="f.stationName.invalid && (f.stationName.dirty || f.stationName.touched)">
+                <span class="error" *ngIf="f.stationName.errors.required">
+                  Station Name is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Country:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="country" formControlName="country" />
+              <div *ngIf="f.country.invalid && (f.country.dirty || f.country.touched)">
+                <span class="error" *ngIf="f.country.errors.required">
+                  Country is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              City:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="city" formControlName="city" />
+              <div *ngIf="f.city.invalid && (f.city.dirty || f.city.touched)">
+                <span class="error" *ngIf="f.city.errors.required">
+                  City is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Regional Office:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="regionalOffice"
+                formControlName="regionalOffice" />
+              <div *ngIf="f.regionalOffice.invalid && (f.regionalOffice.dirty || f.regionalOffice.touched)">
+                <span class="error" *ngIf="f.regionalOffice.errors.required">
+                  Regional Office is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Elevation:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="elevation" formControlName="elevation" />
+              <div *ngIf="f.elevation.invalid && (f.elevation.dirty ||f.elevation.touched)">
+                <span class="error" *ngIf="f.elevation.errors.required">
+                  Elevation is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Ground Cover:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="groundCover" formControlName="groundCover" />
+              <div *ngIf="f.groundCover.invalid && (f.groundCover.dirty ||f.groundCover.touched)">
+                <span class="error" *ngIf="f.groundCover.errors.required">
+                  Ground Cover is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Latitude:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="latitude" formControlName="latitude" />
+              <div *ngIf="f.latitude.invalid && (f.latitude.dirty || f.latitude.touched)">
+                <span class="error" *ngIf="f.latitude.errors.required">
+                  Latitude is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Longitude:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="longitude" formControlName="longitude" />
+              <div *ngIf="f.longitude.invalid && (f.longitude.dirty || f.longitude.touched)">
+                <span class="error" *ngIf="f.longitude.errors.required">
+                  Longitude is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Active:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" id="active" formControlName="active" />
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              ETo station:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" id="EToStation" formControlName="etoStation" />
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Zip codes:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class="form-control textarea_scroll" rows="3" id="zipCodes" name="zipCodes"
+                formControlName="zipCodes"></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
+              <button type="button" class="btn btn-primary" (click)="delete()"
+                *ngIf="id!==undefined&&id!==null">Delete</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4 bottomButton">
+              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]="true"></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

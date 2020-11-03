@@ -1,0 +1,195 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Batch Script</span>
+        </p>
+        <form [formGroup]="batchScriptForm" class="form-group form-padding">
+          <div class="row borderTop borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Batch Name:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="batchName" formControlName="batchName" />
+              <div *ngIf="f.batchName.invalid && (f.batchName.dirty || f.batchName.touched)">
+                <span class="error" *ngIf="f.batchName.errors.required">
+                  Batch Name is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Period:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="period" formControlName="period">
+                <option value="D">Daily</option>
+                <option value="M">Monthly</option>
+                <option value="S" selected="selected">Single</option>
+                <option value="W">Weekly</option>
+                <option value="Y">Year</option>
+              </select>
+              <div *ngIf="f.period.invalid && (f.period.dirty || f.period.touched)">
+                <span class="error" *ngIf="f.period.errors.required">
+                  Batch Period is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Period day:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="periodDay" formControlName="periodDay" />
+              <div *ngIf="f.periodDay.invalid && (f.periodDay.dirty || f.periodDay.touched)">
+                <span class="error" *ngIf="f.periodDay.errors.required">
+                  Period Day is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0">
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label>
+                <input type="checkbox" id="forEachCustomer" formControlName="forEachCustomer" />
+                For each customer
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Calculation Type:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="calculationType" (change)="changeTheme($event)"
+                formControlName="calculationType">
+                <option value="javascript">JavaScript</option>
+                <option value="spel" selected="selected">SpEL</option>
+                <option value="webharvest">WebHarvest script</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Batch Filter:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class="form-control form-control-sm" id="batchFilter" formControlName="batchFilter"></textarea>
+              <div *ngIf="f.batchFilter.invalid && (f.batchFilter.dirty ||f.batchFilter.touched)">
+                <span class="error" *ngIf="f.batchFilter.errors.required">
+                  Batch Filter is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Topic:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class='form-control form-control-sm' id="topic" name="topic">
+                <option value="" selected></option>
+                <option *ngFor='let topic of topicData' [value]="topic.key">{{topic.value}}</option>
+              </select>
+              <div *ngIf="f.topic.invalid && (f.topic.dirty ||f.topic.touched)">
+                <span class="error" *ngIf="f.topic.errors.required">
+                  Topic is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Calculation:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <div class='border '>
+                <ngx-codemirror id="calculation" formControlName="calculation" [options]="codeMirrorOptions">
+                </ngx-codemirror>
+              </div>
+              <span class="debug" (click)="goToDebug()">Debug</span>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Mail Address:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="mailAddress" formControlName="mailAddress" />
+              <div *ngIf="f.mailAddress.invalid && (f.mailAddress.dirty || f.mailAddress.touched)">
+                <span class="error" *ngIf="f.mailAddress.errors.required">
+                  Mail Address is required.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Comments:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class='form-control' id="comments" formControlName="comments"></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row" *ngIf="id!==undefined&&id!==null">
+            <div class="col-sm-12">
+              <p class="messages">
+                <img src="assets/images/dot03.gif" class="dot pointer">
+                <span class="messageName">
+                  Customer Groups
+                </span>
+              </p>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="id!==undefined&&id!==null">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
+              <app-table [keys]="customerGroupKey" [data]="customerDataSource" [isDelete]=false
+                [totalElement]="customerData.totalElements" [checkbox]=true>
+              </app-table>
+            </div>
+          </div>
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3">
+              <button type="button" class="btn btn-primary" (click)="runNow()" *ngIf="id!==undefined&&id!==null"> Run
+                Now</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3">
+              <button type="button" class="btn btn-primary" (click)="delete()" *ngIf="id!==undefined&&id!==null">
+                Delete</button>
+            </div>
+            <div class="col-sm-2 col-md-1 col-lg-1 col-xs-3 bottomButton">
+              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showMethod]="true"></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

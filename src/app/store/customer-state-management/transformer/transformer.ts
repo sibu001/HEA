@@ -300,13 +300,13 @@ export class Transformer {
                     },
                     {
                         key: 'lastSuccessfulUtilityReadDate',
-                        displayName: 'LastMeterRead',
+                        displayName: 'Last Meter Read',
                         sort: 'lastSuccessfulUtilityReadDate',
                         isDate: true
                     },
                     {
                         key: 'optOutMail',
-                        displayName: 'OptOutMail',
+                        displayName: 'Opt Out Mail',
                         sort: 'optOutMail'
                     },
                     {
@@ -532,7 +532,7 @@ export class Transformer {
                     },
                     {
                         key: 'hheFinished',
-                        displayName: 'hheFinished',
+                        displayName: 'hhe Finished',
                         isDate: true
                     },
                     {
@@ -644,5 +644,20 @@ export class Transformer {
                 break;
         }
         return key;
+    }
+    static transformStaffTableData(src: any): any {
+        const dataSource: any = {
+            list: []
+        };
+        src.list.forEach(element => {
+            const dataSourceObj: any = element;
+            dataSourceObj.createdDate = new Date(element.createdDate);
+            dataSource.list.push(dataSourceObj);
+        });
+        dataSource.startRow = src.startRow;
+        dataSource.pageSize = src.pageSize;
+        dataSource.totalSize = src.totalSize;
+        dataSource.hasNext = src.hasNext;
+        return dataSource;
     }
 }

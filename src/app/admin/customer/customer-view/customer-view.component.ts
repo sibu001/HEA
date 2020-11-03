@@ -66,6 +66,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   lat = 51.673858;
   lng = 7.815982;
   id: any;
+  isForce = false;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public dialog: MatDialog,
     private readonly formBuilder: FormBuilder,
@@ -85,11 +86,17 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.customerService.loadCustomerById(this.id);
-      this.subscriptions.add(this.customerService.getCustomerById().pipe(skipWhile((item: any) => !item))
-        .subscribe((customer: any) => {
-          this.setForm(customer);
-        }));
+      this.loadCustomerById();
     }
+  }
+  loadCustomerById() {
+    this.subscriptions.add(this.customerService.getCustomerById().pipe(skipWhile((item: any) => !item))
+      .subscribe((customer: any) => {
+        if (this.isForce) {
+          this.router.navigate(['admin/customer/customerEdit'], { queryParams: { 'id': customer.customerId } });
+        }
+        this.setForm(customer);
+      }));
   }
   loadCustomerGroup() {
     this.systemService.loadCoachUserList(true, '?filter.withRole=COACH');
@@ -312,17 +319,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    document.getElementById('loader').classList.add('loading');
     this.subscriptions.add(this.customerService.deleteCustomerById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-        console.log(response);
-        document.getElementById('loader').classList.remove('loading');
         this.router.navigate(['admin/customer/customerList']);
-      },
-        error => {
-          document.getElementById('loader').classList.remove('loading');
-          console.log(error);
-        }));
+      }));
   }
 
   cancel() {
@@ -332,27 +332,17 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   save() {
     if (this.customerForm.valid) {
       if (this.id !== null && this.id !== undefined) {
-        document.getElementById('loader').classList.add('loading');
         this.subscriptions.add(this.customerService.updateCustomer(this.id, this.customerForm.value).pipe(skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            document.getElementById('loader').classList.remove('loading');
-            this.router.navigate(['admin/customer/customerList']);
-          },
-            error => {
-              document.getElementById('loader').classList.remove('loading');
-              console.log(error);
-            }));
+            this.isForce = true;
+            this.loadCustomerById();
+          }));
       } else {
-        document.getElementById('loader').classList.add('loading');
         this.subscriptions.add(this.customerService.saveCustomer(this.customerForm.value).pipe(skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            document.getElementById('loader').classList.remove('loading');
-            this.router.navigate(['admin/customer/customerList']);
-          },
-            error => {
-              document.getElementById('loader').classList.remove('loading');
-              console.log(error);
-            }));
+            this.isForce = true;
+            this.loadCustomerById();
+          }));
       }
     } else {
       this.validateForm();

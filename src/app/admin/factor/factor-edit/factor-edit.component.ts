@@ -1,10 +1,10 @@
-import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -15,15 +15,21 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class FactorEditComponent implements OnInit, OnDestroy {
 
   id: any;
-  eventForm: FormGroup;
+  factorForm: FormGroup;
   public placeData: Array<any> = TableColumnData.PLACE_CODE;
   public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
   public calculationType: Array<any> = TableColumnData.CALCULATION_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
-  constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService: SystemService,
+  isForce = false;
+  userId: any;
+  constructor(
+    private readonly formBuilder: FormBuilder,
+    private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly location: Location) {
+    private readonly router: Router,
+    private readonly el: ElementRef) {
+    const users = JSON.parse(localStorage.getItem('users'));
+    this.userId = users.userId;
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
@@ -32,12 +38,14 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.systemUtilityService.loadFactorById(this.id);
+      this.loadFactorById();
     }
   }
 
   setForm(event: any) {
-    this.eventForm = this.formBuilder.group({
-      // id: [event !== undefined ? event.id : ''],
+    this.factorForm = this.formBuilder.group({
+      id: [event !== undefined ? event.id : ''],
       factorCode: [event !== undefined ? event.factorCode : ''],
       place: [event !== undefined ? event.place : ''],
       comparisonCode: [event !== undefined ? event.comparisonCode : ''],
@@ -53,27 +61,69 @@ export class FactorEditComponent implements OnInit, OnDestroy {
       comments: [event !== undefined ? event.comments : '']
     });
   }
-  back() {
-    this.location.back();
-  }
 
   goToDebug() {
+    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: {} });
 
+  }
+  recalculate() {
+
+  }
+
+  loadFactorById() {
+    this.subscriptions.add(this.systemUtilityService.getFactorById().pipe(skipWhile((item: any) => !item))
+      .subscribe((factor: any) => {
+        if (this.isForce) {
+          this.router.navigate(['admin/factor/factorEdit'], { queryParams: { 'id': factor.id } });
+        }
+        this.setForm(factor);
+      }));
+  }
+
+  back() {
+    this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': this.isForce } });
+  }
+  delete() {
+    this.subscriptions.add(this.systemUtilityService.deleteFactorById(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': true } });
+      }));
   }
 
   save() {
-
+    if (this.factorForm.valid) {
+      if (this.id !== null && this.id !== undefined) {
+        this.subscriptions.add(this.systemUtilityService.updateFactor(this.id, this.factorForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadFactorById();
+          }));
+      } else {
+        this.subscriptions.add(this.systemUtilityService.saveFactor(this.factorForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadFactorById();
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
   }
-  delete() {
-
+  validateForm() {
+    for (const key of Object.keys(this.factorForm.controls)) {
+      if (this.factorForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
   }
 
-  Recalculate() {
-
-  }
+  get f() { return this.factorForm.controls; }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
-
 }

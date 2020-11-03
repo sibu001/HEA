@@ -4,13 +4,25 @@
       <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
         left;padding-left: 40px;
         padding-top: 35px;'>
-        <p class="accurate">
-          <img src='assets/images/dot03.gif' class='dot'>Roles</p>
-        <hr class="hr_space">
-        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-          [totalElement]="rolesData.totalElements" (changePageEvent)="findRole()"
-          (goToEditEvent)="goToEditRole($event)"
-          (addEvent)='addRole()'></app-table>
+        <div class="row">
+          <div class="col-sm-12">
+            <p class="messages">
+              <img class="pointer" src="assets/images/dot03.gif"
+                class="dot">
+              <span class="messageName">Roles</span>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+              [data]="dataSource"
+              [totalElement]="rolesData.totalElements"
+              (changePageEvent)="findRole()"
+              (goToEditEvent)="goToEditRole($event)"
+              (addEvent)='addRole()'></app-table>
+          </div>
+        </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar [showDetails]="true"></app-sidebar>

@@ -16,7 +16,27 @@ import {
   GetCustomerComparisonGroupByIdAction,
   GetCustomerComparisonGroupListAction,
   SaveCustomerComparisonGroupAction,
-  UpdateCustomerComparisonGroupAction
+  UpdateCustomerComparisonGroupAction,
+  GetFactorListAction,
+  GetFactorByIdAction,
+  SaveFactorAction,
+  DeleteFactorByIdAction,
+  UpdateFactorAction,
+  DeleteLookupByIdAction,
+  GetLookupByIdAction,
+  GetLookupListAction,
+  SaveLookupAction,
+  UpdateLookupAction,
+  GetSystemParameterListAction,
+  SaveSystemParameterAction,
+  DeleteSystemParameterByIdAction,
+  GetSystemParameterByIdAction,
+  UpdateSystemParameterAction,
+  DeleteLogsByIdAction,
+  GetLogsByIdAction,
+  GetLogsListAction,
+  SaveLogsAction,
+  UpdateLogsAction
 } from '../state/system-utility.action';
 import { SystemUtilityManagementState } from '../state/system-utility.state';
 
@@ -50,7 +70,37 @@ export class SystemUtilityService {
     return this.store.select(SystemUtilityManagementState.getCustomerComparisonGroupById);
   }
 
+  getFactorList(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getFactorList);
+  }
 
+  getFactorById(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getFactorById);
+  }
+
+  getLookupList(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getLookupList);
+  }
+
+  getLookupById(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getLookupById);
+  }
+
+  getSystemParameterList(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getSystemParameterList);
+  }
+
+  getSystemParameterById(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getSystemParameterById);
+  }
+
+  getLogsList(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getLogList);
+  }
+
+  getLogsById(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getLogById);
+  }
 
   loadPlaceList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetPlaceListAction(force, filter));
@@ -112,5 +162,84 @@ export class SystemUtilityService {
     return this.store.dispatch(new DeleteCustomerComparisonGroupByIdAction(id));
   }
 
+  loadFactorList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetFactorListAction(force, filter));
+  }
+
+  loadFactorById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetFactorByIdAction(id));
+  }
+
+  saveFactor(factor: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveFactorAction(factor));
+  }
+
+  updateFactor(id: number, factor: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new UpdateFactorAction(id, factor));
+  }
+
+  deleteFactorById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteFactorByIdAction(id));
+  }
+
+  loadLookupList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetLookupListAction(force, filter));
+  }
+
+  loadLookupById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetLookupByIdAction(id));
+  }
+
+  saveLookup(lookup: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveLookupAction(lookup));
+  }
+
+  updateLookup(id: number, lookup: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new UpdateLookupAction(id, lookup));
+  }
+
+  deleteLookupById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteLookupByIdAction(id));
+  }
+
+  loadSystemParameterList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetSystemParameterListAction(force, filter));
+  }
+
+  loadSystemParameterById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetSystemParameterByIdAction(id));
+  }
+
+  saveSystemParameter(systemParameter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveSystemParameterAction(systemParameter));
+  }
+
+  updateSystemParameter(id: number, systemParameter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new UpdateSystemParameterAction(id, systemParameter));
+  }
+
+  deleteSystemParameterById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteSystemParameterByIdAction(id));
+  }
+
+  loadLogsList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetLogsListAction(force, filter));
+  }
+
+  loadLogsById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetLogsByIdAction(id));
+  }
+
+  saveLogs(logs: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveLogsAction(logs));
+  }
+
+  updateLogs(id: number, logs: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new UpdateLogsAction(id, logs));
+  }
+
+  deleteLogsById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteLogsByIdAction(id));
+  }
 
 }

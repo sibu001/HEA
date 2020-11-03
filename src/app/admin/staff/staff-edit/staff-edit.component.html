@@ -1,0 +1,241 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class='messages'>
+          <img src='assets/images/dot03.gif' class='dot'>
+          <span class='messageName'>
+            Account Setting
+          </span>
+        </p>
+        <form [formGroup]='staffForm' class="form-group
+          form-padding">
+          <div class="row borderTop borderBottom rowPadding"
+            *ngIf="id!==undefined&&id!==null">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              User ID:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              {{id}}
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Username:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="text" formControlName="username" class="form-control
+                form-control-sm">
+              <div *ngIf="f.username.invalid && (f.username.dirty ||
+                f.username.touched)">
+                <span class="error" *ngIf="f.username.errors.required">
+                  UserName is required.
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Email:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="text" formControlName="email" class="form-control
+                form-control-sm">
+              <div *ngIf="f.email.invalid && (f.email.dirty ||
+                f.email.touched)">
+                <span class="error" *ngIf="f.email.errors.required">
+                  Email is required.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Phone number:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="text" formControlName="staffPhoneNumber"
+                class="form-control
+                form-control-sm">
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Name:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="text" formControlName="name"
+                class="form-control
+                form-control-sm">
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Status:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <select class="form-control form-control-sm"
+                id="status" formControlName="status">
+                <option value="0">Active (0)</option>
+                <option value="10">In registration (10)</option>
+                <option value="90">Blocked (90)</option>
+              </select>
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              New password:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="password" formControlName="password1"
+                class="form-control
+                form-control-sm">
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              New password (repeat):
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="password" formControlName="password2"
+                class="form-control
+                form-control-sm">
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="checkbox" name="passwordNeedChange"
+                formControlName="passwordNeedChange">
+              <label class="checkbox">Password need to change</label>
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Password strength level:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="text" formControlName="passwordStrengthLevel"
+                class="showValue" disabled>
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Password change date:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="text" formControlName="passwordChangeDate"
+                class="form-control
+                form-control-sm">
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="checkbox" name="sendEmail"
+                formControlName="sendEmail">
+              <label class="checkbox">Send activation E-Mail</label>
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Survey Version Setting
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <select class="form-control form-control-sm"
+                id="surveyVersionSetting"
+                formControlName="surveyVersionSetting" value='-1'>
+                <option value="-1">Standard</option>
+                <option *ngFor="let surveyVersion of
+                  surveyVersionSettingList"
+                  [value]="surveyVersion.id">
+                  {{surveyVersion.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Comments:
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <textarea class="form-control form-control-sm textarea_scroll"
+                rows="3" name="comments" id="comments"
+                formControlName="comments"></textarea>
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <input type="checkbox" name="sendEmail"
+                formControlName="accessToUserPassword">
+              <label class="checkbox">Enable access to user passwords</label>
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Survey Version Setting
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <select class="form-control form-control-sm"
+                id="customerViewConfigurationId"
+                formControlName="customerViewConfigurationId" value='-1'>
+                <option value="-1">Standard</option>
+                <option *ngFor="let viewConfiguration of
+                  viewConfigurationList"
+                  [value]="viewConfiguration.viewConfigurationId">
+                  {{viewConfiguration.configurationName}}</option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+        <p class='messages'>
+          <img src='assets/images/dot03.gif' class='dot'>
+          <span class='messageName'>User roles</span></p>
+        <div class="row rowPadding form-group
+          form-padding">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <app-table [keys]="keys" [checkbox]=true [data]="dataSource"
+              [totalElement]="rolesData.totalElements"  [isHideAdd]="true"></app-table>
+          </div>
+        </div>
+
+        <p class='messages'>
+          <img src='assets/images/dot03.gif' class='dot'>
+          <span class='messageName'>Topic groups</span></p>
+        <div class="row rowPadding form-group
+          form-padding">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <app-table [keys]="topicKeys" [isHideAdd]="true" [checkbox]=true
+              [data]="topicDataSource"
+              [totalElement]="topicGroupData.totalElements"></app-table>
+          </div>
+        </div>
+        <div class="row paddingTop">
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <button type="reset" class="btn btn-primary" (click)='back()'>Cancel</button>
+          </div>
+          <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
+          </div>
+          <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2"
+            style="text-align: right;">
+            <button type="button" class="btn btn-primary"
+              *ngIf="id!==undefined" (click)="delete()">Delete</button>
+          </div>
+          <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="text-align:
+            right;">
+            <button type="submit" class="btn btn-primary" (click)="save()">Save</button>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]="true"></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

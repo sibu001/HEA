@@ -82,6 +82,7 @@ mat-paginator.paginatorcss.mat-paginator {
   border-right: 1px solid #ddd;
   align-self: stretch;
   word-break: break-all;
+  font-size: 13px;
 }
 .mat-header-cell {
   max-height: 100%;
@@ -98,7 +99,7 @@ mat-row {
 mat-cell,
 mat-footer-cell,
 mat-header-cell {
-  padding-left: 12px !important;
+  padding-left: 5px !important;
 }
 
 .mat-cell-underline > div {
@@ -112,8 +113,9 @@ mat-header-cell {
 
 .text-nowrap {
   color: #000;
-  font-size: 18px;
-  white-space: pre-line;
+  font-size: 15px;
+  white-space: break-spaces;
+  align-self: stretch;
 }
 
 .btn-primary {
@@ -197,10 +199,21 @@ div .greenAlert {
 }
 .mat-column-select {
   flex: none;
-  width: 55px;
+  width: 35px;
 }
 
 .removePadding {
   padding: 5px;
   display: inline-table;
+}
+
+.align-center{
+  text-align: center;
+}
+::ng-deep .tableCheckBox .mat-checkbox-inner-container {
+  height: 15px;
+  width: 15px;
+}
+mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {
+   padding-right: 5px;
 }

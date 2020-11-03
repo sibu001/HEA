@@ -6,7 +6,7 @@
           <img class="pointer" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">New Factor</span>
         </p>
-        <form [formGroup]="eventForm" class="form-group form-padding">
+        <form [formGroup]="factorForm" class="form-group form-padding">
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Factor code</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -158,7 +158,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4" *ngIf="id === undefined || id === null"></div>
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="Recalculate()">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="recalculate()">
                   Recalculate
                 </button>
               </div>

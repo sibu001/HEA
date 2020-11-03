@@ -1,0 +1,135 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Script Debug Console</span>
+        </p>
+        <form [formGroup]="debugForm" class="form-group form-padding">
+          <div *ngIf='isTrue' class="row borderBottom borderTop rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Customer:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <div class="row rowpadding borderBottom borderTop">
+                <div class='col-sm-4 col-md-4 col-lg-4 col-xs-12'>
+                  AuditId:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  <input type="text" class='form-control form-control-sm' formControlName="auditId" id="auditId">
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+              </div>
+              <div class="row rowpadding borderBottom">
+                <div class='col-sm-4 col-md-4 col-lg-4 col-xs-12'>
+                  Customer Name:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  <input type="text" class="form-control form-control-sm" formControlName="customerName"
+                    id="customerName">
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div *ngIf='isTrue' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Topic description:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="surveyDescriptionId"
+                formControlName="surveyDescriptionId">
+                <option *ngFor='let topic of topicDescriptionData' [value]="topic.key">{{topic.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Script type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="scriptType" (change)="changeTheme($event)"
+                formControlName="scriptType">
+                <option value="javascript">JavaScript</option>
+                <option value="spel" selected="selected">SpEL</option>
+                <option value="webharvest">WebHarvest script</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Script:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 border code-mirror">
+              <ngx-codemirror formControlName="script" [options]="codeMirrorOptions">
+              </ngx-codemirror>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Event:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select id="event" class='form-control' formControlName="event">
+                <option value=""></option>
+                <option value="OPEN">Open</option>
+                <option value="SAVE">Save</option>
+                <option value="INIT">Initialization</option>
+                <option value="RECALCULATE">Recalculate</option>
+                <option value="RECALCULATE_AFTER_RESCRAPE">Recalculate after re-scrape</option>
+                <option value="VALIDATE" selected="selected">Validate</option>
+                <option value="PERIOD">Periodically</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Result:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class='form-control' formControlName='result'></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Result Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Execution Time (ms):</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row">
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                <label for='disableValueCache'>
+                  <input type="checkbox" formControlName="disableValueCache" id="disableValueCache">
+                  Disable Value Cache
+                </label>
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="executeDebug()">
+                  Execute
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showMethod]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

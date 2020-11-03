@@ -112,8 +112,31 @@ const ROUTES: Routes = [
         path: 'logs',
         loadChildren:
           './admin/logs/logs.module#LogsModule'
-      }
-
+      },
+      {
+        path: 'debug',
+        loadChildren: './admin/debug/debug.module#DebugModule'
+      },
+      {
+        path: 'degreeDays',
+        loadChildren: './admin/degree-days/degree-days.module#DegreeDaysModule'
+      },
+      {
+        path: 'cimisStation',
+        loadChildren: './admin/cimis-station/cimis-station.module#CimisStationModule'
+      },
+      {
+        path: 'cimisMeasurements',
+        loadChildren: './admin/cimis-measurements/cimis-measurements.module#CimisMeasurementsModule'
+      },
+      {
+        path: 'batchScript',
+        loadChildren: './admin/batch-script/batch-script.module#BatchScriptModule'
+      },
+      {
+        path: 'staff',
+        loadChildren: './admin/staff/staff.module#StaffModule'
+      },
     ]
   },
   // {

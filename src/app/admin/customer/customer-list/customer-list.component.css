@@ -162,3 +162,6 @@ input[type="file"]::-webkit-file-upload-button {
 input[type="file"] {
   text-align: left;
 }
+::ng-deep .customerTable {
+  word-break: break-all;
+}

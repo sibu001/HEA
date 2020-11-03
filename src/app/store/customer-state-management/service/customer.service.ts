@@ -1,7 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { DeleteCustomerByIdAction, GetCustomerByIdAction, GetCustomerListAction, SaveCustomerAction, UpdateCustomerAction } from '../state/customer.action';
+import {
+  DeleteCustomerByIdAction,
+  DeleteStaffByIdAction,
+  GetCustomerByIdAction,
+  GetCustomerListAction,
+  GetStaffByIdAction,
+  GetStaffListAction,
+  SaveCustomerAction,
+  SaveStaffAction,
+  UpdateCustomerAction,
+  UpdateStaffAction
+} from '../state/customer.action';
 import { CustomerManagementState } from '../state/customer.state';
 
 @Injectable({
@@ -23,7 +34,15 @@ export class CustomerService {
     return this.store.select(CustomerManagementState.getCustomerById);
   }
 
-  loadCustomerList(force: boolean, filter: string, viewType: number): Observable<CustomerManagementState> {
+  getStaffList(): Observable<any> {
+    return this.store.select(CustomerManagementState.getStaffList);
+  }
+
+  getStaffById(): Observable<any> {
+    return this.store.select(CustomerManagementState.getStaffById);
+  }
+
+  loadCustomerList(force: boolean, filter: any, viewType: number): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetCustomerListAction(force, filter, viewType));
   }
 
@@ -41,5 +60,25 @@ export class CustomerService {
 
   deleteCustomerById(id: number): Observable<CustomerManagementState> {
     return this.store.dispatch(new DeleteCustomerByIdAction(id));
+  }
+
+  loadStaffList(force: boolean, filter: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetStaffListAction(force, filter));
+  }
+
+  loadStaffById(id: number): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetStaffByIdAction(id));
+  }
+
+  saveStaff(staff: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new SaveStaffAction(staff));
+  }
+
+  updateStaff(id: number, staff: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new UpdateStaffAction(id, staff));
+  }
+
+  deleteStaffById(id: number): Observable<CustomerManagementState> {
+    return this.store.dispatch(new DeleteStaffByIdAction(id));
   }
 }

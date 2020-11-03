@@ -26,7 +26,7 @@
 
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary" (click)="search(undefined,true)">Show</button>
             </div>
           </div>
         </form>
@@ -35,7 +35,7 @@
             <img src='assets/images/dot03.gif' class='dot'>
             <span class="messageName">System Parameters (Number of Records = {{totalElement}})</span></p>
           <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-            [totalElement]="systemParameterData.totalElements" (changePageEvent)="findSystemParameter($event)"
+            [totalElement]="systemParameterData.totalElements" (changePageEvent)="search($event,false)"
             (goToEditEvent)="goToEditSystemParameter($event)" (addEvent)='addSystemParameter()'>
           </app-table>
         </div>

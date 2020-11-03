@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, Validators, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material';
@@ -5,6 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableComponent } from 'src/app/common/table/table.component';
+import { AdminFilter } from 'src/app/models/filter-object';
 import { Page } from 'src/app/models/page';
 import { LoginService } from 'src/app/services/login.service';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
@@ -27,6 +29,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   public credentialTypeList: any;
   public coachUserList: any;
   public dataSource: any;
+  public adminFilter: AdminFilter;
   public CustomerData = {
     content: [],
     totalElements: 0,
@@ -34,21 +37,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
 
   private readonly subscriptions: Subscription = new Subscription();
 
-  public searchForm: FormGroup = this.fb.group({
-    auditId: [''],
-    customerGroup: [''],
-    customerName: [''],
-    customerPlace: [''],
-    customerEmail: [''],
-    program: [''],
-    customerView: ['-1', Validators.required],
-    status: [''],
-    alertCode: [''],
-    credentialTypeCode: [''],
-    credentialSubscriptionId: [''],
-    energyCoach: [''],
-    credentialAccount: [''],
-  });
+  public searchForm: FormGroup;
   public fileUploadForm: FormGroup = this.fb.group({
     customerFile: ['']
   });
@@ -57,6 +46,11 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     private readonly systemService: SystemService,
     private readonly customerService: CustomerService,
     public dialog: MatDialog) {
+    this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null) {
+      this.adminFilter = new AdminFilter();
+    }
+    this.setUpForm(this.adminFilter.customerFilter.formValue);
     this.systemService.loadCustomerGroupList(true, '');
     this.systemService.loadViewConfigurationList(true);
     this.systemService.loadProgramGroupsList(true);
@@ -87,61 +81,74 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       .subscribe((coachUserList: any) => {
         this.coachUserList = coachUserList.list;
       }));
-    this.findCustomer(null);
+    this.findCustomer(this.adminFilter.customerFilter.page, false);
   }
 
 
   ngOnInit() {
   }
-  findCustomer(page: Page) {
-    document.getElementById('loader').classList.add('loading');
-    this.keys = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value));
-    let url = '?filter.disableTotalSize=false&filter.pageSize=10' + this.getFilterUrl();
-    if (page !== null) {
-      if (page.pageSize !== undefined) {
-        url =
-          '?filter.disableTotalSize=false&filter.pageSize=' +
-          page.pageSize +
-          '&filter.startRow=' +
-          page.pageIndex * page.pageSize + this.getFilterUrl();
-      }
-      if (page.sort !== null && page.sort.active.length !== 0) {
-        url += '&formAction=sort&sortField=' + page.sort.active + '&sortOrder=' + page.sort.direction.toUpperCase();
-      }
+  findCustomer(event: Page, isSearch: boolean) {
+    this.adminFilter.customerFilter.formValue = this.searchForm.value;
+    this.adminFilter.customerFilter.page = event;
+    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    if (isSearch) {
+      event = JSON.parse(localStorage.getItem('customerFilterEvent'));
     }
-
+    this.keys = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value));
+    const url = this.getFilterUrl(event, isSearch);
     this.customerService.loadCustomerList(true, url, Number(this.searchForm.controls['customerView'].value));
     this.subscriptions.add(this.customerService.getCustomerDataSource().pipe(skipWhile((item: any) => !item))
       .subscribe((customerList: any) => {
-        document.getElementById('loader').classList.remove('loading');
         this.CustomerData.content = customerList.list;
         this.CustomerData.totalElements = customerList.totalSize;
         this.dataSource = [...this.CustomerData.content];
-        document.getElementById('loader').classList.remove('loading');
       }));
   }
 
-
-  getFilterUrl(): string {
-    let url = '';
-    url = '&filter.auditId=' + this.searchForm.controls['auditId'].value
-      + '&filter.customerGroupId=' + this.searchForm.controls['customerGroup'].value
-      + '&filter.customerName=' + this.searchForm.controls['customerName'].value
-      + '&filter.place.place=' + this.searchForm.controls['customerPlace'].value
-      + '&filter.customerEmail=' + this.searchForm.controls['customerEmail'].value
-      + '&filter.programGroup.programGroupId=' + this.searchForm.controls['program'].value
-      + '&customerViewConfigurationId=' + this.searchForm.controls['customerView'].value
-      + '&filter.user.status' + this.searchForm.controls['status'].value
-      + '&filter.eventOrAlertCode=' + this.searchForm.controls['alertCode'].value
-      + '&filter.credentialTypeCode=' + this.searchForm.controls['credentialTypeCode'].value
-      + '&filter.credentialSubscriptionId=' + this.searchForm.controls['credentialSubscriptionId'].value
-      + '&filter.coachUserId=' + this.searchForm.controls['energyCoach'].value
-      + '&filter.credentialAccount=' + this.searchForm.controls['credentialAccount'].value;
-    return url;
+  getFilterUrl(event: any, isSearch: boolean): any {
+    const params = new HttpParams()
+      .set('filter.disableTotalSize', 'false')
+      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('filter.auditId', (this.searchForm.controls['auditId'].value !== null ? this.searchForm.controls['auditId'].value : ''))
+      .set('filter.customerGroupId', (this.searchForm.controls['customerGroup'].value !== null ? this.searchForm.controls['customerGroup'].value : ''))
+      .set('filter.customerName', (this.searchForm.controls['customerName'].value !== null ? this.searchForm.controls['customerName'].value : ''))
+      .set('filter.place.place', (this.searchForm.controls['customerPlace'].value !== null ? this.searchForm.controls['customerPlace'].value : ''))
+      .set('filter.customerEmail', (this.searchForm.controls['customerEmail'].value !== null ? this.searchForm.controls['customerEmail'].value : ''))
+      .set('filter.programGroup.programGroupId', (this.searchForm.controls['program'].value !== null ? this.searchForm.controls['program'].value : ''))
+      .set('customerViewConfigurationId', (this.searchForm.controls['customerView'].value !== null ? this.searchForm.controls['customerView'].value : ''))
+      .set('filter.user.status', (this.searchForm.controls['status'].value !== null ? this.searchForm.controls['status'].value : ''))
+      .set('filter.eventOrAlertCode', (this.searchForm.controls['alertCode'].value !== null ? this.searchForm.controls['alertCode'].value : ''))
+      .set('filter.credentialTypeCode', (this.searchForm.controls['credentialTypeCode'].value !== null ? this.searchForm.controls['credentialTypeCode'].value : ''))
+      .set('filter.credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
+      .set('filter.coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
+      .set('filter.credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
+    return params;
+  }
+  setUpForm(event: any) {
+    this.searchForm = this.fb.group({
+      auditId: [event !== undefined && event !== null ? event.auditId : ''],
+      customerGroup: [event !== undefined && event !== null ? event.customerGroup : ''],
+      customerName: [event !== undefined && event !== null ? event.customerName : ''],
+      customerPlace: [event !== undefined && event !== null ? event.customerPlace : ''],
+      customerEmail: [event !== undefined && event !== null ? event.customerEmail : ''],
+      program: [event !== undefined && event !== null ? event.program : ''],
+      customerView: [event !== undefined && event !== null ? event.customerView : '-1'],
+      status: [event !== undefined && event !== null ? event.status : ''],
+      alertCode: [event !== undefined && event !== null ? event.alertCode : ''],
+      credentialTypeCode: [event !== undefined && event !== null ? event.credentialTypeCode : ''],
+      credentialSubscriptionId: [event !== undefined && event !== null ? event.credentialSubscriptionId : ''],
+      energyCoach: [event !== undefined && event !== null ? event.energyCoach : ''],
+      credentialAccount: [event !== undefined && event !== null ? event.credentialAccount : ''],
+    });
   }
 
   searchFilter() { }
-  goToEditEvent(event: any): void {
+  goToEditCustomer(event: any): void {
     this.router.navigate(['admin/customer/customerEdit'], { queryParams: { id: event.customerId } });
   }
 

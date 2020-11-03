@@ -36,6 +36,7 @@ p.messages {
 .debug {
   text-decoration: underline;
   display: inline;
+  cursor: pointer;
 }
 select {
   background: url("src/assets/images/up_downArrow.png") no-repeat right;

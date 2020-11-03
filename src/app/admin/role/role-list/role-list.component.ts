@@ -17,6 +17,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.ROLE_KEY;
   public dataSource: any;
   public force = false;
+  public userId: any;
   public rolesData = {
     content: [],
     totalElements: 0,
@@ -27,6 +28,8 @@ export class RoleListComponent implements OnInit, OnDestroy {
     private readonly systemService: SystemService,
     private readonly router: Router,
     private readonly activateRoute: ActivatedRoute) {
+    const users = JSON.parse(localStorage.getItem('users'));
+    this.userId = users.userId;
     this.activateRoute.queryParams.subscribe(params => {
       this.force = params['force'];
     });
@@ -39,7 +42,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   }
 
   findRole(): any {
-    this.systemService.loadRoleList(this.force);
+    this.systemService.loadRoleList(this.force, this.userId);
     this.subscriptions.add(this.systemService.getRoleList().pipe(skipWhile((item: any) => !item))
       .subscribe((roleList: any) => {
         this.rolesData.content = roleList;
@@ -48,7 +51,7 @@ export class RoleListComponent implements OnInit, OnDestroy {
   }
 
   goToEditRole(event: any): any {
-    this.router.navigate(['admin/role/roleEdit'], { queryParams: { 'id': event.id } });
+    this.router.navigate(['admin/role/roleEdit'], { queryParams: { 'id': event.roleCode } });
   }
 
   addRole(): any {

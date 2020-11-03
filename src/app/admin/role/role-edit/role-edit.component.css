@@ -1,9 +1,6 @@
 section.space-top {
   margin-top: 5.3em;
 }
-.dot {
-  padding: 10px;
-}
 
 .btn {
   color: #fff;
@@ -15,10 +12,6 @@ section.space-top {
   text-align: left;
   padding-left: 40px;
   padding-top: 35px;
-}
-p.Messages {
-  font-size: larger;
-  font-weight: 600;
 }
 
 .form-control {
@@ -35,4 +28,8 @@ p.Messages {
 }
 .paddingTop {
   padding-top: 3%;
+}
+p.messages{
+  font-size: 17px;
+  font-weight: 600;
 }

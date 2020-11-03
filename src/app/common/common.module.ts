@@ -13,13 +13,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { AgmCoreModule } from '@agm/core';
-import {DragDropModule} from '@angular/cdk/drag-drop';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatDialogModule } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { RoundPipe } from '../pipes/round.pipe';
 
 @NgModule({
   imports: [
@@ -38,12 +39,13 @@ import { RouterModule } from '@angular/router';
     MatCheckboxModule,
     MatDialogModule,
     DragDropModule,
+
     AgmCoreModule.forRoot({
       apiKey: environment.googleMapAPIKey
     })
   ],
-  declarations: [TableComponent, GoogleMapComponent, SidebarComponent],
+  declarations: [TableComponent, GoogleMapComponent, SidebarComponent, RoundPipe],
   entryComponents: [GoogleMapComponent],
-  exports: [TableComponent, SidebarComponent]
+  exports: [TableComponent, SidebarComponent, RoundPipe]
 })
 export class CommonHEAModule { }

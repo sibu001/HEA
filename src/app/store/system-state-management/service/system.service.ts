@@ -176,24 +176,24 @@ export class SystemService {
     return this.store.dispatch(new GetCoachUserListAction(force, filter));
   }
 
-  loadRoleList(force: boolean): Observable<SystemManagementState> {
-    return this.store.dispatch(new GetRoleListAction(force));
+  loadRoleList(force: boolean, userId: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetRoleListAction(force, userId));
   }
 
-  loadRoleById(id: number): Observable<SystemManagementState> {
-    return this.store.dispatch(new GetRoleByIdAction(id));
+  loadRoleById(id: string, userId: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetRoleByIdAction(id, userId));
   }
 
-  saveRole(role: any): Observable<SystemManagementState> {
-    return this.store.dispatch(new SaveRoleAction(role));
+  saveRole(role: any, userId: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new SaveRoleAction(role, userId));
   }
 
-  updateRole(id: number, role: any): Observable<SystemManagementState> {
-    return this.store.dispatch(new UpdateRoleAction(id, role));
+  updateRole(id: string, role: any, userId: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new UpdateRoleAction(id, role, userId));
   }
 
-  deleteRoleById(id: number): Observable<SystemManagementState> {
-    return this.store.dispatch(new DeleteRoleByIdAction(id));
+  deleteRoleById(id: string, userId: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new DeleteRoleByIdAction(id, userId));
   }
 
 }

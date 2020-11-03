@@ -6,7 +6,7 @@
         <p class="heading">
           Search Options (use "%" as wildcard in searches)
         </p>
-        <form [formGroup]='factorForm'>
+        <form [formGroup]='lookupForm'>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
@@ -26,7 +26,7 @@
 
           <div class="row   rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary" (click)="search(undefined,true)">Show</button>
             </div>
           </div>
         </form>
@@ -34,7 +34,7 @@
           <img src='assets/images/dot03.gif' class='dot'>
           <span class="messageName">Lookups (Number of Records = {{totalElement}})</span></p>
         <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-          [totalElement]="lookupData.totalElements" (changePageEvent)="findLookup($event)"
+          [totalElement]="lookupData.totalElements" (changePageEvent)="search($event,false)"
           (goToEditEvent)="goToEditLookup($event)" (addEvent)='addLookup()'>
         </app-table>
       </div>

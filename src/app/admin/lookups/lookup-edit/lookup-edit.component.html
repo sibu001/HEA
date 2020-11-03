@@ -35,8 +35,9 @@
               <span class="messageName">Lookup Values</span>
             </p>
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="lookupValueKey" [data]="lookupValueDataSource" [isDelete]=true
-                [totalElement]="lookupValueData.totalElements">
+              <app-table [keys]="lookupValueKey" [data]="lookupValueDataSource" [isHideAdd]=true [showAddRowButton]=true
+                [isDelete]=true [totalElement]="lookupValueData.totalElements"
+                (toggleSaveButtonEvent)='toggleSaveButtonEvent()' (saveRowEvent)='saveLookup($event)'>
               </app-table>
             </div>
           </div>
@@ -51,12 +52,12 @@
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;"
                 *ngIf="id === undefined || id === null"></div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;"
-                *ngIf="id !== undefined && id !== null">
+                *ngIf="toggleSaveButton && id !== undefined && id !== null">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
                   Delete
                 </button>
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;">
+              <div *ngIf='toggleSaveButton' class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
                   Save
                 </button>
