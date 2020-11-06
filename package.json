@@ -28,6 +28,7 @@
     "@ngxs/store": "^3.5.0-dev.master-3935622",
     "@syncfusion/ej2-angular-richtexteditor": "^18.3.44",
     "@syncfusion/ej2-popups": "^18.3.35",
+    "@types/lodash": "^4.14.120",
     "angular-6-datatable": "^0.8.0",
     "angular-font-awesome": "^3.1.2",
     "bootstrap": "^3.3.7",
