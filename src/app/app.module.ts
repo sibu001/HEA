@@ -19,10 +19,11 @@ import { HeadersComponent } from './headers/headers.component';
 import { RoleGuard } from './role.guard';
 import { UtilityService } from './services/utility.service';
 import { MatSnackBarModule } from '@angular/material';
+
 @NgModule({
   declarations: [
     AppComponent,
-    HeadersComponent,
+    HeadersComponent
   ],
   imports: [
     ReactiveFormsModule,

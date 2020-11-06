@@ -24,7 +24,7 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     ]),
     SystemParameterRoutingModule
   ],
-  declarations: [SystemParameterListComponent, SystemParameterEditComponent]
-  , providers: [SystemService]
+  declarations: [SystemParameterListComponent, SystemParameterEditComponent],
+  providers: [SystemService]
 })
 export class SystemParameterModule { }

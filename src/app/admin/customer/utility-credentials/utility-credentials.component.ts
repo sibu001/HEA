@@ -1,8 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
+import { Component, ElementRef, Inject, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 
 @Component({
@@ -17,13 +19,24 @@ export class UtilityCredentialsComponent implements OnInit {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
+    private readonly customerService: CustomerService,
+    private readonly el: ElementRef,
     public dialogRef: MatDialogRef<UtilityCredentialsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
+    this.setForm(undefined);
     this.findCredentialType(false, '');
-    this.setForm(this.data);
+    if (this.data.row !== undefined) {
+      this.customerService.loadUtilityCredentialById(this.data.customerId, this.data.row.id);
+      this.subscriptions.add(this.customerService.getUtilityCredentialById().pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.setForm(response);
+        }));
+    }
+
   }
 
   findCredentialType(force: boolean, filter: string): void {
@@ -37,35 +50,63 @@ export class UtilityCredentialsComponent implements OnInit {
   setForm(event: any) {
     this.utilityCredentialForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
-      credentialTypeCode: [event !== undefined ? event.credentialTypeCode : ''],
-      login: [event !== undefined ? event.login : ''],
-      password: [event !== undefined ? event.password : ''],
-      active: [event !== undefined ? event.active : ''],
-      account: [event !== undefined ? event.account : ''],
-      electricityServiceId: [event !== undefined ? event.electricityServiceId : ''],
-      electricityMeterId: [event !== undefined ? event.electricityMeterId : ''],
-      electricitySignDate: [event !== undefined ? event.electricitySignDate : ''],
-      heatingServiceId: [event !== undefined ? event.heatingServiceId : ''],
-      heatingMeterId: [event !== undefined ? event.heatingMeterId : ''],
-      heatingSignDate: [event !== undefined ? event.heatingSignDate : ''],
-      waterServiceId: [event !== undefined ? event.waterServiceId : ''],
-      waterMeterId: [event !== undefined ? event.waterMeterId : ''],
-      waterSignDate: [event !== undefined ? event.waterSignDate : ''],
-      subscriptionId: [event !== undefined ? event.subscriptionId : ''],
-      feedId: [event !== undefined ? event.feedId : ''],
-      houseNumber: [event !== undefined ? event.houseNumber : ''],
-      postalCode: [event !== undefined ? event.postalCode : ''],
-      billDateDay: [event !== undefined ? event.billDateDay : ''],
-      dataInUse: [event !== undefined ? event.dataInUse : ''],
-      utilityInUse: [event !== undefined ? event.utilityInUse : ''],
-      electricityInUse: [event !== undefined ? event.electricityInUse : ''],
-      heatingInUse: [event !== undefined ? event.heatingInUse : ''],
-      waterInUse: [event !== undefined ? event.waterInUse : ''],
+      credentialTypeCode: [event !== undefined ? event.credentialType.credentialType : 'calwater', Validators.required],
+      login: [event !== undefined ? event.login : null],
+      password: [event !== undefined ? event.password : null],
+      active: [event !== undefined ? event.active : false],
+      account: [event !== undefined ? event.account : null],
+      electricityServiceId: [event !== undefined ? event.electricityServiceId : null],
+      electricityMeterId: [event !== undefined ? event.electricityMeterId : null],
+      electricitySignDate: [event !== undefined ? event.electricitySignDate : null],
+      heatingServiceId: [event !== undefined ? event.heatingServiceId : null],
+      heatingMeterId: [event !== undefined ? event.heatingMeterId : null],
+      heatingSignDate: [event !== undefined ? event.heatingSignDate : null],
+      waterServiceId: [event !== undefined ? event.waterServiceId : null],
+      waterMeterId: [event !== undefined ? event.waterMeterId : null],
+      waterSignDate: [event !== undefined ? event.waterSignDate : null],
+      subscriptionId: [event !== undefined ? event.subscriptionId : null],
+      feedId: [event !== undefined ? event.feedId : null],
+      houseNumber: [event !== undefined ? event.houseNumber : null],
+      postalCode: [event !== undefined ? event.postalCode : null],
+      billDateDay: [event !== undefined ? event.billDateDay : null],
+      dataInUse: [event !== undefined ? event.dataInUse : false],
+      utilityInUse: [event !== undefined ? event.utilityInUse : false],
+      electricityInUse: [event !== undefined ? event.electricityInUse : false],
+      heatingInUse: [event !== undefined ? event.heatingInUse : false],
+      waterInUse: [event !== undefined ? event.waterInUse : false],
     });
 
   }
 
   onNoClick() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
+  }
+
+  save() {
+    if (this.utilityCredentialForm.valid) {
+      if (this.data.row && this.data.row.id) {
+        this.subscriptions.add(this.customerService.updateUtilityCredential(this.data.customerId, this.data.row.id, this.utilityCredentialForm.value).pipe(skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.dialogRef.close(true);
+          }));
+      } else {
+        this.subscriptions.add(this.customerService.saveUtilityCredential(this.data.customerId, this.utilityCredentialForm.value).pipe(skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.dialogRef.close(true);
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
+  }
+  validateForm() {
+    for (const key of Object.keys(this.utilityCredentialForm.controls)) {
+      if (this.utilityCredentialForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
   }
 }
+

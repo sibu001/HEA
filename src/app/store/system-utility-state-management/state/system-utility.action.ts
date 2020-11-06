@@ -34,6 +34,16 @@ export enum SystemActionTypes {
     SAVE_LOGS = 'Save Logs',
     UPDATE_LOGS = 'Update Logs',
     DELETE_LOGS_BY_ID = 'Delete Logs By Id',
+    GET_WEATHER_STATION_LIST = 'Get All WeatherStation List',
+    GET_WEATHER_STATION_BY_ID = 'Get WeatherStation By Id',
+    SAVE_WEATHER_STATION = 'Save WeatherStation',
+    UPDATE_WEATHER_STATION = 'Update WeatherStation',
+    DELETE_WEATHER_STATION_BY_ID = 'Delete WeatherStation By Id',
+    GET_DEGREE_DAYS_LIST = 'Get All DegreeDays List',
+    GET_DEGREE_DAYS_BY_ID = 'Get DegreeDays By Id',
+    SAVE_DEGREE_DAYS = 'Save DegreeDays',
+    UPDATE_DEGREE_DAYS = 'Update DegreeDays',
+    DELETE_DEGREE_DAYS_BY_ID = 'Delete DegreeDays By Id',
 }
 export class GetPlaceListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_PLACE_LIST;
@@ -238,6 +248,67 @@ export class UpdateLogsAction {
 
 export class DeleteLogsByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_LOGS_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class GetWeatherStationListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_WEATHER_STATION_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetWeatherStationByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_WEATHER_STATION_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class SaveWeatherStationAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_WEATHER_STATION;
+    constructor(readonly factor: any) {
+    }
+}
+
+export class UpdateWeatherStationAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_WEATHER_STATION;
+    constructor(readonly id: number, readonly factor: any) {
+    }
+}
+
+export class DeleteWeatherStationByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_WEATHER_STATION_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+
+export class GetDegreeDaysListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_DEGREE_DAYS_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetDegreeDaysByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_DEGREE_DAYS_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class SaveDegreeDaysAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_DEGREE_DAYS;
+    constructor(readonly factor: any) {
+    }
+}
+
+export class UpdateDegreeDaysAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_DEGREE_DAYS;
+    constructor(readonly id: number, readonly factor: any) {
+    }
+}
+
+export class DeleteDegreeDaysByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_DEGREE_DAYS_BY_ID;
     constructor(readonly id: number) {
     }
 }

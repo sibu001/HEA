@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CustomerRoutingModule } from './customer-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonHEAModule } from 'src/app/common/common.module';
@@ -46,7 +46,7 @@ import { StaffNoteComponent } from './staff-note/staff-note.component';
     CustomerEventTypeComponent,
     StaffNoteComponent
   ],
-  providers: [SystemService,
+  providers: [SystemService, DatePipe,
     CustomerService,
     { provide: MAT_DIALOG_DATA, useValue: {} }
   ],

@@ -36,7 +36,17 @@ import {
   GetLogsByIdAction,
   GetLogsListAction,
   SaveLogsAction,
-  UpdateLogsAction
+  UpdateLogsAction,
+  DeleteDegreeDaysByIdAction,
+  DeleteWeatherStationByIdAction,
+  GetDegreeDaysByIdAction,
+  GetDegreeDaysListAction,
+  GetWeatherStationByIdAction,
+  GetWeatherStationListAction,
+  SaveDegreeDaysAction,
+  SaveWeatherStationAction,
+  UpdateDegreeDaysAction,
+  UpdateWeatherStationAction
 } from '../state/system-utility.action';
 import { SystemUtilityManagementState } from '../state/system-utility.state';
 
@@ -100,6 +110,22 @@ export class SystemUtilityService {
 
   getLogsById(): Observable<any> {
     return this.store.select(SystemUtilityManagementState.getLogById);
+  }
+
+  getWeatherStationList(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getWeatherStationList);
+  }
+
+  getWeatherStationById(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getWeatherStationById);
+  }
+
+  getDegreeDaysList(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getDegreeDaysList);
+  }
+
+  getDegreeDaysById(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getDegreeDaysById);
   }
 
   loadPlaceList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
@@ -240,6 +266,46 @@ export class SystemUtilityService {
 
   deleteLogsById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new DeleteLogsByIdAction(id));
+  }
+
+  loadWeatherStationList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetWeatherStationListAction(force, filter));
+  }
+
+  loadWeatherStationById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetWeatherStationByIdAction(id));
+  }
+
+  saveWeatherStation(logs: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveWeatherStationAction(logs));
+  }
+
+  updateWeatherStation(id: number, logs: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new UpdateWeatherStationAction(id, logs));
+  }
+
+  deleteWeatherStationById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteWeatherStationByIdAction(id));
+  }
+  
+  loadDegreeDaysList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetDegreeDaysListAction(force, filter));
+  }
+
+  loadDegreeDaysById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetDegreeDaysByIdAction(id));
+  }
+
+  saveDegreeDays(logs: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveDegreeDaysAction(logs));
+  }
+
+  updateDegreeDays(id: number, logs: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new UpdateDegreeDaysAction(id, logs));
+  }
+
+  deleteDegreeDaysById(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteDegreeDaysByIdAction(id));
   }
 
 }

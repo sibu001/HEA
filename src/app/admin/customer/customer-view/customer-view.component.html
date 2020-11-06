@@ -438,8 +438,8 @@
         <div class="row">
           <div class="col-sm-12">
             <app-table [keys]="credentialsKeys" [data]="credentialsDataSource" [isDelete]=true
-              [totalElement]="credentialsData.totalElements" (goToEditEvent)="openUtilityCredential($event)"
-              (addEvent)='openUtilityCredential(undefined)' class="rowSize">
+              [totalElement]="credentialsData.totalElements" (goToEditEvent)="editUtility($event)"
+              (addEvent)='openUtilityCredential(undefined)'  (imageEvent)='openUtilityCredential($event)' (deleteEvent)="deleteUtilityCredential($event)" class="rowSize">
             </app-table>
           </div>
         </div>
@@ -458,7 +458,7 @@
         <div class="row">
           <div class="col-sm-12">
             <app-table [keys]="alertsKeys" [data]="alertsDataSource" [isDelete]=true
-              [totalElement]="alertsData.totalElements" (onAddEvent)="addCustomerAlert(undefined)">
+              [totalElement]="alertsData.totalElements" (deleteEvent)="deleteCustomerAlert($event)" (goToEditEvent)="editAlert($event)" (addEvent)="addCustomerAlert(undefined)">
             </app-table>
           </div>
         </div>
@@ -475,7 +475,8 @@
         <div class="row">
           <div class="col-sm-12">
             <app-table [keys]="eventKeys" [data]="eventDataSource" [isDelete]=true
-              [totalElement]="eventData.totalElements" (onAddEvent)="addCustomerEvent(undefined)">
+              [totalElement]="eventData.totalElements" (goToEditEvent)="editCustomerEvent($event)"
+              (deleteEvent)="deleteCustomerEvent($event)" (addEvent)="addCustomerEvent(undefined)">
             </app-table>
           </div>
         </div>
@@ -492,7 +493,9 @@
         <div class="row">
           <div class="col-sm-12">
             <app-table [keys]="staffKeys" [data]="staffDataSource" [isDelete]=true
-              [totalElement]="staffData.totalElements" (onAddEvent)='addStaffNote(undefined)'>
+              [totalElement]="staffData.totalElements" (addEvent)='addStaffNote(undefined)'
+              (goToEditEvent)="editStaffNote($event)"
+              (deleteEvent)="deleteStaffNote($event)" >
             </app-table>
           </div>
         </div>

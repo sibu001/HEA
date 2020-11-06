@@ -1,10 +1,11 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -31,8 +32,10 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
   topicDescriptionData: Array<any> = TableColumnData.TOPIC_DESCRIPTION_DATA;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService: SystemService,
+    private readonly systemMeasurementService: SystemMeasurementService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly router: Router,
+    private readonly el: ElementRef,
     private readonly location: Location) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
@@ -42,13 +45,14 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.loadScriptConsoleById();
     }
   }
 
 
   setForm(event: any) {
     this.debugForm = this.formBuilder.group({
-      // id: [event !== undefined ? event.id : ''],
+      id: [event !== undefined ? event.id : ''],
       auditId: [event !== undefined ? event.auditId : ''],
       customerName: [event !== undefined ? event.customerName : ''],
       surveyDescriptionId: [event !== undefined ? event.surveyDescriptionId : ''],
@@ -59,17 +63,50 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
       disableValueCache: [event !== undefined ? event.disableValueCache : '']
     });
   }
-  back() {
-    this.location.back();
-  }
-
-  executeDebug() {
-
-  }
 
   changeTheme(event: any): any {
     this.codeMirrorOptions.theme = event.target.value;
   }
+
+  loadScriptConsoleById() {
+    this.subscriptions.add(this.systemMeasurementService.getScriptConsoleById().pipe(skipWhile((item: any) => !item))
+      .subscribe((scriptConsole: any) => {
+        this.setForm(scriptConsole);
+      }));
+  }
+
+  executeDebug() {
+    if (this.debugForm.valid) {
+      if (this.id !== null && this.id !== undefined) {
+        this.subscriptions.add(this.systemMeasurementService.updateScriptConsole(this.id, this.debugForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.loadScriptConsoleById();
+          }));
+      } else {
+        this.subscriptions.add(this.systemMeasurementService.saveScriptConsole(this.debugForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.loadScriptConsoleById();
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
+  }
+  validateForm() {
+    for (const key of Object.keys(this.debugForm.controls)) {
+      if (this.debugForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
+  back() {
+    this.location.back();
+  }
+  get f() { return this.debugForm.controls; }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

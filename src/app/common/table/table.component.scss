@@ -164,6 +164,9 @@ mat-header-cell {
 .center {
   text-align: center;
 }
+.tableImage {
+  cursor: pointer;
+}
 
 div .yellowAlert {
   height: 1em;
@@ -201,19 +204,31 @@ div .greenAlert {
   flex: none;
   width: 35px;
 }
+.mat-column-delete {
+  flex: none;
+  width: 35px;
+}
 
 .removePadding {
   padding: 5px;
   display: inline-table;
 }
 
-.align-center{
+.align-center {
   text-align: center;
+}
+
+.btnPadding {
+  display: inline-grid;
+  margin: 3px;
 }
 ::ng-deep .tableCheckBox .mat-checkbox-inner-container {
   height: 15px;
   width: 15px;
 }
-mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {
-   padding-right: 5px;
+
+mat-cell:last-of-type,
+mat-footer-cell:last-of-type,
+mat-header-cell:last-of-type {
+  padding-right: 5px;
 }

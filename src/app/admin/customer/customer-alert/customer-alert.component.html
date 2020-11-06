@@ -39,6 +39,12 @@
                 [value]="customerAlert.customerAlertTypeId">{{customerAlert.name}}
               </option>
             </select>
+            <div *ngIf="f.customerAlertTypeId.invalid && (f.customerAlertTypeId.dirty ||
+                f.customerAlertTypeId.touched)">
+                <span class="error" *ngIf="f.customerAlertTypeId.errors.required">
+                  Customer Alert Type is required.
+                </span>
+              </div>
           </div>
         </div>
         <div class="row rowPadding">
@@ -68,7 +74,7 @@
       </form>
       <div class="row rowPadding">
         <div class="col-sm-12 col-xs-12" style="text-align: end;">
-          <button type="button" class="btn btn-primary btn-padding">Save</button>
+          <button type="button" class="btn btn-primary btn-padding" (click)="save()">Save</button>
         </div>
       </div>
     </div>

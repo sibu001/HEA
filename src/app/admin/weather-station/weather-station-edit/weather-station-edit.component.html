@@ -11,6 +11,12 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Station Id</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="stationId" formControlName="stationId">
+              <div *ngIf="f.stationId.invalid && (f.stationId.dirty ||
+                f.stationId.touched)">
+                <span class="error" *ngIf="f.stationId.errors.required">
+                  Name is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -25,6 +31,12 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Station Name:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control" formControlName="stationName" id="stationName">
+              <div *ngIf="f.stationName.invalid && (f.stationName.dirty ||
+                f.stationName.touched)">
+                <span class="error" *ngIf="f.stationName.errors.required">
+                  Name is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>

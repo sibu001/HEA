@@ -1,6 +1,7 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -17,6 +18,7 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
 
   public keys: Array<TABLECOLUMN>;
   public dataSource: any;
+  public force = false;
   public programGroupData = {
     content: [],
     totalElements: 0,
@@ -28,21 +30,38 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
   });
   constructor(public fb: FormBuilder,
     private readonly systemService: SystemService,
-    private readonly router: Router) { }
+    private readonly router: Router,
+    private readonly activateRoute: ActivatedRoute) {
+    this.activateRoute.queryParams.subscribe(params => {
+      this.force = params['force'];
+    });
+  }
 
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');
     this.keys = TableColumnData.PROGRAM_GROUP_COLUMN_DATA;
-    this.findProgramGroup();
+    this.search(undefined, this.force);
   }
 
-  findProgramGroup(): void {
-    this.systemService.loadProgramGroupsList(false);
+  findProgramGroup(filter: any, force: boolean): void {
+    this.systemService.loadProgramGroupsList(force, filter);
     this.subscriptions.add(this.systemService.getProgramGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((programGroupList: any) => {
         this.programGroupData.content = programGroupList;
         this.dataSource = [...this.programGroupData.content];
       }));
+  }
+
+  search(event: any, force: boolean): void {
+    const params = new HttpParams()
+      .set('filter.startRow', '0')
+      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('programGroupId', '')
+      .set('filter.programCode', (this.programGroupForm.value.programCode !== null ? this.programGroupForm.value.programCode : ''))
+      .set('filter.programName', (this.programGroupForm.value.programName !== null ? this.programGroupForm.value.programName : ''));
+    this.findProgramGroup(params, force);
   }
 
   gotoEditProgramGroup(event: any): void {

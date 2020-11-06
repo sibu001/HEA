@@ -15,4 +15,14 @@ export class AppConstant {
     public static lookup = '';
     public static systemParameter = '';
     public static logs = '';
+    public static weatherStation = '';
+    public static degreeDays = '';
+    public static cimisStation = '';
+    public static cimisMeasurement = '';
+    public static scriptConsole = '';
+    public static scriptBatch = '';
+    public static systemJobs = '';
+    public static eC2Instance = '';
+    public static alertMessage = '';
+    
 }

@@ -27,7 +27,8 @@
             <mat-header-cell *matHeaderCellDef>
                 <mat-checkbox (change)="$event ? masterToggle() : null;checkBoxChange()"
                     [checked]="selection.hasValue() && isAllSelected()" color="primary"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()" class="tableCheckBox">
+                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()"
+                    class="tableCheckBox">
                 </mat-checkbox>
             </mat-header-cell>
             <mat-cell *matCellDef="let row; let colIndex = index">
@@ -60,12 +61,20 @@
                     {{row[col.key]}}</div>
                 <!-- row[col.key]===true &&  -->
                 <div *ngIf="col.type=='image' && col.changeable && !col.isAction" class="center">
-                    <img *ngIf='row[col.key]!==true' [src]='col.imagePath' (click)="imageClickEvent(col,null)">
+                    <img *ngIf='row[col.key]!==true' [src]='col.imagePath' (click)="imageClickEvent(col,row)">
                     <div *ngIf='row[col.key]===true' (click)="imageClickEvent(col,row[col.key])"> {{row[col.key]}}
                     </div>
                 </div>
                 <div *ngIf="col.type=='image' && !col.changeable && !col.isAction" class="center">
-                    <img [src]='col.imagePath' (click)="imageClickEvent(col,null)">
+                    <img *ngIf="col.imagePath!==undefined"  [src]='col.imagePath' (click)="imageClickEvent(col,row)" class="tableImage">
+                    <img *ngIf="row[col.key]!==undefined && col.imagePath===undefined"  [src]='row[col.key]' (click)="imageClickEvent(col,row)" class="tableImage">
+                </div>
+                <div *ngIf="col.type=='buttons' && !col.isAction">
+                    <div class='inline-table btnPadding' *ngFor='let button of col.buttonList'>
+                        <button class='btn btn-primary' (click)='onButtonEvent(button)'>
+                            {{button.name}}
+                        </button>
+                    </div>
                 </div>
                 <div *ngIf="col.type=='link' && !col.isAction">
                     <div *ngFor='let link of col.links'>
@@ -84,19 +93,30 @@
                     </mat-menu>
                 </div>
             </mat-cell>
-
         </ng-container>
         <ng-container matColumnDef="delete">
             <mat-header-cell *matHeaderCellDef class="text-nowrap"></mat-header-cell>
-            <mat-cell *matCellDef="let element"> <img src="assets/images/ico_minus.gif" (click)="deleteRow($event)">
+            <mat-cell *matCellDef="let element"> <img src="assets/images/ico_minus.gif" (click)="deleteRow(element)">
             </mat-cell>
         </ng-container>
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <!-- <ng-container matColumnDef="expandedDetail">
+            <mat-cell *matCellDef="let element" [attr.colspan]="keys.length">
+                <div class="example-element-detail"
+                    [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                    element
+                </div>
+            </mat-cell>
+        </ng-container> -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"
             [ngClass]="{'border-left-green': sideBorder && !row.accountLocked, 'border-left-red': sideBorder && row.accountLocked}">
+            <!-- class="example-element-row"
+            [class.example-expanded-row]="expandedElement === row"
+            (click)="expandedElement = expandedElement === row ? null : row" -->
         </mat-row>
     </mat-table>
-    <div *ngIf='dataSource===undefined ||dataSource===null' class="row">
+    <div *ngIf='(dataSource===undefined || dataSource===null) && !showInput ' class="row">
         <div class='col-sm-12 col-xs-12' style='text-align: center;'>
             <h5>No records found.</h5>
         </div>
@@ -105,16 +125,21 @@
         <form [formGroup]='tableForm' (submit)='saveRow()'>
             <div class="col-sm-{{12/(keys.length+1)|round:0:'down'}} col-md-{{12/(keys.length+1)|round:0:'down'}} col-xs-{{12/(keys.length+1)|round:0:'down'}} col-lg-{{(12)/(keys.length+1)|round:0:'down'}}"
                 *ngFor='let key of keys'>
-                <input type="text" class='form-control' [formControlName]='key.key' [id]="key.key">
-                <div *ngIf="f[key.key].invalid && (f[key.key].dirty ||
+                <input *ngIf="key.addRowType==='text' || key.addRowType===undefined" type="text" class='form-control'
+                    [formControlName]='key.key' [id]="key.key">
+                <select *ngIf="key.addRowType==='select'" class='form-control form-control-sm'
+                    [formControlName]="key.key" [id]="key.key">
+                    <option *ngFor='let option of key.option' [value]="option.key">{{option.value}}</option>
+                </select>
+                <div *ngIf="key.required && f[key.key].invalid && (f[key.key].dirty ||
                 f[key.key].touched)">
                     <span class="error" *ngIf="f[key.key].errors.required">
                         {{key.displayName}} is required.
                     </span>
                 </div>
             </div>
-            <div class="align-center"
-                class="col-sm-{{12/(keys.length+1)|round:0:'down'}} col-md-{{12/(keys.length+1)|round:0:'down'}} col-xs-{{12/(keys.length+1)|round:0:'down'}} col-lg-{{(12)/(keys.length+1)|round:0:'down'}}">
+            <div
+                class="align-center col-sm-{{12/(keys.length+1)|round:0:'down'}} col-md-{{12/(keys.length+1)|round:0:'down'}} col-xs-{{12/(keys.length+1)|round:0:'down'}} col-lg-{{(12)/(keys.length+1)|round:0:'down'}}">
                 <button class="btn btn-primary" type="submit">save</button>
             </div>
         </form>
@@ -130,7 +155,7 @@
             <button class="btn btn-primary" type="button" (click)="onAddEvent($event)">Add</button>
         </div>
 
-        <div *ngIf="showAddRowButton" class="col-sm-6 col-xs-8 removePadding" style="text-align:right;">
+        <div *ngIf="showAddRowButton && !showInput" class="col-sm-6 col-xs-8 removePadding" style="text-align:right;">
             <button class="btn btn-primary" type="button" (click)="onAddRowEvent()">Add Row</button>
         </div>
     </div>

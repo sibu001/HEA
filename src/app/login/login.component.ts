@@ -96,7 +96,7 @@ export class LoginComponent implements OnInit {
   }
   performGetUserRole(userId: any) {
     this.loginService
-      .performGetMultiPartData("/users/" + userId + "/roles")
+      .performGetMultiPartData("users/" + userId + "/roles")
       .subscribe(
         (data) => {
           let response = JSON.parse(JSON.stringify(data));

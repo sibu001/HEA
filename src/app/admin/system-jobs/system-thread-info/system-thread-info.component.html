@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-sm-12">
+    <h4><strong> </strong>
+      <button (click)="onNoClick()" class="closeButton" cdkFocusInitial><svg xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink" width="8pt" height="8pt" viewBox="0 0 8 8" version="1.1">
+          <g id="surface1">
+            <path style=" stroke:none;fill-rule:nonzero;fill:76ba19;fill-opacity:1;"
+              d="M 0.109375 0.644531 C -0.0351562 0.5 -0.0351562 0.257812 0.109375 0.109375 C 0.257812 -0.0351562 0.492188 -0.0351562 0.644531 0.109375 L 3.84375 3.3125 L 7.050781 0.109375 C 7.195312 -0.0351562 7.4375 -0.0351562 7.578125 0.109375 C 7.726562 0.257812 7.726562 0.5 7.578125 0.644531 L 4.378906 3.84375 L 7.578125 7.050781 C 7.726562 7.195312 7.726562 7.433594 7.578125 7.585938 C 7.433594 7.726562 7.195312 7.726562 7.050781 7.585938 L 3.84375 4.378906 L 0.644531 7.585938 C 0.492188 7.726562 0.257812 7.726562 0.109375 7.585938 C -0.0351562 7.433594 -0.0351562 7.195312 0.109375 7.050781 L 3.3125 3.84375 Z M 0.109375 0.644531 " />
+          </g>
+        </svg>
+      </button>
+    </h4>
+  </div>
+</div>
+<div class="row rowPadding">
+  <div class="col-sm-12">
+    <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [isHideAdd]=true
+      [totalElement]="systemThreadData.totalElements" (changePageEvent)="search($event)">
+    </app-table>
+  </div>
+
+  <div class="row rowPadding borderTop">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 align-right">
+      <button type="button" class="btn btn-primary" (click)='onNoClick()'>Close</button>
+    </div>
+  </div>
+</div>

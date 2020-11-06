@@ -1,0 +1,279 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Topic description</span>
+        </p>
+        <form [formGroup]="topicForm" class="form-group form-padding">
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Topic code</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="topicCode" formControlName="topicCode">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Display Label:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="displayLabel" id="displayLabel">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Label:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="reportLabel" id="reportLabel">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Description:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class="form-control" formControlName="description" id="description"></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">First Pane Or Section:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control" formControlName="firstPaneOrSection" id="firstPaneOrSection">
+                <option *ngFor='let topic of topicData' [value]="topic.key">{{topic.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="isActive">
+                <input type="checkbox" formControlName="isActive" id="isActive">
+                Is active
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="permanent">
+                <input type="checkbox" formControlName="permanent" id="permanent">
+                Permanent
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="mandatory">
+                <input type="checkbox" formControlName="mandatory" id="mandatory">
+                Mandatory
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="showProgressIndicator">
+                <input type="checkbox" formControlName="showProgressIndicator" id="showProgressIndicator">
+                Show progress indicator
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="showLabelUnderProgressIndicator">
+                <input type="checkbox" formControlName="showLabelUnderProgressIndicator"
+                  id="showLabelUnderProgressIndicator">
+                Show label under progress indicator
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="showLeaks">
+                <input type="checkbox" formControlName="showLeaks" id="showLeaks">
+                Show Leaks
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="showUnique">
+                <input type="checkbox" formControlName="showUnique" id="showUnique">
+                Show Unique
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="showRightMenu">
+                <input type="checkbox" formControlName="showRightMenu" id="showRightMenu">
+                Show Right Menu
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="showTopMenu">
+                <input type="checkbox" formControlName="showTopMenu" id="showTopMenu">
+                Show Top Menu
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Next Permanent Topic:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="nextTopic" formControlName="nextTopic">
+                <option value="" selected></option>
+                <option *ngFor='let topic of nextTopic' [value]="topic.key">{{topic.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="allowPublic">
+                <input type="checkbox" formControlName="allowPublic" id="allowPublic">
+                Allow Public
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Top Menu:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='topMenu' id='topMenu'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Right menu top part:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='rightMenuTopPart' id='rightMenuTopPart'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Right menu bottom part::</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='rightMenuBottomPart'
+                id='rightMenuBottomPart'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Comments:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="comments" formControlName="comments">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Topic Group</span></p>
+            <app-table [keys]="keys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true [isSearch]="false"
+              [data]="dataSource" [totalElement]="topicTableData.totalElements">
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Topic Panes </span></p>
+            <app-table [keys]="topicPaneKeys" [isPaginate]="true" [isSearch]="true" [data]="dataSource"
+              [totalElement]="topicTableData.totalElements" (addEvent)='addTopicPanes()'
+              (goToEditEvent)='goToEditTopicPanes()'>
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Recommendations, Leaks,Unique </span></p>
+            <app-table [keys]="recommendationKeys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
+              [totalElement]="topicTableData.totalElements" (addEvent)='addRecommendationLeaks()'
+              (goToEditEvent)='goToEditRecommendationLeaks()'>
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Topic Variables </span></p>
+            <app-table [keys]="topicVariablesKeys" [isPaginate]="true" [isSearch]="true" [data]="dataSource"
+              [totalElement]="topicTableData.totalElements" (addEvent)='addTopicVariables()'
+              (goToEditEvent)='goToEditTopicVariables()'>
+            </app-table>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
+              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
+              </div>
+              <div class="col-xs-2 col-sm-3 col-md-2 col-lg-2 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" (click)="copy()">
+                  Copy
+                </button>
+              </div>
+              <div class="col-xs-4 col-sm-3 col-md-4 col-lg-4 sidePadding" *ngIf="id !== undefined && id !== null">
+                <label for="isRerunTopic">
+                  <input type="checkbox" formControlName='isRerunTopic' id='isRerunTopic'>
+                  Require to rerun topic
+                </label>
+              </div>
+              <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" (click)="ReInitTopic()">
+                  Reinit topics
+                </button>
+              </div>
+              <div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
+                  Delete
+                </button>
+              </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sidePadding">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

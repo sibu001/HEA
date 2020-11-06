@@ -1,11 +1,10 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TableColumnData } from 'src/app/data/common-data';
-import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { skipWhile } from 'rxjs/operators';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -16,44 +15,99 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class WeatherStationEditComponent implements OnInit, OnDestroy {
 
   id: any;
+  isForce = false;
   stationForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
+  toggleSaveButton: Boolean = true;
   constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService: SystemService,
+    private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly location: Location) {
+    private readonly router: Router,
+    private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
   }
-
   ngOnInit() {
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.systemUtilityService.loadWeatherStationById(this.id);
+      this.loadWeatherStationById();
     }
   }
 
+
   setForm(event: any) {
     this.stationForm = this.formBuilder.group({
-      stationId: [event !== undefined ? event.stationId : ''],
+      stationId: [event !== undefined ? event.stationId : '', Validators.required],
       stationIsdId: [event !== undefined ? event.stationIsdId : ''],
-      stationName: [event !== undefined ? event.stationName : ''],
+      stationName: [event !== undefined ? event.stationName : '', Validators.required],
     });
   }
+
+  loadWeatherStationById() {
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationById().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStation: any) => {
+        if (this.isForce) {
+          this.router.navigate(['admin/weatherStation/weatherStationEdit'], { queryParams: { 'id': weatherStation.id } });
+        }
+        this.setForm(weatherStation);
+      }));
+  }
+
   back() {
-    this.location.back();
+    this.router.navigate(['admin/weatherStation/weatherStationList'], { queryParams: { 'force': this.isForce } });
+  }
+  delete() {
+    this.subscriptions.add(this.systemUtilityService.deleteWeatherStationById(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['admin/weatherStation/weatherStationList'], { queryParams: { 'force': true } });
+      }));
   }
 
   save() {
-
+    if (this.stationForm.valid) {
+      if (this.id !== null && this.id !== undefined) {
+        this.subscriptions.add(this.systemUtilityService.updateWeatherStation(this.id, this.stationForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadWeatherStationById();
+          }));
+      } else {
+        this.subscriptions.add(this.systemUtilityService.saveWeatherStation(this.stationForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadWeatherStationById();
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
   }
-  delete() {
-
+  validateForm() {
+    for (const key of Object.keys(this.stationForm.controls)) {
+      if (this.stationForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
   }
+
+  saveWeatherStation(event: FormGroup): any {
+    console.log(event);
+  }
+
+  toggleSaveButtonEvent(): any {
+    this.toggleSaveButton = !this.toggleSaveButton;
+  }
+
+  get f() { return this.stationForm.controls; }
 
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
-
 }

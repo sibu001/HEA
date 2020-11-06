@@ -23,4 +23,28 @@ export class AdminFilter {
         page: null,
         formValue: null
     };
+    public degreeDaysFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public cimisStationFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public cimisMeasurementFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public scriptConsoleFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public weatherStationFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public batchScriptFilter: any = {
+        page: null,
+        formValue: null
+    };
 }

@@ -9,22 +9,57 @@
       Use the menu below to navigate to the appropriate administrative function.
     </p>
   </div>
-  <div *ngIf="showMethod" [class.overflow]='methodName.length>0'>
+  <div *ngIf="showDataFields && topicVariableField.length>0" [class.overflow]='topicVariableField.length>0'>
+    <p class='Energy_anaiytic'>
+      <img src='assets/images/dot03.gif' class='dot'>Data field list</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bodderBottom" *ngFor="let field of dataField">
+          <td>{{field.field}}</td>
+          <td>{{field.Name}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="showDataFields && dataField.length>0" [class.overflow]='dataField.length>0'>
+    <p class='Energy_anaiytic'>
+      <img src='assets/images/dot03.gif' class='dot'>Data field list</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Field</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="bodderBottom" *ngFor="let field of dataField">
+          <td>{{field.field}}</td>
+          <td>{{field.Name}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="showMethod && methodName.length>0" [class.overflow]='methodName.length>0'>
     <p class='Energy_anaiytic'>
       <img src='assets/images/dot03.gif' class='dot'>Method list</p>
     <table>
       <thead>
-        <th>
-          Method name
-        </th>
+        <tr>
+          <th>Method name</th>
+        </tr>
       </thead>
       <tbody>
         <tr class="bodderBottom" *ngFor="let method of methodName">
-          <td>
-            {{method}}
-          </td>
+          <td>{{method}}</td>
         </tr>
-
       </tbody>
     </table>
   </div>
@@ -52,19 +87,19 @@
           <li><a [routerLink]="['/admin/cimisMeasurements/cimisMeasurementsList']">CIMIS Measurements</a></li>
           <li><a [routerLink]="['/admin/debug/scriptDebugConsole']">Script Console</a></li>
           <li><a [routerLink]="['/admin/batchScript/batchScriptList']">Script batches</a></li>
-          <li><a href='{{apiURL+"systemJobList.do"}}'>System jobs</a></li>
-          <li><a href='{{apiURL+"jobServerManager.do"}}'>EC2 Instances</a></li>
-          <li><a href='{{apiURL+"alertMessageTypeView.do"}}'>Alert Messages</a></li>
+          <li><a [routerLink]="['/admin/systemJobs/systemJobsList']">System jobs</a></li>
+          <li><a [routerLink]='["/admin/ec2Instances/ec2InstancesList"]'>EC2 Instances</a></li>
+          <li><a [routerLink]='["/admin/alertMessages/alertMessagesList"]'>Alert Messages</a></li>
         </ul>
       </li>
       <li><a [routerLink]="['/admin/staff/staffList']">Staff</a></li>
       <li><a [routerLink]="['/admin/customer/customerList']">Customers</a></li>
       <li><a href='{{apiURL+"registrationView.do"}}'>Prospects</a></li>
-      <li><a href='{{apiURL+"surveyDescriptionList.do"}}'>Topic descriptions</a></li>
-      <li><a href='{{apiURL+"surveyList.do"}}'>Topics</a></li>
-      <li><a href='{{apiURL+"reportList.do"}}'>Administrative Reports</a></li>
+      <li><a [routerLink]="['/admin/topicDescription/topicDescriptionList']">Topic descriptions</a></li>
+      <li><a [routerLink]="['/admin/topic/topicList']">Topics</a></li>
+      <li><a [routerLink]="['/admin/administrativeReport/administrativeReportList']">Administrative Reports</a></li>
       <!-- don't display historyList for admins since this moved to customers-> surveys link-->
-      <li><a href='{{apiURL+"customerEventList.do"}}'>Events history</a>
+      <li><a [routerLink]="['/admin/eventHistory/eventHistoryList']">Events history</a>
       </li>
       <li><a data-toggle='collapse' data-target='#collapseMail' aria-expanded='false' aria-controls='collapseMail'>Mail
           definitions</a>

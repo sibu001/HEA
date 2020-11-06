@@ -18,13 +18,14 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { environment } from 'src/environments/environment';
 import { GoogleMapComponent } from './google-map/google-map.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RoundPipe } from '../pipes/round.pipe';
 
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     RouterModule,
     MatTableModule,

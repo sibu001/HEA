@@ -17,6 +17,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 export interface UserData {
   id: string;
@@ -30,6 +31,13 @@ export interface UserData {
   selector: 'app-table',
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class TableComponent implements OnInit, OnChanges {
   displayedColumns = [];
@@ -57,7 +65,8 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() checkBoxChangeEvent: EventEmitter<any> = new EventEmitter();
   @Output() toggleSaveButtonEvent: EventEmitter<any> = new EventEmitter();
   @Output() saveRowEvent: EventEmitter<any> = new EventEmitter();
-
+  @Output() buttonListEvent: EventEmitter<any> = new EventEmitter();
+  expandedElement: any = null;
   showInput: Boolean = false;
   page = new Page();
   url: String;
@@ -114,7 +123,10 @@ export class TableComponent implements OnInit, OnChanges {
   setForm() {
     if (this.keys !== undefined) {
       this.keys.forEach(key => {
-        this.tableForm.addControl(key.key, this.formBuilder.control('', Validators.required));
+        this.tableForm.addControl(key.key, this.formBuilder.control(''));
+        if (key.required) {
+          this.tableForm.controls[key.key].setValidators(Validators.required);
+        }
       });
     }
   }
@@ -142,7 +154,7 @@ export class TableComponent implements OnInit, OnChanges {
     console.log(event);
     this.page.sort = event;
     this.changePageEvent.emit(this.page);
-    this.changeDetectorRefs.detectChanges();
+    // this.changeDetectorRefs.detectChanges();
   }
 
   onClickMenuItem(item: any, row: any) {
@@ -198,6 +210,10 @@ export class TableComponent implements OnInit, OnChanges {
     this.router.navigate([routerLink], { queryParams: queryParam });
   }
 
+  onButtonEvent(event: any) {
+    this.buttonListEvent.emit(event);
+  }
+
   onAddEvent(event: any): any {
     this.addEvent.emit(event);
   }
@@ -227,9 +243,11 @@ export class TableComponent implements OnInit, OnChanges {
     if (this.tableForm.valid) {
       this.saveRowEvent.emit(this.tableForm);
       this.toggleSaveButtonEvent.emit();
+      this.showInput = false;
     } else {
       this.validateAllFormFields(this.tableForm);
     }
+
   }
   onDeleteEvent(): any {
     this.bulkDeleteEvent.emit(this.selection.selected);

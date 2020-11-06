@@ -1,0 +1,350 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Data Field</span>
+        </p>
+        <form [formGroup]="dataFieldForm" class="form-group form-padding">
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Field code:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" formControlName="fieldCode" id="fieldCode">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div *ngIf='!isBlockField' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pane:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="pane" formControlName="pane">
+                <option *ngFor='let pane of paneData' [value]="pane.key">{{pane.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order Number:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" formControlName="orderNumber" id="orderNumber">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Label:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" formControlName="label" id="label">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Label:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" formControlName="reportLabel" id="reportLabel">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Source:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="source" formControlName="source">
+                <option value="pge">PGE</option>
+                <option value="system" selected="selected">System</option>
+                <option value="user">User</option>
+                <option value="zillow">Zillow</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Data Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="dataType" formControlName="dataType">
+                <option value="boolean" selected="selected">Boolean</option>
+                <option value="datetime">DateTime</option>
+                <option value="number">Number</option>
+                <option value="text">Text</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Input Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="inputType" formControlName="inputType">
+                <option *ngFor='let input of inputData' [value]="input.key">{{input.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">View Condition:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class="form-control form-control-sm" id="viewCondition"
+                formControlName="viewCondition"></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Validation Rule:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class="form-control form-control-sm" id="validationRule"
+                formControlName="validationRule"></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Validation Message:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="validationMessage"
+                formControlName="validationMessage">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Rule Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" formControlName="calculationType" id="calculationType">
+                <option value="javascript" selected="selected">JavaScript</option>
+                <option value="spel">SpEL</option>
+                <option value="webharvest">WebHarvest script</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Rule:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class="form-control form-control-sm" formControlName="calculationType"
+                id="calculationType"></textarea>
+              <span class='debug' (click)='goToDebug()'>Debug</span>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Event:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" formControlName="calculationEvent" id="calculationEvent">
+                <option value="always">Always</option>
+                <option value="open">On Pane open</option>
+                <option value="save" selected="selected">On Pane save</option>
+                <option value="once">Only once</option>
+                <option value="period">Period</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div *ngIf='f.calculationEvent.value==="period"' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Period:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="calculationPeriod" formControlName="calculationPeriod">
+                <option value="B">After new bill</option>
+                <option value="E">After new Electric bill</option>
+                <option value="G">After new Gas bill</option>
+                <option value="V">After new Water bill</option>
+                <option value="A">Always</option>
+                <option value="D" selected="selected">Daily</option>
+                <option value="M">Monthly</option>
+                <option value="W">Weekly</option>
+                <option value="Y">Year</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Display Pattern:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type='text' class="form-control form-control-sm" formControlName="displayPattern"
+                id="displayPattern">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Input Mask:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type='text' class="form-control form-control-sm" formControlName="inputMask" id="inputMask">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label>
+                <input type='checkbox' formControlName="readOnly" id="readOnly">
+                Read Only
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Unit:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type='text' class="form-control form-control-sm" formControlName="unit" id="unit">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Help Text:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type='text' class="form-control form-control-sm" formControlName="helpText" id="helpText">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Comments:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type='text' class="form-control form-control-sm" formControlName="comments" id="comments">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label>
+                <input type='checkbox' formControlName="displayToUser" id="displayToUser">
+                Display To User
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div *ngIf='f.displayToUser.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label>
+                <input type='checkbox' formControlName="required" id="required">
+                Required
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+
+          <div *ngIf='f.displayToUser.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label>
+                <input type='checkbox' formControlName="refreshPane" id="refreshPane">
+                Refresh Pane On Change Event
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+
+          <div *ngIf='f.displayToUser.value && !isBlockField' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label>
+                <input type='checkbox' formControlName="nextRowAnswer1" id="nextRowAnswer1">
+                Set Answer On Next Row
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+
+          <div *ngIf='f.displayToUser.value && f.nextRowAnswer1.value  && !isBlockField'
+            class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Rows between question and answer:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" formControlName="rowsBetween"
+                id="calculationType">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div *ngIf='f.displayToUser.value  && f.nextRowAnswer1.value  && !isBlockField'
+            class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Rows Before Question:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" formControlName="rowsBefore" id="rowsBefore">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div *ngIf='f.displayToUser.value  && f.nextRowAnswer1.value && !isBlockField'
+            class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Rows After Answer:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" formControlName="rowsAfter" id="rowsAfter">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Updated By:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Updated Date:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Field Values</span></p>
+            <app-table [keys]="dataFieldKeys" [isSearch]="false" [isDelete]=true [data]="dataFieldDataSource"
+              [totalElement]="dataFieldData.totalElements" [isHideAdd]=true [showAddRowButton]=true
+              (saveRowEvent)="saveRow()">
+            </app-table>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
+              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
+              </div>
+              <div class="col-sm-8 col-md-10 col-lg-9 col-xs-8 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="recalculate()">
+                  Recalculate
+                </button>
+              </div>
+              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
+                  Delete
+                </button>
+              </div>
+              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDataFields]='true' [showTopicVariableFields]='true' [showMethod]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

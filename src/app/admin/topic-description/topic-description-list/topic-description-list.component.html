@@ -1,0 +1,61 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
+          padding-top: 35px;'>
+        <p class="heading">
+          Topic management
+        </p>
+        <form [formGroup]='topicForm'>
+          <div class="row rowPadding borderBottom">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <span class="filterLabel">Topic label:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='topicLabel' id='topicLabel'>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <label for="isActive">
+                <input type="checkbox" formControlName="isActive" id="isActive">
+                <span class="filterLabel">Active</span>
+              </label>
+            </div>
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+              <span class="filterLabel">Description:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName="description" id="description">
+            </div>
+          </div>
+
+          <div class="row rowPadding borderBottom">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <span class="filterLabel">Search Context Variable:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='searchContextVariable'
+                id='searchContextVariable'>
+            </div>
+          </div>
+          <div class="row rowPadding">
+            <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
+              <button type="submit" class="btn btn-primary">Show</button>
+            </div>
+          </div>
+        </form>
+        <div class="paddingTop">
+          <p class="messages">
+            <img src='assets/images/dot03.gif' class='dot'>
+            <span class="messageName">Topic description list (Number of Records = {{totalElement}})</span></p>
+          <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
+            [totalElement]="topicData.totalElements" (changePageEvent)="findTopicDescription($event)"
+            (goToEditEvent)="goToEditTopicDescription($event)" (addEvent)='addTopicDescription()'>
+          </app-table>
+        </div>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]=true></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

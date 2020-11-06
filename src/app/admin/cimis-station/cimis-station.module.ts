@@ -10,6 +10,9 @@ import { NgxsModule } from '@ngxs/store';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemMeasurementManagementState } from 'src/app/store/system-measurement-management/state/system-measurement.state';
+import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 
 @NgModule({
   imports: [
@@ -19,10 +22,12 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
     CommonHEAModule,
     NgxsModule.forRoot([
       SystemManagementState,
-      CustomerManagementState
+      CustomerManagementState,
+      SystemUtilityManagementState,
+      SystemMeasurementManagementState
     ]),
   ],
   declarations: [CimisStationListComponent, CimisStationEditComponent],
-  providers: [SystemService]
+  providers: [SystemService, SystemMeasurementService]
 })
 export class CimisStationModule { }

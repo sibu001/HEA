@@ -1,0 +1,248 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Pane</span>
+        </p>
+        <form [formGroup]="paneForm" class="form-group form-padding">
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="isSection">
+                <input type="checkbox" id="isSection" formControlName="isSection">
+                Is Section
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div *ngIf='f.isSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="isSection">
+                <input type="checkbox" id="hideSection" formControlName="hideSection">
+                Hide Section In Topic
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pane Code:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="paneCode" id="paneCode">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pane Main Section Label:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="mainSectionLabel" id="mainSectionLabel">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Next Pane Or Section:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control" formControlName="nextPane" id="nextPane">
+                <option value=""></option>
+                <option value="323" selected="selected">Explanation (sp_explainItCEC)</option>
+                <option value="379">Explanation (sp_explainItCW)</option>
+                <option value="391">Explanation (sp_explainItPending)</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order Number:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="orderNumber" id="orderNumber">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Label:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="label" id="label">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Filter:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class="form-control" formControlName="filter" id="filter"></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page Header:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='pageHeader' id='pageHeader'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page Text:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='pageText' id='pageText'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page Footer:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='pageFooter' id='pageFooter'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Factoid:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='factoid' id='factoid'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pending Messages:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='pendingMessages' id='pendingMessages'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Top Menu:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='topMenu' id='topMenu'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Right Menu Top Part:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='rightMenuTopPart' id='rightMenuTopPart'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Right Menu Bottom Part:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='rightMenuBottomPart'
+                id='rightMenuBottomPart'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pane Help:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='paneHelp' id='paneHelp'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="showPrev">
+                <input type="checkbox" formControlName="showPrev" id="showPrev">
+                Show "Prev" Button
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="showNext">
+                <input type="checkbox" formControlName="showNext" id="showNext">
+                Show "Next" Button
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Comments:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="comments" formControlName="comments">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Data Blocks</span></p>
+            <app-table [keys]="dataBlockKeys" [isPaginate]="false"  [isSearch]="false"
+              [data]="dataBlockDataSource" [totalElement]="dataBlockData.totalElements" (addEvent)='addDataBlock()'
+              (goToEditEvent)='goToEditDataBlock()'>
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Data Fields</span></p>
+            <app-table [keys]="dataFieldKeys" [isPaginate]="true"  [isSearch]="false"
+              [data]="dataFieldDataSource" [totalElement]="dataFieldData.totalElements" (addEvent)='addDataField()'
+              (goToEditEvent)='goToEditDataField()'>
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Charts</span></p>
+            <app-table [keys]="chartKeys" [isPaginate]="true"  [isSearch]="false"
+              [data]="chartDataSource" [totalElement]="chartData.totalElements" (addEvent)='addCharts()'
+              (goToEditEvent)='goToEditCharts()'>
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Reports</span></p>
+            <app-table [keys]="reportKeys" [isPaginate]="true"  [isSearch]="false"
+              [data]="reportsDataSource" [totalElement]="reportData.totalElements" (addEvent)='addReports()'
+              (goToEditEvent)='goToEditReports()'>
+            </app-table>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
+              <div class="col-sm-8 col-md-8 col-lg-8 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" (click)="copy()">
+                  Copy
+                </button>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
+                  Delete
+                </button>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4 sidePadding">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDataFields]='true' [showTopicVariableFields]='true' [showMethod]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

@@ -14,19 +14,16 @@
                         </label>
                         <div class="col-sm-6 col-md-4 col-lg-4">
                             <input type="text" class="form-control
-                                form-control-sm" id="auditId"
-                                formControlName="auditId">
+                                form-control-sm" id="auditId" formControlName="auditId">
                         </div>
                         <label class="control-label col-lg-2 col-md-2 col-sm-4">
                             <span class="start"> Customer Group:</span>
                         </label>
                         <div class="col-lg-4 col-md-4 col-sm-6">
-                            <select class="form-control form-control-sm"
-                                id="customerGroup"
+                            <select class="form-control form-control-sm" id="customerGroup"
                                 formControlName="customerGroup">
                                 <option value="" selected="selected"></option>
-                                <option *ngFor="let group of customerGroupList"
-                                    [value]="group.customerGroupId">
+                                <option *ngFor="let group of customerGroupList" [value]="group.customerGroupId">
                                     {{group.groupName}}</option>
                             </select>
                         </div>
@@ -37,15 +34,13 @@
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <input type="text" class="form-control
-                                form-control-sm" id="customerName"
-                                formControlName="customerName">
+                                form-control-sm" id="customerName" formControlName="customerName">
                         </div>
                         <label class="control-label col-lg-2 col-md-2 col-sm-4">
                             <span class="start"> Customer Place:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
-                            <select class="form-control form-control-sm"
-                                id="customerPlace"
+                            <select class="form-control form-control-sm" id="customerPlace"
                                 formControlName="customerPlace">
                                 <option value="" selected="selected"></option>
                                 <option value="ALAMEDA">SF East Bay</option>
@@ -74,20 +69,18 @@
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <input type="text" class="form-control
-                                form-control-sm" id="customerEmail"
-                                formControlName="customerEmail">
+                                form-control-sm" id="customerEmail" formControlName="customerEmail">
                         </div>
 
                         <label class="control-label col-md-2 col-lg-2 col-sm-4">
                             <span class="start">Program:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
-                            <select class="form-control form-control-sm"
-                                id="program" formControlName="program">
+                            <select class="form-control form-control-sm" id="program" formControlName="program">
                                 <option value=""></option>
                                 <option *ngFor="let programGroup of
-                                    programGroupList"
-                                    [value]="programGroup.programGroupId">{{programGroup.programName}}</option>
+                                    programGroupList" [value]="programGroup.programGroupId">
+                                    {{programGroup.programName}}</option>
                             </select>
                         </div>
                     </div>
@@ -96,13 +89,11 @@
                             <span class="start">Customer View:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
-                            <select class="form-control form-control-sm"
-                                id="customerView"
+                            <select class="form-control form-control-sm" id="customerView"
                                 formControlName="customerView" value='-1'>
                                 <option value="-1">Standard</option>
                                 <option *ngFor="let viewConfiguration of
-                                    viewConfigurationList"
-                                    [value]="viewConfiguration.viewConfigurationId">
+                                    viewConfigurationList" [value]="viewConfiguration.viewConfigurationId">
                                     {{viewConfiguration.configurationName}}</option>
                             </select>
                         </div>
@@ -111,8 +102,7 @@
                             <span class="start">Status:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
-                            <select class="form-control form-control-sm"
-                                id="status" formControlName="status">
+                            <select class="form-control form-control-sm" id="status" formControlName="status">
                                 <option value=""></option>
                                 <option value="0">Active (0)</option>
                                 <option value="10">In registration (10)</option>
@@ -130,8 +120,7 @@
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <input type="text" class="form-control
-                                form-control-sm" id="alertCode"
-                                formControlName="alertCode">
+                                form-control-sm" id="alertCode" formControlName="alertCode">
                         </div>
 
                         <label class="control-label col-lg-2 col-md-2 col-sm-4">
@@ -139,21 +128,19 @@
 
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6" style="padding-right: 0%; padding-left: 0px;">
-                            <div class="col-md-6 col-lg-6 col-sm-6" >
+                            <div class="col-md-6 col-lg-6 col-sm-6">
                                 <select class="form-control form-control-sm
-                                    padded-control" id="credentialTypeCode"
-                                    formControlName="credentialTypeCode">
+                                    padded-control" id="credentialTypeCode" formControlName="credentialTypeCode">
                                     <option value="" selected="selected"></option>
                                     <option *ngFor="let credentialType of
-                                        credentialTypeList"
-                                        [value]="credentialType.credentialType">{{credentialType.credentialName}}
+                                        credentialTypeList" [value]="credentialType.credentialType">
+                                        {{credentialType.credentialName}}
                                     </option>
                                 </select>
                             </div>
                             <div class="col-md-6 col-lg-6 col-sm-6">
                                 <input type="text" class="form-control
-                                    form-control-sm"
-                                    id="credentialSubscriptionId"
+                                    form-control-sm" id="credentialSubscriptionId"
                                     formControlName="credentialSubscriptionId">
                             </div>
                         </div>
@@ -163,11 +150,9 @@
                             <span class="start">Energy Coach:</span>
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
-                            <select class="form-control form-control-sm"
-                                formControlName="energyCoach">
+                            <select class="form-control form-control-sm" formControlName="energyCoach">
                                 <option value=""></option>
-                                <option *ngFor="let coachUser of coachUserList"
-                                    [value]="coachUser.userId">
+                                <option *ngFor="let coachUser of coachUserList" [value]="coachUser.userId">
                                     {{coachUser.name}}</option>
                             </select>
                         </div>
@@ -176,8 +161,7 @@
                         </label>
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <input type="text" class="form-control
-                                form-control-sm"
-                                formControlName="credentialAccount">
+                                form-control-sm" formControlName="credentialAccount">
                         </div>
                     </div>
                     <div class="form-row row">
@@ -190,8 +174,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <p class="Messages">
-                            <img class="pointer" src="assets/images/dot03.gif"
-                                class="dot">Customers (Number of Records
+                            <img class="pointer" src="assets/images/dot03.gif" class="dot">Customers (Number of Records
                             =
                             {{this.CustomerData.totalElements}})
                         </p>
@@ -199,37 +182,35 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <app-table [keys]="keys" [isPaginate]="true"
-                            [checkbox]=true [isSearch]="false"
-                            [data]="dataSource"
-                            [totalElement]="CustomerData.totalElements"
-                            (changePageEvent)="findCustomer($event,false)"
-                            (goToEditEvent)="goToEditCustomer($event)"
-                            (imageEvent)='onImageClickEvent($event)'
-                            (addEvent)='addNewCustomer()' class="customerTable">
+                        <app-table [keys]="keys" [isPaginate]="true" [checkbox]=true [isSearch]="false"
+                            [data]="dataSource" [totalElement]="CustomerData.totalElements"
+                            (changePageEvent)="findCustomer($event,false)" (goToEditEvent)="goToEditCustomer($event)"
+                            (imageEvent)='onImageClickEvent($event)' (addEvent)='addNewCustomer()'
+                            class="customerTable">
                         </app-table>
-                    
+
                     </div>
                 </div>
-                <form [formGroup]='fileUploadForm'>
+                <form [formGroup]='fileUploadForm' *ngIf="customerView==-1">
                     <div class="row">
-                        <div class='col-sm-7 col-xs-6'
-                            style="text-align:right">
+                        <div class='col-sm-7 col-xs-6' style="text-align:right">
                             <span>Upload file with new customers:</span>
                         </div>
                         <div class='col-sm-3 col-xs-6'>
-                            <input type="file" class="custom-file-input"
-                                style='font-size: smaller;'
-                                name="customerFile" id="customerFile"
-                                formControlName='customerFile'>
+                            <input type="file" class="custom-file-input" style='font-size: smaller;' name="customerFile"
+                                id="customerFile" formControlName='customerFile'>
                         </div>
-                        <div class='col-sm-2 col-xs-12'
-                            style='text-align: right;'>
+                        <div class='col-sm-2 col-xs-12' style='text-align: right;'>
                             <button type="submit" class="btn
                                 btn-primary">Upload</button>
                         </div>
                     </div>
                 </form>
+                <div class="row" *ngIf="customerView!=-1">
+                    <div class="col-sm-12">
+                       <a (click)="exportToCSV()">Export to CSV</a>
+                    </div>
+                </div>
             </div>
             <div class="col-md-3 .col-lg-3 col-sm-12">
                 <app-sidebar [showDetails]="true"></app-sidebar>

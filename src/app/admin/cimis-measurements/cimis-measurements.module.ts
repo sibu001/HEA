@@ -10,6 +10,9 @@ import { SystemManagementState } from 'src/app/store/system-state-management/sta
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { CalendarModule } from 'primeng/primeng';
+import { SystemMeasurementManagementState } from 'src/app/store/system-measurement-management/state/system-measurement.state';
+import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 
 @NgModule({
   imports: [
@@ -19,12 +22,14 @@ import { CalendarModule } from 'primeng/primeng';
     CalendarModule,
     NgxsModule.forRoot([
       SystemManagementState,
-      CustomerManagementState
+      CustomerManagementState,
+      SystemUtilityManagementState,
+      SystemMeasurementManagementState
     ]),
     CommonHEAModule,
     CimisMeasurementsRoutingModule
   ],
   declarations: [CimisMeasurementsListComponent],
-  providers: [SystemService]
+  providers: [SystemService, SystemMeasurementService]
 })
 export class CimisMeasurementsModule { }

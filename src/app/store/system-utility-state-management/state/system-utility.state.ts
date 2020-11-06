@@ -7,15 +7,19 @@ import { AppConstant } from 'src/app/utility/app.constant';
 import {
     DeleteCustomerComparisonGroupByIdAction,
     DeleteCustomerEventTypeByIdAction,
+    DeleteDegreeDaysByIdAction,
     DeleteFactorByIdAction,
     DeleteLogsByIdAction,
     DeleteLookupByIdAction,
     DeletePlaceByIdAction,
     DeleteSystemParameterByIdAction,
+    DeleteWeatherStationByIdAction,
     GetCustomerComparisonGroupByIdAction,
     GetCustomerComparisonGroupListAction,
     GetCustomerEventTypeByIdAction,
     GetCustomerEventTypeListAction,
+    GetDegreeDaysByIdAction,
+    GetDegreeDaysListAction,
     GetFactorByIdAction,
     GetFactorListAction,
     GetLogsByIdAction,
@@ -26,20 +30,26 @@ import {
     GetPlaceListAction,
     GetSystemParameterByIdAction,
     GetSystemParameterListAction,
+    GetWeatherStationByIdAction,
+    GetWeatherStationListAction,
     SaveCustomerComparisonGroupAction,
     SaveCustomerEventTypeAction,
+    SaveDegreeDaysAction,
     SaveFactorAction,
     SaveLogsAction,
     SaveLookupAction,
     SavePlaceAction,
     SaveSystemParameterAction,
+    SaveWeatherStationAction,
     UpdateCustomerComparisonGroupAction,
     UpdateCustomerEventTypeAction,
+    UpdateDegreeDaysAction,
     UpdateFactorAction,
     UpdateLogsAction,
     UpdateLookupAction,
     UpdatePlaceAction,
-    UpdateSystemParameterAction
+    UpdateSystemParameterAction,
+    UpdateWeatherStationAction
 } from './system-utility.action';
 import { SystemUtilityManagementModel } from './system-utility.model';
 
@@ -60,6 +70,10 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         systemParameter: undefined,
         logList: undefined,
         logs: undefined,
+        weatherStationList: undefined,
+        weatherStation: undefined,
+        degreeDaysList: undefined,
+        degreeDays: undefined,
         error: undefined
     }
 })
@@ -127,6 +141,26 @@ export class SystemUtilityManagementState {
     @Selector()
     static getSystemParameterById(state: SystemUtilityManagementModel): any {
         return state.systemParameter;
+    }
+
+    @Selector()
+    static getDegreeDaysList(state: SystemUtilityManagementModel): any {
+        return state.degreeDaysList;
+    }
+
+    @Selector()
+    static getDegreeDaysById(state: SystemUtilityManagementModel): any {
+        return state.logs;
+    }
+
+    @Selector()
+    static getWeatherStationList(state: SystemUtilityManagementModel): any {
+        return state.weatherStationList;
+    }
+
+    @Selector()
+    static getWeatherStationById(state: SystemUtilityManagementModel): any {
+        return state.weatherStation;
     }
 
     @Selector()
@@ -513,7 +547,7 @@ export class SystemUtilityManagementState {
                         // const res = Transformer.transformLookupTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            factorList: response,
+                            lookupList: response,
                         });
                     },
                         error => {
@@ -532,7 +566,7 @@ export class SystemUtilityManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        factor: response,
+                        lookup: response,
                     });
                 },
                     error => {
@@ -565,7 +599,7 @@ export class SystemUtilityManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        factor: response,
+                        lookup: response,
                     });
                 },
                     error => {
@@ -583,7 +617,7 @@ export class SystemUtilityManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        factor: response,
+                        lookup: response,
                     });
                 },
                     error => {
@@ -604,7 +638,7 @@ export class SystemUtilityManagementState {
                         // const res = Transformer.transformSystemParameterTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            factorList: response,
+                            systemParameterList: response,
                         });
                     },
                         error => {
@@ -623,7 +657,7 @@ export class SystemUtilityManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        factor: response,
+                        systemParameter: response,
                     });
                 },
                     error => {
@@ -656,7 +690,7 @@ export class SystemUtilityManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        factor: response,
+                        systemParameter: response,
                     });
                 },
                     error => {
@@ -674,7 +708,7 @@ export class SystemUtilityManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        factor: response,
+                        systemParameter: response,
                     });
                 },
                     error => {
@@ -695,7 +729,7 @@ export class SystemUtilityManagementState {
                         // const res = Transformer.transformLogTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            factorList: response,
+                            logList: response,
                         });
                     },
                         error => {
@@ -714,7 +748,7 @@ export class SystemUtilityManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        factor: response,
+                        logs: response,
                     });
                 },
                     error => {
@@ -747,7 +781,7 @@ export class SystemUtilityManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        factor: response,
+                        logs: response,
                     });
                 },
                     error => {
@@ -765,7 +799,189 @@ export class SystemUtilityManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        factor: response,
+                        logs: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetWeatherStationListAction)
+    getAllWeatherStationList(ctx: StateContext<SystemUtilityManagementModel>, action: GetWeatherStationListAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getWeatherStationList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.weatherStation, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        // const res = Transformer.transformLogTableData(response);
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            weatherStationList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetWeatherStationByIdAction)
+    getWeatherStationById(ctx: StateContext<SystemUtilityManagementModel>, action: GetWeatherStationByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.weatherStation + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        weatherStation: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteWeatherStationByIdAction)
+    deleteWeatherStationById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteWeatherStationByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.weatherStation + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveWeatherStationAction)
+    saveWeatherStation(ctx: StateContext<SystemUtilityManagementModel>, action: SaveWeatherStationAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.factor, AppConstant.weatherStation)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        weatherStation: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateWeatherStationAction)
+    updateWeatherStation(ctx: StateContext<SystemUtilityManagementModel>, action: UpdateWeatherStationAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.factor, AppConstant.weatherStation + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        weatherStation: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetDegreeDaysListAction)
+    getAllDegreeDaysList(ctx: StateContext<SystemUtilityManagementModel>, action: GetDegreeDaysListAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getDegreeDaysList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.degreeDays, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        // const res = Transformer.transformLogTableData(response);
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            degreeDaysList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetDegreeDaysByIdAction)
+    getDegreeDaysById(ctx: StateContext<SystemUtilityManagementModel>, action: GetDegreeDaysByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.degreeDays + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        degreeDays: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteDegreeDaysByIdAction)
+    deleteDegreeDaysById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteDegreeDaysByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.degreeDays + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveDegreeDaysAction)
+    saveDegreeDays(ctx: StateContext<SystemUtilityManagementModel>, action: SaveDegreeDaysAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.factor, AppConstant.degreeDays)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        degreeDays: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateDegreeDaysAction)
+    updateDegreeDays(ctx: StateContext<SystemUtilityManagementModel>, action: UpdateDegreeDaysAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.factor, AppConstant.degreeDays + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        degreeDays: response,
                     });
                 },
                     error => {

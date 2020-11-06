@@ -85,6 +85,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     this.loadCustomerGroup();
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.loadUtilityCredential(this.id);
+      this.loadCustomerAlert(this.id);
+      this.loadCustomerEvent(this.id);
+      this.loadStaffNote(this.id);
       this.customerService.loadCustomerById(this.id);
       this.loadCustomerById();
     }
@@ -239,46 +243,207 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadUtilityCredential(customerId: any) {
+    this.customerService.loadUtilityCredentialList(customerId);
+    this.subscriptions.add(this.customerService.getUtilityCredentialDataSourceList().pipe(skipWhile((item: any) => !item))
+      .subscribe((utilityCredentialList: any) => {
+        this.credentialsData.content = utilityCredentialList;
+        this.credentialsDataSource = [...this.credentialsData.content];
+      }));
+  }
+  editUtility(event: any) {
+    const obj = {
+      row: event
+    };
+    this.openUtilityCredential(obj);
+  }
   openUtilityCredential(event: any) {
-    this.dialog.open(UtilityCredentialsComponent, {
+    if (!event) {
+      event = {
+        customerId: this.id
+      };
+    } else {
+      event.customerId = this.id;
+    }
+    const dialogRef = this.dialog.open(UtilityCredentialsComponent, {
       width: '70vw',
       height: '70vh',
       data: event,
       disableClose: false
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadUtilityCredential(this.id);
+      }
+    });
+  }
+
+  deleteUtilityCredential(event: any) {
+    this.subscriptions.add(this.customerService.deleteUtilityCredentialById(this.id, event.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.loadUtilityCredential(this.id);
+      }));
+  }
+
+  loadCustomerAlert(customerId: any) {
+    this.customerService.loadAlertList(customerId);
+    this.subscriptions.add(this.customerService.getAlertList().pipe(skipWhile((item: any) => !item))
+      .subscribe((alertList: any) => {
+        this.alertsData.content = alertList;
+        this.alertsDataSource = [...this.alertsData.content];
+      }));
+  }
+
+  editAlert(event: any) {
+    const obj = {
+      row: event
+    };
+    this.addCustomerAlert(obj);
   }
 
   addCustomerAlert(event: any) {
-    this.dialog.open(CustomerAlertComponent, {
+    if (!event) {
+      event = {
+        customerId: this.id
+      };
+    } else {
+      event.customerId = this.id;
+    }
+    const dialogRef = this.dialog.open(CustomerAlertComponent, {
       width: '50vw',
       height: '50vh',
       data: event,
       disableClose: false
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadCustomerAlert(this.id);
+      }
+    });
   }
 
+
+  deleteCustomerAlert(event: any) {
+    this.subscriptions.add(this.customerService.deleteAlertById(this.id, event.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.loadCustomerAlert(this.id);
+      }));
+  }
+
+  loadCustomerEvent(customerId: any) {
+    this.customerService.loadCustomerEventList(customerId);
+    this.subscriptions.add(this.customerService.getCustomerEventList().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerEventList: any) => {
+        this.eventData.content = customerEventList;
+        this.eventDataSource = [...this.eventData.content];
+      }));
+  }
   addCustomerEvent(event: any) {
-    this.dialog.open(CustomerEventTypeComponent, {
+    if (!event) {
+      event = {
+        customerId: this.id
+      };
+    } else {
+      event.customerId = this.id;
+    }
+    const dialogRef = this.dialog.open(CustomerEventTypeComponent, {
       width: '50vw',
       height: '50vh',
       data: event,
       disableClose: false
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadCustomerEvent(this.id);
+      }
     });
   }
 
+  editCustomerEvent(event: any) {
+    const obj = {
+      row: event
+    };
+    this.addCustomerEvent(obj);
+  }
+  deleteCustomerEvent(event: any) {
+    this.subscriptions.add(this.customerService.deleteCustomerEventById(this.id, event.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.loadCustomerEvent(this.id);
+      }));
+  }
+
+  loadStaffNote(customerId: any) {
+    this.customerService.loadStaffNoteList(customerId);
+    this.subscriptions.add(this.customerService.getStaffNoteList().pipe(skipWhile((item: any) => !item))
+      .subscribe((staffNote: any) => {
+        this.staffData.content = staffNote;
+        this.staffData.totalElements = staffNote.totalSize;
+        this.staffDataSource = [...this.staffData.content];
+      }));
+  }
   addStaffNote(event: any) {
-    this.dialog.open(StaffNoteComponent, {
+    if (!event) {
+      event = {
+        customerId: this.id
+      };
+    } else {
+      event.customerId = this.id;
+    }
+    const dialogRef = this.dialog.open(StaffNoteComponent, {
       width: '50vw',
       height: '50vh',
       data: event,
       disableClose: false
     });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadStaffNote(this.id);
+      }
+    });
+  }
+
+  editStaffNote(event: any) {
+    const obj = {
+      row: event
+    };
+    this.addStaffNote(obj);
+  }
+
+  deleteStaffNote(event: any) {
+    this.subscriptions.add(this.customerService.deleteStaffNoteById(this.id, event.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.loadStaffNote(this.id);
+      }));
+  }
+  loadCustomerFile(customerId: any) {
+    this.customerService.loadCustomerFileList(customerId);
+    this.subscriptions.add(this.customerService.getCustomerFileList().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerFileList: any) => {
+        this.filesData.content = customerFileList.list;
+        this.filesData.totalElements = customerFileList.totalSize;
+        this.filesDataSource = [...this.filesData.content];
+      }));
   }
 
   addFile() {
     const element: HTMLElement = document.querySelectorAll('#fileInput')[0] as HTMLElement;
     element.click();
   }
+
+  saveCustomerFIle(customerId: any, event: any) {
+    this.subscriptions.add(this.customerService.saveCustomerFile(customerId, event).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.loadCustomerFile(customerId);
+      }));
+  }
+
+  deleteCustomerFile(customerId: any, event: any) {
+    this.subscriptions.add(this.customerService.deleteCustomerFileById(customerId, event.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.loadCustomerFile(customerId);
+      }));
+  }
+
   handle(e: any) {
     console.log(e);
     console.log('Change input file');

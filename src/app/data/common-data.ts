@@ -40,36 +40,36 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_CREDENTIAL_KEY: Array<TABLECOLUMN> = [
-        { key: 'credentialType', displayName: 'Credential Type' },
-        { key: 'active', displayName: 'Active' },
+        { key: 'credentialType', displayName: 'Credential Type', isEdit: true },
+        { key: 'active', displayName: 'Active', type: 'image', isEdit: true },
         { key: 'login', displayName: 'Links' },
         { key: 'password', displayName: 'Password' },
-        { key: 'customerData', displayName: 'Customer Data', type: 'image' },
-        { key: 'utilityData', displayName: 'Utility Data', type: 'image' },
-        { key: 'electricity', displayName: 'Electricity', type: 'image' },
-        { key: 'heating', displayName: 'Heating', type: 'image' },
-        { key: 'water', displayName: 'Water', type: 'image' },
-        { key: 'lastUsage', displayName: 'Last Usage' },
-        { key: 'authEndDate', displayName: 'Auth End Date' },
-        { key: 'authStatus', displayName: 'Auth Status' }
+        { key: 'dataInUse', displayName: 'Customer Data', type: 'image' },
+        { key: 'utilityInUse', displayName: 'Utility Data', type: 'image' },
+        { key: 'electricityInUse', displayName: 'Electricity', type: 'image' },
+        { key: 'heatingInUse', displayName: 'Heating', type: 'image' },
+        { key: 'waterInUse', displayName: 'Water', type: 'image' },
+        { key: 'lastSuccessfulUsageDate', displayName: 'Last Usage', isDate: true },
+        { key: 'authorizationEndDate', displayName: 'Auth End Date', isDate: true },
+        { key: 'authorizationStatus', displayName: 'Auth Status' }
     ];
 
     static readonly CUSTOMER_ALERT_KEY: Array<TABLECOLUMN> = [
-        { key: 'customerAlertType', displayName: 'Customer Alert Type' },
-        { key: 'alertLevel', displayName: 'Alert Level' },
-        { key: 'notes', displayName: 'Notes' }
+        { key: 'customerAlertType', displayName: 'Customer Alert Type', isEdit: true },
+        { key: 'alertLevels', displayName: 'Alert Level' },
+        { key: 'note', displayName: 'Notes' }
     ];
 
     static readonly CUSTOMER_EVENT_KEY: Array<TABLECOLUMN> = [
-        { key: 'eventType', displayName: 'Event Type' },
-        { key: 'eventDate', displayName: 'Event Date' },
-        { key: 'note', displayName: 'Note' },
-        { key: 'author', displayName: 'Author' }
+        { key: 'eventType', displayName: 'Event Type', isEdit: true },
+        { key: 'eventDatetime', displayName: 'Event Date', isDate: true },
+        { key: 'description', displayName: 'Note' },
+        { key: 'linkedPersonName', displayName: 'Author' }
     ];
 
     static readonly CUSTOMER_STAFF_KEY: Array<TABLECOLUMN> = [
-        { key: 'staff', displayName: 'Staff' },
-        { key: 'date', displayName: 'Date' },
+        { key: 'staff', displayName: 'Staff', isEdit: true },
+        { key: 'noteDate', displayName: 'Date', isDate: true },
         { key: 'note', displayName: 'Note' }
     ];
 
@@ -1754,9 +1754,316 @@ export class TableColumnData {
     static readonly CUSTOMER_GROUP_KEY: Array<TABLECOLUMN> = [
         { key: 'groupCode', sort: 'groupCode', displayName: 'Group' },
         { key: 'groupName', sort: 'groupName', displayName: 'Period' },
-
     ];
-    
+
+    // Job name	Last fire time	Last Runtime	Next fire time	State
+    static readonly SYSTEM_JOBS_KEY: Array<TABLECOLUMN> = [
+        { key: 'jobName', displayName: 'Job name' },
+        { key: 'lastFireTime', displayName: 'Last fire time' },
+        { key: 'lastRuntime', displayName: 'Last Runtime' },
+        { key: 'nextFireTime', displayName: 'Next fire time' },
+        { key: 'state', displayName: 'State' },
+        {
+            key: 'buttons', displayName: '', type: 'buttons', buttonList: [
+                { key: 'execute', name: 'Execute' },
+                { key: 'Pause', name: 'pause' }
+            ]
+        },
+    ];
+
+    static readonly SYSTEM_THREAD_KEY: Array<TABLECOLUMN> = [
+        { key: 'threadName', displayName: 'Thread name' },
+        { key: 'cpuTime', displayName: 'CPU time' },
+        { key: 'usertime', displayName: 'User Runtime' },
+        { key: 'blw', displayName: 'bl/w' },
+        {
+            key: 'stackTrack', displayName: 'Stack Track', type: 'buttons', buttonList: [
+                { key: 'stack', name: 'Stack' }
+            ]
+        }
+    ];
+
+    static readonly EC2_INSTANCE_KEY: Array<TABLECOLUMN> = [
+        { key: 'Name', displayName: 'Name' },
+        { key: 'instanceId', displayName: 'Instance ID' },
+        { key: 'state', displayName: 'State' },
+        { key: 'publicDNS', displayName: 'Public DNS' },
+        { key: 'action', displayName: 'Action' },
+    ];
+
+    static readonly ALERT_MESSAGE_KEY: Array<TABLECOLUMN> = [
+        { key: 'id', sort: 'id', displayName: 'Id' },
+        { key: 'target', sort: 'target', displayName: 'Target' },
+        { key: 'alertType', sort: 'alertType', displayName: 'Alert Type' },
+        { key: 'alertLevel', sort: 'alertLevel', displayName: 'Alert Level' },
+        { key: 'message', sort: 'message', displayName: 'Message' },
+        { key: 'createdDate', sort: 'createdDate', displayName: 'Created Date' },
+        { key: 'active', displayName: 'Active' },
+    ];
+
+    static readonly TOPIC_DESCRIPTION_KEY: Array<TABLECOLUMN> = [
+        { key: 'topicCode', sort: 'topicCode', displayName: 'Topic Code' },
+        { key: 'topicLabel', sort: 'topicLabel', displayName: 'Topic Label' },
+        { key: 'topicReportLabel', sort: 'topicReportLabel', displayName: 'Topic Report Label' },
+        { key: 'active', displayName: 'Active' },
+        { key: 'nextTopicCode', displayName: 'Next Topic Code' }
+    ];
+
+    static readonly TOPIC_DESCRIPTION_SELECT_DATA: Array<any> = [
+        { key: '393', value: 'Does your home have Natural Gas ? (hhe_noGasQ)' },
+        { key: '394', value: 'Get Natural Gas Data(hhe_gasFmSoCalGas)' },
+        { key: '395', value: 'Get Natural Gas Data(hhe_gasFmPGE)' },
+        { key: '396', value: 'Collecting Your Natural Gas Data(hhe_noGasStop)' },
+        { key: '124', value: 'Home Energy Profile Intro(hhe_Intro)' },
+        { key: '108', value: 'NG Special Case Panes(NaturalGasSpecialCase)' },
+        { key: '52', value: 'Fuel other than natural gas(hhe_noGasInOnlineAccountQ)' },
+        { key: '54', value: 'Monthly use other than gas or electric(hhe_noGasNotOnlyElectricity)' },
+        { key: '55', value: 'Fuel other than electric or gas(hhe_noGasNotOnlyElectricityHasLog)' },
+        { key: '56', value: 'No monthly log for fuel use(hhe_noInfo)' },
+        { key: '53', value: 'Only electricity(hhe_noGasOnlyElectricity)' },
+        { key: '184', value: 'Not enough Natural Gas data(hhe_not12mosGas)' },
+        { key: '270', value: 'Natural Gas Cost(hhe_naturalGasCost_new)' },
+        { key: '271', value: 'Winter Heating Natural Gas Cost(hhe_winterHeatingNGCost_new)' },
+        { key: '63', value: 'Other Space Heating Fuel ? (hhe_annualGasSmall)' },
+        { key: '272', value: 'Year - round Natural Gas Cost(hhe_BaseFuelAnalysis_new)' },
+        { key: '57', value: 'Other Water Heating Fuel ? (hhe_smallBaseFuelUse)' },
+        { key: '253', value: 'Variable Natural Gas Cost(hhe_VariableGasLoadsCost)' },
+        { key: '185', value: 'Not enough Electricity data(hhe_not12mosElec)' },
+        { key: '255', value: 'Electricity Cost(hhe_annualElectric_new)' },
+        { key: '257', value: 'Summer Cooling Cost(hhe_bigACelectricity_new)' },
+        { key: '256', value: 'Winter Electric Heating Cost(hhe_bigWinterBaseLoadAnalysis_new)' },
+        { key: '259', value: 'Year - round Electric Costs(hhe_YearRoundElectricityCost_new)' },
+        { key: '260', value: 'Idle Load Summary(hhe_BaseLoadSmartMeter_new)' },
+        { key: '44', value: 'Smart meter info not available(hhe_BaseLoadSurvey)' },
+        { key: '358', value: 'Always on Adjustment(hhe_adjustBase)' },
+        { key: '265', value: 'Always on Electricity Cost(hhe_baseload_new)' },
+        { key: '359', value: 'Recurring Load Adjustment(hhe_adjustRecurring)' },
+        { key: '267', value: 'Recurring Electric Cost(hhe_RecurringEnergy_new)' },
+        { key: '268', value: 'Variable Electric Cost(hhe_variableElectricityCost_new)' },
+        { key: '280', value: 'Variable Electric Use by Hour(hhe_variableElectricityDetail_new)' },
+        { key: '269', value: 'Combined Household Energy Cost(hhe_SeasonalEnergyCost_new)' },
+        { key: '112', value: 'RMVD: Energy Profile Completed(hhe_EnergyProfileCompleted)' },
+    ];
+
+    static readonly TOPIC_PANE_KEY: Array<TABLECOLUMN> = [
+        { key: 'paneCode', displayName: 'Pane Code' },
+        { key: 'label', displayName: 'Label' },
+        { key: 'orderNumber', displayName: 'Order Number' },
+        { key: 'section', displayName: 'Section' },
+        { key: 'isSection', displayName: 'Is Section' }
+    ];
+
+    static readonly RECOMMENDATION_KEY: Array<TABLECOLUMN> = [
+        { key: 'Code', displayName: 'Code' },
+        { key: 'type', displayName: 'Type' },
+        { key: 'label', displayName: 'Label' },
+    ];
+
+    static readonly RECOMMENDATION_EDIT_KEY: Array<TABLECOLUMN> = [
+        { key: 'Code', displayName: 'Code' },
+        { key: 'label', displayName: 'Label' },
+    ];
+
+    static readonly TOPIC_VARIABLES_KEYS: Array<TABLECOLUMN> = [
+        { key: 'field', displayName: 'Field' },
+        { key: 'comments', displayName: 'Comments' },
+        { key: 'calculationPeriod', displayName: 'Calculation Period' },
+    ];
+
+
+    static readonly PANE_DATA_BLOCK_KEY: Array<TABLECOLUMN> = [
+        { key: 'blockCode', displayName: 'Block Code' },
+        { key: 'orderNumber', displayName: 'Order Number' },
+        { key: 'label', displayName: 'Label' },
+        { key: 'isArray', displayName: 'Is Array' }
+    ];
+
+    static readonly PANE_DATA_FIELD_KEY: Array<TABLECOLUMN> = [
+        { key: 'fieldCode', displayName: 'Field Code' },
+        { key: 'orderNumber', displayName: 'Order Number' },
+        { key: 'label', displayName: 'Label' },
+    ];
+
+    static readonly PANE_CHART_KEYS: Array<TABLECOLUMN> = [
+        { key: 'field', displayName: 'Field' },
+        { key: 'comments', displayName: 'Comments' },
+        { key: 'calculationPeriod', displayName: 'Calculation Period' },
+    ];
+
+    static readonly CHART_SERIES_FIELD_KEY: Array<TABLECOLUMN> = [
+        { key: 'seriesCode', displayName: 'Series Code' },
+        { key: 'seriesName', displayName: 'Series Name' },
+        { key: 'orderNumber', displayName: 'Order Number' },
+        { key: 'seriesColor', displayName: 'Series Color' },
+        { key: 'seriesStrokeWidth', displayName: 'Series Stroke Width' },
+    ];
+
+    static readonly PANE_REPORT_KEYS: Array<TABLECOLUMN> = [
+        { key: 'reportCode', displayName: 'Report Code' },
+        { key: 'reportLabel', displayName: 'Report Label' },
+    ];
+
+    static readonly PANE_DATA: Array<any> = [
+        { key: '88', value: 'Introduction to CEC(prf_introCEC)' },
+        { key: '125', value: 'Introduction to EUMV(prf_introMV)' },
+        { key: '169', value: 'Introduction to HEA(prf_introHEA)' },
+        { key: '171', value: 'Introduction to GTLA(prf_introGTLA)' },
+        { key: '236', value: 'Welcome to the study(prf_introVT)' },
+        { key: '237', value: 'Introduction to HET(prf_introHET)' },
+        { key: '327', value: 'Introduction to AC(prf_introAC)' },
+        { key: '360', value: 'Introduction to HEA(prf_introWater)' },
+        { key: '387', value: 'Introduction to EF(prf_introEF)' },
+        { key: '390', value: 'Small Screen Detected(prf_smallScreen)' },
+        { key: '21', value: 'Agree to terms(prf_welcome)' },
+        { key: '361', value: 'Agree to terms(DISABLED)(prf_welcomeWater)' },
+        { key: '389', value: 'Agree to Share Your Data(prf_agreeToShare)' },
+        { key: '22', value: 'Utility Account Info(prf_utilityAccountInfo)' },
+        { key: '388', value: 'Utility Account Info(prf_utilityAccountInfoNonPGE)' },
+        { key: '370', value: 'Water Utility Account Info(prf_wUtilityAccountInfo)' },
+        { key: '23', value: 'Valid Utility Account(prf_utilityAccountValidated)' },
+        { key: '353', value: 'Your Concerns(prf_concerns)' },
+        { key: '156', value: 'Referral Source(prf_ReferralSource)' },
+        { key: '317', value: 'Your Customer Support Staff(prf_staffAssigned)' },
+        { key: '24', value: 'Assessment goals(prf_objectives)' },
+        { key: '25', value: 'Affinity Groups(prf_AffinityGroups)' },
+    ];
+
+    static readonly INPUT_TYPE_DATA: Array<any> = [
+        { key: 'text', value: 'Any text' },
+        { key: 'checkbox', value: 'Checkbox' },
+        { key: 'date', value: 'Date' },
+        { key: 'hslider', value: 'Horizontal slider' },
+        { key: 'password', value: 'Password' },
+        { key: 'radiobutton', value: 'Radiobutton' },
+        { key: 'select" selected = "selected', value: 'Selection' },
+        { key: 'textarea', value: 'Textarea' },
+        { key: 'vradiobutton', value: 'Vertical radiobuttons' },
+        { key: 'vslider', value: 'Vertical slider' },
+    ];
+
+    static readonly COLOR_DATA: Array<any> = [
+        { key: 'default', value: 'Default' },
+        { key: 'white', value: 'White' },
+        { key: 'lightGray', value: 'Light Gray' },
+        { key: 'gray', value: 'Gray' },
+        { key: 'darkGray', value: 'Dark Gray' },
+        { key: 'black', value: 'Black' },
+        { key: 'red', value: 'Red' },
+        { key: 'pink', value: 'Pink' },
+        { key: 'orange', value: 'Orange' },
+        { key: 'yellow', value: 'Yellow' },
+        { key: 'green', value: 'Green' },
+        { key: 'magenta', value: 'Magenta' },
+        { key: 'cyan', value: 'Cyan' },
+        { key: 'blue', value: 'Blue' },
+        { key: 'blue1', value: 'Blue 1' },
+        { key: 'orange1', value: 'Orange 1' },
+        { key: 'lightGrey', value: 'Light Gray' },
+        { key: 'gray1', value: 'Gray 1' },
+        { key: 'lightGrey1', value: 'Light Gray 1' },
+        { key: 'darkGray1', value: 'Dark Gray 1' },
+        { key: 'gray2', value: 'Gray 2' },
+        { key: 'darkOrange', value: 'Dark Orange' },
+        { key: 'beige', value: 'Beige' },
+        { key: 'darkGreen', value: 'Dark Green' },
+    ];
+
+    static readonly FONT_STYLE_DATA: Array<any> = [
+        { key: '', value: 'Default' },
+        { key: 'Century Schoolbook L', value: 'Century Schoolbook L' },
+        { key: 'DejaVu Sans', value: 'DejaVu Sans' },
+        { key: 'DejaVu Sans Mono', value: 'DejaVu Sans Mono' },
+        { key: 'DejaVu Serif', value: 'DejaVu Serif' },
+        { key: 'Dialog', value: 'Dialog' },
+        { key: 'DialogInput', value: 'DialogInput' },
+        { key: 'Dingbats', value: 'Dingbats' },
+        { key: 'Droid Arabic Kufi', value: 'Droid Arabic Kufi' },
+        { key: 'Droid Arabic Naskh', value: 'Droid Arabic Naskh' },
+        { key: 'Droid Naskh Shift Alt', value: 'Droid Naskh Shift Alt' },
+        { key: 'Droid Sans', value: 'Droid Sans' },
+        { key: 'Droid Sans Arabic', value: 'Droid Sans Arabic' },
+        { key: 'Droid Sans Armenian', value: 'Droid Sans Armenian' },
+        { key: 'Droid Sans Ethiopic', value: 'Droid Sans Ethiopic' },
+        { key: 'Droid Sans Fallback', value: 'Droid Sans Fallback' },
+        { key: 'Droid Sans Georgian', value: 'Droid Sans Georgian' },
+        { key: 'Droid Sans Hebrew', value: 'Droid Sans Hebrew' },
+        { key: 'Droid Sans Japanese', value: 'Droid Sans Japanese' },
+        { key: 'Droid Sans Mono', value: 'Droid Sans Mono' },
+        { key: 'Droid Serif', value: 'Droid Serif' },
+        { key: 'Liberation Mono', value: 'Liberation Mono' },
+        { key: 'Liberation Sans', value: 'Liberation Sans' },
+        { key: 'Liberation Sans Narrow', value: 'Liberation Sans Narrow' },
+        { key: 'Liberation Serif', value: 'Liberation Serif' },
+        { key: 'Lucida Bright', value: 'Lucida Bright' },
+        { key: 'Lucida Sans', value: 'Lucida Sans' },
+        { key: 'Lucida Sans Typewriter', value: 'Lucida Sans Typewriter' },
+        { key: 'Monospaced', value: 'Monospaced' },
+        { key: 'Nimbus Mono L', value: 'Nimbus Mono L' },
+        { key: 'Nimbus Roman No9 L', value: 'Nimbus Roman No9 L' },
+        { key: 'Nimbus Sans L', value: 'Nimbus Sans L' },
+        { key: 'SansSerif', value: 'SansSerif' },
+        { key: 'Serif', value: 'Serif' },
+        { key: 'Standard Symbols L', value: 'Standard Symbols L' },
+        { key: 'URW Bookman L', value: 'URW Bookman L' },
+        { key: 'URW Chancery L', value: 'URW Chancery L' },
+        { key: 'URW Gothic L', value: 'URW Gothic L' },
+        { key: 'URW Palladio L', value: 'URW Palladio L' },
+    ];
+
+    static readonly REPORT_PARAMETER_KEY: Array<TABLECOLUMN> = [
+        {
+            key: 'dataField', displayName: 'Data Field', addRowType: 'select', option:
+                [
+                    { key: '1246', value: 'Do you have a solar PV system at your home?&nbsp;(pv_ConfirmPV)' },
+                    { key: '1248', value: 'Install date&nbsp;(pv_InstallDate)' },
+                    { key: '1249', value: 'System size, in rated kW&nbsp;(pv_Size)' },
+                    { key: '1250', value: 'Orientation&nbsp;(pv_Orientation)' },
+                    { key: '1251', value: 'Shading&nbsp;(pv_Shading)' },
+                    { key: '1271', value: 'Order SV Recalculation&nbsp;(pv_OrderSVRecalculation)' },
+                    { key: '1254', value: 'Date Installed&nbsp;(pv_InstallGroup.pv_InstallGroupDate)' },
+                    { key: '1255', value: 'Total System Size (kW)&nbsp;(pv_InstallGroup.pv_installGroupSize)' },
+                    { key: '1256', value: 'Orientation&nbsp;(pv_InstallGroup.pv_InstallGroupOrientation)' },
+                    { key: '1257', value: 'Shading&nbsp;(pv_InstallGroup.pv_installGroupShading)' },
+                    { key: '1272', value: 'Annual derating factor (%)&nbsp;(pv_InstallGroup.pv_installGroupADF)' },
+                    { key: '1258', value: 'Start of Outage&nbsp;(pv_OutageGroup.pv_OutageGroupStart)' },
+                    { key: '1263', value: 'End of Outage&nbsp;(pv_OutageGroup.pv_OutageGroupEnd)' },
+                    { key: '1267', value: 'UpdatePVOutputCallAllowed&nbsp;(pv_UpdatePVOutputCallAllowed)' },
+                    { key: '1266', value: 'Call UpdatePVOutput&nbsp;(pv_UpdatePVOutput)' },
+                    { key: '1268', value: 'UpdatePVOutputOnSave&nbsp;(pv_UpdatePVOutputOnSave)' },
+                    { key: '1273', value: 'Percent of hourly values above idle load&nbsp;(pv_PctOverIdleLoad)' },
+                    { key: '1275', value: 'Electric use came from the Sun&nbsp;(pv_electricUseFromSun)' },
+                    { key: '1276', value: '12 months Electric Savings&nbsp;(pv_12mElectricSavings)' },
+                    { key: '1259', value: 'Do you have a log of your PV system\'s generation on an hourly basis?&nbsp;(pv_hasHourlyLog)' },
+                    {
+                        key: '1260',
+                        value: `Would you like to compare our estimate to your system log for a particular day
+                        in the past?&nbsp;(pv_CompareToSystemLog)`
+                    },
+                    { key: '1261', value: 'Which day would you like to compare?&nbsp;(pv_CompareDate)' },
+                    { key: '1262', value: 'Enter total logged PV output for this day:&nbsp;(pv_DailyOutputFromLog)' },
+                    { key: '1269', value: 'Estimated daily PV system output&nbsp;(pv_PVDayOutput_kWh)' },
+                    { key: '1270', value: 'Estimation difference&nbsp;(pv_EstimationDiff)' },
+                    {
+                        key: '1264',
+                        value: `Do you have a whole-home battery that is used to shift electric loads from
+                        hour to hour?&nbsp;(pv_hasWholeHomeBattery)`
+                    },
+                    {
+                        key: '1265',
+                        value: `Is your battery also used to shift electric loads more than two days?& nbsp;
+                        (pv_IsBatteryUsedToShiftLoads)`
+                    },
+                    { key: '1274', value: 'Recalc SVs&nbsp;(pv_RecalcSVOnSave)' },
+                ]
+        },
+        {
+            key: 'reportParameter', displayName: 'Report Parameter', addRowType: 'select', option:
+                [
+                    { key: '37', value: 'Program Name Filter' },
+                ]
+        },
+    ];
+
     static readonly STAFF_TABLE_COLUMN: Array<TABLECOLUMN> = [
         { key: 'username', sort: 'username', displayName: 'Username', isEdit: true },
         { key: 'email', sort: 'email', displayName: 'E-mail' },
@@ -1771,7 +2078,203 @@ export class TableColumnData {
     ];
 
     static readonly TOPIC_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
-        { key: 'groupCode', displayName: 'Group Code'},
+        { key: 'groupCode', displayName: 'Group Code' },
         { key: 'groupName', displayName: 'Group Name' },
+    ];
+
+    static readonly TOPIC_KEYS: Array<TABLECOLUMN> = [
+        { key: 'label', sort: 'label', displayName: 'Label', isEdit: true },
+        { key: 'user', displayName: 'User' },
+        { key: 'group', displayName: 'Group' },
+        { key: 'startDate', sort: 'startDate', displayName: 'Start Date' },
+        { key: 'modifiedDate', sort: 'modifiedDate', displayName: 'Modified Date' },
+        { key: 'completedDate', sort: 'completedDate', displayName: 'Completed Date' },
+    ];
+
+    static readonly ADMIN_REPORT_KEYS: Array<TABLECOLUMN> = [
+        { key: 'reportName', sort: 'reportLabel', displayName: 'Report Name', isEdit: true },
+        { key: 'reportLabel', sort: 'reportLabel', displayName: 'Report Label' },
+        { key: 'reportType', displayName: 'Report Type' },
+        { key: 'embeddedReport', displayName: 'Embedded Report' },
+        { key: 'callReport', displayName: '', type: 'image', imagePath: 'assets/images/ico_pdf.gif', event: 'callReport' },
+    ];
+
+    static readonly ADMIN_REPORT_PARAMETER_KEYS: Array<TABLECOLUMN> = [
+        { key: 'parameterName', displayName: 'Parameter Name' },
+        { key: 'defaultValue', displayName: 'Default Value' },
+        { key: 'parameterLabel', displayName: 'Parameter Label' },
+    ];
+
+    static readonly EVENT_HISTORY_KEYS: Array<TABLECOLUMN> = [
+        { key: 'customer', sort: 'customer', displayName: 'customer', isEdit: true },
+        { key: 'eventCode', sort: 'eventCode', displayName: 'Event Code' },
+        { key: 'eventName', displayName: 'Event Name' },
+        { key: 'date', displayName: 'Date' },
+        { key: 'author', displayName: 'Author' },
+    ];
+    static readonly CUSTOMER_EVENT_TYPE: Array<any> = [
+        {
+            id: '1',
+            code: '',
+            name: 'Assigned to High Heating or Cooling Program Group'
+        },
+        {
+            id: '2',
+            code: '',
+            name: 'Assign to High Plug Loads Program Group'
+        },
+        {
+            id: '3',
+            code: '',
+            name: 'Assigned to High Heating/Cooling Loads Program Group'
+        },
+        {
+            id: '5',
+            code: '',
+            name: 'New real-time energy monitor was installed'
+        },
+        {
+            id: '6',
+            code: '',
+            name: 'Completed a home energy consultation with an expert'
+        },
+        {
+            id: '9',
+            code: '',
+            name: 'Started charging an electric vehicle at home'
+        },
+        {
+            id: '10',
+            code: '',
+            name: 'Started charging an electric vehicle (sub-metered)'
+        },
+        {
+            id: '11',
+            code: '',
+            name: 'Added, removed or updated a major appliance'
+        },
+        { id: '12', code: '', name: 'Change in average home occupancy' },
+        { id: '13', code: '', name: 'Significant home remodel or retrofit' },
+        {
+            id: '14',
+            code: '',
+            name: 'Completed a simple Energy Efficiency measure'
+        },
+        { id: '15', code: '', name: 'Change in behavior affecting energy use' },
+        {
+            id: '16',
+            code: '',
+            name: 'Unassigned from High Heating/Cooling Loads Program Group'
+        },
+        {
+            id: '17',
+            code: '',
+            name: 'Unassigned from High Plug Loads Program Group'
+        },
+        {
+            id: '18',
+            code: '',
+            name: 'Unassigned from High Heating/Cooling Loads Program Group'
+        },
+        {
+            id: '19',
+            code: '',
+            name: 'Assigned to High Variable Loads Program Group'
+        },
+        {
+            id: '20',
+            code: '',
+            name: 'Unassigned from High Variable Loads Program Group'
+        },
+        {
+            id: '21',
+            code: '',
+            name: 'Completed initial Home Energy Profile for EUMV'
+        },
+        {
+            id: '22',
+            code: '',
+            name: 'Completed online smart meter audit for EUMV'
+        },
+        {
+            id: '23',
+            code: '',
+            name: 'Assigned to High Recurring Loads Program Group'
+        },
+        {
+            id: '24',
+            code: '',
+            name: 'Unassigned from High Recurring Loads Program Group'
+        },
+        { id: '25', code: '', name: 'Assigned to Low Energy Program Group' },
+        {
+            id: '26',
+            code: '',
+            name: 'Unassigned from Low Energy Program Group'
+        },
+        {
+            id: '27',
+            code: '',
+            name: 'Assigned to Detailed Online Audit Program'
+        },
+        { id: '28', code: '', name: 'Unassigned from Online Program' },
+        { id: '29', code: '', name: 'Temporary increase in energy use' },
+        {
+            id: '30',
+            code: '',
+            name: 'Solar PV system installed and generating electricity'
+        },
+        { id: '31', code: '', name: 'Problem with Energy Profile Detected' },
+        { id: '32', code: '', name: 'Problem with Energy Profile now fixed' },
+        { id: '33', code: '', name: 'Moved to a new home' },
+        {
+            id: '34',
+            code: '',
+            name: 'Opt-in for optional Program-specific Survey'
+        },
+        { id: '36', code: '', name: 'Received an energy saving device' },
+        {
+            id: '39',
+            code: '',
+            name: 'Air conditioning optimizer installed by home professional'
+        },
+        {
+            id: '40',
+            code: '',
+            name: 'In-home energy audit performed by professional'
+        },
+        { id: '41', code: '', name: 'Account specific notes' },
+        {
+            id: '42',
+            code: '',
+            name: 'Double-countedrecurring or base load detected and fixed'
+        },
+        {
+            id: '43',
+            code: '',
+            name: 'Double-counted recurring or base load detected and fixed'
+        },
+        { id: '44', code: '', name: 'Enrolled into P4P Program' },
+        { id: '45', code: '', name: 'Removed from P4P Program' },
+        { id: '46', code: '', name: 'Determined Eligible for P4P Program' },
+        { id: '47', code: '', name: 'Temporary decrease in energy use' },
+        {
+            id: '48',
+            code: '',
+            name: 'Stopped charging an electric vehicle at home'
+        },
+        { id: '49', code: '', name: 'Determined  ineligible for P4P Program' },
+        { id: '50', code: '', name: 'Applied for Peninsula Climate Comfort' },
+        {
+            id: '51',
+            code: '',
+            name: 'Completion  date for Home Energy Profile topic'
+        },
+        {
+            id: '52',
+            code: '',
+            name: 'Enrolled into P4P Program as Metered Reserve'
+        },
+        { id: '53', code: '', name: 'Log of miscellaneous Coaching Activity' }
     ];
 }

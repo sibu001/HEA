@@ -13,5 +13,9 @@ export interface SystemUtilityManagementModel {
     systemParameter: any;
     logList: any;
     logs: any;
+    weatherStationList: any;
+    weatherStation: any;
+    degreeDaysList: any;
+    degreeDays: any;
     error: Error;
 }

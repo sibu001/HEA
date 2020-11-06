@@ -1,8 +1,9 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
-          padding-top: 35px;'>
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+        left;padding-left: 40px;
+        padding-top: 35px;'>
         <p class="heading">
           Search Options (use "%" as wildcard in searches)
         </p>
@@ -14,13 +15,15 @@
               <span class="filterLabel">Username:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='username' id='username'>
+              <input type="text" class="form-control" formControlName='username'
+                id='username'>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
               <span class="filterLabel">Record Type:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <select class="form-control" formControlName="recordType" id="recordType">
+              <select class="form-control" formControlName="recordType"
+                id="recordType">
                 <option value="" selected="selected"></option>
                 <option value="U">Update</option>
                 <option value="I">New</option>
@@ -38,13 +41,15 @@
               <span class="filterLabel">Entity:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='entity' id='entity'>
+              <input type="text" class="form-control" formControlName='entity'
+                id='entity'>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
               <span class="filterLabel">Entity Reference:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName="entityReference" id="entityReference">
+              <input type="text" class="form-control"
+                formControlName="entityReference" id="entityReference">
             </div>
           </div>
 
@@ -55,7 +60,8 @@
               <span class="filterLabel">Comment:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='comment' id='comment'>
+              <input type="text" class="form-control" formControlName='comment'
+                id='comment'>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
@@ -65,18 +71,21 @@
 
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary"
+                (click)="search(undefined,true)">Show</button>
             </div>
           </div>
         </form>
         <div class="paddingTop">
           <p class="messages">
             <img src='assets/images/dot03.gif' class='dot'>
-            <span class="messageName">Logs (Number of Records = {{totalElement}})
+            <span class="messageName">Logs (Number of Records =
+              {{totalElement}})
             </span></p>
-          <app-table [isHideAdd]=true [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-            [totalElement]="logsData.totalElements" (changePageEvent)="findLogs($event)"
-            (goToEditEvent)="goToEditLogs($event)" (addEvent)='addLogs()'>
+          <app-table [isHideAdd]=true [keys]="keys" [isPaginate]="true"
+            [isSearch]="false" [data]="dataSource"
+            [totalElement]="logsData.totalElements"
+            (changePageEvent)="search($event,false)">
           </app-table>
         </div>
       </div>

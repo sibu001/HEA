@@ -4,34 +4,37 @@
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="heading">CIMIS Stations</p>
         <form [formGroup]="stationForm" class="form-group">
-          <div class="row sidePadding rowPadding borderBottom">
+          <div class="row sidePadding rowPadding">
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Station Number:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" formControlName="stationNumber" class="form-control" />
+              <input type="text" formControlName="stationNbr"
+                class="form-control" />
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Station Name:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" formControlName="stationName" class="form-control" />
+              <input type="text" formControlName="name"
+                class="form-control" />
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <label class="filterLabel form-check-label" for="isActive">
                 <span class="filterLabel">Active:</span>
               </label>
-              <input type="checkbox" class='form-check-input' formControlName="isActive" id="isActive">
+              <input type="checkbox" class='form-check-input'
+                formControlName="isActive" id="isActive">
 
             </div>
           </div>
           <div class="row">
             <div class="col-sm-12 show-button">
-              <button type="button" class="btn btn-primary" (click)="search(undefined)">Show</button>
+              <button type="button" class="btn btn-primary"
+                (click)="search(undefined,true)">Show</button>
             </div>
           </div>
         </form>
-        <hr>
         <div class="row">
           <div class="col-sm-12">
             <p class="messages">
@@ -42,9 +45,12 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-              [totalElement]="stationData.totalElements" (changePageEvent)="search($event)"
-              (goToEditEvent)="goToEditCimisStation($event)" (addEvent)="addCimisStation()">
+            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+              [data]="dataSource"
+              [totalElement]="stationData.totalElements"
+              (changePageEvent)="search($event,false)"
+              (goToEditEvent)="goToEditCimisStation($event)"
+              (addEvent)="addCimisStation()">
             </app-table>
 
           </div>

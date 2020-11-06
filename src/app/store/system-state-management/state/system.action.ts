@@ -59,7 +59,7 @@ export class DeleteCustomerGroupByIdAction {
 
 export class GetProgramGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_PROGRAM_GROUP_LIST;
-    constructor(readonly force: boolean) {
+    constructor(readonly force: boolean, readonly filter: any) {
     }
 }
 

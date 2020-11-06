@@ -239,7 +239,7 @@ export class SystemManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.programGroups)
+            result = this.loginService.performGetWithParams(AppConstant.programGroups, action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');

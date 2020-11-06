@@ -12,6 +12,8 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/primeng';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 
 @NgModule({
   imports: [
@@ -22,12 +24,13 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
     CodemirrorModule,
     NgxsModule.forRoot([
       SystemManagementState,
-      CustomerManagementState
+      CustomerManagementState,
+      SystemUtilityManagementState
     ]),
     CommonHEAModule,
     BatchScriptRoutingModule
   ],
   declarations: [BatchScriptListComponent, BatchScriptEditComponent],
-  providers: [SystemService]
+  providers: [SystemService, SystemMeasurementService]
 })
 export class BatchScriptModule { }

@@ -29,6 +29,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   public credentialTypeList: any;
   public coachUserList: any;
   public dataSource: any;
+  public customerView = -1;
   public adminFilter: AdminFilter;
   public CustomerData = {
     content: [],
@@ -53,7 +54,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     this.setUpForm(this.adminFilter.customerFilter.formValue);
     this.systemService.loadCustomerGroupList(true, '');
     this.systemService.loadViewConfigurationList(true);
-    this.systemService.loadProgramGroupsList(true);
+    this.systemService.loadProgramGroupsList(true, '');
     this.systemService.loadGetCustomerAlertTypeList(true, '');
     this.systemService.loadCredentialTypeList(true, '');
     this.systemService.loadCoachUserList(true, '?filter.withRole=COACH');
@@ -106,12 +107,14 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   }
 
   getFilterUrl(event: any, isSearch: boolean): any {
+    this.customerView = this.searchForm.controls.customerView.value !== undefined && this.searchForm.controls.customerView.value !== null ? this.searchForm.controls.customerView.value : '-1';
     const params = new HttpParams()
       .set('filter.disableTotalSize', 'false')
       .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+      .set('clearOrder', '' + isSearch)
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
       .set('filter.auditId', (this.searchForm.controls['auditId'].value !== null ? this.searchForm.controls['auditId'].value : ''))
@@ -165,6 +168,10 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed' + result);
     });
+  }
+
+  exportToCSV() {
+    console.log('export to csv');
   }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

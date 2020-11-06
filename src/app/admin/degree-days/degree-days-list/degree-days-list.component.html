@@ -3,41 +3,48 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="heading">Degree Days</p>
-        <form [formGroup]="degreeDayForm" class="form-group">
+        <form [formGroup]="degreeDayForm" class="form-group form-margin">
           <div class="row rowPadding borderBottom">
-            <div class='col-sm-8 col-md-8 col-lg-8 col-xs-6' style="text-align:right">
+            <div class='col-sm-8 col-md-8 col-lg-8 col-xs-6'
+              style="text-align:right">
               <span>Upload file from www.degreedays.net for selected place:</span>
             </div>
             <div class='col-sm-3 col-md-3 col-lg-3 col-xs-6'>
-              <input type="file" class="custom-file-input" style='font-size: smaller;text-align:right'
-                name="customerFile" id="degreeDayFile" formControlName='degreeDayFile'>
+              <input type="file" class="custom-file-input" style='font-size:
+                smaller;text-align:right'
+                name="customerFile" id="fileBody"
+                formControlName='fileBody'>
             </div>
-            <div class='col-sm-1 col-lg-1 col-md-1 col-xs-0' style='text-align: right;'>
+            <div class='col-sm-1 col-lg-1 col-md-1 col-xs-0' style='text-align:
+              right;'>
             </div>
           </div>
-          <div class="row  rowPadding borderBottom">
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Station Id:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <select formControlName="stationId" id="stationId" class="form-control">
+              <select formControlName="stationId" id="stationId"
+                class="form-control">
                 <option value="" selected='selected'></option>
-                <option *ngFor='let station of stationIds' [value]="station.key">{{station.value}}</option>
+                <option *ngFor='let station of stationIds'
+                  [value]="station.key">{{station.value}}</option>
               </select>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-0">
             </div>
           </div>
-          <div class="row  rowPadding borderBottom">
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Date from:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <p-calendar formControlName='fromDate' dateFormat="MM/dd/yyyy" id='fromDate' showIcon=true
+              <p-calendar formControlName='valueDateFrom' dateFormat="MM/dd/yyyy"
+                id='valueDateFrom' showIcon=true
                 showButtonBar="true">
               </p-calendar>
             </div>
@@ -54,21 +61,23 @@
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
           </div>
-          <div class="row  rowPadding borderBottom">
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Date to:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <p-calendar formControlName='toDate' id="toDate" dateFormat="MM/dd/yyyy" showIcon=true
+              <p-calendar formControlName='valueDateTo' id="valueDateTo"
+                dateFormat="MM/dd/yyyy" showIcon=true
                 showButtonBar="true"></p-calendar>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Base temperature:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <select id="baseTemp" class="form-control" formControlName="baseTemp">
+              <select id="baseTemp" class="form-control"
+                formControlName="base">
                 <option value=""></option>
                 <option *ngFor='let temp of baseTemp' [value]="temp.key">{{temp.value}}</option>
               </select>
@@ -76,13 +85,17 @@
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
           </div>
-          <div class="row  rowPadding ">
+          <div class="row rowPadding">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12 row">
-              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-8 show-button inline-table">
-                <button type="submit" class="btn btn-primary" (click)="search(undefined)">Show</button>
+              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-8 show-button
+                inline-table">
+                <button type="submit" class="btn btn-primary"
+                  (click)="search(undefined,true)">Show</button>
               </div>
-              <div class="col-sm-2 col-md-12 col-lg-2 col-xs-4 show-button inline-table">
-                <button type="button" class="btn btn-primary" (click)="upload()">UpLoad</button>
+              <div class="col-sm-2 col-md-12 col-lg-2 col-xs-4 show-button
+                inline-table">
+                <button type="button" class="btn btn-primary"
+                  (click)="upload()">UpLoad</button>
               </div>
             </div>
 
@@ -92,14 +105,17 @@
           <div class="col-sm-12">
             <p class="messages">
               <img src="assets/images/dot03.gif" class="dot pointer">
-              <span class="messageName">Degree days (Number of Records = {{degreeDayData.totalElements}})</span>
+              <span class="messageName">Degree days (Number of Records =
+                {{degreeDayData.totalElements}})</span>
             </p>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-              [totalElement]="degreeDayData.totalElements" (changePageEvent)="search($event)" [isHideAdd]=true>
+            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+              [data]="dataSource"
+              [totalElement]="degreeDayData.totalElements"
+              (changePageEvent)="search($event,true)" [isHideAdd]=true>
             </app-table>
 
           </div>

@@ -11,6 +11,7 @@ import { SystemManagementState } from 'src/app/store/system-state-management/sta
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 
 @NgModule({
   imports: [
@@ -25,6 +26,6 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     WeatherStationRoutingModule
   ],
   declarations: [WeatherStationListComponent, WeatherStationEditComponent]
-  , providers: [SystemService]
+  , providers: [SystemService, SystemUtilityService]
 })
 export class WeatherStationModule { }

@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';

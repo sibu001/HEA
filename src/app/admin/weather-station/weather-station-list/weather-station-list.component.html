@@ -1,32 +1,36 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
-          padding-top: 35px;'>
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+        left;padding-left: 40px;
+        padding-top: 35px;'>
         <p class="heading">
           Weather Stations
         </p>
         <form [formGroup]='weatherStationForm'>
-          <div class="row borderBottom rowPadding">
+          <div class="row rowPadding">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Station Id:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='stationId' id='stationId'>
+              <input type="text" class="form-control"
+                formControlName='stationId' id='stationId'>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
               <span class="filterLabel">Station Name:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text"  class="form-control" formControlName="stationName" id="stationName">
+              <input type="text" class="form-control"
+                formControlName="stationName" id="stationName">
             </div>
           </div>
 
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary"
+                (click)="search(undefined,false)">Show</button>
             </div>
           </div>
         </form>
@@ -34,9 +38,12 @@
           <p class="messages">
             <img src='assets/images/dot03.gif' class='dot'>
             <span class="messageName">Weather Station List</span></p>
-          <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-            [totalElement]="weatherStationData.totalElements" (changePageEvent)="findWeatherStation($event)"
-            (goToEditEvent)="goToEditWeatherStation($event)" (addEvent)='addWeatherStation()'>
+          <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+            [data]="dataSource"
+            [totalElement]="weatherStationData.totalElements"
+            (changePageEvent)="search($event,false)"
+            (goToEditEvent)="goToEditWeatherStation($event)"
+            (addEvent)='addWeatherStation()'>
           </app-table>
         </div>
       </div>

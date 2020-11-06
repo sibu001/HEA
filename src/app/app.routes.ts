@@ -134,9 +134,33 @@ const ROUTES: Routes = [
         loadChildren: './admin/batch-script/batch-script.module#BatchScriptModule'
       },
       {
+        path: 'systemJobs',
+        loadChildren: './admin/system-jobs/system-jobs.module#SystemJobsModule'
+      },
+      {
+        path: 'ec2Instances',
+        loadChildren: './admin/ec2-instances/ec2-instances.module#Ec2InstancesModule'
+      },
+      {
+        path: 'alertMessages',
+        loadChildren: './admin/alert-messages/alert-messages.module#AlertMessagesModule'
+      },
+      {
+        path: 'topicDescription',
+        loadChildren: './admin/topic-description/topic-description.module#TopicDescriptionModule'
+      },
+      {
         path: 'staff',
         loadChildren: './admin/staff/staff.module#StaffModule'
       },
+      {
+        path: 'topic',
+        loadChildren: './admin/topic-list/topic-list.module#TopicListModule'
+      },
+      {
+        path: 'administrativeReport',
+        loadChildren: './admin/administrative-reports/administrative-reports.module#AdministrativeReportsModule'
+      }
     ]
   },
   // {

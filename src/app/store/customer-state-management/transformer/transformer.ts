@@ -1,4 +1,5 @@
 import { RouterLink } from '@angular/router';
+import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 
 export class Transformer {
     static transformCustomerTableData(src: any, viewType: number): any {
@@ -131,7 +132,7 @@ export class Transformer {
         return dataSource;
     }
     static transformCustomerTableKey(viewType: number): any {
-        let key: any;
+        let key: Array<TABLECOLUMN>;
         switch (viewType) {
             case -1:
                 key = [
@@ -660,4 +661,61 @@ export class Transformer {
         dataSource.hasNext = src.hasNext;
         return dataSource;
     }
+
+    static transformUtilityCredentialTableData(src: any): any {
+        const dataSource = [];
+        src.forEach(element => {
+            const dataSourceObj: any = element;
+            dataSourceObj.credentialType = element.credentialType.credentialName;
+            dataSourceObj.active = element.active ? 'assets/images/icon_check_orange.png' : '';
+            dataSourceObj.dataInUse = element.dataInUse ? 'assets/images/icon_check_orange.png' : '';
+            dataSourceObj.utilityInUse = element.utilityInUse ? 'assets/images/icon_check_orange.png' : '';
+            dataSourceObj.electricityInUse = element.electricityInUse ? 'assets/images/icon_check_orange.png' : '';
+            dataSourceObj.heatingInUse = element.heatingInUse ? 'assets/images/icon_check_orange.png' : '';
+            dataSourceObj.waterInUse = element.waterInUse ? 'assets/images/icon_check_orange.png' : '';
+            dataSourceObj.authorizationEndDate = element.authorizationEndDate ? new Date(element.authorizationEndDate) : '';
+            dataSourceObj.lastSuccessfulUsageDate = element.lastSuccessfulUsageDate ? new Date(element.lastSuccessfulUsageDate) : '';
+            dataSource.push(dataSourceObj);
+        });
+        return dataSource;
+    }
+
+    static transformCustomerAlertTableData(src: any): any {
+        const dataSource = [];
+        src.data.forEach(element => {
+            const dataSourceObj: any = element;
+            dataSourceObj.customerAlertType = element.customerAlertType.alertName;
+            dataSourceObj.alertLevels = element.alertLevel === 0 ? 'Green' : '';
+            if (element.alertLevel === 5) {
+                dataSourceObj.alertLevels = 'Yellow';
+            } else if (element.alertLevel === 10) {
+                dataSourceObj.alertLevels = 'Red';
+            }
+            dataSource.push(dataSourceObj);
+        });
+        return dataSource;
+    }
+
+    static transformCustomerEventTableData(src: any): any {
+        const dataSource = [];
+        src.data.forEach(element => {
+            const dataSourceObj: any = element;
+            dataSourceObj.eventType = element.customerEventType.eventName + ' (' + element.customerEventType.eventCode + ')';
+            dataSourceObj.eventDatetime = element.eventDatetime ? new Date(element.eventDatetime) : '';
+            dataSource.push(dataSourceObj);
+        });
+        return dataSource;
+    }
+
+    static transformStaffNoteTableData(src: any): any {
+        const dataSource = [];
+        src.data.forEach(element => {
+            const dataSourceObj: any = element;
+            dataSourceObj.staff = element.user.name;
+            dataSourceObj.noteDate = element.noteDate ? new Date(element.noteDate) : '';
+            dataSource.push(dataSourceObj);
+        });
+        return dataSource;
+    }
+
 }

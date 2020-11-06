@@ -69,7 +69,7 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
       }));
   }
   findProgramGroup(): void {
-    this.systemService.loadProgramGroupsList(false);
+    this.systemService.loadProgramGroupsList(false, '');
     this.subscriptions.add(this.systemService.getProgramGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((programGroupList: any) => {
         this.programGroupData.content = programGroupList;

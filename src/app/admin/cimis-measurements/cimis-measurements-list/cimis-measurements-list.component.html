@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="heading">CIMIS Measurements</p>
-        <form [formGroup]="measurementsForm" class="form-group">
+        <form [formGroup]="measurementsForm" class="form-group form-margin">
           <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0">
             </div>
@@ -11,9 +11,10 @@
               <span class="filterLabel">CIMIS Station:</span>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select formControlName="cimisStation" class="form-control">
+              <select formControlName="stationNbr" class="form-control">
                 <option value='' selected></option>
-                <option *ngFor='let station of cimisStation' [value]='station.key'>{{station.value}}</option>
+                <option *ngFor='let station of cimisStation'
+                  [value]='station.key'>{{station.value}}</option>
               </select>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0">
@@ -26,7 +27,8 @@
               <span class="filterLabel">Date From:</span>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <p-calendar formControlName='fromDate' id="fromDate" dateFormat="MM/dd/yyyy" showIcon=true
+              <p-calendar formControlName='cmDateTimeFrom' id="cmDateTimeFrom"
+                dateFormat="dd/mm/yy" showIcon=true
                 showButtonBar="true"></p-calendar>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0">
@@ -39,7 +41,8 @@
               <span class="filterLabel">Date To:</span>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <p-calendar formControlName='toDate' id="toDate" dateFormat="MM/dd/yyyy" showIcon=true
+              <p-calendar formControlName='cmDateTimeTo' id="cmDateTimeTo"
+                dateFormat="dd/mm/yy" showIcon=true
                 showButtonBar="true"></p-calendar>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0">
@@ -47,23 +50,27 @@
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12 show-button">
-              <button type="button" class="btn btn-primary" (click)="search(undefined)">Show</button>
+              <button type="button" class="btn btn-primary"
+                (click)="search(undefined,true)">Show</button>
             </div>
           </div>
         </form>
-        <hr>
         <div class="row">
           <div class="col-sm-12">
             <p class="messages">
               <img src="assets/images/dot03.gif" class="dot pointer">
-              <span class="messageName">CIMIS Stations List</span>
+              <span class="messageName">CIMIS measurements  (Number of Records
+                =
+                {{measurementsData.totalElements}})</span>
             </p>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [isHideAdd]=true
-              [totalElement]="measurementsData.totalElements" (changePageEvent)="search($event)">
+            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+              [data]="dataSource" [isHideAdd]=true
+              [totalElement]="measurementsData.totalElements"
+              (changePageEvent)="search($event, false)">
             </app-table>
 
           </div>

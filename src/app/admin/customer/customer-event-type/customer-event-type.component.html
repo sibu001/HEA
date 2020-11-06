@@ -33,57 +33,16 @@
           <div class="control-label col-sm-8 col-xs-12">
             <select class="form-control form-control-sm padded-control"
               id="customerEventTypeId"
-              formControlName="customerEventTypeId">
-              <option value="1">Assigned
-                to
-                High Heating or Cooling Program Group</option><option value="2">Assigned
-                to High Plug Loads Program Group</option><option value="3">Assigned
-                to High Heating/Cooling Loads Program Group</option><option
-                value="5">New real-time energy monitor was installed</option><option
-                value="6">Completed a home energy consultation with an expert</option><option
-                value="9">Started charging an electric vehicle at home</option><option
-                value="10">Started charging an electric vehicle (sub-metered)</option><option
-                value="11">Added, removed or updated a major appliance</option><option
-                value="12">Change in average home occupancy</option><option
-                value="13">Significant home remodel or retrofit</option><option
-                value="14">Completed a simple Energy Efficiency measure</option><option
-                value="15">Change in behavior affecting energy use</option><option
-                value="16">Unassigned from High Heating/Cooling Loads Program
-                Group</option><option value="17">Unassigned from High Plug Loads
-                Program Group</option><option value="18">Unassigned from High
-                Heating/Cooling Loads Program Group</option><option value="19">Assigned
-                to High Variable Loads Program Group</option><option value="20">Unassigned
-                from High Variable Loads Program Group</option><option
-                value="21">Completed initial Home Energy Profile for EUMV</option><option
-                value="22">Completed online smart meter audit for EUMV</option><option
-                value="23">Assigned to High Recurring Loads Program Group</option><option
-                value="24">Unassigned from High Recurring Loads Program Group</option><option
-                value="25">Assigned to Low Energy Program Group</option><option
-                value="26">Unassigned from Low Energy Program Group</option><option
-                value="27">Assigned to Detailed Online Audit Program</option><option
-                value="28">Unassigned from Online Program</option><option
-                value="29">Temporary increase in energy use</option><option
-                value="30">Solar PV system installed and generating electricity</option><option
-                value="31">Problem with Energy Profile Detected</option><option
-                value="32">Problem with Energy Profile now fixed</option><option
-                value="33">Moved to a new home</option><option value="34">Opt-in
-                for optional Program-specific Survey</option><option value="36">Received
-                an energy saving device</option><option value="39">Air
-                conditioning optimizer installed by home professional</option><option
-                value="40">In-home energy audit performed by professional</option><option
-                value="41">Account specific notes</option><option value="42">Double-counted
-                recurring or base load detected and fixed</option><option
-                value="43">Double-counted recurring or base load detected and
-                fixed</option><option value="44">Enrolled into P4P Program</option><option
-                value="45">Removed from P4P Program</option><option value="46">Determined
-                Eligible for P4P Program</option><option value="47">Temporary
-                decrease in energy use</option><option value="48">Stopped
-                charging an electric vehicle at home</option><option value="49">Determined
-                ineligible for P4P Program</option><option value="50">Applied
-                for Peninsula Climate Comfort</option><option value="51">Completion
-                date for Home Energy Profile topic</option><option value="52">Enrolled
-                into P4P Program as Metered Reserve</option><option value="53">Log
-                of miscellaneous Coaching Activity</option></select>
+              formControlName="customerEventTypeId" (change)="changeEventCode($event)">
+              <option *ngFor="let group of customerEventTypeList" [value]="group.id">
+                {{group.name}}</option>
+             </select>
+             <div *ngIf="f.customerEventTypeId.invalid && (f.customerEventTypeId.dirty ||
+             f.customerEventTypeId.touched)">
+             <span class="error" *ngIf="f.customerEventTypeId.errors.required">
+               Event Type is required.
+             </span>
+           </div>
           </div>
         </div>
         <div class="row rowPadding borderBottom">
@@ -91,7 +50,13 @@
             Event Code:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-            
+            {{eventCode}}
+            <div *ngIf="f.eventCode.invalid && (f.eventCode.dirty ||
+            f.eventCode.touched)">
+            <span class="error" *ngIf="f.eventCode.errors.required">
+              Event Code is required.
+            </span>
+          </div>
           </div>
         </div>
         <div class="row rowPadding borderBottom">
@@ -99,7 +64,13 @@
            Description:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-           
+           {{eventDescription}}
+           <div *ngIf="f.eventDescription.invalid && (f.eventDescription.dirty ||
+           f.eventDescription.touched)">
+           <span class="error" *ngIf="f.eventDescription.errors.required">
+              Event description is required.
+           </span>
+         </div> 
           </div>
         </div>
 
@@ -120,6 +91,12 @@
           <div class="control-label col-sm-8 col-xs-12">
             <textarea class="form-control textarea_scroll" rows="3" id="comment"
               name="description" formControlName="description"></textarea>
+              <div *ngIf="f.description.invalid && (f.description.dirty ||
+              f.description.touched)">
+              <span class="error" *ngIf="f.description.errors.required">
+                Note is required.
+              </span>
+            </div>
           </div>
         </div>
         <div class="row rowPadding borderBottom">
@@ -143,7 +120,7 @@
       </form>
       <div class="row rowPadding borderBottom">
         <div class="col-sm-12 col-xs-12" style="text-align: end;">
-          <button type="button" class="btn btn-primary btn-padding">Save</button>
+          <button type="button" class="btn btn-primary btn-padding" (click)="save()">Save</button>
         </div>
       </div>
     </div>

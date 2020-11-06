@@ -111,8 +111,8 @@ export class SystemService {
     return this.store.dispatch(new GetViewConfigurationListAction(force));
   }
 
-  loadProgramGroupsList(force: boolean): Observable<SystemManagementState> {
-    return this.store.dispatch(new GetProgramGroupListAction(force));
+  loadProgramGroupsList(force: boolean, filter: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetProgramGroupListAction(force, filter));
   }
 
   loadProgramGroupById(id: number): Observable<SystemManagementState> {
