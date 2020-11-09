@@ -118,6 +118,7 @@ export class LoginComponent implements OnInit {
         (error) => {
           let response = JSON.parse(JSON.stringify(error));
           console.log(response);
+          this.postGetCustomeData(userId, "USERS");
           this.errorMessage = response.error_description;
           document.getElementById("loader").classList.remove("loading");
         }

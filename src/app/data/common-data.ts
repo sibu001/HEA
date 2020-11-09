@@ -2276,5 +2276,5 @@ export class TableColumnData {
             name: 'Enrolled into P4P Program as Metered Reserve'
         },
         { id: '53', code: '', name: 'Log of miscellaneous Coaching Activity' }
-    ];
+    ]
 }

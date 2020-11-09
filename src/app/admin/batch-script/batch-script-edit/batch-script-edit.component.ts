@@ -1,11 +1,11 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TableBody } from 'primeng/primeng';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -34,10 +34,11 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0
   };
+  isForce = false;
   topicData = TableColumnData.TOPIC_DESCRIPTION_DATA;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService: SystemService,
+    private readonly systemMeasurementService: SystemMeasurementService,
     private readonly activateRoute: ActivatedRoute,
     private readonly router: Router,
     private readonly el: ElementRef) {
@@ -49,12 +50,20 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setForm(undefined);
     if (this.id !== undefined) {
-      this.systemService.loadCustomerGroupById(Number(this.id));
+      this.systemMeasurementService.loadScriptBatchById(Number(this.id));
       this.loadBatchScriptById();
     }
   }
-  loadBatchScriptById() {
 
+
+  loadBatchScriptById() {
+    this.subscriptions.add(this.systemMeasurementService.getScriptBatchById().pipe(skipWhile((item: any) => !item))
+      .subscribe((factor: any) => {
+        if (this.isForce) {
+          this.router.navigate(['admin/factor/factorEdit'], { queryParams: { 'id': factor.id } });
+        }
+        this.setForm(factor);
+      }));
   }
   setForm(event: any) {
     this.batchScriptForm = this.formBuilder.group({
@@ -71,7 +80,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
     });
   }
   back() {
-    this.router.navigate(['admin/batchScript/batchScriptList']);
+    this.router.navigate(['admin/batchScript/batchScriptList'], { queryParams: { 'force': this.isForce } });
   }
 
   goToDebug() {
@@ -84,12 +93,43 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-
+    this.subscriptions.add(this.systemMeasurementService.deleteScriptBatchById(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['admin/batchScript/batchScriptList'], { queryParams: { 'force': true } });
+      }));
   }
 
   save() {
-
+    if (this.batchScriptForm.valid) {
+      if (this.id !== null && this.id !== undefined) {
+        this.subscriptions.add(this.systemMeasurementService.updateScriptBatch(this.id, this.batchScriptForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadBatchScriptById();
+          }));
+      } else {
+        this.subscriptions.add(this.systemMeasurementService.saveScriptBatch(this.batchScriptForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadBatchScriptById();
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
   }
+  validateForm() {
+    for (const key of Object.keys(this.batchScriptForm.controls)) {
+      if (this.batchScriptForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
+
 
   changeTheme(event: any): any {
     this.codeMirrorOptions.theme = event.target.value;
@@ -100,6 +140,5 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
-
-
 }
+

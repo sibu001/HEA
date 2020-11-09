@@ -24,5 +24,7 @@ export class AppConstant {
     public static systemJobs = '';
     public static eC2Instance = '';
     public static alertMessage = '';
+    public static administrativeReport = '';
+    public static topic = '';
     
 }

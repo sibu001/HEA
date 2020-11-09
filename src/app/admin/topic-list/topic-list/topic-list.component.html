@@ -1,25 +1,28 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
-          padding-top: 35px;'>
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+        left;padding-left: 40px;
+        padding-top: 35px;'>
         <p class="heading">
           Search Options (use "%" as wildcard in searches)
         </p>
         <form [formGroup]='topicForm'>
-          <div class="row rowPadding borderBottom" (submit)="search()">
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">label:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='label' id='label'>
+              <input type="text" class="form-control" formControlName='label'
+                id='label'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">User:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName="user" id="user">
+              <input type="text" class="form-control" formControlName="user"
+                id="user">
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>
@@ -30,38 +33,46 @@
               <span class="filterLabel">Customer Group:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='customerGroup' id='customerGroup'>
+              <input type="text" class="form-control"
+                formControlName='customerGroup' id='customerGroup'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Customer Place:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='customerPlace' id='customerPlace'>
+              <input type="text" class="form-control"
+                formControlName='customerPlace' id='customerPlace'>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary"
+                (click)="search(undefined,false)">Show</button>
             </div>
           </div>
 
           <div class="paddingTop">
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
-              <span class="messageName">Topic list (Number of Records = {{totalElement}})</span></p>
-            <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false" [data]="dataSource"
-              [totalElement]="topicData.totalElements" (changePageEvent)="findTopicDescription($event)">
+              <span class="messageName">Topic list (Number of Records =
+                {{totalElement}})</span></p>
+            <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true
+              [isSearch]="false" [data]="dataSource"
+              [totalElement]="topicData.totalElements"
+              (changePageEvent)="search($event,false)">
             </app-table>
           </div>
           <div class="row rowPadding">
             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12 sidePadding">
-              <input type="button" class="btn btn-primary" [value]="filter?'Enable Filter':'Disable Filter'"
+              <input type="button" class="btn btn-primary"
+                [value]="filter?'Enable Filter':'Disable Filter'"
                 (click)="disableFilter()">
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
               <input type="button" class="btn btn-primary" style="float: right"
-                [value]="cache?'Enable Value Cache':'Disable Value Cache'" (click)="disableValueCache()">
+                [value]="cache?'Enable Value Cache':'Disable Value Cache'"
+                (click)="disableValueCache()">
             </div>
           </div>
         </form>

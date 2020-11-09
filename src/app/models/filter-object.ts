@@ -47,4 +47,12 @@ export class AdminFilter {
         page: null,
         formValue: null
     };
+    public alertMessageFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public topicFilter: any = {
+        page: null,
+        formValue: null
+    }
 }

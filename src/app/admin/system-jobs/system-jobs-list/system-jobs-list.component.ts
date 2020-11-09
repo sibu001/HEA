@@ -1,10 +1,14 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialog, MatTableDataSource } from '@angular/material';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { AdminFilter } from 'src/app/models/filter-object';
+import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { SystemThreadInfoComponent } from '../system-thread-info/system-thread-info.component';
 
@@ -26,20 +30,15 @@ export class SystemJobsListComponent implements OnInit, OnDestroy {
   maxMemory: any;
   date: Date = new Date();
   private readonly subscriptions: Subscription = new Subscription();
-  constructor(public dialog: MatDialog) {
-  }
-
-  ngOnInit() {
-    document.getElementById('loader').classList.remove('loading');
-    this.keys = TableColumnData.SYSTEM_JOBS_KEY;
-    this.findSystemJobs();
-  }
-
-  findSystemJobs() {
+  public force = false;
+  constructor(public formBuilder: FormBuilder,
+    private readonly systemMeasurementService: SystemMeasurementService,
+    private readonly router: Router,
+    public dialog: MatDialog) {
 
   }
-
-  search(event: any): void {
+  ngOnInit(): void {
+    this.search();
   }
 
   showThreadInfo() {
@@ -52,8 +51,22 @@ export class SystemJobsListComponent implements OnInit, OnDestroy {
       console.log('The dialog was closed' + result);
     });
   }
+  
+  findSystemJobs(force: boolean): void {
+    this.systemMeasurementService.loadSystemJobsList(force, '');
+    this.subscriptions.add(this.systemMeasurementService.getSystemJobsList().pipe(skipWhile((item: any) => !item))
+      .subscribe((systemJobs: any) => {
+        this.systemJobsData.content = systemJobs.list;
+        this.systemJobsData.totalElements = systemJobs.totalSize;
+        this.dataSource = [...this.systemJobsData.content];
+      }));
+  }
 
+  search(): void {
+    this.findSystemJobs(true);
+  }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
+
 }

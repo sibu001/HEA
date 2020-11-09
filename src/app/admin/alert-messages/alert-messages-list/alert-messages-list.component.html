@@ -43,7 +43,7 @@
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
               [totalElement]="alertMessagesData.totalElements" (changePageEvent)="search($event)"
-              (addEvent)='onAddAlertMessages()'>
+              (addEvent)='onAddAlertMessages($event)'>
             </app-table>
           </div>
         </div>

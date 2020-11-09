@@ -1,30 +1,34 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
-          padding-top: 35px;'>
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+        left;padding-left: 40px;
+        padding-top: 35px;'>
         <p class="heading">
           Reports
         </p>
-        <form [formGroup]='topicForm'>
-          <div class="row rowPadding borderBottom" (submit)="search()">
+        <form [formGroup]='administrativeForm'>
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Report Name:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <input type="text" class="form-control" formControlName='reportName' id='reportName'>
+              <input type="text" class="form-control"
+                formControlName='reportName' id='reportName'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Report Label:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <input type="text" class="form-control" formControlName="reportLabel" id="reportLabel">
+              <input type="text" class="form-control"
+                formControlName="reportLabel" id="reportLabel">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Report Type:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <select class="form-control" id="reportType" formControlName="reportType">
+              <select class="form-control" id="reportType"
+                formControlName="reportType">
                 <option value="" selected="selected"></option>
                 <option value="jrxml">Jasper XML format</option>
                 <option value="sql">Report from simple SQL</option>
@@ -33,17 +37,22 @@
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary"
+                (click)="search(undefined, true)">Show</button>
             </div>
           </div>
 
           <div class="paddingTop">
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
-              <span class="messageName">Report list (Number of Records = {{totalElement}})</span></p>
-            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-              [totalElement]="reportData.totalElements" (changePageEvent)="findTopicDescription($event)"
-              (addEvent)="addReport()" (goToEditEvent)="goToEditReport($event)" (imageEvent)="callReport($event)">
+              <span class="messageName">Report list (Number of Records =
+                {{totalElement}})</span></p>
+            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+              [data]="dataSource"
+              [totalElement]="reportData.totalElements"
+              (changePageEvent)="search($event,false)"
+              (addEvent)="addReport()" (goToEditEvent)="goToEditReport($event)"
+              (imageEvent)="callReport($event)">
             </app-table>
           </div>
         </form>

@@ -6,7 +6,7 @@
         <div class="row">
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [isHideAdd]=true
-              [totalElement]="systemJobsData.totalElements" (changePageEvent)="search($event)">
+              [totalElement]="systemJobsData.totalElements" (changePageEvent)="search()">
             </app-table>
           </div>
         </div>
