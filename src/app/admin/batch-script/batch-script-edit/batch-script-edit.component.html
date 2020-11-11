@@ -27,11 +27,7 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="period" formControlName="period">
-                <option value="D">Daily</option>
-                <option value="M">Monthly</option>
-                <option value="S" selected="selected">Single</option>
-                <option value="W">Weekly</option>
-                <option value="Y">Year</option>
+                <option *ngFor='let period of periodData' [value]="period.key">{{period.value}}</option>
               </select>
               <div *ngIf="f.period.invalid && (f.period.dirty || f.period.touched)">
                 <span class="error" *ngIf="f.period.errors.required">

@@ -1,0 +1,111 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Mail Preview </span>
+        </p>
+        <form [formGroup]="contentForm" class="form-group form-padding">
+
+          <div class="row borderBottom borderTop rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Customer:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <div class='row borderBottom borderTop rowPadding'>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                  Audit Id:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                  <input type="text" formControlName='auditId' id='auditId' class="form-control">
+                </div>
+              </div>
+              <div class='row borderBottom rowPadding'>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                  Customer Name:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                  <input type="text" formControlName='customerName' id='customerName' class="form-control">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select id="mailDescriptionId" formControlName="mailDescriptionId" class='form-control'>
+                <option *ngFor='let type of mailType' [value]="type.key">{{type.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Execution Time (ms):</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Unpaid Bills: false<br>
+              Opt Out Mail: false<br>
+              Mail Filter Condition: false
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              Period condition: false<br>
+              Stop Sending Rules: false<br>
+              Mail Description Group: false
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Subject:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
+              <iframe id="ifrmMailContent" class="form-control" scrolling="no" style="height: 1500px; width: 100%;"
+                height="">
+              </iframe>
+            </div>
+          </div>
+
+          <div class="row rowPadding borderBottom">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
+              <input type="checkbox" class="btn btn-primary">
+              Show Html
+
+            </div>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
+              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 sidePadding">
+                <button type="button" class="btn btn-primary" *ngIf="id !== undefined && id !== null"
+                  style="float: right" (click)="sendMailToAddress()">
+                  Send Sample Message to address:
+                </button>
+              </div>
+              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 sidePadding">
+                <input type="text" class="form-control" formControlName="address" id="address">
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

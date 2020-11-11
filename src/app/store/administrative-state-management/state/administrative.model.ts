@@ -4,4 +4,6 @@ export interface AdministrativeManagementModel {
     administrativeReportDataSource: any;
     topicList: any;
     topic: any;
+    prospectsList: any;
+    prospects: any;
 }

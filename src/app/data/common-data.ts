@@ -1752,8 +1752,8 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_GROUP_KEY: Array<TABLECOLUMN> = [
-        { key: 'groupCode', sort: 'groupCode', displayName: 'Group' },
-        { key: 'groupName', sort: 'groupName', displayName: 'Period' },
+        { key: 'groupCode', sort: 'groupCode', displayName: 'Group Code' },
+        { key: 'groupName', sort: 'groupName', displayName: 'Group Name' },
     ];
 
     // Job name	Last fire time	Last Runtime	Next fire time	State
@@ -2276,5 +2276,186 @@ export class TableColumnData {
             name: 'Enrolled into P4P Program as Metered Reserve'
         },
         { id: '53', code: '', name: 'Log of miscellaneous Coaching Activity' }
-    ]
+    ];
+
+    static readonly PROSPECTS_KEY: Array<TABLECOLUMN> = [
+        { key: 'registrationId', sort: 'registrationId', displayName: 'ID' },
+        { key: 'program', sort: 'program', displayName: 'Program' },
+        { key: 'name', sort: 'name', displayName: 'Name' },
+        { key: 'field6', sort: 'field6', displayName: 'Page' },
+        { key: 'email', sort: 'email', displayName: 'Email' },
+        { key: 'coachUserId', sort: 'coachUserId', displayName: 'CoachID' },
+        { key: 'createdDate', sort: 'createdDate', displayName: 'Date', isDate: true },
+        { key: 'optOutMail', sort: 'optOutMail', displayName: 'Opt Out Mail', isDate: true }
+    ];
+
+    static readonly MAIL_DESC_KEYS: Array<TABLECOLUMN> = [
+        { key: 'id', sort: 'id', displayName: 'ID', isEdit: true },
+        { key: 'mailName', sort: 'mailName', displayName: 'Mail Name' },
+        { key: 'period', sort: 'period', displayName: 'Period' },
+        { key: 'periodDay', sort: 'periodDay', displayName: 'Period' },
+        { key: 'runtime', sort: 'runtime', displayName: 'Runtime' },
+        { key: 'subject', sort: 'subject', displayName: 'Subject' },
+    ];
+
+    static readonly CONTENT_PART_KEYS: Array<TABLECOLUMN> = [
+        { key: 'label', displayName: 'Label', isEdit: true },
+        { key: 'order', displayName: 'Order' },
+        { key: 'contentFilter', displayName: 'Content Filter' },
+    ];
+
+    static readonly VARIABLE_KEYS: Array<TABLECOLUMN> = [
+        { key: 'fieldCode', displayName: 'Field Code', isEdit: true },
+        { key: 'order', displayName: 'Order' },
+        { key: 'calculationRule', displayName: 'Calculation Rule' },
+    ];
+
+    static readonly PERIOD_DATA: any[] = [
+        { key: 'D', value: 'Daily' },
+        { key: 'M', value: 'Monthly' },
+        { key: 'N', value: 'None' },
+        { key: 'S', value: 'Single' },
+        { key: 'W', value: 'Weekly' },
+        { key: 'Y', value: 'Year' },
+    ];
+
+    static readonly CUSTOMER_GROUP_DATA: any[] = [
+        { key: '', value: '' },
+        { key: '1', value: 'CEC' },
+        { key: '2', value: 'EUMV' },
+        { key: '5', value: 'HEA' },
+        { key: '6', value: 'Vermont VEIC (disabled)' },
+        { key: '7', value: 'Home Energy Tuneup' },
+        { key: '8', value: 'Test Accounts' },
+        { key: '9', value: 'Alameda' },
+        { key: '10', value: 'PG&amp;E Direct Pay (disabled)' },
+        { key: '11', value: 'SVEW (disabled)' },
+        { key: '12', value: 'CalWater (disabled)' },
+        { key: '13', value: 'Claremont' },
+        { key: '14', value: 'Purissima Water (disabled)' },
+        { key: '15', value: 'Energy Fitness (disabled)' },
+        { key: '16', value: 'Dr Power' },
+        { key: '17', value: 'Pay for Performance' },
+        { key: '18', value: 'Sunnyvale Green At Home (disabled)' },
+        { key: '20', value: 'ConSol PG&amp;E' },
+        { key: '23', value: 'SC High Energy' },
+        { key: '24', value: 'Rising Sun' }
+    ];
+
+    static readonly CUSTOMER_GROUP_MAIL_PART_KEYS: Array<TABLECOLUMN> = [
+        { key: 'customerGroupName', sort: 'customerGroupName', displayName: 'customerGroupName' },
+        { key: 'header', displayName: 'Header', isEdit: true },
+        { key: 'footer', displayName: 'Footer', isEdit: true },
+    ];
+
+    static readonly MAIL_TYPE: any[] = [
+        { key: '3', value: 'For Testing' },
+        { key: '4', value: 'Monthly Home Energy Report' },
+        { key: '5', value: 'Monthly Tips (first year)' },
+        { key: '6', value: 'Not forgotten 1' },
+        { key: '7', value: 'Not forgotten 2' },
+        { key: '8', value: 'Winterize pool' },
+        { key: '9', value: 'CG1 Release' },
+        { key: '10', value: 'CGO Release' },
+        { key: '11', value: 'PG&amp;E Transition' },
+        { key: '12', value: 'Never Activated' },
+        { key: '13', value: 'Didn\'t finish HEP' },
+        { key: '14', value: 'Changed PW?' },
+        { key: '15', value: 'Atta boy!' },
+        { key: '16', value: 'What up?' },
+        { key: '17', value: 'Declined HC/PM' },
+        { key: '18', value: 'EUMV Extended' },
+        { key: '19', value: 'VEIC Welcome' },
+        { key: '20', value: 'Spam Filter Test' },
+        { key: '21', value: 'New customer activation mail' },
+        { key: '22', value: 'Repeated activation mail' },
+        { key: '23', value: 'Recommendations Reminder' },
+        { key: '28', value: 'Welcome to EUMV2' },
+        { key: '30', value: 'Forgot Password' },
+        { key: '31', value: 'New Recommendation' },
+        { key: '32', value: 'E-Mail Changed' },
+        { key: '33', value: 'Registration Errors' },
+        { key: '34', value: 'Alameda HEA Announcement' },
+        { key: '35', value: 'pie chart test' },
+        { key: '36', value: 'SnapShot' },
+        { key: '37', value: 'Alameda Activation Offer' },
+        { key: '38', value: 'Registrations Not Working' },
+        { key: '39', value: 'HETU Phone Consult Confirmation' },
+        { key: '40', value: 'HETU Phone Consult Reminder' },
+        { key: '41', value: 'High Load Alert (similar homes)' },
+        { key: '42', value: 'HAAS Pricing Survey' },
+        { key: '43', value: 'Spam Test (Water)' },
+        { key: '44', value: 'Forgot Password (Water)' },
+        { key: '45', value: 'Registration Errors (Water)' },
+        { key: '46', value: 'Never Activated (Water)' },
+        { key: '47', value: 'Monthly Water Report' },
+        { key: '48', value: 'Didn\'t finish Water' },
+        { key: '49', value: 'New water activation mail' },
+        { key: '50', value: 'Credit card problem' },
+        { key: '51', value: 'Water leak alert' },
+        { key: '52', value: 'OhmConnect DR Offer' },
+        { key: '53', value: 'New EF customer activation' },
+        { key: '54', value: 'RYPL intro message' },
+        { key: '55', value: 'RYPL Utility Link Instructions' },
+        { key: '57', value: 'RYPL Increased Idle Load' },
+        { key: '58', value: 'RYPL Decreased Idle Load' },
+        { key: '59', value: 'RYPL Generic Template' },
+        { key: '60', value: 'RYPL Utility Link Instructions - OLD 2017-04-09' },
+        { key: '61', value: 'RYPL PLDB Update' },
+        { key: '62', value: 'RYPL Try Dr Power' },
+        { key: '63', value: 'Prereg Reminder' },
+        { key: '64', value: 'RYPL Spam Test' },
+        { key: '65', value: 'RYPL New Customer Activation' },
+        { key: '66', value: 'RYPL Registration Errors' },
+        { key: '67', value: 'RYPL Password Reset' },
+        { key: '68', value: 'Energy Coach Introduction' },
+        { key: '69', value: 'Enrolled in P4P notification' },
+        { key: '70', value: 'Increased electric use alert' },
+        { key: '71', value: 'Group E - Inactive, Unqualified - App Intro' },
+        { key: '72', value: 'Group A - Active, Open Emails, High Idle' },
+        { key: '73', value: 'Group D - Active, Dont Open Emails' },
+        { key: '74', value: 'Group B - Active, Open Email, Low Idle, High Bill' },
+        { key: '75', value: 'Group C - Active, Open Emails, Low Idle, Low Bill' },
+        { key: '76', value: 'Increased natural gas use alert' },
+        { key: '77', value: 'Sunnyvale Migration to HI' },
+        { key: '81', value: 'Migration to SMD' },
+        { key: '82', value: 'RYPL Try HomeIntel' },
+        { key: '83', value: 'Authorization about to expire' },
+        { key: '85', value: 'COVID Energy Alert' },
+        { key: '86', value: 'Pre-reg shelter-in-place msg' },
+        { key: '87', value: 'NextDoor Yelp testimonial request' },
+    ];
+
+    static readonly USER_REPORTS_KEYS: Array<TABLECOLUMN> = [
+        { key: 'order', displayName: 'Order' },
+        { key: 'reportType', displayName: 'Report Type' },
+        { key: 'displayLabel', sort: 'displayLabel', displayName: 'Display Label', isEdit: true },
+        { key: 'label', sort: 'label', displayName: 'Label', isEdit: true },
+    ];
+
+    static readonly USER_REPORT_DATA: any[] = [
+        { key: 'bills', value: 'Bills Values' },
+        { key: 'elecHeatMap', value: 'Electric Heat Map' },
+        { key: 'elc_regression', value: 'Electric Regression Model' },
+        { key: 'endUse', value: 'Energy by End Use' },
+        { key: 'hourly', value: 'Hourly' },
+        { key: 'hourlyExclHVAC', value: 'Hourly Details (excluding HVAC)' },
+        { key: 'irrigationWksht', value: 'Irrigation Worksheet' },
+        { key: 'monthlyEnergy', value: 'Monthly Energy Data' },
+        { key: 'ngHeatMap', value: 'Natural Gas Heat Map' },
+        { key: 'ngProfile', value: 'Natural Gas Profile' },
+        { key: 'newHourly', value: 'New Hourly' },
+        { key: 'profile', value: 'Profile' },
+        { key: 'progress', value: 'Progress' },
+        { key: 'recentCSV', value: 'Recent CSV' },
+        { key: 'recentTrends', value: 'Recent Trends' },
+        { key: 'regression', value: 'Regression Model' },
+        { key: 'snapshot', value: 'SnapShot' },
+        { key: 'elecHeatMapPV', value: 'Solar PV Heat Map' },
+        { key: 'trendingProfile" selected="selected', value: 'Trending Profile' },
+        { key: 'userHistory', value: 'User History' },
+        { key: 'waterHeatMap', value: 'Water Heat Map' },
+        { key: 'waterProfile', value: 'Water Profile' },
+        { key: 'waterProgress', value: 'Water Progress' },
+    ];
 }

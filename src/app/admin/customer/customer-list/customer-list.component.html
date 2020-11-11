@@ -185,7 +185,7 @@
                         <app-table [keys]="keys" [isPaginate]="true" [checkbox]=true [isSearch]="false"
                             [data]="dataSource" [totalElement]="CustomerData.totalElements"
                             (changePageEvent)="findCustomer($event,false)" (goToEditEvent)="goToEditCustomer($event)"
-                            (imageEvent)='onImageClickEvent($event)' (addEvent)='addNewCustomer()'
+                            (imageEvent)='onImageClickEvent($event)' (addEvent)='addNewCustomer()' (handleLinkEvent)="handleLink($event)"
                             class="customerTable">
                         </app-table>
 

@@ -28,7 +28,7 @@ export class TopicHistoryComponent implements OnInit {
     let surveyCode;
     if (this.users.currentPaneNumber != undefined) {
       surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
-      if (this.users.surveyLenght <= 3 || (this.users.currentPaneNumber != undefined ? surveyCode == "Profile" : false)) {
+      if (this.users.surveyLength <= 3 || (this.users.currentPaneNumber != undefined ? surveyCode == "Profile" : false)) {
         this.router.navigate(['surveyView']);
       }
     }
@@ -68,7 +68,7 @@ getAllSurvey() {
       }
       document.getElementById("loader").classList.remove('loading');
       var surveylength = Object.keys(response.data).length;
-      this.users.surveyLenght = surveylength;
+      this.users.surveyLength = surveylength;
       this.users.surveyList = response.data;
       this.users.allSurveyCheck = false;
       this.loginService.setUser(this.users);

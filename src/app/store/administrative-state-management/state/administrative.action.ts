@@ -9,6 +9,11 @@ export enum AdministrativeActionTypes {
     SAVE_TOPIC = 'Save Topic',
     UPDATE_TOPIC = 'Update Topic',
     DELETE_TOPIC_BY_ID = 'Delete Topic By Id',
+    GET_PROSPECTS_LIST = 'Get All Prospects List',
+    GET_PROSPECTS_BY_ID = 'Get Prospects By Id',
+    SAVE_PROSPECTS = 'Save Prospects',
+    UPDATE_PROSPECTS = 'Update Prospects',
+    DELETE_PROSPECTS_BY_ID = 'Delete Prospects By Id',
 }
 export class GetAdministrativeReportListAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_ADMINISTRATIVE_REPORT_LIST;
@@ -66,6 +71,37 @@ export class UpdateTopicAction {
 
 export class DeleteTopicByIdAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.DELETE_TOPIC_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+
+export class GetProspectsListAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_PROSPECTS_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetProspectsByIdAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_PROSPECTS_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class SaveProspectsAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.SAVE_PROSPECTS;
+    constructor(readonly prospects: any) {
+    }
+}
+
+export class UpdateProspectsAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.UPDATE_PROSPECTS;
+    constructor(readonly id: number, readonly prospects: any) {
+    }
+}
+
+export class DeleteProspectsByIdAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.DELETE_PROSPECTS_BY_ID;
     constructor(readonly id: number) {
     }
 }

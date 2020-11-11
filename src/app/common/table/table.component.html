@@ -78,7 +78,7 @@
                 </div>
                 <div *ngIf="col.type=='link' && !col.isAction">
                     <div *ngFor='let link of col.links'>
-                        <a (click)='linkCall(link.routerLink,link.queryParam)'>{{link.displayName}}</a>
+                        <a (click)='linkCall(link.routerLink,link.queryParam,row)' class="anchorClass">{{link.displayName}}</a>
                     </div>
                 </div>
                 <div *ngIf="col.type!='image'&& col.isAction && action">

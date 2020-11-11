@@ -1,0 +1,101 @@
+import { Location } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { TableColumnData } from 'src/app/data/common-data';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+
+@Component({
+  selector: 'app-user-report-definitions-edit',
+  templateUrl: './user-report-definitions-edit.component.html',
+  styleUrls: ['./user-report-definitions-edit.component.css']
+})
+export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
+
+
+  id: any;
+  topicForm: FormGroup;
+  public userReportKeys = TableColumnData.CUSTOMER_GROUP_KEY;
+  contentPartsKeys = TableColumnData.CONTENT_PART_KEYS;
+  variableKeys = TableColumnData.VARIABLE_KEYS;
+  reportType = TableColumnData.USER_REPORT_DATA;
+  public userReportDataSource: any;
+  public contentPartsDataSource: any;
+  public variableDataSource: any;
+  public totalElement = 0;
+  public userReportData = {
+    content: [],
+    totalElements: 0,
+  };
+  public contentPartsData = {
+    content: [],
+    totalElements: 0,
+  };
+  public variableData = {
+    content: [],
+    totalElements: 0,
+  };
+  private readonly subscriptions: Subscription = new Subscription();
+  constructor(private readonly formBuilder: FormBuilder,
+    private readonly activateRoute: ActivatedRoute,
+    private readonly location: Location,
+    private readonly router: Router) {
+    this.activateRoute.queryParams.subscribe(params => {
+      this.id = params['id'];
+    });
+  }
+
+
+  ngOnInit() {
+
+    this.setForm(undefined);
+    if (this.id !== undefined) {
+    }
+  }
+
+  setForm(event: any) {
+    this.topicForm = this.formBuilder.group({
+      order: [event !== undefined ? event.order : ''],
+      displayLabel: [event !== undefined ? event.displayLabel : ''],
+      userReportType: [event !== undefined ? event.userReportType : ''],
+      label: [event !== undefined ? event.label : ''],
+      contentType: [event !== undefined ? event.contentType : ''],
+      filter: [event !== undefined ? event.filter : '']
+    });
+  }
+  back() {
+    this.location.back();
+  }
+
+  save(): any { }
+
+  delete(): any { }
+
+  copy(): any { }
+
+  addContentParts(): any {
+    this.router.navigate(['/admin/userReportDefinitions/userReportContentParts']);
+  }
+
+  addVariable(): any {
+    this.router.navigate(['/admin/userReportDefinitions/userReportContextVariable']);
+  }
+
+  goToEditContentParts(): any {
+    this.router.navigate(['/admin/userReportDefinitions/userReportContentParts'], { queryParams: { id: this.id } });
+  }
+
+  goToEditVariable(): any {
+    this.router.navigate(['/admin/userReportDefinitions/userReportContextVariable'], { queryParams: { id: this.id } });
+  }
+
+  Preview() {
+    this.router.navigate(['/admin/userReportDefinitions/userReportPreview'], { queryParams: { id: this.id } });
+  }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+
+}

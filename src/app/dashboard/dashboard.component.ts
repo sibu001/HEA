@@ -101,15 +101,10 @@ export class DashboardComponent implements OnInit {
     }
   }
   leakCalculation() {
-    // for (let i = 0; i < this.users.leakList.length - 1; i++) {
-    //  var imgName=this.users.leakList[i].recommendation.takebackIcon.split('.');
-    //  this.users.leakList[i].recommendation.takebackIcon=imgName+".svg";
-    // }
-    var j = 0, count = 0;
-    let counts = new Array;
+    let count = 0;
     this.leakList = new Array;
-    for (let i = 0; i < this.users.leakList.length - 1; i++) {
-      var distinct = false;
+    for (let i = 0; i < this.users.leakList.length; i++) {
+      let distinct = false;
       for (let j = 0; j < i; j++) {
         if (JSON.stringify(this.users.leakList[i].recommendation.takebackIcon) === JSON.stringify(this.users.leakList[j].recommendation.takebackIcon)) {
           distinct = true;
@@ -121,7 +116,7 @@ export class DashboardComponent implements OnInit {
       }
     }
     for (let i = 0; i < count; i++) {
-      var counter = 0;
+      let counter = 0;
       for (let j = 0; j <= this.users.leakList.length - 1; j++) {
         if (JSON.stringify(this.leakList[i].recommendation.takebackIcon) === JSON.stringify(this.users.leakList[j].recommendation.takebackIcon)) {
           counter++;

@@ -96,7 +96,7 @@
                     </table>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn">
+            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn" *ngIf="users.role!=='ADMIN'">
                 <div class="feedback">
                     <p class="Energy_anaiytic">
                         Powered by Home Energy Analytics, Inc.</p>
@@ -156,6 +156,11 @@
                         </li>
                     </ul>
                 </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-sm-4 rightColumn" *ngIf="users.role==='ADMIN'">
+                <div class="adminFeedback">
+                <app-sidebar [showDetails]="true"></app-sidebar>
+            </div>
             </div>
         </div>
     </div>

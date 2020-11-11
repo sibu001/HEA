@@ -14,7 +14,12 @@ import {
     GetTopicByIdAction,
     GetTopicListAction,
     SaveTopicAction,
-    UpdateTopicAction
+    UpdateTopicAction,
+    GetProspectsListAction,
+    DeleteProspectsByIdAction,
+    GetProspectsByIdAction,
+    SaveProspectsAction,
+    UpdateProspectsAction
 } from './administrative.action';
 import { AdministrativeManagementModel } from './administrative.model';
 
@@ -25,7 +30,9 @@ import { AdministrativeManagementModel } from './administrative.model';
         administrativeReport: undefined,
         administrativeReportDataSource: undefined,
         topicList: undefined,
-        topic: undefined
+        topic: undefined,
+        prospectsList: undefined,
+        prospects: undefined
     }
 })
 
@@ -57,6 +64,16 @@ export class AdministrativeManagementState {
     @Selector()
     static getTopicById(state: AdministrativeManagementModel): any {
         return state.topic;
+    }
+
+    @Selector()
+    static getProspectsList(state: AdministrativeManagementModel): any {
+        return state.prospectsList;
+    }
+
+    @Selector()
+    static getProspectsById(state: AdministrativeManagementModel): any {
+        return state.prospects;
     }
 
 
@@ -234,6 +251,96 @@ export class AdministrativeManagementState {
                     this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         topic: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+    @Action(GetProspectsListAction)
+    getAllProspectsList(ctx: StateContext<AdministrativeManagementModel>, action: GetProspectsListAction): Actions {
+        const force: boolean = action.force || AdministrativeManagementState.getProspectsList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.prospects, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        // const dataSource = Transformer.transformProspectsTableData(response, action.viewType);
+                        ctx.patchState({
+                            prospectsList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetProspectsByIdAction)
+    getProspectsById(ctx: StateContext<AdministrativeManagementModel>, action: GetProspectsByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.prospects + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        prospects: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteProspectsByIdAction)
+    deleteProspectsById(ctx: StateContext<AdministrativeManagementModel>, action: DeleteProspectsByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.prospects + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveProspectsAction)
+    saveProspects(ctx: StateContext<AdministrativeManagementModel>, action: SaveProspectsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.prospects, AppConstant.prospects)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        prospects: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateProspectsAction)
+    updateProspects(ctx: StateContext<AdministrativeManagementModel>, action: UpdateProspectsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.prospects, AppConstant.prospects + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        prospects: response,
                     });
                 },
                     error => {

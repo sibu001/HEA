@@ -11,6 +11,7 @@ import { SystemManagementState } from 'src/app/store/system-state-management/sta
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 
 @NgModule({
   imports: [
@@ -24,7 +25,7 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     ]),
     FactorRoutingModule
   ],
-  declarations: [FactorListComponent, FactorEditComponent]
-  , providers: [SystemService]
+  declarations: [FactorListComponent, FactorEditComponent],
+  providers: [SystemService, SystemUtilityService]
 })
 export class FactorModule { }

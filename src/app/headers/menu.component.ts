@@ -21,7 +21,7 @@ export class MenuComponent implements OnInit {
     if (this.users.currentPaneNumber !== undefined) {
       surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
     }
-    if (this.users.surveyLenght <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false)) {
+    if (this.users.surveyLength <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false)) {
       document.getElementById('_home1').classList.add('header_menu_none');
       document.getElementById('all_topic1').classList.add('header_menu_none');
       document.getElementById('menu_option1').classList.add('header_menu_none');
@@ -36,18 +36,18 @@ export class MenuComponent implements OnInit {
   }
   hide(numbers) {
     if (numbers === 1) {
-      if (this.users.surveyLenght <= 3) {
+      if (this.users.surveyLength <= 3) {
         this.router.navigate(['/surveyView']);
       } else {
         this.router.navigate(['/dashboard']);
       }
     } else if (numbers === 2) {
-      if (this.users.surveyLenght > 3) {
+      if (this.users.surveyLength > 3) {
         this.router.navigate(['/topicshistory']);
       }
     } else if (numbers === 3 && (this.users.currentPaneNumber != null && this.users.currentPaneNumber !==
       undefined ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile' : true)) {
-      if (this.users.surveyLenght > 3) {
+      if (this.users.surveyLength > 3) {
         this.router.navigate(['/accountDetail']);
       }
     } else if (numbers === 9) {

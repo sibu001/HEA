@@ -1143,7 +1143,10 @@ button.closeButton:focus {
   color: red;
 }
 @media only screen and (max-width: 320px) {
-.btn-primary {
-  padding: 4px 15px;
+  .btn-primary {
+    padding: 4px 15px;
+  }
 }
+table.jqplot-table-legend {
+  margin: auto !important;
 }

@@ -1,0 +1,119 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Customer Event</span>
+        </p>
+        <form [formGroup]="eventForm" class="form-group form-padding">
+          <div class="row borderBottom borderTop rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Customer:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <div class="row rowPadding borderBottom" style=" margin-left: 0px; margin-right: 0px;">
+                <div class='col-sm-4 col-md-4 col-lg-4 col-xs-12'>
+                  AuditId:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  <input type="text" class='form-control form-control-sm' formControlName="auditId" id="auditId">
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+              </div>
+              <div class="row rowPadding" style=" margin-left: 0px; margin-right: 0px;" s>
+                <div class='col-sm-4 col-md-4 col-lg-4 col-xs-12'>
+                  Customer Name:
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  <input type="text" class="form-control form-control-sm" formControlName="customerName"
+                    id="customerName">
+                </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Event Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control form-control-sm" id="eventType" formControlName="eventType">
+                <option *ngFor='let eventType of eventTypeData' [value]="eventType.key">{{eventType.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Event Code:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Description:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Event Date:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <p-calendar formControlName='eventDate' dateFormat="MM/dd/yyyy" id='eventDate' showIcon=true
+                showButtonBar="true">
+              </p-calendar>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Additional Comments:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class='form-control form-control-sm' cols=30 rows=10 formControlName='additionalComments'
+                id='additionalComments'></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Author Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Author:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row">
+              <div class="col-sm-8 col-md-8 col-lg-8 col-xs-6">
+                <button class="btn btn-primary" style="float: right">Delete</button>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6">
+                <button type="button" class="btn btn-primary" style="float: right">
+                  Execute
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showMethod]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

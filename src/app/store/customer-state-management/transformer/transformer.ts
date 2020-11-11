@@ -154,17 +154,17 @@ export class Transformer {
                         type: 'link',
                         links: [
                             {
-                                routerLink: '/',
+                                routerLink: '/topicshistory',
                                 displayName: 'Topic',
                                 queryParam: {}
                             },
                             {
-                                routerLink: '/',
+                                routerLink: '/dashboard',
                                 displayName: 'Home',
                                 queryParam: {}
                             },
                             {
-                                routerLink: '/',
+                                routerLink: 'https://sandbox.hea.com/hea-web/userReportLink.do',
                                 displayName: 'User History',
                                 queryParam: {}
                             }

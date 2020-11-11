@@ -3,14 +3,19 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
   DeleteAdministrativeReportByIdAction,
+  DeleteProspectsByIdAction,
   DeleteTopicByIdAction,
   GetAdministrativeReportByIdAction,
   GetAdministrativeReportListAction,
+  GetProspectsByIdAction,
+  GetProspectsListAction,
   GetTopicByIdAction,
   GetTopicListAction,
   SaveAdministrativeReportAction,
+  SaveProspectsAction,
   SaveTopicAction,
   UpdateAdministrativeReportAction,
+  UpdateProspectsAction,
   UpdateTopicAction
 } from '../state/administrative.action';
 import { AdministrativeManagementState } from '../state/administrative.state';
@@ -38,10 +43,18 @@ export class AdministrativeService {
     return this.store.select(AdministrativeManagementState.getTopicList);
   }
 
-
   getTopicById(): Observable<any> {
     return this.store.select(AdministrativeManagementState.getTopicById);
   }
+
+  getProspectsList(): Observable<any> {
+    return this.store.select(AdministrativeManagementState.getProspectsList);
+  }
+
+  getProspectsById(): Observable<any> {
+    return this.store.select(AdministrativeManagementState.getProspectsById);
+  }
+
 
   loadAdministrativeReportList(force: boolean, filter: any): Observable<AdministrativeManagementState> {
     return this.store.dispatch(new GetAdministrativeReportListAction(force, filter));
@@ -81,5 +94,25 @@ export class AdministrativeService {
 
   deleteTopicById(id: number): Observable<AdministrativeManagementState> {
     return this.store.dispatch(new DeleteTopicByIdAction(id));
+  }
+
+  loadProspectsList(force: boolean, filter: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetProspectsListAction(force, filter));
+  }
+
+  loadProspectsById(id: number): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetProspectsByIdAction(id));
+  }
+
+  saveProspects(customer: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new SaveProspectsAction(customer));
+  }
+
+  updateProspects(id: number, customer: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new UpdateProspectsAction(id, customer));
+  }
+
+  deleteProspectsById(id: number): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new DeleteProspectsByIdAction(id));
   }
 }

@@ -1,6 +1,6 @@
 <div class='container-fluid'>
   <div *ngIf='showDetails'>
-    <p class='Energy_anaiytic'>
+    <p class='info'>
       <img src='assets/images/dot03.gif' class='dot'>HEA Administrator's Home Page</p>
     <p class='feedback'>
       This page provides access to administrative functions for Home Energy Analytics' survey system.
@@ -10,7 +10,7 @@
     </p>
   </div>
   <div *ngIf="showDataFields && topicVariableField.length>0" [class.overflow]='topicVariableField.length>0'>
-    <p class='Energy_anaiytic'>
+    <p class='info'>
       <img src='assets/images/dot03.gif' class='dot'>Data field list</p>
     <table>
       <thead>
@@ -29,7 +29,7 @@
   </div>
 
   <div *ngIf="showDataFields && dataField.length>0" [class.overflow]='dataField.length>0'>
-    <p class='Energy_anaiytic'>
+    <p class='info'>
       <img src='assets/images/dot03.gif' class='dot'>Data field list</p>
     <table>
       <thead>
@@ -48,7 +48,7 @@
   </div>
 
   <div *ngIf="showMethod && methodName.length>0" [class.overflow]='methodName.length>0'>
-    <p class='Energy_anaiytic'>
+    <p class='info'>
       <img src='assets/images/dot03.gif' class='dot'>Method list</p>
     <table>
       <thead>
@@ -94,7 +94,7 @@
       </li>
       <li><a [routerLink]="['/admin/staff/staffList']">Staff</a></li>
       <li><a [routerLink]="['/admin/customer/customerList']">Customers</a></li>
-      <li><a href='{{apiURL+"registrationView.do"}}'>Prospects</a></li>
+      <li><a [routerLink]="['/admin/prospects/prospectsList']">Prospects</a></li>
       <li><a [routerLink]="['/admin/topicDescription/topicDescriptionList']">Topic descriptions</a></li>
       <li><a [routerLink]="['/admin/topic/topicList']">Topics</a></li>
       <li><a [routerLink]="['/admin/administrativeReport/administrativeReportList']">Administrative Reports</a></li>
@@ -105,14 +105,14 @@
           definitions</a>
         <ul class='collapse' id='collapseMail'>
           <li>
-            <a href='{{apiURL+"mailDescriptionList.do"}}'>Mail Descriptions</a>
+            <a [routerLink]="['/admin/mailDescription/mailDescriptionList']">Mail Descriptions</a>
           </li>
           <li>
-            <a href='{{apiURL+"customerGroupMailPartList.do"}}'>Customer Group Mail Parts</a>
+            <a [routerLink]="['/admin/customerGroupMailParts/customerGroupMailPartsList']">Customer Group Mail Parts</a>
           </li>
         </ul>
       </li>
-      <li><a href='{{apiURL+"userReportList.do"}}'>User report definitions</a>
+      <li><a [routerLink]="['/admin/userReportDefinitions/userReportDefinitionsList']">User report definitions</a>
       </li>
       <li><a data-toggle='collapse' data-target='#collapseDynamicView' aria-expanded='false'
           aria-controls='collapseDynamicView'>Dynamic Views</a>

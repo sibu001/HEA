@@ -160,6 +160,26 @@ const ROUTES: Routes = [
       {
         path: 'administrativeReport',
         loadChildren: './admin/administrative-reports/administrative-reports.module#AdministrativeReportsModule'
+      },
+      {
+        path: 'prospects',
+        loadChildren: './admin/prospects/prospects.module#ProspectsModule'
+      },
+      {
+        path: 'eventHistory',
+        loadChildren: './admin/event-history/event-history.module#EventHistoryModule'
+      },
+      {
+        path: 'mailDescription',
+        loadChildren: './admin/mail-description/mail-description.module#MailDescriptionModule'
+      },
+      {
+        path: 'customerGroupMailParts',
+        loadChildren: './admin/customer-group-mail-parts/customer-group-mail-parts.module#CustomerGroupMailPartsModule'
+      },
+      {
+        path: 'userReportDefinitions',
+        loadChildren: './admin/user-report-definitions/user-report-definitions.module#UserReportDefinitionsModule'
       }
     ]
   },

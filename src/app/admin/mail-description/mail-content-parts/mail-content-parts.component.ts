@@ -1,0 +1,84 @@
+import { Location } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+import {
+  HtmlEditorService,
+  ImageService,
+  LinkService,
+  ToolbarService
+} from '@syncfusion/ej2-angular-richtexteditor';
+@Component({
+  selector: 'app-mail-content-parts',
+  templateUrl: './mail-content-parts.component.html',
+  styleUrls: ['./mail-content-parts.component.css'],
+  providers: [ToolbarService, LinkService, ImageService, HtmlEditorService]
+})
+export class MailContentPartsComponent implements OnInit, OnDestroy {
+
+  public tools: object = {
+    items: ['Undo', 'Redo', '|',
+      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
+      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
+      'SubScript', 'SuperScript', '|',
+      'LowerCase', 'UpperCase', '|',
+      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
+      'Indent', 'Outdent', '|', 'CreateLink',
+      'Image', '|', 'ClearFormat', 'Print', 'SourceCode', '|', 'FullScreen',
+      {
+        tooltipText: 'Select Style',
+        undo: true,
+        template: `
+        <select class="e-tbar-btn e-btn" tabindex="-1" id="custom_tbar" style="width:100px">
+        <option value='nmt'>nmt</option>
+        </select>`
+      }]
+  };
+  id: any;
+  contentForm: FormGroup;
+  private readonly subscriptions: Subscription = new Subscription();
+  constructor(private readonly formBuilder: FormBuilder,
+    private readonly activateRoute: ActivatedRoute,
+    private readonly location: Location,
+    public dialog: MatDialog) {
+    this.activateRoute.queryParams.subscribe(params => {
+      this.id = params['id'];
+    });
+  }
+
+
+  ngOnInit() {
+    this.setForm(undefined);
+    if (this.id !== undefined) {
+    }
+  }
+
+  setForm(event: any) {
+    this.contentForm = this.formBuilder.group({
+      label: [event !== undefined ? event.label : ''],
+      order: [event !== undefined ? event.order : ''],
+      contentFilter: [event !== undefined ? event.contentFilter : ''],
+      disableHtmlEditor: [event !== undefined ? event.disableHtmlEditor : ''],
+      content: [event !== undefined ? event.content : ''],
+      imageUrl: [event !== undefined ? event.imageUrl : ''],
+      imageFile: [event !== undefined ? event.imageFile : ''],
+      embeddedImage: [event !== undefined ? event.embeddedImage : ''],
+    });
+  }
+  back() {
+    this.location.back();
+  }
+
+  save(): any { }
+
+  delete(): any { }
+
+  get f() { return this.contentForm.controls; }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+}

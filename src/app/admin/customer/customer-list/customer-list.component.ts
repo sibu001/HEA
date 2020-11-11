@@ -8,6 +8,7 @@ import { skipWhile } from 'rxjs/operators';
 import { TableComponent } from 'src/app/common/table/table.component';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { Page } from 'src/app/models/page';
+import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { Transformer } from 'src/app/store/customer-state-management/transformer/transformer';
@@ -31,6 +32,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   public dataSource: any;
   public customerView = -1;
   public adminFilter: AdminFilter;
+  public users: Users = new Users();
   public CustomerData = {
     content: [],
     totalElements: 0,
@@ -46,7 +48,9 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly systemService: SystemService,
     private readonly customerService: CustomerService,
+    private loginService: LoginService,
     public dialog: MatDialog) {
+    this.users = this.loginService.getUser();
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null) {
       this.adminFilter = new AdminFilter();
@@ -170,6 +174,17 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     });
   }
 
+  handleLink(event: any) {
+    this.subscriptions.add(this.customerService.loadCustomerById(event.value.customerId).pipe(skipWhile((item: any) => !item))
+      .subscribe((customer: any) => {
+        this.users.outhMeResponse = customer.customerManagement.customer;
+        this.users.theme = customer.customerManagement.customer.customerGroup.theme;
+        this.users.recommendationStatusChange = true;
+        this.loginService.setUser(this.users);
+        this.router.navigate([event.routLink], { queryParams: event.queryParam });
+      }));
+  }
+
   exportToCSV() {
     console.log('export to csv');
   }
@@ -182,6 +197,5 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     if (event.eventType === 'addEditLog') {
       this.addEditCustomerEvent();
     }
-
   }
 }

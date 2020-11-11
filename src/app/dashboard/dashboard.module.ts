@@ -8,11 +8,12 @@ import { mailArchiveViewComponent } from 'src/app/dashboard/mailArchiveView.comp
 
 import { customerEventListComponent } from 'src/app/dashboard/customerEventList.component';
 
-import { customerEventViewComponent } from "src/app/dashboard/customerEventView.component";
-import { AccountDetailComponent } from "src/app/dashboard/accountDetail.component";
+import { customerEventViewComponent } from 'src/app/dashboard/customerEventView.component';
+import { AccountDetailComponent } from 'src/app/dashboard/accountDetail.component';
 import { SharedModule } from '../general/share.module';
 import { DashboardRoutingModule } from './dashboard.routes';
 import { SurveyModule } from '../survey/survey.module';
+import { CommonHEAModule } from '../common/common.module';
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -27,7 +28,8 @@ import { SurveyModule } from '../survey/survey.module';
     imports: [
         SharedModule,
         DashboardRoutingModule,
-        SurveyModule
+        SurveyModule,
+        CommonHEAModule
     ],
     providers: [],
     exports: [
@@ -36,5 +38,4 @@ import { SurveyModule } from '../survey/survey.module';
 
 })
 export class DashboardModule {
-
 }

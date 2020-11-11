@@ -66,6 +66,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() toggleSaveButtonEvent: EventEmitter<any> = new EventEmitter();
   @Output() saveRowEvent: EventEmitter<any> = new EventEmitter();
   @Output() buttonListEvent: EventEmitter<any> = new EventEmitter();
+  @Output() handleLinkEvent: EventEmitter<any> = new EventEmitter();
   expandedElement: any = null;
   showInput: Boolean = false;
   page = new Page();
@@ -206,8 +207,14 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
 
-  linkCall(routerLink, queryParam) {
-    this.router.navigate([routerLink], { queryParams: queryParam });
+  linkCall(routerLink: any, queryParam: any, col: any) {
+    const event = {
+      routLink: routerLink,
+      queryParam: queryParam,
+      value: col
+    };
+    this.handleLinkEvent.emit(event);
+    // this.router.navigate([routerLink], { queryParams: queryParam });
   }
 
   onButtonEvent(event: any) {

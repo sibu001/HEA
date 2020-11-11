@@ -26,5 +26,5 @@ export class AppConstant {
     public static alertMessage = '';
     public static administrativeReport = '';
     public static topic = '';
-    
+    public static prospects = '';
 }

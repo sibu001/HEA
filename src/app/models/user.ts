@@ -1,5 +1,3 @@
-import { Time } from '@angular/common';
-
 export class Users {
     public outhMeResponse: any;
     public customerResponse: any;
@@ -7,24 +5,23 @@ export class Users {
     public email: string;
     public phone: number;
     public id: number;
+    public name: string;
     public username: string;
     public password: string;
     public role: string;
     public userId: string;
-    public token: string=null;
+    public token: string = null;
+    public userData: any;
     public socolUsername: string;
-    public socolPassword: string
-    public paneNumber: number = 0;
-    public surveyLenght: number;
-
-    public leakFocusId: number = 1;
-
+    public socolPassword: string;
+    public paneNumber = 0;
+    public surveyLength: number;
+    public leakFocusId = 1;
     public recomandationNo: number;
     public dates: Date;
     public treadingLoadsValue: string;
-    public trendId: number = 1;
-
-    public profileId: number = 1;
+    public trendId = 1;
+    public profileId = 1;
     public myReportsData: any;
     public refreshToken: string;
     public instructionHtml: string;
@@ -42,8 +39,8 @@ export class Users {
     public surveyCode: any[] = [];
     public usesList: any[] = [];
     public currentPaneNumber: any;
-    public unitType: number = 0;
-    public resourceType: number = 0;
+    public unitType = 0;
+    public resourceType = 0;
     public lookupValue: string;
     public trendingProfileData: any;
     public mailContaint: string;
@@ -56,7 +53,7 @@ export class Users {
     public electricSmartMeterList: any[] = [];
     public electricDailySmartMeterList: any[] = [];
     public gasSmartMeterList: any[] = [];
-    public userEventList : any[] = [];
-    public customerEventList : any[] = [];
+    public userEventList: any[] = [];
+    public customerEventList: any[] = [];
 
 }

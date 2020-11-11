@@ -20,8 +20,8 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemMeasurementService: SystemMeasurementService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly router: Router,
-    private readonly el: ElementRef) {
+    private readonly el: ElementRef,
+    private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });

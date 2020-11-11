@@ -274,9 +274,9 @@ export class SurveyComponent implements AfterViewInit {
             this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
           }
         }
-        if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'LeaksIntro') {
+        if (this.users.surveyLength == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'LeaksIntro') {
           this.getAllSurvey();
-        } else if (this.users.surveyLenght > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != 'Profile') {
+        } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != 'Profile') {
           if (document.getElementById('_home')) {
             document.getElementById('_home').classList.add('header_menu_none');
           }
@@ -338,9 +338,9 @@ export class SurveyComponent implements AfterViewInit {
               this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
             }
           }
-          if (this.users.surveyLenght == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'LeaksIntro') {
+          if (this.users.surveyLength == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'LeaksIntro') {
             this.getAllSurvey();
-          } else if (this.users.surveyLenght > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != 'Profile') {
+          } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != 'Profile') {
             if (document.getElementById('_home')) {
               document.getElementById('_home').classList.add('header_menu_none');
             }
@@ -501,7 +501,7 @@ export class SurveyComponent implements AfterViewInit {
         const response = JSON.parse(JSON.stringify(data));
         document.getElementById('loader').classList.remove('loading');
         const surveylength = Object.keys(response.data).length;
-        this.users.surveyLenght = surveylength;
+        this.users.surveyLength = surveylength;
         this.users.surveyList = response.data;
         this.loginService.setUser(this.users);
         if (document.getElementById('_home')) {

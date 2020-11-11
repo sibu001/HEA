@@ -1,29 +1,60 @@
 <section class="space-top">
     <div class="container-fluid">
-        <div class="row" *ngIf="users.surveyList!=null&&users.surveyList!=undefined">
+        <div class="row"
+            *ngIf="users.surveyList!=null&&users.surveyList!=undefined">
             <div class="col-sm-9 topic_list">
                 <h3 class="select_next">
-                    <img src="assets/images/right-.png" class="back_img" (click)="back()">&nbsp;&nbsp;Topics history</h3>
-                <p class="accurate" [routerLink]="['/menu']">You have completed all existing Topics</p>
+                    <img src="assets/images/right-.png" class="back_img"
+                        (click)="back()">&nbsp;&nbsp;Topics history</h3>
+                <p class="accurate" *ngIf="users.role!=='ADMIN'">You have
+                    completed all existing Topics</p>
+                <div class="row" *ngIf="users.role==='ADMIN'">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-2">Audit Id:</div>
+                    <div class="col-sm-3">
+                        <input type="text"
+                            class="form-control" id="auditId" name="auditId"
+                            [(ngModel)]="users.outhMeResponse.auditId">
+                    </div>
+                    <div class="col-sm-2">Customer</div>
+                    <div class="col-sm-3">
+                        <input type="text"
+                            class="form-control" id="customer" name="customer"
+                            [(ngModel)]="users.outhMeResponse.user.name">
+                    </div>
+                    <div class="col-sm-1"></div>
+
+                </div>
+
                 <hr class="hr_space">
                 <div class="panel panel-info">
                     <div class="panel-group" id="accordion">
-                        <div class="panel panel-default" *ngFor="let userSurveyList of users.surveyList;index as i">
-                            <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#accordion" [attr.href]="'#collapse'+userSurveyList.surveyId">
+                        <div class="panel panel-default" *ngFor="let
+                            userSurveyList of users.surveyList;index as i">
+                            <div class="panel-heading collapsed"
+                                data-toggle="collapse" data-parent="#accordion"
+                                [attr.href]="'#collapse'+userSurveyList.surveyId">
                                 <!-- <i class="fa fa-fw fa-caret-down fa_icon"></i>
                                 <i class="fa fa-fw fa-caret-right fa_icon"></i> -->
-                                <img src="assets/images/triangledown.svg" class="fa fa-fw fa-caret-down fa_icon">
-                                <img src="assets/images/triangleright.svg" class="fa fa-fw fa-caret-right fa_icon"> &nbsp;&nbsp;
+                                <img src="assets/images/triangledown.svg"
+                                    class="fa fa-fw fa-caret-down fa_icon">
+                                <img src="assets/images/triangleright.svg"
+                                    class="fa fa-fw fa-caret-right fa_icon">
+                                &nbsp;&nbsp;
 
-                                <a class="topic_heading" id="topic{{i}}">{{userSurveyList.surveyDescription.label}}&nbsp;&nbsp;({{ userSurveyList.finishedDate | date
+                                <a class="topic_heading" id="topic{{i}}">{{userSurveyList.surveyDescription.label}}&nbsp;&nbsp;({{
+                                    userSurveyList.finishedDate | date
                                     : "MM/dd/y hh:mm" }})</a>
                             </div>
-                            <div id="collapse{{userSurveyList.surveyId}}" class="panel-collapse collapse">
+                            <div id="collapse{{userSurveyList.surveyId}}"
+                                class="panel-collapse collapse">
                                 <!-- The inside div eliminates the 'jumping' animation. -->
                                 <div class="panel-body">
-                                    <ng-container *ngFor="let paneList of userSurveyList.panes;index as j">
+                                    <ng-container *ngFor="let paneList of
+                                        userSurveyList.panes;index as j">
                                         <p class="topic_subpoint">
-                                            <a class="topic_point" (click)="goToTopicPage(userSurveyList.surveyId,paneList.paneCode,userSurveyList.surveyDescription.surveyCode,j)">{{paneList.label}}</a>
+                                            <a class="topic_point"
+                                                (click)="goToTopicPage(userSurveyList.surveyId,paneList.paneCode,userSurveyList.surveyDescription.surveyCode,j)">{{paneList.label}}</a>
                                         </p>
                                     </ng-container>
                                 </div>
@@ -32,57 +63,86 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-3" *ngIf="users.role!=='ADMIN'">
                 <p class="Energy_anaiytic">
-                    <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
+                    <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered
+                    by Home Energy Analytics, Inc.</p>
                 <p class="feedback">Send feedback to</p>
                 <p class="link_hea">
-                    <a href = "mailto:info@hea.com" class="info_hea">info@hea.com</a>
+                    <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
                 </p>
                 <hr>
                 <ul class="leaks">
                     <li>
-                        <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
+                        <a class="a_history" [routerLink]="['/topicshistory']">Topics
+                            history</a>
                     </li>
                     <li>
-                        <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
+                        <a class="a_history"
+                            [routerLink]="['/customerEventList']">Events history</a>
                     </li>
                     <li>
-                        <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
+                        <a class="a_history"
+                            [routerLink]="['/MailArchiveList']">Mail archive</a>
                     </li>
                     <li>
-                        <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
+                        <a class="a_history"
+                            [routerLink]="['/surveyRecommendationList']">Recommendations</a>
                     </li>
                     <li>
                         <div class="dropdown">
-                            <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
+                            <a class="dropdown-toggle" id="menu1"
+                                data-toggle="dropdown">Usage history
                             </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
+                            <ul class="dropdown-menu" role="menu"
+                                aria-labelledby="menu1">
+                                <li role="presentation" style="padding-bottom:
+                                    5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/gasList']">Gas</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas charge</a>
+                                <li role="presentation" style="padding-bottom:
+                                    5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/gasChargeList']">Gas
+                                        charge</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
+                                <li role="presentation" style="padding-bottom:
+                                    5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricityList']">Electricity</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                <li role="presentation" style="padding-bottom:
+                                    5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricityChargeList']">Electricity
+                                        charge</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                <li role="presentation" style="padding-bottom:
+                                    5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricitySmartMeterList']">Electric
+                                        smart meter</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
+                                <li role="presentation" style="padding-bottom:
+                                    5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricDailySmartMeterList']">Electric
+                                        Daily smart meter</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                <li role="presentation" style="padding-bottom:
+                                    5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/gasSmartMeter']">Gas
+                                        smart meter</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                 </ul>
+            </div>
+            <div class="col-sm-3" *ngIf="users.role==='ADMIN'">
+                <app-sidebar [showDetails]="true"></app-sidebar>
             </div>
         </div>
     </div>

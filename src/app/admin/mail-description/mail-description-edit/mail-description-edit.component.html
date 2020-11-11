@@ -1,0 +1,274 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Mail Description</span>
+        </p>
+        <form [formGroup]="topicForm" class="form-group form-padding">
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Id:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              {{id}}
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Source Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control" formControlName="sourceType" id="sourceType">
+                <option selected=selected value="CUST">By Customer</option>
+                <option value="REG">By Registration</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Name:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="mailName" id="mailName">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Filter:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class="form-control" formControlName="mailFilter" id="mailFilter"></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Period:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control" formControlName="period" id="period">
+                <option *ngFor='let period of periodData' [value]="period.key">{{period.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Intra-Period trigger:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class='form-control form-control-sm' formControlName="periodDayRule"
+                id="periodDayRule"> </textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after this many days:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class='form-control form-control-sm' formControlName="stopDays" id="stopDays">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after this many Messages:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class='form-control form-control-sm' formControlName="stopNumber" id="stopNumber">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop Sending Reset Period:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class='form-control form-control-sm' formControlName="resetPeriod" id="resetPeriod">
+                <option *ngFor='let period of periodData' [value]="period.key">{{period.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop Date Rule:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class='form-control form-control-sm' formControlName="stopDateRule"
+                id="stopDateRule"> </textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Subject Template:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class='form-control form-control-sm' formControlName="subjectTemplate"
+                id="subjectTemplate"> </textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class='form-control form-control-sm' formControlName="contentType" id="contentType">
+                <option value="application/csv">CSV</option>
+                <option value="H">HTML</option>
+                <option value="T">Text</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Use Customer Group Header:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" formControlName="includeHeader" id="includeHeader">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Use Customer Group Footer:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" formControlName="includeFooter" id="includeFooter">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">cc Energy Coach:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" formControlName="ccCoachUser" id="ccCoachUser">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Active:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" formControlName="isActive" id="isActive">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Allow Force Send for Admin:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" formControlName="allowAdminForce" id="allowAdminForce">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Ignore Opt Out mail flag:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" formControlName="ignoreOptOutMail" id="ignoreOptOutMail">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Calls:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Processed Time:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Next Permanent Topic:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Processed Time:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <button class="btn btn-primary" (click)='showStackTrace()'>Show Stack</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calls in the last session:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+            </div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Last Session Time:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+            </div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Time for the last session:</div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+            </div>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Customer groups</span></p>
+            <app-table [keys]="customerGroupKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true
+              [isSearch]="false" [data]="customerGroupDataSource" [totalElement]="customerGroupData.totalElements">
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Mail Content Parts</span></p>
+            <app-table [keys]="contentPartsKeys" [isPaginate]="true" [isSearch]="true" [data]="contentPartsDataSource"
+              [totalElement]="contentPartsData.totalElements" (addEvent)='addContentParts()'
+              (goToEditEvent)='goToEditContentParts()'>
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Context variables</span></p>
+            <app-table [keys]="variableKeys" [isPaginate]="true" [isSearch]="false" [data]="variableDataSource"
+              [totalElement]="variableData.totalElements" (addEvent)='addVariable()'
+              (goToEditEvent)='goToEditVariable()'>
+            </app-table>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1 sidePadding">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-11 row rowPadding sidePadding">
+              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10 sidePadding" *ngIf="id === undefined || id === null">
+              </div>
+              <div class="col-xs-4 col-sm-5 col-md-5 col-lg-7 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="Preview()">
+                  Preview
+                </button>
+              </div>
+              <div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button class="btn btn-primary" (click)='callMailReminder()'>
+                  Call Mail Reminder
+                </button>
+              </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
+                  Delete
+                </button>
+              </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sidePadding">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

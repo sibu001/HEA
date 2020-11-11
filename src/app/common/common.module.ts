@@ -42,7 +42,7 @@ import { RoundPipe } from '../pipes/round.pipe';
     DragDropModule,
 
     AgmCoreModule.forRoot({
-      apiKey: environment.googleMapAPIKey
+      apiKey: environment.googleMapAPIKey, libraries: ['places']
     })
   ],
   declarations: [TableComponent, GoogleMapComponent, SidebarComponent, RoundPipe],

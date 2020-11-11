@@ -34,6 +34,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0
   };
+  periodData: any[] = TableColumnData.PERIOD_DATA;
   isForce = false;
   topicData = TableColumnData.TOPIC_DESCRIPTION_DATA;
   private readonly subscriptions: Subscription = new Subscription();

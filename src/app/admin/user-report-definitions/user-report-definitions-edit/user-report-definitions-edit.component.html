@@ -1,0 +1,124 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">User Report</span>
+        </p>
+        <form [formGroup]="topicForm" class="form-group form-padding">
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="order" id="order">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Display Label:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control" formControlName="displayLabel" id="displayLabel">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select id="userReportType" formControlName="userReportType" class="form-control">
+                <option *ngFor='let type of reportType' [value]="type.key">{{type.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Label:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class='form-control form-control-sm' formControlName="label" id="label"> </textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select id="contentType" class='form-control form-control-sm' formControlName="contentType">
+                <option value="application/csv">CSV</option>
+                <option value="H">HTML</option>
+                <option value="T">Text</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Filter:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class='form-control form-control-sm' formControlName="filter" id="filter"> </textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName"> User Report Groups</span></p>
+            <app-table [keys]="userReportKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true
+              [isSearch]="false" [data]="userReportDataSource" [totalElement]="userReportData.totalElements">
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Content Parts</span></p>
+            <app-table [keys]="contentPartsKeys" [isPaginate]="true" [isSearch]="true" [data]="contentPartsDataSource"
+              [totalElement]="contentPartsData.totalElements" (addEvent)='addContentParts()'
+              (goToEditEvent)='goToEditContentParts()'>
+            </app-table>
+          </div>
+
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+            <p class="messages">
+              <img src='assets/images/dot03.gif' class='dot'>
+              <span class="messageName">Context variables</span></p>
+            <app-table [keys]="variableKeys" [isPaginate]="true" [isSearch]="false" [data]="variableDataSource"
+              [totalElement]="variableData.totalElements" (addEvent)='addVariable()'
+              (goToEditEvent)='goToEditVariable()'>
+            </app-table>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1 sidePadding">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-11 row rowPadding sidePadding">
+              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10 sidePadding" *ngIf="id === undefined || id === null">
+              </div>
+              <div class="col-xs-6 col-sm-7 col-md-6 col-lg-9 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="Preview()">
+                  Preview
+                </button>
+              </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
+                  Delete
+                </button>
+              </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sidePadding">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

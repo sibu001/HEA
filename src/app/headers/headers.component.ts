@@ -43,15 +43,15 @@ export class HeadersComponent implements OnInit {
       });
     });
 
-    if (this.users.role === 'USERS' && this.users.surveyLenght <= 3 || (this.users.currentPaneNumber !== null &&
+    if (this.users.role === 'USERS' && this.users.surveyLength <= 3 || (this.users.currentPaneNumber !== null &&
       this.users.currentPaneNumber !== undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile')) {
-        if (document.getElementById('_home')) {
-          document.getElementById('_home').classList.add('header_menu_none');
-        }  if (document.getElementById('all_topic')) {
-          document.getElementById('all_topic').classList.add('header_menu_none');
-        }  if (document.getElementById('menu_option')) {
-          document.getElementById('menu_option').classList.add('header_menu_none');
-        }
+      if (document.getElementById('_home')) {
+        document.getElementById('_home').classList.add('header_menu_none');
+      } if (document.getElementById('all_topic')) {
+        document.getElementById('all_topic').classList.add('header_menu_none');
+      } if (document.getElementById('menu_option')) {
+        document.getElementById('menu_option').classList.add('header_menu_none');
+      }
       this.headerResposiveMenu();
     }
     this.hideResponsiveMenu();
@@ -62,7 +62,7 @@ export class HeadersComponent implements OnInit {
       if (this.users.currentPaneNumber !== undefined) {
         surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
       }
-      if (this.users.surveyLenght <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false)) {
+      if (this.users.surveyLength <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false)) {
         setTimeout(() => {
           this.headerResposiveMenu();
         }, 300);
@@ -91,27 +91,31 @@ export class HeadersComponent implements OnInit {
       this.isResponsive = true;
       this.hideResponsiveMenu();
     } else if (numbers === 2) {
-      if (this.users.surveyLenght <= 3) {
-        this.router.navigate(['/surveyView']);
+      if (this.users.role === 'ADMIN') {
+        this.router.navigate(['admin/customer']);
       } else {
-        this.router.navigate(['/dashboard']);
+        if (this.users.surveyLength <= 3) {
+          this.router.navigate(['/surveyView']);
+        } else {
+          this.router.navigate(['/dashboard']);
+        }
       }
     } else if (numbers === 3) {
-      if (this.users.surveyLenght > 3 &&
+      if (this.users.surveyLength > 3 &&
         (this.users.currentPaneNumber !== undefined ?
           this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile' : true)) {
         this.router.navigate(['/accountDetail']);
       }
     } else if (numbers === 4) {
-      if (this.users.surveyLenght > 3) {
+      if (this.users.surveyLength > 3) {
         this.router.navigate(['/topicshistory']);
       }
     } else if (numbers === 5) {
-      if (this.users.surveyLenght > 3) {
+      if (this.users.surveyLength > 3) {
         this.router.navigate(['/topicshistory']);
       }
     } else if (numbers === 6) {
-      if (this.users.surveyLenght > 3) {
+      if (this.users.surveyLength > 3) {
         this.router.navigate(['/customerEventList']);
       }
     } else if (numbers === 7) {

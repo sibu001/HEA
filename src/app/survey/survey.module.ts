@@ -9,6 +9,7 @@ import { SafePipe } from "src/app/pipes/safeStyle";
 import { SearchFilterPipe } from "src/app/pipes/searchPipe";
 import { SharedModule } from '../general/share.module';
 import { SurveyRoutingModule } from './survey.routes';
+import { CommonHEAModule } from '../common/common.module';
 
 @NgModule({
     declarations: [
@@ -23,7 +24,8 @@ import { SurveyRoutingModule } from './survey.routes';
     ],
     imports: [
        SharedModule,
-       SurveyRoutingModule
+       SurveyRoutingModule,
+       CommonHEAModule
     ],
     providers: [],
     exports: [

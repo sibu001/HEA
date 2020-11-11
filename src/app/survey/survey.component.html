@@ -981,7 +981,7 @@
             </a></p>
         </div>
         <div *ngIf="users.currentPaneNumber.survey.surveyDescription.showRightMenu">
-          <ul class="leaks">
+          <ul class="leaks" *ngIf="users.role!=='ADMIN'">
             <li>
               <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
             </li>
@@ -994,9 +994,6 @@
             <li>
               <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
             </li>
-            <!-- <li>
-              <a class="a_history">Usage history</a>
-            </li> -->
             <li>
               <div class="dropdown">
                 <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
@@ -1029,6 +1026,7 @@
               </div>
             </li>
           </ul>
+          <app-sidebar *ngIf="users.role==='ADMIN'" [showDetails]="true"></app-sidebar>
         </div>
       </div>
     </div>

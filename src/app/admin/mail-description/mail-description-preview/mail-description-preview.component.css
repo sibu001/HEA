@@ -1,0 +1,104 @@
+section.space-top {
+  margin-top: 5.3em;
+}
+.borderTop {
+  border-top: 1px solid #ddd;
+}
+.borderBottom {
+  border-bottom: 1px solid #ddd;
+}
+.rowPadding {
+  padding: 5px;
+}
+.form-padding {
+  padding-left: 40px;
+  padding-right: 40px;
+}
+p.messages {
+  font-size: 17px;
+  font-weight: 600;
+  margin-top: 1%;
+}
+.messageName {
+  margin-left: 4px;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #76ba19;
+  border-color: #76ba19;
+  padding: 4px 23px;
+  border-radius: 3px;
+}
+.paddingTop {
+  padding-top: 3%;
+}
+
+.debug {
+  text-decoration: underline;
+  display: inline;
+}
+select {
+  background: url("src/assets/images/up_downArrow.png") no-repeat right;
+  -webkit-appearance: none;
+  padding-right: 30px;
+  background-position-x: 98%;
+}
+.sidePadding {
+  padding: 2px !important;
+  display: inline-table !important;
+  text-align: right !important;
+}
+
+@media screen and (max-width: 769px) {
+  .sidePadding {
+    text-align: left !important;
+  }
+}
+
+.custom-file-input {
+  font-size: smaller !important;
+  width: 165px;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+  -webkit-appearance: none;
+  margin: 1px 1px 1px 1px;
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
+}
+
+@media (max: 420) {
+  .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+
+  .custom-file-input::before {
+    content: "Select some files";
+    color: black;
+    display: inline-block;
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+  }
+  .custom-file-input:hover::before {
+    border-color: black;
+  }
+  .custom-file-input:active {
+    outline: 0;
+  }
+  .custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  }
+}
+
+input[type="file"] {
+  text-align: left;
+}

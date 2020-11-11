@@ -62,7 +62,7 @@
                     <ul class="nav navbar-nav navbar-right header">
                         <li class="active hi">
                             <a (click)="hide(3)"><span class="username">Hi
-                                    {{users?.outhMeResponse?.user?.name}}</span></a>
+                                    {{users?.name}}</span></a>
                         </li>
                         <li>
                             <a (click)="hide(2)" class="main-menu" id="_home">
@@ -72,13 +72,13 @@
                         <li class="active hi">
                             <a (click)="hide(3)"><span class="username">Account</span></a>
                         </li>
-                        <li>
-                            <a class="main-menu" (click)="hide(4)" id="all_topic" *ngIf="users?.role=='USERS'">
+                        <li *ngIf="users?.role=='USERS'">
+                            <a class="main-menu" (click)="hide(4)" id="all_topic" >
                                 <img src="assets/images/menu_icon_admin.svg" class="icon_size">&nbsp;&nbsp;<span
                                     class="menu">Topics</span></a>
                         </li>
-                        <li id="_classic1">
-                            <a class="main-menu" (click)="hide(9)" *ngIf="users?.role=='USERS'">
+                        <li id="_classic1"  *ngIf="users?.role=='USERS'">
+                            <a class="main-menu" (click)="hide(9)">
                                 <img src="assets/images/menu_icon_home.svg" class="icon_size">&nbsp;&nbsp;<span
                                     class="menu">Return to classic interface</span></a>
                         </li>
@@ -127,7 +127,7 @@
                 <ul class="demo" id="main-menu">
                     <li>
                         <a class="main-menu" (click)="hide(3)"><span class="menu">Hi
-                                {{users?.outhMeResponse?.user?.name}}</span></a>
+                                {{users?.name}}</span></a>
                     </li>
                     <li id="_home1">
                         <a class="main-menu" (click)="hide(2)">
@@ -138,13 +138,13 @@
                         <a class="main-menu" (click)="hide(3)"><img src="assets/images/img2.png"
                                 class="icon_size">&nbsp;&nbsp;<span class="menu">Account</span></a>
                     </li>
-                    <li id="all_topic1">
-                        <a class="main-menu" (click)="hide(4)" *ngIf="users?.role=='USERS'">
+                    <li id="all_topic1" *ngIf="users?.role!=='ADMIN'">
+                        <a class="main-menu" (click)="hide(4)">
                             <img src="assets/images/menu_icon_admin.svg" class="icon_size">&nbsp;&nbsp;<span
                                 class="menu">Topics</span></a>
                     </li>
-                    <li id="_classic1">
-                        <a class="main-menu" (click)="hide(9)" *ngIf="users?.role=='USERS'">
+                    <li id="_classic1"  *ngIf="users?.role!=='ADMIN'">
+                        <a class="main-menu" (click)="hide(9)">
                             <img src="assets/images/menu_icon_home.svg" class="icon_size">&nbsp;&nbsp;<span
                                 class="menu">Return to classic interface</span></a>
                     </li>
@@ -154,9 +154,9 @@
                                 class="menu">Logout</span></a>
                     </li>
 
-                    <div id="menu_option1" *ngIf="users?.role=='USERS'">
+                    <div id="menu_option1" *ngIf="users?.role!=='ADMIN'">
                         <li>
-                            <a class="history_a" (click)="hide(2)">Topics history</a>
+                            <a class="history_a" (click)="hide(5)">Topics history</a>
                         </li>
                         <li>
                             <a class="history_a" [routerLink]="['/customerEventList']">Events history</a>
@@ -168,7 +168,7 @@
                             <a class="history_a" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
                         </li>
                     </div>
-                    <li id="menu_option2">
+                    <li id="menu_option2"  *ngIf="users?.role!=='ADMIN'">
                         <div class="dropdown">
                             <a class="dropdown-toggle history_a" id="menu1" data-toggle="dropdown">Usage history
                             </a>

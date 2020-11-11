@@ -28,7 +28,9 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
       AdministrativeManagementState
     ]),
   ],
-  providers: [AdministrativeService],
-  declarations: [AdministrativeReportsListComponent, AdministrativeReportsEditComponent, AdministrativeReportsCallComponent]
+  declarations: [
+    AdministrativeReportsListComponent,
+    AdministrativeReportsEditComponent,
+    AdministrativeReportsCallComponent]
 })
 export class AdministrativeReportsModule { }

@@ -19,6 +19,7 @@ import { UtilityCredentialsComponent } from './utility-credentials/utility-crede
 import { CustomerAlertComponent } from './customer-alert/customer-alert.component';
 import { CustomerEventTypeComponent } from './customer-event-type/customer-event-type.component';
 import { StaffNoteComponent } from './staff-note/staff-note.component';
+import { LoginService } from 'src/app/services/login.service';
 
 @NgModule({
   imports: [
@@ -46,7 +47,7 @@ import { StaffNoteComponent } from './staff-note/staff-note.component';
     CustomerEventTypeComponent,
     StaffNoteComponent
   ],
-  providers: [SystemService, DatePipe,
+  providers: [SystemService, DatePipe, LoginService,
     CustomerService,
     { provide: MAT_DIALOG_DATA, useValue: {} }
   ],

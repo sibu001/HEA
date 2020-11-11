@@ -1,0 +1,75 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Customer Group Mail Part</span>
+        </p>
+        <form [formGroup]="partForm" class="form-group form-padding">
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Customer Group:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control" formControlName="customerGroup" id="customerGroup">
+                <option *ngFor='let customer of customerGroupData' [value]="customer">{{customer.value}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Part Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control" formControlName="partType" id="partType">
+                <option value="header">Header</option>
+                <option value="footer">Footer</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" formControlName="disableHtmlEditor" id="disableHtmlEditor">
+              Disable Html Editor
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm' formControlName="content"
+                id="content"> </textarea>
+              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value' [toolbarSettings]='tools' formControlName='content'
+                id='content'>
+              </ejs-richtexteditor>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row rowPadding">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
+              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 sidePadding">
+                <button type="button" class="btn btn-primary" *ngIf="id !== undefined && id !== null"
+                  style="float: right" (click)="delete()">
+                  Delete
+                </button>
+              </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar [showDetails]='true'></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>
