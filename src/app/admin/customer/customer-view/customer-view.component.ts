@@ -89,6 +89,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       this.loadCustomerAlert(this.id);
       this.loadCustomerEvent(this.id);
       this.loadStaffNote(this.id);
+      this.loadCustomerFile(this.id);
       this.customerService.loadCustomerById(this.id);
       this.loadCustomerById();
     }
@@ -377,7 +378,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.customerService.getStaffNoteList().pipe(skipWhile((item: any) => !item))
       .subscribe((staffNote: any) => {
         this.staffData.content = staffNote;
-        this.staffData.totalElements = staffNote.totalSize;
+        this.staffData.totalElements = staffNote.length;
         this.staffDataSource = [...this.staffData.content];
       }));
   }
@@ -419,8 +420,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     this.customerService.loadCustomerFileList(customerId);
     this.subscriptions.add(this.customerService.getCustomerFileList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerFileList: any) => {
+        console.log(customerFileList);
         this.filesData.content = customerFileList.list;
-        this.filesData.totalElements = customerFileList.totalSize;
+        this.filesData.totalElements = customerFileList.length;
         this.filesDataSource = [...this.filesData.content];
       }));
   }

@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -59,7 +59,7 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
       order: [event !== undefined ? event.order : ''],
       displayLabel: [event !== undefined ? event.displayLabel : ''],
       userReportType: [event !== undefined ? event.userReportType : ''],
-      label: [event !== undefined ? event.label : ''],
+      label: [event !== undefined ? event.label : '', Validators.required],
       contentType: [event !== undefined ? event.contentType : ''],
       filter: [event !== undefined ? event.filter : '']
     });

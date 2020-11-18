@@ -1,5 +1,6 @@
 export enum SystemActionTypes {
     GET_CUSTOMER_LIST = 'Get All Customer List',
+    GET_CUSTOMER_VIEW_CONFIGURATION_LIST = 'Get All Customer view configuration List',
     GET_CUSTOMER_BY_ID = 'Get Customer By Id',
     SAVE_CUSTOMER = 'Save Customer',
     UPDATE_CUSTOMER = 'Update Customer',
@@ -39,6 +40,12 @@ export enum SystemActionTypes {
 export class GetCustomerListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_LIST;
     constructor(readonly force: boolean, readonly filter: any, readonly viewType: number) {
+    }
+}
+
+export class GetCustomerViewConfigurationListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_VIEW_CONFIGURATION_LIST;
+    constructor(readonly viewConfigurationId: any, readonly filter: any) {
     }
 }
 

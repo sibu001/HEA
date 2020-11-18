@@ -43,8 +43,8 @@ export class TopicPaneDataBlockEditComponent implements OnInit, OnDestroy {
     this.variableForm = this.formBuilder.group({
       blockCode: [event !== undefined ? event.blockCode : '', Validators.required],
       orderNumber: [event !== undefined ? event.calculationType : '1'],
-      label: [event !== undefined ? event.calculationExpression : ''],
-      reportLabel: [event !== undefined ? event.calculationPeriod : ''],
+      label: [event !== undefined ? event.calculationExpression : '', Validators.required],
+      reportLabel: [event !== undefined ? event.calculationPeriod : '', Validators.required],
       isArray: [event !== undefined ? event.isArray : ''],
       minRowsCount: [event !== undefined ? event.minRowsCount : ''],
       maxRowsCount: [event !== undefined ? event.maxRowsCount : ''],

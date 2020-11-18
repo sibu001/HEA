@@ -3,18 +3,23 @@ import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
   DeleteAdministrativeReportByIdAction,
+  DeleteEventHistoryByIdAction,
   DeleteProspectsByIdAction,
   DeleteTopicByIdAction,
   GetAdministrativeReportByIdAction,
   GetAdministrativeReportListAction,
+  GetEventHistoryByIdAction,
+  GetEventHistoryListAction,
   GetProspectsByIdAction,
   GetProspectsListAction,
   GetTopicByIdAction,
   GetTopicListAction,
   SaveAdministrativeReportAction,
+  SaveEventHistoryAction,
   SaveProspectsAction,
   SaveTopicAction,
   UpdateAdministrativeReportAction,
+  UpdateEventHistoryAction,
   UpdateProspectsAction,
   UpdateTopicAction
 } from '../state/administrative.action';
@@ -53,6 +58,14 @@ export class AdministrativeService {
 
   getProspectsById(): Observable<any> {
     return this.store.select(AdministrativeManagementState.getProspectsById);
+  }
+
+  getEventHistoryList(): Observable<any> {
+    return this.store.select(AdministrativeManagementState.getEventHistoryList);
+  }
+
+  getEventHistoryById(): Observable<any> {
+    return this.store.select(AdministrativeManagementState.getEventHistoryById);
   }
 
 
@@ -114,5 +127,25 @@ export class AdministrativeService {
 
   deleteProspectsById(id: number): Observable<AdministrativeManagementState> {
     return this.store.dispatch(new DeleteProspectsByIdAction(id));
+  }
+
+  loadEventHistoryList(force: boolean, filter: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetEventHistoryListAction(force, filter));
+  }
+
+  loadEventHistoryById(id: number): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetEventHistoryByIdAction(id));
+  }
+
+  saveEventHistory(customer: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new SaveEventHistoryAction(customer));
+  }
+
+  updateEventHistory(id: number, customer: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new UpdateEventHistoryAction(id, customer));
+  }
+
+  deleteEventHistoryById(id: number): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new DeleteEventHistoryByIdAction(id));
   }
 }

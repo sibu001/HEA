@@ -14,6 +14,11 @@ export enum AdministrativeActionTypes {
     SAVE_PROSPECTS = 'Save Prospects',
     UPDATE_PROSPECTS = 'Update Prospects',
     DELETE_PROSPECTS_BY_ID = 'Delete Prospects By Id',
+    GET_EVENT_HISTORY_LIST = 'Get All EventHistory List',
+    GET_EVENT_HISTORY_BY_ID = 'Get EventHistory By Id',
+    SAVE_EVENT_HISTORY = 'Save EventHistory',
+    UPDATE_EVENT_HISTORY = 'Update EventHistory',
+    DELETE_EVENT_HISTORY_BY_ID = 'Delete EventHistory By Id',
 }
 export class GetAdministrativeReportListAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_ADMINISTRATIVE_REPORT_LIST;
@@ -102,6 +107,36 @@ export class UpdateProspectsAction {
 
 export class DeleteProspectsByIdAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.DELETE_PROSPECTS_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class GetEventHistoryListAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_EVENT_HISTORY_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetEventHistoryByIdAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_EVENT_HISTORY_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class SaveEventHistoryAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.SAVE_EVENT_HISTORY;
+    constructor(readonly eventHistory: any) {
+    }
+}
+
+export class UpdateEventHistoryAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.UPDATE_EVENT_HISTORY;
+    constructor(readonly id: number, readonly eventHistory: any) {
+    }
+}
+
+export class DeleteEventHistoryByIdAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.DELETE_EVENT_HISTORY_BY_ID;
     constructor(readonly id: number) {
     }
 }

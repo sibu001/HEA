@@ -180,7 +180,36 @@ const ROUTES: Routes = [
       {
         path: 'userReportDefinitions',
         loadChildren: './admin/user-report-definitions/user-report-definitions.module#UserReportDefinitionsModule'
+      },
+      {
+        path: 'jsPages',
+        loadChildren: './admin/js-pages/js-pages.module#JsPagesModule'
+      },
+      {
+        path: 'viewConfiguration',
+        loadChildren: './admin/view-configuration/view-configuration.module#ViewConfigurationModule'
+      },
+      {
+        path: 'keyIndicator',
+        loadChildren: './admin/key-indicator/key-indicator.module#KeyIndicatorModule'
+      },
+      {
+        path: 'trendingChartDefinition',
+        loadChildren: './admin/trending-chart-definition/trending-chart-definition.module#TrendingChartDefinitionModule'
+      },
+      {
+        path: 'summaryChartDefinition',
+        loadChildren: './admin/summary-chart-definition/summary-chart-definition.module#SummaryChartDefinitionModule'
+      },
+      {
+        path: 'shareMyData',
+        loadChildren: './admin/share-my-data/share-my-data.module#ShareMyDataModule'
+      },
+      {
+        path: 'waterUsageHistory',
+        loadChildren: './admin/water-usage-history/water-usage-history.module#WaterUsageHistoryModule'
       }
+
     ]
   },
   // {

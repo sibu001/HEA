@@ -1,158 +1,194 @@
 <section class="space-top">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-8">
-                <p class="accurate">Gas</p>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <label class="control-label col-lg-2 col-sm-3" for="email">
-                                    <span class="start">Year:</span>
-                                </label>
-                                <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="year" name="Year" [(ngModel)]="year">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-sm-6">
-                        <form class="form-horizontal">
-                            <div class="form-group">
-                                <label class="control-label col-lg-2 col-sm-3" for="code">
-                                    <span class="start">Month:</span>
-                                </label>
-                                <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="month" name="Month" [(ngModel)]="month">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12" style="text-align:right;">
-                        <button type="button" class="btn btn-primary" (click)="searchData()">Show</button>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <p class="Messages">
-                            <img src="assets/images/dot03.gif" class="dot">&nbsp;Values</p>
-                    </div>
-                </div>
-                <div class="table-responsive">
-                    <table id="example" class="table table-striped table-bordered table-sm" data-source="data-source"
-                        [mfData]="usageHistoryList" #mf="mfDataTable" [mfRowsOnPage]="10">
-                        <thead>
-                            <tr>
-                                <th class="th-sm no-sort">
-                                    <mfDefaultSorter by="img"><img src="assets/images/whitebox.png" class="colorbox">
-                                    </mfDefaultSorter>
-                                </th>
-                                <th class="th-sm">
-                                    <mfDefaultSorter by="year">Year</mfDefaultSorter>
-                                </th>
-                                <th class="th-sm">
-                                    <mfDefaultSorter by="month">Month</mfDefaultSorter>
-                                </th>
-                                <th class="fwns no-sort">
-                                    Billing Period
-                                </th>
-                                <th class="fwns no-sort">
-                                    Billing Date
-                                </th>
-                                <th class="fwns no-sort">
-                                    Value
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let usageList of usageHistoryList;index as i">
-                                <td> <img src="assets/images/whitebox.png" class="colorbox"></td>
-                                <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
-                                    {{usageList.year}}</td>
-                                <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
-                                    {{usageList.month}}</td>
-                                <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
-                                    {{usageList.startDate | date : "dd-MMM-y"}} -
-                                    {{usageList.endDate | date : "dd-MMM-y"}}</td>
-                                <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
-                                    {{usageList.billingDate | date : "dd-MMM-y"}}</td>
-                                <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
-                                    {{usageList.value}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+   <div class="container-fluid">
+      <div class="row">
+         <div class="col-lg-9 col-md-9 col-sm-8">
+            <p class="accurate">Gas</p>
+            <div *ngIf='isAdminView' class="row">
+               <div class="col-sm-6">
+                  <form class="form-horizontal">
+                     <div class="form-group">
+                        <label class="control-label col-lg-2 col-sm-3" for="email">
+                           <span class="start">Audit Id:</span>
+                        </label>
+                        <div class="col-lg-5 col-sm-6">
+                           <input type="text" class="form-control" id="auditId" name="auditId" [(ngModel)]="auditId" />
+                        </div>
+                     </div>
+                  </form>
+               </div>
+               <div class="col-sm-6">
+                  <form class="form-horizontal">
+                     <div class="form-group">
+                        <label class="control-label col-lg-2 col-sm-3" for="code">
+                           <span class="start">Customer Name:</span>
+                        </label>
+                        <div class="col-lg-5 col-sm-6">
+                           <input type="text" class="form-control" id="customerName" name="customerName"
+                              [(ngModel)]="customerName" />
+                        </div>
+                     </div>
+                  </form>
+               </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn">
-                <div class="feedback">
-                    <p class="Energy_anaiytic">
-                        <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
-                    <p class="feedback">Send feedback to</p>
-                    <p class="link_hea">
-                        <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
-                    </p>
-                    <hr>
-                    <ul class="leaks">
-                        <li>
-                            <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
-                        </li>
-                        <li>
-                            <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
-                        </li>
-                        <li>
-                            <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
-                        </li>
-                        <li>
-                            <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
-                        </li>
-                        <li>
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
-                                </a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas
-                                            charge</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricityList']">Electricity</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricityChargeList']">Electricity charge</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart
-                                            meter</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart
-                                            meter</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+            <div class="row">
+               <div class="col-sm-6">
+                  <form class="form-horizontal">
+                     <div class="form-group">
+                        <label class="control-label col-lg-2 col-sm-3" for="email">
+                           <span class="start">Year:</span>
+                        </label>
+                        <div class="col-lg-5 col-sm-6">
+                           <input type="text" class="form-control" id="year" name="Year" [(ngModel)]="year" />
+                        </div>
+                     </div>
+                  </form>
+               </div>
+               <div class="col-sm-6">
+                  <form class="form-horizontal">
+                     <div class="form-group">
+                        <label class="control-label col-lg-2 col-sm-3" for="code">
+                           <span class="start">Month:</span>
+                        </label>
+                        <div class="col-lg-5 col-sm-6">
+                           <input type="text" class="form-control" id="month" name="Month" [(ngModel)]="month" />
+                        </div>
+                     </div>
+                  </form>
+               </div>
             </div>
-        </div>
-    </div>
+            <div class="row">
+               <div class="col-sm-12" style="text-align: right">
+                  <button type="button" class="btn btn-primary" (click)="searchData()">
+                     Show
+                  </button>
+               </div>
+            </div>
+            <hr />
+            <div class="row">
+               <div class="col-sm-12">
+                  <p class="Messages">
+                     <img src="assets/images/dot03.gif" class="dot" />&nbsp;Values
+                  </p>
+                  <app-table [keys]="keys" [checkbox]=true [isPaginate]="true" [isHideAdd]=true [isSearch]="false"
+                     [data]="dataSource" [totalElement]="usageHistoryData.totalElements"
+                     (changePageEvent)="getGasList()">
+                  </app-table>
+               </div>
+            </div>
+            <!-- <table id="example" class="table table-striped table-bordered table-sm" data-source="data-source"
+                  [mfData]="usageHistoryList" #mf="mfDataTable" [mfRowsOnPage]="10">
+                  <thead>
+                     <tr>
+                        <th class="th-sm no-sort">
+                           <mfDefaultSorter by="img"><img src="assets/images/whitebox.png" class="colorbox" />
+                           </mfDefaultSorter>
+                        </th>
+                        <th class="th-sm">
+                           <mfDefaultSorter by="year">Year</mfDefaultSorter>
+                        </th>
+                        <th class="th-sm">
+                           <mfDefaultSorter by="month">Month</mfDefaultSorter>
+                        </th>
+                        <th class="fwns no-sort">Billing Period</th>
+                        <th class="fwns no-sort">Billing Date</th>
+                        <th class="fwns no-sort">Value</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                     <tr *ngFor="let usageList of usageHistoryList; index as i">
+                        <td>
+                           <img src="assets/images/whitebox.png" class="colorbox" />
+                        </td>
+                        <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
+                           {{ usageList.year }}
+                        </td>
+                        <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
+                           {{ usageList.month }}
+                        </td>
+                        <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
+                           {{ usageList.startDate | date: "dd-MMM-y" }} -
+                           {{ usageList.endDate | date: "dd-MMM-y" }}
+                        </td>
+                        <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
+                           {{ usageList.billingDate | date: "dd-MMM-y" }}
+                        </td>
+                        <td data-toggle="modal" data-target="#myModal" (click)="increment(i)">
+                           {{ usageList.value }}
+                        </td>
+                     </tr>
+                  </tbody>
+               </table> -->
+         </div>
+         <div *ngIf='isAdminView' class="col-md-3 .col-lg-3 col-sm-12">
+            <app-sidebar></app-sidebar>
+         </div>
+         <div *ngIf='!isAdminView' class="col-lg-3 col-md-3 col-sm-4 rightColumn">
+            <div class="feedback">
+               <p class="Energy_anaiytic">
+                  <img src="assets/images/dot03.gif" class="dot" />&nbsp;Powered by
+                  Home Energy Analytics, Inc.
+               </p>
+               <p class="feedback">Send feedback to</p>
+               <p class="link_hea">
+                  <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
+               </p>
+               <hr />
+               <ul class="leaks">
+                  <li>
+                     <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
+                  </li>
+                  <li>
+                     <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
+                  </li>
+                  <li>
+                     <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
+                  </li>
+                  <li>
+                     <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
+                  </li>
+                  <li>
+                     <div class="dropdown">
+                        <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                           <li role="presentation" style="padding-bottom: 5px">
+                              <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
+                           </li>
+                           <li role="presentation" style="padding-bottom: 5px">
+                              <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas
+                                 charge</a>
+                           </li>
+                           <li role="presentation" style="padding-bottom: 5px">
+                              <a role="menuitem" tabindex="-1" [routerLink]="['/electricityList']">Electricity</a>
+                           </li>
+                           <li role="presentation" style="padding-bottom: 5px">
+                              <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity
+                                 charge</a>
+                           </li>
+                           <li role="presentation" style="padding-bottom: 5px">
+                              <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric
+                                 smart meter</a>
+                           </li>
+                           <li role="presentation" style="padding-bottom: 5px">
+                              <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric
+                                 Daily smart
+                                 meter</a>
+                           </li>
+                           <li role="presentation" style="padding-bottom: 5px">
+                              <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart
+                                 meter</a>
+                           </li>
+                        </ul>
+                     </div>
+                  </li>
+               </ul>
+            </div>
+         </div>
+      </div>
+   </div>
 </section>
 <div id="myModal" class="modal fade" role="dialog">
-    <ng-container *ngIf="userObj != undefined && userObj != null">
-        <app-usage-history-detail [usageModelObj]="userObj2" (onModelSave)="getGasList()"></app-usage-history-detail>
-    </ng-container>
-
+   <ng-container *ngIf="userObj != undefined && userObj != null">
+      <app-usage-history-detail [usageModelObj]="userObj2" (onModelSave)="getGasList()"></app-usage-history-detail>
+   </ng-container>
 </div>

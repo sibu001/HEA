@@ -4,6 +4,7 @@ import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
 import { Router } from "@angular/router";
 import { DatePipe } from '@angular/common';
+import { TableColumnData } from '../data/common-data';
 declare var $: any;
 
 @Component({
@@ -26,11 +27,32 @@ export class electricityChargeListComponent implements OnInit {
   endDateOrigView: any;
   billingDateView: any;
   filterCheck: boolean;
+  auditId: string;
+  customerName: string;
+  isAdminView = false;
+  dataSource: any;
+  usageHistoryData = {
+    content: [],
+    totalElements: 0,
+  };
+  keys = TableColumnData.GAS_KEYS;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
-    this.users = this.loginService.getUser();
-    this.usageHistoryList = new Array;
+    this.route.queryParams.subscribe(params => {
+      this.isAdminView = params['isAdminView'];
+    });
+    if (!this.isAdminView) {
+      this.users = this.loginService.getUser();
+    } else {
+      this.users.outhMeResponse = {};
+      this.users.outhMeResponse.userId = '2139';
+      // this.getUserById();
+    } this.usageHistoryList = new Array;
     this.getGasList();
   }
+  // getUserById(): any {
+  //   this.users.outhMeResponse = {};
+  //   this.users.outhMeResponse.userId = '2139';
+  // }
   ngOnInit() {
     // $(document).ready(function () {
     // $('#example').DataTable();
@@ -78,6 +100,8 @@ export class electricityChargeListComponent implements OnInit {
         this.loginService.setUser(this.users);
         this.usageHistoryList = new Array;
         this.usageHistoryList = response.data;
+        this.usageHistoryData.content = response.data;
+        this.dataSource = [...this.usageHistoryData.content];
         if ((this.year != undefined && this.year != null) || (this.month != undefined && this.month != null)) {
           this.searchData();
         }

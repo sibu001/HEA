@@ -1,9 +1,11 @@
-import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 
 @Component({
@@ -16,11 +18,16 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   id: any;
   eventForm: FormGroup;
   eventTypeData: Array<any> = TableColumnData.CUSTOMER_EVENT_TYPE;
-  constructor(private readonly formBuilder: FormBuilder,
+  isForce = false;
+  userId: any;
+  private readonly subscriptions: Subscription = new Subscription();
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly administrativeService: AdministrativeService,
     private readonly activateRoute: ActivatedRoute,
     private readonly router: Router,
-    private readonly el: ElementRef,
-    private readonly location: Location) {
+    private readonly el: ElementRef) {
+
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
@@ -28,13 +35,16 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setForm(undefined);
+    if (this.id !== undefined) {
+      this.administrativeService.loadEventHistoryById(this.id);
+      this.loadEventHistoryById();
+    }
   }
-
   setForm(event: any) {
-    this.eventForm = this.formBuilder.group({
+    this.eventForm = this.fb.group({
       id: [event !== undefined ? event.id : ''],
-      auditId: [event !== undefined ? event.auditId : ''],
-      customerName: [event !== undefined ? event.customerName : ''],
+      auditId: [event !== undefined ? event.auditId : '', Validators.required],
+      customerName: [event !== undefined ? event.customerName : '', Validators.required],
       eventType: [event !== undefined ? event.eventType : ''],
       eventDate: [event !== undefined ? event.eventDate : ''],
       additionalComments: [event !== undefined ? event.additionalComments : '']
@@ -51,13 +61,52 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  back() {
-    this.location.back();
+  loadEventHistoryById() {
+    this.subscriptions.add(this.administrativeService.getEventHistoryById().pipe(skipWhile((item: any) => !item))
+      .subscribe((eventHistory: any) => {
+        if (this.isForce) {
+          this.router.navigate(['admin/eventHistory/eventHistoryEdit'], { queryParams: { 'id': eventHistory.id } });
+        }
+        this.setForm(eventHistory);
+      }));
   }
 
+
+  back() {
+    this.router.navigate(['admin/eventHistory/eventHistoryList'], { queryParams: { 'force': this.isForce } });
+  }
+  delete() {
+    this.subscriptions.add(this.administrativeService.deleteEventHistoryById(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['admin/eventHistory/eventHistoryList'], { queryParams: { 'force': true } });
+      }));
+  }
+
+  save() {
+    if (this.eventForm.valid) {
+      if (this.id !== null && this.id !== undefined) {
+        this.subscriptions.add(this.administrativeService.updateEventHistory(this.id, this.eventForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadEventHistoryById();
+          }));
+      } else {
+        this.subscriptions.add(this.administrativeService.saveEventHistory(this.eventForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadEventHistoryById();
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
+  }
   get f() { return this.eventForm.controls; }
 
   ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 
 }

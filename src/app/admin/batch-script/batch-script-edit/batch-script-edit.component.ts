@@ -68,15 +68,15 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
   setForm(event: any) {
     this.batchScriptForm = this.formBuilder.group({
-      batchName: [event !== undefined ? event.batchName : '', Validators.required],
+      batchName: [event !== undefined ? event.batchName : ''],
       period: [event !== undefined ? event.period : '', Validators.required],
       periodDay: [event !== undefined ? event.periodDay : '', Validators.required],
-      forEachCustomer: [event !== undefined ? event.forEachCustomer : '', Validators.required],
-      calculationType: [event !== undefined ? event.calculationType : '', Validators.required],
-      batchFilter: [event !== undefined ? event.batchFilter : '', Validators.required],
-      topic: [event !== undefined ? event.topic : '', Validators.required],
-      calculation: [event !== undefined ? event.calculation : '', Validators.required],
-      mailAddress: [event !== undefined ? event.mailAddress : '', Validators.required],
+      forEachCustomer: [event !== undefined ? event.forEachCustomer : ''],
+      calculationType: [event !== undefined ? event.calculationType : ''],
+      batchFilter: [event !== undefined ? event.batchFilter : ''],
+      topic: [event !== undefined ? event.topic : ''],
+      calculation: [event !== undefined ? event.calculation : ''],
+      mailAddress: [event !== undefined ? event.mailAddress : ''],
       comments: [event !== undefined ? event.comments : '']
     });
   }

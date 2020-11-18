@@ -17,6 +17,7 @@ import {
   GetCustomerFileByIdAction,
   GetCustomerFileListAction,
   GetCustomerListAction,
+  GetCustomerViewConfigurationListAction,
   GetStaffByIdAction,
   GetStaffListAction,
   GetStaffNoteByIdAction,
@@ -48,6 +49,10 @@ export class CustomerService {
 
   getCustomerList(): Observable<any> {
     return this.store.select(CustomerManagementState.getCustomerList);
+  }
+
+  getCustomerViewConfigurationList(): Observable<any> {
+    return this.store.select(CustomerManagementState.getCustomerViewConfigurationList);
   }
 
   getCustomerDataSource(): Observable<any> {
@@ -113,6 +118,10 @@ export class CustomerService {
 
   loadCustomerList(force: boolean, filter: any, viewType: number): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetCustomerListAction(force, filter, viewType));
+  }
+
+  loadCustomerViewConfigurationList(viewConfigurationId: any, filter: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetCustomerViewConfigurationListAction(viewConfigurationId, filter));
   }
 
   loadCustomerById(id: number): Observable<CustomerManagementState> {

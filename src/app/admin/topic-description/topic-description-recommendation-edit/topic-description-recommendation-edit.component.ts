@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -64,7 +64,7 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
 
   setForm(event: any): any {
     this.recommendationForm = this.formBuilder.group({
-      code: [event !== undefined ? event.code : ''],
+      code: [event !== undefined ? event.code : '', Validators.required],
       type: [event !== undefined ? event.type : '1'],
       label: [event !== undefined ? event.label : ''],
       suggestion: [event !== undefined ? event.suggestion : ''],

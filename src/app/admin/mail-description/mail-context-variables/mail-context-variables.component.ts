@@ -1,10 +1,12 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -13,60 +15,89 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   styleUrls: ['./mail-context-variables.component.css']
 })
 export class MailContextVariablesComponent implements OnInit, OnDestroy {
-
-
-  public tools: object = {
-    items: ['Undo', 'Redo', '|',
-      'Bold', 'Italic', 'Underline', 'StrikeThrough', '|',
-      'FontName', 'FontSize', 'FontColor', 'BackgroundColor', '|',
-      'SubScript', 'SuperScript', '|',
-      'LowerCase', 'UpperCase', '|',
-      'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
-      'Indent', 'Outdent', '|', 'CreateLink',
-      'Image', '|', 'ClearFormat', 'Print', 'SourceCode', '|', 'FullScreen',
-      {
-        tooltipText: 'Select Style',
-        undo: true,
-        template: `
-        <select class="e-tbar-btn e-btn" tabindex="-1" id="custom_tbar" style="width:100px">
-        <option value='nmt'>nmt</option>
-        </select>`
-      }]
-  };
   id: any;
   contentForm: FormGroup;
   calculationType = TableColumnData.CALCULATION_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
-  constructor(private readonly formBuilder: FormBuilder,
+  isForce = false;
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly mailService: MailService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly location: Location) {
+    private readonly router: Router,
+    private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
   }
 
-
   ngOnInit() {
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.mailService.loadContextVariableById(this.id);
+      this.loadContextVariableById();
     }
   }
 
   setForm(event: any) {
-    this.contentForm = this.formBuilder.group({
+    this.contentForm = this.fb.group({
       field: [event !== undefined ? event.field : ''],
       orderNumber: [event !== undefined ? event.orderNumber : ''],
       calculationType: [event !== undefined ? event.calculationType : ''],
       calculationExpression: [event !== undefined ? event.calculationExpression : '']
     });
   }
-  back() {
-    this.location.back();
+
+  loadContextVariableById() {
+    this.subscriptions.add(this.mailService.getContextVariableById().pipe(skipWhile((item: any) => !item))
+      .subscribe((contextVariable: any) => {
+        if (this.isForce) {
+          this.router.navigate(['admin/mailDescription/mailContextVariables'], { queryParams: { 'id': contextVariable.id } });
+        }
+        this.setForm(contextVariable);
+      }));
   }
 
-  save(): any { }
+  back() {
+    this.router.navigate(['admin/contextVariable/contextVariableList'], { queryParams: { 'force': this.isForce } });
+  }
+  delete() {
+    this.subscriptions.add(this.mailService.deleteContextVariableById(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'force': true } });
+      }));
+  }
 
-  delete(): any { }
+  save() {
+    if (this.contentForm.valid) {
+      if (this.id !== null && this.id !== undefined) {
+        this.subscriptions.add(this.mailService.updateContextVariable(this.id, this.contentForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadContextVariableById();
+          }));
+      } else {
+        this.subscriptions.add(this.mailService.saveContextVariable(this.contentForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadContextVariableById();
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
+  }
+  validateForm() {
+    for (const key of Object.keys(this.contentForm.controls)) {
+      if (this.contentForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
 
   get f() { return this.contentForm.controls; }
 

@@ -4,6 +4,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { CustomerError } from '../../customer-state-management/state/customer.action';
 import {
     GetAdministrativeReportListAction,
     GetAdministrativeReportByIdAction,
@@ -19,7 +20,12 @@ import {
     DeleteProspectsByIdAction,
     GetProspectsByIdAction,
     SaveProspectsAction,
-    UpdateProspectsAction
+    UpdateProspectsAction,
+    DeleteEventHistoryByIdAction,
+    GetEventHistoryByIdAction,
+    GetEventHistoryListAction,
+    SaveEventHistoryAction,
+    UpdateEventHistoryAction
 } from './administrative.action';
 import { AdministrativeManagementModel } from './administrative.model';
 
@@ -32,7 +38,9 @@ import { AdministrativeManagementModel } from './administrative.model';
         topicList: undefined,
         topic: undefined,
         prospectsList: undefined,
-        prospects: undefined
+        prospects: undefined,
+        eventHistoryList: undefined,
+        eventHistory: undefined,
     }
 })
 
@@ -76,6 +84,15 @@ export class AdministrativeManagementState {
         return state.prospects;
     }
 
+    @Selector()
+    static getEventHistoryList(state: AdministrativeManagementModel): any {
+        return state.eventHistoryList;
+    }
+
+    @Selector()
+    static getEventHistoryById(state: AdministrativeManagementModel): any {
+        return state.eventHistory;
+    }
 
     @Action(GetAdministrativeReportListAction)
     getAllAdministrativeReportList(ctx: StateContext<AdministrativeManagementModel>, action: GetAdministrativeReportListAction): Actions {
@@ -348,4 +365,97 @@ export class AdministrativeManagementState {
                         this.utilityService.showErrorMessage(error.message);
                     }));
     }
+
+    @Action(GetEventHistoryListAction)
+    getAllEventHistoryList(ctx: StateContext<AdministrativeManagementModel>, action: GetEventHistoryListAction): Actions {
+        const force: boolean = action.force || AdministrativeManagementState.getEventHistoryList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.eventHistory, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        // const res = Transformer.transformEventHistoryTableData(response);
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            eventHistoryList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                            ctx.dispatch(new CustomerError(error));
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetEventHistoryByIdAction)
+    getEventHistoryById(ctx: StateContext<AdministrativeManagementModel>, action: GetEventHistoryByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.eventHistory + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        eventHistory: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteEventHistoryByIdAction)
+    deleteEventHistoryById(ctx: StateContext<AdministrativeManagementModel>, action: DeleteEventHistoryByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.eventHistory + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveEventHistoryAction)
+    saveEventHistory(ctx: StateContext<AdministrativeManagementModel>, action: SaveEventHistoryAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.eventHistory, AppConstant.eventHistory)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        eventHistory: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateEventHistoryAction)
+    updateEventHistory(ctx: StateContext<AdministrativeManagementModel>, action: UpdateEventHistoryAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.eventHistory, AppConstant.eventHistory + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        eventHistory: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
 }

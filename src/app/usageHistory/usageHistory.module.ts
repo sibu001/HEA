@@ -9,6 +9,7 @@ import { UsageHistoryDetailComponent } from './usage-history-detail/usage-histor
 import { electricDailySmartMeterListComponent } from './electricDailySmartMeterList.component';
 import { SharedModule } from '../general/share.module';
 import { UsageHistoryRoutingModule } from './usageHistory.routes';
+import { CommonHEAModule } from '../common/common.module';
 @NgModule({
     declarations: [
         electricityUsageListComponent,
@@ -22,6 +23,7 @@ import { UsageHistoryRoutingModule } from './usageHistory.routes';
     ],
     imports: [
         SharedModule,
+        CommonHEAModule,
         UsageHistoryRoutingModule,
     ],
     providers: [],

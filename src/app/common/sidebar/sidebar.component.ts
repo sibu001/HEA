@@ -11,7 +11,6 @@ export class SidebarComponent implements OnInit {
   @Input() showMethod: Boolean = false;
   @Input() showTopicVariableFields: Boolean = false;
   @Input() showDataFields: Boolean = false;
-  @Input() showDetails: Boolean = false;
   apiURL = environment.webBaseUrl;
   methodName = [];
   dataField = [];

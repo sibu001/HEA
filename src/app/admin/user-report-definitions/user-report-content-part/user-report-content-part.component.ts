@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService } from '@syncfusion/ej2-angular-richtexteditor';
@@ -57,7 +57,7 @@ export class UserReportContentPartComponent implements OnInit, OnDestroy {
       order: [event !== undefined ? event.order : ''],
       contentFilter: [event !== undefined ? event.contentFilter : ''],
       disableHtmlEditor: [event !== undefined ? event.disableHtmlEditor : ''],
-      content: [event !== undefined ? event.content : ''],
+      content: [event !== undefined ? event.content : '', Validators.required],
       imageUrl: [event !== undefined ? event.imageUrl : ''],
       imageFile: [event !== undefined ? event.imageFile : ''],
       embeddedImage: [event !== undefined ? event.embeddedImage : ''],

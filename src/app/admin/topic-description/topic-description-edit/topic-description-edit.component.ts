@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   HtmlEditorService,
@@ -82,9 +82,9 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.topicForm = this.formBuilder.group({
-      topicCode: [event !== undefined ? event.topicCode : ''],
-      displayLabel: [event !== undefined ? event.displayLabel : ''],
-      reportLabel: [event !== undefined ? event.reportLabel : ''],
+      topicCode: [event !== undefined ? event.topicCode : '', Validators.required],
+      displayLabel: [event !== undefined ? event.displayLabel : '', Validators.required],
+      reportLabel: [event !== undefined ? event.reportLabel : '', Validators.required],
       description: [event !== undefined ? event.description : ''],
       firstPaneOrSection: [event !== undefined ? event.firstPaneOrSection : ''],
       isActive: [event !== undefined ? event.isActive : ''],

@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Subscription } from 'rxjs';
@@ -87,7 +87,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     this.paneForm = this.formBuilder.group({
       isSection: [event !== undefined ? event.isSection : ''],
       hideSection: [event !== undefined ? event.hideSection : ''],
-      paneCode: [event !== undefined ? event.paneCode : ''],
+      paneCode: [event !== undefined ? event.paneCode : '', Validators.required],
       mainSectionLabel: [event !== undefined ? event.mainSectionLabel : ''],
       label: [event !== undefined ? event.label : ''],
       nextPane: [event !== undefined ? event.nextPane : ''],

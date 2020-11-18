@@ -3,6 +3,34 @@
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-8">
                 <p class="accurate">Electricity Smart Meter</p>
+                <div *ngIf='isAdminView' class="row">
+                    <div class="col-sm-6">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-lg-2 col-sm-3" for="email">
+                                    <span class="start">Audit Id:</span>
+                                </label>
+                                <div class="col-lg-5 col-sm-6">
+                                    <input type="text" class="form-control" id="auditId" name="auditId"
+                                        [(ngModel)]="auditId" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-6">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="control-label col-lg-2 col-sm-3" for="code">
+                                    <span class="start">Customer Name:</span>
+                                </label>
+                                <div class="col-lg-5 col-sm-6">
+                                    <input type="text" class="form-control" id="customerName" name="customerName"
+                                        [(ngModel)]="customerName" />
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col-sm-6">
                         <form class="form-horizontal">
@@ -65,9 +93,13 @@
                     <div class="col-sm-12">
                         <p class="Messages">
                             <img src="assets/images/dot03.gif" class="dot">&nbsp;Values</p>
+                        <app-table [keys]="keys" [checkbox]=true [isPaginate]="true" [isHideAdd]=true [isSearch]="false"
+                            [data]="dataSource" [totalElement]="usageHistoryData.totalElements"
+                            (changePageEvent)="perFormGetList('smartMeterElectric')">
+                        </app-table>
                     </div>
                 </div>
-                <div class="table-responsive">
+                <!-- <div class="table-responsive">
 
                     <table id="example" class="table table-striped table-bordered table-sm" data-source="data-source"
                         [mfData]="usageHistoryList" #mf="mfDataTable" [mfRowsOnPage]="10">
@@ -105,15 +137,18 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                </div> -->
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn">
+            <div *ngIf='isAdminView' class="col-md-3 .col-lg-3 col-sm-12">
+                <app-sidebar></app-sidebar>
+            </div>
+            <div *ngIf='!isAdminView' class="col-lg-3 col-md-3 col-sm-4 rightColumn">
                 <div class="feedback">
                     <p class="Energy_anaiytic">
                         <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
                     <p class="feedback">Send feedback to</p>
                     <p class="link_hea">
-                        <a href = "mailto:info@hea.com" class="info_hea">info@hea.com</a>
+                        <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
                     </p>
                     <hr>
                     <ul class="leaks">

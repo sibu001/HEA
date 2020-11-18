@@ -27,4 +27,11 @@ export class AppConstant {
     public static administrativeReport = '';
     public static topic = '';
     public static prospects = '';
+    public static contextVariable = '';
+    public static mailDescription = '';
+    public static mailContentPart = '';
+    public static eventHistory = '';
+    public static userReportDefinitions = '';
+    public static userReportDefinitionContextVariableTypes = '';
+    public static userReportDefinitionContentParts = '';
 }

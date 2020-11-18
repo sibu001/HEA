@@ -54,5 +54,13 @@ export class AdminFilter {
     public topicFilter: any = {
         page: null,
         formValue: null
-    }
+    };
+    public mailDescriptionFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public eventHistoryFilter: any = {
+        page: null,
+        formValue: null
+    };
 }

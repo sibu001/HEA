@@ -68,7 +68,7 @@ export class ProspectsEditComponent implements OnInit, OnDestroy {
         this.setForm(prospects);
       }));
   }
-  onNoClick(){
+  onNoClick() {
     this.dialogRef.close(false);
   }
 
@@ -109,6 +109,10 @@ export class ProspectsEditComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.prospectsForm.controls; }
+
+  goToEditProspects(event: any): any {
+
+  }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

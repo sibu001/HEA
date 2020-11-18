@@ -1,0 +1,117 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <span class="messageName">Dynamic view</span>
+        </p>
+        <form [formGroup]="configForm" class="form-group form-padding">
+          <div class="row borderBottom borderTop rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Owner:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Configuration Name:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class='form-control form-control-sm' formControlName="configurationName"
+                id="configurationName">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Base Entity:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select class="form-control  form-control-sm" formControlName="baseEntity" id="baseEntity">
+                <option value="customer">Customer List</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type='checkbox' formControlName="isPaged" id="isPaged">
+              Is Paged
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type='checkbox' formControlName="shared" id="shared">
+              Shared
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Note:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <textarea class="form-control" formControlName="note" id="note">
+              </textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Calls:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type='text' class='form-control form-control-sm' formControlName="totalCalls" id="totalCalls">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Processed Time:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <div class=row>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  <input type=" text" class='form-control form-control-sm' formControlName="totalProcessedTime"
+                    id="totalProcessedTime">
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  (000 ms per request)
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row rowPadding">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1 sidePadding">
+              <button type="button" class="btn btn-primary" (click)="back()">
+                Back
+              </button>
+            </div>
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-11 row rowPadding sidePadding">
+              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-10 sidePadding" *ngIf="id === undefined || id === null">
+              </div>
+              <div class="col-xs-7 col-sm-8 col-md-7 col-lg-9 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button class="btn btn-primary" (click)='goToAttributeList()'>
+                  Attributes List
+                </button>
+              </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sidePadding" *ngIf="id !== undefined && id !== null">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
+                  Delete
+                </button>
+              </div>
+              <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sidePadding">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar ></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

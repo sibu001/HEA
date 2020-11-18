@@ -203,7 +203,7 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   imageClickEvent(col, row) {
-    this.imageEvent.emit({ key: col.key, eventType: col.event, row: row });
+    this.imageEvent.emit({ key: col.key, eventType: col.event, row: row, col: col });
   }
 
 

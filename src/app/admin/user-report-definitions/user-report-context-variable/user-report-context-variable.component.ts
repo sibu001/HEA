@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -34,8 +34,8 @@ export class UserReportContextVariableComponent implements OnInit {
 
   setForm(event: any) {
     this.contentForm = this.formBuilder.group({
-      field: [event !== undefined ? event.field : ''],
-      orderNumber: [event !== undefined ? event.orderNumber : ''],
+      field: [event !== undefined ? event.field : '', Validators.required],
+      orderNumber: [event !== undefined ? event.orderNumber : '', Validators.required],
       calculationType: [event !== undefined ? event.calculationType : ''],
       calculationExpression: [event !== undefined ? event.calculationExpression : '']
     });

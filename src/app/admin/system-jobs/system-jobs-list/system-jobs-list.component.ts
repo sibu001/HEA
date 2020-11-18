@@ -18,7 +18,7 @@ import { SystemThreadInfoComponent } from '../system-thread-info/system-thread-i
   styleUrls: ['./system-jobs-list.component.css']
 })
 export class SystemJobsListComponent implements OnInit, OnDestroy {
-  public keys: Array<TABLECOLUMN>;
+  public keys: Array<TABLECOLUMN> = TableColumnData.SYSTEM_JOBS_KEY;
   public dataSource: any;
   public systemJobsData = {
     content: [],
@@ -51,7 +51,7 @@ export class SystemJobsListComponent implements OnInit, OnDestroy {
       console.log('The dialog was closed' + result);
     });
   }
-  
+
   findSystemJobs(force: boolean): void {
     this.systemMeasurementService.loadSystemJobsList(force, '');
     this.subscriptions.add(this.systemMeasurementService.getSystemJobsList().pipe(skipWhile((item: any) => !item))

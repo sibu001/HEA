@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,8 @@ import {
   LinkService,
   ToolbarService
 } from '@syncfusion/ej2-angular-richtexteditor';
+import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
+import { skipWhile } from 'rxjs/operators';
 @Component({
   selector: 'app-mail-content-parts',
   templateUrl: './mail-content-parts.component.html',
@@ -40,45 +42,94 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
   id: any;
   contentForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
-  constructor(private readonly formBuilder: FormBuilder,
+  isForce = false;
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly mailService: MailService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly location: Location,
-    public dialog: MatDialog) {
+    private readonly router: Router,
+    private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
   }
 
-
   ngOnInit() {
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.mailService.loadMailContentPartById(this.id);
+      this.loadMailContentPartById();
     }
   }
 
   setForm(event: any) {
-    this.contentForm = this.formBuilder.group({
+    this.contentForm = this.fb.group({
       label: [event !== undefined ? event.label : ''],
       order: [event !== undefined ? event.order : ''],
       contentFilter: [event !== undefined ? event.contentFilter : ''],
       disableHtmlEditor: [event !== undefined ? event.disableHtmlEditor : ''],
-      content: [event !== undefined ? event.content : ''],
+      content: [event !== undefined ? event.content : '', Validators.required],
       imageUrl: [event !== undefined ? event.imageUrl : ''],
       imageFile: [event !== undefined ? event.imageFile : ''],
       embeddedImage: [event !== undefined ? event.embeddedImage : ''],
     });
   }
-  back() {
-    this.location.back();
+
+  loadMailContentPartById() {
+    this.subscriptions.add(this.mailService.getMailContentPartById().pipe(skipWhile((item: any) => !item))
+      .subscribe((mailContentPart: any) => {
+        if (this.isForce) {
+          this.router.navigate(['admin/mailDescription/mailContentParts'], { queryParams: { 'id': mailContentPart.id } });
+        }
+        this.setForm(mailContentPart);
+      }));
   }
 
-  save(): any { }
+  back() {
+    this.router.navigate(['admin/mailContentPart/mailDescriptionList'], { queryParams: { 'force': this.isForce } });
+  }
+  delete() {
+    this.subscriptions.add(this.mailService.deleteMailContentPartById(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'force': true } });
+      }));
+  }
 
-  delete(): any { }
+  save() {
+    if (this.contentForm.valid) {
+      if (this.id !== null && this.id !== undefined) {
+        this.subscriptions.add(this.mailService.updateMailContentPart(this.id, this.contentForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadMailContentPartById();
+          }));
+      } else {
+        this.subscriptions.add(this.mailService.saveMailContentPart(this.contentForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadMailContentPartById();
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
+  }
+  validateForm() {
+    for (const key of Object.keys(this.contentForm.controls)) {
+      if (this.contentForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
 
   get f() { return this.contentForm.controls; }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
+
 }

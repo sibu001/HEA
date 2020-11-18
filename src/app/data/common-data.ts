@@ -74,8 +74,8 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_FILE_KEY: Array<TABLECOLUMN> = [
-        { key: 'fileName', displayName: 'File Name' },
-        { key: 'timeStamp', displayName: 'Time Stamp' },
+        { key: 'name', displayName: 'File Name' },
+        { key: 'timestamp', displayName: 'Time Stamp' },
         { key: 'description', displayName: 'Description' },
         { key: 'size', displayName: 'Size' }
     ];
@@ -1885,9 +1885,9 @@ export class TableColumnData {
     ];
 
     static readonly PANE_CHART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'field', displayName: 'Field' },
-        { key: 'comments', displayName: 'Comments' },
-        { key: 'calculationPeriod', displayName: 'Calculation Period' },
+        { key: 'chartCode', displayName: 'Chart Code' },
+        { key: 'orderNumber', displayName: 'Order Number' },
+        { key: 'chartTitle', displayName: 'Chart Title' },
     ];
 
     static readonly CHART_SERIES_FIELD_KEY: Array<TABLECOLUMN> = [
@@ -2457,5 +2457,159 @@ export class TableColumnData {
         { key: 'waterHeatMap', value: 'Water Heat Map' },
         { key: 'waterProfile', value: 'Water Profile' },
         { key: 'waterProgress', value: 'Water Progress' },
+    ];
+    static readonly JS_PAGES_KEYS: Array<TABLECOLUMN> = [
+        { key: 'code', sort: 'code', displayName: 'Code', isEdit: true },
+        { key: 'pageName', sort: 'pageName', displayName: 'Page Name' },
+        { key: 'template', displayName: 'Template' },
+        { key: 'showInMenu', displayName: 'Show In Menu' },
+    ];
+
+    static readonly VIEW_CONF_KEYS: Array<TABLECOLUMN> = [
+        { key: 'name', sort: 'name', displayName: 'Name', isEdit: true },
+        { key: 'username', sort: 'username', displayName: 'User Name' },
+        { key: 'shared', displayName: 'Shared' },
+        { key: 'baseEntity', displayName: 'Base Entity' },
+        { key: 'attributes', displayName: '', type: 'link', links: [{ routerLink: '/admin/viewConfiguration/viewConfigurationAttributeList', displayName: 'Attributes', queryParam: {} }] },
+    ];
+
+    static readonly ATTRIBUTE_LIST_KEYS: Array<TABLECOLUMN> = [
+        { key: 'columnOrder', sort: 'columnOrder', displayName: 'Column Order', isEdit: true },
+        { key: 'definition', sort: 'definition', displayName: 'Definition' },
+        { key: 'label', sort: 'label', displayName: 'Label' },
+        { key: 'attributeType', sort: 'attributeType', displayName: 'Attribute Type' },
+        { key: 'sortAllow', sort: 'sortAllow', displayName: 'Sort Allow' },
+    ];
+
+    static readonly ATTRIBUTE_TYPE_DATA: any[] = [
+        { key: 'C', value: 'Only Column' },
+        { key: 'S', value: 'Script Calculation' },
+        { key: 'V', value: 'Variable' },
+        { key: 'A', value: 'Alerts' },
+        { key: 'E', value: 'Events' },
+        { key: 'N', value: 'Notes' },
+        { key: 'D', value: 'Customer Files' },
+    ];
+
+    static readonly DEFINITION_DATA: any[] = [
+        { key: 'customerId', value: 'Customer ID' },
+        { key: 'userId', value: 'User ID' },
+        { key: 'auditId" selected="selected', value: 'Audit ID' },
+        { key: 'activationDate', value: 'Activation Date' },
+        { key: 'registrationDate', value: 'Registration Date' },
+        { key: 'staffPermission', value: 'Staff Permission' },
+        { key: 'findReason', value: 'Find Reason' },
+        { key: 'phoneNumber', value: 'Phone Number' },
+        { key: 'placeCode', value: 'Place Code' },
+        { key: 'city', value: 'City' },
+        { key: 'postalCode', value: 'Postal Code' },
+        { key: 'state', value: 'Sate' },
+        { key: 'street1', value: 'Street' },
+        { key: 'pgeAgreementSigned', value: 'PG&amp;E' },
+        { key: 'pgeAddress', value: 'PG&amp;E Address' },
+        { key: 'pgeHasPool', value: 'Has Pool' },
+        { key: 'solarPvInstalled', value: 'Solar PV' },
+        { key: 'calWaterAccount', value: 'CalWater Account' },
+        { key: 'purismaAccount', value: 'Purisma Account' },
+        { key: 'zillowConstructionSQFT', value: 'Zillow, SQFT' },
+        { key: 'zillowLotSize', value: 'Zillow, Lot Size' },
+        { key: 'zillowYearBuilt', value: 'Zillow, Year Built' },
+        { key: 'constructionSQFT', value: 'SQFT' },
+        { key: 'lotSize', value: 'Lot Size' },
+        { key: 'yearBuilt', value: 'Year Built' },
+        { key: 'permissionGranted', value: 'Permission Granted' },
+        { key: 'livedMoreThan', value: 'Lived More Than' },
+        { key: 'historyCollected', value: 'History Collected' },
+        { key: 'constructionValidated', value: 'Construction Validated' },
+        { key: 'optOutMail', value: 'Opt Out Mail' },
+        { key: 'pgeBillDateDay', value: 'PG&amp;E Bill Date Day' },
+        { key: 'notes', value: 'Notes' },
+        { key: 'excludeFromReports', value: 'Exclude From Reports' },
+        { key: 'ngHeatingModel', value: 'NG Heating Model' },
+        { key: 'elCoolingModel', value: 'El Cooling Model' },
+        { key: 'elHeatingModel', value: 'El Heating Model' },
+        { key: 'eligibleStartDate', value: 'Eligible Start Date' },
+        { key: 'latitude', value: 'Latitude' },
+        { key: 'longitude', value: 'Longitude' },
+        { key: 'maxAlertLevel', value: 'Alert level' },
+        { key: 'coachUser.username', value: 'Coach Username' },
+        { key: 'coachUser.email', value: 'Coach E-Mail' },
+        { key: 'coachUser.staffPhoneNumber', value: 'Coach Phone' },
+        { key: 'coachUser.status', value: 'Coach Status' },
+        { key: 'coachUser.name', value: 'Coach' },
+        { key: 'user.username', value: 'Username' },
+        { key: 'user.email', value: 'E-Mail' },
+        { key: 'user.status', value: 'Status' },
+        { key: 'user.name', value: 'Name' },
+        { key: 'user.comments', value: 'Comments' },
+        { key: 'user.lastSuccessfulUtilityReadDate', value: 'Most recent utility data collection' },
+        { key: 'customerGroup.groupCode', value: 'Group Code' },
+        { key: 'customerGroup.groupName', value: 'Group Name' },
+        { key: 'place.place', value: 'Place' },
+        { key: 'place.placeName', value: 'Place Name' },
+        { key: 'place.stationId', value: 'Station ID' },
+        { key: 'place.timezone', value: 'Time Zone' },
+        { key: 'programGroup.programCode', value: 'Program Code' },
+        { key: 'programGroup.programName', value: 'Program Name' },
+    ];
+
+    static readonly TRENDING_PART_KEYS: Array<TABLECOLUMN> = [
+        { key: 'label', sort: 'label', displayName: 'Label', isEdit: true },
+        { key: 'orderNumber', sort: 'orderNumber', displayName: 'Order Number' },
+        { key: 'explanation', sort: 'Explanation', displayName: 'Explanation' },
+    ];
+
+    static readonly TRENDING_CHART_KEYS: Array<TABLECOLUMN> = [
+        { key: 'chartCode', displayName: 'Chart Code', isEdit: true },
+        { key: 'orderNumber', displayName: 'Order Number' },
+        { key: 'resourceUse', displayName: 'Resource Use' },
+        { key: 'unitType ', displayName: 'Unit Type' },
+        { key: 'useType', displayName: 'Use Type' },
+    ];
+
+    static readonly SUMMARY_CHART_KEYS: Array<TABLECOLUMN> = [
+        { key: 'chartCode', sort: 'chartCode', displayName: 'Chart Code', isEdit: true },
+        { key: 'orderNumber', sort: 'orderNumber', displayName: 'Order Number' },
+        { key: 'resourceUse', displayName: 'Resource Use' },
+        { key: 'unitType ', displayName: 'Unit Type' },
+        { key: 'useType', displayName: 'Use Type' },
+    ];
+    static readonly DATA_SET_KEYS: Array<TABLECOLUMN> = [
+        { key: 'queryParameter', displayName: 'Query Parameter', addRowType: 'text' },
+        { key: 'calculationFormula', displayName: 'Calculation Formula', addRowType: 'textarea' },
+    ];
+
+    static readonly GAS_KEYS: Array<TABLECOLUMN> = [
+        { key: 'year', sort: 'year', displayName: 'Year' },
+        { key: 'month', sort: 'month', displayName: 'Month' },
+        { key: 'billingPeriod', displayName: 'Billing Period' },
+        { key: 'billingDate', displayName: 'Billing Date' },
+        { key: 'value', displayName: 'Value' },
+    ];
+
+    static readonly SMART_METER_KEYS: Array<TABLECOLUMN> = [
+        { key: 'year', sort: 'year', displayName: 'Year' },
+        { key: 'month', sort: 'month', displayName: 'Month' },
+        { key: 'day', sort: 'day', displayName: 'Day' },
+        { key: 'hour', sort: 'hour', displayName: 'Hour' },
+        { key: 'value', displayName: 'Value' },
+    ];
+
+    static readonly SMART_METER_DAILY_KEYS: Array<TABLECOLUMN> = [
+        { key: 'year', sort: 'year', displayName: 'Year' },
+        { key: 'month', sort: 'month', displayName: 'Month' },
+        { key: 'day', sort: 'day', displayName: 'Day' },
+        { key: 'value', displayName: 'Value' },
+    ];
+
+    static readonly SHARE_MY_DATA_KEYS: Array<TABLECOLUMN> = [
+        { key: 'auditId', sort: 'auditId', displayName: 'Audit Id', isEdit: true },
+        { key: 'subscriptionId', sort: 'subscriptionId', displayName: 'Subscription Id' },
+        { key: 'createdDate', sort: 'createdDate', displayName: 'Created Date' },
+        { key: 'account', sort: 'account', displayName: 'Account' },
+        { key: 'name', sort: 'name', displayName: 'Name' },
+        { key: 'city', sort: 'city', displayName: 'City' },
+        { key: 'address', sort: 'address', displayName: 'Address' },
+        { key: 'createNew', displayName: 'create New?' },
     ];
 }

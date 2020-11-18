@@ -22,6 +22,7 @@ import {
     GetCustomerFileByIdAction,
     GetCustomerFileListAction,
     GetCustomerListAction,
+    GetCustomerViewConfigurationListAction,
     GetStaffByIdAction,
     GetStaffListAction,
     GetStaffNoteByIdAction,
@@ -49,6 +50,7 @@ import { CustomerManagementModel } from './customer.model';
     name: 'customerManagement',
     defaults: {
         customerList: undefined,
+        customerViewConfigurationList: undefined,
         customer: undefined,
         customerDataSource: undefined,
         staffList: undefined,
@@ -76,6 +78,11 @@ export class CustomerManagementState {
     @Selector()
     static getCustomerList(state: CustomerManagementModel): any {
         return state.customerList;
+    }
+
+    @Selector()
+    static getCustomerViewConfigurationList(state: CustomerManagementModel): any {
+        return state.customerViewConfigurationList;
     }
 
     @Selector()
@@ -163,10 +170,8 @@ export class CustomerManagementState {
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        const dataSource = Transformer.transformCustomerTableData(response, action.viewType);
                         ctx.patchState({
                             customerList: response,
-                            customerDataSource: dataSource
                         });
                     },
                         error => {
@@ -176,6 +181,25 @@ export class CustomerManagementState {
                         }));
         }
         return result;
+    }
+
+
+    @Action(GetCustomerViewConfigurationListAction)
+    getCustomerViewConfigurationList(ctx: StateContext<CustomerManagementModel>, action: GetCustomerViewConfigurationListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.customer + '/' + AppConstant.viewConfigurations + '/' + action.viewConfigurationId, action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerViewConfigurationList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
     }
 
     @Action(GetCustomerByIdAction)
@@ -703,13 +727,13 @@ export class CustomerManagementState {
     @Action(GetCustomerFileListAction)
     getAllCustomerFileList(ctx: StateContext<CustomerManagementModel>, action: GetCustomerFileListAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/customerNotes')
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/files')
             .pipe(
                 tap((response: any) => {
-                    // const res = Transformer.transformStaffTableData(response);
+                    const res = Transformer.transformCustomerFileTableData(response);
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        staffNoteList: response,
+                        customerFileList: res,
                     });
                 },
                     error => {
@@ -722,12 +746,12 @@ export class CustomerManagementState {
     @Action(GetCustomerFileByIdAction)
     getCustomerFileById(ctx: StateContext<CustomerManagementModel>, action: GetCustomerFileByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/customerNotes/' + action.id)
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/files/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        staffNote: response,
+                        customerFile: response,
                     });
                 },
                     error => {
@@ -739,7 +763,7 @@ export class CustomerManagementState {
     @Action(DeleteCustomerFileByIdAction)
     deleteCustomerFileById(ctx: StateContext<CustomerManagementModel>, action: DeleteCustomerFileByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.customer + '/' + action.customerId + '/customerNotes/' + action.id)
+        return this.loginService.performDelete(AppConstant.customer + '/' + action.customerId + '/files/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -754,13 +778,13 @@ export class CustomerManagementState {
     @Action(SaveCustomerFileAction)
     saveCustomerFile(ctx: StateContext<CustomerManagementModel>, action: SaveCustomerFileAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPostMultiPartDataPost(action.customerFile, AppConstant.customer + '/' + action.customerId + '/customerNotes')
+        return this.loginService.performPostMultiPartDataPost(action.customerFile, AppConstant.customer + '/' + action.customerId + '/files')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        staffNote: response,
+                        customerFile: response,
                     });
                 },
                     error => {

@@ -9,6 +9,7 @@ import { SystemManagementState } from 'src/app/store/system-state-management/sta
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 
 @NgModule({
   imports: [
@@ -24,6 +25,6 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
     ]),
   ],
   declarations: [ScriptDebugConsoleComponent],
-  providers: [SystemService]
+  providers: [SystemService, SystemMeasurementService]
 })
 export class DebugModule { }

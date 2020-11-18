@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
@@ -42,8 +42,8 @@ export class SystemParameterEditComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.systemParameterForm = this.formBuilder.group({
-      parameterCode: [event !== undefined ? event.parameterCode : ''],
-      description: [event !== undefined ? event.description : ''],
+      parameterCode: [event !== undefined ? event.parameterCode : '', Validators.required],
+      description: [event !== undefined ? event.description : '', Validators.required],
       parameterValue: [event !== undefined ? event.parameterValue : ''],
       formatType: [event !== undefined ? event.formatType : ''],
       needServerRestart: [event !== undefined ? event.needServerRestart : ''],

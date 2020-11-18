@@ -1,11 +1,13 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { StackTraceComponent } from '../stack-trace/stack-trace.component';
@@ -39,38 +41,41 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0,
   };
+  isForce = false;
+  userId: any;
   private readonly subscriptions: Subscription = new Subscription();
-  constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService: SystemService,
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly mailService: MailService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly location: Location,
     private readonly router: Router,
-    public dialog: MatDialog) {
+    private readonly dialog: MatDialog,
+    private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
   }
 
-
   ngOnInit() {
-
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.mailService.loadMailDescriptionById(this.id);
+      this.loadMailDescriptionById();
     }
   }
 
   setForm(event: any) {
-    this.topicForm = this.formBuilder.group({
+    this.topicForm = this.fb.group({
       sourceType: [event !== undefined ? event.sourceType : ''],
       mailName: [event !== undefined ? event.mailName : ''],
       mailFilter: [event !== undefined ? event.mailFilter : ''],
-      period: [event !== undefined ? event.period : ''],
-      periodDayRule: [event !== undefined ? event.periodDayRule : ''],
+      period: [event !== undefined ? event.period : '', Validators.required],
+      periodDayRule: [event !== undefined ? event.periodDayRule : '', Validators.required],
       stopDays: [event !== undefined ? event.stopDays : ''],
       stopNumber: [event !== undefined ? event.stopNumber : ''],
-      resetPeriod: [event !== undefined ? event.resetPeriod : ''],
-      stopDateRule: [event !== undefined ? event.stopDateRule : ''],
-      subjectTemplate: [event !== undefined ? event.subjectTemplate : ''],
+      resetPeriod: [event !== undefined ? event.resetPeriod : '', Validators.required],
+      stopDateRule: [event !== undefined ? event.stopDateRule : '', Validators.required],
+      subjectTemplate: [event !== undefined ? event.subjectTemplate : '', Validators.required],
       contentType: [event !== undefined ? event.contentType : ''],
       includeHeader: [event !== undefined ? event.includeHeader : ''],
       includeFooter: [event !== undefined ? event.includeFooter : ''],
@@ -80,13 +85,6 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
       ignoreOptOutMail: [event !== undefined ? event.ignoreOptOutMail : '']
     });
   }
-  back() {
-    this.location.back();
-  }
-
-  save(): any { }
-
-  delete(): any { }
 
   copy(): any { }
 
@@ -122,7 +120,80 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   }
 
   callMailReminder(): any { }
+
+
+  loadMailDescriptionById() {
+    this.subscriptions.add(this.mailService.getMailDescriptionById().pipe(skipWhile((item: any) => !item))
+      .subscribe((mailDescription: any) => {
+        if (this.isForce) {
+          this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': mailDescription.id } });
+        }
+        this.setForm(mailDescription);
+      }));
+  }
+
+  loadMailContentPartList() {
+    this.mailService.loadMailContentPartList();
+    this.subscriptions.add(this.mailService.getMailContentPartList().pipe(skipWhile((item: any) => !item))
+      .subscribe((mailContentPartList: any) => {
+
+      }));
+  }
+
+  loadContextVariableList() {
+    this.mailService.loadContextVariableList();
+    this.subscriptions.add(this.mailService.getContextVariableList().pipe(skipWhile((item: any) => !item))
+      .subscribe((contextVariableList: any) => {
+
+      }));
+  }
+
+
+  back() {
+    this.router.navigate(['admin/mailDescription/mailDescriptionList'], { queryParams: { 'force': this.isForce } });
+  }
+  delete() {
+    this.subscriptions.add(this.mailService.deleteMailDescriptionById(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['admin/mailDescription/mailDescriptionList'], { queryParams: { 'force': true } });
+      }));
+  }
+
+  save() {
+    if (this.topicForm.valid) {
+      if (this.id !== null && this.id !== undefined) {
+        this.subscriptions.add(this.mailService.updateMailDescription(this.id, this.topicForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadMailDescriptionById();
+          }));
+      } else {
+        this.subscriptions.add(this.mailService.saveMailDescription(this.topicForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadMailDescriptionById();
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
+  }
+  validateForm() {
+    for (const key of Object.keys(this.topicForm.controls)) {
+      if (this.topicForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
+
+  get f() { return this.topicForm.controls; }
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
+
 }

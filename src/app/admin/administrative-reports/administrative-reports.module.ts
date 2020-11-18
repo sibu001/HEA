@@ -31,6 +31,7 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
   declarations: [
     AdministrativeReportsListComponent,
     AdministrativeReportsEditComponent,
-    AdministrativeReportsCallComponent]
+    AdministrativeReportsCallComponent],
+  providers: [AdministrativeService]
 })
 export class AdministrativeReportsModule { }

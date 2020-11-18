@@ -1,18 +1,20 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
-          padding-top: 35px;'>
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+        left;padding-left: 40px;
+        padding-top: 35px;'>
         <p class="heading">
           Events history
         </p>
-        <form [formGroup]='topicForm' (submit)="search()">
+        <form [formGroup]='topicForm'>
           <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
               <span class="filterLabel">Period Start:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <p-calendar formControlName='periodStart' dateFormat="MM/dd/yyyy" id='periodStart' showIcon=true
+              <p-calendar formControlName='periodStart' dateFormat="MM/dd/yyyy"
+                id='periodStart' showIcon=true
                 showButtonBar="true">
               </p-calendar>
             </div>
@@ -20,13 +22,15 @@
               <span class="filterLabel">Audit Id:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <input type="text" class="form-control" formControlName="auditId" id="auditId">
+              <input type="text" class="form-control" formControlName="auditId"
+                id="auditId">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Event Code:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <input type="text" class="form-control" formControlName="eventCode" id="eventCode">
+              <input type="text" class="form-control"
+                formControlName="eventCode" id="eventCode">
             </div>
           </div>
 
@@ -35,7 +39,8 @@
               <span class="filterLabel">Period End:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <p-calendar formControlName='periodEnd' dateFormat="MM/dd/yyyy" id='periodEnd' showIcon=true
+              <p-calendar formControlName='periodEnd' dateFormat="MM/dd/yyyy"
+                id='periodEnd' showIcon=true
                 showButtonBar="true">
               </p-calendar>
             </div>
@@ -43,13 +48,15 @@
               <span class="filterLabel">Customer Name:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <input type="text" class="form-control" formControlName="customerName" id="customerName">
+              <input type="text" class="form-control"
+                formControlName="customerName" id="customerName">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Event Name:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <input type="text" class="form-control" formControlName="eventName" id="eventName">
+              <input type="text" class="form-control"
+                formControlName="eventName" id="eventName">
             </div>
           </div>
 
@@ -68,23 +75,28 @@
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary"
+                (click)="search(undefined,true)">Show</button>
             </div>
           </div>
 
           <div class="paddingTop">
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
-              <span class="messageName">Event list (Number of Records = {{totalElement}})</span></p>
-            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-              [totalElement]="reportData.totalElements" (changePageEvent)="findTopicDescription($event)"
-              (addEvent)="addReport()" (goToEditEvent)="goToEditReport($event)">
+              <span class="messageName">Event list (Number of Records =
+                {{totalElement}})</span></p>
+            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+              [data]="dataSource"
+              [totalElement]="reportData.totalElements"
+              (changePageEvent)="search($event,false)"
+              (addEvent)="addEventHistory()"
+              (goToEditEvent)="goToEditEventHistory($event)">
             </app-table>
           </div>
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar [showDetails]=true></app-sidebar>
+        <app-sidebar ></app-sidebar>
       </div>
     </div>
   </div>

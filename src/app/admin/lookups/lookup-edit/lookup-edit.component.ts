@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
@@ -51,8 +51,8 @@ export class LookupEditComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.lookupForm = this.formBuilder.group({
-      lookupCode: [event !== undefined ? event.lookupCode : ''],
-      lookupName: [event !== undefined ? event.lookupName : ''],
+      lookupCode: [event !== undefined ? event.lookupCode : '', Validators.required],
+      lookupName: [event !== undefined ? event.lookupName : '', Validators.required],
       defaultValue: [event !== undefined ? event.defaultValue : ''],
     });
   }

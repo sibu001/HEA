@@ -1,5 +1,6 @@
 export interface CustomerManagementModel {
     customerList: any;
+    customerViewConfigurationList: any;
     customer: any;
     customerDataSource: any;
     staffList: any;

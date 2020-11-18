@@ -6,6 +6,11 @@ import { SystemJobsListComponent } from './system-jobs-list/system-jobs-list.com
 import { CommonHEAModule } from 'src/app/common/common.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SystemThreadInfoComponent } from './system-thread-info/system-thread-info.component';
+import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { NgxsModule } from '@ngxs/store';
+import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
+import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
+import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
 
 @NgModule({
   imports: [
@@ -13,9 +18,15 @@ import { SystemThreadInfoComponent } from './system-thread-info/system-thread-in
     ReactiveFormsModule,
     FormsModule,
     CommonHEAModule,
-    SystemJobsRoutingModule
+    SystemJobsRoutingModule,
+    NgxsModule.forRoot([
+      SystemManagementState,
+      CustomerManagementState,
+      SystemUtilityManagementState
+    ]),
   ],
   declarations: [SystemJobsListComponent, SystemThreadInfoComponent],
-  entryComponents: [SystemThreadInfoComponent]
+  entryComponents: [SystemThreadInfoComponent],
+  providers: [SystemMeasurementService]
 })
 export class SystemJobsModule { }

@@ -3,6 +3,7 @@ import { Users } from "src/app/models/user";
 import { LoginService } from "src/app/services/login.service";
 import { ActivatedRoute } from "@angular/router";
 import { Router } from "@angular/router";
+import { TableColumnData } from '../data/common-data';
 declare var $: any;
 
 @Component({
@@ -19,11 +20,33 @@ export class gasSmartMeterComponent implements OnInit {
   month: any;
   day: any;
   hour: any;
+  auditId: string;
+  customerName: string;
+  isAdminView = false;
+  dataSource: any;
+  usageHistoryData = {
+    content: [],
+    totalElements: 0,
+  };
+  keys = TableColumnData.SMART_METER_KEYS;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
-    this.users = this.loginService.getUser();
+    this.route.queryParams.subscribe(params => {
+      this.isAdminView = params['isAdminView'];
+    });
+    if (!this.isAdminView) {
+      this.users = this.loginService.getUser();
+    } else {
+      this.users.outhMeResponse = {};
+      this.users.outhMeResponse.userId = '2139';
+      // this.getUserById();
+    }
     this.perFormGetList("smartMeterGas");
-
   }
+
+  // getUserById(): any {
+  //   this.users.outhMeResponse = {};
+  //   this.users.outhMeResponse.userId = '2139';
+  // }
   ngOnInit() {
 
   }
@@ -68,6 +91,8 @@ export class gasSmartMeterComponent implements OnInit {
         this.loginService.setUser(this.users);
         this.usageHistoryList = new Array;
         this.usageHistoryList = response.data;
+        this.usageHistoryData.content = response.data;
+        this.dataSource = [...this.usageHistoryData.content];
       },
       error => {
         document.getElementById("loader").classList.remove('loading');

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
@@ -46,7 +46,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   setForm(event: any) {
     this.factorForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
-      factorCode: [event !== undefined ? event.factorCode : ''],
+      factorCode: [event !== undefined ? event.factorCode : '', Validators.required],
       place: [event !== undefined ? event.place : ''],
       comparisonCode: [event !== undefined ? event.comparisonCode : ''],
       year: [event !== undefined ? event.year : ''],

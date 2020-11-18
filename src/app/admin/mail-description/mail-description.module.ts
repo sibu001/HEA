@@ -16,6 +16,8 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { StackTraceComponent } from './stack-trace/stack-trace.component';
 import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
+import { MailManagementState } from 'src/app/store/mail-state-management/state/mail.state';
+import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 
 @NgModule({
   imports: [
@@ -26,7 +28,8 @@ import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
-      SystemUtilityManagementState
+      SystemUtilityManagementState,
+      MailManagementState
     ]),
     MailDescriptionRoutingModule,
     RichTextEditorModule,
@@ -39,7 +42,7 @@ import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
     MailDescriptionPreviewComponent,
     StackTraceComponent
   ],
-  providers: [SystemService],
+  providers: [SystemService, MailService],
   entryComponents: [StackTraceComponent]
 })
 export class MailDescriptionModule { }

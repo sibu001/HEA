@@ -1,0 +1,59 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
+          padding-top: 35px;'>
+        <p class="heading">
+          Water Smart Meter
+        </p>
+        <form [formGroup]='myDataForm'>
+          <div class="row rowPadding borderBottom">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Audit Id:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='auditId' id='auditId'>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Customer Name:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='customerName' id='customerName'>
+            </div>
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+          </div>
+          <div class="row rowPadding borderBottom">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Year:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='year' id='year'>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Month:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='month' id='month'>
+            </div>
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+          </div>
+          <div class="row rowPadding">
+            <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
+              <button type="submit" class="btn btn-primary" (click)="findWater($event)">Show</button>
+            </div>
+          </div>
+          <div class="paddingTop">
+            <app-table [keys]="keys" [isSearch]="false" [isPaginate]=true [data]="dataSource" [isHideAdd]=true
+              [totalElement]="data.totalElements" (goToEditEvent)='goToEditWater($event)'>
+            </app-table>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

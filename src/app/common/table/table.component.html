@@ -66,8 +66,10 @@
                     </div>
                 </div>
                 <div *ngIf="col.type=='image' && !col.changeable && !col.isAction" class="center">
-                    <img *ngIf="col.imagePath!==undefined"  [src]='col.imagePath' (click)="imageClickEvent(col,row)" class="tableImage">
-                    <img *ngIf="row[col.key]!==undefined && col.imagePath===undefined"  [src]='row[col.key]' (click)="imageClickEvent(col,row)" class="tableImage">
+                    <img *ngIf="col.imagePath!==undefined" [src]='col.imagePath' (click)="imageClickEvent(col,row)"
+                        class="tableImage">
+                    <img *ngIf="row[col.key]!==undefined && col.imagePath===undefined" [src]='row[col.key]'
+                        (click)="imageClickEvent(col,row)" class="tableImage">
                 </div>
                 <div *ngIf="col.type=='buttons' && !col.isAction">
                     <div class='inline-table btnPadding' *ngFor='let button of col.buttonList'>
@@ -78,7 +80,8 @@
                 </div>
                 <div *ngIf="col.type=='link' && !col.isAction">
                     <div *ngFor='let link of col.links'>
-                        <a (click)='linkCall(link.routerLink,link.queryParam,row)' class="anchorClass">{{link.displayName}}</a>
+                        <a (click)='linkCall(link.routerLink,link.queryParam,row)'
+                            class="anchorClass">{{link.displayName}}</a>
                     </div>
                 </div>
                 <div *ngIf="col.type!='image'&& col.isAction && action">
@@ -131,6 +134,8 @@
                     [formControlName]="key.key" [id]="key.key">
                     <option *ngFor='let option of key.option' [value]="option.key">{{option.value}}</option>
                 </select>
+                <textarea *ngIf="key.addRowType==='textarea'" [formControlName]="key.key" [id]="key.key" cols="30"
+                    rows="5" class='form-control form-control-sm'></textarea>
                 <div *ngIf="key.required && f[key.key].invalid && (f[key.key].dirty ||
                 f[key.key].touched)">
                     <span class="error" *ngIf="f[key.key].errors.required">

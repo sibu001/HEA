@@ -6,4 +6,6 @@ export interface AdministrativeManagementModel {
     topic: any;
     prospectsList: any;
     prospects: any;
+    eventHistoryList: any;
+    eventHistory: any;
 }

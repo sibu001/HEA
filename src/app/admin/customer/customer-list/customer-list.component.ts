@@ -99,41 +99,101 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     if (isSearch) {
       event = JSON.parse(localStorage.getItem('customerFilterEvent'));
     }
-    this.keys = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value));
     const url = this.getFilterUrl(event, isSearch);
-    this.customerService.loadCustomerList(true, url, Number(this.searchForm.controls['customerView'].value));
-    this.subscriptions.add(this.customerService.getCustomerDataSource().pipe(skipWhile((item: any) => !item))
-      .subscribe((customerList: any) => {
-        this.CustomerData.content = customerList.list;
-        this.CustomerData.totalElements = customerList.totalSize;
+    if (Number(this.searchForm.controls['customerView'].value) === -1) {
+      this.getCustomerList(url);
+    } else {
+      this.getViewConfigurationList(url);
+    }
+
+  }
+  getViewConfigurationList(url: any) {
+    this.subscriptions.add(this.customerService.loadCustomerViewConfigurationList(Number(this.searchForm.controls['customerView'].value), url).pipe(skipWhile((item: any) => !item))
+      .subscribe((customerList1: any) => {
+        console.log(customerList1);
+        const tableValue = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value), customerList1.customerManagement.customerViewConfigurationList);
+        this.keys = tableValue.key;
+        const customerValue = Transformer.transformCustomerTableData(customerList1.customerManagement.customerViewConfigurationList, Number(this.searchForm.controls['customerView'].value), tableValue.dataKey);
+        this.CustomerData.content = customerValue.list;
+        this.CustomerData.totalElements = customerValue.totalSize;
         this.dataSource = [...this.CustomerData.content];
       }));
   }
 
+  getCustomerList(url: any) {
+    this.subscriptions.add(this.customerService.loadCustomerList(true, url, Number(this.searchForm.controls['customerView'].value)).pipe(skipWhile((item: any) => !item))
+      .subscribe((customerList1: any) => {
+        console.log(customerList1.customerManagement.customerList);
+        const tableValue = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value), customerList1.customerManagement.customerList);
+        this.keys = tableValue.key;
+        const customerValue = Transformer.transformCustomerTableData(customerList1.customerManagement.customerList, Number(this.searchForm.controls['customerView'].value), tableValue.dataKey);
+        this.CustomerData.content = customerValue.list;
+        this.CustomerData.totalElements = customerValue.totalSize;
+        this.dataSource = [...this.CustomerData.content];
+      }));
+    // this.customerService.loadCustomerList(true, url, Number(this.searchForm.controls['customerView'].value));
+    // this.subscriptions.add(this.customerService.getCustomerList().pipe(skipWhile((item: any) => !item))
+    //   .subscribe((customerList: any) => {
+    //     const tableValue = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value), customerList);
+    //     this.keys = tableValue.key;
+    //     const customerValue = Transformer.transformCustomerTableData(customerList, Number(this.searchForm.controls['customerView'].value), tableValue.dataKey);
+    //     this.CustomerData.content = customerValue.list;
+    //     this.CustomerData.totalElements = customerValue.totalSize;
+    //     this.dataSource = [...this.CustomerData.content];
+    //   }));
+  }
   getFilterUrl(event: any, isSearch: boolean): any {
     this.customerView = this.searchForm.controls.customerView.value !== undefined && this.searchForm.controls.customerView.value !== null ? this.searchForm.controls.customerView.value : '-1';
-    const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-        (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('clearOrder', '' + isSearch)
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
-      .set('filter.auditId', (this.searchForm.controls['auditId'].value !== null ? this.searchForm.controls['auditId'].value : ''))
-      .set('filter.customerGroupId', (this.searchForm.controls['customerGroup'].value !== null ? this.searchForm.controls['customerGroup'].value : ''))
-      .set('filter.customerName', (this.searchForm.controls['customerName'].value !== null ? this.searchForm.controls['customerName'].value : ''))
-      .set('filter.place.place', (this.searchForm.controls['customerPlace'].value !== null ? this.searchForm.controls['customerPlace'].value : ''))
-      .set('filter.customerEmail', (this.searchForm.controls['customerEmail'].value !== null ? this.searchForm.controls['customerEmail'].value : ''))
-      .set('filter.programGroup.programGroupId', (this.searchForm.controls['program'].value !== null ? this.searchForm.controls['program'].value : ''))
-      .set('customerViewConfigurationId', (this.searchForm.controls['customerView'].value !== null ? this.searchForm.controls['customerView'].value : ''))
-      .set('filter.user.status', (this.searchForm.controls['status'].value !== null ? this.searchForm.controls['status'].value : ''))
-      .set('filter.eventOrAlertCode', (this.searchForm.controls['alertCode'].value !== null ? this.searchForm.controls['alertCode'].value : ''))
-      .set('filter.credentialTypeCode', (this.searchForm.controls['credentialTypeCode'].value !== null ? this.searchForm.controls['credentialTypeCode'].value : ''))
-      .set('filter.credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
-      .set('filter.coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
-      .set('filter.credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
+    let params;
+    if ((Number(this.searchForm.controls['customerView'].value)) === null || (Number(this.searchForm.controls['customerView'].value)) === -1) {
+      params = new HttpParams()
+        .set('filter.disableTotalSize', 'false')
+        .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+        .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+          (event.pageIndex * event.pageSize) + '' : '0'))
+        .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+        .set('clearOrder', '' + isSearch)
+        .set('loadCustomers', 'true')
+        .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+        .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+        .set('filter.auditId', (this.searchForm.controls['auditId'].value !== null ? this.searchForm.controls['auditId'].value : ''))
+        .set('filter.customerGroupId', (this.searchForm.controls['customerGroup'].value !== null ? this.searchForm.controls['customerGroup'].value : ''))
+        .set('filter.customerName', (this.searchForm.controls['customerName'].value !== null ? this.searchForm.controls['customerName'].value : ''))
+        .set('filter.place.place', (this.searchForm.controls['customerPlace'].value !== null ? this.searchForm.controls['customerPlace'].value : ''))
+        .set('filter.customerEmail', (this.searchForm.controls['customerEmail'].value !== null ? this.searchForm.controls['customerEmail'].value : ''))
+        .set('filter.programGroup.programGroupId', (this.searchForm.controls['program'].value !== null ? this.searchForm.controls['program'].value : ''))
+        .set('customerViewConfigurationId', (this.searchForm.controls['customerView'].value !== null ? this.searchForm.controls['customerView'].value : ''))
+        .set('filter.user.status', (this.searchForm.controls['status'].value !== null ? this.searchForm.controls['status'].value : ''))
+        .set('filter.eventOrAlertCode', (this.searchForm.controls['alertCode'].value !== null ? this.searchForm.controls['alertCode'].value : ''))
+        .set('filter.credentialTypeCode', (this.searchForm.controls['credentialTypeCode'].value !== null ? this.searchForm.controls['credentialTypeCode'].value : ''))
+        .set('filter.credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
+        .set('filter.coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
+        .set('filter.credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
+    } else {
+      params = new HttpParams()
+        .set('disableTotalSize', 'false')
+        .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+        .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+          (event.pageIndex * event.pageSize) + '' : '0'))
+        .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+        .set('clearOrder', '' + isSearch)
+        .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+        .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+        .set('auditId', (this.searchForm.controls['auditId'].value !== null ? this.searchForm.controls['auditId'].value : ''))
+        .set('customerGroupId', (this.searchForm.controls['customerGroup'].value !== null ? this.searchForm.controls['customerGroup'].value : ''))
+        .set('customerName', (this.searchForm.controls['customerName'].value !== null ? this.searchForm.controls['customerName'].value : ''))
+        .set('place.place', (this.searchForm.controls['customerPlace'].value !== null ? this.searchForm.controls['customerPlace'].value : ''))
+        .set('customerEmail', (this.searchForm.controls['customerEmail'].value !== null ? this.searchForm.controls['customerEmail'].value : ''))
+        .set('programGroup.programGroupId', (this.searchForm.controls['program'].value !== null ? this.searchForm.controls['program'].value : ''))
+        .set('customerViewConfigurationId', (this.searchForm.controls['customerView'].value !== null ? this.searchForm.controls['customerView'].value : ''))
+        .set('user.status', (this.searchForm.controls['status'].value !== null ? this.searchForm.controls['status'].value : ''))
+        .set('eventOrAlertCode', (this.searchForm.controls['alertCode'].value !== null ? this.searchForm.controls['alertCode'].value : ''))
+        .set('credentialTypeCode', (this.searchForm.controls['credentialTypeCode'].value !== null ? this.searchForm.controls['credentialTypeCode'].value : ''))
+        .set('credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
+        .set('coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
+        .set('credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
+    }
+
     return params;
   }
   setUpForm(event: any) {

@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -38,7 +38,7 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.reportForm = this.formBuilder.group({
-      reportCode: [event !== undefined ? event.reportCode : ''],
+      reportCode: [event !== undefined ? event.reportCode : '', Validators.required],
       report: [event !== undefined ? event.report : ''],
     });
   }
