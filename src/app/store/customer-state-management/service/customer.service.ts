@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
+  ClearCustomerValueCacheAction,
   DeleteAlertByIdAction,
   DeleteCustomerByIdAction,
   DeleteCustomerEventByIdAction,
@@ -14,6 +15,7 @@ import {
   GetCustomerByIdAction,
   GetCustomerEventByIdAction,
   GetCustomerEventListAction,
+  GetCustomerEventListByCodeAction,
   GetCustomerFileByIdAction,
   GetCustomerFileListAction,
   GetCustomerListAction,
@@ -24,19 +26,25 @@ import {
   GetStaffNoteListAction,
   GetUtilityCredentialByIdAction,
   GetUtilityCredentialListAction,
+  RecalculateCustomerVariableAction,
+  RescrapeCustomerUsageAction,
   SaveAlertAction,
   SaveCustomerAction,
   SaveCustomerEventAction,
   SaveCustomerFileAction,
+  SaveCustomerUsingFileAction,
   SaveStaffAction,
   SaveStaffNoteAction,
   SaveUtilityCredentialAction,
+  SendActivationMailMessageAction,
   UpdateAlertAction,
   UpdateCustomerAction,
   UpdateCustomerEventAction,
+  UpdateCustomerFileAction,
   UpdateStaffAction,
   UpdateStaffNoteAction,
-  UpdateUtilityCredentialAction
+  UpdateUtilityCredentialAction,
+  ValidateUtilityCredentialDataAction
 } from '../state/customer.action';
 import { CustomerManagementState } from '../state/customer.state';
 
@@ -92,6 +100,10 @@ export class CustomerService {
     return this.store.select(CustomerManagementState.getCustomerEventById);
   }
 
+  getCustomerEventListByCode(): Observable<any> {
+    return this.store.select(CustomerManagementState.getCustomerEventListByCode);
+  }
+
   getAlertList(): Observable<any> {
     return this.store.select(CustomerManagementState.getAlertList);
   }
@@ -130,6 +142,10 @@ export class CustomerService {
 
   saveCustomer(customer: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new SaveCustomerAction(customer));
+  }
+
+  saveCustomerUsingFile(customerFile: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new SaveCustomerUsingFileAction(customerFile));
   }
 
   updateCustomer(id: number, customer: any): Observable<CustomerManagementState> {
@@ -186,6 +202,10 @@ export class CustomerService {
 
   loadCustomerEventById(customerId: any, id: number): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetCustomerEventByIdAction(customerId, id));
+  }
+
+  loadCustomerEventListByCode(customerId: any, eventCode: number): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetCustomerEventListByCodeAction(customerId, eventCode));
   }
 
   saveCustomerEvent(customerId: any, customerEvent: any): Observable<CustomerManagementState> {
@@ -248,11 +268,35 @@ export class CustomerService {
     return this.store.dispatch(new GetCustomerFileByIdAction(customerId, id));
   }
 
-  saveCustomerFile(customerId: any, customerFile: any): Observable<CustomerManagementState> {
-    return this.store.dispatch(new SaveCustomerFileAction(customerId, customerFile));
+  saveCustomerFile(customerId: any, customerFile: any, description: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new SaveCustomerFileAction(customerId, customerFile, description));
   }
 
-  deleteCustomerFileById(customerId: any, id: number): Observable<CustomerManagementState> {
-    return this.store.dispatch(new DeleteCustomerFileByIdAction(customerId, id));
+  updateCustomerFile(customerId: any, id: number, customerFile: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new UpdateCustomerFileAction(customerId, id, customerFile));
+  }
+
+  deleteCustomerFileById(customerId: any, fileName: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new DeleteCustomerFileByIdAction(customerId, fileName));
+  }
+
+  sendActivationMailMessage(mailObject: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new SendActivationMailMessageAction(mailObject));
+  }
+
+  clearCustomerValueCache(customerId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new ClearCustomerValueCacheAction(customerId));
+  }
+
+  recalculateCustomerVariable(customerId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new RecalculateCustomerVariableAction(customerId));
+  }
+
+  rescrapeCustomerUsage(customerId: any, credentialId: any, params: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new RescrapeCustomerUsageAction(customerId, credentialId, params));
+  }
+
+  validateUtilityCredentialData(customerId: any, credentialId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new ValidateUtilityCredentialDataAction(customerId, credentialId));
   }
 }

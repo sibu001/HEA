@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 
@@ -17,7 +19,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
 
   id: any;
   eventForm: FormGroup;
-  eventTypeData: Array<any> = TableColumnData.CUSTOMER_EVENT_TYPE;
+  eventTypeData: Array<any>;
   isForce = false;
   userId: any;
   private readonly subscriptions: Subscription = new Subscription();
@@ -25,6 +27,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemUtilityService: SystemUtilityService,
     private readonly router: Router,
     private readonly el: ElementRef) {
 
@@ -51,6 +54,13 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadCustomerEventType() {
+    this.systemUtilityService.loadCustomerEventTypeList('');
+    this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.eventTypeData = response;
+      }));
+  }
   validateForm() {
     for (const key of Object.keys(this.eventForm.controls)) {
       if (this.eventForm.controls[key].invalid) {

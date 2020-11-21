@@ -1,11 +1,11 @@
+import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, Validators, FormBuilder } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
-import { TableComponent } from 'src/app/common/table/table.component';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { Page } from 'src/app/models/page';
 import { Users } from 'src/app/models/user';
@@ -14,7 +14,9 @@ import { CustomerService } from 'src/app/store/customer-state-management/service
 import { Transformer } from 'src/app/store/customer-state-management/transformer/transformer';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
-import { CustomerEventComponent } from '../customer-event/customer-event.component';
+import { AddFileComponent } from '../add-file/add-file.component';
+import { CustomerEventTypeComponent } from '../customer-event-type/customer-event-type.component';
+import { StaffNoteComponent } from '../staff-note/staff-note.component';
 
 @Component({
   selector: 'app-customer-list',
@@ -33,23 +35,29 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   public customerView = -1;
   public adminFilter: AdminFilter;
   public users: Users = new Users();
+  public checkBoxValue: any;
+  public showCSVExportButton = false;
   public CustomerData = {
     content: [],
     totalElements: 0,
   };
+  public fileObject: any;
 
   private readonly subscriptions: Subscription = new Subscription();
 
   public searchForm: FormGroup;
   public fileUploadForm: FormGroup = this.fb.group({
-    customerFile: ['']
+    customerFile: ['', Validators.required]
   });
   constructor(private fb: FormBuilder,
     private readonly router: Router,
     private readonly systemService: SystemService,
     private readonly customerService: CustomerService,
     private loginService: LoginService,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private datePipe: DatePipe) {
+    const tableValue = Transformer.transformCustomerTableKey(-1, '');
+    this.keys = tableValue.key;
     this.users = this.loginService.getUser();
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null) {
@@ -101,8 +109,10 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     }
     const url = this.getFilterUrl(event, isSearch);
     if (Number(this.searchForm.controls['customerView'].value) === -1) {
+      this.showCSVExportButton = false;
       this.getCustomerList(url);
     } else {
+      this.showCSVExportButton = true;
       this.getViewConfigurationList(url);
     }
 
@@ -114,6 +124,34 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         const tableValue = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value), customerList1.customerManagement.customerViewConfigurationList);
         this.keys = tableValue.key;
         const customerValue = Transformer.transformCustomerTableData(customerList1.customerManagement.customerViewConfigurationList, Number(this.searchForm.controls['customerView'].value), tableValue.dataKey);
+        if (this.searchForm.controls['customerView'].value === '11') {
+          customerValue.list.forEach((elements: any, index: any) => {
+            let i = 0;
+            this.subscriptions.add(this.customerService.loadCustomerEventList(elements.customerId).pipe(skipWhile((item: any) => !item)).subscribe((eventList: any) => {
+              eventList.customerManagement.customerEventList.forEach(element => {
+                customerValue.list[index][element.customerEventType.eventCode] = this.datePipe.transform(element.eventDatetime, 'dd/MM/yyyy') + ' ' + element.description +
+                  (customerValue.list[index][element.customerEventType.eventCode] ? ' ...' : '');
+                i++;
+              });
+            }));
+            this.subscriptions.add(this.customerService.loadStaffNoteList(elements.customerId).pipe(skipWhile((item: any) => !item)).subscribe((staffNoteList: any) => {
+              staffNoteList.customerManagement.staffNoteList.forEach(element => {
+                customerValue.list[index].staffNote = this.datePipe.transform(element.noteDate, 'dd/MM/yyyy') + ' ' + element.note +
+                  (customerValue.list[index].staffNote ? ' ...' : '');
+              });
+            }));
+
+            this.subscriptions.add(this.customerService.loadCustomerFileList(elements.customerId).pipe(skipWhile((item: any) => !item)).subscribe((customerFileList: any) => {
+              customerFileList.customerManagement.customerFileList.list.forEach(element => {
+                customerValue.list[index].files = element.name + ' ' + this.datePipe.transform(element.timestamp, 'dd/MM/yyyy') + ' ' + element.description +
+                  (customerValue.list[index].files ? ' ...' : '');
+              });
+            }));
+            this.CustomerData.content = customerValue.list;
+            this.CustomerData.totalElements = customerValue.totalSize;
+            this.dataSource = [...this.CustomerData.content];
+          });
+        }
         this.CustomerData.content = customerValue.list;
         this.CustomerData.totalElements = customerValue.totalSize;
         this.dataSource = [...this.CustomerData.content];
@@ -131,16 +169,6 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         this.CustomerData.totalElements = customerValue.totalSize;
         this.dataSource = [...this.CustomerData.content];
       }));
-    // this.customerService.loadCustomerList(true, url, Number(this.searchForm.controls['customerView'].value));
-    // this.subscriptions.add(this.customerService.getCustomerList().pipe(skipWhile((item: any) => !item))
-    //   .subscribe((customerList: any) => {
-    //     const tableValue = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value), customerList);
-    //     this.keys = tableValue.key;
-    //     const customerValue = Transformer.transformCustomerTableData(customerList, Number(this.searchForm.controls['customerView'].value), tableValue.dataKey);
-    //     this.CustomerData.content = customerValue.list;
-    //     this.CustomerData.totalElements = customerValue.totalSize;
-    //     this.dataSource = [...this.CustomerData.content];
-    //   }));
   }
   getFilterUrl(event: any, isSearch: boolean): any {
     this.customerView = this.searchForm.controls.customerView.value !== undefined && this.searchForm.controls.customerView.value !== null ? this.searchForm.controls.customerView.value : '-1';
@@ -214,7 +242,6 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     });
   }
 
-  searchFilter() { }
   goToEditCustomer(event: any): void {
     this.router.navigate(['admin/customer/customerEdit'], { queryParams: { id: event.customerId } });
   }
@@ -223,17 +250,60 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/customer/customerEdit']);
   }
 
-  addEditCustomerEvent() {
-    const dialogRef = this.dialog.open(CustomerEventComponent, {
-      width: '70vw',
-      height: '70vh',
-      data: {}
+  delete(id: any, length: any, i: any) {
+    this.subscriptions.add(this.customerService.deleteCustomerById(id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        if (length === i) {
+          this.findCustomer(this.adminFilter.customerFilter.page, false);
+        }
+      }));
+  }
+
+  addEditCustomerEvent(event: any) {
+    event.customerId = event.row.customerId;
+    event.isList = true;
+    const dialogRef = this.dialog.open(CustomerEventTypeComponent, {
+      width: '50vw',
+      height: '50vh',
+      data: event,
+      disableClose: false
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed' + result);
+      if (result) {
+        this.findCustomer(this.adminFilter.customerFilter.page, false);
+      }
     });
   }
 
+  addStaffNote(event: any) {
+    event.customerId = event.row.customerId;
+    event.isList = true;
+    const dialogRef = this.dialog.open(StaffNoteComponent, {
+      width: '50vw',
+      height: '50vh',
+      data: event
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.findCustomer(this.adminFilter.customerFilter.page, false);
+      }
+    });
+  }
+
+  addFile(event: any) {
+    event.isList = true;
+    event.customerId = event.row.customerId;
+    const dialogRef = this.dialog.open(AddFileComponent, {
+      width: '50vw',
+      height: '60vh',
+      data: event
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.findCustomer(this.adminFilter.customerFilter.page, false);
+      }
+    });
+  }
   handleLink(event: any) {
     this.subscriptions.add(this.customerService.loadCustomerById(event.value.customerId).pipe(skipWhile((item: any) => !item))
       .subscribe((customer: any) => {
@@ -245,17 +315,39 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       }));
   }
 
-  exportToCSV() {
-    console.log('export to csv');
-  }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 
-  onImageClickEvent(event) {
+  onImageClickEvent(event: any): void {
     console.log(event);
-    if (event.eventType === 'addEditLog') {
-      this.addEditCustomerEvent();
+    if (event.col.attributeType === 'N') {
+      this.addStaffNote(event);
+    } else if (event.col.attributeType === 'E') {
+      this.addEditCustomerEvent(event);
+    } else if (event.col.attributeType === 'D') {
+      this.addFile(event);
+    }
+  }
+
+  checkBoxChangeEvent(event: any) {
+    this.checkBoxValue = event;
+  }
+
+  batchDelete() {
+    let i = 0;
+    this.checkBoxValue.forEach(element => {
+      i++;
+      this.delete(element.customerId, this.checkBoxValue.length, i);
+    });
+  }
+  handleFileInput(file: any) {
+    this.fileObject = file[0];
+  }
+
+  uploadNewCustomerFile() {
+    if (this.fileUploadForm.valid) {
+      this.customerService.saveCustomerUsingFile(this.fileObject);
     }
   }
 }

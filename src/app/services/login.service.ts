@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Users } from "src/app/models/user";
-import { AppUtility } from "src/app/utility/app.utility";
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
-import { Router } from "@angular/router";
+import { Users } from 'src/app/models/user';
+import { AppUtility } from 'src/app/utility/app.utility';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-declare var converse: any;
 @Injectable()
 export class LoginService {
     private users: Users;
@@ -16,8 +15,8 @@ export class LoginService {
     }
 
     public getUser(): Users {
-        var users = JSON.parse(localStorage.getItem('users'));
-        if (users != undefined && users != null) {
+        const users = JSON.parse(localStorage.getItem('users'));
+        if (users !== undefined && users !== null) {
             this.users = users;
         } else {
             this.users = new Users();
@@ -26,7 +25,7 @@ export class LoginService {
     }
     public isLoggedIn(): boolean {
         this.users = this.getUser();
-        if (this.users.token != undefined) {
+        if (this.users.token !== undefined && this.users.token !== null) {
             return (AppUtility.isEmptyObject(this.users) || AppUtility.isEmptyString(this.users.token)) ?
                 false : true;
         } else {
@@ -39,7 +38,7 @@ export class LoginService {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json'
             }), withCredentials: true,
-        }
+        };
         return httpOptions;
     }
     getHttpParamsOptions(parameter: HttpParams) {
@@ -57,7 +56,7 @@ export class LoginService {
             headers: new HttpHeaders({
                 'Content-Type': 'application/x-www-form-urlencoded'
             }), withCredentials: true,
-        }
+        };
         return httpOptions;
     }
     getOptionsMultiPart() {
@@ -66,7 +65,7 @@ export class LoginService {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/json',
                 }), withCredentials: true,
-            }
+            };
             return httpOptions;
         }
     }
@@ -77,94 +76,112 @@ export class LoginService {
                 headers: new HttpHeaders({
                     'Content-Type': 'application/x-www-form-urlencoded',
                 }), withCredentials: true,
-            }
+            };
             return httpOptions;
         }
     }
 
+    getMultipartOption() {
+        if (this.getUser != null) {
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Content-Type': 'multipart/form-data',
+                }), withCredentials: true,
+            };
+            return httpOptions;
+        }
+    }
     getOptionsLogOut() {
         if (this.getUser != null) {
             const httpOptions = {
                 headers: new HttpHeaders({
                 }), withCredentials: true,
-            }
+            };
             return httpOptions;
         }
     }
 
-    getFormattedUrl(endpoint) {
+    getFormattedUrl(endpoint: any): any {
         return environment.webBaseUrl + endpoint;
     }
-    performPost(object, endpoint) {
-        let url = this.getFormattedUrl(endpoint);
+    performPost(object: any, endpoint: any): any {
+        const url = this.getFormattedUrl(endpoint);
         return this.http.post(url, JSON.stringify(object), this.getOptions());
     }
-    performPostMultiPart(endpoint) {
-        let object = {};
-        let url = this.getFormattedUrl(endpoint);
+    performPostWithParam(object: any, endpoint: any, params: any): any {
+        const url = this.getFormattedUrl(endpoint);
+        return this.http.post(url, JSON.stringify(object), this.getHttpParamsOptions(params));
+    }
+    performPostMultiPart(endpoint: any): any {
+        const object = {};
+        const url = this.getFormattedUrl(endpoint);
         return this.http.post(url, object, this.getOptionsMultiPart());
     }
-    performPostMultiPartDataPost(object, endpoint) {
-        let url = this.getFormattedUrl(endpoint);
+    performPostMultiPartDataPost(object: any, endpoint: any) {
+        const url = this.getFormattedUrl(endpoint);
         return this.http.post(url, object, this.getOptionsMultiPart());
     }
-    performPostMultiPartData(object, endpoint) {
-        let url = this.getFormattedUrl(endpoint);
+    performPostMultiPartData(object: any, endpoint: any): any {
+        const url = this.getFormattedUrl(endpoint);
         return this.http.post(url, object, this.getOptionsMultiPartData());
     }
-    performPut(object, endpoint) {
-        let url = this.getFormattedUrl(endpoint);
+    performPostMultiPartFromData(object, endpoint) {
+        const url = this.getFormattedUrl(endpoint);
+        return this.http.post(url, object, this.getMultipartOption());
+    }
+    performPut(object: any, endpoint: any): any {
+        const url = this.getFormattedUrl(endpoint);
         return this.http.put(url, object, this.getOptionsMultiPart());
     }
-    performGet(endPoint) {
-        let url = this.getFormattedUrl(endPoint);
+    performGet(endPoint: any): any {
+        const url = this.getFormattedUrl(endPoint);
         return this.http.get(url, this.getOptions());
     }
-    performGetWithParams(endPoint, params?: HttpParams) {
+    performGetWithParams(endPoint: any, params?: HttpParams): any {
         const url = this.getFormattedUrl(endPoint);
         return this.http.get(url, this.getHttpParamsOptions(params));
     }
-    performGetMultiPartData(endPoint) {
-        let url = this.getFormattedUrl(endPoint);
+    performGetMultiPartData(endPoint: any): any {
+        const url = this.getFormattedUrl(endPoint);
         return this.http.get(url, this.getOptionsMultiPartData());
     }
-    performDelete(endPoint) {
-        let url = this.getFormattedUrl(endPoint);
+    performDelete(endPoint: any): any {
+        const url = this.getFormattedUrl(endPoint);
         return this.http.delete(url, this.getOptionsMultiPartData());
     }
-    performOauthToken(endPoint, body) {
-        let url = this.getFormattedUrl(endPoint);
-        var tokens = this.http.post(url, body, this.getOptionsForm());
+    performOauthToken(endPoint: any, body: any): any {
+        const url = this.getFormattedUrl(endPoint);
+        const tokens = this.http.post(url, body, this.getOptionsForm());
         return tokens;
     }
     getRefreshToken() {
-        let content = new URLSearchParams();
+        const content = new URLSearchParams();
         content.set('grant_type', 'refresh_token');
         content.set('access_token', this.users.token);
         content.set('refresh_token', this.users.refreshToken);
-        let body = content.toString();
-        let url = this.getFormattedUrl("oauth/token");
-        return this.http.post(url, body, this.getOptionsForm())
+        const body = content.toString();
+        const url = this.getFormattedUrl('oauth/token');
+        return this.http.post(url, body, this.getOptionsForm());
     }
-    performGetLogOut(endPoint) {
-        let url = this.getFormattedUrl(endPoint);
+    performGetLogOut(endPoint: any): any {
+        const url = this.getFormattedUrl(endPoint);
         return this.http.get(url, this.getOptionsLogOut());
     }
     public logout(): void {
-        let theme = "";
-        document.getElementById("loader").classList.add('loading');
-        this.performGetLogOut("j_spring_security_logout").subscribe(
+        let theme = '';
+        document.getElementById('loader').classList.add('loading');
+        this.performGetLogOut('j_spring_security_logout').subscribe(
             data => {
-                let response = JSON.parse(JSON.stringify(data));
+                const response = JSON.parse(JSON.stringify(data));
                 console.log(response);
                 this.users = this.getUser();
                 theme = this.users.theme;
                 this.users = new Users();
                 localStorage.removeItem('users');
                 localStorage.clear();
-                console.log("logged out");
-                this.router.navigate(["\login"], { queryParams: { "theme": theme } })
-                document.getElementById("loader").classList.remove('loading');
+                console.log('logged out');
+                this.router.navigate(['\login'], { queryParams: { 'theme': theme } });
+                document.getElementById('loader').classList.remove('loading');
             },
             errors => {
                 console.log(errors);
@@ -173,13 +190,9 @@ export class LoginService {
                 this.users = new Users();
                 localStorage.removeItem('users');
                 localStorage.clear();
-                console.log("logged out");
-                this.router.navigate(["\login"], { queryParams: { "theme": theme } })
-                document.getElementById("loader").classList.remove('loading');
+                this.router.navigate(['\login'], { queryParams: { 'theme': theme } });
+                document.getElementById('loader').classList.remove('loading');
             }
         );
     }
-
-
-
 }

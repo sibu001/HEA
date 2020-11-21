@@ -37,7 +37,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Event Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="eventType" formControlName="eventType">
-                <option *ngFor='let eventType of eventTypeData' [value]="eventType.key">{{eventType.value}}</option>
+                <option *ngFor='let eventType of eventTypeData' [value]="eventType.eventCode">{{eventType.eventName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

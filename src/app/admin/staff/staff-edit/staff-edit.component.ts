@@ -35,6 +35,9 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   staffForm: FormGroup;
   isForce = false;
   userId: any;
+  roleCheckBox: any;
+  topicGroupCheckBox: any;
+  roleList: any = [];
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly fb: FormBuilder,
@@ -92,6 +95,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     this.systemService.loadRoleList(false, this.userId);
     this.subscriptions.add(this.systemService.getRoleList().pipe(skipWhile((item: any) => !item))
       .subscribe((roleList: any) => {
+        this.roleList = roleList;
         this.rolesData.content = roleList;
         this.dataSource = [...this.rolesData.content];
       }));
@@ -131,6 +135,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   save() {
     if (this.staffForm.valid) {
       if (this.id !== null && this.id !== undefined) {
+        this.checkRole();
         this.subscriptions.add(this.customerService.updateStaff(this.id, this.staffForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
@@ -159,6 +164,50 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  checkRole() {
+    const assignList: any = [];
+    this.roleCheckBox.forEach(element => {
+      let isAvailable = false;
+      let i = 0;
+      this.roleList.forEach(roleValue => {
+        if (element.roleCode === roleValue.roleCode) {
+          isAvailable = true;
+          this.roleList.splice(i, 1);
+        }
+        i++;
+      });
+      if (!isAvailable) {
+        assignList.push(element);
+      }
+    });
+    this.deleteRoleOfStaff(this.roleList);
+    this.assignRoleToStaff(assignList);
+    this.getAllRole();
+  }
+  assignRoleToStaff(roleList: any) {
+    roleList.array.forEach(element => {
+      this.systemService.saveRole(element.roleCode, this.id);
+    });
+  }
+
+  deleteRoleOfStaff(deleteList: any) {
+    deleteList.array.forEach(element => {
+      this.systemService.deleteRoleById(element.roleCode, this.id);
+    });
+  }
+  checkTopicGroup() {
+  }
+  assignTopicGroupToStaff(topicGroupList: any) {
+
+  }
+
+  roleCheckBoxChangeEvent(event: any) {
+    this.roleCheckBox = event;
+  }
+
+  topicCheckBoxChangeEvent(event: any) {
+    this.topicGroupCheckBox = event;
+  }
   get f() { return this.staffForm.controls; }
 
   ngOnDestroy(): void {

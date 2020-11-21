@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { nullSafeIsEquivalent } from '@angular/compiler/src/output/output_ast';
 import { Component, ElementRef, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -82,6 +83,20 @@ export class UtilityCredentialsComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
+  validateCredentialData() {
+    this.subscriptions.add(this.customerService.validateUtilityCredentialData(this.data.customerId, this.data.row.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+      }));
+  }
+
+  rescrapeCustomerUsage(updateOnly: boolean) {
+    const params = new HttpParams()
+      .set('sendActivationLink', '' + this.data.activationMail)
+      .set('updateOnly', '' + updateOnly);
+    this.subscriptions.add(this.customerService.rescrapeCustomerUsage(this.data.customerId, this.data.row.id, params).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+      }));
+  }
   save() {
     if (this.utilityCredentialForm.valid) {
       if (this.data.row && this.data.row.id) {

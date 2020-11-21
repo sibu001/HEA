@@ -21,7 +21,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RoundPipe } from '../pipes/round.pipe';
-
+import { MatTableExporterModule } from 'mat-table-exporter';
 @NgModule({
   imports: [
     CommonModule,
@@ -40,7 +40,7 @@ import { RoundPipe } from '../pipes/round.pipe';
     MatCheckboxModule,
     MatDialogModule,
     DragDropModule,
-
+    MatTableExporterModule,
     AgmCoreModule.forRoot({
       apiKey: environment.googleMapAPIKey, libraries: ['places']
     })

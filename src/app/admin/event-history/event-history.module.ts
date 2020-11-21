@@ -9,7 +9,9 @@ import { CalendarModule } from 'primeng/primeng';
 import { NgxsModule } from '@ngxs/store';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
 
 @NgModule({
   imports: [
@@ -19,7 +21,13 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
     CalendarModule,
     FormsModule,
     EventHistoryRoutingModule,
+    NgxsModule.forRoot([
+      SystemManagementState,
+      CustomerManagementState,
+      SystemUtilityManagementState
+    ]),
   ],
   declarations: [EventHistoryListComponent, EventHistoryEditComponent],
+  providers: [CustomerService, SystemUtilityService]
 })
 export class EventHistoryModule { }

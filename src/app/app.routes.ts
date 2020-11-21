@@ -26,7 +26,7 @@ const ROUTES: Routes = [
   {
     path: '',
     component: HeadersComponent,
-    canActivate: [AuthGuard],
+    // canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -49,7 +49,7 @@ const ROUTES: Routes = [
   {
     path: 'admin',
     component: HeadersComponent,
-    canActivate: [RoleGuard],
+    // canActivate: [RoleGuard],
     children: [
       {
         path: 'customer',

@@ -6,6 +6,7 @@ import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { Transformer } from '../transformer/transformer';
 import {
+    ClearCustomerValueCacheAction,
     CustomerError,
     DeleteAlertByIdAction,
     DeleteCustomerByIdAction,
@@ -19,6 +20,7 @@ import {
     GetCustomerByIdAction,
     GetCustomerEventByIdAction,
     GetCustomerEventListAction,
+    GetCustomerEventListByCodeAction,
     GetCustomerFileByIdAction,
     GetCustomerFileListAction,
     GetCustomerListAction,
@@ -29,19 +31,25 @@ import {
     GetStaffNoteListAction,
     GetUtilityCredentialByIdAction,
     GetUtilityCredentialListAction,
+    RecalculateCustomerVariableAction,
+    RescrapeCustomerUsageAction,
     SaveAlertAction,
     SaveCustomerAction,
     SaveCustomerEventAction,
     SaveCustomerFileAction,
+    SaveCustomerUsingFileAction,
     SaveStaffAction,
     SaveStaffNoteAction,
     SaveUtilityCredentialAction,
+    SendActivationMailMessageAction,
     UpdateAlertAction,
     UpdateCustomerAction,
     UpdateCustomerEventAction,
+    UpdateCustomerFileAction,
     UpdateStaffAction,
     UpdateStaffNoteAction,
-    UpdateUtilityCredentialAction
+    UpdateUtilityCredentialAction,
+    ValidateUtilityCredentialDataAction
 } from './customer.action';
 import { CustomerManagementModel } from './customer.model';
 
@@ -59,6 +67,7 @@ import { CustomerManagementModel } from './customer.model';
         utilityCredentialDataSourceList: undefined,
         utilityCredential: undefined,
         customerEventList: undefined,
+        customerEventListByCode: undefined,
         customerEvent: undefined,
         alertList: undefined,
         alert: undefined,
@@ -66,6 +75,11 @@ import { CustomerManagementModel } from './customer.model';
         staffNote: undefined,
         customerFileList: undefined,
         customerFile: undefined,
+        clearCustomerValueCache: undefined,
+        recalculateCustomerVariable: undefined,
+        rescrapeCustomerUsage: undefined,
+        sendActivationMail: undefined,
+        validateCustomerData: undefined,
         error: undefined
     }
 })
@@ -128,6 +142,11 @@ export class CustomerManagementState {
     @Selector()
     static getCustomerEventById(state: CustomerManagementModel): any {
         return state.customerEvent;
+    }
+
+    @Selector()
+    static getCustomerEventListByCode(state: CustomerManagementModel): any {
+        return state.customerEventListByCode;
     }
 
     @Selector()
@@ -255,6 +274,25 @@ export class CustomerManagementState {
                     }));
     }
 
+    @Action(SaveCustomerUsingFileAction)
+    saveCustomerUsingFile(ctx: StateContext<CustomerManagementModel>, action: SaveCustomerUsingFileAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostMultiPartFromData(action.customer, AppConstant.customer + '/files/newCustomers')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    if (response.errorMessage) {
+                        this.utilityService.showSuccessMessage(response.errorMessage);
+                    } else {
+                        this.utilityService.showSuccessMessage('Save Successfully');
+                    }
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
     @Action(UpdateCustomerAction)
     updateCustomer(ctx: StateContext<CustomerManagementModel>, action: UpdateCustomerAction): Actions {
         document.getElementById('loader').classList.add('loading');
@@ -265,6 +303,82 @@ export class CustomerManagementState {
                     this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         customer: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
+    @Action(ClearCustomerValueCacheAction)
+    clearCustomerValueCache(ctx: StateContext<CustomerManagementModel>, action: ClearCustomerValueCacheAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.customer + '/' + action.customerId + '/' + AppConstant.clearCustomerValueCache)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Clear Value Cache Successfully');
+                    ctx.patchState({
+                        clearCustomerValueCache: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
+    @Action(RecalculateCustomerVariableAction)
+    recalculateCustomerVariable(ctx: StateContext<CustomerManagementModel>, action: RecalculateCustomerVariableAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.customer + '/' + action.customerId + '/' + AppConstant.recalculateVariables)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Recalculate Successfully');
+                    ctx.patchState({
+                        recalculateCustomerVariable: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
+    @Action(RescrapeCustomerUsageAction)
+    rescrapeCustomerUsage(ctx: StateContext<CustomerManagementModel>, action: RescrapeCustomerUsageAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostWithParam('', AppConstant.customer + '/' + action.customerId + '/' + AppConstant.credentials + '/' + action.credentialId + '/' + AppConstant.rescrapeCustomerUsage, action.params)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Rescrape  Successfully');
+                    ctx.patchState({
+                        rescrapeCustomerUsage: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
+    @Action(ValidateUtilityCredentialDataAction)
+    validateUtilityCredentialData(ctx: StateContext<CustomerManagementModel>, action: ValidateUtilityCredentialDataAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.customer + '/' + action.customerId + '/' + AppConstant.credentials + '/' + action.credentialId + '/' + AppConstant.validateUtilityData)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Validate Successfully');
+                    ctx.patchState({
+                        validateCustomerData: response,
                     });
                 },
                     error => {
@@ -491,6 +605,23 @@ export class CustomerManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
                         customerEvent: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetCustomerEventListByCodeAction)
+    getCustomerEventListByCode(ctx: StateContext<CustomerManagementModel>, action: GetCustomerEventListByCodeAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/customerEvents/getByCode/' + action.eventCode)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerEventListByCode: response,
                     });
                 },
                     error => {
@@ -763,11 +894,11 @@ export class CustomerManagementState {
     @Action(DeleteCustomerFileByIdAction)
     deleteCustomerFileById(ctx: StateContext<CustomerManagementModel>, action: DeleteCustomerFileByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.customer + '/' + action.customerId + '/files/' + action.id)
+        return this.loginService.performDelete(AppConstant.customer + '/' + action.customerId + '/file?fileName=' + action.fileName)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -778,13 +909,51 @@ export class CustomerManagementState {
     @Action(SaveCustomerFileAction)
     saveCustomerFile(ctx: StateContext<CustomerManagementModel>, action: SaveCustomerFileAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPostMultiPartDataPost(action.customerFile, AppConstant.customer + '/' + action.customerId + '/files')
+        const formData = new FormData();
+        formData.append('customerFile', action.customerFile);
+        return this.loginService.performPostMultiPartFromData(formData, AppConstant.customer + '/' + action.customerId + '/files' + action.description)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         customerFile: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateCustomerFileAction)
+    updateCustomerFile(ctx: StateContext<CustomerManagementModel>, action: UpdateCustomerFileAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostWithParam(action.customerFile, AppConstant.customer + '/' + action.customerId + '/file/description', action.params)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        customerFile: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SendActivationMailMessageAction)
+    sendActivationMailMessage(ctx: StateContext<CustomerManagementModel>, action: SendActivationMailMessageAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.mailObject, AppConstant.sendMail)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Mail Send');
+                    ctx.patchState({
+                        sendActivationMail: response,
                     });
                 },
                     error => {

@@ -148,8 +148,8 @@ export class SystemUtilityService {
     return this.store.dispatch(new DeletePlaceByIdAction(id));
   }
 
-  loadCustomerEventTypeList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetCustomerEventTypeListAction(force, filter));
+  loadCustomerEventTypeList(filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerEventTypeListAction(filter));
   }
 
   loadCustomerEventTypeById(id: number): Observable<SystemUtilityManagementState> {
@@ -287,7 +287,7 @@ export class SystemUtilityService {
   deleteWeatherStationById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new DeleteWeatherStationByIdAction(id));
   }
-  
+
   loadDegreeDaysList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetDegreeDaysListAction(force, filter));
   }

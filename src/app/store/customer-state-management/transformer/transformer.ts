@@ -109,8 +109,17 @@ export class Transformer {
             data.data.viewAttributes.forEach(element => {
                 let keyObj: any = {};
                 keyObj = element;
-                keyObj.key = element.label;
-                dataKey[i] = element.label;
+                if (element.label === 'Files') {
+                    keyObj.key = 'files';
+                    dataKey[i] = 'files';
+                } else if (element.label === 'IntNotes') {
+                    keyObj.key = 'staffNote';
+                    dataKey[i] = 'staffNote';
+                } else {
+                    keyObj.key = element.definition;
+                    dataKey[i] = element.definition;
+                }
+
                 keyObj.displayName = element.label;
                 keyObj.sort = element.sortAllowed ? element.definition : '';
                 if (i === 0) {
@@ -120,6 +129,7 @@ export class Transformer {
                 if (element.attributeType === 'A' || element.attributeType === 'E' || element.attributeType === 'N' || element.attributeType === 'D') {
                     keyObj.imagePath = 'assets/images/ico_add.gif';
                     keyObj.type = 'image';
+                    keyObj.changeable = true;
                 }
                 key.push(keyObj);
             });
@@ -206,8 +216,6 @@ export class Transformer {
             const dataSourceObj: any = element;
             dataSourceObj.timestamp = new Date(element.timestamp);
             const newArray = element.fileName.split('/');
-            console.log(newArray);
-            console.log(newArray);
             dataSourceObj.name = newArray[newArray.length - 1];
             dataSource.list.push(dataSourceObj);
         });

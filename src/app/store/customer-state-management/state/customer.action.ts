@@ -3,6 +3,7 @@ export enum SystemActionTypes {
     GET_CUSTOMER_VIEW_CONFIGURATION_LIST = 'Get All Customer view configuration List',
     GET_CUSTOMER_BY_ID = 'Get Customer By Id',
     SAVE_CUSTOMER = 'Save Customer',
+    SAVE_CUSTOMER_USING_FILE = 'Save Customer using file',
     UPDATE_CUSTOMER = 'Update Customer',
     DELETE_CUSTOMER_BY_ID = 'Delete Customer By Id',
     DELETE_BATCH_CUSTOMER = 'Delete Batch Customer',
@@ -18,6 +19,7 @@ export enum SystemActionTypes {
     DELETE_UTILITY_CREDENTIAL_BY_ID = 'Delete Utility Credential By Id',
     GET_CUSTOMER_EVENT_LIST = 'Get All Customer Event List',
     GET_CUSTOMER_EVENT_BY_ID = 'Get Customer Event By Id',
+    GET_CUSTOMER_EVENT_LIST_BY_CODE = 'Get Customer Event List By Code',
     SAVE_CUSTOMER_EVENT = 'Save Customer Event',
     UPDATE_CUSTOMER_EVENT = 'Update Customer Event',
     DELETE_CUSTOMER_EVENT_BY_ID = 'Delete Customer Event By Id',
@@ -34,7 +36,13 @@ export enum SystemActionTypes {
     GET_CUSTOMER_FILE_LIST = 'Get All Customer File List',
     GET_CUSTOMER_FILE_BY_ID = 'Get Customer File By Id',
     SAVE_CUSTOMER_FILE = 'Save Customer File',
+    UPDATE_CUSTOMER_FILE = 'Update Customer File',
     DELETE_CUSTOMER_FILE_BY_ID = 'Delete Customer File By Id',
+    SEND_ACTIVATION_MAIL_MESSAGE = 'Send Activation Mail Message',
+    CLEAR_CUSTOMER_VALUE_CACHE = 'Clear Customer Value Cache',
+    RECALCULATE_CUSTOMER_VARIABLE = 'Recalculate Customer Variable',
+    RESCRAPE_CUSTOMER_USAGE = 'Rescrape Customer Usage',
+    VALIDATE_UTILITY_CREDENTIAL_DATA = 'Validate Utility Credential Data',
     CUSTOMER_ERROR = 'Customer Error'
 }
 export class GetCustomerListAction {
@@ -57,6 +65,12 @@ export class GetCustomerByIdAction {
 
 export class SaveCustomerAction {
     static readonly type: SystemActionTypes = SystemActionTypes.SAVE_CUSTOMER;
+    constructor(readonly customer: any) {
+    }
+}
+
+export class SaveCustomerUsingFileAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_CUSTOMER_USING_FILE;
     constructor(readonly customer: any) {
     }
 }
@@ -157,6 +171,12 @@ export class GetCustomerEventByIdAction {
     }
 }
 
+export class GetCustomerEventListByCodeAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_EVENT_LIST_BY_CODE;
+    constructor(readonly customerId: any, readonly eventCode: number) {
+    }
+}
+
 export class SaveCustomerEventAction {
     static readonly type: SystemActionTypes = SystemActionTypes.SAVE_CUSTOMER_EVENT;
     constructor(readonly customerId: any, readonly customerEvent: any) {
@@ -249,12 +269,48 @@ export class GetCustomerFileByIdAction {
 
 export class SaveCustomerFileAction {
     static readonly type: SystemActionTypes = SystemActionTypes.SAVE_CUSTOMER_FILE;
-    constructor(readonly customerId: any, readonly customerFile: any) {
+    constructor(readonly customerId: any, readonly customerFile: any, readonly description: any) {
+    }
+}
+
+export class UpdateCustomerFileAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_CUSTOMER_FILE;
+    constructor(readonly customerId: any, readonly customerFile: any, readonly params: any) {
     }
 }
 
 export class DeleteCustomerFileByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_CUSTOMER_FILE_BY_ID;
-    constructor(readonly customerId: any, readonly id: number) {
+    constructor(readonly customerId: any, readonly fileName: number) {
+    }
+}
+
+export class SendActivationMailMessageAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SEND_ACTIVATION_MAIL_MESSAGE;
+    constructor(readonly mailObject: any) {
+    }
+}
+
+export class ClearCustomerValueCacheAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.CLEAR_CUSTOMER_VALUE_CACHE;
+    constructor(readonly customerId: any) {
+    }
+}
+
+export class RecalculateCustomerVariableAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.RECALCULATE_CUSTOMER_VARIABLE;
+    constructor(readonly customerId: any) {
+    }
+}
+
+export class RescrapeCustomerUsageAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.RESCRAPE_CUSTOMER_USAGE;
+    constructor(readonly customerId: any, readonly credentialId: any, readonly params: any) {
+    }
+}
+
+export class ValidateUtilityCredentialDataAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.VALIDATE_UTILITY_CREDENTIAL_DATA;
+    constructor(readonly customerId: any, readonly credentialId: any) {
     }
 }

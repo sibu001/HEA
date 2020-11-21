@@ -182,10 +182,10 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <app-table [keys]="keys" [isPaginate]="true" [checkbox]=true [isSearch]="false"
+                        <app-table [keys]="keys" [isPaginate]="true" [checkbox]=true [isSearch]="false" [showCSVExportButton]='showCSVExportButton'
                             [data]="dataSource" [totalElement]="CustomerData.totalElements"
                             (changePageEvent)="findCustomer($event,false)" (goToEditEvent)="goToEditCustomer($event)"
-                            (imageEvent)='onImageClickEvent($event)' (addEvent)='addNewCustomer()' (handleLinkEvent)="handleLink($event)"
+                            (imageEvent)='onImageClickEvent($event)' (checkBoxChangeEvent)="checkBoxChangeEvent($event)" (addEvent)='addNewCustomer()' (handleLinkEvent)="handleLink($event)"
                             class="customerTable">
                         </app-table>
 
@@ -193,24 +193,23 @@
                 </div>
                 <form [formGroup]='fileUploadForm' *ngIf="customerView==-1">
                     <div class="row">
-                        <div class='col-sm-7 col-xs-6' style="text-align:right">
+                        <div class='col-sm-2 col-xs-3'>
+                            <button type="submit" class="btn
+                                btn-primary" (click)="batchDelete()">Delete</button>
+                        </div>
+                        <div class='col-sm-5 col-xs-4' style="text-align:right">
                             <span>Upload file with new customers:</span>
                         </div>
-                        <div class='col-sm-3 col-xs-6'>
+                        <div class='col-sm-3 col-xs-5'>
                             <input type="file" class="custom-file-input" style='font-size: smaller;' name="customerFile"
-                                id="customerFile" formControlName='customerFile'>
+                                id="customerFile" formControlName='customerFile' (change)="handleFileInput($event.target.files)">
                         </div>
                         <div class='col-sm-2 col-xs-12' style='text-align: right;'>
                             <button type="submit" class="btn
-                                btn-primary">Upload</button>
+                                btn-primary" (click)="uploadNewCustomerFile()">Upload</button>
                         </div>
                     </div>
                 </form>
-                <div class="row" *ngIf="customerView!=-1">
-                    <div class="col-sm-12">
-                       <a (click)="exportToCSV()">Export to CSV</a>
-                    </div>
-                </div>
             </div>
             <div class="col-md-3 .col-lg-3 col-sm-12">
                 <app-sidebar></app-sidebar>

@@ -25,7 +25,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   customerForm: FormGroup;
   customerGroupList: any;
   coachUserList: any;
-  pgeHasPoolDisabled: false;
+  pgeHasPoolDisabled = false;
   placeCode: Array<any> = TableColumnData.PLACE_CODE;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
   credentialsKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_CREDENTIAL_KEY;
@@ -67,6 +67,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   lng = 7.815982;
   id: any;
   isForce = false;
+  fileObject: any;
+  description = '';
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public dialog: MatDialog,
     private readonly formBuilder: FormBuilder,
@@ -229,6 +231,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         longitude: [event !== undefined ? event.place.longitude : ''],
         id: [event !== undefined ? event.place.id : ''],
       }),
+      activationMail: [false],
+      repeatedActivationMail: [false],
     });
   }
 
@@ -261,10 +265,12 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   openUtilityCredential(event: any) {
     if (!event) {
       event = {
-        customerId: this.id
+        customerId: this.id,
+        activationMail: this.customerForm.value.activationMail
       };
     } else {
       event.customerId = this.id;
+      event.activationMail = this.customerForm.value.activationMail;
     }
     const dialogRef = this.dialog.open(UtilityCredentialsComponent, {
       width: '70vw',
@@ -342,10 +348,12 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   addCustomerEvent(event: any) {
     if (!event) {
       event = {
-        customerId: this.id
+        customerId: this.id,
+        isList: false
       };
     } else {
       event.customerId = this.id;
+      event.isList = false;
     }
     const dialogRef = this.dialog.open(CustomerEventTypeComponent, {
       width: '50vw',
@@ -385,10 +393,12 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   addStaffNote(event: any) {
     if (!event) {
       event = {
-        customerId: this.id
+        customerId: this.id,
+        isList: false
       };
     } else {
       event.customerId = this.id;
+      event.isList = false;
     }
     const dialogRef = this.dialog.open(StaffNoteComponent, {
       width: '50vw',
@@ -420,7 +430,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     this.customerService.loadCustomerFileList(customerId);
     this.subscriptions.add(this.customerService.getCustomerFileList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerFileList: any) => {
-        console.log(customerFileList);
         this.filesData.content = customerFileList.list;
         this.filesData.totalElements = customerFileList.length;
         this.filesDataSource = [...this.filesData.content];
@@ -432,10 +441,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     element.click();
   }
 
-  saveCustomerFIle(customerId: any, event: any) {
-    this.subscriptions.add(this.customerService.saveCustomerFile(customerId, event).pipe(skipWhile((item: any) => !item))
+  uploadFile() {
+    this.subscriptions.add(this.customerService.saveCustomerFile(this.id, this.fileObject, '?description=' + this.description).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-        this.loadCustomerFile(customerId);
+        this.loadCustomerFile(this.id);
       }));
   }
 
@@ -446,9 +455,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       }));
   }
 
-  handle(e: any) {
-    console.log(e);
-    console.log('Change input file');
+  handle(files: any) {
+    if (files.length > 0) {
+      this.fileObject = files[0];
+    }
   }
 
   changeDropDownValue(event: any, type: any) {
@@ -496,9 +506,28 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
+  previewFile(event: any) {
+    const url = window.location.origin + '/' + event.fileName + '?preview=true&fileName=Test.txt';
+    window.open(url, '_blank');
+  }
+
   save() {
     if (this.customerForm.valid) {
       if (this.id !== null && this.id !== undefined) {
+        if (this.customerForm.value.repeatedActivationMail) {
+          const mailObj = {
+            customerId: this.id,
+            sendRepeatedActivationMail: this.customerForm.value.repeatedActivationMail
+          };
+          this.sendActivationMail(mailObj);
+        }
+        if (this.customerForm.value.activationMail) {
+          const mailObj = {
+            customerId: this.id,
+            sendActivationMail: this.customerForm.value.activationMail
+          };
+          this.sendActivationMail(mailObj);
+        }
         this.subscriptions.add(this.customerService.updateCustomer(this.id, this.customerForm.value).pipe(skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
@@ -514,6 +543,28 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     } else {
       this.validateForm();
     }
+  }
+
+  clearCustomerValueCache() {
+    if (this.id) {
+      this.subscriptions.add(this.customerService.clearCustomerValueCache(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+        }));
+    }
+  }
+
+  recalculateCustomerVariable() {
+    if (this.id) {
+      this.subscriptions.add(this.customerService.recalculateCustomerVariable(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+        }));
+    }
+  }
+
+  sendActivationMail(mailObject: any) {
+    this.subscriptions.add(this.customerService.sendActivationMailMessage(mailObject).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+      }));
   }
 
   validateForm() {

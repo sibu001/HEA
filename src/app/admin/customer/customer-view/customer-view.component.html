@@ -14,9 +14,11 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="customerGroupId"
-                (change)="changeDropDownValue($event,'customerGroup')" formControlName="customerGroupId">
+                (change)="changeDropDownValue($event,'customerGroup')"
+                formControlName="customerGroupId">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let group of customerGroupList" [value]="group.customerGroupId">
+                <option *ngFor="let group of customerGroupList"
+                  [value]="group.customerGroupId">
                   {{group.groupName}}</option>
               </select>
             </div>
@@ -28,7 +30,8 @@
               Witch Place?:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="placeCode" (change)="changeDropDownValue($event,'place')"
+              <select class="form-control form-control-sm" id="placeCode"
+                (change)="changeDropDownValue($event,'place')"
                 formControlName="placeCode">
                 <option *ngFor="let group of placeCode" [value]="group.id">
                   {{group.value}}</option>
@@ -41,7 +44,8 @@
               Status
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="status" (change)="changeDropDownValue($event,'status')"
+              <select class="form-control form-control-sm" id="status"
+                (change)="changeDropDownValue($event,'status')"
                 formControlName="status">
                 <option *ngFor="let group of statusData" [value]="group.id">
                   {{group.value}}</option>
@@ -54,7 +58,8 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="coachUserId"
-                (change)="changeDropDownValue($event,'coachUser')" formControlName="coachUserId">
+                (change)="changeDropDownValue($event,'coachUser')"
+                formControlName="coachUserId">
                 <option value=null selected="selected">Unassigned</option>
                 <option *ngFor="let group of coachUserList" [value]="group.id">
                   {{group.name}}</option>
@@ -66,7 +71,8 @@
               Name:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="name" formControlName="name">
+              <input type="text" class="form-control form-control-sm" id="name"
+                formControlName="name">
               <div *ngIf="f1.name.invalid && (f1.name.dirty ||
                 f1.name.touched)">
                 <span class="error" *ngIf="f1.name.errors.required">
@@ -80,7 +86,8 @@
               E-mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="email" formControlName="email">
+              <input type="text" class="form-control form-control-sm" id="email"
+                formControlName="email">
               <div *ngIf="f1.email.invalid && (f1.email.dirty ||
                 f1.email.touched)">
                 <span class="error" *ngIf="f1.email.errors.required">
@@ -94,7 +101,8 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="optOutMail" formControlName="optOutMail">
+              <input type="checkbox" name="optOutMail"
+                formControlName="optOutMail">
               <label class="checkbox">Opt Out mail</label>
             </div>
           </div>
@@ -103,7 +111,8 @@
               Phone:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="phoneNumber" formControlName="phoneNumber">
+              <input type="text" class="form-control form-control-sm"
+                id="phoneNumber" formControlName="phoneNumber">
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -111,7 +120,8 @@
               <Strong>Address</Strong>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-5">
-              <button type="button" class="btn btn-primary" (click)="openAddressOnGoogleMap()">View in Google
+              <button type="button" class="btn btn-primary"
+                (click)="openAddressOnGoogleMap()">View in Google
                 Maps</button>
             </div>
           </div>
@@ -120,7 +130,8 @@
               City:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="city" formControlName="city" disabled>
+              <input type="text" class="form-control form-control-sm" id="city"
+                formControlName="city" disabled>
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -128,7 +139,8 @@
               State:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="state" formControlName="state" disabled>
+              <input type="text" class="form-control form-control-sm" id="state"
+                formControlName="state" disabled>
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -136,7 +148,8 @@
               Postal code:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="postalCode" formControlName="postalCode"
+              <input type="text" class="form-control form-control-sm"
+                id="postalCode" formControlName="postalCode"
                 disabled>
             </div>
           </div>
@@ -145,7 +158,8 @@
               Street:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="street1" formControlName="street1" disabled>
+              <input type="text" class="form-control form-control-sm"
+                id="street1" formControlName="street1" disabled>
             </div>
           </div>
           <div class="row borderBottom rowPadding">
@@ -156,7 +170,8 @@
               Username:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="username" formControlName="username">
+              <input type="text" class="form-control form-control-sm"
+                id="username" formControlName="username">
             </div>
           </div>
           <div class="row borderBottom rowPadding" formGroupName="user">
@@ -164,7 +179,8 @@
               New password:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="password" class="form-control form-control-sm" id="restorePasswordKey">
+              <input type="password" class="form-control form-control-sm"
+                id="restorePasswordKey">
             </div>
           </div>
           <div class="row borderBottom rowPadding">
@@ -172,7 +188,8 @@
               New password (repeat):
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="password" class="form-control form-control-sm" id="newPassword">
+              <input type="password" class="form-control form-control-sm"
+                id="newPassword">
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -195,7 +212,8 @@
               Electricity Model:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="elHeatingModel" formControlName="elHeatingModel">
+              <select class="form-control form-control-sm" id="elHeatingModel"
+                formControlName="elHeatingModel">
                 <option value="0">Auto</option>
                 <option value="11">Seasonal Model</option>
                 <option value="13" selected="selected">Daily Combined Model</option>
@@ -207,19 +225,22 @@
               Natural Gas Heating Model:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="ngHeatingModel" formControlName="ngHeatingModel">
+              <select class="form-control form-control-sm" id="ngHeatingModel"
+                formControlName="ngHeatingModel">
                 <option value="0">Auto</option>
                 <option value="1" selected="selected">Seasonal Model</option>
                 <option value="3">5-day MA Linear Regression Model</option>
               </select>
             </div>
           </div>
-          <div class="row borderBottom rowPadding" formGroupName="place" *ngIf="id!=undefined">
+          <div class="row borderBottom rowPadding" formGroupName="place"
+            *ngIf="id!=undefined">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Weather Station:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="stationId" formControlName="stationId"
+              <input type="text" class="form-control form-control-sm"
+                id="stationId" formControlName="stationId"
                 disabled>
             </div>
           </div>
@@ -232,11 +253,12 @@
           </div>
           <div class="row borderBottom rowPadding">
             <div class="row col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4"><button type="button" class="btn btn-primary">Clear
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4"><button
+                  type="button" class="btn btn-primary" (click)="clearCustomerValueCache()">Clear
                   Cache</button>
               </div>
               <div class="col-sm-10 col-md-10 col-lg-10 col-xs-8">
-                <button type="button" class="btn btn-primary">Recalculate
+                <button type="button" class="btn btn-primary" (click)="recalculateCustomerVariable()">Recalculate
                   Variables</button>
               </div>
               <div style="padding-left: inherit">
@@ -255,7 +277,8 @@
               Has pool
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-              <input type="checkbox" name="mail" id="pgeHasPool" formControlName="pgeHasPool" disabled>
+              <input type="checkbox" name="mail" id="pgeHasPool"
+                formControlName="pgeHasPool" disabled>
             </div>
           </div>
           <div class="row borderBottom rowPadding">
@@ -263,7 +286,8 @@
               Has Solar PV
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-              <input type="checkbox" name="solarPvInstalled" id="solarPvInstalled" formControlName="solarPvInstalled">
+              <input type="checkbox" name="solarPvInstalled"
+                id="solarPvInstalled" formControlName="solarPvInstalled">
             </div>
           </div>
           <div class="row borderBottom rowPadding">
@@ -273,7 +297,8 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="staffPermission" id="staffPermission" formControlName="staffPermission">
+              <input type="checkbox" name="staffPermission" id="staffPermission"
+                formControlName="staffPermission">
               <label class="checkbox">Permission for staff access granted</label>
             </div>
           </div>
@@ -281,7 +306,8 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="permissionGranted" id="permissionGranted"
+              <input type="checkbox" name="permissionGranted"
+                id="permissionGranted"
                 formControlName="permissionGranted">
               <label class="checkbox">Permission granted to analyze your
                 historic and future utility bills using your
@@ -293,7 +319,8 @@
               Audit ID:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="auditId" formControlName="auditId" disabled>
+              <input type="text" class="form-control form-control-sm"
+                id="auditId" formControlName="auditId" disabled>
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -317,7 +344,8 @@
               Eligible start date::
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="eligibleStartDate"
+              <input type="text" class="form-control form-control-sm"
+                id="eligibleStartDate"
                 formControlName="eligibleStartDate">
             </div>
           </div>
@@ -350,7 +378,7 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="activationMail" id="activationMail">
+              <input type="checkbox" name="activationMail"formControlName="activationMail" id="activationMail">
               <label class="checkbox">Send activation E-Mail</label>
             </div>
           </div>
@@ -359,7 +387,7 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="repeated" id="repeated">
+              <input type="checkbox" name="repeated" formControlName="repeatedActivationMail" id="repeated">
               <label class="checkbox"> Send repeated activation E-Mail</label>
             </div>
           </div>
@@ -368,7 +396,8 @@
               Smart Meter Electric period:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="smePeriod" formControlName="smePeriod" disabled="true">
+              <select class="form-control form-control-sm" id="smePeriod"
+                formControlName="smePeriod" disabled="true">
                 <option value=""></option>
                 <option value="1">One Hour</option>
                 <option value="2">30 min</option>
@@ -390,7 +419,8 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="excludeFromReports" id="excludeFromReports"
+              <input type="checkbox" name="excludeFromReports"
+                id="excludeFromReports"
                 formControlName="excludeFromReports">
               <label class="checkbox"> Exclude this user from Reports</label>
             </div>
@@ -400,7 +430,8 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="allowUIVersion" id="allowUIVersion" formControlName="allowUIVersion">
+              <input type="checkbox" name="allowUIVersion" id="allowUIVersion"
+                formControlName="allowUIVersion">
               <label class="checkbox"> Allow UI version selection</label>
             </div>
           </div>
@@ -409,7 +440,8 @@
               UI Version:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="uiVersion" formControlName="uiVersion">
+              <select class="form-control form-control-sm" id="uiVersion"
+                formControlName="uiVersion">
                 <option value="V1">"classic" version</option>
                 <option value="V2">The new responsive version</option>
               </select>
@@ -420,7 +452,8 @@
               Notes:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control form-control-sm textarea_scroll" rows="3" name="notes" id="notes"
+              <textarea class="form-control form-control-sm textarea_scroll"
+                rows="3" name="notes" id="notes"
                 formControlName="notes"></textarea>
             </div>
           </div>
@@ -437,9 +470,13 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [keys]="credentialsKeys" [data]="credentialsDataSource" [isDelete]=true
-              [totalElement]="credentialsData.totalElements" (goToEditEvent)="editUtility($event)"
-              (addEvent)='openUtilityCredential(undefined)'  (imageEvent)='openUtilityCredential($event)' (deleteEvent)="deleteUtilityCredential($event)" class="rowSize">
+            <app-table [keys]="credentialsKeys" [data]="credentialsDataSource"
+              [isDelete]=true
+              [totalElement]="credentialsData.totalElements"
+              (goToEditEvent)="editUtility($event)"
+              (addEvent)='openUtilityCredential(undefined)'
+              (imageEvent)='openUtilityCredential($event)'
+              (deleteEvent)="deleteUtilityCredential($event)" class="rowSize">
             </app-table>
           </div>
         </div>
@@ -457,8 +494,12 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [keys]="alertsKeys" [data]="alertsDataSource" [isDelete]=true
-              [totalElement]="alertsData.totalElements" (deleteEvent)="deleteCustomerAlert($event)" (goToEditEvent)="editAlert($event)" (addEvent)="addCustomerAlert(undefined)">
+            <app-table [keys]="alertsKeys" [data]="alertsDataSource"
+              [isDelete]=true
+              [totalElement]="alertsData.totalElements"
+              (deleteEvent)="deleteCustomerAlert($event)"
+              (goToEditEvent)="editAlert($event)"
+              (addEvent)="addCustomerAlert(undefined)">
             </app-table>
           </div>
         </div>
@@ -474,9 +515,12 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [keys]="eventKeys" [data]="eventDataSource" [isDelete]=true
-              [totalElement]="eventData.totalElements" (goToEditEvent)="editCustomerEvent($event)"
-              (deleteEvent)="deleteCustomerEvent($event)" (addEvent)="addCustomerEvent(undefined)">
+            <app-table [keys]="eventKeys" [data]="eventDataSource"
+              [isDelete]=true
+              [totalElement]="eventData.totalElements"
+              (goToEditEvent)="editCustomerEvent($event)"
+              (deleteEvent)="deleteCustomerEvent($event)"
+              (addEvent)="addCustomerEvent(undefined)">
             </app-table>
           </div>
         </div>
@@ -486,16 +530,19 @@
         <div class="row">
           <div class="col-sm-12">
             <p class="Messages">
-              <img src="assets/images/dot03.gif" class="dot pointer"><strong>Staff Notes</strong>
+              <img src="assets/images/dot03.gif" class="dot pointer"><strong>Staff
+                Notes</strong>
             </p>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [keys]="staffKeys" [data]="staffDataSource" [isDelete]=true
-              [totalElement]="staffData.totalElements" (addEvent)='addStaffNote(undefined)'
+            <app-table [keys]="staffKeys" [data]="staffDataSource"
+              [isDelete]=true
+              [totalElement]="staffData.totalElements"
+              (addEvent)='addStaffNote(undefined)'
               (goToEditEvent)="editStaffNote($event)"
-              (deleteEvent)="deleteStaffNote($event)" >
+              (deleteEvent)="deleteStaffNote($event)">
             </app-table>
           </div>
         </div>
@@ -511,21 +558,54 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <input type="file" id="fileInput" style="display:none" (change)="handle($event)">
-            <app-table [keys]="filesKeys" [data]="filesDataSource" [isDelete]=true
-              [totalElement]="filesData.totalElements" (onAddEvent)='addFile()'>
+            <input type="file" id="fileInput" style="display:none"
+              (change)="handle($event.target.files)">
+            <app-table [keys]="filesKeys" [data]="filesDataSource"
+              [isDelete]=true [isFilePreview]=true
+              [totalElement]="filesData.totalElements" (addEvent)='addFile()'
+              (filePreviewEvent)="previewFile($event)">
             </app-table>
+          </div>
+        </div>
+        <div class="row" *ngIf="fileObject!=undefined">
+          <div class="col-sm-6">
+            <div class="row" style="margin: 0px;">
+              <div class="row">
+                <div class="col-sm-3">
+                  <button type="button" class="btn btn-primary"
+                    (click)="uploadFile()">upload</button>
+                </div>
+                <div class="col-sm-3">
+                  <input type="text" class="form-control
+                    form-control-sm" id="fileName" class="showValue" disabled
+                    [(ngModel)]="fileObject.name">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <p>Description</p>
+                  <textarea class="form-control textarea_scroll" rows="3"
+                    id="description"
+                    name="description" [(ngModel)]="description"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
           </div>
         </div>
         <div class="row rowPadding paddingTop">
           <div class="col-sm-8 col-md-8 col-lg-8 col-xs-4">
-            <button type="button" class="btn btn-primary" (click)="cancel()">Cancel</button>
+            <button type="button" style="margin-left:-4px;" class="btn
+              btn-primary" (click)="cancel()">Cancel</button>
           </div>
           <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
-            <button type="button" class="btn btn-primary" (click)="delete()" *ngIf="id!=undefined">Delete</button>
+            <button type="button" class="btn btn-primary" (click)="delete()"
+              *ngIf="id!=undefined">Delete</button>
           </div>
           <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
-            <button type="button" class="btn btn-primary" (click)="save()" style="float:right; margin-right: -4px;">Save</button>
+            <button type="button" class="btn btn-primary" (click)="save()"
+              style="float:right; margin-right: -4px;">Save</button>
           </div>
         </div>
       </div>

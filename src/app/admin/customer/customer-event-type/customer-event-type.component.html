@@ -26,16 +26,16 @@
   <div class="row">
     <div class="col-sm-12 col-md-12 col-lg-12 content">
       <form [formGroup]="customerEventTypeForm" class="form-group">
-        <div class="row rowPadding borderTop borderBottom">
+        <div class="row rowPadding borderTop borderBottom" *ngIf="!isList">
           <div class="control-label col-sm-4 col-xs-12">
             Event Type:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
             <select class="form-control form-control-sm padded-control"
-              id="customerEventTypeId"
-              formControlName="customerEventTypeId" (change)="changeEventCode($event)">
-              <option *ngFor="let group of customerEventTypeList" [value]="group.id">
-                {{group.name}}</option>
+              id="eventCode"
+              formControlName="eventCode" (change)="changeEventCode($event)">
+              <option *ngFor="let group of customerEventTypeList" [value]="group.eventCode">
+                {{group.eventName}}</option>
              </select>
              <div *ngIf="f.customerEventTypeId.invalid && (f.customerEventTypeId.dirty ||
              f.customerEventTypeId.touched)">
@@ -45,32 +45,22 @@
            </div>
           </div>
         </div>
-        <div class="row rowPadding borderBottom">
+        <div class="row rowPadding borderBottom" *ngIf="!isList">
           <div class="control-label col-sm-4 col-xs-12">
             Event Code:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-            {{eventCode}}
-            <div *ngIf="f.eventCode.invalid && (f.eventCode.dirty ||
-            f.eventCode.touched)">
-            <span class="error" *ngIf="f.eventCode.errors.required">
-              Event Code is required.
-            </span>
-          </div>
+            <input type="text" class="form-control
+            form-control-sm" id="eventCode" class="showValue" disabled formControlName="eventCode">
           </div>
         </div>
-        <div class="row rowPadding borderBottom">
+        <div class="row rowPadding borderBottom" *ngIf="!isList">
           <div class="control-label col-sm-4 col-xs-12">
            Description:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-           {{eventDescription}}
-           <div *ngIf="f.eventDescription.invalid && (f.eventDescription.dirty ||
-           f.eventDescription.touched)">
-           <span class="error" *ngIf="f.eventDescription.errors.required">
-              Event description is required.
-           </span>
-         </div> 
+            <input type="text" class="form-control
+            form-control-sm" id="eventDescription" class="showValue" disabled formControlName="eventDescription">
           </div>
         </div>
 
@@ -79,8 +69,8 @@
            Event Date:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-            <input type="text" class="form-control form-control-sm"
-            id="eventDatetime" formControlName="eventDatetime">
+            <p-calendar formControlName='eventDatetime' id="eventDatetime"
+                showIcon=true showTime="true"></p-calendar>
           </div>
         </div>
 
@@ -99,28 +89,45 @@
             </div>
           </div>
         </div>
-        <div class="row rowPadding borderBottom">
+        <div class="row rowPadding borderBottom" *ngIf="!isList">
           <div class="control-label col-sm-4 col-xs-12">
            Author Type:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-           
+           {{authorType}}
           </div>
         </div>
 
-        <div class="row rowPadding borderBottom">
+        <div class="row rowPadding borderBottom" *ngIf="!isList">
           <div class="control-label col-sm-4 col-xs-12">
            Author:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-           
+            {{author}}
           </div>
         </div>
-
       </form>
       <div class="row rowPadding borderBottom">
-        <div class="col-sm-12 col-xs-12" style="text-align: end;">
-          <button type="button" class="btn btn-primary btn-padding" (click)="save()">Save</button>
+        <div class="col-sm-6 col-xs-6" *ngIf="!isList">
+        </div>
+        <div class="col-sm-6 col-xs-6" *ngIf="isList">
+          <button type="button" class="btn btn-primary btn-padding" (click)="prev()" *ngIf="customerEventList.length>1">&lt;</button>
+          <button type="button" class="btn btn-primary btn-padding" (click)="newEvent()">New</button>
+          <button type="button" class="btn btn-primary btn-padding" (click)="next()" *ngIf="customerEventList.length>1">&gt;</button>
+        </div>
+        <div class="col-sm-6 col-xs-6 " style="text-align: end;">
+          <div class="row" *ngIf="isList">
+            <div class="col-sm-4 col-xs-12">
+              <button type="button" class="btn btn-primary btn-padding" (click)="save()">Save</button>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+              <button type="button" class="btn btn-primary btn-padding" *ngIf="showDelete" (click)="delete()">Delete</button>
+            </div>
+            <div class="col-sm-4 col-xs-12">
+              <button type="button" class="btn btn-primary btn-padding" (click)="onNoClick()">Cancel</button>
+            </div>
+          </div>
+          <button type="button" class="btn btn-primary btn-padding"  *ngIf="!isList" (click)="save()">Save</button>
         </div>
       </div>
     </div>

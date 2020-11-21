@@ -9,6 +9,7 @@ export interface CustomerManagementModel {
     utilityCredentialDataSourceList: any;
     utilityCredential: any;
     customerEventList: any;
+    customerEventListByCode: any;
     customerEvent: any;
     alertList: any;
     alert: any;
@@ -16,5 +17,10 @@ export interface CustomerManagementModel {
     staffNote: any;
     customerFileList: any;
     customerFile: any;
+    sendActivationMail: any;
+    clearCustomerValueCache: any;
+    recalculateCustomerVariable: any;
+    rescrapeCustomerUsage: any;
+    validateCustomerData: any;
     error: Error;
 }

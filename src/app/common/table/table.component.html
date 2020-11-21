@@ -6,7 +6,6 @@
         </mat-form-field>
     </div>
 </div> -->
-
 <div class="row">
     <div class="col-md-4" *ngIf='isSearch'>
         <div class="form-group" style="margin-top: 11px;">
@@ -14,35 +13,47 @@
                 <span class="input-group-addon search" id="basic-addon1">
                     <i class="fa fa-search css" aria-hidden="true"></i>
                 </span>
-                <input type="text" class="form-control search" placeholder="search" aria-label="search"
-                    (keyup)="applyFilter($event.target.value)" aria-describedby="basic-addon1">
+                <input type="text" class="form-control search"
+                    placeholder="search" aria-label="search"
+                    (keyup)="applyFilter($event.target.value)"
+                    aria-describedby="basic-addon1">
             </div>
         </div>
     </div>
 </div>
 
 <div class="example-container mat-elevation-z0 table-wrapper">
-    <mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" class="table">
+    <mat-table [dataSource]="dataSource" matTableExporter
+        #exporter="matTableExporter" matSort (matSortChange)="sortData($event)"
+        class="table">
         <ng-container matColumnDef="select">
             <mat-header-cell *matHeaderCellDef>
-                <mat-checkbox (change)="$event ? masterToggle() : null;checkBoxChange()"
-                    [checked]="selection.hasValue() && isAllSelected()" color="primary"
-                    [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()"
+                <mat-checkbox (change)="$event ? masterToggle() :
+                    null;checkBoxChange()"
+                    [checked]="selection.hasValue() && isAllSelected()"
+                    color="primary"
+                    [indeterminate]="selection.hasValue() && !isAllSelected()"
+                    [aria-label]="checkboxLabel()"
                     class="tableCheckBox">
                 </mat-checkbox>
             </mat-header-cell>
-            <mat-cell *matCellDef="let row; let colIndex = index">
+            <mat-cell *matCellDef="let row; let colIndex= index">
                 <mat-checkbox (click)="$event.stopPropagation()"
-                    (change)="$event ? selection.toggle(row) : null;checkBoxChange()" color="primary"
-                    [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)" class="tableCheckBox">
+                    (change)="$event ? selection.toggle(row) :
+                    null;checkBoxChange()" color="primary"
+                    [checked]="selection.isSelected(row)"
+                    [aria-label]="checkboxLabel(row)" class="tableCheckBox">
                 </mat-checkbox>
             </mat-cell>
         </ng-container>
-        <ng-container *ngFor="let col of keys; let colIndex = index" matColumnDef="{{col.key}}">
-            <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" [id]="col.key" [disabled]="!col.sort"
+        <ng-container *ngFor="let col of keys; let colIndex= index"
+            matColumnDef="{{col.key}}">
+            <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key"
+                [id]="col.key" [disabled]="!col.sort"
                 class="text-nowrap">
                 {{col.displayName}}</mat-header-cell>
-            <mat-cell [class.mat-cell-underline]='col.isEdit' *matCellDef="let row" style="display: grid;">
+            <mat-cell [class.mat-cell-underline]='col.isEdit' *matCellDef="let
+                row" style="display: grid;">
                 <div *ngIf="col.type!='image' && col.isDate && !col.isAction">
                     {{row[col.key]|date:'mediumDate'}}</div>
                 <div *ngIf="col.type==='alert' && !col.isAction">
@@ -56,31 +67,40 @@
                         <p class="alertCircle">&nbsp;</p>
                     </div>
                 </div>
-                <div *ngIf="col.type!='image' && col.type!='alert' && !col.isDate && !col.isAction"
+                <div *ngIf="col.type!='image' && col.type!='alert' &&
+                    !col.isDate && !col.isAction"
                     (click)='goToEdit(row,col);'>
                     {{row[col.key]}}</div>
                 <!-- row[col.key]===true &&  -->
-                <div *ngIf="col.type=='image' && col.changeable && !col.isAction" class="center">
-                    <img *ngIf='row[col.key]!==true' [src]='col.imagePath' (click)="imageClickEvent(col,row)">
-                    <div *ngIf='row[col.key]===true' (click)="imageClickEvent(col,row[col.key])"> {{row[col.key]}}
+                <div *ngIf="col.type=='image' && col.changeable &&
+                    !col.isAction" class="center">
+                    <img *ngIf='row[col.key]===null' [src]='col.imagePath'
+                        (click)="imageClickEvent(col,row)">
+                    <div *ngIf='row[col.key]!==null'
+                        (click)="imageClickEvent(col,row)"> {{row[col.key]}}
                     </div>
                 </div>
-                <div *ngIf="col.type=='image' && !col.changeable && !col.isAction" class="center">
-                    <img *ngIf="col.imagePath!==undefined" [src]='col.imagePath' (click)="imageClickEvent(col,row)"
-                        class="tableImage">
-                    <img *ngIf="row[col.key]!==undefined && col.imagePath===undefined" [src]='row[col.key]'
+                <div *ngIf="col.type=='image' && !col.changeable &&
+                    !col.isAction" class="center">
+                    <img *ngIf="col.imagePath!==undefined" [src]='col.imagePath'
+                        (click)="imageClickEvent(col,row)" class="tableImage">
+                    <img *ngIf="row[col.key]!==undefined &&
+                        col.imagePath===undefined" [src]='row[col.key]'
                         (click)="imageClickEvent(col,row)" class="tableImage">
                 </div>
                 <div *ngIf="col.type=='buttons' && !col.isAction">
-                    <div class='inline-table btnPadding' *ngFor='let button of col.buttonList'>
-                        <button class='btn btn-primary' (click)='onButtonEvent(button)'>
+                    <div class='inline-table btnPadding' *ngFor='let button of
+                        col.buttonList'>
+                        <button class='btn btn-primary'
+                            (click)='onButtonEvent(button)'>
                             {{button.name}}
                         </button>
                     </div>
                 </div>
                 <div *ngIf="col.type=='link' && !col.isAction">
                     <div *ngFor='let link of col.links'>
-                        <a (click)='linkCall(link.routerLink,link.queryParam,row)'
+                        <a
+                            (click)='linkCall(link.routerLink,link.queryParam,row)'
                             class="anchorClass">{{link.displayName}}</a>
                     </div>
                 </div>
@@ -90,7 +110,8 @@
                             <mat-icon class="btnArrow">arrow _drop_down</mat-icon></span>
                     </button>
                     <mat-menu #menu="matMenu">
-                        <button mat-menu-item *ngFor="let item of col.actionMenu" (click)="onClickMenuItem(item,row)">
+                        <button mat-menu-item *ngFor="let item of
+                            col.actionMenu" (click)="onClickMenuItem(item,row)">
                             <span>{{item.displayName}}</span>
                         </button>
                     </mat-menu>
@@ -99,7 +120,14 @@
         </ng-container>
         <ng-container matColumnDef="delete">
             <mat-header-cell *matHeaderCellDef class="text-nowrap"></mat-header-cell>
-            <mat-cell *matCellDef="let element"> <img src="assets/images/ico_minus.gif" (click)="deleteRow(element)">
+            <mat-cell *matCellDef="let element">
+                <img
+                    src="assets/images/ico_minus.gif"
+                    (click)="deleteRow(element)">
+                <img *ngIf="isFilePreview"
+                    src="assets/images/ico_preview.png"
+                    (click)="filePreview(element)">
+
             </mat-cell>
         </ng-container>
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -113,26 +141,34 @@
         </ng-container> -->
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let row; columns: displayedColumns;"
-            [ngClass]="{'border-left-green': sideBorder && !row.accountLocked, 'border-left-red': sideBorder && row.accountLocked}">
+            [ngClass]="{'border-left-green': sideBorder && !row.accountLocked,
+            'border-left-red': sideBorder && row.accountLocked}">
             <!-- class="example-element-row"
             [class.example-expanded-row]="expandedElement === row"
             (click)="expandedElement = expandedElement === row ? null : row" -->
         </mat-row>
     </mat-table>
-    <div *ngIf='(dataSource===undefined || dataSource===null) && !showInput ' class="row">
+    <div *ngIf='(dataSource===undefined || dataSource===null) && !showInput '
+        class="row">
         <div class='col-sm-12 col-xs-12' style='text-align: center;'>
             <h5>No records found.</h5>
         </div>
     </div>
     <div class="row" *ngIf='showInput'>
         <form [formGroup]='tableForm' (submit)='saveRow()'>
-            <div class="col-sm-{{12/(keys.length+1)|round:0:'down'}} col-md-{{12/(keys.length+1)|round:0:'down'}} col-xs-{{12/(keys.length+1)|round:0:'down'}} col-lg-{{(12)/(keys.length+1)|round:0:'down'}}"
+            <div class="col-sm-{{12/(keys.length+1)|round:0:'down'}}
+                col-md-{{12/(keys.length+1)|round:0:'down'}}
+                col-xs-{{12/(keys.length+1)|round:0:'down'}}
+                col-lg-{{(12)/(keys.length+1)|round:0:'down'}}"
                 *ngFor='let key of keys'>
-                <input *ngIf="key.addRowType==='text' || key.addRowType===undefined" type="text" class='form-control'
+                <input *ngIf="key.addRowType==='text' ||
+                    key.addRowType===undefined" type="text" class='form-control'
                     [formControlName]='key.key' [id]="key.key">
-                <select *ngIf="key.addRowType==='select'" class='form-control form-control-sm'
+                <select *ngIf="key.addRowType==='select'" class='form-control
+                    form-control-sm'
                     [formControlName]="key.key" [id]="key.key">
-                    <option *ngFor='let option of key.option' [value]="option.key">{{option.value}}</option>
+                    <option *ngFor='let option of key.option'
+                        [value]="option.key">{{option.value}}</option>
                 </select>
                 <textarea *ngIf="key.addRowType==='textarea'" [formControlName]="key.key" [id]="key.key" cols="30"
                     rows="5" class='form-control form-control-sm'></textarea>
@@ -144,29 +180,42 @@
                 </div>
             </div>
             <div
-                class="align-center col-sm-{{12/(keys.length+1)|round:0:'down'}} col-md-{{12/(keys.length+1)|round:0:'down'}} col-xs-{{12/(keys.length+1)|round:0:'down'}} col-lg-{{(12)/(keys.length+1)|round:0:'down'}}">
+                class="align-center col-sm-{{12/(keys.length+1)|round:0:'down'}}
+                col-md-{{12/(keys.length+1)|round:0:'down'}}
+                col-xs-{{12/(keys.length+1)|round:0:'down'}}
+                col-lg-{{(12)/(keys.length+1)|round:0:'down'}}">
                 <button class="btn btn-primary" type="submit">save</button>
             </div>
         </form>
     </div>
     <div class="row">
         <div class="col-sm-6 col-xs-12 removePadding">
-            <mat-paginator disableRipple="true" *ngIf="isPaginate" #paginator style-paginator hidePageSize
-                [length]="totalLength" [pageSize]="10" (page)="onChangePage($event)" showFirstLastButtons
+            <mat-paginator disableRipple="true" *ngIf="isPaginate" #paginator
+                style-paginator hidePageSize
+                [length]="totalLength" [pageSize]="10"
+                (page)="onChangePage($event)" showFirstLastButtons
                 class="paginatorcss">
             </mat-paginator>
         </div>
-        <div *ngIf="!isHideAdd" class="col-sm-6 col-xs-12" style="text-align:right;">
-            <button class="btn btn-primary" type="button" (click)="onAddEvent($event)">Add</button>
+        <div *ngIf="!isHideAdd" class="col-sm-6 col-xs-12"
+            style="text-align:right;">
+            <button class="btn btn-primary" type="button"
+                (click)="onAddEvent($event)">Add</button>
         </div>
 
-        <div *ngIf="showAddRowButton && !showInput" class="col-sm-6 col-xs-8 removePadding" style="text-align:right;">
-            <button class="btn btn-primary" type="button" (click)="onAddRowEvent()">Add Row</button>
+        <div *ngIf="showAddRowButton && !showInput" class="col-sm-6 col-xs-8
+            removePadding" style="text-align:right;">
+            <button class="btn btn-primary" type="button"
+                (click)="onAddRowEvent()">Add Row</button>
         </div>
     </div>
     <div class="row">
-        <div *ngIf="showDeleteButton" class="col-sm-2 col-xs-3 ">
-            <button class="btn btn-primary" type="button" (click)="onDeleteEvent($event)">Delete</button>
+        <div *ngIf="showCSVExportButton" class="col-sm-3 col-xs-3">
+            <a (click)="exporter.exportTable('csv')">Export To CSV</a>
+        </div>
+        <div *ngIf="showDeleteButton" class="col-sm-2 col-xs-3">
+            <button class="btn btn-primary" type="button"
+                (click)="onDeleteEvent($event)">Delete</button>
         </div>
     </div>
 

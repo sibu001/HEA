@@ -265,24 +265,19 @@ export class SystemUtilityManagementState {
 
     @Action(GetCustomerEventTypeListAction)
     getAllCustomerEventType(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerEventTypeListAction): Actions {
-        const force: boolean = action.force || SystemUtilityManagementState.getCustomerEventTypeList(ctx.getState()) === undefined;
-        let result: Actions;
-        if (force) {
-            document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.customerEventTypes + action.filter)
-                .pipe(
-                    tap((response: any) => {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.customerEventTypes, action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerEventTypeList: response.data,
+                    });
+                },
+                    error => {
                         document.getElementById('loader').classList.remove('loading');
-                        ctx.patchState({
-                            customerEventTypeList: response,
-                        });
-                    },
-                        error => {
-                            document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.errorMessage);
-                        }));
-        }
-        return result;
+                        this.utilityService.showErrorMessage(error.errorMessage);
+                    }));
     }
 
     @Action(GetCustomerEventTypeByIdAction)

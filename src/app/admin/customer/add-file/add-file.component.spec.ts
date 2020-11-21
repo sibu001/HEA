@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CustomerEventComponent } from './customer-event.component';
+import { AddFileComponent } from './add-file.component';
 
-describe('CustomerEventComponent', () => {
-  let component: CustomerEventComponent;
-  let fixture: ComponentFixture<CustomerEventComponent>;
+describe('AddFileComponent', () => {
+  let component: AddFileComponent;
+  let fixture: ComponentFixture<AddFileComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ CustomerEventComponent ]
+      declarations: [ AddFileComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(CustomerEventComponent);
+    fixture = TestBed.createComponent(AddFileComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

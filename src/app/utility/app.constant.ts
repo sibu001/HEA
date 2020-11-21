@@ -8,8 +8,14 @@ export class AppConstant {
     public static credentialTypes = 'credentialTypes';
     public static users = 'users';
     public static roles = 'roles';
+    public static customerEventTypes = 'customerEventTypes';
+    public static sendMail = 'sendMailMessage.do';
+    public static clearCustomerValueCache = 'clearValueCache';
+    public static recalculateVariables = 'recalculateVariables';
+    public static credentials = 'credentials';
+    public static rescrapeCustomerUsage = 'rescrapeCustomerUsage';
+    public static validateUtilityData = 'validateUtilityData';
     public static places = '';
-    public static customerEventTypes = '';
     public static customerComparisonGroups = '';
     public static factor = '';
     public static lookup = '';

@@ -200,7 +200,7 @@
           form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <app-table [keys]="keys" [checkbox]=true [data]="dataSource"
-              [totalElement]="rolesData.totalElements"  [isHideAdd]="true"></app-table>
+              [totalElement]="rolesData.totalElements" (checkBoxChangeEvent)="roleCheckBoxChangeEvent($event)" [isHideAdd]="true"></app-table>
           </div>
         </div>
 
@@ -211,7 +211,7 @@
           form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <app-table [keys]="topicKeys" [isHideAdd]="true" [checkbox]=true
-              [data]="topicDataSource"
+              [data]="topicDataSource" (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)"
               [totalElement]="topicGroupData.totalElements"></app-table>
           </div>
         </div>

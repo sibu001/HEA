@@ -54,12 +54,15 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() isPaginate: Boolean = false;
   @Input() isHideAdd: Boolean = false;
   @Input() showDeleteButton: Boolean = false;
+  @Input() showCSVExportButton: Boolean = false;
+  @Input() isFilePreview: Boolean = false;
   @Input() showAddRowButton: Boolean = false;
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
   @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() imageEvent: EventEmitter<any> = new EventEmitter();
+  @Output() filePreviewEvent: EventEmitter<any> = new EventEmitter();
   @Output() addEvent: EventEmitter<any> = new EventEmitter();
   @Output() bulkDeleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() checkBoxChangeEvent: EventEmitter<any> = new EventEmitter();
@@ -206,6 +209,9 @@ export class TableComponent implements OnInit, OnChanges {
     this.imageEvent.emit({ key: col.key, eventType: col.event, row: row, col: col });
   }
 
+  filePreview(event: any) {
+    this.filePreviewEvent.emit(event);
+  }
 
   linkCall(routerLink: any, queryParam: any, col: any) {
     const event = {

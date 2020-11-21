@@ -36,11 +36,11 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-      this.findCustomerEventType(this.force, '');
+    this.findCustomerEventType(this.force, '');
   }
 
   findCustomerEventType(force: boolean, filter: string): void {
-    this.systemUtilityService.loadCustomerEventTypeList(force, filter);
+    this.systemUtilityService.loadCustomerEventTypeList(filter);
     this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((credentialTypeList: any) => {
         this.customerEventTypeData.content = credentialTypeList;

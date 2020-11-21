@@ -81,7 +81,7 @@ mat-paginator.paginatorcss.mat-paginator {
   vertical-align: middle;
   border-right: 1px solid #ddd;
   align-self: stretch;
-  word-break: break-all;
+  word-break: break-word;
   font-size: 13px;
 }
 .mat-header-cell {
@@ -114,7 +114,8 @@ mat-header-cell {
 .text-nowrap {
   color: #000;
   font-size: 15px;
-  white-space: break-spaces;
+  white-space: inherit;
+  word-break: break-word;
   align-self: stretch;
 }
 
@@ -163,6 +164,7 @@ mat-header-cell {
 
 .center {
   text-align: center;
+  font-size: inherit;
 }
 .tableImage {
   cursor: pointer;
@@ -205,6 +207,10 @@ div .greenAlert {
   width: 35px;
 }
 .mat-column-delete {
+  flex: none;
+  width: 45px;
+}
+.mat-column-maxAlertLevel{
   flex: none;
   width: 35px;
 }

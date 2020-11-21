@@ -42,7 +42,7 @@ export class TableColumnData {
     static readonly CUSTOMER_CREDENTIAL_KEY: Array<TABLECOLUMN> = [
         { key: 'credentialType', displayName: 'Credential Type', isEdit: true },
         { key: 'active', displayName: 'Active', type: 'image', isEdit: true },
-        { key: 'login', displayName: 'Links' },
+        { key: 'login', displayName: 'Login' },
         { key: 'password', displayName: 'Password' },
         { key: 'dataInUse', displayName: 'Customer Data', type: 'image' },
         { key: 'utilityInUse', displayName: 'Utility Data', type: 'image' },
