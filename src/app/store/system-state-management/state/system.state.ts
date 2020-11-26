@@ -537,12 +537,12 @@ export class SystemManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.users + '/' + action.userId + '/' + AppConstant.roles)
+            result = this.loginService.performGetWithParams(AppConstant.roles, action.params)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            roleList: response,
+                            roleList: response.data,
                         });
                     },
                         error => {
@@ -554,30 +554,19 @@ export class SystemManagementState {
     }
 
     @Action(GetRoleByIdAction)
-    getRolesById(ctx: StateContext<SystemManagementModel>, action: GetRoleByIdAction): void {
-        // return this.loginService.performGet(AppConstant.users + '/' + action.userId + '/' + AppConstant.roles + '/' + action.id)
-        //     .pipe(
-        //         tap((response: any) => {
-        //             document.getElementById('loader').classList.remove('loading');
-        //             ctx.patchState({
-        //                 role: response,
-        //             });
-        //         },
-        //             error => {
-        //                 document.getElementById('loader').classList.remove('loading');
-        //                 this.utilityService.showErrorMessage(error.error.errorMessage);
-        //             }));
-        const roleList = SystemManagementState.getRoleList(ctx.getState());
-        let roleObj: any;
-        if (roleList !== undefined) {
-            const i = roleList.findIndex((item: any) => item.id === action.id);
-            if (i !== -1) {
-                roleObj = roleList[i];
-            }
-        }
-        ctx.patchState({
-            role: roleObj
-        });
+    getRolesById(ctx: StateContext<SystemManagementModel>, action: GetRoleByIdAction) {
+        return this.loginService.performGet(AppConstant.roles + '/' + action.roleCode)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        role: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
 
     }
 
@@ -585,7 +574,7 @@ export class SystemManagementState {
     @Action(DeleteRoleByIdAction)
     deleteRoleById(ctx: StateContext<SystemManagementModel>, action: DeleteRoleByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.users + '/' + action.userId + '/' + AppConstant.roles + '/' + action.id)
+        return this.loginService.performDelete(AppConstant.roles + '/' + action.roleCode)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -600,7 +589,7 @@ export class SystemManagementState {
     @Action(SaveRoleAction)
     saveRole(ctx: StateContext<SystemManagementModel>, action: SaveRoleAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.role, AppConstant.users + '/' + action.userId + '/' + AppConstant.roles)
+        return this.loginService.performPost(action.role, AppConstant.roles)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -618,7 +607,7 @@ export class SystemManagementState {
     @Action(UpdateRoleAction)
     updateRole(ctx: StateContext<SystemManagementModel>, action: UpdateRoleAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.role, AppConstant.users + '/' + action.userId + '/' + AppConstant.roles + '/' + action.id)
+        return this.loginService.performPut(action.role, AppConstant.roles + '/' + action.roleCode)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

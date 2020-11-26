@@ -55,10 +55,10 @@ export class StaffEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadCustomerViewConfiguration();
-    this.findCustomerGroup(true, '');
     this.getAllRole();
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.findUserCustomerGroup(this.id);
       this.customerService.loadStaffById(this.id);
       this.loadStaffById();
     }
@@ -72,11 +72,11 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       }));
   }
 
-  findCustomerGroup(force: boolean, filter: any) {
-    this.systemService.loadCustomerGroupList(force, filter);
-    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
+  findUserCustomerGroup(userId: any) {
+    this.customerService.loadUserCustomerGroupList(userId);
+    this.subscriptions.add(this.customerService.getUserCustomerGroupsList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
-        this.topicGroupData.content = customerGroupList;
+        this.topicGroupData.content = customerGroupList.data.list;
         this.topicDataSource = [...this.topicGroupData.content];
       }));
   }
@@ -92,11 +92,11 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   getAllRole(): any {
-    this.systemService.loadRoleList(false, this.userId);
+    this.systemService.loadRoleList(true, this.userId);
     this.subscriptions.add(this.systemService.getRoleList().pipe(skipWhile((item: any) => !item))
       .subscribe((roleList: any) => {
-        this.roleList = roleList;
-        this.rolesData.content = roleList;
+        this.roleList = roleList.list;
+        this.rolesData.content = roleList.list;
         this.dataSource = [...this.rolesData.content];
       }));
   }
@@ -185,14 +185,14 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     this.getAllRole();
   }
   assignRoleToStaff(roleList: any) {
-    roleList.array.forEach(element => {
-      this.systemService.saveRole(element.roleCode, this.id);
+    roleList.forEach(element => {
+      this.customerService.assignRoleToUser(this.id, element.roleCode);
     });
   }
 
   deleteRoleOfStaff(deleteList: any) {
-    deleteList.array.forEach(element => {
-      this.systemService.deleteRoleById(element.roleCode, this.id);
+    deleteList.forEach(element => {
+      // this.customerService.deleteRoleById(this.id, element.roleCode);
     });
   }
   checkTopicGroup() {

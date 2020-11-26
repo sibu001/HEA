@@ -24,10 +24,10 @@ export class ViewConfigurationAttributesComponent implements OnInit {
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');
     this.keys = TableColumnData.ATTRIBUTE_LIST_KEYS;
-    this.findAttribute();
+    this.findAttribute(null);
   }
 
-  findAttribute(): any { }
+  findAttribute(event: any): any { }
 
 
   addAttributes(): any {

@@ -5,18 +5,23 @@ import {
   DeleteUserReportDefinitionByIdAction,
   DeleteUserReportDefinitionContentPartByIdAction,
   DeleteUserReportDefinitionContextVariableTypeByIdAction,
+  DeleteUserReportGroupByIdAction,
   GetUserReportDefinitionByIdAction,
   GetUserReportDefinitionContentPartByIdAction,
   GetUserReportDefinitionContentPartListAction,
   GetUserReportDefinitionContextVariableTypeByIdAction,
   GetUserReportDefinitionContextVariableTypeListAction,
   GetUserReportDefinitionListAction,
+  GetUserReportGroupByIdAction,
+  GetUserReportGroupListAction,
   SaveUserReportDefinitionAction,
   SaveUserReportDefinitionContentPartAction,
   SaveUserReportDefinitionContextVariableTypeAction,
+  SaveUserReportGroupAction,
   UpdateUserReportDefinitionAction,
   UpdateUserReportDefinitionContentPartAction,
-  UpdateUserReportDefinitionContextVariableTypeAction
+  UpdateUserReportDefinitionContextVariableTypeAction,
+  UpdateUserReportGroupAction
 } from '../state/user-report.action';
 import { UserReportManagementState } from '../state/user-report.state';
 
@@ -109,6 +114,26 @@ export class UserReportService {
 
   deleteUserReportDefinitionContentPartById(id: number): Observable<UserReportManagementState> {
     return this.store.dispatch(new DeleteUserReportDefinitionContentPartByIdAction(id));
+  }
+
+  loadUserReportGroupList(force: boolean, filter: any): Observable<UserReportManagementState> {
+    return this.store.dispatch(new GetUserReportGroupListAction(force, filter));
+  }
+
+  loadUserReportGroupById(id: number): Observable<UserReportManagementState> {
+    return this.store.dispatch(new GetUserReportGroupByIdAction(id));
+  }
+
+  saveUserReportGroup(UserReportGroup: any): Observable<UserReportManagementState> {
+    return this.store.dispatch(new SaveUserReportGroupAction(UserReportGroup));
+  }
+
+  updateUserReportGroup(id: number, UserReportGroup: any): Observable<UserReportManagementState> {
+    return this.store.dispatch(new UpdateUserReportGroupAction(id, UserReportGroup));
+  }
+
+  deleteUserReportGroupById(id: number): Observable<UserReportManagementState> {
+    return this.store.dispatch(new DeleteUserReportGroupByIdAction(id));
   }
 
 }

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -15,6 +15,18 @@ import { UtilityCredentialsComponent } from '../utility-credentials/utility-cred
 import { CustomerAlertComponent } from '../customer-alert/customer-alert.component';
 import { CustomerEventTypeComponent } from '../customer-event-type/customer-event-type.component';
 import { StaffNoteComponent } from '../staff-note/staff-note.component';
+import { HttpParams } from '@angular/common/http';
+import { ErrorStateMatcher } from '@angular/material';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const invalidCtrl = !!(control && control.invalid && control.parent.dirty);
+    const invalidParent = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
+
+    return (invalidCtrl || invalidParent);
+  }
+}
+
 
 @Component({
   selector: 'app-customer-view',
@@ -22,7 +34,9 @@ import { StaffNoteComponent } from '../staff-note/staff-note.component';
   styleUrls: ['./customer-view.component.css']
 })
 export class CustomerViewComponent implements OnInit, OnDestroy {
+  matcher = new MyErrorStateMatcher();
   customerForm: FormGroup;
+  passwordForm: FormGroup;
   customerGroupList: any;
   coachUserList: any;
   pgeHasPoolDisabled = false;
@@ -69,6 +83,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   isForce = false;
   fileObject: any;
   description = '';
+  minLength = 12;
+  maxLength = 100;
+  pattern = '';
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public dialog: MatDialog,
     private readonly formBuilder: FormBuilder,
@@ -78,12 +95,14 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     private readonly location: Location,
     private readonly router: Router,
     private readonly el: ElementRef) {
+    this.getPasswordValidationRule();
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
   }
 
   ngOnInit() {
+    // this.setPasswordForm();
     this.loadCustomerGroup();
     this.setForm(undefined);
     if (this.id !== undefined) {
@@ -117,6 +136,17 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         this.coachUserList = coachUserList.list;
       }));
 
+  }
+  setPasswordForm() {
+    this.passwordForm = this.formBuilder.group({
+      password: ['', [Validators.required, Validators.maxLength(this.maxLength), Validators.minLength(this.minLength), Validators.pattern(this.pattern)]],
+      confirmPassword: ['']
+    }, { validator: this.checkPasswords });
+  }
+  checkPasswords(group: FormGroup) { // here we have the 'passwords' group
+    const pass = group.get('password').value;
+    const confirmPass = group.get('confirmPassword').value;
+    return pass === confirmPass ? null : { notSame: true };
   }
   setForm(event: any) {
     this.customerForm = this.formBuilder.group({
@@ -231,9 +261,55 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         longitude: [event !== undefined ? event.place.longitude : ''],
         id: [event !== undefined ? event.place.id : ''],
       }),
+      passwordForm: this.formBuilder.group({
+        password: ['', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]],
+        confirmPassword: ['',Validators.required]
+      }, { validator: this.checkPasswords }),
       activationMail: [false],
       repeatedActivationMail: [false],
     });
+  }
+
+  getPasswordValidationRule() {
+    this.customerService.loadPasswordValidationRule();
+    this.subscriptions.add(this.customerService.getPasswordValidationRule().pipe(skipWhile((item: any) => !item))
+      .subscribe((passwordValidationRule: any) => {
+        if (passwordValidationRule.data && passwordValidationRule.data.length > 0) {
+          this.maxLength = passwordValidationRule.data[0].maximumLength;
+          this.minLength = passwordValidationRule.data[0].minimumLength;
+          if (passwordValidationRule.data.length > 1 && passwordValidationRule.data[1].rules.length > 0) {
+            this.pattern = passwordValidationRule.data[1].rules[0].validCharacters;
+          }
+          // this.setPasswordForm();
+        }
+        console.log(passwordValidationRule);
+      }));
+  }
+
+  getValidateNewPassword(password: any) {
+    this.customerService.loadValidateNewPassword(password);
+    this.subscriptions.add(this.customerService.getValidateNewPassword().pipe(skipWhile((item: any) => !item))
+      .subscribe((passwordValidation: any) => {
+        console.log(passwordValidation);
+      }));
+  }
+
+  saveValidateNewPassword(password: any) {
+    const params = new HttpParams()
+      .set('password', password);
+    this.subscriptions.add(this.customerService.saveValidateNewPassword(params).pipe(skipWhile((item: any) => !item))
+      .subscribe((passwordValidation: any) => {
+        console.log(passwordValidation);
+      }));
+  }
+
+  saveNewPassword(password: any) {
+    const params = new HttpParams()
+      .set('password', password);
+    this.subscriptions.add(this.customerService.setNewPassword(this.id, params).pipe(skipWhile((item: any) => !item))
+      .subscribe((passwordValidation: any) => {
+        console.log(passwordValidation);
+      }));
   }
 
   openAddressOnGoogleMap() {
@@ -587,6 +663,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     }
   }
   get f() { return this.customerForm.controls; }
+  get p() {
+    const passwordForm = this.customerForm.controls.passwordForm as FormGroup;
+    return passwordForm.controls;
+  }
   get f1() {
     const user = this.customerForm.controls.user as FormGroup;
     return user.controls;

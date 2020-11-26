@@ -691,13 +691,13 @@
 
           <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="placeKey" [data]="placeDataSource" [isDelete]=false
+              <app-table [keys]="placeKey" [data]="placeDataSource" [isHideAdd]=true [isDelete]=false
                 [totalElement]="placeData.totalElements" [checkbox]=true>
               </app-table>
             </div>
           </div>
 
-          <div class="row">
+          <div class="row" *ngIf='id!==undefined'>
             <div class="col-sm-12">
               <p class="messages">
                 <img src="assets/images/dot03.gif" class="dot pointer">
@@ -710,24 +710,25 @@
 
           <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="programGroupKey" [data]="programGroupDataSource" [isDelete]=false
-                [totalElement]="programGroupData.totalElements" [checkbox]=true>
+              <app-table [keys]="programGroupKey" [data]="programGroupDataSource" [isHideAdd]=true [isDelete]=false
+                [totalElement]="programGroupData.totalElements" [checkbox]=true id='programCode'
+                [selectionList]='programSelectionList'>
               </app-table>
             </div>
           </div>
 
           <div class="row rowPadding paddingTop">
-            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-4">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-1 sidePadding">
               <button type="button" class="btn btn-primary" (click)="back()">Back</button>
             </div>
             <!-- <div class="col-sm-6 col-md-6 col-lg-6">
 
             </div> -->
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
+            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-9 sidePadding">
               <button type="button" class="btn btn-primary" (click)="delete()"
-                *ngIf="id!==undefined&&id!==null">Delete</button>
+                *ngIf="id!==undefined && id!==null">Delete</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4 bottomButton">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-2 bottomButton sidePadding">
               <button type="button" class="btn btn-primary" (click)="save()" style="margin-right: -4px;">Save</button>
             </div>
           </div>

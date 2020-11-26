@@ -14,7 +14,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class RoleEditComponent implements OnInit, OnDestroy {
 
   roleForm: FormGroup;
-  id: any;
+  roleCode: any;
   isForce = false;
   userId: any;
   private readonly subscriptions: Subscription = new Subscription();
@@ -28,30 +28,25 @@ export class RoleEditComponent implements OnInit, OnDestroy {
     this.userId = users.userId;
     this.systemService.loadRoleList(true, this.userId);
     this.activateRoute.queryParams.subscribe(params => {
-      this.id = params['id'];
+      this.roleCode = params['roleCode'];
     });
   }
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.id !== undefined) {
-      this.subscriptions.add(this.systemService.getRoleList().pipe(skipWhile((item: any) => !item))
-        .subscribe((roleList: any) => {
-          this.systemService.loadRoleById(this.id, this.userId);
-          this.loadRoleById();
-        }));
-
+    if (this.roleCode) {
+      this.loadRoleById();
     }
   }
 
   loadRoleById() {
+    this.systemService.loadRoleById(this.roleCode);
     this.subscriptions.add(this.systemService.getRoleById().pipe(skipWhile((item: any) => !item))
       .subscribe((role: any) => {
-        console.log(role);
         if (this.isForce) {
-          this.router.navigate(['admin/role/roleEdit'], { queryParams: { 'id': role.id } });
+          this.router.navigate(['admin/role/roleEdit'], { queryParams: { 'roleCode': role.roleCode } });
         }
-        this.setForm(role);
+        this.setForm(role.data);
       }, error => {
         console.log(error);
       }));
@@ -61,8 +56,8 @@ export class RoleEditComponent implements OnInit, OnDestroy {
     this.roleForm = this.formBuilder.group({
       roleCode: [event !== undefined ? event.roleCode : '', Validators.required],
       description: [event !== undefined ? event.description : ''],
-      id: [event !== undefined ? event.id : ''],
-      permanent: [event !== undefined ? event.permanent : ''],
+      id: [event !== undefined ? event.id : null],
+      permanent: [event !== undefined ? event.permanent : true],
     });
   }
 
@@ -70,23 +65,26 @@ export class RoleEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/role/roleList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.systemService.deleteRoleById(this.id, this.userId).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/role/roleList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.systemService.deleteRoleById(this.roleCode).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/role/roleList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   save() {
     if (this.roleForm.valid) {
-      if (this.id !== null && this.id !== undefined) {
-        this.subscriptions.add(this.systemService.updateRole(this.id, this.roleForm.value, this.userId).pipe(
+      if (this.roleCode !== null && this.roleCode !== undefined) {
+        this.roleForm.value.id = this.roleForm.value.roleCode;
+        this.subscriptions.add(this.systemService.updateRole(this.roleCode, this.roleForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
             this.loadRoleById();
           }));
       } else {
-        this.subscriptions.add(this.systemService.saveRole(this.roleForm.value, this.userId).pipe(
+        this.subscriptions.add(this.systemService.saveRole(this.roleForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;

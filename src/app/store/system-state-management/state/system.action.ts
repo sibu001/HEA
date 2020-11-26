@@ -161,31 +161,31 @@ export class GetCoachUserListAction {
 
 export class GetRoleListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_ROLE_LIST;
-    constructor(readonly force: boolean, readonly userId: any) {
+    constructor(readonly force: boolean, readonly params: any) {
     }
 }
 
 export class GetRoleByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_ROLE_BY_ID;
-    constructor(readonly id: string, readonly userId: any) {
+    constructor(readonly roleCode: string) {
     }
 }
 
 export class UpdateRoleAction {
     static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_ROLE;
-    constructor(readonly id: string, readonly role: any, readonly userId: any) {
+    constructor(readonly roleCode: string, readonly role: any) {
     }
 }
 
 export class SaveRoleAction {
     static readonly type: SystemActionTypes = SystemActionTypes.SAVE_ROLE;
-    constructor(readonly role: any, readonly userId: any) {
+    constructor(readonly role: any) {
     }
 }
 
 export class DeleteRoleByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_ROLE;
-    constructor(readonly id: string, readonly userId: any) {
+    constructor(readonly roleCode: string) {
     }
 }
 

@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
@@ -57,10 +57,12 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/program/programGroupList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.systemService.deleteProgramGroupById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/program/programGroupList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.systemService.deleteProgramGroupById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/program/programGroupList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   save() {
@@ -81,17 +83,28 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
           }));
       }
     } else {
-      this.validateForm();
+      this.validateAllFormFields(this.programGroupForm);
     }
   }
-  validateForm() {
-    for (const key of Object.keys(this.programGroupForm.controls)) {
-      if (this.programGroupForm.controls[key].invalid) {
-        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-        invalidControl.focus();
-        break;
+  // validateForm() {
+  //   for (const key of Object.keys(this.programGroupForm.controls)) {
+  //     if (this.programGroupForm.controls[key].invalid) {
+  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+  //       invalidControl.focus();
+  //       break;
+  //     }
+  //   }
+  // }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
       }
-    }
+    });
   }
   get f() { return this.programGroupForm.controls; }
 

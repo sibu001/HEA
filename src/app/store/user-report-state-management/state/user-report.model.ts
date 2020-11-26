@@ -5,4 +5,6 @@ export interface UserReportManagementModel {
     userReportDefinitionContextVariableType: any;
     userReportDefinitionContentPartList: any;
     userReportDefinitionContentPart: any;
+    userReportGroupList: any;
+    userReportGroup: any;
 }

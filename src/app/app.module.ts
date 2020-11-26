@@ -19,8 +19,6 @@ import { HeadersComponent } from './headers/headers.component';
 import { RoleGuard } from './role.guard';
 import { UtilityService } from './services/utility.service';
 import { MatSnackBarModule } from '@angular/material';
-import { SummaryChartDefinitionListComponent } from './admin/summary-chart-definition/summary-chart-definition-list/summary-chart-definition-list.component';
-import { SummaryChartDefinitionEditComponent } from './admin/summary-chart-definition/summary-chart-definition-edit/summary-chart-definition-edit.component';
 
 @NgModule({
   declarations: [

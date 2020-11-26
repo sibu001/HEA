@@ -1,0 +1,209 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-9 col-md-9 col-sm-8">
+        <p class="accurate">Gas smart meter</p>
+        <form [formGroup]='gasForm' class="form-horizontal">
+          <div *ngIf='isAdminView' class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label class="control-label col-lg-2 col-sm-3" for="email">
+                  <span class="start">Audit Id:</span>
+                </label>
+                <div class="col-lg-5 col-sm-6">
+                  <input type="text" class="form-control" id="auditId" name="auditId" formControlName="auditId" />
+                </div>
+              </div>
+
+            </div>
+            <div class="col-sm-6">
+
+              <div class="form-group">
+                <label class="control-label col-lg-2 col-sm-3" for="code">
+                  <span class="start">Customer Name:</span>
+                </label>
+                <div class="col-lg-5 col-sm-6">
+                  <input type="text" class="form-control" id="customerName" name="customerName"
+                    formControlName="customerName" />
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+
+              <div class="form-group">
+                <label class="control-label col-lg-2 col-sm-3" for="email">
+                  <span class="start">Year:</span>
+                </label>
+                <div class="col-lg-5 col-sm-6">
+                  <input type="text" class="form-control" id="year" name="Year" formControlName="year">
+                </div>
+              </div>
+
+            </div>
+            <div class="col-sm-6">
+
+              <div class="form-group">
+                <label class="control-label col-lg-2 col-sm-3" for="code">
+                  <span class="start">Month:</span>
+                </label>
+                <div class="col-lg-5 col-sm-6">
+                  <input type="text" class="form-control" id="month" name="Month" formControlName="month">
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-6">
+
+              <div class="form-group">
+                <label class="control-label col-lg-2 col-sm-3" for="email">
+                  <span class="start">Day:</span>
+                </label>
+                <div class="col-lg-5 col-sm-6">
+                  <input type="text" class="form-control" id="day" name="Day" formControlName="day">
+                </div>
+              </div>
+
+            </div>
+            <div class="col-sm-6">
+
+              <div class="form-group">
+                <label class="control-label col-lg-2 col-sm-3" for="code">
+                  <span class="start">Hour:</span>
+                </label>
+                <div class="col-lg-5 col-sm-6">
+                  <input type="text" class="form-control" id="hour" name="Hour" formControlName="hour">
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12" style="text-align:right;">
+              <button type="button" class="btn btn-primary" (click)="searchData()">Show</button>
+            </div>
+          </div>
+        </form>
+        <hr>
+        <div class="row">
+          <div class="col-sm-12">
+            <p class="Messages">
+              <img src="assets/images/dot03.gif" class="dot">&nbsp;Values</p>
+            <app-table [keys]="keys" [checkbox]=true [isPaginate]="true" [isHideAdd]=true [isSearch]="false"
+              [data]="dataSource" [totalElement]="usageHistoryData.totalElements"
+              (changePageEvent)="perFormGetList('smartMeterGas')">
+            </app-table>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <!-- <table id="example" class="table table-striped table-bordered table-sm" data-source="data-source"
+                      [mfData]="usageHistoryList" #mf="mfDataTable" [mfRowsOnPage]="10">
+                      <thead>
+                          <tr>
+                              <th class="th-sm no-sort">
+                                  <mfDefaultSorter by="img"><img src="assets/images/whitebox.png" class="colorbox">
+                                  </mfDefaultSorter>
+                              </th>
+                              <th class="th-sm">
+                                  <mfDefaultSorter by="year">Year</mfDefaultSorter>
+                              </th>
+                              <th class="th-sm">
+                                  <mfDefaultSorter by="month">Month</mfDefaultSorter>
+                              </th>
+                              <th class="th-sm ">
+                                  <mfDefaultSorter by="day">Day</mfDefaultSorter>
+                              </th>
+                              <th class="th-sm ">
+                                  <mfDefaultSorter by="hour">Hour</mfDefaultSorter>
+                              </th>
+                              <th class="fwns no-sort">
+                                  Value
+                              </th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let usageList of usageHistoryList">
+                              <td> <img src="assets/images/whitebox.png" class="colorbox"></td>
+                              <td> {{usageList.year}} </td>
+                              <td>{{usageList.month}}</td>
+                              <td>{{usageList.day}}</td>
+                              <td>{{usageList.hour}}</td>
+                              <td>{{usageList.value}}</td>
+                          </tr>
+                      </tbody>
+                  </table> -->
+        </div>
+      </div>
+      <div *ngIf='isAdminView' class="col-md-3 .col-lg-3 col-sm-12">
+        <app-sidebar></app-sidebar>
+      </div>
+      <div *ngIf='!isAdminView' class="col-lg-3 col-md-3 col-sm-4 rightColumn">
+        <div class="feedback">
+          <p class="Energy_anaiytic">
+            <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
+          <p class="feedback">Send feedback to</p>
+          <p class="link_hea">
+            <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
+          </p>
+          <hr>
+          <ul class="leaks">
+            <li>
+              <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
+            </li>
+            <li>
+              <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
+            </li>
+            <li>
+              <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
+            </li>
+            <li>
+              <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
+            </li>
+            <li>
+              <div class="dropdown">
+                <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
+                </a>
+                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                  <li role="presentation" style="padding-bottom: 5px;">
+                    <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasList']">Gas</a>
+                  </li>
+                  <li role="presentation" style="padding-bottom: 5px;">
+                    <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasChargeList']">Gas
+                      charge</a>
+                  </li>
+                  <li role="presentation" style="padding-bottom: 5px;">
+                    <a role="menuitem" tabindex="-1"
+                      [routerLink]="['/electricity/electricityUsageList']">Electricity</a>
+                  </li>
+                  <li role="presentation" style="padding-bottom: 5px;">
+                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricity/electricityChargeList']">Electricity
+                      charge</a>
+                  </li>
+                  <li role="presentation" style="padding-bottom: 5px;">
+                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricity/electricitySmartMeterList']">Electric
+                      smart
+                      meter</a>
+                  </li>
+                  <li role="presentation" style="padding-bottom: 5px;">
+                    <a role="menuitem" tabindex="-1"
+                      [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric Daily
+                      smart
+                      meter</a>
+                  </li>
+                  <li role="presentation" style="padding-bottom: 5px;">
+                    <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasSmartMeterList']">Gas smart
+                      meter</a>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

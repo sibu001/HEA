@@ -43,6 +43,17 @@ export enum SystemActionTypes {
     RECALCULATE_CUSTOMER_VARIABLE = 'Recalculate Customer Variable',
     RESCRAPE_CUSTOMER_USAGE = 'Rescrape Customer Usage',
     VALIDATE_UTILITY_CREDENTIAL_DATA = 'Validate Utility Credential Data',
+    GET_PASSWORD_VALIDATION_RULE = 'Get Password Validation Rule',
+    GET_VALIDATE_NEW_PASSWORD = 'Get Validate New Password',
+    SAVE_VALIDATE_NEW_PASSWORD = 'Save Validate New Password',
+    SET_NEW_PASSWORD = 'Set New Password',
+    GET_ROLE_LIST_BY_USER_ID = 'Get Role List By User Id',
+    ASSIGN_ROLE_TO_USER_ID = 'Assign role To User',
+    DELETE_USER_ROLE = 'Delete User Role',
+    GET_USER_CUSTOMER_GROUP_LIST = 'Get All User Customer Group List',
+    GET_USER_CUSTOMER_GROUP_BY_ID = 'Get User Customer Group By Id',
+    SAVE_USER_CUSTOMER_GROUP = 'Save User Customer Group',
+    DELETE_USER_CUSTOMER_GROUP = 'Delete User Customer Group',
     CUSTOMER_ERROR = 'Customer Error'
 }
 export class GetCustomerListAction {
@@ -312,5 +323,69 @@ export class RescrapeCustomerUsageAction {
 export class ValidateUtilityCredentialDataAction {
     static readonly type: SystemActionTypes = SystemActionTypes.VALIDATE_UTILITY_CREDENTIAL_DATA;
     constructor(readonly customerId: any, readonly credentialId: any) {
+    }
+}
+
+export class GetPasswordValidationRuleAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_PASSWORD_VALIDATION_RULE;
+}
+
+export class GetValidateNewPasswordAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_VALIDATE_NEW_PASSWORD;
+    constructor(readonly password: any) {
+    }
+}
+
+export class SaveValidateNewPasswordAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_VALIDATE_NEW_PASSWORD;
+    constructor(readonly params: any) {
+    }
+}
+
+export class SetNewPasswordAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SET_NEW_PASSWORD;
+    constructor(readonly userId: any, readonly params: any) {
+    }
+}
+
+export class GetRoleListByUserIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_ROLE_LIST_BY_USER_ID;
+    constructor(readonly force: boolean, readonly userId: any) {
+    }
+}
+
+export class AssignRoleToUserAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.ASSIGN_ROLE_TO_USER_ID;
+    constructor(readonly userId: any, readonly roleCode: any) {
+    }
+}
+
+export class DeleteUserRoleAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_USER_ROLE;
+    constructor(readonly userId: any, readonly roleCode: any) {
+    }
+}
+
+export class GetUserCustomerGroupListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_CUSTOMER_GROUP_LIST;
+    constructor(readonly userId: any) {
+    }
+}
+
+export class GetUserCustomerGroupByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_CUSTOMER_GROUP_BY_ID;
+    constructor(readonly userId: any, readonly customerGroupId: number) {
+    }
+}
+
+export class SaveUserCustomerGroupAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_USER_CUSTOMER_GROUP;
+    constructor(readonly userId: any, readonly customerGroupId: any) {
+    }
+}
+
+export class DeleteUserCustomerGroupByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_USER_CUSTOMER_GROUP;
+    constructor(readonly userId: any, readonly customerGroupId: any) {
     }
 }

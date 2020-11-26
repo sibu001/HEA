@@ -139,18 +139,23 @@
           aria-controls='collapseUsageHistory'>Usage history</a>
         <ul class='collapse' id='collapseUsageHistory'>
           <li><a [routerLink]="['/admin/shareMyData']">Share My Data</a></li>
-          <li><a [routerLink]="['/gasList']" [queryParams]="{ isAdminView: 'true'}">Gas</a></li>
-          <li><a [routerLink]="['/gasChargeList']" [queryParams]="{ isAdminView: 'true'}">Gas charge</a></li>
-          <li><a [routerLink]="['/electricityList']" [queryParams]="{ isAdminView: 'true'}">Electricity</a></li>
-          <li><a [routerLink]="['/electricityChargeList']" [queryParams]="{ isAdminView: 'true'}">Electricity charge</a>
+          <li><a [routerLink]="['/admin/gas/gasList']" [queryParams]="{ isAdminView: 'true'}">Gas</a></li>
+          <li><a [routerLink]="['/admin/gas/gasChargeList']" [queryParams]="{ isAdminView: 'true'}">Gas charge</a></li>
+          <li><a [routerLink]="['/admin/electricity/electricityUsageList']"
+              [queryParams]="{ isAdminView: 'true'}">Electricity</a></li>
+          <li><a [routerLink]="['/admin/electricity/electricityChargeList']"
+              [queryParams]="{ isAdminView: 'true'}">Electricity charge</a>
           </li>
           <li><a [routerLink]="['/admin/waterUsageHistory/waterList']">Water</a></li>
           <li><a [routerLink]="['/admin/waterUsageHistory/waterChargeList']">Water charge</a></li>
-          <li><a [routerLink]="['/electricitySmartMeterList']" [queryParams]="{ isAdminView: 'true'}">Electric smart
+          <li><a [routerLink]="['/admin/electricity/electricitySmartMeterList']"
+              [queryParams]="{ isAdminView: 'true'}">Electric smart
               meter</a></li>
-          <li><a [routerLink]="['/electricDailySmartMeterList']" [queryParams]="{ isAdminView: 'true'}">Electric Daily
+          <li><a [routerLink]="['/admin/electricity/electricityDailySmartMeterList']"
+              [queryParams]="{ isAdminView: 'true'}">Electric Daily
               smart meter</a></li>
-          <li><a [routerLink]="['/smartMeterGasList.do']" [queryParams]="{ isAdminView: 'true'}">Gas smart meter</a>
+          <li><a [routerLink]="['/admin/gas/gasSmartMeterList']" [queryParams]="{ isAdminView: 'true'}">Gas smart
+              meter</a>
           </li>
           <li><a [routerLink]="['/admin/waterUsageHistory/waterSmartMeterList']">Water smart meter</a></li>
         </ul>

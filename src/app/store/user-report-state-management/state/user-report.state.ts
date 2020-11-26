@@ -8,18 +8,23 @@ import {
     DeleteUserReportDefinitionByIdAction,
     DeleteUserReportDefinitionContentPartByIdAction,
     DeleteUserReportDefinitionContextVariableTypeByIdAction,
+    DeleteUserReportGroupByIdAction,
     GetUserReportDefinitionByIdAction,
     GetUserReportDefinitionContentPartByIdAction,
     GetUserReportDefinitionContentPartListAction,
     GetUserReportDefinitionContextVariableTypeByIdAction,
     GetUserReportDefinitionContextVariableTypeListAction,
     GetUserReportDefinitionListAction,
+    GetUserReportGroupByIdAction,
+    GetUserReportGroupListAction,
     SaveUserReportDefinitionAction,
     SaveUserReportDefinitionContentPartAction,
     SaveUserReportDefinitionContextVariableTypeAction,
+    SaveUserReportGroupAction,
     UpdateUserReportDefinitionAction,
     UpdateUserReportDefinitionContentPartAction,
-    UpdateUserReportDefinitionContextVariableTypeAction
+    UpdateUserReportDefinitionContextVariableTypeAction,
+    UpdateUserReportGroupAction
 } from './user-report.action';
 import { UserReportManagementModel } from './user-report.model';
 
@@ -31,7 +36,9 @@ import { UserReportManagementModel } from './user-report.model';
         userReportDefinitionContextVariableTypeList: undefined,
         userReportDefinitionContextVariableType: undefined,
         userReportDefinitionContentPartList: undefined,
-        userReportDefinitionContentPart: undefined
+        userReportDefinitionContentPart: undefined,
+        userReportGroupList: undefined,
+        userReportGroup: undefined,
     }
 })
 
@@ -68,6 +75,16 @@ export class UserReportManagementState {
     @Selector()
     static getUserReportDefinitionContentPartById(state: UserReportManagementModel): any {
         return state.userReportDefinitionContentPart;
+    }
+
+    @Selector()
+    static getUserReportGroupList(state: UserReportManagementModel): any {
+        return state.userReportGroupList;
+    }
+
+    @Selector()
+    static getUserReportGroup(state: UserReportManagementModel): any {
+        return state.userReportGroup;
     }
 
     @Action(GetUserReportDefinitionListAction)
@@ -340,5 +357,96 @@ export class UserReportManagementState {
                         this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
+
+    @Action(GetUserReportGroupListAction)
+    getAllUserReportGroup(ctx: StateContext<UserReportManagementModel>, action: GetUserReportGroupListAction): Actions {
+        const force: boolean = action.force || UserReportManagementState.getUserReportGroupList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.userReportGroups + action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            userReportGroupList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.errorMessage);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetUserReportGroupByIdAction)
+    getUserReportGroupById(ctx: StateContext<UserReportManagementModel>, action: GetUserReportGroupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.userReportGroups + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        userReportGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(DeleteUserReportGroupByIdAction)
+    deleteUserReportGroupById(ctx: StateContext<UserReportManagementModel>, action: DeleteUserReportGroupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.userReportGroups + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(SaveUserReportGroupAction)
+    saveUserReportGroup(ctx: StateContext<UserReportManagementModel>, action: SaveUserReportGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.userReportGroup, AppConstant.userReportGroups)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        userReportGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(UpdateUserReportGroupAction)
+    updateUserReportGroup(ctx: StateContext<UserReportManagementModel>, action: UpdateUserReportGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.userReportGroup, AppConstant.userReportGroups + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        userReportGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
 
 }

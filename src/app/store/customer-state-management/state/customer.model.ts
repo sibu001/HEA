@@ -22,5 +22,12 @@ export interface CustomerManagementModel {
     recalculateCustomerVariable: any;
     rescrapeCustomerUsage: any;
     validateCustomerData: any;
+    passwordValidationRule: any;
+    validateNewPassword: any;
+    saveValidatePassword: any;
+    setNewPassword: any;
+    roleListByUserId: any;
+    userCustomerGroupList: any;
+    userCustomerGroup: any;
     error: Error;
 }

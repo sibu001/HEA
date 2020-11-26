@@ -43,6 +43,14 @@ const ROUTES: Routes = [
       {
         path: '',
         loadChildren: './usageHistory/usageHistory.module#UsageHistoryModule',
+      },
+      {
+        path: 'electricity',
+        loadChildren: './electricity/electricity.module#ElectricityModule'
+      },
+      {
+        path: 'gas',
+        loadChildren: './gas/gas.module#GasModule'
       }
     ]
   },
@@ -208,8 +216,15 @@ const ROUTES: Routes = [
       {
         path: 'waterUsageHistory',
         loadChildren: './admin/water-usage-history/water-usage-history.module#WaterUsageHistoryModule'
+      },
+      {
+        path: 'electricity',
+        loadChildren: './electricity/electricity.module#ElectricityModule'
+      },
+      {
+        path: 'gas',
+        loadChildren: './gas/gas.module#GasModule'
       }
-
     ]
   },
   // {

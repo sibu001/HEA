@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 
 import { ActivatedRoute, Router } from '@angular/router';
@@ -83,13 +83,13 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.placeForm = this.fb.group({
-      id: [this.id !== undefined ? this.id : ''],
-      placeCode: [event !== undefined ? event.placeCode : '', Validators.required],
-      placeName: [event !== undefined ? event.placeName : '', Validators.required],
-      stationId: [event !== undefined ? event.stationId : ''],
-      timeZone: [event !== undefined ? event.timeZone : 'America/Los_Angeles'],
-      latitude: [event !== undefined ? event.latitude : '', Validators.required],
-      longitude: [event !== undefined ? event.longitude : '', Validators.required],
+      id: this.fb.control(this.id !== undefined ? this.id : ''),
+      placeCode: this.fb.control(event !== undefined ? event.id : '', Validators.required),
+      placeName: this.fb.control(event !== undefined ? event.placeName : '', Validators.required),
+      stationId: this.fb.control(event !== undefined ? event.stationId : ''),
+      timezone: this.fb.control(event !== undefined ? event.timezone : 'America/Los_Angeles'),
+      latitude: this.fb.control(event !== undefined ? event.latitude : '', Validators.required),
+      longitude: this.fb.control(event !== undefined ? event.longitude : '', Validators.required),
     });
   }
 
@@ -97,10 +97,12 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/place/placeList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.systemUtilityService.deletePlaceById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/place/placeList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.systemUtilityService.deletePlaceById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/place/placeList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   save() {
@@ -111,6 +113,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
           .subscribe((response: any) => {
             this.isForce = true;
             this.loadPlaceById();
+            this.router.navigate(['admin/place/placeList'], { queryParams: { 'force': this.isForce } });
           }));
       } else {
         this.subscriptions.add(this.systemUtilityService.savePlace(this.placeForm.value).pipe(
@@ -121,18 +124,30 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
           }));
       }
     } else {
-      this.validateForm();
+      this.validateAllFormFields(this.placeForm);
     }
   }
-  validateForm() {
-    for (const key of Object.keys(this.placeForm.controls)) {
-      if (this.placeForm.controls[key].invalid) {
-        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-        invalidControl.focus();
-        break;
+  // validateForm() {
+  //   for (const key of Object.keys(this.placeForm.controls)) {
+  //     if (this.placeForm.controls[key].invalid) {
+  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+  //       invalidControl.focus();
+  //       break;
+  //     }
+  //   }
+  // }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
       }
-    }
+    });
   }
+
 
   get f() { return this.placeForm.controls; }
 

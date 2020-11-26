@@ -119,7 +119,8 @@
                                         </td>
                                         <!-- <td>{{usageList.date | date : "dd-MMM-y"}} - {{usageList.endDate | date : "dd-MMM-y"}}</td> -->
                                         <td> <a (click)="customerEventView(usageList)"
-                                            style="cursor:pointer;color:#000;text-decoration:underline"><span style="display:none;">{{usageList.eventDatetime}}</span>{{usageList.eventDatetime | date : "dd-MMM-y"}}
+                                                style="cursor:pointer;color:#000;text-decoration:underline"><span
+                                                    style="display:none;">{{usageList.eventDatetime}}</span>{{usageList.eventDatetime | date : "dd-MMM-y"}}
                                             </a></td>
                                         <td> <a (click)="customerEventView(usageList)"
                                                 style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.linkedPersonName}}
@@ -170,36 +171,36 @@
                                 </a>
                                 <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasList']">Gas</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasChargeList']">Gas
                                             charge</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricityList']">Electricity</a>
+                                            [routerLink]="['/electricity/electricityUsageList']">Electricity</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                            [routerLink]="['/electricity/electricityChargeList']">Electricity charge</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                            [routerLink]="['/electricity/electricitySmartMeterList']">Electric smart meter</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart
+                                            [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric Daily smart
                                             meter</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart
+                                            [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric Daily smart
                                             meter</a>
                                     </li>
                                     <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasSmartMeterList']">Gas smart
                                             meter</a>
                                     </li>
                                 </ul>

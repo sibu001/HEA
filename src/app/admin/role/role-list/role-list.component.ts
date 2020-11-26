@@ -42,16 +42,16 @@ export class RoleListComponent implements OnInit, OnDestroy {
   }
 
   findRole(): any {
-    this.systemService.loadRoleList(this.force, this.userId);
+    this.systemService.loadRoleList(this.force, '');
     this.subscriptions.add(this.systemService.getRoleList().pipe(skipWhile((item: any) => !item))
       .subscribe((roleList: any) => {
-        this.rolesData.content = roleList;
+        this.rolesData.content = roleList.list;
         this.dataSource = [...this.rolesData.content];
       }));
   }
 
   goToEditRole(event: any): any {
-    this.router.navigate(['admin/role/roleEdit'], { queryParams: { 'id': event.roleCode } });
+    this.router.navigate(['admin/role/roleEdit'], { queryParams: { 'roleCode': event.roleCode } });
   }
 
   addRole(): any {

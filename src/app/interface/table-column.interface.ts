@@ -11,4 +11,5 @@ export interface TABLECOLUMN {
     option?: Array<any>;
     addRowType?: string;
     isDate?: boolean;
+    isId?: boolean;
 }

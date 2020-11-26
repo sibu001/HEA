@@ -46,6 +46,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() data: any;
   @Input() totalElement: any;
   @Input() keys: any;
+  @Input() id: any;
   @Input() sideBorder: Boolean = false;
   @Input() action: Boolean = false;
   @Input() checkbox: Boolean = false;
@@ -57,6 +58,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() showCSVExportButton: Boolean = false;
   @Input() isFilePreview: Boolean = false;
   @Input() showAddRowButton: Boolean = false;
+  @Input() selectionList: Array<any> = [];
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
@@ -109,6 +111,19 @@ export class TableComponent implements OnInit, OnChanges {
       this.totalLength = this.totalElement;
       this.dataSource = new MatTableDataSource(this.data);
       this.loadPagination();
+      if (this.selectionList.length > 0) {
+        this.selectionList.forEach(e => {
+          this.dataSource.data.every((row) => {
+            if (e === row[this.id]) {
+              this.selection.select(row);
+              this.checkBoxChange();
+              return false;
+            } else {
+              return true;
+            }
+          });
+        });
+      }
     }
     if (changes['keys'] && changes['keys'].currentValue) {
       this.keys = changes['keys'].currentValue;

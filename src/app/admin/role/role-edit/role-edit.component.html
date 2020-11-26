@@ -3,15 +3,14 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
           padding-top: 35px;'>
-          <!-- <p class='Messages'>
+        <!-- <p class='Messages'>
               <img src='assets/images/dot03.gif' class='dot'>
           <span class="messageName">Role</span>
         </p> -->
         <div class="row">
           <div class="col-sm-12">
             <p class="messages">
-              <img class="pointer" src="assets/images/dot03.gif"
-                class="dot">
+              <img class="pointer" src="assets/images/dot03.gif" class="dot">
               <span class="messageName">Role</span>
             </p>
           </div>
@@ -22,14 +21,14 @@
               Role Code:
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <span *ngIf="id!==undefined">{{id}}</span>
-              <input  *ngIf="id===undefined" type="text" formControlName="roleCode" class="form-control
+              <span *ngIf="roleCode!==undefined">{{roleCode}}</span>
+              <input *ngIf="roleCode===undefined" type="text" formControlName="roleCode" class="form-control
                 form-control-sm">
               <div *ngIf="f.roleCode.invalid && (f.roleCode.dirty
                 ||
                 f.roleCode.touched)">
                 <span class="error" *ngIf="f.roleCode.errors.required">
-                   Role Code is required.
+                  Role Code is required.
                 </span>
               </div>
             </div>
@@ -39,27 +38,27 @@
               Description:
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <input type="text" formControlName="description"
-                class="form-control form-control-sm">
+              <input type="text" formControlName="description" class="form-control form-control-sm">
             </div>
           </div>
           <div class="row paddingTop rowPadding">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sidePadding">
               <button type="text" class="btn btn-primary" (click)='back()'>Cancel</button>
             </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="text-align:
-            right;">
-              <button type="text" class="btn btn-primary" (click)="delete()"
-                *ngIf="id!=undefined&&id!='ADMIN'" >Delete</button>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="text-align:
-              right;">
-              <button type="text" class="btn btn-primary" (click)="save()">Save</button>
+            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 row sidePadding">
+              <div *ngIf="roleCode!==undefined&&roleCode!=='ADMIN'" class="col-xs-0 col-sm-8 col-md-8 col-lg-8 sidePadding"></div>
+              <div *ngIf="roleCode===undefined || roleCode==='ADMIN'" class="col-xs-0 col-sm-10 col-md-10 col-lg-10 sidePadding">
+              </div>
+
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
+                <button type="text" class="btn btn-primary" (click)="save()">Save</button>
+              </div>
+              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
+                <button type="text" class="btn btn-primary" (click)="delete()"
+                  *ngIf="roleCode!=undefined&&roleCode!='ADMIN'">Delete</button>
+              </div>
             </div>
           </div>
-
 
         </form>
       </div>

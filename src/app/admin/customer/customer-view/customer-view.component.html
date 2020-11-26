@@ -174,22 +174,43 @@
                 id="username" formControlName="username">
             </div>
           </div>
-          <div class="row borderBottom rowPadding" formGroupName="user">
+          <div class="row borderBottom rowPadding" formGroupName="passwordForm">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               New password:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="password" class="form-control form-control-sm"
-                id="restorePasswordKey">
+                id="restorePasswordKey" formControlName="password">
+              <div *ngIf="p.password.invalid && (p.password.dirty ||
+                p.password.touched)">
+                <span class="error" *ngIf="p.password.errors?.required">
+                  Password is required.
+                </span>
+                <span class="error" *ngIf="p.password.errors?.required ||
+                  p.password.errors?.minlength || p.password.errors?.maxlength">
+                  Password Min length 12 and Max length 100
+                </span>
+              </div>
             </div>
           </div>
-          <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" formGroupName="passwordForm">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               New password (repeat):
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="password" class="form-control form-control-sm"
-                id="newPassword">
+                id="newPassword" formControlName="confirmPassword">
+              <!-- {{p.password.error.notSame}} -->
+              <!-- <div *ngIf="(p.confirmPassword.dirty
+                ||
+                p.confirmPassword.touched)">
+                
+                <div *ngIf="passwordForm.hasError('notSame')">
+                  <span class="error">
+                    Password Not match.
+                  </span>
+                </div>
+              </div> -->
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -254,11 +275,13 @@
           <div class="row borderBottom rowPadding">
             <div class="row col-sm-12 col-md-12 col-lg-12 col-xs-12">
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4"><button
-                  type="button" class="btn btn-primary" (click)="clearCustomerValueCache()">Clear
+                  type="button" class="btn btn-primary"
+                  (click)="clearCustomerValueCache()">Clear
                   Cache</button>
               </div>
               <div class="col-sm-10 col-md-10 col-lg-10 col-xs-8">
-                <button type="button" class="btn btn-primary" (click)="recalculateCustomerVariable()">Recalculate
+                <button type="button" class="btn btn-primary"
+                  (click)="recalculateCustomerVariable()">Recalculate
                   Variables</button>
               </div>
               <div style="padding-left: inherit">
@@ -378,7 +401,8 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="activationMail"formControlName="activationMail" id="activationMail">
+              <input type="checkbox" name="activationMail"
+                formControlName="activationMail" id="activationMail">
               <label class="checkbox">Send activation E-Mail</label>
             </div>
           </div>
@@ -387,7 +411,8 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="repeated" formControlName="repeatedActivationMail" id="repeated">
+              <input type="checkbox" name="repeated"
+                formControlName="repeatedActivationMail" id="repeated">
               <label class="checkbox"> Send repeated activation E-Mail</label>
             </div>
           </div>

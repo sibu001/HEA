@@ -33,3 +33,15 @@ p.messages{
   font-size: 17px;
   font-weight: 600;
 }
+
+.sidePadding {
+  padding: 2px !important;
+  display: inline-table !important;
+  text-align: right !important;
+}
+
+@media screen and (max-width: 769px) {
+  .sidePadding {
+    text-align: left !important;
+  }
+}

@@ -34,5 +34,5 @@ export class WaterChargeComponent implements OnInit {
 
   findWater(event?: any): any { }
 
-  goToEditWater(event: any): any { }
+  goToEditWater(evnet: any): any { }
 }

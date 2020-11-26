@@ -9,7 +9,7 @@
             <span class="messageName">Attributes List</span></p>
           <app-table [keys]="keys" [isPaginate]="true" (goToEditEvent)='goToEditAttributes()'
             (addEvent)='addAttributes()' [isSearch]="false" [data]="dataSource"
-            [totalElement]="attributeData.totalElements" (changePageEvent)="findAttribute()">
+            [totalElement]="attributeData.totalElements" (changePageEvent)="findAttribute($event)">
           </app-table>
         </div>
         <div class="row rowPadding">

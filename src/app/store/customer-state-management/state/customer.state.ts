@@ -6,6 +6,7 @@ import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { Transformer } from '../transformer/transformer';
 import {
+    AssignRoleToUserAction,
     ClearCustomerValueCacheAction,
     CustomerError,
     DeleteAlertByIdAction,
@@ -14,6 +15,8 @@ import {
     DeleteCustomerFileByIdAction,
     DeleteStaffByIdAction,
     DeleteStaffNoteByIdAction,
+    DeleteUserCustomerGroupByIdAction,
+    DeleteUserRoleAction,
     DeleteUtilityCredentialByIdAction,
     GetAlertByIdAction,
     GetAlertListAction,
@@ -25,12 +28,17 @@ import {
     GetCustomerFileListAction,
     GetCustomerListAction,
     GetCustomerViewConfigurationListAction,
+    GetPasswordValidationRuleAction,
+    GetRoleListByUserIdAction,
     GetStaffByIdAction,
     GetStaffListAction,
     GetStaffNoteByIdAction,
     GetStaffNoteListAction,
+    GetUserCustomerGroupByIdAction,
+    GetUserCustomerGroupListAction,
     GetUtilityCredentialByIdAction,
     GetUtilityCredentialListAction,
+    GetValidateNewPasswordAction,
     RecalculateCustomerVariableAction,
     RescrapeCustomerUsageAction,
     SaveAlertAction,
@@ -40,8 +48,11 @@ import {
     SaveCustomerUsingFileAction,
     SaveStaffAction,
     SaveStaffNoteAction,
+    SaveUserCustomerGroupAction,
     SaveUtilityCredentialAction,
+    SaveValidateNewPasswordAction,
     SendActivationMailMessageAction,
+    SetNewPasswordAction,
     UpdateAlertAction,
     UpdateCustomerAction,
     UpdateCustomerEventAction,
@@ -80,6 +91,13 @@ import { CustomerManagementModel } from './customer.model';
         rescrapeCustomerUsage: undefined,
         sendActivationMail: undefined,
         validateCustomerData: undefined,
+        passwordValidationRule: undefined,
+        saveValidatePassword: undefined,
+        setNewPassword: undefined,
+        validateNewPassword: undefined,
+        roleListByUserId: undefined,
+        userCustomerGroupList: undefined,
+        userCustomerGroup: undefined,
         error: undefined
     }
 })
@@ -177,6 +195,31 @@ export class CustomerManagementState {
     @Selector()
     static getCustomerFileById(state: CustomerManagementModel): any {
         return state.customerFile;
+    }
+
+    @Selector()
+    static getPasswordValidationRule(state: CustomerManagementModel): any {
+        return state.passwordValidationRule;
+    }
+
+    @Selector()
+    static getValidateNewPassword(state: CustomerManagementModel): any {
+        return state.validateNewPassword;
+    }
+
+    @Selector()
+    static getSaveValidatePassword(state: CustomerManagementModel): any {
+        return state.saveValidatePassword;
+    }
+
+    @Selector()
+    static getSetNewPassword(state: CustomerManagementModel): any {
+        return state.setNewPassword;
+    }
+
+    @Selector()
+    static getUserCustomerGroupList(state: CustomerManagementModel): any {
+        return state.userCustomerGroupList;
     }
 
     @Action(GetCustomerListAction)
@@ -961,4 +1004,191 @@ export class CustomerManagementState {
                         this.utilityService.showErrorMessage(error.message);
                     }));
     }
+
+    @Action(GetPasswordValidationRuleAction)
+    getPasswordValidationRule(ctx: StateContext<CustomerManagementModel>, action: GetPasswordValidationRuleAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.passwordValidationRule)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        passwordValidationRule: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetValidateNewPasswordAction)
+    getValidateNewPassword(ctx: StateContext<CustomerManagementModel>, action: GetValidateNewPasswordAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.validateNewPassword + '/' + action.password)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        validateNewPassword: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveValidateNewPasswordAction)
+    saveValidateNewPassword(ctx: StateContext<CustomerManagementModel>, action: SaveValidateNewPasswordAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostWithParam('', AppConstant.validateNewPassword, action.params)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        saveValidatePassword: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SetNewPasswordAction)
+    setNewPassword(ctx: StateContext<CustomerManagementModel>, action: SetNewPasswordAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostWithParam('', AppConstant.users + '/' + action.userId + AppConstant.saveNewPassword, action.params)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        setNewPassword: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetRoleListByUserIdAction)
+    getAllRoleListByUserId(ctx: StateContext<CustomerManagementModel>, action: GetRoleListByUserIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.users + '/' + action.userId + '/' + AppConstant.roles)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        roleListByUserId: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+
+    @Action(DeleteUserRoleAction)
+    deleteUserRole(ctx: StateContext<CustomerManagementModel>, action: DeleteUserRoleAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.users + '/' + action.userId + '/' + AppConstant.roles + '/' + action.roleCode)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(AssignRoleToUserAction)
+    saveRole(ctx: StateContext<CustomerManagementModel>, action: AssignRoleToUserAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.users + '/' + action.userId + '/' + AppConstant.roles + '/' + action.roleCode)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // ctx.patchState({
+                    //     role: response,
+                    // });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetUserCustomerGroupListAction)
+    getAllUserCustomerGroupList(ctx: StateContext<CustomerManagementModel>, action: GetUserCustomerGroupListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.users + '/' + action.userId + '/' + AppConstant.userCustomerGroups)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        userCustomerGroupList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetUserCustomerGroupByIdAction)
+    getUserCustomerGroupById(ctx: StateContext<CustomerManagementModel>, action: GetUserCustomerGroupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.users + '/' + action.userId + '/' + AppConstant.userCustomerGroups + '/' + action.customerGroupId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        userCustomerGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(DeleteUserCustomerGroupByIdAction)
+    deleteUserCustomerGroup(ctx: StateContext<CustomerManagementModel>, action: DeleteUserCustomerGroupByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.users + '/' + action.userId + '/' + AppConstant.userCustomerGroups + '/' + action.customerGroupId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(SaveUserCustomerGroupAction)
+    saveUserCustomerGroup(ctx: StateContext<CustomerManagementModel>, action: SaveUserCustomerGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.users + '/' + action.userId + '/' + AppConstant.userCustomerGroups + '/' + action.customerGroupId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        userCustomerGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
 }

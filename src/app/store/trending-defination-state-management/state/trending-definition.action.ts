@@ -1,0 +1,140 @@
+export enum TrendingDefinitionActionTypes {
+    GET_KEY_INDICATOR_LIST = 'Get All Key Indicator List',
+    GET_KEY_INDICATOR_BY_ID = 'Get Key Indicator By Id',
+    UPDATE_KEY_INDICATOR = 'Update Key Indicator',
+    SAVE_KEY_INDICATOR = 'Save Key Indicator',
+    DELETE_KEY_INDICATOR_BY_ID = 'Delete Key Indicator By Id',
+    GET_KEY_INDICATOR_VARIABLE_LIST = 'Get All Key Indicator Variable List',
+    GET_KEY_INDICATOR_VARIABLE_BY_ID = 'Get Key Indicator Variable By Id',
+    UPDATE_KEY_INDICATOR_VARIABLE = 'Update Key Indicator Variable',
+    SAVE_KEY_INDICATOR_VARIABLE = 'Save Key Indicator Variable',
+    DELETE_KEY_INDICATOR_VARIABLE_BY_ID = 'Delete Key Indicator Variable By Id',
+    GET_KEY_INDICATOR_CUSTOMER_GROUP_LIST = 'Get All Key Indicator Customer Group List',
+    GET_KEY_INDICATOR_CUSTOMER_GROUP_BY_ID = 'Get Key Indicator Customer Group By Id',
+    UPDATE_KEY_INDICATOR_CUSTOMER_GROUP = 'Update Key Indicator Customer Group',
+    SAVE_KEY_INDICATOR_CUSTOMER_GROUP = 'Save Key Indicator Customer Group',
+    DELETE_KEY_INDICATOR_CUSTOMER_GROUP_BY_ID = 'Delete Key Indicator Customer Group By Id',
+    GET_TRENDING_PARTS_LIST = 'Get All TrendingParts List',
+    GET_TRENDING_PARTS_BY_ID = 'Get TrendingParts By Id',
+    UPDATE_TRENDING_PARTS_ = 'Update TrendingParts',
+    SAVE_TRENDING_PARTS_ = 'Save TrendingParts',
+    DELETE_TRENDING_PARTS_BY_ID = 'Delete TrendingParts By Id',
+
+}
+export class GetKeyIndicatorListAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetKeyIndicatorByIdAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+export class UpdateKeyIndicatorAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.UPDATE_KEY_INDICATOR;
+    constructor(readonly id: number, readonly keyIndicator: any) {
+    }
+}
+
+export class SaveKeyIndicatorAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.SAVE_KEY_INDICATOR;
+    constructor(readonly keyIndicator: any) {
+    }
+}
+
+export class DeleteKeyIndicatorByIdAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_KEY_INDICATOR_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class GetKeyIndicatorVariableListAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_VARIABLE_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetKeyIndicatorVariableByIdAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_VARIABLE_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+export class UpdateKeyIndicatorVariableAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.UPDATE_KEY_INDICATOR_VARIABLE;
+    constructor(readonly id: number, readonly keyIndicatorVariable: any) {
+    }
+}
+
+export class SaveKeyIndicatorVariableAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.SAVE_KEY_INDICATOR_VARIABLE;
+    constructor(readonly keyIndicatorVariable: any) {
+    }
+}
+
+export class DeleteKeyIndicatorVariableByIdAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_KEY_INDICATOR_VARIABLE_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class GetKeyIndicatorCustomerGroupListAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_CUSTOMER_GROUP_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetKeyIndicatorCustomerGroupByIdAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_CUSTOMER_GROUP_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+export class UpdateKeyIndicatorCustomerGroupAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.UPDATE_KEY_INDICATOR_CUSTOMER_GROUP;
+    constructor(readonly id: number, readonly keyIndicatorCustomerGroup: any) {
+    }
+}
+
+export class SaveKeyIndicatorCustomerGroupAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.SAVE_KEY_INDICATOR_CUSTOMER_GROUP;
+    constructor(readonly keyIndicatorCustomerGroup: any) {
+    }
+}
+
+export class DeleteKeyIndicatorCustomerGroupByIdAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_KEY_INDICATOR_CUSTOMER_GROUP_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class GetTrendingPartsListAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_TRENDING_PARTS_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetTrendingPartsByIdAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_TRENDING_PARTS_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+export class UpdateTrendingPartsAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.UPDATE_TRENDING_PARTS_;
+    constructor(readonly id: number, readonly trendingParts: any) {
+    }
+}
+
+export class SaveTrendingPartsAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.SAVE_TRENDING_PARTS_;
+    constructor(readonly trendingParts: any) {
+    }
+}
+
+export class DeleteTrendingPartsByIdAction {
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_TRENDING_PARTS_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+

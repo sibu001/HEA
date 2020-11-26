@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
+  AssignRoleToUserAction,
   ClearCustomerValueCacheAction,
   DeleteAlertByIdAction,
   DeleteCustomerByIdAction,
@@ -9,6 +10,8 @@ import {
   DeleteCustomerFileByIdAction,
   DeleteStaffByIdAction,
   DeleteStaffNoteByIdAction,
+  DeleteUserCustomerGroupByIdAction,
+  DeleteUserRoleAction,
   DeleteUtilityCredentialByIdAction,
   GetAlertByIdAction,
   GetAlertListAction,
@@ -20,12 +23,17 @@ import {
   GetCustomerFileListAction,
   GetCustomerListAction,
   GetCustomerViewConfigurationListAction,
+  GetPasswordValidationRuleAction,
+  GetRoleListByUserIdAction,
   GetStaffByIdAction,
   GetStaffListAction,
   GetStaffNoteByIdAction,
   GetStaffNoteListAction,
+  GetUserCustomerGroupByIdAction,
+  GetUserCustomerGroupListAction,
   GetUtilityCredentialByIdAction,
   GetUtilityCredentialListAction,
+  GetValidateNewPasswordAction,
   RecalculateCustomerVariableAction,
   RescrapeCustomerUsageAction,
   SaveAlertAction,
@@ -35,8 +43,11 @@ import {
   SaveCustomerUsingFileAction,
   SaveStaffAction,
   SaveStaffNoteAction,
+  SaveUserCustomerGroupAction,
   SaveUtilityCredentialAction,
+  SaveValidateNewPasswordAction,
   SendActivationMailMessageAction,
+  SetNewPasswordAction,
   UpdateAlertAction,
   UpdateCustomerAction,
   UpdateCustomerEventAction,
@@ -87,7 +98,6 @@ export class CustomerService {
     return this.store.select(CustomerManagementState.getUtilityCredentialDataSourceList);
   }
 
-
   getUtilityCredentialById(): Observable<any> {
     return this.store.select(CustomerManagementState.getUtilityCredentialById);
   }
@@ -126,6 +136,10 @@ export class CustomerService {
 
   getCustomerFileById(): Observable<any> {
     return this.store.select(CustomerManagementState.getCustomerFileById);
+  }
+
+  getUserCustomerGroupsList(): Observable<any> {
+    return this.store.select(CustomerManagementState.getUserCustomerGroupList);
   }
 
   loadCustomerList(force: boolean, filter: any, viewType: number): Observable<CustomerManagementState> {
@@ -298,5 +312,57 @@ export class CustomerService {
 
   validateUtilityCredentialData(customerId: any, credentialId: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new ValidateUtilityCredentialDataAction(customerId, credentialId));
+  }
+
+  loadPasswordValidationRule(): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetPasswordValidationRuleAction());
+  }
+
+  getPasswordValidationRule(): Observable<CustomerManagementState> {
+    return this.store.select(CustomerManagementState.getPasswordValidationRule);
+  }
+
+  loadValidateNewPassword(password: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetValidateNewPasswordAction(password));
+  }
+
+  getValidateNewPassword(): Observable<CustomerManagementState> {
+    return this.store.select(CustomerManagementState.getValidateNewPassword);
+  }
+
+  saveValidateNewPassword(params: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new SaveValidateNewPasswordAction(params));
+  }
+
+  setNewPassword(userId: any, params: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new SetNewPasswordAction(userId, params));
+  }
+
+  loadRoleListByUserId(force: boolean, userId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetRoleListByUserIdAction(force, userId));
+  }
+
+  assignRoleToUser(userId: any, roleCode: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new AssignRoleToUserAction(userId, roleCode));
+  }
+
+  deleteRoleById(userId: any, roleCode: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new DeleteUserRoleAction(userId, roleCode));
+  }
+
+  loadUserCustomerGroupList(userId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetUserCustomerGroupListAction(userId));
+  }
+
+  loadUserCustomerGroupById(userId: any, customerGroupId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetUserCustomerGroupByIdAction(userId, customerGroupId));
+  }
+
+  saveUserCustomerGroup(userId: any, customerGroupId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new SaveUserCustomerGroupAction(userId, customerGroupId));
+  }
+
+  deleteUserCustomerGroup(userId: any, customerGroupId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new DeleteUserCustomerGroupByIdAction(userId, customerGroupId));
   }
 }

@@ -1,5 +1,5 @@
 import { Component, ElementRef, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -69,10 +69,12 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.subscriptions.add(this.systemMeasurementService.deleteAlertMessageById(this.data.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/alertMessages/alertMessagesList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.systemMeasurementService.deleteAlertMessageById(this.data.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/alertMessages/alertMessagesList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   onSaveClick() {
@@ -91,17 +93,28 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
           }));
       }
     } else {
-      this.validateForm();
+      this.validateAllFormFields(this.alertMessagesForm);
     }
   }
-  validateForm() {
-    for (const key of Object.keys(this.alertMessagesForm.controls)) {
-      if (this.alertMessagesForm.controls[key].invalid) {
-        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-        invalidControl.focus();
-        break;
+  // validateForm() {
+  //   for (const key of Object.keys(this.alertMessagesForm.controls)) {
+  //     if (this.alertMessagesForm.controls[key].invalid) {
+  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+  //       invalidControl.focus();
+  //       break;
+  //     }
+  //   }
+  // }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
       }
-    }
+    });
   }
 
   get f() { return this.alertMessagesForm.controls; }

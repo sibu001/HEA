@@ -32,7 +32,7 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
               <input type="text" formControlName="placeName" class="form-control
                 form-control-sm">
-                <div *ngIf="f.placeName.invalid && (f.placeName.dirty ||
+              <div *ngIf="f.placeName.invalid && (f.placeName.dirty ||
                 f.placeName.touched)">
                 <span class="error" *ngIf="f.placeName.errors.required">
                   Place Name is required.
@@ -47,11 +47,9 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
               <select formControlName="stationId" class="form-control
-                form-control-sm" id="place.stationId"
-                name="place.stationId">
+                form-control-sm" id="place.stationId" name="place.stationId">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let stationId of placeStationId"
-                  [value]="stationId.key" selected="selected">
+                <option *ngFor="let stationId of placeStationId" [value]="stationId.key" selected="selected">
                   {{stationId.value}}</option>
 
               </select>
@@ -62,9 +60,8 @@
               Time Zone:
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <select formControlName="timeZone" class="form-control
-                form-control-sm" id="place.timezone"
-                name="place.timezone">
+              <select formControlName="timezone" class="form-control
+                form-control-sm" id="place.timezone" name="place.timezone">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let timezone of timezoneData" [value]="timezone.key">{{timezone.value}}</option>
               </select>
@@ -77,7 +74,7 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
               <input type="text" formControlName="latitude" class="form-control
                 form-control-sm">
-                <div *ngIf="f.latitude.invalid && (f.latitude.dirty ||
+              <div *ngIf="f.latitude.invalid && (f.latitude.dirty ||
                 f.latitude.touched)">
                 <span class="error" *ngIf="f.latitude.errors.required">
                   Latitude is required.
@@ -92,7 +89,7 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
               <input type="text" formControlName="longitude" class="form-control
                 form-control-sm">
-                <div *ngIf="f.longitude.invalid && (f.longitude.dirty ||
+              <div *ngIf="f.longitude.invalid && (f.longitude.dirty ||
                 f.longitude.touched)">
                 <span class="error" *ngIf="f.longitude.errors.required">
                   Longitude is required.
@@ -101,15 +98,14 @@
             </div>
           </div>
         </form>
-        <p class='messages'>
+        <p *ngIf="id!==undefined" class='messages'>
           <img src='assets/images/dot03.gif' class='dot'>
           <span class='messageName'>Zip Codes</span></p>
-        <div class="row rowPadding form-group
-          form-padding">
+        <div *ngIf="id!==undefined" class="row rowPadding form-group form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-<app-table [keys]="keys" [isPaginate]="true" [isDelete]='true' [isSearch]="false" [data]="dataSource"
-            [totalElement]="rolesData.totalElements"
-            (goToEditEvent)="goToEditZipCode($event)" (addEvent)='addZipCode()'></app-table>
+            <app-table [keys]="keys" [isPaginate]="true" [isDelete]='true' [isSearch]="false" [data]="dataSource"
+              [totalElement]="rolesData.totalElements" (goToEditEvent)="goToEditZipCode($event)"
+              (addEvent)='addZipCode()'></app-table>
           </div>
         </div>
         <hr class="hr_space">
@@ -117,16 +113,13 @@
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <button type="reset" class="btn btn-primary" (click)='back()'>Cancel</button>
           </div>
-          <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-          </div>
-          <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2"
-            style="text-align: right;">
-            <button type="button" class="btn btn-primary"
-              *ngIf="id!==undefined" (click)="delete()">Delete</button>
-          </div>
-          <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="text-align:
-            right;">
-            <button type="submit" class="btn btn-primary" (click)="save()">Save</button>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 row">
+            <div class="col-xs-8 col-sm-9 col-md-9 col-lg-10 sidePadding">
+              <button type="button" class="btn btn-primary" *ngIf="id!==undefined" (click)="delete()">Delete</button>
+            </div>
+            <div class="col-xs-2 col-sm-1 col-md-1 col-lg-1 sidePadding">
+              <button type="submit" class="btn btn-primary" (click)="save()">Save</button>
+            </div>
           </div>
         </div>
 

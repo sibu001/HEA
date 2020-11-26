@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
@@ -59,10 +59,12 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/customerEvent/customerEventTypeList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.systemUtilityService.deleteCustomerEventTypeById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/customerEvent/customerEventTypeList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.systemUtilityService.deleteCustomerEventTypeById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/customerEvent/customerEventTypeList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   save() {
@@ -83,17 +85,28 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
           }));
       }
     } else {
-      this.validateForm();
+      this.validateAllFormFields(this.eventForm);
     }
   }
-  validateForm() {
-    for (const key of Object.keys(this.eventForm.controls)) {
-      if (this.eventForm.controls[key].invalid) {
-        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-        invalidControl.focus();
-        break;
+  // validateForm() {
+  //   for (const key of Object.keys(this.eventForm.controls)) {
+  //     if (this.eventForm.controls[key].invalid) {
+  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+  //       invalidControl.focus();
+  //       break;
+  //     }
+  //   }
+  // }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
       }
-    }
+    });
   }
   get f() { return this.eventForm.controls; }
   ngOnDestroy(): void {

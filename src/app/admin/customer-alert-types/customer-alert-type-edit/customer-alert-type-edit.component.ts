@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { TableColumnData } from 'src/app/data/common-data';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -16,6 +17,7 @@ export class CustomerAlertTypeEditComponent implements OnInit, OnDestroy {
   id: any;
   isForce = false;
   private readonly subscriptions: Subscription = new Subscription();
+  eventType = TableColumnData.EVENT_TYPE_DATA;
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,

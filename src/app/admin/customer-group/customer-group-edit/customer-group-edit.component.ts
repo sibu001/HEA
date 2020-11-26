@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
@@ -7,6 +7,7 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { TableColumnData } from 'src/app/data/common-data';
+import { SelectionModel } from '@angular/cdk/collections';
 
 @Component({
   selector: 'app-customer-group-edit',
@@ -33,8 +34,9 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
       placeName: 'test'
     }
   ];
-
   programGroupKey: Array<TABLECOLUMN> = TableColumnData.PROGRAM_GROUP_KEY;
+  // programIdColumn = 'programCode';
+  programSelectionList: Array<any> = [];
   programGroupData = {
     content: [],
     totalElements: 0
@@ -75,45 +77,52 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
         this.programGroupData.content = programGroupList;
         this.programGroupDataSource = [...this.programGroupData.content];
       }));
+    this.programSelectionList.push('HiHC');
+    this.programSelectionList.push('MedHC');
+    this.programSelectionList.push('HiVar');
+    this.programSelectionList.push('HiPlug');
+
   }
 
   setForm(event: any) {
     this.customerGroupForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
-      allowBilling: [event !== undefined ? event.allowBilling : ''],
-      archived: [event !== undefined ? event.archived : ''],
-      auditIdPattern: [event !== undefined ? event.auditIdPattern : '', Validators.required],
-      baseDirectory: [event !== undefined ? event.baseDirectory : '', Validators.required],
-      contextPath: [event !== undefined ? event.contextPath : ''],
       customerGroupId: [event !== undefined ? event.customerGroupId : ''],
-      customerRegistrationSuccessViewId: [event !== undefined ? event.customerRegistrationSuccessViewId : ''],
-      customerRegistrationViewId: [event !== undefined ? event.customerRegistrationViewId : ''],
-      dataCheckAlg: [event !== undefined ? event.dataCheckAlg : ''],
-      forgotPwdMailDescriptionId: [event !== undefined ? event.forgotPwdMailDescriptionId : ''],
       groupCode: [event !== undefined ? event.groupCode : '', Validators.required],
       groupName: [event !== undefined ? event.groupName : '', Validators.required],
-      immediateLogin: [event !== undefined ? event.immediateLogin : ''],
-      mailChangedMailDescriptionId: [event !== undefined ? event.mailChangedMailDescriptionId : ''],
-      mailDescriptionId: [event !== undefined ? event.mailDescriptionId : ''],
-      newRecommendationMailDescriptionId: [event !== undefined ? event.newRecommendationMailDescriptionId : ''],
-      registrationErrorMailDescriptionId: [event !== undefined ? event.registrationErrorMailDescriptionId : ''],
-      registrationUrl: [event !== undefined ? event.registrationUrl : '', Validators.required],
-      repeatedMailDescriptionId: [event !== undefined ? event.repeatedMailDescriptionId : ''],
-      scrapingPeriod: [event !== undefined ? event.scrapingPeriod : 'D'],
-      scrapingUtility: [event !== undefined ? event.scrapingUtility : 'pge'],
-      showEventHistory: [event !== undefined ? event.showEventHistory : ''],
-      spamTestMailDescriptionId: [event !== undefined ? event.spamTestMailDescriptionId : ''],
+      contextPath: [event !== undefined ? event.contextPath : ''],
       theme: [event !== undefined ? event.theme : 'AC'],
+      registrationUrl: [event !== undefined ? event.registrationUrl : '', Validators.required],
+      baseDirectory: [event !== undefined ? event.baseDirectory : '', Validators.required],
+      auditIdPattern: [event !== undefined ? event.auditIdPattern : '', Validators.required],
+      scrapingUtility: [event !== undefined ? event.scrapingUtility : 'pge'],
+      scrapingPeriod: [event !== undefined ? event.scrapingPeriod : 'D'],
+      showEventHistory: [event !== undefined ? event.showEventHistory : ''],
+      mailDescriptionId: [event !== undefined ? event.mailDescriptionId : ''],
+      repeatedMailDescriptionId: [event !== undefined ? event.repeatedMailDescriptionId : ''],
+      spamTestMailDescriptionId: [event !== undefined ? event.spamTestMailDescriptionId : ''],
+      forgotPwdMailDescriptionId: [event !== undefined ? event.forgotPwdMailDescriptionId : ''],
+      newRecommendationMailDescriptionId: [event !== undefined ? event.newRecommendationMailDescriptionId : ''],
+      mailChangedMailDescriptionId: [event !== undefined ? event.mailChangedMailDescriptionId : ''],
+      registrationErrorMailDescriptionId: [event !== undefined ? event.registrationErrorMailDescriptionId : ''],
+      customerRegistrationViewId: [event !== undefined ? event.customerRegistrationViewId : ''],
+      customerRegistrationSuccessViewId: [event !== undefined ? event.customerRegistrationSuccessViewId : ''],
+      immediateLogin: [event !== undefined ? event.immediateLogin : ''],
+      allowBilling: [event !== undefined ? event.allowBilling : ''],
+      archived: [event !== undefined ? event.archived : ''],
+      dataCheckAlg: [event !== undefined ? event.dataCheckAlg : ''],
     });
   }
   back() {
     this.router.navigate(['admin/customer-group/customerGroupList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.systemService.deleteCustomerGroupById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/customer-group/customerGroupList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.systemService.deleteCustomerGroupById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/customer-group/customerGroupList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   save() {
@@ -134,17 +143,28 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
           }));
       }
     } else {
-      this.validateForm();
+      this.validateAllFormFields(this.customerGroupForm);
     }
   }
-  validateForm() {
-    for (const key of Object.keys(this.customerGroupForm.controls)) {
-      if (this.customerGroupForm.controls[key].invalid) {
-        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-        invalidControl.focus();
-        break;
+  // validateForm() {
+  //   for (const key of Object.keys(this.customerGroupForm.controls)) {
+  //     if (this.customerGroupForm.controls[key].invalid) {
+  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+  //       invalidControl.focus();
+  //       break;
+  //     }
+  //   }
+  // }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
       }
-    }
+    });
   }
   get f() { return this.customerGroupForm.controls; }
   ngOnDestroy(): void {

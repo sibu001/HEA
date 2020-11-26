@@ -35,7 +35,7 @@ export class TableColumnData {
     ];
 
     static readonly PROGRAM_GROUP_KEY: Array<TABLECOLUMN> = [
-        { key: 'programCode', displayName: 'Program Code' },
+        { key: 'programCode', displayName: 'Program Code', isId: true },
         { key: 'programName', displayName: 'Program Name' },
     ];
 
@@ -117,9 +117,9 @@ export class TableColumnData {
     ];
 
     static readonly PLACE_LIST_KEY: Array<TABLECOLUMN> = [
-        { displayName: 'Place', key: 'place', isEdit: true },
-        { displayName: 'Place Name', key: 'placeName' },
-        { displayName: 'Weather Station', key: 'weatherStation' }
+        { displayName: 'Place', sort: 'place', key: 'place', isEdit: true },
+        { displayName: 'Place Name', sort: 'placeName', key: 'placeName' },
+        { displayName: 'Weather Station', key: 'stationId' }
     ];
 
     static readonly ZIP_CODE_KEY: Array<TABLECOLUMN> = [
@@ -2611,5 +2611,55 @@ export class TableColumnData {
         { key: 'city', sort: 'city', displayName: 'City' },
         { key: 'address', sort: 'address', displayName: 'Address' },
         { key: 'createNew', displayName: 'create New?' },
+    ];
+
+    static readonly EVENT_TYPE_DATA: Array<any> = [
+        { key: '1', value: 'Assigned to High Heating or Cooling Program Group' },
+        { key: '2', value: 'Assigned to High Plug Loads Program Group' },
+        { key: '3', value: 'Assigned to High Heating/Cooling Loads Program Group' },
+        { key: '5', value: 'New real-time energy monitor was installed' },
+        { key: '6', value: 'Completed a home energy consultation with an expert' },
+        { key: '9', value: 'Started charging anelectric vehicle at home' },
+        { key: '10', value: 'Started charging an electric vehicle(sub - metered)' },
+        { key: '11', value: 'Added, removed or updated a major appliance' },
+        { key: '12', value: 'Change in average home occupancy' },
+        { key: '13', value: 'Significant home remodel or retrofit' },
+        { key: '14', value: 'Completed a simple Energy Efficiency measure' },
+        { key: '15', value: 'Change in behavior affecting energy use' },
+        { key: '16', value: 'Unassigned from High Heating/Cooling Loads Program Group' },
+        { key: '17', value: 'Unassigned from High Plug Loads Program Group' },
+        { key: '18', value: 'Unassigned from High Heating / Cooling Loads Program Group' },
+        { key: '19', value: 'Assigned to High Variable Loads Program Group' },
+        { key: '20', value: 'Unassigned from High Variable Loads Program Group' },
+        { key: '21', value: 'Completed initial Home Energy Profile for EUMV' },
+        { key: '22', value: 'Completed online smart meter audit for EUMV' },
+        { key: '23', value: 'Assigned to High Recurring Loads Program Group' },
+        { key: '24', value: 'Unassigned from High Recurring Loads Program Group' },
+        { key: '25', value: 'Assigned to Low Energy Program Group' },
+        { key: '26', value: 'Unassigned from Low Energy Program Group' },
+        { key: '27', value: 'Assigned to Detailed Online Audit Program' },
+        { key: '28', value: 'Unassigned from Online Program' },
+        { key: '29', value: 'Temporary increase in energy use' },
+        { key: '30', value: 'Solar PV system installed and generating electricity' },
+        { key: '31', value: 'Problem with Energy Profile Detected' },
+        { key: '32', value: 'Problem with Energy Profile now fixed' },
+        { key: '33', value: 'Moved to a new home' },
+        { key: '34', value: 'Opt -in for optional Program - specific Survey' },
+        { key: '36', value: 'Received an energy saving device' },
+        { key: '39', value: 'Air conditioning optimizer installed by home professional' },
+        { key: '40', value: 'In-home energy audit performed by professional' },
+        { key: '41', value: 'Account specific notes' },
+        { key: '42', value: 'Double-counted recurring or base load detected and fixed' },
+        { key: '43', value: 'Double-counted recurring or base load detected and fixed' },
+        { key: '44', value: 'Enrolled into P4P Program' },
+        { key: '45', value: 'Removed from P4P Program' },
+        { key: '46', value: 'Determined Eligible for P4P Program' },
+        { key: '47', value: 'Temporary decrease in energy use' },
+        { key: '48', value: 'Stopped charging an electric vehicle at home' },
+        { key: '49', value: 'Determined ineligible for P4P Program' },
+        { key: '50', value: 'Applied for Peninsula Climate Comfort' },
+        { key: '51', value: 'Completion date for Home Energy Profile topic' },
+        { key: '52', value: 'Enrolled into P4P Program as Metered Reserve' },
+        { key: '53', value: 'Log of miscellaneous Coaching Activity' },
     ];
 }
