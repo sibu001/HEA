@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { MustMatch } from 'src/app/common/password.validator';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
@@ -38,6 +39,12 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   roleCheckBox: any;
   topicGroupCheckBox: any;
   roleList: any = [];
+  minLength = 12;
+  maxLength = 100;
+  pattern = '';
+  regex = '';
+  charactersCount = 0;
+  passwordIsValid = false;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly fb: FormBuilder,
@@ -56,12 +63,35 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadCustomerViewConfiguration();
     this.getAllRole();
+    this.getPasswordValidationRule();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.findUserCustomerGroup(this.id);
       this.customerService.loadStaffById(this.id);
       this.loadStaffById();
     }
+  }
+
+  getPasswordValidationRule() {
+    this.customerService.loadPasswordValidationRule();
+    this.subscriptions.add(this.customerService.getPasswordValidationRule().pipe(skipWhile((item: any) => !item))
+      .subscribe((passwordValidationRule: any) => {
+        if (passwordValidationRule.data && passwordValidationRule.data.length > 0) {
+          this.maxLength = passwordValidationRule.data[0].maximumLength;
+          this.minLength = passwordValidationRule.data[0].minimumLength;
+          if (passwordValidationRule.data.length > 1 && passwordValidationRule.data[1].rules.length > 0) {
+            this.pattern = passwordValidationRule.data[1].rules[0].validCharacters;
+            this.charactersCount = passwordValidationRule.data[1].rules[0].numberOfCharacters;
+          }
+          this.regex = '^.*(?=(?:.*?[' + this.pattern
+            .replace(']', '').concat('\\\]')
+            + ']){' + this.charactersCount + ',}).*$';
+          this.p.password.setValidators([Validators.pattern(new RegExp(this.regex))]);
+          this.p.password.updateValueAndValidity();
+          // this.setPasswordForm();
+        }
+        console.log(passwordValidationRule);
+      }));
   }
 
   loadCustomerViewConfiguration() {
@@ -109,8 +139,18 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       staffPhoneNumber: [event !== undefined ? event.staffPhoneNumber : ''],
       name: [event !== undefined ? event.name : ''],
       status: [event !== undefined ? event.status : '0'],
-      password1: [event !== undefined ? event.password1 : ''],
-      password2: [event !== undefined ? event.password2 : ''],
+      passwordForm: this.fb.group({
+        password: [event !== undefined ? event.password1 : '',
+        [
+          Validators.required,
+          Validators.minLength(this.minLength),
+          Validators.maxLength(this.maxLength)
+        ]
+        ],
+        confirmPassword: [event !== undefined ? event.password2 : '', Validators.required],
+        // password1: [event !== undefined ? event.password1 : ''],
+        // password2: [event !== undefined ? event.password2 : ''],
+      }, { validator: MustMatch('password', 'confirmPassword') }),
       passwordNeedChange: [event !== undefined ? event.passwordNeedChange : ''],
       passwordStrengthLevel: [event !== undefined ? event.passwordStrengthLevel : ''],
       passwordChangeDate: [event !== undefined ? event.passwordChangeDate : ''],
@@ -209,9 +249,16 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     this.topicGroupCheckBox = event;
   }
   get f() { return this.staffForm.controls; }
-
+  get p() {
+    const passwordForm = this.staffForm.controls.passwordForm as FormGroup;
+    return passwordForm.controls;
+  }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+
+  passwordValid(event) {
+    this.passwordIsValid = event;
   }
 
 }

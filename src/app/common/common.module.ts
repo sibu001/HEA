@@ -22,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { RoundPipe } from '../pipes/round.pipe';
 import { MatTableExporterModule } from 'mat-table-exporter';
+import { PasswordStrengthComponent } from './password-strength/password-strength.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -45,8 +46,8 @@ import { MatTableExporterModule } from 'mat-table-exporter';
       apiKey: environment.googleMapAPIKey, libraries: ['places']
     })
   ],
-  declarations: [TableComponent, GoogleMapComponent, SidebarComponent, RoundPipe],
+  declarations: [TableComponent, GoogleMapComponent, SidebarComponent, RoundPipe, PasswordStrengthComponent],
   entryComponents: [GoogleMapComponent],
-  exports: [TableComponent, SidebarComponent, RoundPipe]
+  exports: [TableComponent, SidebarComponent, RoundPipe, PasswordStrengthComponent],
 })
 export class CommonHEAModule { }

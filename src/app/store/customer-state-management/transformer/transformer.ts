@@ -217,6 +217,7 @@ export class Transformer {
             dataSourceObj.timestamp = new Date(element.timestamp);
             const newArray = element.fileName.split('/');
             dataSourceObj.name = newArray[newArray.length - 1];
+            dataSourceObj.isInlineEdit = true;
             dataSource.list.push(dataSourceObj);
         });
         return dataSource;

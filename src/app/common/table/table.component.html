@@ -51,12 +51,13 @@
             <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key"
                 [id]="col.key" [disabled]="!col.sort"
                 class="text-nowrap">
-                {{col.displayName}}</mat-header-cell>
+                {{col.displayName}}
+            </mat-header-cell>
             <mat-cell [class.mat-cell-underline]='col.isEdit' *matCellDef="let
                 row" style="display: grid;">
                 <div *ngIf="col.type!='image' && col.isDate && !col.isAction">
                     {{row[col.key]|date:'mediumDate'}}</div>
-                <div *ngIf="col.type==='alert' && !col.isAction">
+                <div id='1' *ngIf="col.type==='alert' && !col.isAction">
                     <div class="redAlert" *ngIf="row[col.key]===10">
                         <p id="alertCircle">&nbsp;</p>
                     </div>
@@ -67,12 +68,15 @@
                         <p class="alertCircle">&nbsp;</p>
                     </div>
                 </div>
-                <div *ngIf="col.type!='image' && col.type!='alert' &&
+                <div id='2' *ngIf="col.type!='image' && col.type!='alert' &&
                     !col.isDate && !col.isAction"
                     (click)='goToEdit(row,col);'>
-                    {{row[col.key]}}</div>
-                <!-- row[col.key]===true &&  -->
-                <div *ngIf="col.type=='image' && col.changeable &&
+                    {{row[col.key]}}
+                    <button class="btn btn-primary" type="submit"
+                        *ngIf="col.type==='textArea'&&row['isInlineEdit']"
+                        (click)='editColumn(col,row)' style="float: right;">Edit</button>
+                </div>
+                <div id='3' *ngIf="col.type=='image' && col.changeable &&
                     !col.isAction" class="center">
                     <img *ngIf='row[col.key]===null' [src]='col.imagePath'
                         (click)="imageClickEvent(col,row)">
@@ -80,7 +84,7 @@
                         (click)="imageClickEvent(col,row)"> {{row[col.key]}}
                     </div>
                 </div>
-                <div *ngIf="col.type=='image' && !col.changeable &&
+                <div id='4' *ngIf="col.type=='image' && !col.changeable &&
                     !col.isAction" class="center">
                     <img *ngIf="col.imagePath!==undefined" [src]='col.imagePath'
                         (click)="imageClickEvent(col,row)" class="tableImage">
@@ -88,7 +92,7 @@
                         col.imagePath===undefined" [src]='row[col.key]'
                         (click)="imageClickEvent(col,row)" class="tableImage">
                 </div>
-                <div *ngIf="col.type=='buttons' && !col.isAction">
+                <div id='5' *ngIf="col.type=='buttons' && !col.isAction">
                     <div class='inline-table btnPadding' *ngFor='let button of
                         col.buttonList'>
                         <button class='btn btn-primary'
@@ -97,14 +101,14 @@
                         </button>
                     </div>
                 </div>
-                <div *ngIf="col.type=='link' && !col.isAction">
+                <div id='6' *ngIf="col.type=='link' && !col.isAction">
                     <div *ngFor='let link of col.links'>
                         <a
                             (click)='linkCall(link.routerLink,link.queryParam,row)'
                             class="anchorClass">{{link.displayName}}</a>
                     </div>
                 </div>
-                <div *ngIf="col.type!='image'&& col.isAction && action">
+                <div id='7' *ngIf="col.type!='image'&& col.isAction && action">
                     <button mat-icon-button [matMenuTriggerFor]="menu">
                         <span class="selectButton">Select
                             <mat-icon class="btnArrow">arrow _drop_down</mat-icon></span>
@@ -115,6 +119,13 @@
                             <span>{{item.displayName}}</span>
                         </button>
                     </mat-menu>
+                </div>
+                <div *ngIf="col.type==='textArea'&&!row['isInlineEdit']">
+                    <textarea cols='3' rows='3' class="form-control
+                        form-control-sm"
+                        id="inputText" [(ngModel)]="row[col.key]"></textarea>
+                    <button class="btn btn-primary" type="submit"
+                        (click)='saveColumn(col,row)' style="float: right;">Save</button>
                 </div>
             </mat-cell>
         </ng-container>
@@ -170,10 +181,12 @@
                     <option *ngFor='let option of key.option'
                         [value]="option.key">{{option.value}}</option>
                 </select>
-                <textarea *ngIf="key.addRowType==='textarea'" [formControlName]="key.key" [id]="key.key" cols="30"
+                <textarea *ngIf="key.addRowType==='textarea'"
+                    [formControlName]="key.key" [id]="key.key" cols="30"
                     rows="5" class='form-control form-control-sm'></textarea>
-                <div *ngIf="key.required && f[key.key].invalid && (f[key.key].dirty ||
-                f[key.key].touched)">
+                <div *ngIf="key.required && f[key.key].invalid &&
+                    (f[key.key].dirty ||
+                    f[key.key].touched)">
                     <span class="error" *ngIf="f[key.key].errors.required">
                         {{key.displayName}} is required.
                     </span>

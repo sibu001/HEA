@@ -286,8 +286,8 @@ export class CustomerService {
     return this.store.dispatch(new SaveCustomerFileAction(customerId, customerFile, description));
   }
 
-  updateCustomerFile(customerId: any, id: number, customerFile: any): Observable<CustomerManagementState> {
-    return this.store.dispatch(new UpdateCustomerFileAction(customerId, id, customerFile));
+  updateCustomerFile(customerId: any, customerFile: any, params: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new UpdateCustomerFileAction(customerId, customerFile, params));
   }
 
   deleteCustomerFileById(customerId: any, fileName: any): Observable<CustomerManagementState> {

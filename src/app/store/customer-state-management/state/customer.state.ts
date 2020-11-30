@@ -972,7 +972,7 @@ export class CustomerManagementState {
     @Action(UpdateCustomerFileAction)
     updateCustomerFile(ctx: StateContext<CustomerManagementModel>, action: UpdateCustomerFileAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPostWithParam(action.customerFile, AppConstant.customer + '/' + action.customerId + '/file/description', action.params)
+        return this.loginService.performPostWithParam('', AppConstant.customer + '/' + action.customerId + '/file/description', action.params)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

@@ -17,6 +17,7 @@ import { CustomerEventTypeComponent } from '../customer-event-type/customer-even
 import { StaffNoteComponent } from '../staff-note/staff-note.component';
 import { HttpParams } from '@angular/common/http';
 import { ErrorStateMatcher } from '@angular/material';
+import { MustMatch } from 'src/app/common/password.validator';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -86,6 +87,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   minLength = 12;
   maxLength = 100;
   pattern = '';
+  regex = '';
+  charactersCount = 0;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public dialog: MatDialog,
     private readonly formBuilder: FormBuilder,
@@ -141,13 +144,13 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     this.passwordForm = this.formBuilder.group({
       password: ['', [Validators.required, Validators.maxLength(this.maxLength), Validators.minLength(this.minLength), Validators.pattern(this.pattern)]],
       confirmPassword: ['']
-    }, { validator: this.checkPasswords });
+    }, { validator: MustMatch('password', 'confirmPassword') });
   }
-  checkPasswords(group: FormGroup) { // here we have the 'passwords' group
-    const pass = group.get('password').value;
-    const confirmPass = group.get('confirmPassword').value;
-    return pass === confirmPass ? null : { notSame: true };
-  }
+  // checkPasswords(group: FormGroup) { // here we have the 'passwords' group
+  //   const pass = group.get('password').value;
+  //   const confirmPass = group.get('confirmPassword').value;
+  //   return pass === confirmPass ? null : { notSame: true };
+  // }
   setForm(event: any) {
     this.customerForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
@@ -261,10 +264,18 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         longitude: [event !== undefined ? event.place.longitude : ''],
         id: [event !== undefined ? event.place.id : ''],
       }),
-      passwordForm: this.formBuilder.group({
-        password: ['', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]],
-        confirmPassword: ['',Validators.required]
-      }, { validator: this.checkPasswords }),
+      passwordForm: this.formBuilder.group(
+        {
+          password: ['',
+            [
+              Validators.required,
+              Validators.minLength(this.minLength),
+              Validators.maxLength(this.maxLength)
+            ]
+          ],
+          confirmPassword: ['', Validators.required],
+        },
+        { validator: MustMatch('password', 'confirmPassword') }),
       activationMail: [false],
       repeatedActivationMail: [false],
     });
@@ -279,13 +290,22 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
           this.minLength = passwordValidationRule.data[0].minimumLength;
           if (passwordValidationRule.data.length > 1 && passwordValidationRule.data[1].rules.length > 0) {
             this.pattern = passwordValidationRule.data[1].rules[0].validCharacters;
+            this.charactersCount = passwordValidationRule.data[1].rules[0].numberOfCharacters;
           }
+          this.regex = '^.*(?=(?:.*?[' + this.pattern
+            .replace(']', '').concat('\\\]')
+            + ']){' + this.charactersCount + ',}).*$';
+          this.p.password.setValidators([Validators.pattern(new RegExp(this.regex))]);
+          this.p.password.updateValueAndValidity();
           // this.setPasswordForm();
         }
         console.log(passwordValidationRule);
       }));
   }
 
+  onchange() {
+    console.log(this.p.password.errors);
+  }
   getValidateNewPassword(password: any) {
     this.customerService.loadValidateNewPassword(password);
     this.subscriptions.add(this.customerService.getValidateNewPassword().pipe(skipWhile((item: any) => !item))
@@ -531,6 +551,23 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       }));
   }
 
+  handleInLineEditEvent(event: any): any {
+    const i = this.filesData.content.findIndex((item: any) => item.name === event.row.name);
+    this.filesData.content[i].isInlineEdit = false;
+    this.filesDataSource = [...this.filesData.content];
+
+  }
+
+  handleInLineSaveEvent(event: any): any {
+    const params = new HttpParams()
+      .set('fileName', event.row.name)
+      .set('description', event.row.description);
+    this.subscriptions.add(this.customerService.updateCustomerFile(this.id, '', params).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.loadCustomerFile(this.id);
+      }));
+
+  }
   handle(files: any) {
     if (files.length > 0) {
       this.fileObject = files[0];

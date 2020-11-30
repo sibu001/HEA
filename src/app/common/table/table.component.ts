@@ -72,6 +72,8 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() saveRowEvent: EventEmitter<any> = new EventEmitter();
   @Output() buttonListEvent: EventEmitter<any> = new EventEmitter();
   @Output() handleLinkEvent: EventEmitter<any> = new EventEmitter();
+  @Output() handleInLineEditEvent: EventEmitter<any> = new EventEmitter();
+  @Output() handleInLineSaveEvent: EventEmitter<any> = new EventEmitter();
   expandedElement: any = null;
   showInput: Boolean = false;
   page = new Page();
@@ -149,13 +151,20 @@ export class TableComponent implements OnInit, OnChanges {
       });
     }
   }
+
   loadPagination() {
     this.dataSource.sort = this.sort;
   }
 
+  editColumn(col: any, row: any) {
+    this.handleInLineEditEvent.emit({ col, row });
+  }
+  saveColumn(col: any, row: any) {
+    this.handleInLineSaveEvent.emit({ col, row });
+  }
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // Datasource defaults to lowercase matches
+    filterValue = filterValue.toLowerCase(); // DataSource defaults to lowercase matches
     console.log(filterValue);
     this.page.search = filterValue;
     this.changePageEvent.emit(this.page);

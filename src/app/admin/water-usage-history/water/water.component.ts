@@ -58,7 +58,7 @@ export class WaterComponent implements OnInit, OnDestroy {
       + '&filter.month=' + this.myDataForm.value.month;
     this.findWater(true, filter);
   }
-  goToEditWater(event: any): any { }
+  goToEditWater(): any { }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

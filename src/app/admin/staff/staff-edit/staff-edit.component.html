@@ -10,8 +10,7 @@
         </p>
         <form [formGroup]='staffForm' class="form-group
           form-padding">
-          <div class="row borderTop borderBottom rowPadding"
-            *ngIf="id!==undefined&&id!==null">
+          <div class="row borderTop borderBottom rowPadding" *ngIf="id!==undefined&&id!==null">
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
               User ID:
             </div>
@@ -55,8 +54,7 @@
               Phone number:
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="text" formControlName="staffPhoneNumber"
-                class="form-control
+              <input type="text" formControlName="staffPhoneNumber" class="form-control
                 form-control-sm">
             </div>
           </div>
@@ -65,8 +63,7 @@
               Name:
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="text" formControlName="name"
-                class="form-control
+              <input type="text" formControlName="name" class="form-control
                 form-control-sm">
             </div>
           </div>
@@ -75,8 +72,7 @@
               Status:
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <select class="form-control form-control-sm"
-                id="status" formControlName="status">
+              <select class="form-control form-control-sm" id="status" formControlName="status">
                 <option value="0">Active (0)</option>
                 <option value="10">In registration (10)</option>
                 <option value="90">Blocked (90)</option>
@@ -87,28 +83,48 @@
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
               New password:
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="password" formControlName="password1"
-                class="form-control
-                form-control-sm">
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" formGroupName="passwordForm">
+              <input type="password" formControlName="password" class="form-control form-control-sm"
+                [pattern]='regex'>
+                <app-password-strength (passwordStrength)="passwordValid($event)" [passwordToCheck]="p.password.value"></app-password-strength>
+              <div *ngIf="p.password.invalid && (p.password.dirty ||
+                p.password.touched)">
+                <span class="error" *ngIf="p.password.errors?.required">
+                  Password is required.
+                </span>
+                <span class="error" *ngIf="p.password.errors?.required ||
+                  p.password.errors?.minlength || p.password.errors?.maxlength">
+                  Password Min length {{minLength}} and Max length {{maxLength}}
+                </span>
+                <span class="error" *ngIf="p.password.errors?.pattern">
+                  Min {{charactersCount}} characters from {{pattern}} is required
+                </span>
+              </div>
             </div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
               New password (repeat):
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="password" formControlName="password2"
-                class="form-control
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6" formGroupName="passwordForm">
+              <input type="password" formControlName="confirmPassword" class="form-control
                 form-control-sm">
+                <div *ngIf="p.confirmPassword.invalid && (p.confirmPassword.dirty ||
+                p.confirmPassword.touched)">
+                <span class="error" *ngIf="p.confirmPassword.errors?.required">
+                  Password is required.
+                </span>
+                <span class="error" *ngIf="p.confirmPassword.errors?.mustMatch">
+                  Password and repeat password must match
+                </span>
+              </div>
             </div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="checkbox" name="passwordNeedChange"
-                formControlName="passwordNeedChange">
+              <input type="checkbox" name="passwordNeedChange" formControlName="passwordNeedChange">
               <label class="checkbox">Password need to change</label>
             </div>
           </div>
@@ -117,8 +133,7 @@
               Password strength level:
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="text" formControlName="passwordStrengthLevel"
-                class="showValue" disabled>
+              <input type="text" formControlName="passwordStrengthLevel" class="showValue" disabled>
             </div>
           </div>
           <div class="row borderBottom rowPadding">
@@ -126,8 +141,7 @@
               Password change date:
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="text" formControlName="passwordChangeDate"
-                class="form-control
+              <input type="text" formControlName="passwordChangeDate" class="form-control
                 form-control-sm">
             </div>
           </div>
@@ -135,8 +149,7 @@
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="checkbox" name="sendEmail"
-                formControlName="sendEmail">
+              <input type="checkbox" name="sendEmail" formControlName="sendEmail">
               <label class="checkbox">Send activation E-Mail</label>
             </div>
           </div>
@@ -145,13 +158,11 @@
               Survey Version Setting
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <select class="form-control form-control-sm"
-                id="surveyVersionSetting"
+              <select class="form-control form-control-sm" id="surveyVersionSetting"
                 formControlName="surveyVersionSetting" value='-1'>
                 <option value="-1">Standard</option>
                 <option *ngFor="let surveyVersion of
-                  surveyVersionSettingList"
-                  [value]="surveyVersion.id">
+                  surveyVersionSettingList" [value]="surveyVersion.id">
                   {{surveyVersion.name}}</option>
               </select>
             </div>
@@ -161,8 +172,7 @@
               Comments:
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <textarea class="form-control form-control-sm textarea_scroll"
-                rows="3" name="comments" id="comments"
+              <textarea class="form-control form-control-sm textarea_scroll" rows="3" name="comments" id="comments"
                 formControlName="comments"></textarea>
             </div>
           </div>
@@ -170,8 +180,7 @@
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="checkbox" name="sendEmail"
-                formControlName="accessToUserPassword">
+              <input type="checkbox" name="sendEmail" formControlName="accessToUserPassword">
               <label class="checkbox">Enable access to user passwords</label>
             </div>
           </div>
@@ -180,13 +189,11 @@
               Survey Version Setting
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <select class="form-control form-control-sm"
-                id="customerViewConfigurationId"
+              <select class="form-control form-control-sm" id="customerViewConfigurationId"
                 formControlName="customerViewConfigurationId" value='-1'>
                 <option value="-1">Standard</option>
                 <option *ngFor="let viewConfiguration of
-                  viewConfigurationList"
-                  [value]="viewConfiguration.viewConfigurationId">
+                  viewConfigurationList" [value]="viewConfiguration.viewConfigurationId">
                   {{viewConfiguration.configurationName}}</option>
               </select>
             </div>
@@ -199,8 +206,8 @@
         <div class="row rowPadding form-group
           form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <app-table [keys]="keys" [checkbox]=true [data]="dataSource"
-              [totalElement]="rolesData.totalElements" (checkBoxChangeEvent)="roleCheckBoxChangeEvent($event)" [isHideAdd]="true"></app-table>
+            <app-table [keys]="keys" [checkbox]=true [data]="dataSource" [totalElement]="rolesData.totalElements"
+              (checkBoxChangeEvent)="roleCheckBoxChangeEvent($event)" [isHideAdd]="true"></app-table>
           </div>
         </div>
 
@@ -210,9 +217,9 @@
         <div class="row rowPadding form-group
           form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <app-table [keys]="topicKeys" [isHideAdd]="true" [checkbox]=true
-              [data]="topicDataSource" (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)"
-              [totalElement]="topicGroupData.totalElements"></app-table>
+            <app-table [keys]="topicKeys" [isHideAdd]="true" [checkbox]=true [data]="topicDataSource"
+              (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)" [totalElement]="topicGroupData.totalElements">
+            </app-table>
           </div>
         </div>
         <div class="row paddingTop">
@@ -221,10 +228,8 @@
           </div>
           <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
           </div>
-          <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2"
-            style="text-align: right;">
-            <button type="button" class="btn btn-primary"
-              *ngIf="id!==undefined" (click)="delete()">Delete</button>
+          <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="text-align: right;">
+            <button type="button" class="btn btn-primary" *ngIf="id!==undefined" (click)="delete()">Delete</button>
           </div>
           <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="text-align:
             right;">

@@ -76,7 +76,7 @@ export class TableColumnData {
     static readonly CUSTOMER_FILE_KEY: Array<TABLECOLUMN> = [
         { key: 'name', displayName: 'File Name' },
         { key: 'timestamp', displayName: 'Time Stamp' },
-        { key: 'description', displayName: 'Description' },
+        { key: 'description', displayName: 'Description', type: 'textArea' },
         { key: 'size', displayName: 'Size' }
     ];
 
