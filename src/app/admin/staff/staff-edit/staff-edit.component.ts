@@ -19,6 +19,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
 
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.ROLE_KEY;
+  public roleSelectionList: any = [];
   public topicKeys: Array<TableColumnData> = TableColumnData.TOPIC_GROUP_COLUMN_DATA;
   public surveyVersionSettingList: Array<any> = TableColumnData.SURVEY_VERSION_SETTING_DATA;
   public viewConfigurationList: any;
@@ -39,6 +40,9 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   roleCheckBox: any;
   topicGroupCheckBox: any;
   roleList: any = [];
+  selectedRole: any;
+  selectedTopicGroup: any;
+  topicGroupList: any = [];
   minLength = 12;
   maxLength = 100;
   pattern = '';
@@ -57,6 +61,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     this.userId = users.userId;
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.getRoleListByUserId();
     });
   }
 
@@ -121,11 +126,20 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       }));
   }
 
+  getRoleListByUserId() {
+    this.subscriptions.add(this.customerService.loadRoleListByUserId(true, this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((roleList: any) => {
+        this.roleList = roleList.customerManagement.roleListByUserId;
+        roleList.customerManagement.roleListByUserId.forEach(element => {
+          this.roleSelectionList.push(element.roleCode);
+        });
+      }));
+  }
+
   getAllRole(): any {
     this.systemService.loadRoleList(true, this.userId);
     this.subscriptions.add(this.systemService.getRoleList().pipe(skipWhile((item: any) => !item))
       .subscribe((roleList: any) => {
-        this.roleList = roleList.list;
         this.rolesData.content = roleList.list;
         this.dataSource = [...this.rolesData.content];
       }));
@@ -205,24 +219,21 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   checkRole() {
-    const assignList: any = [];
-    this.roleCheckBox.forEach(element => {
-      let isAvailable = false;
-      let i = 0;
-      this.roleList.forEach(roleValue => {
-        if (element.roleCode === roleValue.roleCode) {
-          isAvailable = true;
-          this.roleList.splice(i, 1);
+    for (let index = 0; index < this.roleCheckBox.length; index++) {
+      const element = this.roleCheckBox[index];
+      const i = this.roleList.findIndex((item: any) => item.roleCode === element.roleCode);
+      if (i !== -1) {
+        this.roleList.splice(i, 1);
+        const j = this.selectedRole.findIndex((item2: any) => item2.roleCode === element.roleCode);
+        if (j !== -1) {
+          this.selectedRole.splice(j, 1);
         }
-        i++;
-      });
-      if (!isAvailable) {
-        assignList.push(element);
       }
-    });
+    }
     this.deleteRoleOfStaff(this.roleList);
-    this.assignRoleToStaff(assignList);
+    this.assignRoleToStaff(this.selectedRole);
     this.getAllRole();
+    this.getRoleListByUserId();
   }
   assignRoleToStaff(roleList: any) {
     roleList.forEach(element => {
@@ -232,20 +243,44 @@ export class StaffEditComponent implements OnInit, OnDestroy {
 
   deleteRoleOfStaff(deleteList: any) {
     deleteList.forEach(element => {
-      // this.customerService.deleteRoleById(this.id, element.roleCode);
+      this.customerService.deleteRoleById(this.id, element.roleCode);
     });
   }
   checkTopicGroup() {
+    for (let index = 0; index < this.topicGroupCheckBox.length; index++) {
+      const element = this.topicGroupCheckBox[index];
+      const i = this.roleList.findIndex((item: any) => item.customerGroupId === element.customerGroupId);
+      if (i !== -1) {
+        this.roleList.splice(i, 1);
+        const j = this.selectedTopicGroup.findIndex((item2: any) => item2.customerGroupId === element.customerGroupId);
+        if (j !== -1) {
+          this.selectedTopicGroup.splice(j, 1);
+        }
+      }
+    }
+    this.deleteTopicGroupOfStaff(this.roleList);
+    this.assignTopicGroupToStaff(this.selectedRole);
+    this.findUserCustomerGroup(this.id);
   }
   assignTopicGroupToStaff(topicGroupList: any) {
+    topicGroupList.forEach(element => {
+      this.customerService.saveUserCustomerGroup(this.id, element.customerGroupId);
+    });
+  }
 
+  deleteTopicGroupOfStaff(deleteList: any) {
+    deleteList.forEach(element => {
+      this.customerService.deleteUserCustomerGroup(this.id, element.customerGroupId);
+    });
   }
 
   roleCheckBoxChangeEvent(event: any) {
+    this.selectedRole = [...event];
     this.roleCheckBox = event;
   }
 
   topicCheckBoxChangeEvent(event: any) {
+    this.selectedTopicGroup = [...event];
     this.topicGroupCheckBox = event;
   }
   get f() { return this.staffForm.controls; }

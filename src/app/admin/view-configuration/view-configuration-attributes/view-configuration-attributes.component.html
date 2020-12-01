@@ -1,15 +1,18 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
-          padding-top: 35px;'>
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+        left;padding-left: 40px;
+        padding-top: 35px;'>
         <div class="paddingTop">
           <p class="messages">
             <img src='assets/images/dot03.gif' class='dot'>
             <span class="messageName">Attributes List</span></p>
-          <app-table [keys]="keys" [isPaginate]="true" (goToEditEvent)='goToEditAttributes()'
+          <app-table [keys]="keys" [isPaginate]="true"
+            (goToEditEvent)='goToEditAttributes()'
             (addEvent)='addAttributes()' [isSearch]="false" [data]="dataSource"
-            [totalElement]="attributeData.totalElements" (changePageEvent)="findAttribute($event)">
+            [totalElement]="attributeData.totalElements"
+            (changePageEvent)="search($event,false)">
           </app-table>
         </div>
         <div class="row rowPadding">
@@ -19,7 +22,7 @@
         </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar ></app-sidebar>
+        <app-sidebar></app-sidebar>
       </div>
     </div>
   </div>

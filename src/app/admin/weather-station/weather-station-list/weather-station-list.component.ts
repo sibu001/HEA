@@ -68,7 +68,7 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
     this.systemUtilityService.loadWeatherStationList(force, filter);
     this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
       .subscribe((weatherStationList: any) => {
-        this.weatherStationData.content = weatherStationList.list;
+        this.weatherStationData.content = weatherStationList;
         this.weatherStationData.totalElements = weatherStationList.totalSize;
         this.dataSource = [...this.weatherStationData.content];
       }));
@@ -76,18 +76,18 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.weatherStationFilter.page = event;
+    // .set('disableTotalSize', 'false')
+    // .set('filter.homeowner', 'false')
+    // .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
       .set('stationId', '')
-      .set('filter.stationId', (this.weatherStationForm.value.stationId !== null ? this.weatherStationForm.value.stationId : ''))
-      .set('filter.stationName', (this.weatherStationForm.value.stationName !== null ? this.weatherStationForm.value.stationName : ''));
+      .set('stationId', (this.weatherStationForm.value.stationId !== null ? this.weatherStationForm.value.stationId : ''))
+      .set('stationName', (this.weatherStationForm.value.stationName !== null ? this.weatherStationForm.value.stationName : ''));
     this.findWeatherStation(true, params);
   }
   ngOnDestroy(): void {

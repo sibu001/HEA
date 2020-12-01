@@ -1,8 +1,6 @@
-import { Location } from '@angular/common';
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
@@ -22,9 +20,9 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.ZIP_CODE_KEY;
   public placeStationId: Array<any> = TableColumnData.PLACE_STATION_ID;
-  public timezoneData: Array<any> = TableColumnData.TIMEZONE;
+  public timezoneData: Array<any>;
   public dataSource: any;
-  public rolesData = {
+  public zipData = {
     content: [],
     totalElements: 0,
   };
@@ -33,18 +31,18 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly dialog: MatDialog,
-    private readonly location: Location,
     private readonly fb: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly router: Router,
-    private readonly el: ElementRef) {
+    private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.getZipCodeList();
     });
   }
 
   ngOnInit() {
+    this.loadTimeZoneList();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemUtilityService.loadPlaceById(this.id);
@@ -77,8 +75,12 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
       }));
   }
 
-  onImageClickEvent(event: any): any {
-    console.log('delete zip');
+  loadTimeZoneList() {
+    this.systemUtilityService.loadTimeZoneList(false);
+    this.subscriptions.add(this.systemUtilityService.getTimeZoneList().pipe(skipWhile((item: any) => !item))
+      .subscribe((timeZoneList: any) => {
+        this.timezoneData = timeZoneList.data;
+      }));
   }
 
   setForm(event: any) {
@@ -127,15 +129,6 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
       this.validateAllFormFields(this.placeForm);
     }
   }
-  // validateForm() {
-  //   for (const key of Object.keys(this.placeForm.controls)) {
-  //     if (this.placeForm.controls[key].invalid) {
-  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-  //       invalidControl.focus();
-  //       break;
-  //     }
-  //   }
-  // }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
@@ -148,6 +141,35 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     });
   }
 
+  getZipCodeList() {
+    this.subscriptions.add(this.systemUtilityService.loadZipCodeList(this.id, '').pipe(skipWhile((item: any) => !item))
+      .subscribe((zipCodeList: any) => {
+        this.zipData.content = zipCodeList.systemUtilityManagement.zipCodeList;
+        this.dataSource = [...this.zipData.content];
+      }));
+  }
+
+  addZipCode(): any {
+    const dialogRef = this.dialog.open(ZipCodeEditComponent, {
+      width: '500px',
+      height: 'auto',
+      data: {
+        placeCode: this.id
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getZipCodeList();
+      }
+    });
+  }
+
+  deleteZip(event: any): any {
+    this.subscriptions.add(this.systemUtilityService.deleteZipCodeById(this.id, event.zipCode).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.getZipCodeList();
+      }));
+  }
 
   get f() { return this.placeForm.controls; }
 
@@ -155,14 +177,4 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 
-  addZipCode(): any {
-    const dialogRef = this.dialog.open(ZipCodeEditComponent, {
-      width: '500px',
-      height: 'auto',
-      data: {}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed' + result);
-    });
-  }
 }

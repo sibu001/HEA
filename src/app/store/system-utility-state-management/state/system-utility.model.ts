@@ -17,5 +17,8 @@ export interface SystemUtilityManagementModel {
     weatherStation: any;
     degreeDaysList: any;
     degreeDays: any;
+    zipCodeList: any;
+    zipCode: any;
+    timeZoneList: any;
     error: Error;
 }

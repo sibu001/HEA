@@ -9,6 +9,8 @@ export class AppConstant {
     public static users = 'users';
     public static roles = 'roles';
     public static places = 'places';
+    public static zipCode = 'zipcodes';
+    public static timezone = 'timezones';
     public static customerEventTypes = 'customerEventTypes';
     public static sendMail = 'sendMailMessage.do';
     public static clearCustomerValueCache = 'clearValueCache';
@@ -20,12 +22,15 @@ export class AppConstant {
     public static validateNewPassword = 'users/validate/password';
     public static saveNewPassword = 'password';
     public static userCustomerGroups = 'userCustomerGroups';
+    public static lookupValues = 'lookupValues';
+    public static themes = 'themes';
+    public static mailDescription = 'mailDescriptions';
     public static customerComparisonGroups = '';
     public static factor = '';
     public static lookup = '';
     public static systemParameter = '';
     public static logs = '';
-    public static weatherStation = '';
+    public static weatherStation = 'weatherStations';
     public static degreeDays = '';
     public static cimisStation = '';
     public static cimisMeasurement = '';
@@ -38,7 +43,6 @@ export class AppConstant {
     public static topic = '';
     public static prospects = '';
     public static contextVariable = '';
-    public static mailDescription = '';
     public static mailContentPart = '';
     public static eventHistory = '';
     public static userReportDefinitions = '';
@@ -46,7 +50,7 @@ export class AppConstant {
     public static userReportDefinitionContentParts = '';
     public static userReportGroups = '';
     public static javaScriptCustomerGroups = '';
-    public static javaScriptPages = '';
+    public static javaScriptPages = 'jsPages';
     public static dynamicViews = '';
     public static attributes = '';
     public static keyIndicator = '';

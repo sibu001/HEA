@@ -83,7 +83,6 @@ export class MailManagementState {
             result = this.loginService.performGetWithParams(AppConstant.mailDescription, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformMailDescriptionTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             mailDescriptionList: response,

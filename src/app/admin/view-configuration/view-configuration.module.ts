@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { ViewConfigurationRoutingModule } from './view-configuration-routing.module';
 import { ViewConfigurationListComponent } from './view-configuration-list/view-configuration-list.component';
@@ -8,6 +8,16 @@ import { ViewConfigurationAttributesComponent } from './view-configuration-attri
 import { ViewConfigurationAttributesEditComponent } from './view-configuration-attributes-edit/view-configuration-attributes-edit.component';
 import { CommonHEAModule } from 'src/app/common/common.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxsModule } from '@ngxs/store';
+import { LoginService } from 'src/app/services/login.service';
+import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
+import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
+import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
+import { DynamicViewManagementState } from 'src/app/store/dynamic-view-state-management/state/dynamic-view.state';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
 
 @NgModule({
   imports: [
@@ -15,8 +25,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     CommonHEAModule,
     ReactiveFormsModule,
-    ViewConfigurationRoutingModule
+    ViewConfigurationRoutingModule,
+    NgxsModule.forRoot([
+      SystemManagementState,
+      CustomerManagementState,
+      SystemUtilityManagementState,
+      DynamicViewManagementState
+    ]),
   ],
+  providers: [SystemService, DatePipe, LoginService, SystemUtilityService,
+    CustomerService, DynamicViewService],
   declarations: [ViewConfigurationListComponent, ViewConfigurationEditComponent, ViewConfigurationAttributesComponent, ViewConfigurationAttributesEditComponent]
 })
 export class ViewConfigurationModule { }

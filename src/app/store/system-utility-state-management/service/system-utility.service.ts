@@ -46,7 +46,11 @@ import {
   SaveDegreeDaysAction,
   SaveWeatherStationAction,
   UpdateDegreeDaysAction,
-  UpdateWeatherStationAction
+  UpdateWeatherStationAction,
+  GetZipCodeListAction,
+  SaveZipCodeAction,
+  DeleteZipCodeByIdAction,
+  GetTimeZoneListAction
 } from '../state/system-utility.action';
 import { SystemUtilityManagementState } from '../state/system-utility.state';
 
@@ -306,6 +310,26 @@ export class SystemUtilityService {
 
   deleteDegreeDaysById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new DeleteDegreeDaysByIdAction(id));
+  }
+
+  loadZipCodeList(placeCode: any, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetZipCodeListAction(placeCode, filter));
+  }
+
+  saveZipCode(placeCode: any, zipCode: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveZipCodeAction(placeCode, zipCode));
+  }
+
+  deleteZipCodeById(placeCode: number, id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteZipCodeByIdAction(placeCode, id));
+  }
+
+  getTimeZoneList(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getTimeZoneList);
+  }
+
+  loadTimeZoneList(force: boolean): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetTimeZoneListAction(force));
   }
 
 }

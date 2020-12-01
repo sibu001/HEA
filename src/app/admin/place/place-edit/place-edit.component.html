@@ -51,7 +51,6 @@
                 <option value="" selected="selected"></option>
                 <option *ngFor="let stationId of placeStationId" [value]="stationId.key" selected="selected">
                   {{stationId.value}}</option>
-
               </select>
             </div>
           </div>
@@ -63,7 +62,7 @@
               <select formControlName="timezone" class="form-control
                 form-control-sm" id="place.timezone" name="place.timezone">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let timezone of timezoneData" [value]="timezone.key">{{timezone.value}}</option>
+                <option *ngFor="let timezone of timezoneData" [value]="timezone.id">{{timezone.displayName}}</option>
               </select>
             </div>
           </div>
@@ -104,8 +103,8 @@
         <div *ngIf="id!==undefined" class="row rowPadding form-group form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <app-table [keys]="keys" [isPaginate]="true" [isDelete]='true' [isSearch]="false" [data]="dataSource"
-              [totalElement]="rolesData.totalElements" (goToEditEvent)="goToEditZipCode($event)"
-              (addEvent)='addZipCode()'></app-table>
+              [totalElement]="zipData.totalElements" (goToEditEvent)="goToEditZipCode($event)"
+              (addEvent)='addZipCode()' (deleteEvent)="deleteZip($event)"></app-table>
           </div>
         </div>
         <hr class="hr_space">

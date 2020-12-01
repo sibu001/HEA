@@ -80,13 +80,16 @@ export class RoleEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.systemService.updateRole(this.roleCode, this.roleForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
+            this.roleCode = this.roleForm.value.roleCode;
             this.isForce = true;
             this.loadRoleById();
           }));
       } else {
+        this.roleForm.value.id = this.roleForm.value.roleCode;
         this.subscriptions.add(this.systemService.saveRole(this.roleForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
+            this.roleCode = this.roleForm.value.roleCode;
             this.isForce = true;
             this.loadRoleById();
           }));

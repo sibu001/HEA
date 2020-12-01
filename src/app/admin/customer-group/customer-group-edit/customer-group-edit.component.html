@@ -9,12 +9,14 @@
         </p>
         <form [formGroup]="customerGroupForm" class="form-group
           form-padding">
-          <div class="row borderTop borderBottom rowPadding" *ngIf="id!==undefined&&id!==null">
+          <div class="row borderTop borderBottom rowPadding"
+            *ngIf="id!==undefined&&id!==null">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Record Id:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="customerGroupId"
+              <input type="text" class="form-control form-control-sm"
+                id="customerGroupId"
                 formControlName="customerGroupId">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -24,7 +26,8 @@
               Group code
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="groupCode" formControlName="groupCode">
+              <input type="text" class="form-control form-control-sm"
+                id="groupCode" formControlName="groupCode">
               <div *ngIf="f.groupCode.invalid && (f.groupCode.dirty ||
                 f.groupCode.touched)">
                 <span class="error" *ngIf="f.groupCode.errors.required">
@@ -39,7 +42,8 @@
               Group Name:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="groupName" formControlName="groupName">
+              <input type="text" class="form-control form-control-sm"
+                id="groupName" formControlName="groupName">
               <div *ngIf="f.groupName.invalid && (f.groupName.dirty ||
                 f.groupName.touched)">
                 <span class="error" *ngIf="f.groupName.errors.required">
@@ -54,7 +58,8 @@
               Context path:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="contextPath" formControlName="contextPath">
+              <input type="text" class="form-control form-control-sm"
+                id="contextPath" formControlName="contextPath">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -63,30 +68,11 @@
               Theme:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="theme" formControlName="theme">
-                <option value="AC">AC</option>
-                <option value="CEC" selected="selected">CEC</option>
-                <option value="CL">CL</option>
-                <option value="CLR">CLR</option>
-                <option value="CSP">CSP</option>
-                <option value="CW">CW</option>
-                <option value="EF">EF</option>
-                <option value="HEA">HEA</option>
-                <option value="HET">HET</option>
-                <option value="M">M</option>
-                <option value="MBL">MBL</option>
-                <option value="MV">MV</option>
-                <option value="P4P">P4P</option>
-                <option value="PGE">PGE</option>
-                <option value="PW">PW</option>
-                <option value="RS">RS</option>
-                <option value="RYPL">RYPL</option>
-                <option value="SC">SC</option>
-                <option value="SCB">SCB</option>
-                <option value="SNV">SNV</option>
-                <option value="SV">SV</option>
-                <option value="TST">TST</option>
-                <option value="VT">VT</option>
+              <select class="form-control form-control-sm" id="theme"
+                formControlName="theme">
+                <option value="" selected="selected"></option>
+                <option *ngFor="let themeObject of themeList"
+                  [value]="themeObject.itemValue">{{themeObject.itemLabel}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -96,9 +82,11 @@
               Registration URL:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="registrationUrl"
+              <input type="text" class="form-control form-control-sm"
+                id="registrationUrl"
                 formControlName="registrationUrl">
-              <div *ngIf="f.registrationUrl.invalid && (f.registrationUrl.dirty ||
+              <div *ngIf="f.registrationUrl.invalid && (f.registrationUrl.dirty
+                ||
                 f.registrationUrl.touched)">
                 <span class="error" *ngIf="f.registrationUrl.errors.required">
                   Registration Url is required.
@@ -112,7 +100,8 @@
               Base directory:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="baseDirectory"
+              <input type="text" class="form-control form-control-sm"
+                id="baseDirectory"
                 formControlName="baseDirectory">
               <div *ngIf="f.baseDirectory.invalid && (f.baseDirectory.dirty ||
                 f.baseDirectory.touched)">
@@ -128,7 +117,8 @@
               Audit ID pattern:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="auditIdPattern"
+              <input type="text" class="form-control form-control-sm"
+                id="auditIdPattern"
                 formControlName="auditIdPattern">
               <div *ngIf="f.auditIdPattern.invalid && (f.auditIdPattern.dirty ||
                 f.auditIdPattern.touched)">
@@ -144,13 +134,12 @@
               Scraping Utility:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="scrapingUtility" formControlName="scrapingUtility">
-                <option value="calwater">CalWater</option>
-                <option value="gb">Green Button</option>
-                <option value="pge">PG&amp;E</option>
-                <option value="purissima">Purissima</option>
-                <option value="sce">SCE</option>
-                <option value="socalgas">SoCalGas</option>
+              <select class="form-control form-control-sm" id="scrapingUtility"
+                formControlName="scrapingUtility">
+                <option value="" selected="selected"></option>
+                <option *ngFor="let scrapingUtilityObject of
+                  scrapingUtilityList"
+                  [value]="scrapingUtilityObject.lookupValue">{{scrapingUtilityObject.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -160,11 +149,11 @@
               Scraping Period:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="scrapingPeriod" formControlName="scrapingPeriod">
-                <option value="D">Daily</option>
-                <option value="M">Monthly</option>
-                <option value="W">Weekly</option>
-                <option value="Y">Year</option>
+              <select class="form-control form-control-sm" id="scrapingPeriod"
+                formControlName="scrapingPeriod">
+                <option value="" selected="selected"></option>
+                <option *ngFor="let scrapingPeriodObject of scrapingPeriodList"
+                  [value]="scrapingPeriodObject.lookupValue">{{scrapingPeriodObject.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -174,7 +163,8 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="mail" id="showEventHistory" formControlName="showEventHistory">
+              <input type="checkbox" name="mail" id="showEventHistory"
+                formControlName="showEventHistory">
               <label class="checkbox">Show Event History</label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -184,49 +174,12 @@
               Activation mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="mailDescriptionId" formControlName="mailDescriptionId">
-                <option value=""></option>
-                <option value="4">Monthly Home Energy Report</option>
-                <option value="5">Monthly Tips (first year)</option>
-                <option value="8">Winterize
-                  pool</option>
-                <option value="12">Never Activated</option>
-                <option value="13">Didn't finish HEP</option>
-                <option value="14">Changed
-                  PW?</option>
-                <option value="20">Spam Filter Test</option>
-                <option value="21" selected="selected">New customer activation mail</option>
-                <option value="22">Repeated activation mail</option>
-                <option value="23">Recommendations Reminder</option>
-                <option value="30">Forgot Password</option>
-                <option value="32">E-Mail
-                  Changed</option>
-                <option value="33">Registration Errors</option>
-                <option value="36">SnapShot</option>
-                <option value="41">High Load Alert
-                  (similar homes)</option>
-                <option value="54">RYPL intro message</option>
-                <option value="55">RYPL Utility Link Instructions</option>
-                <option value="57">RYPL Increased Idle Load</option>
-                <option value="58">RYPL Decreased Idle Load</option>
-                <option value="62">RYPL Try Dr Power</option>
-                <option value="63">Prereg
-                  Reminder</option>
-                <option value="64">RYPL Spam Test</option>
-                <option value="65">RYPL New Customer Activation</option>
-                <option value="66">RYPL Registration Errors</option>
-                <option value="67">RYPL Password Reset</option>
-                <option value="68">Energy
-                  Coach Introduction</option>
-                <option value="69">Enrolled in P4P
-                  notification</option>
-                <option value="70">Increased electric use
-                  alert</option>
-                <option value="76">Increased natural gas use
-                  alert</option>
-                <option value="82">RYPL Try HomeIntel</option>
-                <option value="83">Authorization about to expire</option>
-                <option value="87">NextDoor Yelp testimonial request</option>
+              <select class="form-control form-control-sm"
+                id="mailDescriptionId" formControlName="mailDescriptionId">
+                <option value="" selected="selected"></option>
+                <option *ngFor="let mailDescriptionObject of
+                  mailDescriptionList"
+                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -236,50 +189,13 @@
               Repeated Activation mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="repeatedMailDescriptionId"
+              <select class="form-control form-control-sm"
+                id="repeatedMailDescriptionId"
                 formControlName="repeatedMailDescriptionId">
-                <option value=""></option>
-                <option value="4">Monthly Home Energy Report</option>
-                <option value="5">Monthly Tips (first year)</option>
-                <option value="8">Winterize
-                  pool</option>
-                <option value="12">Never Activated</option>
-                <option value="13">Didn't finish HEP</option>
-                <option value="14">Changed
-                  PW?</option>
-                <option value="20">Spam Filter Test</option>
-                <option value="21">New customer activation mail</option>
-                <option value="22" selected="selected">Repeated activation mail</option>
-                <option value="23">Recommendations Reminder</option>
-                <option value="30">Forgot Password</option>
-                <option value="32">E-Mail
-                  Changed</option>
-                <option value="33">Registration Errors</option>
-                <option value="36">SnapShot</option>
-                <option value="41">High Load Alert
-                  (similar homes)</option>
-                <option value="54">RYPL intro message</option>
-                <option value="55">RYPL Utility Link Instructions</option>
-                <option value="57">RYPL Increased Idle Load</option>
-                <option value="58">RYPL Decreased Idle Load</option>
-                <option value="62">RYPL Try Dr Power</option>
-                <option value="63">Prereg
-                  Reminder</option>
-                <option value="64">RYPL Spam Test</option>
-                <option value="65">RYPL New Customer Activation</option>
-                <option value="66">RYPL Registration Errors</option>
-                <option value="67">RYPL Password Reset</option>
-                <option value="68">Energy
-                  Coach Introduction</option>
-                <option value="69">Enrolled in P4P
-                  notification</option>
-                <option value="70">Increased electric use
-                  alert</option>
-                <option value="76">Increased natural gas use
-                  alert</option>
-                <option value="82">RYPL Try HomeIntel</option>
-                <option value="83">Authorization about to expire</option>
-                <option value="87">NextDoor Yelp testimonial request</option>
+                <option value="" selected="selected"></option>
+                <option *ngFor="let mailDescriptionObject of
+                  mailDescriptionList"
+                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -289,51 +205,13 @@
               Spam Test Filter mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="spamTestMailDescriptionId"
+              <select class="form-control form-control-sm"
+                id="spamTestMailDescriptionId"
                 formControlName="spamTestMailDescriptionId">
-                <option value=""></option>
-                <option value="4">Monthly Home Energy Report</option>
-                <option value="5">Monthly Tips (first year)</option>
-                <option value="8">Winterize
-                  pool</option>
-                <option value="12">Never Activated</option>
-                <option value="13">Didn't finish HEP</option>
-                <option value="14">Changed
-                  PW?</option>
-                <option value="20" selected="selected">Spam Filter
-                  Test</option>
-                <option value="21">New customer activation mail</option>
-                <option value="22">Repeated activation mail</option>
-                <option value="23">Recommendations Reminder</option>
-                <option value="30">Forgot Password</option>
-                <option value="32">E-Mail
-                  Changed</option>
-                <option value="33">Registration Errors</option>
-                <option value="36">SnapShot</option>
-                <option value="41">High Load Alert
-                  (similar homes)</option>
-                <option value="54">RYPL intro message</option>
-                <option value="55">RYPL Utility Link Instructions</option>
-                <option value="57">RYPL Increased Idle Load</option>
-                <option value="58">RYPL Decreased Idle Load</option>
-                <option value="62">RYPL Try Dr Power</option>
-                <option value="63">Prereg
-                  Reminder</option>
-                <option value="64">RYPL Spam Test</option>
-                <option value="65">RYPL New Customer Activation</option>
-                <option value="66">RYPL Registration Errors</option>
-                <option value="67">RYPL Password Reset</option>
-                <option value="68">Energy
-                  Coach Introduction</option>
-                <option value="69">Enrolled in P4P
-                  notification</option>
-                <option value="70">Increased electric use
-                  alert</option>
-                <option value="76">Increased natural gas use
-                  alert</option>
-                <option value="82">RYPL Try HomeIntel</option>
-                <option value="83">Authorization about to expire</option>
-                <option value="87">NextDoor Yelp testimonial request</option>
+                <option value="" selected="selected"></option>
+                <option *ngFor="let mailDescriptionObject of
+                  mailDescriptionList"
+                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -343,54 +221,13 @@
               "Forgot Password" mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="forgotPwdMailDescriptionId"
+              <select class="form-control form-control-sm"
+                id="forgotPwdMailDescriptionId"
                 formControlName="forgotPwdMailDescriptionId">
-                <option value=""></option>
-                <option value="4">Monthly Home Energy
-                  Report</option>
-                <option value="5">Monthly Tips (first year)</option>
-                <option value="8">Winterize pool</option>
-                <option value="12">Never
-                  Activated</option>
-                <option value="13">Didn't finish HEP</option>
-                <option value="14">Changed PW?</option>
-                <option value="20">Spam Filter
-                  Test</option>
-                <option value="21">New customer activation mail</option>
-                <option value="22">Repeated activation mail</option>
-                <option value="23">Recommendations Reminder</option>
-                <option value="30" selected="selected">Forgot Password</option>
-                <option value="32">E-Mail Changed</option>
-                <option value="33">Registration
-                  Errors</option>
-                <option value="36">SnapShot</option>
-                <option value="41">High Load Alert (similar homes)</option>
-                <option value="54">RYPL intro message</option>
-                <option value="55">RYPL
-                  Utility Link Instructions</option>
-                <option value="57">RYPL
-                  Increased Idle Load</option>
-                <option value="58">RYPL Decreased
-                  Idle Load</option>
-                <option value="62">RYPL Try Dr Power</option>
-                <option value="63">Prereg Reminder</option>
-                <option value="64">RYPL
-                  Spam Test</option>
-                <option value="65">RYPL New Customer
-                  Activation</option>
-                <option value="66">RYPL Registration Errors</option>
-                <option value="67">RYPL Password Reset</option>
-                <option value="68">Energy
-                  Coach Introduction</option>
-                <option value="69">Enrolled in P4P
-                  notification</option>
-                <option value="70">Increased electric use
-                  alert</option>
-                <option value="76">Increased natural gas use
-                  alert</option>
-                <option value="82">RYPL Try HomeIntel</option>
-                <option value="83">Authorization about to expire</option>
-                <option value="87">NextDoor Yelp testimonial request</option>
+                <option value="" selected="selected"></option>
+                <option *ngFor="let mailDescriptionObject of
+                  mailDescriptionList"
+                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -400,51 +237,13 @@
               New Recommendation mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="newRecommendationMailDescriptionId"
+              <select class="form-control form-control-sm"
+                id="newRecommendationMailDescriptionId"
                 formControlName="newRecommendationMailDescriptionId">
-                <option value=""></option>
-                <option value="4">Monthly Home Energy
-                  Report</option>
-                <option value="5">Monthly Tips (first year)</option>
-                <option value="8">Winterize pool</option>
-                <option value="12">Never
-                  Activated</option>
-                <option value="13">Didn't finish HEP</option>
-                <option value="14">Changed PW?</option>
-                <option value="20">Spam Filter
-                  Test</option>
-                <option value="21">New customer activation mail</option>
-                <option value="22">Repeated activation mail</option>
-                <option value="23">Recommendations Reminder</option>
-                <option value="30">Forgot Password</option>
-                <option value="32">E-Mail
-                  Changed</option>
-                <option value="33">Registration Errors</option>
-                <option value="36">SnapShot</option>
-                <option value="41">High Load Alert
-                  (similar homes)</option>
-                <option value="54">RYPL intro message</option>
-                <option value="55">RYPL Utility Link Instructions</option>
-                <option value="57">RYPL Increased Idle Load</option>
-                <option value="58">RYPL Decreased Idle Load</option>
-                <option value="62">RYPL Try Dr Power</option>
-                <option value="63">Prereg
-                  Reminder</option>
-                <option value="64">RYPL Spam Test</option>
-                <option value="65">RYPL New Customer Activation</option>
-                <option value="66">RYPL Registration Errors</option>
-                <option value="67">RYPL Password Reset</option>
-                <option value="68">Energy
-                  Coach Introduction</option>
-                <option value="69">Enrolled in P4P
-                  notification</option>
-                <option value="70">Increased electric use
-                  alert</option>
-                <option value="76">Increased natural gas use
-                  alert</option>
-                <option value="82">RYPL Try HomeIntel</option>
-                <option value="83">Authorization about to expire</option>
-                <option value="87">NextDoor Yelp testimonial request</option>
+                <option value="" selected="selected"></option>
+                <option *ngFor="let mailDescriptionObject of
+                  mailDescriptionList"
+                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -454,53 +253,13 @@
               Mail Changed mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="mailChangedMailDescriptionId"
+              <select class="form-control form-control-sm"
+                id="mailChangedMailDescriptionId"
                 formControlName="mailChangedMailDescriptionId">
-                <option value=""></option>
-                <option value="4">Monthly Home Energy Report</option>
-                <option value="5">Monthly Tips (first year)</option>
-                <option value="8">Winterize
-                  pool</option>
-                <option value="12">Never Activated</option>
-                <option value="13">Didn't finish HEP</option>
-                <option value="14">Changed
-                  PW?</option>
-                <option value="20">Spam Filter Test</option>
-                <option value="21">New customer activation mail</option>
-                <option value="22">Repeated activation mail</option>
-                <option value="23">Recommendations Reminder</option>
-                <option value="30">Forgot Password</option>
-                <option value="32" selected="selected">E-Mail Changed</option>
-                <option value="33">Registration
-                  Errors</option>
-                <option value="36">SnapShot</option>
-                <option value="41">High Load Alert (similar homes)</option>
-                <option value="54">RYPL intro message</option>
-                <option value="55">RYPL
-                  Utility Link Instructions</option>
-                <option value="57">RYPL
-                  Increased Idle Load</option>
-                <option value="58">RYPL Decreased
-                  Idle Load</option>
-                <option value="62">RYPL Try Dr Power</option>
-                <option value="63">Prereg Reminder</option>
-                <option value="64">RYPL
-                  Spam Test</option>
-                <option value="65">RYPL New Customer
-                  Activation</option>
-                <option value="66">RYPL Registration Errors</option>
-                <option value="67">RYPL Password Reset</option>
-                <option value="68">Energy
-                  Coach Introduction</option>
-                <option value="69">Enrolled in P4P
-                  notification</option>
-                <option value="70">Increased electric use
-                  alert</option>
-                <option value="76">Increased natural gas use
-                  alert</option>
-                <option value="82">RYPL Try HomeIntel</option>
-                <option value="83">Authorization about to expire</option>
-                <option value="87">NextDoor Yelp testimonial request</option>
+                <option value="" selected="selected"></option>
+                <option *ngFor="let mailDescriptionObject of
+                  mailDescriptionList"
+                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -510,54 +269,13 @@
               Registration Warning mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="registrationErrorMailDescriptionId"
+              <select class="form-control form-control-sm"
+                id="registrationErrorMailDescriptionId"
                 formControlName="registrationErrorMailDescriptionId">
-                <option value=""></option>
-                <option value="4">Monthly Home Energy Report</option>
-                <option value="5">Monthly Tips (first year)</option>
-                <option value="8">Winterize
-                  pool</option>
-                <option value="12">Never Activated</option>
-                <option value="13">Didn't finish HEP</option>
-                <option value="14">Changed
-                  PW?</option>
-                <option value="20">Spam Filter Test</option>
-                <option value="21">New customer activation mail</option>
-                <option value="22">Repeated activation mail</option>
-                <option value="23">Recommendations Reminder</option>
-                <option value="30">Forgot Password</option>
-                <option value="32">E-Mail
-                  Changed</option>
-                <option value="33" selected="selected">Registration
-                  Errors</option>
-                <option value="36">SnapShot</option>
-                <option value="41">High Load Alert (similar homes)</option>
-                <option value="54">RYPL intro message</option>
-                <option value="55">RYPL
-                  Utility Link Instructions</option>
-                <option value="57">RYPL
-                  Increased Idle Load</option>
-                <option value="58">RYPL Decreased
-                  Idle Load</option>
-                <option value="62">RYPL Try Dr Power</option>
-                <option value="63">Prereg Reminder</option>
-                <option value="64">RYPL
-                  Spam Test</option>
-                <option value="65">RYPL New Customer
-                  Activation</option>
-                <option value="66">RYPL Registration Errors</option>
-                <option value="67">RYPL Password Reset</option>
-                <option value="68">Energy
-                  Coach Introduction</option>
-                <option value="69">Enrolled in P4P
-                  notification</option>
-                <option value="70">Increased electric use
-                  alert</option>
-                <option value="76">Increased natural gas use
-                  alert</option>
-                <option value="82">RYPL Try HomeIntel</option>
-                <option value="83">Authorization about to expire</option>
-                <option value="87">NextDoor Yelp testimonial request</option>
+                <option value="" selected="selected"></option>
+                <option *ngFor="let mailDescriptionObject of
+                  mailDescriptionList"
+                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -567,29 +285,12 @@
               Customer Registration JS Page (optional):
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="customerRegistrationViewId"
+              <select class="form-control form-control-sm"
+                id="customerRegistrationViewId"
                 formControlName="customerRegistrationViewId">
-                <option value=""></option>
-                <option value="13">Registration for Solar PV
-                  users</option>
-                <option value="67">PG&amp;E - P4P - Image Long</option>
-                <option value="68">PG&amp;E - P4P - Image Short</option>
-                <option value="69">PG&amp;E - CSP - Image Short</option>
-                <option value="72">PG&amp;E - P4P - Custom - BayRen</option>
-                <option value="75">SCE - SCB - HEH Letters</option>
-                <option value="79">PG&amp;E
-                  - P4P - Image Short - MyEnergy Initiated</option>
-                <option value="81">PG&amp;E - CSP - Custom - Energuy</option>
-                <option value="82">PG&amp;E - P4P - Generic CCE</option>
-                <option value="83">PG&amp;E - Rising Sun</option>
-                <option value="84">Instant
-                  Registration page -- ConSol</option>
-                <option value="85">Out Of
-                  Service</option>
-                <option value="89">Utility API registrations</option>
-                <option value="90">Atherton landing page</option>
-                <option value="91">PG&amp;E
-                  - P4P - New Atherton style</option>
+                <option value="" selected="selected"></option>
+                <option *ngFor="let jsPageObject of jsPageList"
+                  [value]="jsPageObject.jsPageId">{{jsPageObject.name}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -599,29 +300,12 @@
               Customer Registration Success JS Page (optional):
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="customerRegistrationSuccessViewId"
+              <select class="form-control form-control-sm"
+                id="customerRegistrationSuccessViewId"
                 formControlName="customerRegistrationSuccessViewId">
-                <option value=""></option>
-                <option value="13">Registration for Solar PV
-                  users</option>
-                <option value="67">PG&amp;E - P4P - Image Long</option>
-                <option value="68">PG&amp;E - P4P - Image Short</option>
-                <option value="69">PG&amp;E - CSP - Image Short</option>
-                <option value="72">PG&amp;E - P4P - Custom - BayRen</option>
-                <option value="75">SCE - SCB - HEH Letters</option>
-                <option value="79">PG&amp;E
-                  - P4P - Image Short - MyEnergy Initiated</option>
-                <option value="81">PG&amp;E - CSP - Custom - Energuy</option>
-                <option value="82">PG&amp;E - P4P - Generic CCE</option>
-                <option value="83">PG&amp;E - Rising Sun</option>
-                <option value="84">Instant
-                  Registration page -- ConSol</option>
-                <option value="85">Out Of
-                  Service</option>
-                <option value="89">Utility API registrations</option>
-                <option value="90">Atherton landing page</option>
-                <option value="91">PG&amp;E
-                  - P4P - New Atherton style</option>
+                <option value="" selected="selected"></option>
+                <option *ngFor="let jsPageObject of jsPageList"
+                  [value]="jsPageObject.jsPageId">{{jsPageObject.name}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -632,7 +316,8 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="immediateLogin" id="immediateLogin" formControlName="immediateLogin">
+              <input type="checkbox" name="immediateLogin" id="immediateLogin"
+                formControlName="immediateLogin">
               <label class="checkbox">Immediate Login after registration</label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -642,7 +327,8 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="allowBilling" id="allowBilling" formControlName="allowBilling">
+              <input type="checkbox" name="allowBilling" id="allowBilling"
+                formControlName="allowBilling">
               <label class="checkbox">Allow Billing</label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -652,7 +338,8 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="archived" id="archived" formControlName="archived">
+              <input type="checkbox" name="archived" id="archived"
+                formControlName="archived">
               <label class="checkbox">Archived</label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -663,7 +350,8 @@
               Registration success rule:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="customerRegistrationSuccessViewId"
+              <select class="form-control form-control-sm"
+                id="customerRegistrationSuccessViewId"
                 formControlName="customerRegistrationSuccessViewId">
                 <option value="0">Smart Audit</option>
                 <option value="1">Dr Power</option>
@@ -691,7 +379,8 @@
 
           <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="placeKey" [data]="placeDataSource" [isHideAdd]=true [isDelete]=false
+              <app-table [keys]="placeKey" [data]="placeDataSource"
+                [isHideAdd]=true [isDelete]=false
                 [totalElement]="placeData.totalElements" [checkbox]=true>
               </app-table>
             </div>
@@ -710,8 +399,11 @@
 
           <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="programGroupKey" [data]="programGroupDataSource" [isHideAdd]=true [isDelete]=false
-                [totalElement]="programGroupData.totalElements" [checkbox]=true id='programCode'
+              <app-table [keys]="programGroupKey"
+                [data]="programGroupDataSource" [isHideAdd]=true
+                [isDelete]=false
+                [totalElement]="programGroupData.totalElements" [checkbox]=true
+                id='programCode'
                 [selectionList]='programSelectionList'>
               </app-table>
             </div>
@@ -728,8 +420,10 @@
               <button type="button" class="btn btn-primary" (click)="delete()"
                 *ngIf="id!==undefined && id!==null">Delete</button>
             </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-2 bottomButton sidePadding">
-              <button type="button" class="btn btn-primary" (click)="save()" style="margin-right: -4px;">Save</button>
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-2 bottomButton
+              sidePadding">
+              <button type="button" class="btn btn-primary" (click)="save()"
+                style="margin-right: -4px;">Save</button>
             </div>
           </div>
         </form>

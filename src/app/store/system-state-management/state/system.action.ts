@@ -26,6 +26,9 @@ export enum SystemActionTypes {
     SAVE_ROLE = 'Save Role',
     UPDATE_ROLE = 'Update Role',
     DELETE_ROLE = 'Delete Role',
+    GET_THEMES_LIST = 'Get All Theme List',
+    GET_SCRAPING_UTILITY_LIST = 'Get Scraping Utility List',
+    GET_SCRAPING_PERIOD_LIST = 'Get Scraping Period List',
     CUSTOMER_GROUP_ERROR = 'Customer Error'
 }
 export class GetCustomerGroupListAction {
@@ -186,6 +189,24 @@ export class SaveRoleAction {
 export class DeleteRoleByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_ROLE;
     constructor(readonly roleCode: string) {
+    }
+}
+
+export class GetThemesListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_THEMES_LIST;
+    constructor(readonly force: boolean) {
+    }
+}
+
+export class GetScrapingUtilityListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_SCRAPING_UTILITY_LIST;
+    constructor(readonly force: boolean, readonly params: any) {
+    }
+}
+
+export class GetScrapingPeriodListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_SCRAPING_PERIOD_LIST;
+    constructor(readonly force: boolean, readonly params: any) {
     }
 }
 

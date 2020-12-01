@@ -6,8 +6,8 @@
         <p class="heading">
           Dynamic Views
         </p>
-        <form [formGroup]='mailForm'>
-          <div class="row rowPadding borderBottom" (submit)="search()">
+        <form [formGroup]='viewConfiguration'>
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Configuration Name:</span>
@@ -26,7 +26,7 @@
 
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary" (click)="search($event,true)">Show</button>
             </div>
           </div>
 
@@ -36,7 +36,7 @@
               <span class="messageName">Dynamic Views List</span></p>
             <app-table [keys]="keys" [isPaginate]="true" (goToEditEvent)='goToEditViewConfigurations()'
               (addEvent)='addViewConfigurations()' [isSearch]="false" [data]="dataSource"
-              [totalElement]="viewData.totalElements" (changePageEvent)="findViewConfiguration($event)">
+              [totalElement]="viewData.totalElements" (changePageEvent)="search($event,false)">
             </app-table>
           </div>
         </form>

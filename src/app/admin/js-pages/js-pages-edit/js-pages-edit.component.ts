@@ -1,13 +1,13 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
-import { StackTraceComponent } from '../../mail-description/stack-trace/stack-trace.component';
 
 @Component({
   selector: 'app-js-pages-edit',
@@ -29,6 +29,7 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
     matchBrackets: true,
     lint: true,
   };
+  isForce = false;
   public customerGroupKeys = TableColumnData.CUSTOMER_GROUP_KEY;
   public customerGroupDataSource: any;
   public totalElement = 0;
@@ -39,18 +40,19 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
-    private readonly location: Location,
-    private readonly router: Router) {
+    private readonly dynamicViewService: DynamicViewService,
+    private readonly router: Router,
+    private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
   }
 
-
   ngOnInit() {
-
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.dynamicViewService.loadJavaScriptPageById(this.id);
+      this.loadJavaScriptPageById();
     }
   }
 
@@ -74,21 +76,66 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
       htmlTemplate: [event !== undefined ? event.htmlTemplate : ''],
     });
   }
-  back() {
-    this.location.back();
-  }
-
-  save(): any { }
-
-  delete(): any { }
 
   Preview() {
     this.router.navigate(['/admin/jsPages/jsPagesPreview'], { queryParams: { id: this.id } });
   }
 
-  get f() { return this.jsPagesForm.controls; }
 
+  loadJavaScriptPageById() {
+    this.subscriptions.add(this.dynamicViewService.getJavaScriptPageById().pipe(skipWhile((item: any) => !item))
+      .subscribe((jsPages: any) => {
+        if (this.isForce) {
+          this.router.navigate(['admin/jsPages/jsPagesEdit'], { queryParams: { 'id': jsPages.id } });
+        }
+        this.setForm(jsPages);
+      }));
+  }
+
+  back() {
+    this.router.navigate(['admin/jsPages/jsPagesList'], { queryParams: { 'force': this.isForce } });
+  }
+  delete() {
+    this.subscriptions.add(this.dynamicViewService.deleteJavaScriptPageById(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['admin/jsPages/jsPagesList'], { queryParams: { 'force': true } });
+      }));
+  }
+
+  save() {
+    if (this.jsPagesForm.valid) {
+      if (this.id !== null && this.id !== undefined) {
+        this.subscriptions.add(this.dynamicViewService.updateJavaScriptPage(this.id, this.jsPagesForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadJavaScriptPageById();
+          }));
+      } else {
+        this.subscriptions.add(this.dynamicViewService.saveJavaScriptPage(this.jsPagesForm.value).pipe(
+          skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.isForce = true;
+            this.loadJavaScriptPageById();
+          }));
+      }
+    } else {
+      this.validateForm();
+    }
+  }
+  validateForm() {
+    for (const key of Object.keys(this.jsPagesForm.controls)) {
+      if (this.jsPagesForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
+
+  get f() { return this.jsPagesForm.controls; }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }
+

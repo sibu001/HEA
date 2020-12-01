@@ -47,7 +47,7 @@
           <div class="paddingTop">
             <app-table [keys]="keys" [isSearch]="false" [isPaginate]=true [data]="dataSource" [isHideAdd]=true
               [totalElement]="data.totalElements" (changePageEvent)='search($event)'
-              (goToEditEvent)='goToEditWater($event)'>
+              (goToEditEvent)='goToEditWater()'>
             </app-table>
           </div>
         </form>

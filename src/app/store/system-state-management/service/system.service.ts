@@ -18,6 +18,9 @@ import {
   GetProgramGroupListAction,
   GetRoleByIdAction,
   GetRoleListAction,
+  GetScrapingPeriodListAction,
+  GetScrapingUtilityListAction,
+  GetThemesListAction,
   GetViewConfigurationListAction,
   SaveCredentialTypeAction,
   SaveCustomerAlertTypeAction,
@@ -87,6 +90,18 @@ export class SystemService {
     return this.store.select(SystemManagementState.getCoachUserList);
   }
 
+  getThemeList(): Observable<any> {
+    return this.store.select(SystemManagementState.getThemeList);
+  }
+
+  getScrapingUtilityList(): Observable<any> {
+    return this.store.select(SystemManagementState.getScrapingUtilityList);
+  }
+
+  getScrapingPeriodList(): Observable<any> {
+    return this.store.select(SystemManagementState.getScrapingPeriodList);
+  }
+
   loadCustomerGroupList(force: boolean, filter: any): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCustomerGroupListAction(force, filter));
   }
@@ -130,7 +145,6 @@ export class SystemService {
   deleteProgramGroupById(id: number): Observable<SystemManagementState> {
     return this.store.dispatch(new DeleteProgramGroupByIdAction(id));
   }
-
 
   loadGetCustomerAlertTypeList(force: boolean, filter: any): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCustomerAlertTypeListAction(force, filter));
@@ -196,4 +210,15 @@ export class SystemService {
     return this.store.dispatch(new DeleteRoleByIdAction(roleCode));
   }
 
+  loadThemesList(force: boolean): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetThemesListAction(force));
+  }
+
+  loadScrapingUtilityList(force: boolean, params: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetScrapingUtilityListAction(force, params));
+  }
+
+  loadScrapingPeriodList(force: boolean, params: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetScrapingPeriodListAction(force, params));
+  }
 }

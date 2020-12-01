@@ -14,6 +14,7 @@ import {
     DeletePlaceByIdAction,
     DeleteSystemParameterByIdAction,
     DeleteWeatherStationByIdAction,
+    DeleteZipCodeByIdAction,
     GetCustomerComparisonGroupByIdAction,
     GetCustomerComparisonGroupListAction,
     GetCustomerEventTypeByIdAction,
@@ -30,8 +31,10 @@ import {
     GetPlaceListAction,
     GetSystemParameterByIdAction,
     GetSystemParameterListAction,
+    GetTimeZoneListAction,
     GetWeatherStationByIdAction,
     GetWeatherStationListAction,
+    GetZipCodeListAction,
     SaveCustomerComparisonGroupAction,
     SaveCustomerEventTypeAction,
     SaveDegreeDaysAction,
@@ -41,6 +44,7 @@ import {
     SavePlaceAction,
     SaveSystemParameterAction,
     SaveWeatherStationAction,
+    SaveZipCodeAction,
     UpdateCustomerComparisonGroupAction,
     UpdateCustomerEventTypeAction,
     UpdateDegreeDaysAction,
@@ -74,6 +78,9 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         weatherStation: undefined,
         degreeDaysList: undefined,
         degreeDays: undefined,
+        zipCodeList: undefined,
+        zipCode: undefined,
+        timeZoneList: undefined,
         error: undefined
     }
 })
@@ -171,6 +178,16 @@ export class SystemUtilityManagementState {
     @Selector()
     static getLogById(state: SystemUtilityManagementModel): any {
         return state.logs;
+    }
+
+    @Selector()
+    static getZipCodeList(state: SystemUtilityManagementModel): any {
+        return state.zipCodeList;
+    }
+
+    @Selector()
+    static getTimeZoneList(state: SystemUtilityManagementModel): any {
+        return state.timeZoneList;
     }
 
     @Action(GetPlaceListAction)
@@ -850,7 +867,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -952,7 +969,7 @@ export class SystemUtilityManagementState {
     @Action(SaveDegreeDaysAction)
     saveDegreeDays(ctx: StateContext<SystemUtilityManagementModel>, action: SaveDegreeDaysAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.factor, AppConstant.degreeDays)
+        return this.loginService.performPost(action.degreeDays, AppConstant.degreeDays)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -970,7 +987,7 @@ export class SystemUtilityManagementState {
     @Action(UpdateDegreeDaysAction)
     updateDegreeDays(ctx: StateContext<SystemUtilityManagementModel>, action: UpdateDegreeDaysAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.factor, AppConstant.degreeDays + '/' + action.id)
+        return this.loginService.performPut(action.degreeDays, AppConstant.degreeDays + '/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -983,5 +1000,77 @@ export class SystemUtilityManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
                     }));
+    }
+
+    @Action(GetZipCodeListAction)
+    getAllZipCodeList(ctx: StateContext<SystemUtilityManagementModel>, action: GetZipCodeListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.places + '/' + action.placeCode + '/' + AppConstant.zipCode, action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        zipCodeList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteZipCodeByIdAction)
+    deleteZipCodeById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteZipCodeByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.places + '/' + action.placeCode + '/' + AppConstant.zipCode + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage(response.message);
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveZipCodeAction)
+    saveZipCode(ctx: StateContext<SystemUtilityManagementModel>, action: SaveZipCodeAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.zipCode, AppConstant.places + '/' + action.placeCode + '/' + AppConstant.zipCode)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        zipCode: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetTimeZoneListAction)
+    getAllTimeZoneList(ctx: StateContext<SystemUtilityManagementModel>, action: GetTimeZoneListAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getTimeZoneList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.timezone)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            timeZoneList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
     }
 }

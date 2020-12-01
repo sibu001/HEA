@@ -44,6 +44,10 @@ export enum SystemActionTypes {
     SAVE_DEGREE_DAYS = 'Save DegreeDays',
     UPDATE_DEGREE_DAYS = 'Update DegreeDays',
     DELETE_DEGREE_DAYS_BY_ID = 'Delete DegreeDays By Id',
+    GET_ZIP_CODE_LIST = 'Get All ZIpCode List',
+    SAVE_ZIP_CODE = 'Save ZIpCode',
+    DELETE_ZIP_CODE_BY_ID = 'Delete ZIpCode By Id',
+    GET_TIMEZONE_LIST = 'Get Time Zone List'
 }
 export class GetPlaceListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_PLACE_LIST;
@@ -297,18 +301,42 @@ export class GetDegreeDaysByIdAction {
 
 export class SaveDegreeDaysAction {
     static readonly type: SystemActionTypes = SystemActionTypes.SAVE_DEGREE_DAYS;
-    constructor(readonly factor: any) {
+    constructor(readonly degreeDays: any) {
     }
 }
 
 export class UpdateDegreeDaysAction {
     static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_DEGREE_DAYS;
-    constructor(readonly id: number, readonly factor: any) {
+    constructor(readonly id: number, readonly degreeDays: any) {
     }
 }
 
 export class DeleteDegreeDaysByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_DEGREE_DAYS_BY_ID;
     constructor(readonly id: number) {
+    }
+}
+
+export class GetZipCodeListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_ZIP_CODE_LIST;
+    constructor(readonly placeCode: any, readonly filter: any) {
+    }
+}
+
+export class SaveZipCodeAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_ZIP_CODE;
+    constructor(readonly placeCode: any, readonly zipCode: any) {
+    }
+}
+
+export class DeleteZipCodeByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_ZIP_CODE_BY_ID;
+    constructor(readonly placeCode: any, readonly id: number) {
+    }
+}
+
+export class GetTimeZoneListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_TIMEZONE_LIST;
+    constructor(readonly force: boolean) {
     }
 }

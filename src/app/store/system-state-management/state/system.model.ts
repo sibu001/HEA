@@ -11,5 +11,8 @@ export interface SystemManagementModel {
     coachUserList: any;
     roleList: any;
     role: any;
+    themesList: any;
+    scrapingUtility: any;
+    scrapingPeriod: any;
     error: Error;
 }

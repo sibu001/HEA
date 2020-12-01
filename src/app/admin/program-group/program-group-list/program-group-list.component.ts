@@ -54,13 +54,13 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
 
   search(event: any, force: boolean): void {
     const params = new HttpParams()
-      .set('filter.startRow', '0')
+      .set('startRow', '0')
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
       .set('programGroupId', '')
-      .set('filter.programCode', (this.programGroupForm.value.programCode !== null ? this.programGroupForm.value.programCode : ''))
-      .set('filter.programName', (this.programGroupForm.value.programName !== null ? this.programGroupForm.value.programName : ''));
+      .set('programCode', (this.programGroupForm.value.programCode !== null ? this.programGroupForm.value.programCode : ''))
+      .set('programName', (this.programGroupForm.value.programName !== null ? this.programGroupForm.value.programName : ''));
     this.findProgramGroup(params, force);
   }
 

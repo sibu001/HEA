@@ -94,7 +94,7 @@ export class DynamicViewManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.javaScriptPages + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.javaScriptPages, action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');

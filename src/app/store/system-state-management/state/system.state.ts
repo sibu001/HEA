@@ -23,6 +23,9 @@ import {
     GetProgramGroupListAction,
     GetRoleByIdAction,
     GetRoleListAction,
+    GetScrapingPeriodListAction,
+    GetScrapingUtilityListAction,
+    GetThemesListAction,
     GetViewConfigurationListAction,
     SaveCredentialTypeAction,
     SaveCustomerAlertTypeAction,
@@ -52,6 +55,9 @@ import { SystemManagementModel } from './system.model';
         coachUserList: undefined,
         roleList: undefined,
         role: undefined,
+        themesList: undefined,
+        scrapingUtility: undefined,
+        scrapingPeriod: undefined,
         error: undefined
     }
 })
@@ -119,6 +125,21 @@ export class SystemManagementState {
     @Selector()
     static getRoleById(state: SystemManagementModel): any {
         return state.role;
+    }
+
+    @Selector()
+    static getThemeList(state: SystemManagementModel): any {
+        return state.themesList;
+    }
+
+    @Selector()
+    static getScrapingUtilityList(state: SystemManagementModel): any {
+        return state.scrapingUtility;
+    }
+
+    @Selector()
+    static getScrapingPeriodList(state: SystemManagementModel): any {
+        return state.scrapingPeriod;
     }
 
     @Action(GetCustomerGroupListAction)
@@ -620,6 +641,72 @@ export class SystemManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
+    }
+
+    @Action(GetScrapingUtilityListAction)
+    getAllScrapingUtilityList(ctx: StateContext<SystemManagementModel>, action: GetScrapingUtilityListAction): Actions {
+        const force: boolean = action.force || SystemManagementState.getScrapingUtilityList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.lookupValues + '/' + action.params)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            scrapingUtility: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetScrapingPeriodListAction)
+    getAllScrapingPeriodList(ctx: StateContext<SystemManagementModel>, action: GetScrapingPeriodListAction): Actions {
+        const force: boolean = action.force || SystemManagementState.getScrapingPeriodList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.lookupValues + '/' + action.params)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            scrapingPeriod: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetThemesListAction)
+    getAllThemesList(ctx: StateContext<SystemManagementModel>, action: GetThemesListAction): Actions {
+        const force: boolean = action.force || SystemManagementState.getThemeList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.themes)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            themesList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
+                        }));
+        }
+        return result;
     }
 
     @Action(CustomerGroupError)

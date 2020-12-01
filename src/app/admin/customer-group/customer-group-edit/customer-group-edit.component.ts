@@ -7,7 +7,9 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { TableColumnData } from 'src/app/data/common-data';
-import { SelectionModel } from '@angular/cdk/collections';
+import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
+import { HttpParams } from '@angular/common/http';
+import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 
 @Component({
   selector: 'app-customer-group-edit',
@@ -17,6 +19,11 @@ import { SelectionModel } from '@angular/cdk/collections';
 export class CustomerGroupEditComponent implements OnInit, OnDestroy {
   customerGroupForm: FormGroup;
   id: any;
+  themeList: Array<any>;
+  scrapingUtilityList: Array<any>;
+  scrapingPeriodList: Array<any>;
+  jsPageList: Array<any>;
+  mailDescriptionList: Array<any>;
   placeKey: Array<TABLECOLUMN> = TableColumnData.PLACE_KEY;
   isForce = false;
   placeData = {
@@ -35,7 +42,6 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     }
   ];
   programGroupKey: Array<TABLECOLUMN> = TableColumnData.PROGRAM_GROUP_KEY;
-  // programIdColumn = 'programCode';
   programSelectionList: Array<any> = [];
   programGroupData = {
     content: [],
@@ -46,9 +52,15 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly dynamicViewService: DynamicViewService,
     private readonly router: Router,
-    private readonly el: ElementRef) {
+    private readonly mailService: MailService) {
     this.findProgramGroup();
+    this.loadThemeList();
+    this.loadScrapingUtilityList();
+    this.loadScrapingPeriodList();
+    this.loadJSPageList();
+    this.loadMailDescriptionList();
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
@@ -81,7 +93,52 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     this.programSelectionList.push('MedHC');
     this.programSelectionList.push('HiVar');
     this.programSelectionList.push('HiPlug');
+  }
 
+  loadThemeList(): any {
+    this.systemService.loadThemesList(false);
+    this.subscriptions.add(this.systemService.getThemeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((themeList: any) => {
+        this.themeList = themeList.data;
+        console.log(themeList.data);
+      }));
+  }
+
+  loadScrapingUtilityList(): any {
+    this.systemService.loadScrapingUtilityList(false, 'SCRAPING_UTILITY');
+    this.subscriptions.add(this.systemService.getScrapingUtilityList().pipe(skipWhile((item: any) => !item))
+      .subscribe((scrapingUtilityList: any) => {
+        this.scrapingUtilityList = scrapingUtilityList.data;
+      }));
+  }
+
+  loadScrapingPeriodList(): any {
+    this.systemService.loadScrapingPeriodList(false, 'SCRAPING_PERIOD');
+    this.subscriptions.add(this.systemService.getScrapingPeriodList().pipe(skipWhile((item: any) => !item))
+      .subscribe((scrapingPeriodList: any) => {
+        this.scrapingPeriodList = scrapingPeriodList.data;
+      }));
+  }
+
+  loadJSPageList(): any {
+    const params = new HttpParams()
+      .set('needAuthorization', 'false')
+      .set('openInNewWindow', 'false');
+    this.dynamicViewService.loadJavaScriptPageList(false, params);
+    this.subscriptions.add(this.dynamicViewService.getJavaScriptPageList().pipe(skipWhile((item: any) => !item))
+      .subscribe((jsPageList: any) => {
+        this.jsPageList = jsPageList;
+      }));
+  }
+
+  loadMailDescriptionList(): any {
+    const params = new HttpParams()
+      .set('active', 'true');
+    this.mailService.loadMailDescriptionList(false, params);
+    this.subscriptions.add(this.mailService.getMailDescriptionList().pipe(skipWhile((item: any) => !item))
+      .subscribe((mailDescriptionList: any) => {
+        this.mailDescriptionList = mailDescriptionList.data;
+      }));
   }
 
   setForm(event: any) {
@@ -113,9 +170,11 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
       dataCheckAlg: [event !== undefined ? event.dataCheckAlg : ''],
     });
   }
+
   back() {
     this.router.navigate(['admin/customer-group/customerGroupList'], { queryParams: { 'force': this.isForce } });
   }
+
   delete() {
     if (confirm('Are you sure you want to delete?')) {
       this.subscriptions.add(this.systemService.deleteCustomerGroupById(this.id).pipe(skipWhile((item: any) => !item))
@@ -146,15 +205,6 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
       this.validateAllFormFields(this.customerGroupForm);
     }
   }
-  // validateForm() {
-  //   for (const key of Object.keys(this.customerGroupForm.controls)) {
-  //     if (this.customerGroupForm.controls[key].invalid) {
-  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-  //       invalidControl.focus();
-  //       break;
-  //     }
-  //   }
-  // }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {

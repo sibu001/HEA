@@ -62,8 +62,8 @@ export class PlaceListComponent implements OnInit, OnDestroy {
       + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
       + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
       + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction : 'ASC')
-      + '&placeCode=&filter.placeName='
-      + this.placeForm.value.placeName + '&filter.zipCode='
+      + '&placeCode=&placeName='
+      + this.placeForm.value.placeName + '&zipCode='
       + this.placeForm.value.zipCode;
     this.findPlace(true, filter);
   }
