@@ -46,8 +46,8 @@ export class JsPagesListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/jsPages/jsPagesEdit']);
   }
 
-  goToEditJsPages(): any {
-    this.router.navigate(['/admin/jsPages/jsPagesEdit'], { queryParams: { id: this.id } });
+  goToEditJsPages(event: any): any {
+    this.router.navigate(['/admin/jsPages/jsPagesEdit'], { queryParams: { id: event.jsPageId } });
   }
 
   setUpForm(event: any) {
@@ -61,25 +61,24 @@ export class JsPagesListComponent implements OnInit, OnDestroy {
     this.dynamicViewService.loadJavaScriptPageList(force, filter);
     this.subscriptions.add(this.dynamicViewService.getJavaScriptPageList().pipe(skipWhile((item: any) => !item))
       .subscribe((jsPagesList: any) => {
-        this.jsPagesData.content = jsPagesList.list;
-        this.jsPagesData.totalElements = jsPagesList.totalSize;
+        this.jsPagesData.content = jsPagesList;
         this.dataSource = [...this.jsPagesData.content];
       }));
   }
 
   search(event: any, isSearch: boolean): void {
+    // .set('filter.disableTotalSize', 'false')
+    // .set('filter.homeowner', 'false')
+    // .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
       .set('jsPageId', '')
-      .set('filter.code', (this.jsPagesForm.value.code !== null ? this.jsPagesForm.value.code : ''))
-      .set('filter.name', (this.jsPagesForm.value.pageName !== null ? this.jsPagesForm.value.pageName : ''));
+      .set('code', (this.jsPagesForm.value.code !== null ? this.jsPagesForm.value.code : ''))
+      .set('name', (this.jsPagesForm.value.pageName !== null ? this.jsPagesForm.value.pageName : ''));
     this.findJsPages(true, params);
   }
   ngOnDestroy(): void {

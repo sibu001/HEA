@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
+  AssignPlaceToCustomerGroupAction,
+  AssignProgramGroupToCustomerGroupAction,
   DeleteCredentialTypeByIdAction,
   DeleteCustomerAlertTypeByIdAction,
   DeleteCustomerGroupByIdAction,
+  DeletePlaceOfCustomerGroupAction,
   DeleteProgramGroupByIdAction,
+  DeleteProgramGroupOfCustomerGroupAction,
   DeleteRoleByIdAction,
   GetCoachUserListAction,
   GetCredentialTypeByIdAction,
@@ -14,8 +18,10 @@ import {
   GetCustomerAlertTypeListAction,
   GetCustomerGroupByIdAction,
   GetCustomerGroupListAction,
+  GetPlaceListByCustomerGroupIdAction,
   GetProgramGroupByIdAction,
   GetProgramGroupListAction,
+  GetProgramGroupListByCustomerGroupIdAction,
   GetRoleByIdAction,
   GetRoleListAction,
   GetScrapingPeriodListAction,
@@ -48,6 +54,14 @@ export class SystemService {
 
   getCustomerGroupById(): Observable<any> {
     return this.store.select(SystemManagementState.getCustomerGroupById);
+  }
+
+  getPlaceByCustomerGroupId(): Observable<any> {
+    return this.store.select(SystemManagementState.getPlaceListByCustomerGroupId);
+  }
+
+  getProgramGroupByCustomerGroupId(): Observable<any> {
+    return this.store.select(SystemManagementState.getProgramGroupListByCustomerGroupId);
   }
 
   getViewConfigurationList(): Observable<any> {
@@ -120,6 +134,30 @@ export class SystemService {
 
   deleteCustomerGroupById(id: number): Observable<SystemManagementState> {
     return this.store.dispatch(new DeleteCustomerGroupByIdAction(id));
+  }
+
+  loadPlaceListByCustomerGroupId(customerGroupId: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetPlaceListByCustomerGroupIdAction(customerGroupId));
+  }
+
+  assignPlaceToCustomerGroup(customerGroupId: any, placeCode: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new AssignPlaceToCustomerGroupAction(customerGroupId, placeCode));
+  }
+
+  deletePlaceOfCustomerGroup(customerGroupId: any, placeCode: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new DeletePlaceOfCustomerGroupAction(customerGroupId, placeCode));
+  }
+
+  loadProgramGroupListByCustomerGroupId(customerGroupId: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetProgramGroupListByCustomerGroupIdAction(customerGroupId));
+  }
+
+  assignProgramGroupToCustomerGroup(customerGroupId: any, programGroupId: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new AssignProgramGroupToCustomerGroupAction(customerGroupId, programGroupId));
+  }
+
+  deleteProgramGroupOfCustomerGroup(customerGroupId: any, programGroupId: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new DeleteProgramGroupOfCustomerGroupAction(customerGroupId, programGroupId));
   }
 
   loadViewConfigurationList(force: boolean): Observable<SystemManagementState> {

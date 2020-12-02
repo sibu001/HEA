@@ -4,6 +4,12 @@ export enum SystemActionTypes {
     UPDATE_CUSTOMER_GROUP = 'Update Customer Group',
     SAVE_CUSTOMER_GROUP = 'Save Customer Group',
     DELETE_CUSTOMER_GROUP_BY_ID = 'Delete Customer Group By Id',
+    GET_PLACE_LIST_BY_CUSTOMER_GROUP_ID = 'Get Place List by Customer Group Id',
+    ASSIGN_PLACE_TO_CUSTOMER_GROUP = 'Assign Place to Customer Group',
+    DELETE_PLACE_OF_CUSTOMER_GROUP = 'Delete Place of Customer Group',
+    GET_PROGRAM_GROUP_LIST_BY_CUSTOMER_GROUP_ID = 'Get Program Group List by Customer Group Id',
+    ASSIGN_PROGRAM_GROUP_TO_CUSTOMER_GROUP = 'Assign Program Group to Customer Group',
+    DELETE_PROGRAM_GROUP_OF_CUSTOMER_GROUP = 'Delete Program Group of Customer Group',
     GET_VIEW_CONFIGURATION_LIST = 'Get All View Configuration List',
     GET_PROGRAM_GROUP_LIST = 'Get All Program Group List',
     GET_PROGRAM_GROUP_BY_ID = 'Get Program Group By Id',
@@ -57,6 +63,42 @@ export class SaveCustomerGroupAction {
 export class DeleteCustomerGroupByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_CUSTOMER_GROUP_BY_ID;
     constructor(readonly id: number) {
+    }
+}
+
+export class GetPlaceListByCustomerGroupIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_PLACE_LIST_BY_CUSTOMER_GROUP_ID;
+    constructor( readonly customerGroupId: any) {
+    }
+}
+
+export class AssignPlaceToCustomerGroupAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.ASSIGN_PLACE_TO_CUSTOMER_GROUP;
+    constructor(readonly customerGroupId: any, readonly placeCode: any) {
+    }
+}
+
+export class DeletePlaceOfCustomerGroupAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_PLACE_OF_CUSTOMER_GROUP;
+    constructor(readonly customerGroupId: any, readonly placeCode: any) {
+    }
+}
+
+export class GetProgramGroupListByCustomerGroupIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_PROGRAM_GROUP_LIST_BY_CUSTOMER_GROUP_ID;
+    constructor(readonly customerGroupId: any) {
+    }
+}
+
+export class AssignProgramGroupToCustomerGroupAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.ASSIGN_PROGRAM_GROUP_TO_CUSTOMER_GROUP;
+    constructor(readonly customerGroupId: any, readonly programGroupId: any) {
+    }
+}
+
+export class DeleteProgramGroupOfCustomerGroupAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_PROGRAM_GROUP_OF_CUSTOMER_GROUP;
+    constructor(readonly customerGroupId: any, readonly programGroupId: any) {
     }
 }
 

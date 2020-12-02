@@ -1,6 +1,8 @@
 export interface SystemManagementModel {
     customerGroupList: any;
     customerGroup: any;
+    placeListByCustomerGroupId: any;
+    programGroupListByCustomerGroupId: any;
     viewConfigurationList: any;
     programGroupList: any;
     programGroup: any;

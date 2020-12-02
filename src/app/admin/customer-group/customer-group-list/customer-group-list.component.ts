@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -48,18 +49,26 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
         this.customerGroupData.content = customerGroupList;
         this.dataSource = [...this.customerGroupData.content];
       }));
-
   }
 
   search(event: any): void {
-    const filter = '?filter.startRow=0&formAction='
-      + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
-      + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
-      + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction : 'ASC')
-      + '&customerGroupId=&filter.groupCode='
-      + this.customerGroupForm.value.groupCode + '&filter.groupName='
-      + this.customerGroupForm.value.groupName;
-    this.findCustomerGroup(true, filter);
+    const params = new HttpParams()
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('customerGroupId', '')
+      .set('groupCode', (this.customerGroupForm.value.groupCode !== null ? this.customerGroupForm.value.groupCode : ''))
+      .set('groupName', (this.customerGroupForm.value.groupName !== null ? this.customerGroupForm.value.groupName : ''));
+    // const filter = '?filter.startRow=0&formAction='
+    //   + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
+    //   + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
+    //   + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction : 'ASC')
+    //   + '&customerGroupId=&filter.groupCode='
+    //   + this.customerGroupForm.value.groupCode + '&filter.groupName='
+    //   + this.customerGroupForm.value.groupName;
+    this.findCustomerGroup(true, params);
   }
 
 

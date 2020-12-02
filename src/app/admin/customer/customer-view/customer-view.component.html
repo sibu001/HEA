@@ -337,6 +337,7 @@
               Activation Date:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm show-value" id="activationDate" formControlName="activationDate" disabled>
               <!-- {{customerForm.activationDate.value}} -->
             </div>
           </div>
@@ -345,6 +346,7 @@
               Registration Date:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm show-value" id="registrationDate" formControlName="registrationDate" disabled>
               <!-- <p> {{customerForm.registrationDate.value}}</p> -->
             </div>
           </div>
@@ -362,7 +364,8 @@
               Most recent cache update:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-
+              <input type="text" class="form-control form-control-sm show-value" id="vacaCalculationDate"
+              formControlName="vacaCalculationDate" disabled>
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -370,15 +373,16 @@
               Most recent analysis update:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <p></p>
+              <input type="text" class="form-control form-control-sm show-value" id="lastMonthlyCalc"
+              formControlName="lastMonthlyCalc" disabled>
             </div>
           </div>
-          <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
+          <div class="row borderBottom rowPadding" *ngIf="id!=undefined" formGroupName="user">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Most recent utility data collection:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <!-- <p>{{customerForm.lastSuccessfulUtilityReadDate.value}}</p> -->
+              <input type="text" class="form-control form-control-sm show-value" id="lastSuccessfulUtilityReadDate" formControlName="lastSuccessfulUtilityReadDate" disabled>
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -567,7 +571,7 @@
                 </div>
                 <div class="col-sm-3">
                   <input type="text" class="form-control
-                    form-control-sm showValue" id="fileName" disabled [(ngModel)]="fileObject.name">
+                    form-control-sm show-value" id="fileName" disabled [(ngModel)]="fileObject.name">
                 </div>
               </div>
               <div class="row">

@@ -6,11 +6,15 @@ import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { SystemTransformer } from '../transformer/transformer';
 import {
+    AssignPlaceToCustomerGroupAction,
+    AssignProgramGroupToCustomerGroupAction,
     CustomerGroupError,
     DeleteCredentialTypeByIdAction,
     DeleteCustomerAlertTypeByIdAction,
     DeleteCustomerGroupByIdAction,
+    DeletePlaceOfCustomerGroupAction,
     DeleteProgramGroupByIdAction,
+    DeleteProgramGroupOfCustomerGroupAction,
     DeleteRoleByIdAction,
     GetCoachUserListAction,
     GetCredentialTypeByIdAction,
@@ -19,8 +23,10 @@ import {
     GetCustomerAlertTypeListAction,
     GetCustomerGroupByIdAction,
     GetCustomerGroupListAction,
+    GetPlaceListByCustomerGroupIdAction,
     GetProgramGroupByIdAction,
     GetProgramGroupListAction,
+    GetProgramGroupListByCustomerGroupIdAction,
     GetRoleByIdAction,
     GetRoleListAction,
     GetScrapingPeriodListAction,
@@ -45,6 +51,8 @@ import { SystemManagementModel } from './system.model';
     defaults: {
         customerGroupList: undefined,
         customerGroup: undefined,
+        placeListByCustomerGroupId: undefined,
+        programGroupListByCustomerGroupId: undefined,
         viewConfigurationList: undefined,
         programGroupList: undefined,
         programGroup: undefined,
@@ -75,6 +83,16 @@ export class SystemManagementState {
     @Selector()
     static getCustomerGroupById(state: SystemManagementModel): any {
         return state.customerGroup;
+    }
+
+    @Selector()
+    static getPlaceListByCustomerGroupId(state: SystemManagementModel): any {
+        return state.programGroupListByCustomerGroupId;
+    }
+
+    @Selector()
+    static getProgramGroupListByCustomerGroupId(state: SystemManagementModel): any {
+        return state.placeListByCustomerGroupId;
     }
 
     @Selector()
@@ -148,7 +166,7 @@ export class SystemManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.customerGroups + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.customerGroups, action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -226,6 +244,102 @@ export class SystemManagementState {
                     ctx.patchState({
                         customerGroup: response,
                     });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetPlaceListByCustomerGroupIdAction)
+    getPlaceListByCustomerGroupId(ctx: StateContext<SystemManagementModel>, action: GetPlaceListByCustomerGroupIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.places)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        placeListByCustomerGroupId: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.errorMessage);
+                        ctx.dispatch(new CustomerGroupError(error));
+                    }));
+    }
+
+    @Action(DeletePlaceOfCustomerGroupAction)
+    deletePlaceOfCustomerGroup(ctx: StateContext<SystemManagementModel>, action: DeletePlaceOfCustomerGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.places + '/' + action.placeCode)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(AssignPlaceToCustomerGroupAction)
+    assignPlaceToCustomerGroup(ctx: StateContext<SystemManagementModel>, action: AssignPlaceToCustomerGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(null, AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.places + '/' + action.placeCode)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetProgramGroupListByCustomerGroupIdAction)
+    getProgramGroupListByCustomerGroupId(ctx: StateContext<SystemManagementModel>, action: GetProgramGroupListByCustomerGroupIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.programGroups)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        programGroupListByCustomerGroupId: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.errorMessage);
+                        ctx.dispatch(new CustomerGroupError(error));
+                    }));
+    }
+
+    @Action(DeleteProgramGroupOfCustomerGroupAction)
+    deleteProgramGroupOfCustomerGroup(ctx: StateContext<SystemManagementModel>, action: DeleteProgramGroupOfCustomerGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.programGroups + '/' + action.programGroupId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(AssignProgramGroupToCustomerGroupAction)
+    assignProgramGroupToCustomerGroup(ctx: StateContext<SystemManagementModel>, action: AssignProgramGroupToCustomerGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.programGroups + '/' + action.programGroupId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

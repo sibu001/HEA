@@ -8,7 +8,7 @@
           JavaScript pages
         </p>
         <form [formGroup]='jsPagesForm'>
-          <div class="row rowPadding borderBottom">
+          <div class="row rowPadding">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Code:</span>
@@ -30,7 +30,7 @@
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
               <button type="submit" class="btn btn-primary"
-                (click)="search($event,true)">Show</button>
+                (click)="search(undefined,true)">Show</button>
             </div>
           </div>
 
@@ -39,7 +39,7 @@
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">JavaScript pages</span></p>
             <app-table [keys]="keys" [isPaginate]="true"
-              (goToEditEvent)='goToEditJsPages()' (addEvent)='addJsPages()'
+              (goToEditEvent)='goToEditJsPages($event)' (addEvent)='addJsPages()'
               [isSearch]="false" [data]="dataSource"
               [totalElement]="jsPagesData.totalElements"
               (changePageEvent)="search($event,false)">

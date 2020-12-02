@@ -64,10 +64,10 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <div class="row">
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                  <input type="checkbox" formControlName="selectCustomerGroup" id="selectCustomerGroup">
+                  <input type="checkbox" formControlName="selectGroup" id="selectGroup">
                   Select Customer Group
                 </div>
-                <div *ngIf="f.selectCustomerGroup.value" class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <div *ngIf="f.selectGroup.value" class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                   <select class="form-control" id="selectGroupMode" formControlName="selectGroupMode">
                     <option value="A" selected="selected">Allow All</option>
                     <option value="W">Allow All with waring</option>
@@ -126,11 +126,11 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <div class="row">
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                  <input type="checkbox" formControlName="specifyPage" id="specifyPage">
+                  <input type="checkbox" formControlName="selectPage" id="selectPage">
                   Specify Preregistration Page
                 </div>
-                <div *ngIf="f.specifyPage.value" class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                  <select class="form-control" id="specifyPageMode" formControlName="specifyPageMode">
+                <div *ngIf="f.selectPage.value" class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  <select class="form-control" id="selectPageMode" formControlName="selectPageMode">
                     <option value="A" selected="selected">Allow All</option>
                     <option value="W">Allow All with waring</option>
                     <option value="S">Select single value</option>
@@ -141,10 +141,10 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf='f.selectCustomerGroup.value && f.needAuthorization.value' class="row borderBottom rowPadding">
+          <div *ngIf='f.selectGroup.value && f.needAuthorization.value' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0">Specify Select Mode:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control" id="specifySelectMode" formControlName="specifySelectMode">
+              <select class="form-control" id="selectAllMode" formControlName="selectAllMode">
                 <option value="A" selected="selected">Allow All</option>
                 <option value="W">Allow All with waring</option>
               </select>
@@ -156,7 +156,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0">Page HTML Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <div class='border'>
-                <ngx-codemirror id="htmlTemplate" formControlName="htmlTemplate" [options]="codeMirrorOptions">
+                <ngx-codemirror id="pageBody" formControlName="pageBody" [options]="codeMirrorOptions">
                 </ngx-codemirror>
               </div>
             </div>

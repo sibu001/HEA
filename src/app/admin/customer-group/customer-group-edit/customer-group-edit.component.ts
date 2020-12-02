@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,6 +10,8 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
 import { HttpParams } from '@angular/common/http';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { TableComponent } from 'src/app/common/table/table.component';
 
 @Component({
   selector: 'app-customer-group-edit',
@@ -26,23 +28,20 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
   mailDescriptionList: Array<any>;
   placeKey: Array<TABLECOLUMN> = TableColumnData.PLACE_KEY;
   isForce = false;
+  placeCheckBox: any;
+  placeList: any = [];
+  selectedPlace: any;
   placeData = {
-    content: [
-      {
-        placeCode: 'test',
-        placeName: 'test'
-      }
-    ],
+    content: [],
     totalElements: 0
   };
-  public placeDataSource: any = [
-    {
-      placeCode: 'test',
-      placeName: 'test'
-    }
-  ];
+  public placeDataSource: any = [];
+  placeSelectionListData: any = [];
   programGroupKey: Array<TABLECOLUMN> = TableColumnData.PROGRAM_GROUP_KEY;
   programSelectionList: Array<any> = [];
+  programGroupCheckBox: any;
+  programGroupList: any = [];
+  selectedProgramGroup: any;
   programGroupData = {
     content: [],
     totalElements: 0
@@ -53,9 +52,9 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
     private readonly dynamicViewService: DynamicViewService,
+    private readonly systemUtilityService: SystemUtilityService,
     private readonly router: Router,
     private readonly mailService: MailService) {
-    this.findProgramGroup();
     this.loadThemeList();
     this.loadScrapingUtilityList();
     this.loadScrapingPeriodList();
@@ -63,6 +62,8 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     this.loadMailDescriptionList();
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.findPlaceListByCustomerGroupId();
+      this.findProgramGroupListByCustomerGroupId();
     });
   }
 
@@ -71,6 +72,10 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     if (this.id !== undefined) {
       this.systemService.loadCustomerGroupById(Number(this.id));
       this.loadCustomerGroupById();
+    }
+    if (!this.id) {
+      this.findProgramGroup();
+      this.findPlace(false, '');
     }
   }
   loadCustomerGroupById() {
@@ -89,10 +94,39 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
         this.programGroupData.content = programGroupList;
         this.programGroupDataSource = [...this.programGroupData.content];
       }));
-    this.programSelectionList.push('HiHC');
-    this.programSelectionList.push('MedHC');
-    this.programSelectionList.push('HiVar');
-    this.programSelectionList.push('HiPlug');
+  }
+
+  findProgramGroupListByCustomerGroupId(): void {
+    this.programSelectionList = [];
+    this.subscriptions.add(this.systemService.loadProgramGroupListByCustomerGroupId(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((programData: any) => {
+        this.programGroupList = programData.systemManagement.programGroupListByCustomerGroupId;
+        programData.systemManagement.programGroupListByCustomerGroupId.forEach(element => {
+          this.programSelectionList.push(element.programCode);
+        });
+        this.findProgramGroup();
+      }));
+  }
+
+  findPlace(force: boolean, filter: string): any {
+    this.systemUtilityService.loadPlaceList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
+      .subscribe((placeList: any) => {
+        this.placeData.content = placeList;
+        this.placeDataSource = [...this.placeData.content];
+      }));
+  }
+
+  findPlaceListByCustomerGroupId(): void {
+    this.placeSelectionListData = [];
+    this.subscriptions.add(this.systemService.loadPlaceListByCustomerGroupId(this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((placeData: any) => {
+        this.placeList = placeData.systemManagement.placeListByCustomerGroupId;
+        placeData.systemManagement.placeListByCustomerGroupId.forEach(element => {
+          this.placeSelectionListData.push(element.place);
+        });
+        this.findPlace(false, '');
+      }));
   }
 
   loadThemeList(): any {
@@ -100,7 +134,6 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemService.getThemeList().pipe(skipWhile((item: any) => !item))
       .subscribe((themeList: any) => {
         this.themeList = themeList.data;
-        console.log(themeList.data);
       }));
   }
 
@@ -187,6 +220,8 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
   save() {
     if (this.customerGroupForm.valid) {
       if (this.id !== null && this.id !== undefined) {
+        this.checkPlace();
+        this.checkProgramGroup();
         this.subscriptions.add(this.systemService.updateCustomerGroup(this.id, this.customerGroupForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
@@ -205,6 +240,86 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
       this.validateAllFormFields(this.customerGroupForm);
     }
   }
+
+  placeCheckBoxChangeEvent(event: any) {
+    this.selectedPlace = [...event];
+    this.placeCheckBox = event;
+  }
+
+  checkPlace() {
+    let changeValue = false;
+    this.placeCheckBox.forEach(element => {
+      const i = this.placeList.findIndex((item: any) => item.place === element.place);
+      changeValue = true;
+      if (i !== -1) {
+        this.placeList.splice(i, 1);
+        const j = this.selectedPlace.findIndex((item2: any) => item2.place === element.place);
+        if (j !== -1) {
+          this.selectedPlace.splice(j, 1);
+        }
+      }
+    });
+    this.deletePlaceOfCustomerGroup(this.placeList);
+    this.assignPlaceToCustomerGroup(this.selectedPlace);
+    setTimeout(() => {
+      if (changeValue) {
+        this.findPlaceListByCustomerGroupId();
+      }
+    }, 3000);
+  }
+
+  assignPlaceToCustomerGroup(placeList: any) {
+    placeList.forEach(element => {
+      this.systemService.assignPlaceToCustomerGroup(this.id, element.place);
+    });
+  }
+
+  deletePlaceOfCustomerGroup(deleteList: any) {
+    deleteList.forEach(element => {
+      this.systemService.deletePlaceOfCustomerGroup(this.id, element.place);
+    });
+  }
+
+  programGroupCheckBoxChangeEvent(event: any) {
+    this.selectedProgramGroup = [...event];
+    this.programGroupCheckBox = event;
+  }
+
+  checkProgramGroup() {
+    let changeValue = false;
+    this.programGroupCheckBox.forEach(element => {
+      const i = this.programGroupList.findIndex((item: any) => item.programGroupId === element.programGroupId);
+      changeValue = true;
+      if (i !== -1) {
+        this.programGroupList.splice(i, 1);
+        const j = this.selectedProgramGroup.findIndex((item2: any) => item2.programGroupId === element.programGroupId);
+        if (j !== -1) {
+          this.selectedProgramGroup.splice(j, 1);
+        }
+      }
+
+    });
+    this.deleteProgramGroupOfCustomerGroup(this.programGroupList);
+    this.assignProgramGroupToCustomerGroup(this.selectedProgramGroup);
+    setTimeout(() => {
+      if (changeValue) {
+        this.findProgramGroupListByCustomerGroupId();
+      }
+    }, 3000);
+  }
+
+  assignProgramGroupToCustomerGroup(programGroupList: any) {
+    programGroupList.forEach(element => {
+      this.systemService.assignProgramGroupToCustomerGroup(this.id, element.programGroupId);
+    });
+  }
+
+  deleteProgramGroupOfCustomerGroup(deleteList: any) {
+    deleteList.forEach(element => {
+      this.systemService.deleteProgramGroupOfCustomerGroup(this.id, element.programGroupId);
+    });
+  }
+
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {

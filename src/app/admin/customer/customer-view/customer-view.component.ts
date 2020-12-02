@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Data, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { GoogleMapComponent } from 'src/app/common/google-map/google-map.component';
@@ -9,7 +9,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
-import { Location } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { UtilityCredentialsComponent } from '../utility-credentials/utility-credentials.component';
 import { CustomerAlertComponent } from '../customer-alert/customer-alert.component';
@@ -97,6 +97,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     private readonly customerService: CustomerService,
     private readonly location: Location,
     private readonly router: Router,
+    private datePipe: DatePipe,
     private readonly el: ElementRef) {
     this.getPasswordValidationRule();
     this.activateRoute.queryParams.subscribe(params => {
@@ -160,7 +161,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       userId: [event !== undefined ? event.userId : ''],
       coachUserId: [event !== undefined ? event.coachUserId : ''],
       auditId: [event !== undefined ? event.auditId : ''],
-      activationDate: [event !== undefined ? event.activationDate : ''],
+      activationDate: [event !== undefined ? (this.datePipe.transform(event.activationDate, 'MM/dd/yyyy h:mm:ss')) : ''],
       staffPermission: [event !== undefined ? event.staffPermission : true],
       findReason: [event !== undefined ? event.findReason : ''],
       phoneNumber: [event !== undefined ? event.phoneNumber : ''],
@@ -203,7 +204,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       needVACACalculation: [event !== undefined ? event.needVACACalculation : ''],
       needSVCalculation: [event !== undefined ? event.needSVCalculation : ''],
       needSACalculation: [event !== undefined ? event.needSACalculation : ''],
-      vacaCalculationDate: [event !== undefined ? event.vacaCalculationDate : ''],
       deleted: [event !== undefined ? event.deleted : ''],
       hasElectricity: [event !== undefined ? event.hasElectricity : ''],
       hasElectricityCharge: [event !== undefined ? event.hasElectricityCharge : ''],
@@ -223,7 +223,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       longitude: [event !== undefined ? event.longitude : ''],
       maxAlertLevel: [event !== undefined ? event.maxAlertLevel : ''],
       smePeriod: [event !== undefined ? event.smePeriod : ''],
-      lastMonthlyCalc: [event !== undefined ? event.lastMonthlyCalc : ''],
       stripeCustomerId: [event !== undefined ? event.stripeCustomerId : null],
       sharedPercentage: [event !== undefined ? event.sharedPercentage : null],
       viewedHomepage: [event !== undefined ? event.viewedHomepage : ''],
@@ -232,6 +231,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       uiVersion: [event !== undefined ? event.uiVersion : 'V1'],
       programGroup: [event !== undefined ? event.programGroup : null],
       coachUser: [event !== undefined ? event.customerGroup : null],
+      registrationDate: [event !== undefined ? (this.datePipe.transform(event.registrationDate, 'MM/dd/yyyy h:mm:ss')) : null],
+      vacaCalculationDate: [event !== undefined ? (this.datePipe.transform(event.vacaCalculationDate, 'MM/dd/yyyy h:mm:ss')) : null],
+      lastMonthlyCalc: [event !== undefined ? (this.datePipe.transform(event.lastMonthlyCalc, 'MM/dd/yyyy h:mm:ss')) : null],
       user: this.formBuilder.group({
         userId: [event !== undefined ? event.user.userId : ''],
         username: [event !== undefined ? event.user.username : ''],
@@ -247,7 +249,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         registrationAuthentication: [event !== undefined ? event.user.registrationAuthentication : ''],
         restorePasswordKey: [event !== undefined ? event.user.restorePasswordKey : ''],
         restorePasswordDate: [event !== undefined ? event.user.restorePasswordDate : ''],
-        lastSuccessfulUtilityReadDate: [event !== undefined ? event.user.lastSuccessfulUtilityReadDate : ''],
+        lastSuccessfulUtilityReadDate: [event !== undefined ?(this.datePipe.transform(event.user.lastSuccessfulUtilityReadDate, 'MM/dd/yyyy h:mm:ss'))  : ''],
         passwordStrengthLevel: [event !== undefined ? event.user.passwordStrengthLevel : ''],
         passwordNeedChange: [event !== undefined ? event.user.passwordNeedChange : ''],
         customerViewConfigurationId: [event !== undefined ? event.user.customerViewConfigurationId : ''],

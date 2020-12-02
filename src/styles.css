@@ -1150,3 +1150,9 @@ button.closeButton:focus {
 table.jqplot-table-legend {
   margin: auto !important;
 }
+
+.show-value{
+  background: none;
+  border: none;
+  box-shadow: none;
+}

@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -41,10 +42,12 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
     private readonly dynamicViewService: DynamicViewService,
+    private readonly systemService: SystemService,
     private readonly router: Router,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.findCustomerGroup(false, '');
     });
   }
 
@@ -56,6 +59,15 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  findCustomerGroup(force: boolean, filter: any) {
+    this.systemService.loadCustomerGroupList(force, filter);
+    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerGroupList: any) => {
+        this.customerGroupData.content = customerGroupList;
+        this.customerGroupDataSource = [...this.customerGroupData.content];
+      }));
+  }
+
   setForm(event: any) {
     this.jsPagesForm = this.formBuilder.group({
       code: [event !== undefined ? event.code : '', Validators.required],
@@ -64,16 +76,16 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
       showInMenu: [event !== undefined ? event.showInMenu : ''],
       openInNewWindow: [event !== undefined ? event.openInNewWindow : ''],
       needAuthorization: [event !== undefined ? event.needAuthorization : ''],
-      selectCustomerGroup: [event !== undefined ? event.selectCustomerGroup : ''],
+      selectGroup: [event !== undefined ? event.selectGroup : ''],
       selectGroupMode: [event !== undefined ? event.selectGroupMode : ''],
       selectCoach: [event !== undefined ? event.selectCoach : ''],
       selectCoachMode: [event !== undefined ? event.selectCoachMode : ''],
       selectCity: [event !== undefined ? event.selectCity : ''],
       selectCityMode: [event !== undefined ? event.selectCityMode : ''],
-      specifyPage: [event !== undefined ? event.specifyPage : ''],
-      specifyPageMode: [event !== undefined ? event.specifyPageMode : ''],
-      specifySelectMode: [event !== undefined ? event.specifySelectMode : ''],
-      htmlTemplate: [event !== undefined ? event.htmlTemplate : ''],
+      selectPage: [event !== undefined ? event.selectPage : ''],
+      selectPageMode: [event !== undefined ? event.selectPageMode : ''],
+      selectAllMode: [event !== undefined ? event.selectAllMode : ''],
+      pageBody: [event !== undefined ? event.pageBody : ''],
     });
   }
 

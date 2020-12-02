@@ -30,7 +30,7 @@ export class TableColumnData {
     ];
 
     static readonly PLACE_KEY: Array<TABLECOLUMN> = [
-        { key: 'placeCode', displayName: 'Place Code' },
+        { key: 'place', displayName: 'Place Code' },
         { key: 'placeName', displayName: 'Place Name' },
     ];
 
@@ -1240,7 +1240,7 @@ export class TableColumnData {
     ];
     static readonly JS_PAGES_KEYS: Array<TABLECOLUMN> = [
         { key: 'code', sort: 'code', displayName: 'Code', isEdit: true },
-        { key: 'pageName', sort: 'pageName', displayName: 'Page Name' },
+        { key: 'name', sort: 'name', displayName: 'Page Name' },
         { key: 'template', displayName: 'Template' },
         { key: 'showInMenu', displayName: 'Show In Menu' },
     ];

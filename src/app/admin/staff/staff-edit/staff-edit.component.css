@@ -23,10 +23,6 @@ section.space-top {
   .paddingTop {
     padding-top: 3%;
   }
-  .showValue{
-    background: none;
-    border: none;
-  }
   .checkbox {
     margin-left: 10px;
     display: inline;
