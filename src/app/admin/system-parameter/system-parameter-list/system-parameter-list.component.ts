@@ -57,7 +57,7 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
 
   setUpForm(event: any) {
     this.systemParameterForm = this.fb.group({
-      parameterValue: [event !== undefined && event !== null ? event.parameterValue : ''],
+      paramValue: [event !== undefined && event !== null ? event.paramValue : ''],
       description: [event !== undefined && event !== null ? event.description : ''],
     });
   }
@@ -65,11 +65,14 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
   findSystemParameter(force: boolean, filter: any): void {
     this.adminFilter.systemParameterFilter.formValue = this.systemParameterForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    this.subscriptions.add(this.systemUtilityService.loadSystemParameterCount().pipe(skipWhile((item: any) => !item))
+    .subscribe((systemParameterCount: any) => {
+      this.systemParameterData.totalElements = systemParameterCount.systemUtilityManagement.systemParameterCount;
+    }));
     this.systemUtilityService.loadSystemParameterList(force, filter);
     this.subscriptions.add(this.systemUtilityService.getSystemParameterList().pipe(skipWhile((item: any) => !item))
       .subscribe((systemParameterList: any) => {
-        this.systemParameterData.content = systemParameterList.list;
-        this.systemParameterData.totalElements = systemParameterList.totalSize;
+        this.systemParameterData.content = systemParameterList;
         this.dataSource = [...this.systemParameterData.content];
       }));
   }
@@ -77,17 +80,15 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
   search(event: any, isSearch: boolean): void {
     this.adminFilter.systemParameterFilter.page = event;
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
       .set('paramCode', '')
-      .set('filter.paramValue', (this.systemParameterForm.value.paramValue !== null ? this.systemParameterForm.value.paramValue : ''))
-      .set('filter.description', (this.systemParameterForm.value.description !== null ? this.systemParameterForm.value.description : ''));
+      .set('paramValue', (this.systemParameterForm.value.paramValue !== null && this.systemParameterForm.value.paramValue !== undefined ? this.systemParameterForm.value.paramValue : ''))
+      .set('description', (this.systemParameterForm.value.description !== null ? this.systemParameterForm.value.description : ''));
     this.findSystemParameter(true, params);
   }
   ngOnDestroy(): void {

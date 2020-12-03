@@ -71,7 +71,7 @@ export class CustomerEventTypeComponent implements OnInit {
   }
 
   loadCustomerEventType() {
-    this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeList('').pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeList(false, '').pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.customerEventTypeList = response.systemUtilityManagement.customerEventTypeList;
         if (this.data.isList && !this.showDelete) {

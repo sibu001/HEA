@@ -14,6 +14,7 @@ import { SharedModule } from '../general/share.module';
 import { DashboardRoutingModule } from './dashboard.routes';
 import { SurveyModule } from '../survey/survey.module';
 import { CommonHEAModule } from '../common/common.module';
+import { PipeModule } from '../pipes/pipe/pipe.module';
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -29,7 +30,8 @@ import { CommonHEAModule } from '../common/common.module';
         SharedModule,
         DashboardRoutingModule,
         SurveyModule,
-        CommonHEAModule
+        CommonHEAModule,
+        PipeModule
     ],
     providers: [],
     exports: [

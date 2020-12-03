@@ -155,15 +155,8 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       status: [event !== undefined ? event.status : '0'],
       passwordForm: this.fb.group({
         password: [event !== undefined ? event.password1 : '',
-        [
-          Validators.required,
-          Validators.minLength(this.minLength),
-          Validators.maxLength(this.maxLength)
-        ]
         ],
-        confirmPassword: [event !== undefined ? event.password2 : '', Validators.required],
-        // password1: [event !== undefined ? event.password1 : ''],
-        // password2: [event !== undefined ? event.password2 : ''],
+        confirmPassword: [event !== undefined ? event.password2 : ''],
       }, { validator: MustMatch('password', 'confirmPassword') }),
       passwordNeedChange: [event !== undefined ? event.passwordNeedChange : ''],
       passwordStrengthLevel: [event !== undefined ? event.passwordStrengthLevel : ''],
@@ -187,6 +180,13 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
+
+    if (this.p.password) {
+      this.p.password.setValidators([Validators.required,
+      Validators.minLength(this.minLength),
+      Validators.maxLength(this.maxLength)]);
+      this.p.confirmPassword.setValidators([Validators.required]);
+    }
     if (this.staffForm.valid) {
       if (this.id !== null && this.id !== undefined) {
         this.checkRole();

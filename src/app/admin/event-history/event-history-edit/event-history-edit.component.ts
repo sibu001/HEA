@@ -55,7 +55,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   }
 
   loadCustomerEventType() {
-    this.systemUtilityService.loadCustomerEventTypeList('');
+    this.systemUtilityService.loadCustomerEventTypeList(false,'');
     this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.eventTypeData = response;

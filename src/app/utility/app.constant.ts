@@ -28,7 +28,7 @@ export class AppConstant {
     public static customerComparisonGroups = '';
     public static factor = '';
     public static lookup = '';
-    public static systemParameter = '';
+    public static systemParameter = 'systemParameters';
     public static logs = '';
     public static weatherStation = 'weatherStations';
     public static degreeDays = '';

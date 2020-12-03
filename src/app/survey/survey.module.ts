@@ -10,6 +10,7 @@ import { SearchFilterPipe } from "src/app/pipes/searchPipe";
 import { SharedModule } from '../general/share.module';
 import { SurveyRoutingModule } from './survey.routes';
 import { CommonHEAModule } from '../common/common.module';
+import { PipeModule } from '../pipes/pipe/pipe.module';
 
 @NgModule({
     declarations: [
@@ -17,23 +18,14 @@ import { CommonHEAModule } from '../common/common.module';
         TopicHistoryComponent,
         surveyRecommendationListComponent,
         RecommendationInstructionComponent,
-        SortGridPipe,
-        SafeHtmlPipe,
-        SafePipe,
-        SearchFilterPipe
     ],
     imports: [
-       SharedModule,
-       SurveyRoutingModule,
-       CommonHEAModule
+        SharedModule,
+        SurveyRoutingModule,
+        CommonHEAModule,
+        PipeModule
     ],
     providers: [],
-    exports: [
-        SortGridPipe,
-        SafeHtmlPipe,
-        SafePipe,
-        SearchFilterPipe
-    ]
 
 })
 export class SurveyModule {

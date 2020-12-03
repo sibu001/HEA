@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { SystemParameterEditComponent } from './system-parameter-edit.component';
 
-import { LookupEditComponent } from './lookup-edit.component';
 
-describe('LookupEditComponent', () => {
-  let component: LookupEditComponent;
-  let fixture: ComponentFixture<LookupEditComponent>;
+describe('SystemParameterEditComponent', () => {
+  let component: SystemParameterEditComponent;
+  let fixture: ComponentFixture<SystemParameterEditComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ LookupEditComponent ]
+      declarations: [ SystemParameterEditComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LookupEditComponent);
+    fixture = TestBed.createComponent(SystemParameterEditComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -5,6 +5,7 @@ export enum SystemActionTypes {
     SAVE_PLACE = 'Save Place',
     DELETE_PLACE_BY_ID = 'Delete Place By Id',
     GET_CUSTOMER_EVENT_TYPE_LIST = 'Get All Customer Event Type List',
+    GET_CUSTOMER_EVENT_TYPE_COUNT = 'Get Customer Event Type Count',
     GET_CUSTOMER_EVENT_TYPE_BY_ID = 'Get Customer Event Type By Id',
     UPDATE_CUSTOMER_EVENT_TYPE = 'Update Customer Event Type',
     SAVE_CUSTOMER_EVENT_TYPE = 'Save Customer Event Type',
@@ -24,11 +25,12 @@ export enum SystemActionTypes {
     SAVE_LOOKUP = 'Save Lookup',
     UPDATE_LOOKUP = 'Update Lookup',
     DELETE_LOOKUP_BY_ID = 'Delete Lookup By Id',
-    GET_SYSTEM_PARAMETER_LIST = 'Get All SystemParameter List',
-    GET_SYSTEM_PARAMETER_BY_ID = 'Get SystemParameter By Id',
-    SAVE_SYSTEM_PARAMETER = 'Save SystemParameter',
-    UPDATE_SYSTEM_PARAMETER = 'Update SystemParameter',
-    DELETE_SYSTEM_PARAMETER_BY_ID = 'Delete SystemParameter By Id',
+    GET_SYSTEM_PARAMETER_LIST = 'Get All System Parameter List',
+    GET_SYSTEM_PARAMETER_COUNT = 'Get System Parameter Count',
+    GET_SYSTEM_PARAMETER_BY_ID = 'Get System Parameter By Id',
+    SAVE_SYSTEM_PARAMETER = 'Save System Parameter',
+    UPDATE_SYSTEM_PARAMETER = 'Update System Parameter',
+    DELETE_SYSTEM_PARAMETER_BY_ID = 'Delete System Parameter By Id',
     GET_LOGS_LIST = 'Get All Logs List',
     GET_LOGS_BY_ID = 'Get Logs By Id',
     SAVE_LOGS = 'Save Logs',
@@ -80,8 +82,12 @@ export class DeletePlaceByIdAction {
 
 export class GetCustomerEventTypeListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_EVENT_TYPE_LIST;
-    constructor(readonly filter: any) {
+    constructor(readonly force: boolean, readonly filter: any) {
     }
+}
+
+export class GetCustomerEventTypeCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_EVENT_TYPE_COUNT;
 }
 
 export class GetCustomerEventTypeByIdAction {
@@ -200,6 +206,10 @@ export class GetSystemParameterListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_SYSTEM_PARAMETER_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
     }
+}
+
+export class GetSystemParameterCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_SYSTEM_PARAMETER_COUNT;
 }
 
 export class GetSystemParameterByIdAction {

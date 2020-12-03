@@ -51,11 +51,12 @@ export class LoginService {
         return httpOptions;
     }
 
-    getOptionsForm() {
+    getOptionsForm(parameter?: HttpParams) {
         const httpOptions = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/x-www-form-urlencoded'
             }), withCredentials: true,
+            params: parameter,
         };
         return httpOptions;
     }
@@ -149,9 +150,9 @@ export class LoginService {
         const url = this.getFormattedUrl(endPoint);
         return this.http.delete(url, this.getOptionsMultiPartData());
     }
-    performOauthToken(endPoint: any, body: any): any {
+    performOauthToken(endPoint: any, body: any, params?: HttpParams): any {
         const url = this.getFormattedUrl(endPoint);
-        const tokens = this.http.post(url, body, this.getOptionsForm());
+        const tokens = this.http.post(url, body, this.getOptionsForm(params));
         return tokens;
     }
     getRefreshToken() {

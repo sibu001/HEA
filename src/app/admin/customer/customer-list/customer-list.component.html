@@ -192,19 +192,29 @@
                     </div>
                 </div>
                 <form [formGroup]='fileUploadForm' *ngIf="customerView==-1">
-                    <div class="row">
-                        <div class='col-sm-2 col-xs-3'>
+                    <div class="row bottom-button">
+                        <div class='col-sm-2 col-xs-3 responsive-desktop'>
                             <button type="submit" class="btn
                                 btn-primary" (click)="batchDelete()">Delete</button>
                         </div>
-                        <div class='col-sm-5 col-xs-4' style="text-align:right">
+                        <div class='col-sm-5 col-xs-5' style="text-align:right">
                             <span>Upload file with new customers:</span>
                         </div>
-                        <div class='col-sm-3 col-xs-5'>
+                        <div class='col-sm-3 col-xs-7'>
                             <input type="file" class="custom-file-input" style='font-size: smaller;' name="customerFile"
                                 id="customerFile" formControlName='customerFile' (change)="handleFileInput($event.target.files)">
                         </div>
-                        <div class='col-sm-2 col-xs-12' style='text-align: right;'>
+                        <div class='col-sm-2 col-xs-3 responsive-desktop' style='text-align: right;'>
+                            <button type="submit" class="btn
+                                btn-primary" (click)="uploadNewCustomerFile()">Upload</button>
+                        </div>
+                    </div>
+                    <div class="row responsive-tab">
+                        <div class='col-sm-2 col-xs-6'>
+                            <button type="submit" class="btn
+                                btn-primary" (click)="batchDelete()">Delete</button>
+                        </div>
+                        <div class='col-sm-2 col-xs-6' style='text-align: right;'>
                             <button type="submit" class="btn
                                 btn-primary" (click)="uploadNewCustomerFile()">Upload</button>
                         </div>

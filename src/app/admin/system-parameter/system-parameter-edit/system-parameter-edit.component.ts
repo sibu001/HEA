@@ -1,12 +1,8 @@
-import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
-import { TableColumnData } from 'src/app/data/common-data';
-import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -42,9 +38,9 @@ export class SystemParameterEditComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.systemParameterForm = this.formBuilder.group({
-      parameterCode: [event !== undefined ? event.parameterCode : '', Validators.required],
+      paramCode: [event !== undefined ? event.paramCode : '', Validators.required],
       description: [event !== undefined ? event.description : '', Validators.required],
-      parameterValue: [event !== undefined ? event.parameterValue : ''],
+      paramValue: [event !== undefined ? event.paramValue : ''],
       formatType: [event !== undefined ? event.formatType : ''],
       needServerRestart: [event !== undefined ? event.needServerRestart : ''],
       readOnly: [event !== undefined ? event.readOnly : ''],

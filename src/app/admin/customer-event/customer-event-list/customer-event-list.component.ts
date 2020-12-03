@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -39,8 +40,12 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
     this.findCustomerEventType(this.force, '');
   }
 
-  findCustomerEventType(force: boolean, filter: string): void {
-    this.systemUtilityService.loadCustomerEventTypeList(filter);
+  findCustomerEventType(force: boolean, filter: any): void {
+    this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeCount().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerEventTypeCount: any) => {
+        this.customerEventTypeData.totalElements = customerEventTypeCount.systemUtilityManagement.customerEventTypeCount;
+      }));
+    this.systemUtilityService.loadCustomerEventTypeList(force, filter);
     this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((credentialTypeList: any) => {
         this.customerEventTypeData.content = credentialTypeList;
@@ -60,14 +65,18 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 
-  search(event: any): void {
-    const filter = '?filter.startRow=0&formAction='
-      + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
-      + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
-      + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction : 'ASC')
-      + '&customerEventTypeId=&filter.eventCode='
-      + this.customerGroupForm.value.eventCode + '&filter.eventName='
-      + this.customerGroupForm.value.eventName;
-    this.findCustomerEventType(true, filter);
+  search(event: any, isSearch: boolean): void {
+    // .set('disableTotalSize', 'false')
+    //   .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+    const params = new HttpParams()
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('customerEventTypeId', '')
+      .set('eventCode', (this.customerGroupForm.value.eventCode !== null ? this.customerGroupForm.value.eventCode : ''))
+      .set('eventName', (this.customerGroupForm.value.eventName !== null ? this.customerGroupForm.value.eventName : ''));
+    this.findCustomerEventType(true, params);
   }
 }

@@ -185,27 +185,6 @@ img.dr_center-blockCL {
     margin-bottom: 0px;
     margin-top: 0px;
 }
-/* img.dr_center-block2CL {
-    width: 18%;
-}
-img.dr_center-block2EF {
-    width: 18%;
-}
-img.dr_center-block2MV {
-    width: 20%;
-}
-img.dr_center-block2SNV{
-    width:38%;
-}
-img.dr_center-block2VT{
-    width:35%;
-}
-img.dr_center-block2P4P {
-    width: 16%;
-}
-img.dr_center-block2AC{
-    width:28%;
-} */
 img.dr_center-block2CL{
     width: 145px;
 }
@@ -247,7 +226,7 @@ img.dr_center-block2HET{
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding: 36px 40px;
+    padding: 36px 40px 36px 40px;
     padding-bottom: 1em;
 }
 .mainLoginBottumCL{
@@ -308,6 +287,11 @@ p.footerimageCL {
     text-align: center;
     display: none;
 }
+@media screen and (max-width:900px) and (min-width: 768px) {
+    .mainLoginCL{
+        padding: 36px 0px 36px 20px;
+    }
+}
 @media screen and (max-width:767px) and (min-width: 320px) {
     .errorTextCL{
     margin-left: 5%;
@@ -339,32 +323,8 @@ p.footerimageCL {
     font-size: 14px;
     cursor: pointer;
 }
-/* img.dr_center-block2P4P {
-    width: 35%;
-}
-img.dr_center-block2CL {
-    width: 45%;
-}
-img.dr_center-block2EF {
-    width: 45%;
-}
-img.dr_center-block2AC{
-    width:70%;
-}
-img.dr_center-block2HET{
-    width:62%;
-}
-img.dr_center-block2MV{
-    width:54%;
-}
-img.dr_center-block2SNV{
-    width:75%;
-}
-img.dr_center-block2VT{
-    width:75%;
-} */
+
 .registrationTextHI{
-    /* color:rgb(95%, 44%, 14%) !important; */
     font-weight: bold;
     font-size: 14px;
     cursor: pointer;

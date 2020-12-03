@@ -271,9 +271,9 @@ export class TableColumnData {
     ];
 
     static readonly SYSTEM_PARAMETER_KEYS: Array<TABLECOLUMN> = [
-        { key: 'parameterCode', sort: 'parameterCode', displayName: 'Parameter Code' },
+        { key: 'paramCode', sort: 'paramCode', displayName: 'Parameter Code', isEdit: true },
         { key: 'description', sort: 'description', displayName: 'Description' },
-        { key: 'parameterValue', sort: 'parameterValue', displayName: 'Parameter Value' },
+        { key: 'paramValue', sort: 'paramValue', displayName: 'Parameter Value' },
         { key: 'format', sort: 'format', displayName: 'Format' },
     ];
 

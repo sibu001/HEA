@@ -134,7 +134,7 @@ export class DeleteProgramGroupByIdAction {
 
 export class GetCustomerAlertTypeListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_ALERT_TYPE_LIST;
-    constructor(readonly force: boolean, readonly filter: boolean) {
+    constructor(readonly force: boolean, readonly filter: any) {
     }
 }
 
@@ -170,7 +170,7 @@ export class GetViewConfigurationListAction {
 
 export class GetCredentialTypeListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CREDENTIAL_TYPE_LIST;
-    constructor(readonly force: boolean, readonly filter: string) {
+    constructor(readonly force: boolean, readonly filter: any) {
     }
 }
 

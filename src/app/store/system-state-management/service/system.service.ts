@@ -204,7 +204,7 @@ export class SystemService {
     return this.store.dispatch(new DeleteCustomerAlertTypeByIdAction(id));
   }
 
-  loadCredentialTypeList(force: boolean, filter: string): Observable<SystemManagementState> {
+  loadCredentialTypeList(force: boolean, filter: any): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCredentialTypeListAction(force, filter));
   }
 

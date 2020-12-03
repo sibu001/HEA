@@ -50,8 +50,8 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
       eventCode: [event !== undefined ? event.eventCode : '', Validators.required],
       eventName: [event !== undefined ? event.eventName : '', Validators.required],
       description: [event !== undefined ? event.description : ''],
-      availableToUser: [event !== undefined ? event.availableToUser : ''],
-      onlyOnePerAccount: [event !== undefined ? event.availableToUser : ''],
+      shared: [event !== undefined ? event.shared : ''],
+      onlyOne: [event !== undefined ? event.onlyOne : ''],
     });
   }
 

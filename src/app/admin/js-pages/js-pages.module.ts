@@ -18,6 +18,7 @@ import { CustomerService } from 'src/app/store/customer-state-management/service
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { PipeModule } from 'src/app/pipes/pipe/pipe.module';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { SystemUtilityService } from 'src/app/store/system-utility-state-managem
     CodemirrorModule,
     ReactiveFormsModule,
     JsPagesRoutingModule,
+    PipeModule,
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
@@ -34,8 +36,19 @@ import { SystemUtilityService } from 'src/app/store/system-utility-state-managem
       DynamicViewManagementState
     ]),
   ],
-  providers: [SystemService, DatePipe, LoginService, SystemUtilityService,
-    CustomerService, DynamicViewService],
-  declarations: [JsPagesListComponent, JsPagesEditComponent, JsPagesPreviewComponent]
+  providers: [
+    SystemService,
+    DatePipe,
+    LoginService,
+    SystemUtilityService,
+    CustomerService,
+    DynamicViewService
+  ],
+  declarations: [
+    JsPagesListComponent,
+    JsPagesEditComponent,
+    JsPagesPreviewComponent,
+  ],
+
 })
 export class JsPagesModule { }

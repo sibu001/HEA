@@ -4,27 +4,30 @@
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="heading">Customer Event Types</p>
         <form [formGroup]="customerGroupForm" class="form-group">
-          <div class="row borderBottom rowPadding">
+          <div class="row rowPadding">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Event code</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" formControlName="eventCode" class="form-control" />
+              <input type="text" formControlName="eventCode"
+                class="form-control" />
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Event Name</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" formControlName="eventName" class="form-control" />
+              <input type="text" formControlName="eventName"
+                class="form-control" />
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
           </div>
-          <div class="row  borderBottom rowPadding">
+          <div class="row rowPadding">
             <div class="col-sm-12 show-button">
-              <button type="button" class="btn btn-primary" (click)="search(undefined)">Show</button>
+              <button type="button" class="btn btn-primary"
+                (click)="search(undefined,true)">Show</button>
             </div>
           </div>
         </form>
@@ -38,15 +41,18 @@
         </div>
         <div class="row rowPadding">
           <div class="col-sm-12">
-            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-              [totalElement]="customerEventTypeData.totalElements" (changePageEvent)="search($event)"
-              (goToEditEvent)="goToEditEventEventType($event)" (addEvent)='addCustomerEventType()'>
+            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+              [data]="dataSource"
+              [totalElement]="customerEventTypeData.totalElements"
+              (changePageEvent)="search($event,false)"
+              (goToEditEvent)="goToEditEventEventType($event)"
+              (addEvent)='addCustomerEventType()'>
             </app-table>
           </div>
         </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar ></app-sidebar>
+        <app-sidebar></app-sidebar>
       </div>
     </div>
   </div>

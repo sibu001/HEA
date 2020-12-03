@@ -3,6 +3,7 @@ export interface SystemUtilityManagementModel {
     place: any;
     customerEventTypeList: any;
     customerEventType: any;
+    customerEventTypeCount: any;
     customerComparisonGroupList: any;
     customerComparisonGroup: any;
     factorList: any;
@@ -11,6 +12,7 @@ export interface SystemUtilityManagementModel {
     lookup: any;
     systemParameterList: any;
     systemParameter: any;
+    systemParameterCount: any;
     logList: any;
     logs: any;
     weatherStationList: any;

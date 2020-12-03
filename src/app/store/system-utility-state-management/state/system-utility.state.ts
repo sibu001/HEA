@@ -4,6 +4,7 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { SystemUtilityTransformer } from '../transformer/transformer';
 import {
     DeleteCustomerComparisonGroupByIdAction,
     DeleteCustomerEventTypeByIdAction,
@@ -18,6 +19,7 @@ import {
     GetCustomerComparisonGroupByIdAction,
     GetCustomerComparisonGroupListAction,
     GetCustomerEventTypeByIdAction,
+    GetCustomerEventTypeCountAction,
     GetCustomerEventTypeListAction,
     GetDegreeDaysByIdAction,
     GetDegreeDaysListAction,
@@ -30,6 +32,7 @@ import {
     GetPlaceByIdAction,
     GetPlaceListAction,
     GetSystemParameterByIdAction,
+    GetSystemParameterCountAction,
     GetSystemParameterListAction,
     GetTimeZoneListAction,
     GetWeatherStationByIdAction,
@@ -64,6 +67,7 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         place: undefined,
         customerEventTypeList: undefined,
         customerEventType: undefined,
+        customerEventTypeCount: undefined,
         customerComparisonGroupList: undefined,
         customerComparisonGroup: undefined,
         factorList: undefined,
@@ -72,6 +76,7 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         lookup: undefined,
         systemParameterList: undefined,
         systemParameter: undefined,
+        systemParameterCount: undefined,
         logList: undefined,
         logs: undefined,
         weatherStationList: undefined,
@@ -282,19 +287,42 @@ export class SystemUtilityManagementState {
 
     @Action(GetCustomerEventTypeListAction)
     getAllCustomerEventType(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerEventTypeListAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getCustomerEventTypeList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.customerEventTypes, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        const res = SystemUtilityTransformer.transformCustomerEventTypeTableData(response);
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            customerEventTypeList: res,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.errorMessage);
+                        }));
+        }
+        return result;
+    }
+    @Action(GetCustomerEventTypeCountAction)
+    getCustomerEventTypeCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerEventTypeCountAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGetWithParams(AppConstant.customerEventTypes, action.filter)
+        return this.loginService.performGet(AppConstant.customerEventTypes + '/count')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        customerEventTypeList: response.data,
+                        customerEventTypeCount: response,
                     });
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.errorMessage);
                     }));
+
     }
 
     @Action(GetCustomerEventTypeByIdAction)
@@ -503,7 +531,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -594,7 +622,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -647,10 +675,10 @@ export class SystemUtilityManagementState {
             result = this.loginService.performGetWithParams(AppConstant.systemParameter, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformSystemParameterTableData(response);
+                        const res = SystemUtilityTransformer.transformSystemParameterTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            systemParameterList: response,
+                            systemParameterList: res,
                         });
                     },
                         error => {
@@ -659,6 +687,23 @@ export class SystemUtilityManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetSystemParameterCountAction)
+    getSystemParameterCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetSystemParameterCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.systemParameter + '/count')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        systemParameterCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
     }
 
     @Action(GetSystemParameterByIdAction)
@@ -685,7 +730,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -776,7 +821,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -958,7 +1003,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1026,7 +1071,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

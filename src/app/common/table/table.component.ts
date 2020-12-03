@@ -106,10 +106,8 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('onChange method call in common table component');
     if (changes['data'] && changes['data'].currentValue) {
       this.data = changes['data'].currentValue;
-      console.log('data', this.data);
       this.totalLength = this.totalElement;
       this.dataSource = new MatTableDataSource(this.data);
       this.loadPagination();
@@ -129,7 +127,6 @@ export class TableComponent implements OnInit, OnChanges {
     }
     if (changes['keys'] && changes['keys'].currentValue) {
       this.keys = changes['keys'].currentValue;
-      console.log('keys', this.keys);
       this.displayedColumns = this.keys.map((col) => col.key);
       if (this.checkbox) {
         this.displayedColumns.unshift('select');
@@ -165,7 +162,6 @@ export class TableComponent implements OnInit, OnChanges {
   applyFilter(filterValue: string) {
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // DataSource defaults to lowercase matches
-    console.log(filterValue);
     this.page.search = filterValue;
     this.changePageEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
@@ -179,7 +175,6 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   sortData(event?: Sort) {
-    console.log(event);
     this.page.sort = event;
     this.changePageEvent.emit(this.page);
     // this.changeDetectorRefs.detectChanges();
@@ -219,13 +214,11 @@ export class TableComponent implements OnInit, OnChanges {
 
   goToEdit(event: any, col: any): any {
     if (col.isEdit) {
-      console.log(event);
       this.goToEditEvent.emit(event);
     }
   }
 
   deleteRow(event: any) {
-    console.log(event);
     this.deleteEvent.emit(event);
   }
 
@@ -291,7 +284,6 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   logRow(row) {
-    console.log(row);
   }
   get f() { return this.tableForm.controls; }
 }

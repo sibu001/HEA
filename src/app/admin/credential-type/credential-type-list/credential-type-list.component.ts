@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -40,7 +41,7 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
     this.findCredentialType(this.force, '');
   }
 
-  findCredentialType(force: boolean, filter: string): void {
+  findCredentialType(force: boolean, filter: any): void {
     this.systemService.loadCredentialTypeList(force, filter);
     this.subscriptions.add(this.systemService.getCredentialTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((credentialTypeList: any) => {
@@ -54,14 +55,16 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any): void {
-    const filter = '?filter.startRow=0&formAction='
-      + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
-      + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
-      + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction : 'ASC')
-      + '&credentialTypeCode=&filter.credentialType='
-      + this.credentialTypeForm.value.credentialType + '&filter.credentialName='
-      + this.credentialTypeForm.value.credentialName;
-    this.findCredentialType(true, filter);
+    const params = new HttpParams()
+    .set('startRow', '0')
+    .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+    .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+    .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+    .set('credentialTypeCode', '')
+    .set('credentialType', (this.credentialTypeForm.value.credentialType !== null ? this.credentialTypeForm.value.credentialType : ''))
+    .set('credentialName', (this.credentialTypeForm.value.credentialName !== null ? this.credentialTypeForm.value.credentialName : ''));
+
+    this.findCredentialType(true, params);
   }
 
   addCredentialType() {

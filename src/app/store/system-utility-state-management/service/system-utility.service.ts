@@ -50,7 +50,9 @@ import {
   GetZipCodeListAction,
   SaveZipCodeAction,
   DeleteZipCodeByIdAction,
-  GetTimeZoneListAction
+  GetTimeZoneListAction,
+  GetCustomerEventTypeCountAction,
+  GetSystemParameterCountAction
 } from '../state/system-utility.action';
 import { SystemUtilityManagementState } from '../state/system-utility.state';
 
@@ -152,8 +154,12 @@ export class SystemUtilityService {
     return this.store.dispatch(new DeletePlaceByIdAction(id));
   }
 
-  loadCustomerEventTypeList(filter: any): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetCustomerEventTypeListAction(filter));
+  loadCustomerEventTypeList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerEventTypeListAction(force, filter));
+  }
+
+  loadCustomerEventTypeCount(): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerEventTypeCountAction());
   }
 
   loadCustomerEventTypeById(id: number): Observable<SystemUtilityManagementState> {
@@ -234,6 +240,10 @@ export class SystemUtilityService {
 
   loadSystemParameterList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetSystemParameterListAction(force, filter));
+  }
+
+  loadSystemParameterCount(): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetSystemParameterCountAction());
   }
 
   loadSystemParameterById(id: number): Observable<SystemUtilityManagementState> {

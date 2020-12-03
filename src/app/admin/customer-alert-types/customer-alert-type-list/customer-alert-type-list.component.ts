@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -52,14 +53,15 @@ export class CustomerAlertTypeListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any): void {
-    const filter = '?filter.startRow=0&formAction='
-      + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
-      + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
-      + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction : 'ASC')
-      + '&customerAlertTypeId=&filter.alertCode='
-      + this.customerAlertTypeForm.value.alertCode + '&filter.alertName='
-      + this.customerAlertTypeForm.value.alertName;
-    this.findCustomerAlertType(true, filter);
+    const params = new HttpParams()
+    .set('startRow', '0')
+    .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+    .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+    .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+    .set('customerAlertTypeId', '')
+    .set('alertCode', (this.customerAlertTypeForm.value.alertCode !== null ? this.customerAlertTypeForm.value.alertCode : ''))
+    .set('alertName', (this.customerAlertTypeForm.value.alertName !== null ? this.customerAlertTypeForm.value.alertName : ''));
+    this.findCustomerAlertType(true, params);
   }
 
 

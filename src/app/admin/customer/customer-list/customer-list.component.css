@@ -165,3 +165,30 @@ input[type="file"] {
 ::ng-deep .customerTable {
   word-break: break-all;
 }
+
+.responsive-desktop{
+  display: block;
+}
+
+.responsive-tab{
+  display: none;
+}
+
+@media (min-width: 200px) and (max-width: 767px) {
+  .responsive-desktop{
+    display: none;
+  }
+  .bottom-button{
+    margin-top: 10px;
+  }
+  .responsive-tab{
+    display: block;
+  }
+}
+
+
+@media (min-width: 200px) and (max-width: 350px) {
+  .custom-file-input {
+    width: 90px;
+  }
+}
