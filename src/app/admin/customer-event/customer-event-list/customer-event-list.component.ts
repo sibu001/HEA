@@ -37,19 +37,19 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.findCustomerEventType(this.force, '');
+    this.search(undefined, false);
   }
 
   findCustomerEventType(force: boolean, filter: any): void {
     this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeCount().pipe(skipWhile((item: any) => !item))
       .subscribe((customerEventTypeCount: any) => {
         this.customerEventTypeData.totalElements = customerEventTypeCount.systemUtilityManagement.customerEventTypeCount;
-      }));
-    this.systemUtilityService.loadCustomerEventTypeList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
-      .subscribe((credentialTypeList: any) => {
-        this.customerEventTypeData.content = credentialTypeList;
-        this.dataSource = [...this.customerEventTypeData.content];
+        this.systemUtilityService.loadCustomerEventTypeList(force, filter);
+        this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
+          .subscribe((credentialTypeList: any) => {
+            this.customerEventTypeData.content = credentialTypeList;
+            this.dataSource = [...this.customerEventTypeData.content];
+          }));
       }));
   }
 
@@ -66,11 +66,10 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any, isSearch: boolean): void {
-    // .set('disableTotalSize', 'false')
-    //   .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))

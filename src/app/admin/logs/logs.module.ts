@@ -9,6 +9,7 @@ import { NgxsModule } from '@ngxs/store';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 
 @NgModule({
   imports: [
@@ -21,7 +22,7 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
     ]),
     LogsRoutingModule
   ],
-  declarations: [LogsListComponent]
-  , providers: [SystemService]
+  declarations: [LogsListComponent],
+  providers: [SystemService, SystemUtilityService]
 })
 export class LogsModule { }

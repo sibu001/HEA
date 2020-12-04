@@ -34,14 +34,11 @@ p.messages{
   font-weight: 600;
 }
 
-.sidePadding {
-  padding: 2px !important;
-  display: inline-table !important;
-  text-align: right !important;
-}
-
-@media screen and (max-width: 769px) {
-  .sidePadding {
-    text-align: left !important;
+@media (min-width: 200px) and (max-width: 340px) {
+  .display-inline-button{
+    display: inline-table;
+  }
+  .display-responsive{
+    margin-top: 5px;;
   }
 }

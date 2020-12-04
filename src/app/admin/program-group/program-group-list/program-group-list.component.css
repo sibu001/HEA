@@ -31,3 +31,7 @@ section.space-top {
     margin-top: 15px;
   }
   
+  .form-padding {
+    padding-left: 40px;
+    padding-right: 40px;
+  }

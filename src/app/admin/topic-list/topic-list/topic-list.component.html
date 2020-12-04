@@ -64,12 +64,12 @@
             </app-table>
           </div>
           <div class="row rowPadding">
-            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12 sidePadding">
+            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-6 display-button-table">
               <input type="button" class="btn btn-primary"
                 [value]="filter?'Enable Filter':'Disable Filter'"
                 (click)="disableFilter()">
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-6 display-button-table">
               <input type="button" class="btn btn-primary" style="float: right"
                 [value]="cache?'Enable Value Cache':'Disable Value Cache'"
                 (click)="disableValueCache()">

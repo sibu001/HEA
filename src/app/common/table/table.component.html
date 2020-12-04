@@ -210,14 +210,14 @@
                 class="paginatorcss">
             </mat-paginator>
         </div>
-        <div *ngIf="!isHideAdd" class="col-sm-6 col-xs-12"
+        <div *ngIf="!isHideAdd" class="col-sm-6 col-xs-12 fixed-add-button"
             style="text-align:right;">
             <button class="btn btn-primary" type="button"
                 (click)="onAddEvent($event)">Add</button>
         </div>
 
         <div *ngIf="showAddRowButton && !showInput" class="col-sm-6 col-xs-8
-            removePadding" style="text-align:right;">
+            removePadding fixed-add-button" style="text-align:right;">
             <button class="btn btn-primary" type="button"
                 (click)="onAddRowEvent()">Add Row</button>
         </div>

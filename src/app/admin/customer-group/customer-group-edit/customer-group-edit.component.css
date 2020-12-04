@@ -28,14 +28,11 @@ p.messages {
   padding-top: 3%;
 }
 
-.sidePadding {
-  padding: 2px !important;
-  display: inline-table !important;
-  text-align: right !important;
-}
-
-@media (max-width: 399px) {
-  .sidePadding {
-    text-align: left !important;
+@media (min-width: 100px) and (max-width: 380px) {
+  .display-inline-button{
+    display: inline-table;
+  }
+  .display-responsive{
+    margin-top: 5px;;
   }
 }

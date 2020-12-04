@@ -210,7 +210,7 @@ div .greenAlert {
   flex: none;
   width: 45px;
 }
-.mat-column-maxAlertLevel{
+.mat-column-maxAlertLevel {
   flex: none;
   width: 35px;
 }
@@ -238,6 +238,14 @@ mat-footer-cell:last-of-type,
 mat-header-cell:last-of-type {
   padding-right: 5px;
 }
-.anchorClass{
+.anchorClass {
   cursor: pointer;
+}
+.fixed-add-button {
+  position: inherit;
+}
+@media (min-width: 200px) and (max-width: 767px) {
+  .fixed-add-button {
+    position: absolute;
+  }
 }

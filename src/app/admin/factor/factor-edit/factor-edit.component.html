@@ -10,7 +10,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Factor code</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="FactorCode" formControlName="factorCode">
+              <input type="text" class="form-control form-control-sm"
+                id="FactorCode" formControlName="factorCode">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -31,9 +32,11 @@
               Comparison Code:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="comparisonCode" formControlName="comparisonCode" class="form-control">
+              <select id="comparisonCode" formControlName="comparisonCode"
+                class="form-control">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let comparisonCode of comparisonCodeDropdownData" [value]="comparisonCode.key">
+                <option *ngFor="let comparisonCode of
+                  comparisonCodeDropdownData" [value]="comparisonCode.key">
                   {{ comparisonCode.value }}
                 </option>
               </select>
@@ -43,35 +46,40 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Year:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="year" id="year">
+              <input type="text" class="form-control" formControlName="year"
+                id="year">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Value:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="value" id="value">
+              <input type="text" class="form-control" formControlName="value"
+                id="value">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Dimension:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="dimension" id="dimension">
+              <input type="text" class="form-control"
+                formControlName="dimension" id="dimension">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Name:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="name" id="name">
+              <input type="text" class="form-control" formControlName="name"
+                id="name">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Source Url:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="sourceUrl" id="sourceUrl">
+              <input type="text" class="form-control"
+                formControlName="sourceUrl" id="sourceUrl">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -80,8 +88,10 @@
               Calculation type:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="calculationType" class="form-control" formControlName="calculationType">
-                <option *ngFor="let type of calculationType" [value]="type.key" [selected]="type.selected">
+              <select id="calculationType" class="form-control"
+                formControlName="calculationType">
+                <option *ngFor="let type of calculationType" [value]="type.key"
+                  [selected]="type.selected">
                   {{ type.value }}
                 </option>
               </select>
@@ -93,7 +103,8 @@
               Calculation Rule:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" style="display: inline;" formControlName="calculationRule"
+              <textarea class="form-control" style="display: inline;"
+                formControlName="calculationRule"
                 id="calculationRule"></textarea>
               <span class="debug" (click)="goToDebug()">Debug</span>
             </div>
@@ -114,7 +125,8 @@
               Calculation Period:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="calculationPeriod" class="form-control" formControlName="calculationPeriod">
+              <select id="calculationPeriod" class="form-control"
+                formControlName="calculationPeriod">
                 <option value="D" selected="selected">Daily</option>
                 <option value="M">Monthly</option>
                 <option value="W">Weekly</option>
@@ -136,7 +148,8 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="isActive">
-                <input type="checkbox" formControlName="isActive" id="isActive" />
+                <input type="checkbox" formControlName="isActive" id="isActive"
+                  />
                 Active
               </label>
             </div>
@@ -145,33 +158,33 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0">Comments:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="comments" id="comments"></textarea>
+              <textarea class="form-control" formControlName="comments"
+                id="comments"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row rowPadding">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
+      
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-5 col-md-5 col-lg-5 col-xs-3
+              display-inline-button">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3
+              display-inline-button" [ngClass]="{'display-responsive3':
+              id!==undefined&&id!==null}" style="text-align: end;">
+              <button type="button" class="btn btn-primary"
+                (click)="recalculate()" *ngIf="id!==undefined&&id!==null">
+                Recalculate
               </button>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row">
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4" *ngIf="id === undefined || id === null"></div>
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="recalculate()">
-                  Recalculate
-                </button>
-              </div>
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
-                  Save
-                </button>
-              </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3
+              display-inline-button" [ngClass]="{'display-responsive2':
+              id!==undefined&&id!==null}" style="text-align: end;">
+              <button type="button" class="btn btn-primary" (click)="delete()"  *ngIf="id!==undefined&&id!==null">Delete</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
+              [ngClass]="{'display-responsive': id!==undefined&&id!==null}">
+              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
             </div>
           </div>
         </form>

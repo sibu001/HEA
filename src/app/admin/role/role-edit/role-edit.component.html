@@ -42,21 +42,17 @@
             </div>
           </div>
           <div class="row paddingTop rowPadding">
-            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 sidePadding">
+            <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 display-inline-button">
               <button type="text" class="btn btn-primary" (click)='back()'>Cancel</button>
             </div>
-            <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11 row sidePadding">
-              <div *ngIf="roleCode!==undefined&&roleCode!=='ADMIN'" class="col-xs-0 col-sm-8 col-md-8 col-lg-8 sidePadding"></div>
-              <div *ngIf="roleCode===undefined || roleCode==='ADMIN'" class="col-xs-0 col-sm-10 col-md-10 col-lg-10 sidePadding">
-              </div>
-
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
+            <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9" style="text-align: end;">
+              <!-- <div class="col-xs-6 col-sm-10 col-md-10 col-lg-10" style="text-align: end;"> -->
                 <button type="text" class="btn btn-primary" (click)="save()">Save</button>
-              </div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
-                <button type="text" class="btn btn-primary" (click)="delete()"
-                  *ngIf="roleCode!=undefined&&roleCode!='ADMIN'">Delete</button>
-              </div>
+              <!-- </div> -->
+            </div>
+            <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2 display-responsive" style="text-align: end;">
+              <button type="text" class="btn btn-primary" (click)="delete()"
+                *ngIf="roleCode!=undefined&&!permanent">Delete</button>
             </div>
           </div>
 

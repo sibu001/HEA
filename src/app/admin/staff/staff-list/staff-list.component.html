@@ -4,7 +4,7 @@
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="heading">Search Options (use "%" as wildcard in searches)</p>
         <form [formGroup]="staffForm" class="form-group">
-          <div class="row rowPadding rowMargin">
+          <div class="row rowPadding">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
               <span class="filterLabel">Username</span>
             </div>
@@ -49,7 +49,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-sm-12" style="position: relative;">
             <app-table [keys]="keys" [isPaginate]="true"
               [isSearch]="false"
               [data]="dataSource"

@@ -15,6 +15,7 @@ export class RoleEditComponent implements OnInit, OnDestroy {
 
   roleForm: FormGroup;
   roleCode: any;
+  permanent = true;
   isForce = false;
   userId: any;
   private readonly subscriptions: Subscription = new Subscription();
@@ -53,6 +54,9 @@ export class RoleEditComponent implements OnInit, OnDestroy {
   }
 
   setForm(event: any) {
+    if (event && event.permanent !== null) {
+      this.permanent = event.permanent;
+    }
     this.roleForm = this.formBuilder.group({
       roleCode: [event !== undefined ? event.roleCode : '', Validators.required],
       description: [event !== undefined ? event.description : ''],

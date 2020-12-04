@@ -42,3 +42,20 @@ p.messages {
   text-align: right;
   margin-top: 15px;
 }
+
+.responsive-mobile{
+  display: none;
+}
+
+.responsive-tab{
+  display: block;
+}
+
+@media (min-width: 100px) and (max-width: 456px) {
+  .responsive-mobile{
+    display: block;
+  }
+  .responsive-tab{
+    display: none;
+  }
+}

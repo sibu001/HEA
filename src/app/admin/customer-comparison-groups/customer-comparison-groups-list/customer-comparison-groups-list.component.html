@@ -1,9 +1,12 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9">
+      <div class="col-sm-12 col-md-9 col-lg-9" style='text-align:
+      left;padding-left: 40px;
+      padding-top: 35px;'>
         <p class="heading">Customer Comparison Groups</p>
-        <form [formGroup]="customerComparisonGroupForm" class="form-group form-padding">
+        <form [formGroup]="customerComparisonGroupForm" class="form-group
+          form-padding">
           <div class="row borderBottom rowPadding">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
@@ -11,9 +14,11 @@
               <span class="filterLabel">Comparison code</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <select id="comparisonCode" formControlName="comparisonCode" class="form-control">
+              <select id="comparisonCode" formControlName="comparisonCode"
+                class="form-control">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let comparisonCode of comparisonCodeDropdownData" [value]='comparisonCode.key'>
+                <option *ngFor="let comparisonCode of
+                  comparisonCodeDropdownData" [value]='comparisonCode.key'>
                   {{comparisonCode.value}}</option>
               </select>
             </div>
@@ -21,7 +26,8 @@
               <span class="filterLabel">Group Name</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" formControlName="groupName" class="form-control" />
+              <input type="text" formControlName="groupName"
+                class="form-control" />
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
@@ -33,9 +39,11 @@
               <span class="filterLabel">Weather Station</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <select id="weatherStationId" class='form-control form-control-sm' formControlName="weatherStationId">
+              <select id="weatherStationId" class='form-control form-control-sm'
+                formControlName="weatherStationId">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let stationId of weatherStationIds" [value]="stationId.key">
+                <option *ngFor="let stationId of weatherStationIds"
+                  [value]="stationId.key">
                   {{stationId.value}}
                 </option>
               </select>
@@ -44,7 +52,8 @@
               <span class="filterLabel">Home Size</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <select id="homeSize" formControlName="homeSize" class="form-control form-control-sm">
+              <select id="homeSize" formControlName="homeSize"
+                class="form-control form-control-sm">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let size of houseSizeData" [value]="size.key">{{size.value}}</option>
               </select>
@@ -54,7 +63,8 @@
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12 show-button">
-              <button type="button" class="btn btn-primary" (click)="findCustomerComparisonGroup(true,'')">Show</button>
+              <button type="button" class="btn btn-primary"
+                (click)="findCustomerComparisonGroup(true,'')">Show</button>
             </div>
           </div>
         </form>
@@ -68,31 +78,59 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [isHideAdd]="true" [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
+            <app-table [isHideAdd]="true" [keys]="keys" [isPaginate]="true"
+              [isSearch]="false" [data]="dataSource"
               [totalElement]="customerComparisonGroupData.totalElements"
-              (changePageEvent)="findCustomerComparisonGroup(true,'')" (goToEditEvent)="gotoEditCustomerComparisonGroup($event)">
+              (changePageEvent)="findCustomerComparisonGroup(true,'')"
+              (goToEditEvent)="gotoEditCustomerComparisonGroup($event)">
             </app-table>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-4 col-md-6 col-lg-6 col-xs-0"></div>
-          <div class="col-sm-8 col-md-6 col-lg-6 col-xs-12 row">
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3" style="display: inline-table;">
-              <button class="btn btn-primary" style='float:right;' (click)='addCustomerComparisonGroup()'>Add</button>
+          <div class="col-sm-8 col-md-6 col-lg-6 col-xs-12">
+            <div class="row responsive-tab">
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3" style="display:
+                inline-table;">
+                <button class="btn btn-primary" style='float:right;'
+                  (click)='addCustomerComparisonGroup()'>Add</button>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4" style="display:
+                inline-table;">
+                <button class="btn btn-primary" style='float:right;'
+                  (click)='goToBatchAdd()'>Batch
+                  Add</button>
+              </div>
+              <div class="col-sm-5 col-md-5 col-lg-5 col-xs-5" style="display:
+                inline-table;">
+                <button class="btn btn-primary" style='float:right;'
+                  (click)='goToBatchRemove()'>Batch
+                  Remove</button>
+              </div>
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4" style="display: inline-table;">
-              <button class="btn btn-primary" style='float:right;' (click)='goToBatchAdd()'>Batch
-                Add</button>
-            </div>
-            <div class="col-sm-5 col-md-5 col-lg-5 col-xs-5" style="display: inline-table;">
-              <button class="btn btn-primary" style='float:right;' (click)='goToBatchRemove()'>Batch
-                Remove</button>
+            <div class="row responsive-mobile">
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-6" style="display:
+                inline-table;">
+                <button class="btn btn-primary"
+                  (click)='addCustomerComparisonGroup()'>Add</button>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6" style="display:
+                inline-table;">
+                <button class="btn btn-primary" style='float:right;'
+                  (click)='goToBatchAdd()'>Batch
+                  Add</button>
+              </div>
+              <div class="col-sm-5 col-md-5 col-lg-5 col-xs-12" style="text-align: center; margin-top: 10px;">
+                <button class="btn btn-primary"
+                  (click)='goToBatchRemove()'>Batch
+                  Remove</button>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar ></app-sidebar>
+        <app-sidebar></app-sidebar>
       </div>
     </div>
   </div>

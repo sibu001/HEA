@@ -1,7 +1,9 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9">
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+      left;padding-left: 40px;
+      padding-top: 35px;'>
         <p class="heading">Degree Days</p>
         <form [formGroup]="degreeDayForm" class="form-group form-margin">
           <div class="row rowPadding borderBottom">
@@ -86,22 +88,33 @@
             </div>
           </div>
           <div class="row rowPadding">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12 row">
-              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-8 show-button
+            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-9" style="text-align: end;margin-top: 10px;">
+              <!-- <div class="col-sm-10 col-md-10 col-lg-10 col-xs-8 show-button
+                inline-table"> -->
+                <button type="submit" class="btn btn-primary"
+                  (click)="search(undefined,true)">Show</button>
+              <!-- </div>
+              <div class="col-sm-2 col-md-12 col-lg-2 col-xs-4 show-button
+                inline-table">
+                <button type="button" class="btn btn-primary"
+                  (click)="upload()">UpLoad</button>
+              </div> -->
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3" style="text-align: end;margin-top: 10px;">
+              <!-- <div class="col-sm-10 col-md-10 col-lg-10 col-xs-8 show-button
                 inline-table">
                 <button type="submit" class="btn btn-primary"
                   (click)="search(undefined,true)">Show</button>
               </div>
               <div class="col-sm-2 col-md-12 col-lg-2 col-xs-4 show-button
-                inline-table">
+                inline-table"> -->
                 <button type="button" class="btn btn-primary"
                   (click)="upload()">UpLoad</button>
-              </div>
+              <!-- </div> -->
             </div>
-
           </div>
         </form>
-        <div class="row">
+        <div class="row rowPadding">
           <div class="col-sm-12">
             <p class="messages">
               <img src="assets/images/dot03.gif" class="dot pointer">
@@ -110,7 +123,7 @@
             </p>
           </div>
         </div>
-        <div class="row">
+        <div class="row rowPadding">
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
               [data]="dataSource"

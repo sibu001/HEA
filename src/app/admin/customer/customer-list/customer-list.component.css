@@ -186,7 +186,6 @@ input[type="file"] {
   }
 }
 
-
 @media (min-width: 200px) and (max-width: 350px) {
   .custom-file-input {
     width: 90px;

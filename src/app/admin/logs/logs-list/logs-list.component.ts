@@ -31,7 +31,6 @@ export class LogsListComponent implements OnInit, OnDestroy {
   public adminFilter: AdminFilter;
   constructor(public fb: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
-    private readonly router: Router,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null) {

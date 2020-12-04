@@ -46,14 +46,10 @@ select {
   background-position-x: 98%;
 }
 
-.sidePadding {
-  padding: 2px !important;
-  display: inline-table !important;
-  text-align: right !important;
-}
-
-@media screen and (max-width: 769px) {
-  .sidePadding {
-    text-align: left !important;
+@media (min-width: 200px) and (max-width: 380px) {
+  .display-button-table{
+    display: inline-table;
+    padding: 5px;
   }
 }
+

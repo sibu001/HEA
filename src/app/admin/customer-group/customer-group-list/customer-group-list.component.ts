@@ -61,13 +61,6 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
       .set('customerGroupId', '')
       .set('groupCode', (this.customerGroupForm.value.groupCode !== null ? this.customerGroupForm.value.groupCode : ''))
       .set('groupName', (this.customerGroupForm.value.groupName !== null ? this.customerGroupForm.value.groupName : ''));
-    // const filter = '?filter.startRow=0&formAction='
-    //   + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
-    //   + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
-    //   + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction : 'ASC')
-    //   + '&customerGroupId=&filter.groupCode='
-    //   + this.customerGroupForm.value.groupCode + '&filter.groupName='
-    //   + this.customerGroupForm.value.groupName;
     this.findCustomerGroup(true, params);
   }
 

@@ -45,4 +45,8 @@ section.space-top {
     padding-right: 30px;
     background-position-x: 98%;
   }
+  .checkbox {
+    margin-left: 10px;
+    display: inline;
+  }
   

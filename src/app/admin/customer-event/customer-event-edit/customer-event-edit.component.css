@@ -29,12 +29,12 @@ p.messages {
   padding: 4px 23px;
   border-radius: 3px;
 }
-.paddingTop {
-  padding-top: 3%;
-}
 
-.removePadding {
-  padding-left: 0%;
-  padding-right: 0%;
-  display: inline-table;
+@media (min-width: 100px) and (max-width: 380px) {
+  .display-inline-button{
+    display: inline-table;
+  }
+  .display-responsive{
+    margin-top: 5px;;
+  }
 }

@@ -57,3 +57,8 @@ select {
     text-align: left !important;
   }
 }
+
+.checkbox {
+  margin-left: 10px;
+  display: inline;
+}
