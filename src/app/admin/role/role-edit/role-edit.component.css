@@ -34,11 +34,3 @@ p.messages{
   font-weight: 600;
 }
 
-@media (min-width: 200px) and (max-width: 340px) {
-  .display-inline-button{
-    display: inline-table;
-  }
-  .display-responsive{
-    margin-top: 5px;;
-  }
-}

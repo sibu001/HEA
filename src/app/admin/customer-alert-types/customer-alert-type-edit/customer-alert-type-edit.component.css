@@ -23,11 +23,3 @@ section.space-top {
   .paddingTop{
       padding-top: 3%;
   }
-  @media (min-width: 100px) and (max-width: 380px) {
-    .display-inline-button{
-      display: inline-table;
-    }
-    .display-responsive{
-      margin-top: 5px;;
-    }
-  }

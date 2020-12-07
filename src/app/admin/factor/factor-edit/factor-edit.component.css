@@ -44,23 +44,3 @@ select {
   padding-right: 30px;
   background-position-x: 98%;
 }
-
-@media (min-width: 100px) and (max-width: 600px) {
-  .display-inline-button{
-    display: inline-table;
-  }
-  .display-responsive{
-    margin-top: 5px;;
-  }
-}
-
-@media (min-width: 100px) and (max-width: 467px) {  
-  .display-responsive2{
-    margin-top: 5px;;
-  }
-}
-@media (min-width: 100px) and (max-width: 349px) {  
-  .display-responsive3{
-    margin-top: 5px;;
-  }
-}

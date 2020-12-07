@@ -104,8 +104,21 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-
-          <div class="row rowPadding">
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-3 display-inline-button">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6" style="text-align: end;">
+              <label for='disableValueCache'>
+                <input type="checkbox" formControlName="disableValueCache" id="disableValueCache">
+                Disable Value Cache
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3 display-responsive">
+              <button type="button" class="btn btn-primary" (click)="executeDebug()">Execute</button>
+            </div>
+          </div>
+          <!-- <div class="row rowPadding">
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <button type="button" class="btn btn-primary" (click)="back()">
                 Back
@@ -124,7 +137,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">

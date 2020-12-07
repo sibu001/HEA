@@ -1156,3 +1156,42 @@ table.jqplot-table-legend {
   border: none;
   box-shadow: none;
 }
+
+@media (min-width: 100px) and (max-width: 380px) {
+  .display-inline-button {
+    display: inline-table;
+  }
+  .display-responsive {
+    margin-top: 5px;
+  }
+}
+
+@media (min-width: 200px) and (max-width: 340px) {
+  .display-inline-button-medium{
+    display: inline-table;
+  }
+  .display-responsive-medium{
+    margin-top: 5px;;
+  }
+}
+
+
+@media (min-width: 100px) and (max-width: 600px) {
+  .display-inline-button-big{
+    display: inline-table;
+  }
+  .display-responsive-big{
+    margin-top: 5px;;
+  }
+}
+
+@media (min-width: 100px) and (max-width: 467px) {  
+  .display-responsive-big2{
+    margin-top: 5px;;
+  }
+}
+@media (min-width: 100px) and (max-width: 349px) {  
+  .display-responsive-big3{
+    margin-top: 5px;;
+  }
+}
