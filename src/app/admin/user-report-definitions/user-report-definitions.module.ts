@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { UserReportDefinitionsRoutingModule } from './user-report-Definitions-routing.module';
+import { UserReportDefinitionsRoutingModule } from './user-report-definitions-routing.module';
 import { UserReportDefinitionsComponent } from './user-report-definitions/user-report-definitions.component';
 import { CommonHEAModule } from 'src/app/common/common.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
