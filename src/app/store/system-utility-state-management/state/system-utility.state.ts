@@ -12,6 +12,7 @@ import {
     DeleteFactorByIdAction,
     DeleteLogsByIdAction,
     DeleteLookupByIdAction,
+    DeleteLookupValueByIdAction,
     DeletePlaceByIdAction,
     DeleteSystemParameterByIdAction,
     DeleteWeatherStationByIdAction,
@@ -25,10 +26,13 @@ import {
     GetDegreeDaysListAction,
     GetFactorByIdAction,
     GetFactorListAction,
+    GetLoadLookupCountAction,
     GetLogsByIdAction,
     GetLogsListAction,
     GetLookupByIdAction,
     GetLookupListAction,
+    GetLookupValueByIdAction,
+    GetLookupValueListAction,
     GetPlaceByIdAction,
     GetPlaceListAction,
     GetSystemParameterByIdAction,
@@ -44,6 +48,7 @@ import {
     SaveFactorAction,
     SaveLogsAction,
     SaveLookupAction,
+    SaveLookupValueAction,
     SavePlaceAction,
     SaveSystemParameterAction,
     SaveWeatherStationAction,
@@ -54,6 +59,7 @@ import {
     UpdateFactorAction,
     UpdateLogsAction,
     UpdateLookupAction,
+    UpdateLookupValueAction,
     UpdatePlaceAction,
     UpdateSystemParameterAction,
     UpdateWeatherStationAction
@@ -74,6 +80,9 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         factor: undefined,
         lookupList: undefined,
         lookup: undefined,
+        lookupCount: undefined,
+        lookupValueList: undefined,
+        lookupValue: undefined,
         systemParameterList: undefined,
         systemParameter: undefined,
         systemParameterCount: undefined,
@@ -143,6 +152,16 @@ export class SystemUtilityManagementState {
     @Selector()
     static getLookupById(state: SystemUtilityManagementModel): any {
         return state.lookup;
+    }
+
+    @Selector()
+    static getLookupValueList(state: SystemUtilityManagementModel): any {
+        return state.logList;
+    }
+
+    @Selector()
+    static getLookupValueById(state: SystemUtilityManagementModel): any {
+        return state.logs;
     }
 
     @Selector()
@@ -598,6 +617,24 @@ export class SystemUtilityManagementState {
         return result;
     }
 
+    @Action(GetLoadLookupCountAction)
+    getLookupCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetLoadLookupCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookup + '/count')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        lookupCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+
     @Action(GetLookupByIdAction)
     getLookupById(ctx: StateContext<SystemUtilityManagementModel>, action: GetLookupByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
@@ -665,6 +702,98 @@ export class SystemUtilityManagementState {
                         this.utilityService.showErrorMessage(error.message);
                     }));
     }
+
+    @Action(GetLookupValueListAction)
+    getAllLookupValuesList(ctx: StateContext<SystemUtilityManagementModel>, action: GetLookupValueListAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getLookupValueList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.lookup + '/' + action.lookupCode + '/' + AppConstant.lookupValue, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        // const res = Transformer.transformLogTableData(response);
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            lookupValueList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetLookupValueByIdAction)
+    getLookupValueById(ctx: StateContext<SystemUtilityManagementModel>, action: GetLookupValueByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookup + '/' + action.lookupCode + '/' + AppConstant.lookupValue + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        lookupValue: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteLookupValueByIdAction)
+    deleteLookupValueById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteLookupValueByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.lookup + '/' + action.lookupCode + '/' + AppConstant.lookupValue + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveLookupValueAction)
+    saveLookupValue(ctx: StateContext<SystemUtilityManagementModel>, action: SaveLookupValueAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.lookupValue, AppConstant.lookup + '/' + action.lookupCode + '/' + AppConstant.lookupValue)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        lookupValue: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateLookupValueAction)
+    updateLookupValue(ctx: StateContext<SystemUtilityManagementModel>, action: UpdateLookupValueAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.lookupValue, AppConstant.lookup + '/' + action.lookupCode + '/' + AppConstant.lookupValue + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        lookupValue: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
 
     @Action(GetSystemParameterListAction)
     getAllSystemParameterList(ctx: StateContext<SystemUtilityManagementModel>, action: GetSystemParameterListAction): Actions {

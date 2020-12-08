@@ -46,7 +46,9 @@ section.space-top {
     background-position-x: 98%;
   }
   .checkbox {
-    margin-left: 10px;
-    display: inline;
+    /* margin-left: 10px;
+    display: inline; */
+    margin-top: -22px;
+    margin-left: 22px;
   }
   

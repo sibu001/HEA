@@ -21,10 +21,16 @@ export enum SystemActionTypes {
     UPDATE_FACTOR = 'Update Factor',
     DELETE_FACTOR_BY_ID = 'Delete Factor By Id',
     GET_LOOKUP_LIST = 'Get All Lookup List',
+    GET_LOOKUP_COUNT = 'Get Lookup count',
     GET_LOOKUP_BY_ID = 'Get Lookup By Id',
     SAVE_LOOKUP = 'Save Lookup',
     UPDATE_LOOKUP = 'Update Lookup',
     DELETE_LOOKUP_BY_ID = 'Delete Lookup By Id',
+    GET_LOOKUP_VALUE_LIST = 'Get All LookupValue List',
+    GET_LOOKUP_VALUE_BY_ID = 'Get LookupValue By Id',
+    SAVE_LOOKUP_VALUE = 'Save LookupValue',
+    UPDATE_LOOKUP_VALUE = 'Update LookupValue',
+    DELETE_LOOKUP_VALUE_BY_ID = 'Delete LookupValue By Id',
     GET_SYSTEM_PARAMETER_LIST = 'Get All System Parameter List',
     GET_SYSTEM_PARAMETER_COUNT = 'Get System Parameter Count',
     GET_SYSTEM_PARAMETER_BY_ID = 'Get System Parameter By Id',
@@ -178,6 +184,10 @@ export class GetLookupListAction {
     }
 }
 
+export class GetLoadLookupCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_LOOKUP_COUNT;
+}
+
 export class GetLookupByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_LOOKUP_BY_ID;
     constructor(readonly id: number) {
@@ -199,6 +209,36 @@ export class UpdateLookupAction {
 export class DeleteLookupByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_LOOKUP_BY_ID;
     constructor(readonly id: number) {
+    }
+}
+
+export class GetLookupValueListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_LOOKUP_VALUE_LIST;
+    constructor(readonly force: boolean, readonly filter: any, readonly lookupCode: any) {
+    }
+}
+
+export class GetLookupValueByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_LOOKUP_VALUE_BY_ID;
+    constructor(readonly id: number, readonly lookupCode: any) {
+    }
+}
+
+export class SaveLookupValueAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_LOOKUP_VALUE;
+    constructor(readonly lookupValue: any, readonly lookupCode: any) {
+    }
+}
+
+export class UpdateLookupValueAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_LOOKUP_VALUE;
+    constructor(readonly id: number, readonly lookupValue: any, readonly lookupCode: any) {
+    }
+}
+
+export class DeleteLookupValueByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_LOOKUP_VALUE_BY_ID;
+    constructor(readonly id: number, readonly lookupCode: any) {
     }
 }
 

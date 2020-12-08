@@ -32,3 +32,8 @@ p.messages {
 .input-padding {
   margin: 5px;
 }
+@media (min-width: 100px) and (max-width: 767px) {
+  .checkbox-div{
+    padding: 0px;
+  }
+}

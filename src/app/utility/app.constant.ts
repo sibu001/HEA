@@ -27,7 +27,8 @@ export class AppConstant {
     public static mailDescription = 'mailDescriptions';
     public static customerComparisonGroups = '';
     public static factor = '';
-    public static lookup = '';
+    public static lookup = 'lookups';
+    public static lookupValue = 'lookupValues';
     public static systemParameter = 'systemParameters';
     public static logs = '';
     public static weatherStation = 'weatherStations';

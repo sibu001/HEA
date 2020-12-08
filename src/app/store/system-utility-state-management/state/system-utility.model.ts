@@ -10,6 +10,9 @@ export interface SystemUtilityManagementModel {
     factor: any;
     lookupList: any;
     lookup: any;
+    lookupCount: any;
+    lookupValueList: any;
+    lookupValue: any;
     systemParameterList: any;
     systemParameter: any;
     systemParameterCount: any;

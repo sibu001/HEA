@@ -1151,7 +1151,7 @@ table.jqplot-table-legend {
   margin: auto !important;
 }
 
-.show-value{
+.show-value {
   background: none;
   border: none;
   box-shadow: none;
@@ -1167,31 +1167,36 @@ table.jqplot-table-legend {
 }
 
 @media (min-width: 200px) and (max-width: 340px) {
-  .display-inline-button-medium{
+  .display-inline-button-medium {
     display: inline-table;
   }
-  .display-responsive-medium{
-    margin-top: 5px;;
+  .display-responsive-medium {
+    margin-top: 5px;
   }
 }
-
 
 @media (min-width: 100px) and (max-width: 600px) {
-  .display-inline-button-big{
+  .display-inline-button-big {
     display: inline-table;
   }
-  .display-responsive-big{
-    margin-top: 5px;;
+  .display-responsive-big {
+    margin-top: 5px;
   }
 }
 
-@media (min-width: 100px) and (max-width: 467px) {  
-  .display-responsive-big2{
-    margin-top: 5px;;
+@media (min-width: 100px) and (max-width: 467px) {
+  .display-responsive-big2 {
+    margin-top: 5px;
   }
 }
-@media (min-width: 100px) and (max-width: 349px) {  
-  .display-responsive-big3{
-    margin-top: 5px;;
+@media (min-width: 100px) and (max-width: 349px) {
+  .display-responsive-big3 {
+    margin-top: 5px;
   }
+}
+
+.admin-content {
+  text-align: left;
+  padding-left: 40px !important;
+  padding-top: 35px;
 }

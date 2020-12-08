@@ -10,21 +10,24 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Name:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" formControlName="reportName" id="reportName">
+              <input type="text" class="form-control form-control-sm"
+                formControlName="reportName" id="reportName">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" formControlName="reportLabel" id="reportLabel">
+              <input type="text" class="form-control form-control-sm"
+                formControlName="reportLabel" id="reportLabel">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="reportType" class="form-control form-control-sm" formControlName="reportType">
+              <select id="reportType" class="form-control form-control-sm"
+                formControlName="reportType">
                 <option value="jrxml">Jasper XML format</option>
                 <option value="sql" selected="selected">Report from simple SQL</option>
               </select>
@@ -32,13 +35,18 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf="id!==null && id !==undefined" class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Select Report for upload (jrxml type)</div>
+          <div *ngIf="id!==null && id !==undefined" class="row borderBottom
+            rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Select Report for
+              upload (jrxml type)</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea *ngIf="f.reportType.value==='sql'" cols='30' rows='10' class="form-control form-control-sm"
+              <textarea *ngIf="f.reportType.value==='sql'" cols='30' rows='10'
+                class="form-control form-control-sm"
                 id="report" formControlName="report"></textarea>
-              <input *ngIf="f.reportType.value==='jrxml'" type="file" class="custom-file-input"
-                style='font-size: smaller;' name="reportFile" id="reportFile" formControlName='reportFile'>
+              <input *ngIf="f.reportType.value==='jrxml'" type="file"
+                class="custom-file-input"
+                style='font-size: smaller;' name="reportFile" id="reportFile"
+                formControlName='reportFile'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -48,31 +56,27 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Report parameters</span></p>
-            <app-table [keys]="dataFieldKeys" [isPaginate]="false" [isDelete]='true' [isHideAdd]='true'
-              [isSearch]="false" [data]="dataFieldDataSource" [totalElement]="dataFieldData.totalElements"
+            <app-table [keys]="dataFieldKeys" [isPaginate]="false"
+              [isDelete]='true' [isHideAdd]='true'
+              [isSearch]="false" [data]="dataFieldDataSource"
+              [totalElement]="dataFieldData.totalElements"
               [showAddRowButton]='true' (saveRowEvent)='addParameter()'>
             </app-table>
           </div>
 
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
-              </button>
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-3
+              display-inline-button">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
-              </div>
-              <div class="col-sm-8 col-md-10 col-lg-9 col-xs-8 sidePadding" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
-                  Save
-                </button>
-              </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6" style="text-align:
+              end;">
+              <button type="button" class="btn btn-primary" (click)="delete()"
+                *ngIf="id!==undefined&&id!==null">Delete</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
+              [ngClass]="{'display-responsive': id!==undefined&&id!==null}">
+              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
             </div>
           </div>
         </form>

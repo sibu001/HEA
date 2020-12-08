@@ -52,7 +52,13 @@ import {
   DeleteZipCodeByIdAction,
   GetTimeZoneListAction,
   GetCustomerEventTypeCountAction,
-  GetSystemParameterCountAction
+  GetSystemParameterCountAction,
+  GetLoadLookupCountAction,
+  GetLookupValueListAction,
+  GetLookupValueByIdAction,
+  DeleteLookupValueByIdAction,
+  SaveLookupValueAction,
+  UpdateLookupValueAction
 } from '../state/system-utility.action';
 import { SystemUtilityManagementState } from '../state/system-utility.state';
 
@@ -222,6 +228,10 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetLookupListAction(force, filter));
   }
 
+  loadLookupCount(): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetLoadLookupCountAction());
+  }
+
   loadLookupById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetLookupByIdAction(id));
   }
@@ -236,6 +246,26 @@ export class SystemUtilityService {
 
   deleteLookupById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new DeleteLookupByIdAction(id));
+  }
+
+  loadLookupValueList(force: boolean, filter: any, lookupCode: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetLookupValueListAction(force, filter, lookupCode));
+  }
+
+  loadLookupValueById(id: number, lookupCode: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetLookupValueByIdAction(id, lookupCode));
+  }
+
+  saveLookupValue(lookupValue: any, lookupCode: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveLookupValueAction(lookupValue, lookupCode));
+  }
+
+  updateLookupValue(id: number, lookupValue: any, lookupCode: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new UpdateLookupValueAction(id, lookupValue, lookupCode));
+  }
+
+  deleteLookupValueById(id: number, lookupCode: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteLookupValueByIdAction(id, lookupCode));
   }
 
   loadSystemParameterList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {

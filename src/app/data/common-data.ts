@@ -260,7 +260,7 @@ export class TableColumnData {
 
 
     static readonly LOOKUP_KEYS: Array<TABLECOLUMN> = [
-        { key: 'lookupCode', sort: 'lookupCode', displayName: 'Lookup Code' },
+        { key: 'lookupCode', sort: 'lookupCode', displayName: 'Lookup Code', isEdit: true },
         { key: 'lookupName', sort: 'lookupName', displayName: 'Lookup Name' },
         { key: 'defaultValue', sort: 'defaultValue', displayName: 'Default Value' },
     ];

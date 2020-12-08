@@ -232,32 +232,64 @@
             </app-table>
           </div>
 
-          <div class="row rowPadding">
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3
+              display-inline-button-big">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2
+              display-inline-button-big display-responsive-big2" style="text-align: end;">
+              <button type="button" class="btn btn-primary"
+                (click)="recalculate()" >
+                Copy
+              </button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-3 col-xs-4 display-inline-button-big display-responsive-big2" >
+              <label for="isRerunTopic">
+                <input type="checkbox" formControlName='isRerunTopic' id='isRerunTopic'>
+                Require to rerun topic
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3 display-inline-button-big display-responsive-big2">
+              <button type="button" class="btn btn-primary" (click)="ReInitTopic()">
+                Reinit topics
+              </button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-1 col-xs-6
+              display-inline-button-big display-responsive-big2"  style="text-align: end;">
+              <button type="button" class="btn btn-primary" (click)="delete()">Delete</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 display-responsive-big" style="text-align: end;">
+              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+            </div>
+          </div>
+
+          <!-- <div class="row rowPadding">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
               <button type="button" class="btn btn-primary" (click)="back()">
                 Back
               </button>
             </div>
             <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
+              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-0 sidePadding">
               </div>
-              <div class="col-xs-2 col-sm-3 col-md-2 col-lg-2 sidePadding" *ngIf="id !== undefined && id !== null">
+              <div class="col-xs-2 col-sm-3 col-md-2 col-lg-2 sidePadding">
                 <button type="button" class="btn btn-primary" (click)="copy()">
                   Copy
                 </button>
               </div>
-              <div class="col-xs-4 col-sm-3 col-md-4 col-lg-4 sidePadding" *ngIf="id !== undefined && id !== null">
+              <div class="col-xs-4 col-sm-3 col-md-4 col-lg-4 sidePadding">
                 <label for="isRerunTopic">
                   <input type="checkbox" formControlName='isRerunTopic' id='isRerunTopic'>
                   Require to rerun topic
                 </label>
               </div>
-              <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1 sidePadding" *ngIf="id !== undefined && id !== null">
+              <div class="col-xs-3 col-sm-2 col-md-1 col-lg-1 sidePadding">
                 <button type="button" class="btn btn-primary" (click)="ReInitTopic()">
                   Reinit topics
                 </button>
               </div>
-              <div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 sidePadding" *ngIf="id !== undefined && id !== null">
+              <div class="col-xs-2 col-sm-2 col-md-1 col-lg-1 sidePadding">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
                   Delete
                 </button>
@@ -268,7 +300,7 @@
                 </button>
               </div>
             </div>
-          </div>
+          </div> -->
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">

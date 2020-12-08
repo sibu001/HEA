@@ -66,29 +66,32 @@ export class LookupListComponent implements OnInit, OnDestroy {
   findLookup(force: boolean, filter: any): void {
     this.adminFilter.lookupFilter.formValue = this.lookupForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.systemUtilityService.loadLookupList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getLookupList().pipe(skipWhile((item: any) => !item))
-      .subscribe((lookupList: any) => {
-        this.lookupData.content = lookupList.list;
-        this.lookupData.totalElements = lookupList.totalSize;
-        this.dataSource = [...this.lookupData.content];
+    this.subscriptions.add(this.systemUtilityService.loadLookupCount().pipe(skipWhile((item: any) => !item))
+      .subscribe((systemParameterCount: any) => {
+        this.lookupData.totalElements = systemParameterCount.systemUtilityManagement.lookupCount;
+
+        this.systemUtilityService.loadLookupList(force, filter);
+        this.subscriptions.add(this.systemUtilityService.getLookupList().pipe(skipWhile((item: any) => !item))
+          .subscribe((lookupList: any) => {
+            this.lookupData.content = lookupList;
+            // this.lookupData.totalElements = lookupList.totalSize;
+            this.dataSource = [...this.lookupData.content];
+          }));
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.lookupFilter.page = event;
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
       .set('lookupCode', '')
-      .set('filter.defaultValue', (this.lookupForm.value.defaultValue !== null ? this.lookupForm.value.defaultValue : ''))
-      .set('filter.lookupName', (this.lookupForm.value.lookupName !== null ? this.lookupForm.value.lookupName : ''));
+      .set('defaultValue', (this.lookupForm.value.defaultValue !== null ? this.lookupForm.value.defaultValue : ''))
+      .set('lookupName', (this.lookupForm.value.lookupName !== null ? this.lookupForm.value.lookupName : ''));
     this.findLookup(true, params);
   }
   ngOnDestroy(): void {

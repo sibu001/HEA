@@ -69,6 +69,8 @@ export class LookupEditComponent implements OnInit, OnDestroy {
         if (this.isForce) {
           this.router.navigate(['admin/lookup/lookupEdit'], { queryParams: { 'id': lookup.id } });
         }
+        this.lookupValueData.content = lookup.values;
+        this.lookupValueDataSource= [...this.lookupValueData.content];
         this.setForm(lookup);
       }));
   }

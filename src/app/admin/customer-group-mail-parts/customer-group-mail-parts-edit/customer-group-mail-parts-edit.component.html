@@ -45,24 +45,20 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
+
           <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
-              </button>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-3
+              display-inline-button">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 sidePadding">
-                <button type="button" class="btn btn-primary" *ngIf="id !== undefined && id !== null"
-                  style="float: right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
-                  Save
-                </button>
-              </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6" style="text-align:
+              end;">
+              <button type="button" class="btn btn-primary" (click)="delete()"
+                *ngIf="id!==undefined&&id!==null">Delete</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
+              [ngClass]="{'display-responsive': id!==undefined&&id!==null}">
+              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
             </div>
           </div>
         </form>
