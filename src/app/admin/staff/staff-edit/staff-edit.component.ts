@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -28,6 +29,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0,
   };
+  public topicGroupSelectionList: any = [];
   public topicDataSource: any;
   public topicGroupData = {
     content: [],
@@ -61,19 +63,23 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     this.userId = users.userId;
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
-      this.getRoleListByUserId();
+      if (this.id) {
+        this.getRoleListByUserId();
+        this.findUserCustomerGroup(this.id);
+      }
     });
   }
 
   ngOnInit() {
     this.loadCustomerViewConfiguration();
-    this.getAllRole();
     this.getPasswordValidationRule();
     this.setForm(undefined);
     if (this.id !== undefined) {
-      this.findUserCustomerGroup(this.id);
       this.customerService.loadStaffById(this.id);
       this.loadStaffById();
+    } else {
+      this.getAllRole();
+      this.loadCustomerGroup(false, '');
     }
   }
 
@@ -98,7 +104,14 @@ export class StaffEditComponent implements OnInit, OnDestroy {
         console.log(passwordValidationRule);
       }));
   }
-
+  loadCustomerGroup(force: boolean, filter: any) {
+    this.systemService.loadCustomerGroupList(force, filter);
+    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerGroupList: any) => {
+        this.topicGroupData.content = customerGroupList;
+        this.topicDataSource = [...this.topicGroupData.content];
+      }));
+  }
   loadCustomerViewConfiguration() {
     this.systemService.loadViewConfigurationList(true);
     this.subscriptions.add(this.systemService.getViewConfigurationList().pipe(skipWhile((item: any) => !item))
@@ -108,11 +121,13 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   findUserCustomerGroup(userId: any) {
-    this.customerService.loadUserCustomerGroupList(userId);
-    this.subscriptions.add(this.customerService.getUserCustomerGroupsList().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.customerService.loadUserCustomerGroupList(userId).pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
-        this.topicGroupData.content = customerGroupList.data.list;
-        this.topicDataSource = [...this.topicGroupData.content];
+        this.topicGroupList = customerGroupList.customerManagement.userCustomerGroupList.data.list;
+        customerGroupList.customerManagement.userCustomerGroupList.data.list.forEach(element => {
+          this.topicGroupSelectionList.push(element.groupCode);
+        });
+        this.loadCustomerGroup(false, '');
       }));
   }
 
@@ -133,6 +148,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
         roleList.customerManagement.roleListByUserId.forEach(element => {
           this.roleSelectionList.push(element.roleCode);
         });
+        this.getAllRole();
       }));
   }
 
@@ -154,9 +170,9 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       name: [event !== undefined ? event.name : ''],
       status: [event !== undefined ? event.status : '0'],
       passwordForm: this.fb.group({
-        password: [event !== undefined ? event.password1 : '',
+        password: [event !== undefined && event.password1 ? event.password1 : '',
         ],
-        confirmPassword: [event !== undefined ? event.password2 : ''],
+        confirmPassword: [event !== undefined && event.password2 ? event.password2 : ''],
       }, { validator: MustMatch('password', 'confirmPassword') }),
       passwordNeedChange: [event !== undefined ? event.passwordNeedChange : ''],
       passwordStrengthLevel: [event !== undefined ? event.passwordStrengthLevel : ''],
@@ -181,15 +197,19 @@ export class StaffEditComponent implements OnInit, OnDestroy {
 
   save() {
 
-    if (this.p.password) {
+    if (this.p.password.value) {
       this.p.password.setValidators([Validators.required,
       Validators.minLength(this.minLength),
       Validators.maxLength(this.maxLength)]);
       this.p.confirmPassword.setValidators([Validators.required]);
     }
+    if (this.p.password.value && this.p1.valid) {
+      this.getValidateNewPassword(this.p.password.value);
+    }
     if (this.staffForm.valid) {
       if (this.id !== null && this.id !== undefined) {
         this.checkRole();
+        this.checkTopicGroup();
         this.subscriptions.add(this.customerService.updateStaff(this.id, this.staffForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
@@ -208,9 +228,35 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       this.validateForm();
     }
   }
+
+
+  getValidateNewPassword(password: any) {
+    this.customerService.loadValidateNewPassword(password);
+    this.subscriptions.add(this.customerService.getValidateNewPassword().pipe(skipWhile((item: any) => !item))
+      .subscribe((passwordValidation: any) => {
+        this.saveNewPassword(password);
+      }));
+  }
+
+  saveNewPassword(password: any) {
+    this.subscriptions.add(this.customerService.setNewPassword(this.id, password).pipe(skipWhile((item: any) => !item))
+      .subscribe((passwordValidation: any) => {
+        console.log(passwordValidation);
+      }));
+  }
   validateForm() {
     for (const key of Object.keys(this.staffForm.controls)) {
-      if (this.staffForm.controls[key].invalid) {
+      if (this.staffForm.controls[key].invalid && key === 'passwordForm') {
+        const passwordForm = this.staffForm.controls.passwordForm as FormGroup;
+        for (const keys of Object.keys(passwordForm.controls)) {
+          if (passwordForm.controls[keys].invalid) {
+            const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + keys + '"]');
+            invalidControl.focus();
+            break;
+          }
+        }
+      }
+      if (this.staffForm.controls[key].invalid && key !== 'passwordForm') {
         const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
         invalidControl.focus();
         break;
@@ -249,17 +295,17 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   checkTopicGroup() {
     for (let index = 0; index < this.topicGroupCheckBox.length; index++) {
       const element = this.topicGroupCheckBox[index];
-      const i = this.roleList.findIndex((item: any) => item.customerGroupId === element.customerGroupId);
+      const i = this.topicGroupList.findIndex((item: any) => item.customerGroupId === element.customerGroupId);
       if (i !== -1) {
-        this.roleList.splice(i, 1);
+        this.topicGroupList.splice(i, 1);
         const j = this.selectedTopicGroup.findIndex((item2: any) => item2.customerGroupId === element.customerGroupId);
         if (j !== -1) {
           this.selectedTopicGroup.splice(j, 1);
         }
       }
     }
-    this.deleteTopicGroupOfStaff(this.roleList);
-    this.assignTopicGroupToStaff(this.selectedRole);
+    this.deleteTopicGroupOfStaff(this.topicGroupList);
+    this.assignTopicGroupToStaff(this.selectedTopicGroup);
     this.findUserCustomerGroup(this.id);
   }
   assignTopicGroupToStaff(topicGroupList: any) {
@@ -287,6 +333,10 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   get p() {
     const passwordForm = this.staffForm.controls.passwordForm as FormGroup;
     return passwordForm.controls;
+  }
+  get p1() {
+    const passwordForm = this.staffForm.controls.passwordForm as FormGroup;
+    return passwordForm;
   }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

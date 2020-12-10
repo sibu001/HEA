@@ -13,6 +13,7 @@ import { CustomerManagementState } from 'src/app/store/customer-state-management
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
 import { MAT_DIALOG_DATA } from '@angular/material';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 
 @NgModule({
   imports: [
@@ -28,7 +29,7 @@ import { MAT_DIALOG_DATA } from '@angular/material';
     ]),
   ],
   declarations: [ProspectsListComponent, ProspectsEditComponent],
-  providers: [AdministrativeService,{ provide: MAT_DIALOG_DATA, useValue: {} }],
+  providers: [AdministrativeService, SystemService, { provide: MAT_DIALOG_DATA, useValue: {} }],
   entryComponents: [ProspectsEditComponent]
 })
 export class ProspectsModule { }

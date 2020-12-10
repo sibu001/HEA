@@ -209,7 +209,8 @@
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Customer groups</span></p>
             <app-table [keys]="customerGroupKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true
-              [isSearch]="false" [data]="customerGroupDataSource" [totalElement]="customerGroupData.totalElements">
+              [isSearch]="false" [data]="customerGroupDataSource" [totalElement]="customerGroupData.totalElements"
+              (checkBoxChangeEvent)="customerGroupCheckBoxChangeEvent($event)"  id='groupCode' [selectionList]='customerGroupSelectionList'>
             </app-table>
           </div>
 

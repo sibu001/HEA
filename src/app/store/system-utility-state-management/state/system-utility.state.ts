@@ -746,7 +746,7 @@ export class SystemUtilityManagementState {
     @Action(DeleteLookupValueByIdAction)
     deleteLookupValueById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteLookupValueByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.lookup + '/' + action.lookupCode + '/' + AppConstant.lookupValue + action.id)
+        return this.loginService.performDelete(AppConstant.lookup + '/' + action.lookupCode + '/' + AppConstant.lookupValue + '/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

@@ -37,6 +37,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadCustomerEventType();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.administrativeService.loadEventHistoryById(this.id);
@@ -50,17 +51,22 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       customerName: [event !== undefined ? event.customerName : '', Validators.required],
       eventType: [event !== undefined ? event.eventType : ''],
       eventDate: [event !== undefined ? event.eventDate : ''],
-      additionalComments: [event !== undefined ? event.additionalComments : '']
+      eventCode: [event !== undefined ? event.eventCode : ''],
+      description: [event !== undefined ? event.description : ''],
+      additionalComments: [event !== undefined ? event.additionalComments : ''],
+      linkedPersonType: [event !== undefined ? event.linkedPersonType : ''],
+      linkedPersonName: [event !== undefined ? event.linkedPersonName : '']
     });
   }
 
   loadCustomerEventType() {
-    this.systemUtilityService.loadCustomerEventTypeList(false,'');
+    this.systemUtilityService.loadCustomerEventTypeList(true, '');
     this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.eventTypeData = response;
       }));
   }
+
   validateForm() {
     for (const key of Object.keys(this.eventForm.controls)) {
       if (this.eventForm.controls[key].invalid) {

@@ -37,7 +37,7 @@
               <select id="weatherStationId" class='form-control form-control-sm' name="weatherStationId"
                 formControlName="weatherStationId">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let stationId of weatherStationIds" [value]="stationId.key">{{stationId.value}}</option>
+                <option *ngFor="let stationId of weatherStationIds" [value]="stationId.stationId">{{stationId.stationName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

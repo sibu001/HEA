@@ -70,7 +70,7 @@ export class LookupEditComponent implements OnInit, OnDestroy {
           this.router.navigate(['admin/lookup/lookupEdit'], { queryParams: { 'id': lookup.id } });
         }
         this.lookupValueData.content = lookup.values;
-        this.lookupValueDataSource= [...this.lookupValueData.content];
+        this.lookupValueDataSource = [...this.lookupValueData.content];
         this.setForm(lookup);
       }));
   }
@@ -85,6 +85,20 @@ export class LookupEditComponent implements OnInit, OnDestroy {
       }));
   }
 
+  deleteLookupValue(event: any) {
+    this.subscriptions.add(this.systemUtilityService.deleteLookupValueById(event.lookupValueId, event.lookupCode).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.loadLookupValueList();
+      }));
+  }
+
+  loadLookupValueList() {
+    this.subscriptions.add(this.systemUtilityService.loadLookupValueList(true, '', this.id).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.lookupValueData.content = response.systemUtilityManagement.lookupValueList;
+        this.lookupValueDataSource = [...this.lookupValueData.content];
+      }));
+  }
   save() {
     if (this.lookupForm.valid) {
       if (this.id !== null && this.id !== undefined) {
@@ -117,7 +131,13 @@ export class LookupEditComponent implements OnInit, OnDestroy {
   }
 
   saveLookup(event: FormGroup): any {
-    console.log(event);
+    const object = event.value;
+    object.lookupCode = this.id;
+    this.subscriptions.add(this.systemUtilityService.saveLookupValue(object, this.id).pipe(
+      skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.loadLookupValueList();
+      }));
   }
 
   toggleSaveButtonEvent(): any {

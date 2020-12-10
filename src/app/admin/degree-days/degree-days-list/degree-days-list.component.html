@@ -30,7 +30,7 @@
                 class="form-control">
                 <option value="" selected='selected'></option>
                 <option *ngFor='let station of stationIds'
-                  [value]="station.key">{{station.value}}</option>
+                  [value]="station.stationId">{{station.stationName}}</option>
               </select>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-0">
@@ -87,28 +87,12 @@
           </div>
           <div class="row rowPadding">
             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-9" style="text-align: end;margin-top: 10px;">
-              <!-- <div class="col-sm-10 col-md-10 col-lg-10 col-xs-8 show-button
-                inline-table"> -->
                 <button type="submit" class="btn btn-primary"
                   (click)="search(undefined,true)">Show</button>
-              <!-- </div>
-              <div class="col-sm-2 col-md-12 col-lg-2 col-xs-4 show-button
-                inline-table">
-                <button type="button" class="btn btn-primary"
-                  (click)="upload()">UpLoad</button>
-              </div> -->
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3" style="text-align: end;margin-top: 10px;">
-              <!-- <div class="col-sm-10 col-md-10 col-lg-10 col-xs-8 show-button
-                inline-table">
-                <button type="submit" class="btn btn-primary"
-                  (click)="search(undefined,true)">Show</button>
-              </div>
-              <div class="col-sm-2 col-md-12 col-lg-2 col-xs-4 show-button
-                inline-table"> -->
                 <button type="button" class="btn btn-primary"
-                  (click)="upload()">UpLoad</button>
-              <!-- </div> -->
+                  (click)="upload()">Upload</button>
             </div>
           </div>
         </form>

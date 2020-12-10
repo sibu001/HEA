@@ -8,6 +8,7 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { ProspectsEditComponent } from '../prospects-edit/prospects-edit.component';
 
@@ -20,6 +21,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
 
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.PROSPECTS_KEY;
+  public coachIdList: any = [];
   public dataSource: any;
   public totalElement = 0;
   public prospectsData = {
@@ -32,6 +34,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   constructor(public fb: FormBuilder,
     public dialog: MatDialog,
     private readonly administrativeService: AdministrativeService,
+    private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute) {
     this.activateRoute.queryParams.subscribe(params => {
       this.force = params['force'];
@@ -39,6 +42,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.findCoachId();
     this.setUpForm(undefined);
     this.search('', false);
   }
@@ -78,6 +82,13 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
       }));
   }
 
+  findCoachId() {
+    this.systemService.loadCoachUserList(true, '?filter.withRole=COACH');
+    this.subscriptions.add(this.systemService.getCoachUserList().pipe(skipWhile((item: any) => !item))
+      .subscribe((coachUserList: any) => {
+        this.coachIdList = coachUserList.list;
+      }));
+  }
   search(event: any, isSearch: boolean): void {
     let sortOrder = true;
     if (event && event.sort.direction !== undefined) {

@@ -49,8 +49,8 @@
               <select formControlName="stationId" class="form-control
                 form-control-sm" id="place.stationId" name="place.stationId">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let stationId of placeStationId" [value]="stationId.key" selected="selected">
-                  {{stationId.value}}</option>
+                <option *ngFor="let stationId of placeStationId" [value]="stationId.stationId" selected="selected">
+                  {{stationId.stationName}}</option>
               </select>
             </div>
           </div>

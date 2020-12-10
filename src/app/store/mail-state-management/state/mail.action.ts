@@ -14,6 +14,9 @@ export enum MailActionTypes {
     SAVE_MAIL_CONTENT_PART = 'Save Mail Content Part',
     UPDATE_MAIL_CONTENT_PART = 'Update Mail Content Part',
     DELETE_MAIL_CONTENT_PART_BY_ID = 'Delete Mail Content Part By Id',
+    GET_CUSTOMER_GROUP_LIST_BY_MAIL_DESCRIPTION_ID = 'Fet Customer Group List By Mail Description Id',
+    ASSIGN_CUSTOMER_GROUP_TO_MAIL_DESCRIPTION = 'Assign Customer Group To Mail Description',
+    DELETE_MAIL_DESCRIPTION_CUSTOMER_GROUP = 'Delete Customer Group Of Mail Description'
 }
 
 export class GetMailDescriptionListAction {
@@ -103,5 +106,23 @@ export class UpdateMailContentPartAction {
 export class DeleteMailContentPartByIdAction {
     static readonly type: MailActionTypes = MailActionTypes.DELETE_MAIL_CONTENT_PART_BY_ID;
     constructor(readonly id: number) {
+    }
+}
+
+export class GetCustomerGroupListByMailDescriptionIdAction {
+    static readonly type: MailActionTypes = MailActionTypes.GET_CUSTOMER_GROUP_LIST_BY_MAIL_DESCRIPTION_ID;
+    constructor(readonly force: boolean, readonly mailDescriptionId: any) {
+    }
+}
+
+export class AssignCustomerGroupToMailDescriptionAction {
+    static readonly type: MailActionTypes = MailActionTypes.ASSIGN_CUSTOMER_GROUP_TO_MAIL_DESCRIPTION;
+    constructor(readonly mailDescriptionId: any, readonly groupCode: any) {
+    }
+}
+
+export class DeleteMailDescriptionCustomerGroupAction {
+    static readonly type: MailActionTypes = MailActionTypes.DELETE_MAIL_DESCRIPTION_CUSTOMER_GROUP;
+    constructor(readonly mailDescriptionId: any, readonly groupCode: any) {
     }
 }

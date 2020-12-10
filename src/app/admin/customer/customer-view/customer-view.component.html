@@ -31,7 +31,7 @@
               <select class="form-control form-control-sm" id="placeCode" (change)="changeDropDownValue($event,'place')"
                 formControlName="placeCode">
                 <option *ngFor="let group of placeCode" [value]="group.id">
-                  {{group.value}}</option>
+                  {{group.placeName}}</option>
               </select>
             </div>
           </div>

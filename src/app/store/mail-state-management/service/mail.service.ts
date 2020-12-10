@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
+  AssignCustomerGroupToMailDescriptionAction,
   DeleteContextVariableByIdAction,
   DeleteMailContentPartByIdAction,
   DeleteMailDescriptionByIdAction,
+  DeleteMailDescriptionCustomerGroupAction,
   GetContextVariableByIdAction,
   GetContextVariableListAction,
+  GetCustomerGroupListByMailDescriptionIdAction,
   GetMailContentPartByIdAction,
   GetMailContentPartListAction,
   GetMailDescriptionByIdAction,
@@ -30,6 +33,10 @@ export class MailService {
 
   getMailDescriptionList(): Observable<any> {
     return this.store.select(MailManagementState.getMailDescriptionList);
+  }
+
+  getMailDescriptionDataSourceList(): Observable<any> {
+    return this.store.select(MailManagementState.getMailDescriptionDataSourceList);
   }
 
   getMailDescriptionById(): Observable<any> {
@@ -110,6 +117,18 @@ export class MailService {
 
   deleteMailContentPartById(id: number): Observable<MailManagementState> {
     return this.store.dispatch(new DeleteMailContentPartByIdAction(id));
+  }
+
+  loadCustomerGroupListByMailDescriptionId(force: boolean, mailDescriptionId: any): Observable<MailManagementState> {
+    return this.store.dispatch(new GetCustomerGroupListByMailDescriptionIdAction(force, mailDescriptionId));
+  }
+
+  assignCustomerGroupToMailDescription(mailDescriptionId: any, groupCode: any): Observable<MailManagementState> {
+    return this.store.dispatch(new AssignCustomerGroupToMailDescriptionAction(mailDescriptionId, groupCode));
+  }
+
+  deleteCustomerGroupByMailDescriptionId(mailDescriptionId: any, groupCode: any): Observable<MailManagementState> {
+    return this.store.dispatch(new DeleteMailDescriptionCustomerGroupAction(mailDescriptionId, groupCode));
   }
 
 }

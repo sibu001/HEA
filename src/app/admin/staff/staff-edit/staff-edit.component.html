@@ -208,7 +208,7 @@
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <app-table [keys]="keys" [checkbox]=true [data]="dataSource"
               [totalElement]="rolesData.totalElements" (checkBoxChangeEvent)="roleCheckBoxChangeEvent($event)"
-              id='roleCode' [selectionList]='roleSelectionList'> [isHideAdd]="true"></app-table>
+              id='roleCode' [selectionList]='roleSelectionList' [isHideAdd]="true"></app-table>
           </div>
         </div>
 
@@ -219,7 +219,7 @@
           form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <app-table [keys]="topicKeys" [isHideAdd]="true" [checkbox]=true [data]="topicDataSource"
-              (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)" [totalElement]="topicGroupData.totalElements">
+              (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)"  id='groupCode' [selectionList]='topicGroupSelectionList' [totalElement]="topicGroupData.totalElements">
             </app-table>
           </div>
         </div>
@@ -236,21 +236,6 @@
             <button type="button" class="btn btn-primary" (click)="save()">Save</button>
           </div>
         </div>
-        <!-- <div class="row paddingTop">
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <button type="reset" class="btn btn-primary" (click)='back()'>Cancel</button>
-          </div>
-          <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2">
-          </div>
-          <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="text-align: right;">
-            <button type="button" class="btn btn-primary" *ngIf="id!==undefined&&id!==null" (click)="delete()">Delete</button>
-          </div>
-          <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="text-align:
-            right;">
-            <button type="submit" class="btn btn-primary" (click)="save()">Save</button>
-          </div>
-        </div> -->
-
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar></app-sidebar>

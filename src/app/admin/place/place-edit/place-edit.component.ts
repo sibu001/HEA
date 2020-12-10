@@ -19,7 +19,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
 
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.ZIP_CODE_KEY;
-  public placeStationId: Array<any> = TableColumnData.PLACE_STATION_ID;
+  public placeStationId: Array<any>;
   public timezoneData: Array<any>;
   public dataSource: any;
   public zipData = {
@@ -42,12 +42,21 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.findWeatherStation(true, '');
     this.loadTimeZoneList();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemUtilityService.loadPlaceById(this.id);
       this.loadPlaceById();
     }
+  }
+
+  findWeatherStation(force: boolean, filter: any): void {
+    this.systemUtilityService.loadWeatherStationList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStationList: any) => {
+        this.placeStationId = weatherStationList;
+      }));
   }
 
   findZipCode(event: any): any {

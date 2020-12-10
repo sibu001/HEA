@@ -5,6 +5,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { CustomerError } from '../../customer-state-management/state/customer.action';
+import { MailTransformer } from '../transformer/transformer';
 import {
     GetMailDescriptionListAction,
     GetMailDescriptionByIdAction,
@@ -20,7 +21,10 @@ import {
     GetMailContentPartByIdAction,
     DeleteMailContentPartByIdAction,
     SaveMailContentPartAction,
-    UpdateMailContentPartAction
+    UpdateMailContentPartAction,
+    GetCustomerGroupListByMailDescriptionIdAction,
+    DeleteMailDescriptionCustomerGroupAction,
+    AssignCustomerGroupToMailDescriptionAction
 } from './mail.action';
 import { MailManagementModel } from './mail.model';
 
@@ -33,7 +37,9 @@ import { MailManagementModel } from './mail.model';
         contextVariableList: undefined,
         contextVariable: undefined,
         mailDescriptionList: undefined,
-        mailDescription: undefined
+        mailDescriptionDataSourceList: undefined,
+        mailDescription: undefined,
+        mailDescriptionCustomerGroupList: undefined
     }
 })
 
@@ -46,6 +52,11 @@ export class MailManagementState {
     @Selector()
     static getMailDescriptionList(state: MailManagementModel): any {
         return state.mailDescriptionList;
+    }
+
+    @Selector()
+    static getMailDescriptionDataSourceList(state: MailManagementModel): any {
+        return state.mailDescriptionDataSourceList;
     }
 
     @Selector()
@@ -83,9 +94,13 @@ export class MailManagementState {
             result = this.loginService.performGetWithParams(AppConstant.mailDescription, action.filter)
                 .pipe(
                     tap((response: any) => {
+                        const res = MailTransformer.transformMailDescription(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             mailDescriptionList: response,
+                        });
+                        ctx.patchState({
+                            mailDescriptionDataSourceList: res,
                         });
                     },
                         error => {
@@ -336,6 +351,54 @@ export class MailManagementState {
                     error => {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetCustomerGroupListByMailDescriptionIdAction)
+    getAllRoleListByUserId(ctx: StateContext<MailManagementModel>, action: GetCustomerGroupListByMailDescriptionIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.users + '/' + action.mailDescriptionId + '/' + AppConstant.roles)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        mailDescriptionCustomerGroupList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+
+    @Action(DeleteMailDescriptionCustomerGroupAction)
+    deleteUserRole(ctx: StateContext<MailManagementModel>, action: DeleteMailDescriptionCustomerGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.users + '/' + action.mailDescriptionId + '/' + AppConstant.roles + '/' + action.groupCode)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(AssignCustomerGroupToMailDescriptionAction)
+    saveRole(ctx: StateContext<MailManagementModel>, action: AssignCustomerGroupToMailDescriptionAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.users + '/' + action.mailDescriptionId + '/' + AppConstant.roles + '/' + action.groupCode)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 

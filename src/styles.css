@@ -1152,9 +1152,9 @@ table.jqplot-table-legend {
 }
 
 .show-value {
-  background: none;
-  border: none;
-  box-shadow: none;
+  background: none!important;
+  border: none!important;
+  box-shadow: none!important;
 }
 
 @media (min-width: 100px) and (max-width: 380px) {
@@ -1199,4 +1199,22 @@ table.jqplot-table-legend {
   text-align: left;
   padding-left: 40px !important;
   padding-top: 35px;
+}
+
+@media (min-width: 100px) and (max-width: 350px) {
+  table.jqplot-table-legend {
+    bottom: -60px !important;
+  }
+  .chartDiv > div > :nth-child(2) {
+    margin-top: 60px !important;
+  }
+}
+
+@media (min-width: 351px) and (max-width: 480px) {
+  table.jqplot-table-legend {
+    bottom: -40px !important;
+  }
+  .chartDiv > div > :nth-child(2) {
+    margin-top: 40px !important;
+  }
 }

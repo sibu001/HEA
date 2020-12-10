@@ -76,9 +76,6 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.weatherStationFilter.page = event;
-    // .set('disableTotalSize', 'false')
-    // .set('filter.homeowner', 'false')
-    // .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))

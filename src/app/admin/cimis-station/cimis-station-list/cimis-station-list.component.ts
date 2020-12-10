@@ -27,7 +27,6 @@ export class CimisStationListComponent implements OnInit, OnDestroy {
   stationForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: AdminFilter;
-  public stationIds: Array<any> = TableColumnData.PLACE_STATION_ID;
   public baseTemp: Array<any> = TableColumnData.BASE_TEMPERATURE;
   constructor(public fb: FormBuilder,
     private readonly systemMeasurementService: SystemMeasurementService,

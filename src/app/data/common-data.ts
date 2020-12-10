@@ -90,26 +90,6 @@ export class TableColumnData {
         { id: 85, value: 'PG&amp;E account pending (85)' },
     ];
 
-    static readonly PLACE_CODE: Array<any> = [
-        { id: 'ATHERTON', value: 'Atherton' },
-        { id: 'CENTRAL VALLEY', value: 'Central Valley' },
-        { id: 'ALAMEDA', value: 'SF East Bay' },
-        { id: 'CLAREMONT', value: 'Claremont' },
-        { id: 'LOS ALTOS', value: 'Los Altos' },
-        { id: 'LOS ALTOS HILLS', value: 'Los Altos Hills' },
-        { id: 'MONTE SERENO', value: 'Monte Sereno' },
-        { id: 'MOUNTAIN VIEW', value: 'Mountain View' },
-        { id: 'NORTHCV', value: 'North Central Valley' },
-        { id: 'OTHER', value: 'NorCal' },
-        { id: 'PORTOLA VALLEY', value: 'Portola Valley' },
-        { id: 'SF BAY AREA', value: 'SF Bay Area' },
-        { id: 'SOCAL', value: 'SoCal' },
-        { id: 'SUNNYVALE', value: 'Sunnyvale' },
-        { id: 'TST-US', value: 'Anytown USA' },
-        { id: 'VERMONT', value: 'Vermont' },
-        { id: 'WOODSIDE', value: 'Woodside' },
-    ];
-
     static readonly ROLE_KEY: Array<TABLECOLUMN> = [
         { displayName: 'Role Code', key: 'roleCode', isEdit: true },
         { displayName: 'Permanent', key: 'permanent' },
@@ -142,35 +122,6 @@ export class TableColumnData {
         { displayName: 'Weather Station', key: 'weatherStation', sort: 'weatherStation' },
         { displayName: 'Costumers', key: 'costumers', sort: 'customers' },
 
-    ];
-
-    static readonly PLACE_STATION_ID: Array<any> = [
-        { key: 'KACV', value: 'CZ 01(Arcata)(KACV)' }
-        , { key: 'KCIC', value: 'Chico Municipal Airport(North Central Valley)(KCIC)' }
-        , { key: 'KCQT', value: 'CZ 06(Los Angeles Downtown)(KCQT)' }
-        , { key: 'KFAT', value: 'CZ 13(Fresno Yosemite International)(KFAT)' }
-        , { key: 'KHAF', value: 'Half Moon Bay AirPort(KHAF)' }
-        , { key: 'KLVK', value: 'Livermore Municipal Airport(instead of KCALIVER9)(KLVK)' }
-        , { key: 'KMHS', value: 'CZ 16(Mount Shasta)(KMHS)' }
-        , { key: 'KMPV', value: 'Vermont(KMPV)' }
-        , { key: 'KMYV', value: 'Olivehurst, CA(North Central Valley)(KMYV)' }
-        , { key: 'KNID', value: 'CZ 14(China Lake)(KNID)' }
-        , { key: 'KNJK', value: 'CZ 15(El Centro Naval Air Facility)(KNJK)' }
-        , { key: 'KOAK', value: 'CZ 03(Metro Oakland International)(KOAK)' }
-        , { key: 'KONT', value: 'Ontario airport in SoCal(KONT)' }
-        , { key: 'KRAL', value: 'CZ 10(Riverside Municipal)(KRAL)' }
-        , { key: 'KRBL', value: 'CZ 11(Red Bluff Municipal)(KRBL)' }
-        , { key: 'KSAC', value: 'CZ 12(Sacramento Executive)(KSAC)' }
-        , { key: 'KSAN', value: 'CZ 07(San Diego International - Lindbergh)(KSAN)' }
-        , { key: 'KSFO', value: 'San Francisco International(KSFO)' }
-        , { key: 'KSJC', value: 'CZ 04(San Jose Airport)(KSJC)' }
-        , { key: 'KSMX', value: 'CZ 05(Santa Maria Public Airport)(KSMX)' }
-        , { key: 'KSNA', value: 'CZ 08(John Wayne - Orange County)(KSNA)' }
-        , { key: 'KSNS', value: 'Salinas Municipal Airport(KSNS)' }
-        , { key: 'KSTS', value: 'CZ 02(Sonoma County)(KSTS)' }
-        , { key: 'KVTMONTP2', value: 'Vermont(old)(KVTMONTP2)' }
-        , { key: 'RECYCLE-CZ12', value: 'C12 TMY for CEC "Urban Footprint" program(RECYCLE - CZ12)' }
-        , { key: 'RECYCLE-US', value: 'Artificial weather data for TST accounts(RECYCLE - US)' }
     ];
 
     static readonly COMPARISON_CODE_DROPDOWN_DATA: Array<any> = [
@@ -1070,12 +1021,12 @@ export class TableColumnData {
     ];
 
     static readonly MAIL_DESC_KEYS: Array<TABLECOLUMN> = [
-        { key: 'id', sort: 'id', displayName: 'ID', isEdit: true },
-        { key: 'mailName', sort: 'mailName', displayName: 'Mail Name' },
-        { key: 'period', sort: 'period', displayName: 'Period' },
-        { key: 'periodDay', sort: 'periodDay', displayName: 'Period' },
-        { key: 'runtime', sort: 'runtime', displayName: 'Runtime' },
-        { key: 'subject', sort: 'subject', displayName: 'Subject' },
+        { key: 'id', sort: 'id', displayName: 'ID' },
+        { key: 'mailName', sort: 'mailName', displayName: 'Mail Name', isEdit: true },
+        { key: 'mailPeriod', sort: 'mailPeriod', displayName: 'Period', isEdit: true },
+        { key: 'periodDayRule', sort: 'periodDayRule', displayName: 'Period Day' },
+        { key: 'lastMaxProcessedTime', sort: 'lastMaxProcessedTime', displayName: 'Runtime' },
+        { key: 'subjectTemplate', sort: 'subjectTemplate', displayName: 'Subject' },
     ];
 
     static readonly CONTENT_PART_KEYS: Array<TABLECOLUMN> = [

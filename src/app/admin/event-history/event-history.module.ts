@@ -12,6 +12,8 @@ import { CustomerManagementState } from 'src/app/store/customer-state-management
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { AdministrativeManagementState } from 'src/app/store/administrative-state-management/state/administrative.state';
 
 @NgModule({
   imports: [
@@ -24,10 +26,11 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
-      SystemUtilityManagementState
+      SystemUtilityManagementState,
+      AdministrativeManagementState
     ]),
   ],
   declarations: [EventHistoryListComponent, EventHistoryEditComponent],
-  providers: [CustomerService, SystemUtilityService]
+  providers: [CustomerService, SystemUtilityService, AdministrativeService]
 })
 export class EventHistoryModule { }

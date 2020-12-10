@@ -1059,7 +1059,7 @@ export class CustomerManagementState {
     @Action(SetNewPasswordAction)
     setNewPassword(ctx: StateContext<CustomerManagementModel>, action: SetNewPasswordAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPostWithParam('', AppConstant.users + '/' + action.userId + '/' + AppConstant.saveNewPassword, action.params)
+        return this.loginService.performPostWithParam({ 'password': action.params }, AppConstant.users + '/' + action.userId + '/' + AppConstant.saveNewPassword, null)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

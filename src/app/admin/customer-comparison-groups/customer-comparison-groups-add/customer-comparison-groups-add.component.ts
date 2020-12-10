@@ -17,7 +17,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit {
   id: any;
   customerComparisonGroupForm: FormGroup;
   isForce = false;
-  public weatherStationIds: Array<any> = TableColumnData.PLACE_STATION_ID;
+  public weatherStationIds: Array<any>;
   public houseSizeData: Array<any> = TableColumnData.HOUSE_SIZE_DATA;
   public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
   public houseTypeData: Array<any> = TableColumnData.HOUSE_TYPE_DATA;
@@ -35,6 +35,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit {
     });
   }
   ngOnInit() {
+    this.findWeatherStation(true, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemUtilityService.loadCustomerComparisonGroupById(this.id);
@@ -51,6 +52,16 @@ export class CustomerComparisonGroupsAddComponent implements OnInit {
         this.setForm(credentialType);
       }));
   }
+
+  findWeatherStation(force: boolean, filter: any): void {
+    this.systemUtilityService.loadWeatherStationList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStationList: any) => {
+        this.weatherStationIds = weatherStationList;
+      }));
+  }
+
+
   setForm(event: any) {
     this.customerComparisonGroupForm = this.formBuilder.group({
       comparisonCode: [event !== undefined ? event.comparisonCode : 'Cooling'],

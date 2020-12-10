@@ -16,7 +16,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
 
   id: any;
   factorForm: FormGroup;
-  public placeData: Array<any> = TableColumnData.PLACE_CODE;
+  public placeData: Array<any>;
   public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
   public calculationType: Array<any> = TableColumnData.CALCULATION_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
@@ -36,6 +36,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.findPlace(true, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemUtilityService.loadFactorById(this.id);
@@ -60,6 +61,14 @@ export class FactorEditComponent implements OnInit, OnDestroy {
       isActive: [event !== undefined ? event.isActive : ''],
       comments: [event !== undefined ? event.comments : '']
     });
+  }
+
+  findPlace(force: boolean, filter: string): any {
+    this.systemUtilityService.loadPlaceList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
+      .subscribe((placeList: any) => {
+        this.placeData = placeList;
+      }));
   }
 
   goToDebug() {

@@ -21,7 +21,7 @@
               <select id="place" class="form-control" formControlName="place">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let place of placeData" [value]="place.id">
-                  {{ place.value }}
+                  {{ place.placeName }}
                 </option>
               </select>
             </div>

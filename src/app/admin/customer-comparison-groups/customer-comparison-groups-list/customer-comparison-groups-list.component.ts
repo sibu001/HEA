@@ -18,7 +18,7 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
 
   public keys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_COMPARISON_GROUP_COLUMN_DATA;
   public dataSource: any;
-  public weatherStationIds: Array<any> = TableColumnData.PLACE_STATION_ID;
+  public weatherStationIds: Array<any>;
   public houseSizeData: Array<any> = TableColumnData.HOUSE_SIZE_DATA;
   public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
   public customerComparisonGroupData = {
@@ -44,6 +44,7 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
 
   ngOnInit() {
     this.findCustomerComparisonGroup(this.force, '');
+    this.findWeatherStation(true, '');
   }
 
   findCustomerComparisonGroup(force: boolean, filter: string): void {
@@ -53,7 +54,14 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
         this.customerComparisonGroupData.content = customerComparisonGroupList;
         this.dataSource = [...this.customerComparisonGroupData.content];
       }));
+  }
 
+  findWeatherStation(force: boolean, filter: any): void {
+    this.systemUtilityService.loadWeatherStationList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStationList: any) => {
+        this.weatherStationIds = weatherStationList;
+      }));
   }
 
   search(event: any): void {

@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Data, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { GoogleMapComponent } from 'src/app/common/google-map/google-map.component';
@@ -18,6 +18,7 @@ import { StaffNoteComponent } from '../staff-note/staff-note.component';
 import { HttpParams } from '@angular/common/http';
 import { ErrorStateMatcher } from '@angular/material';
 import { MustMatch } from 'src/app/common/password.validator';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -41,7 +42,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   customerGroupList: any;
   coachUserList: any;
   pgeHasPoolDisabled = false;
-  placeCode: Array<any> = TableColumnData.PLACE_CODE;
+  placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
   credentialsKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_CREDENTIAL_KEY;
   public credentialsDataSource: any;
@@ -95,6 +96,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
     private readonly customerService: CustomerService,
+    private readonly systemUtilityService: SystemUtilityService,
     private readonly location: Location,
     private readonly router: Router,
     private datePipe: DatePipe,
@@ -106,7 +108,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.setPasswordForm();
+    this.findPlace(true, '');
     this.loadCustomerGroup();
     this.setForm(undefined);
     if (this.id !== undefined) {
@@ -118,6 +120,14 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       this.customerService.loadCustomerById(this.id);
       this.loadCustomerById();
     }
+  }
+
+  findPlace(force: boolean, filter: string): any {
+    this.systemUtilityService.loadPlaceList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
+      .subscribe((placeList: any) => {
+        this.placeCode = placeList;
+      }));
   }
   loadCustomerById() {
     this.subscriptions.add(this.customerService.getCustomerById().pipe(skipWhile((item: any) => !item))
@@ -249,7 +259,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         registrationAuthentication: [event !== undefined ? event.user.registrationAuthentication : ''],
         restorePasswordKey: [event !== undefined ? event.user.restorePasswordKey : ''],
         restorePasswordDate: [event !== undefined ? event.user.restorePasswordDate : ''],
-        lastSuccessfulUtilityReadDate: [event !== undefined ?(this.datePipe.transform(event.user.lastSuccessfulUtilityReadDate, 'MM/dd/yyyy h:mm:ss'))  : ''],
+        lastSuccessfulUtilityReadDate: [event !== undefined ? (this.datePipe.transform(event.user.lastSuccessfulUtilityReadDate, 'MM/dd/yyyy h:mm:ss')) : ''],
         passwordStrengthLevel: [event !== undefined ? event.user.passwordStrengthLevel : ''],
         passwordNeedChange: [event !== undefined ? event.user.passwordNeedChange : ''],
         customerViewConfigurationId: [event !== undefined ? event.user.customerViewConfigurationId : ''],
@@ -326,9 +336,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   }
 
   saveNewPassword(password: any) {
-    const params = new HttpParams()
-      .set('password', password);
-    this.subscriptions.add(this.customerService.setNewPassword(this.id, params).pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.customerService.setNewPassword(this.id, password).pipe(skipWhile((item: any) => !item))
       .subscribe((passwordValidation: any) => {
         console.log(passwordValidation);
       }));

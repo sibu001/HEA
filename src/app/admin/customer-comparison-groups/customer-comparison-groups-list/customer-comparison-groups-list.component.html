@@ -41,8 +41,8 @@
                 formControlName="weatherStationId">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let stationId of weatherStationIds"
-                  [value]="stationId.key">
-                  {{stationId.value}}
+                  [value]="stationId.stationId">
+                  {{stationId.stationName}}
                 </option>
               </select>
             </div>

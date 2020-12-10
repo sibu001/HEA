@@ -18,6 +18,7 @@ import { StackTraceComponent } from './stack-trace/stack-trace.component';
 import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
 import { MailManagementState } from 'src/app/store/mail-state-management/state/mail.state';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
+import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 
 @NgModule({
   imports: [
@@ -42,7 +43,7 @@ import { MailService } from 'src/app/store/mail-state-management/service/mail.se
     MailDescriptionPreviewComponent,
     StackTraceComponent
   ],
-  providers: [SystemService, MailService],
+  providers: [SystemService, MailService, CustomerService],
   entryComponents: [StackTraceComponent]
 })
 export class MailDescriptionModule { }

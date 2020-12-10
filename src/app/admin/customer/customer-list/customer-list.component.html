@@ -43,23 +43,8 @@
                             <select class="form-control form-control-sm" id="customerPlace"
                                 formControlName="customerPlace">
                                 <option value="" selected="selected"></option>
-                                <option value="ALAMEDA">SF East Bay</option>
-                                <option value="ATHERTON">Atherton</option>
-                                <option value="CENTRAL VALLEY">Central Valley</option>
-                                <option value="CLAREMONT">Claremont</option>
-                                <option value="LOS ALTOS">Los Altos</option>
-                                <option value="LOS ALTOS HILLS">Los Altos Hills</option>
-                                <option value="MONTE SERENO">Monte Sereno</option>
-                                <option value="MOUNTAIN VIEW">Mountain View</option>
-                                <option value="NORTHCV">North Central Valley</option>
-                                <option value="OTHER">NorCal</option>
-                                <option value="PORTOLA VALLEY">Portola Valley</option>
-                                <option value="SF BAY AREA">SF Bay Area</option>
-                                <option value="SOCAL">SoCal</option>
-                                <option value="SUNNYVALE">Sunnyvale</option>
-                                <option value="TST-US">Anytown USA</option>
-                                <option value="VERMONT">Vermont</option>
-                                <option value="WOODSIDE">Woodside</option>
+                                <option *ngFor="let placeData of placeList" [value]="placeData.id">
+                                    {{placeData.placeName}}</option>
                             </select>
                         </div>
                     </div>

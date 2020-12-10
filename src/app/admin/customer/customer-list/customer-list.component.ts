@@ -13,6 +13,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { Transformer } from 'src/app/store/customer-state-management/transformer/transformer';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { AddFileComponent } from '../add-file/add-file.component';
 import { CustomerEventTypeComponent } from '../customer-event-type/customer-event-type.component';
@@ -49,9 +50,11 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   public fileUploadForm: FormGroup = this.fb.group({
     customerFile: ['', Validators.required]
   });
+  public placeList: any = [];
   constructor(private fb: FormBuilder,
     private readonly router: Router,
     private readonly systemService: SystemService,
+    private readonly systemUtilityService: SystemUtilityService,
     private readonly customerService: CustomerService,
     private loginService: LoginService,
     public dialog: MatDialog,
@@ -64,6 +67,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       this.adminFilter = new AdminFilter();
     }
     this.setUpForm(this.adminFilter.customerFilter.formValue);
+    this.findPlace(true, '');
     this.systemService.loadCustomerGroupList(true, '');
     this.systemService.loadViewConfigurationList(true);
     this.systemService.loadProgramGroupsList(true, '');
@@ -99,6 +103,14 @@ export class CustomerListComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+  }
+
+  findPlace(force: boolean, filter: string): any {
+    this.systemUtilityService.loadPlaceList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
+      .subscribe((placeList: any) => {
+        this.placeList = placeList;
+      }));
   }
   findCustomer(event: Page, isSearch: boolean) {
     this.adminFilter.customerFilter.formValue = this.searchForm.value;

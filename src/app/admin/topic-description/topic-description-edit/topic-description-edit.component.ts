@@ -117,10 +117,6 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
 
   ReInitTopic(): any { }
 
-  recalculate(): any {
-
-  }
-
   addTopicPanes(): any {
     this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit']);
   }

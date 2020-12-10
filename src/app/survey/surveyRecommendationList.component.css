@@ -1,6 +1,12 @@
 section.space-top{
     margin-top: 3em;
 }
+
+@media (min-width: 767px) and (max-width: 1092px) {
+    section.space-top {
+      margin-top: 6em;
+    }
+  }
 .backcolor{
     background-color: #fbfbfb;
     padding: 18px 19px 8px 19px;

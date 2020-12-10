@@ -25,7 +25,7 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
   degreeDayForm: FormGroup;
   public force = false;
   public adminFilter: AdminFilter;
-  public stationIds: Array<any> = TableColumnData.PLACE_STATION_ID;
+  public stationIds: Array<any>;
   public baseTemp: Array<any> = TableColumnData.BASE_TEMPERATURE;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
@@ -42,8 +42,17 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.findWeatherStation(true, '');
     this.setUpForm(this.adminFilter.degreeDaysFilter.formValue);
     this.search(this.adminFilter.degreeDaysFilter.page, false);
+  }
+
+  findWeatherStation(force: boolean, filter: any): void {
+    this.systemUtilityService.loadWeatherStationList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStationList: any) => {
+        this.stationIds = weatherStationList;
+      }));
   }
 
   setUpForm(event: any) {

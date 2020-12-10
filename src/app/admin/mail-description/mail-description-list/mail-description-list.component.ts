@@ -54,10 +54,6 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/mailDescription/mailDescriptionEdit']);
   }
 
-  goToEditMailDescriptions(): any {
-    this.router.navigate(['/admin/mailDescription/mailDescriptionEdit'], { queryParams: { id: this.id } });
-  }
-
   disableFilter(): any {
     this.filter = !this.filter;
   }
@@ -78,10 +74,10 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
     this.adminFilter.mailDescriptionFilter.formValue = this.mailForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     this.mailService.loadMailDescriptionList(force, filter);
-    this.subscriptions.add(this.mailService.getMailDescriptionList().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.mailService.getMailDescriptionDataSourceList().pipe(skipWhile((item: any) => !item))
       .subscribe((mailDescriptionList: any) => {
-        this.mailData.content = mailDescriptionList.list;
-        this.mailData.totalElements = mailDescriptionList.totalSize;
+        this.mailData.content = mailDescriptionList.data;
+        // this.mailData.totalElements = mailDescriptionList.data.length;
         this.dataSource = [...this.mailData.content];
       }));
   }
@@ -92,24 +88,18 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.mailDescriptionFilter.page = event;
+    // .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
       .set('mailDescriptionCode', '')
-      .set('filter.active', (this.mailForm.value.isActive !== null ? this.mailForm.value.isActive : ''))
-      .set('filter.subjectTemplate', (this.mailForm.value.subject !== null ? this.mailForm.value.subject : ''))
-      .set('filter.mailPeriod', (this.mailForm.value.mailPeriod !== null ? this.mailForm.value.mailPeriod : ''));
+      .set('active', (this.mailForm.value.isActive !== null ? this.mailForm.value.isActive : true))
+      .set('subjectTemplate', (this.mailForm.value.subject !== null ? this.mailForm.value.subject : ''))
+      .set('mailPeriod', (this.mailForm.value.mailPeriod !== null ? this.mailForm.value.mailPeriod : ''));
     this.findMailDescription(true, params);
-  }
-
-  addMailDescription() {
-    this.router.navigate(['admin/mailDescription/mailDescriptionEdit']);
   }
 
   ngOnDestroy(): void {

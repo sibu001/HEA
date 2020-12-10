@@ -3,8 +3,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -15,12 +17,13 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDestroy {
   id: any;
   customerComparisonGroupForm: FormGroup;
-  public weatherStationIds: Array<any> = TableColumnData.PLACE_STATION_ID;
+  public weatherStationIds: Array<any>;
   public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
   public yesNoData: Array<any> = TableColumnData.YES_NO_DATA;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
+    private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
     private readonly location: Location) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -29,9 +32,18 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   }
 
   ngOnInit() {
+    this.findWeatherStation(false,'');
     this.setForm(undefined);
     if (this.id !== undefined) {
     }
+  }
+
+  findWeatherStation(force: boolean, filter: any): void {
+    this.systemUtilityService.loadWeatherStationList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStationList: any) => {
+        this.weatherStationIds = weatherStationList;
+      }));
   }
 
   findProgramGroup(): void {

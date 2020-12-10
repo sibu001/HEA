@@ -8,6 +8,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -28,7 +29,6 @@ export class CimisMeasurementsListComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
   public adminFilter: AdminFilter;
-  public stationIds: Array<any> = TableColumnData.PLACE_STATION_ID;
   public baseTemp: Array<any> = TableColumnData.BASE_TEMPERATURE;
   constructor(public fb: FormBuilder,
     private readonly systemMeasurementService: SystemMeasurementService,

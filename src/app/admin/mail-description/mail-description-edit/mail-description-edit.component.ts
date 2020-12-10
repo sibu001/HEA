@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
@@ -6,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
@@ -43,11 +42,17 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   };
   isForce = false;
   userId: any;
+  customerGroupCheckBox: any;
+  selectedCustomerGroup: any;
+  customerGroupList: any = [];
+  public customerGroupSelectionList: any = [];
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly fb: FormBuilder,
     private readonly mailService: MailService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly customerService: CustomerService,
+    private readonly systemService: SystemService,
     private readonly router: Router,
     private readonly dialog: MatDialog,
     private readonly el: ElementRef) {
@@ -57,6 +62,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadCustomerGroup(false, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.mailService.loadMailDescriptionById(this.id);
@@ -180,6 +186,60 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
       this.validateForm();
     }
   }
+
+  findUserCustomerGroup(mailDescriptionId: any) {
+    this.subscriptions.add(this.customerService.loadUserCustomerGroupList(mailDescriptionId).pipe(skipWhile((item: any) => !item))
+      .subscribe((customerGroupList: any) => {
+        this.customerGroupList = customerGroupList.customerManagement.userCustomerGroupList.data.list;
+        customerGroupList.customerManagement.userCustomerGroupList.data.list.forEach(element => {
+          this.customerGroupSelectionList.push(element.groupCode);
+        });
+        this.loadCustomerGroup(false, '');
+      }));
+  }
+
+  loadCustomerGroup(force: boolean, filter: any) {
+    this.systemService.loadCustomerGroupList(force, filter);
+    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerGroupList: any) => {
+        this.customerGroupData.content = customerGroupList;
+        this.customerGroupDataSource = [...this.customerGroupData.content];
+      }));
+  }
+  checkCustomerGroup() {
+    for (let index = 0; index < this.customerGroupCheckBox.length; index++) {
+      const element = this.customerGroupCheckBox[index];
+      const i = this.customerGroupList.findIndex((item: any) => item.customerGroupId === element.customerGroupId);
+      if (i !== -1) {
+        this.customerGroupList.splice(i, 1);
+        const j = this.selectedCustomerGroup.findIndex((item2: any) => item2.customerGroupId === element.customerGroupId);
+        if (j !== -1) {
+          this.selectedCustomerGroup.splice(j, 1);
+        }
+      }
+    }
+    this.deleteCustomerGroupOfMailDescription(this.customerGroupList);
+    this.assignCustomerGroupToMailDescription(this.selectedCustomerGroup);
+    this.findUserCustomerGroup(this.id);
+  }
+  assignCustomerGroupToMailDescription(customerGroupList: any) {
+    customerGroupList.forEach(element => {
+      this.mailService.loadCustomerGroupListByMailDescriptionId(this.id, element.customerGroupId);
+    });
+  }
+
+  deleteCustomerGroupOfMailDescription(deleteList: any) {
+    deleteList.forEach(element => {
+      this.mailService.deleteCustomerGroupByMailDescriptionId(this.id, element.customerGroupId);
+    });
+  }
+
+  customerGroupCheckBoxChangeEvent(event: any) {
+    this.selectedCustomerGroup = [...event];
+    this.customerGroupCheckBox = event;
+  }
+
+
   validateForm() {
     for (const key of Object.keys(this.topicForm.controls)) {
       if (this.topicForm.controls[key].invalid) {

@@ -1,6 +1,11 @@
 section.space-top {
   margin-top: 5em;
 }
+@media (min-width: 767px) and (max-width: 1092px) {
+  section.space-top {
+    margin-top: 8em;
+  }
+}
 div.factoid {
   color: #4550a1;
   font-size: 16px;

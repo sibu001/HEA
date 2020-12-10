@@ -48,8 +48,8 @@
         <select class="form-control textarea_scroll" rows="3" id="stationId" formControlName='stationId'>
           <option value="" selected="selected"></option>
           <option *ngFor="let stationId of placeStationId"
-            [value]="stationId.key" selected="selected">
-            {{stationId.value}}</option>
+            [value]="stationId.stationId" selected="selected">
+            {{stationId.stationName}}</option>
         </select>
       </div>
     </div>

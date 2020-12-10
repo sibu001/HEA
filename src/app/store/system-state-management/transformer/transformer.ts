@@ -16,5 +16,4 @@ export class SystemTransformer {
         });
         return dataSourceList;
     }
-
 }

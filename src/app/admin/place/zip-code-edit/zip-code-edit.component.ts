@@ -13,7 +13,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   styleUrls: ['./zip-code-edit.component.css']
 })
 export class ZipCodeEditComponent implements OnInit, OnDestroy {
-  public placeStationId: Array<any> = TableColumnData.PLACE_STATION_ID;
+  public placeStationId: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
   zipForm: FormGroup;
 
@@ -23,6 +23,7 @@ export class ZipCodeEditComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+    this.findWeatherStation(true, '');
     this.setForm(undefined);
   }
 
@@ -37,6 +38,13 @@ export class ZipCodeEditComponent implements OnInit, OnDestroy {
     });
   }
 
+  findWeatherStation(force: boolean, filter: any): void {
+    this.systemUtilityService.loadWeatherStationList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStationList: any) => {
+        this.placeStationId = weatherStationList;
+      }));
+  }
 
   save() {
     if (this.zipForm.valid) {

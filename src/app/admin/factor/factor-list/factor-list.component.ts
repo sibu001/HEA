@@ -25,7 +25,7 @@ export class FactorListComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0,
   };
-  public placeData: Array<any> = TableColumnData.PLACE_CODE;
+  public placeData: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
   public adminFilter: AdminFilter;
@@ -44,6 +44,7 @@ export class FactorListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.findPlace(true, '');
     this.setUpForm(this.adminFilter.factorFilter.formValue);
     this.search(this.adminFilter.factorFilter.page, false);
   }
@@ -55,6 +56,15 @@ export class FactorListComponent implements OnInit, OnDestroy {
   addFactor(): any {
     this.router.navigate(['/admin/factor/factorEdit']);
   }
+
+  findPlace(force: boolean, filter: string): any {
+    this.systemUtilityService.loadPlaceList(force, filter);
+    this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
+      .subscribe((placeList: any) => {
+        this.placeData = placeList;
+      }));
+  }
+
 
   setUpForm(event: any) {
     this.factorForm = this.fb.group({
