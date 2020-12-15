@@ -4,6 +4,7 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { UsageHistoryTransformer } from '../transformer/transformer';
 import {
     DeleteShareMyDataByIdAction,
     GetShareMyDataListAction,
@@ -260,24 +261,19 @@ export class UsageHistoryManagementState {
 
     // Gas Action
     @Action(GetGasListAction)
-    getGasListAction(
-        ctx: StateContext<UsageHistoryManagementModel>,
-        action: GetGasListAction
-    ): Actions {
-        const force: boolean =
-            action.force ||
-            UsageHistoryManagementState.getGasList(ctx.getState()) === undefined;
+    getGasListAction(ctx: StateContext<UsageHistoryManagementModel>, action: GetGasListAction): Actions {
+        const force: boolean = action.force || UsageHistoryManagementState.getGasList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService
-                .performGet(AppConstant.gasList + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.gasList, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
+                            const res = UsageHistoryTransformer.transformGasList(response);
                             document.getElementById('loader').classList.remove('loading');
                             ctx.patchState({
-                                gasList: response,
+                                gasList: res,
                             });
                         },
                         (error) => {
@@ -361,24 +357,19 @@ export class UsageHistoryManagementState {
 
     // Gas Charge Action
     @Action(GetGasChargeListAction)
-    getGasChargeListAction(
-        ctx: StateContext<UsageHistoryManagementModel>,
-        action: GetGasChargeListAction
-    ): Actions {
-        const force: boolean =
-            action.force ||
-            UsageHistoryManagementState.getGasChargeList(ctx.getState()) === undefined;
+    getGasChargeListAction(ctx: StateContext<UsageHistoryManagementModel>, action: GetGasChargeListAction): Actions {
+        const force: boolean = action.force || UsageHistoryManagementState.getGasChargeList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService
-                .performGet(AppConstant.gasChargeList + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.gasList, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
                             document.getElementById('loader').classList.remove('loading');
+                            const res = UsageHistoryTransformer.transformGasChargeList(response);
                             ctx.patchState({
-                                gasChargeList: response,
+                                gasChargeList: res,
                             });
                         },
                         (error) => {
@@ -462,18 +453,12 @@ export class UsageHistoryManagementState {
 
     // Gas Smart Meter Action
     @Action(GetGasSmartMeterListAction)
-    getGasSmartMeterListAction(
-        ctx: StateContext<UsageHistoryManagementModel>,
-        action: GetGasSmartMeterListAction
-    ): Actions {
-        const force: boolean =
-            action.force ||
-            UsageHistoryManagementState.getGasSmartMeterList(ctx.getState()) === undefined;
+    getGasSmartMeterListAction(ctx: StateContext<UsageHistoryManagementModel>, action: GetGasSmartMeterListAction): Actions {
+        const force: boolean = action.force || UsageHistoryManagementState.getGasSmartMeterList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService
-                .performGet(AppConstant.gasSmartMeterList + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/' + AppConstant.smartMeterGas, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
@@ -498,7 +483,7 @@ export class UsageHistoryManagementState {
         action: GetGasSmartMeterByIdAction
     ): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.gasSmartMeter + '/' + action.id).pipe(
+        return this.loginService.performGet(AppConstant.smartMeterGas + '/' + action.id).pipe(
             tap(
                 (response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -521,7 +506,7 @@ export class UsageHistoryManagementState {
     ): Actions {
         document.getElementById('loader').classList.add('loading');
         return this.loginService
-            .performDelete(AppConstant.gasSmartMeter + '/' + action.id)
+            .performDelete(AppConstant.smartMeterGas + '/' + action.id)
             .pipe(
                 tap(
                     (response: any) => {
@@ -543,7 +528,7 @@ export class UsageHistoryManagementState {
     ): Actions {
         document.getElementById('loader').classList.add('loading');
         return this.loginService
-            .performPut(action.gasSmartMeter, AppConstant.gasSmartMeter + '/' + action.id)
+            .performPut(action.gasSmartMeter, AppConstant.smartMeterGas + '/' + action.id)
             .pipe(
                 tap(
                     (response: any) => {
@@ -563,24 +548,19 @@ export class UsageHistoryManagementState {
 
     // Electricity action
     @Action(GetElectricityListAction)
-    getElectricityListAction(
-        ctx: StateContext<UsageHistoryManagementModel>,
-        action: GetElectricityListAction
-    ): Actions {
-        const force: boolean =
-            action.force ||
-            UsageHistoryManagementState.getElectricityList(ctx.getState()) === undefined;
+    getElectricityListAction(ctx: StateContext<UsageHistoryManagementModel>, action: GetElectricityListAction): Actions {
+        const force: boolean = action.force || UsageHistoryManagementState.getElectricityList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService
-                .performGet(AppConstant.electricityList + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.electricity, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
                             document.getElementById('loader').classList.remove('loading');
+                            const res = UsageHistoryTransformer.transformGasList(response);
                             ctx.patchState({
-                                gasList: response,
+                                electricityList: res,
                             });
                         },
                         (error) => {
@@ -664,18 +644,12 @@ export class UsageHistoryManagementState {
 
     // Electricity Charge Action
     @Action(GetElectricityChargeListAction)
-    getElectricityChargeListAction(
-        ctx: StateContext<UsageHistoryManagementModel>,
-        action: GetElectricityChargeListAction
-    ): Actions {
-        const force: boolean =
-            action.force ||
-            UsageHistoryManagementState.getElectricityChargeList(ctx.getState()) === undefined;
+    getElectricityChargeListAction(ctx: StateContext<UsageHistoryManagementModel>, action: GetElectricityChargeListAction): Actions {
+        const force: boolean = action.force || UsageHistoryManagementState.getElectricityChargeList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService
-                .performGet(AppConstant.electricityChargeList + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.electricity, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
@@ -766,18 +740,12 @@ export class UsageHistoryManagementState {
 
     // Electricity Smart Meter Action
     @Action(GetElectricitySmartMeterListAction)
-    getElectricitySmartMeterListAction(
-        ctx: StateContext<UsageHistoryManagementModel>,
-        action: GetElectricitySmartMeterListAction
-    ): Actions {
-        const force: boolean =
-            action.force ||
-            UsageHistoryManagementState.getElectricitySmartMeterList(ctx.getState()) === undefined;
+    getElectricitySmartMeterListAction(ctx: StateContext<UsageHistoryManagementModel>, action: GetElectricitySmartMeterListAction): Actions {
+        const force: boolean = action.force || UsageHistoryManagementState.getElectricitySmartMeterList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService
-                .performGet(AppConstant.electricitySmartMeterList + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/' + AppConstant.smartMeterElectric, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
@@ -865,22 +833,14 @@ export class UsageHistoryManagementState {
             );
     }
 
-
-
     // Electricity Daily Smart Meter Action
     @Action(GetElectricityDailySmartMeterListAction)
-    getElectricityDailySmartMeterListAction(
-        ctx: StateContext<UsageHistoryManagementModel>,
-        action: GetElectricityDailySmartMeterListAction
-    ): Actions {
-        const force: boolean =
-            action.force ||
-            UsageHistoryManagementState.getElectricityDailySmartMeterList(ctx.getState()) === undefined;
+    getElectricityDailySmartMeterListAction(ctx: StateContext<UsageHistoryManagementModel>, action: GetElectricityDailySmartMeterListAction): Actions {
+        const force: boolean = action.force || UsageHistoryManagementState.getElectricityDailySmartMeterList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService
-                .performGet(AppConstant.electricityDailySmartMeterList + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/' + AppConstant.smartMeterElectricDaily, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
@@ -905,7 +865,7 @@ export class UsageHistoryManagementState {
         action: GetElectricityDailySmartMeterByIdAction
     ): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.electricityDailySmartMeter + '/' + action.id).pipe(
+        return this.loginService.performGet(AppConstant.smartMeterElectricDaily + '/' + action.id).pipe(
             tap(
                 (response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -928,7 +888,7 @@ export class UsageHistoryManagementState {
     ): Actions {
         document.getElementById('loader').classList.add('loading');
         return this.loginService
-            .performDelete(AppConstant.electricityDailySmartMeter + '/' + action.id)
+            .performDelete(AppConstant.smartMeterElectricDaily + '/' + action.id)
             .pipe(
                 tap(
                     (response: any) => {
@@ -950,7 +910,7 @@ export class UsageHistoryManagementState {
     ): Actions {
         document.getElementById('loader').classList.add('loading');
         return this.loginService
-            .performPut(action.electricityDailySmartMeter, AppConstant.electricityDailySmartMeter + '/' + action.id)
+            .performPut(action.electricityDailySmartMeter, AppConstant.smartMeterElectricDaily + '/' + action.id)
             .pipe(
                 tap(
                     (response: any) => {

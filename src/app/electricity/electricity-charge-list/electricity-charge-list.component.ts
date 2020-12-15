@@ -1,11 +1,16 @@
 import { DatePipe } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { AdminFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
+import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
 import { ElectricityUsagePopupComponent } from '../electricity-usage-popup/electricity-usage-popup.component';
 declare var $: any;
 
@@ -14,250 +19,73 @@ declare var $: any;
   templateUrl: './electricity-charge-list.component.html',
   styleUrls: ['./electricity-charge-list.component.css']
 })
-export class ElectricityChargeListComponent implements OnInit, AfterViewInit {
+export class ElectricityChargeListComponent implements OnInit {
   users: Users = new Users();
-  errorMessage: string;
-  useTypes: string;
-  usageHistoryList: any[] = [];
-  userObj: any;
-  userObj2: any;
-  // year: any;
-  // month: any;
-  electricityForm: FormGroup = this.fb.group({
-    year: this.fb.control(''),
-    month: this.fb.control('')
-  });
-
-  startDateView: any;
-  endDateView: any;
-  startDateOrigView: any;
-  endDateOrigView: any;
-  billingDateView: any;
-  filterCheck: boolean;
-  // auditId: string;
-  // customerName: string;
-  isAdminView = false;
+  electricityForm: FormGroup;
   dataSource: any;
   usageHistoryData = {
     content: [],
     totalElements: 0,
   };
   keys = TableColumnData.GAS_KEYS; 4;
-  i = 0;
   constructor(private loginService: LoginService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private fb: FormBuilder,
-    private dialog: MatDialog) {
-    this.route.queryParams.subscribe(params => {
-      this.isAdminView = params['isAdminView'];
-    });
+    private readonly usageHistoryService: UsageHistoryService,
+    private readonly fb: FormBuilder,
+    public dialog: MatDialog
+  ) {
     this.users = this.loginService.getUser();
-    if (this.isAdminView) {
-
-      this.users.outhMeResponse = {};
-      this.users.outhMeResponse.userId = '2139';
-      // this.getUserById();
-    } this.usageHistoryList = new Array;
-    this.getGasList();
+    this.adminFilter = JSON.parse(localStorage.getItem('electricityChargeFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null) {
+      this.adminFilter = new AdminFilter();
+    }
   }
-  // getUserById(): any {
-  //   this.users.outhMeResponse = {};
-  //   this.users.outhMeResponse.userId = '2139';
-  // }
+  private readonly subscriptions: Subscription = new Subscription();
+  public adminFilter: AdminFilter;
+
   ngOnInit() {
-    // $(document).ready(function () {
-    // $('#example').DataTable();
-    // });
-    if (this.isAdminView) {
-      this.electricityForm.addControl('auditId', this.fb.control(''));
-      this.electricityForm.addControl('customerName', this.fb.control(''));
-    }
-    if ((this.f.year.value !== undefined && this.f.year.value !== '') || (this.f.month.value !== undefined && this.f.month.value !== '')) {
-      this.searchData();
-    }
-
+    this.setUpForm(this.adminFilter.electricityChargeFilter.formValue);
+    this.search(this.adminFilter.electricityChargeFilter.page, false);
   }
-  ngAfterViewInit() {
-    $(document).ready(function () {
-      setTimeout(function () {
-        $('#example').DataTable({
-          'responsive': true,
-          'pagingType': 'full',
-          'columnDefs': [{
-            'targets': 'no-sort', // column or columns numbers
-            'orderable': false, // set orderable for selected columns
-          }],
-          'retrieve': true
-        });
-      }, 1500);
+
+  setUpForm(event: any) {
+    this.electricityForm = this.fb.group({
+      year: [event !== undefined && event !== null ? event.year : ''],
+      month: [event !== undefined && event !== null ? event.month : ''],
     });
+    if (this.users.role === 'ADMIN') {
+      this.electricityForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
+      this.electricityForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
+    }
   }
 
-  getGasList() {
-    this.perFormGetList('electricityCharge');
-  }
-
-  perFormGetList1(useTypes) {
-
-    this.router.navigate(['/gasList/' + useTypes]);
-    // window.location.reload();
-  }
-  perFormGetList(useTypes) {
-
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('users/' + this.users.outhMeResponse.userId + '/usage/electricity?type=' + useTypes).subscribe(
-      data => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(data));
-        this.users.types = useTypes;
-        this.users.electricityChargeList = new Array;
-        this.users.electricityChargeList = response.data;
-        this.loginService.setUser(this.users);
-        this.usageHistoryList = new Array;
-        this.usageHistoryList = response.data;
-        this.usageHistoryData.content = response.data;
+  findGasList(force: boolean, filter: any): void {
+    this.adminFilter.electricityChargeFilter.formValue = this.electricityForm.value;
+    localStorage.setItem('electricityChargeFilter', JSON.stringify(this.adminFilter));
+    this.usageHistoryService.loadElectricityChargeList(force, this.users.outhMeResponse.user.id, filter);
+    this.subscriptions.add(this.usageHistoryService.getElectricityChargeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((gasList: any) => {
+        this.usageHistoryData.content = gasList.data;
         this.dataSource = [...this.usageHistoryData.content];
-        if ((this.f.year.value !== undefined && this.f.year.value !== null) || (this.f.month.value !== undefined && this.f.month.value !== null)) {
-          this.searchData();
-        }
-        $(document).ready(function () {
-          $('#example').dataTable().fnDestroy();
-          setTimeout(function () {
-            $('#example').DataTable({
-              'responsive': true,
-              'pagingType': 'full',
-              'columnDefs': [{
-                'targets': 'no-sort', // column or columns numbers
-                'orderable': false, // set orderable for selected columns
-              }],
-              'retrieve': true
-            });
-          }, 1500);
-        });
-
-      },
-      error => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(error));
-        console.log(error);
-        this.errorMessage = response.error_description;
-
-      }
-    );
-
+      }));
   }
 
-  increment(i) {
-    this.i = i;
-    this.userObj = this.usageHistoryList[i];
-    let date;
-    if (this.usageHistoryList[i].startDate !== null && this.usageHistoryList[i].startDate !== undefined) {
-      date = new Date(this.usageHistoryList[i].startDate);
-      const datePipe = new DatePipe('en-US');
-      this.startDateView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.startTime = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.startDateView = this.startDateView;
-
+  search(event: any, isSearch: boolean): void {
+    this.adminFilter.electricityChargeFilter.page = event;
+    const params = new HttpParams()
+      .set('type', 'electricityCharge')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('year', (this.electricityForm.value.year !== null ? this.electricityForm.value.year : ''))
+      .set('month', (this.electricityForm.value.month !== null ? this.electricityForm.value.month : ''));
+    if (this.users.role === 'ADMIN') {
+      params.set('auditId', this.electricityForm.value.auditId !== null ? this.electricityForm.value.auditId : '');
+      params.set('customerName', this.electricityForm.value.customerName !== null ? this.electricityForm.value.customerName : '');
     }
-    if (this.usageHistoryList[i].endDate !== null && this.usageHistoryList[i].endDate !== undefined) {
-      date = new Date(this.usageHistoryList[i].endDate);
-      const datePipe = new DatePipe('en-US');
-      this.endDateView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.endTime = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.endDateView = this.endDateView;
-
-    }
-    if (this.usageHistoryList[i].startDateOrig !== null && this.usageHistoryList[i].startDateOrig !== undefined) {
-      date = new Date(this.usageHistoryList[i].startDateOrig);
-      const datePipe = new DatePipe('en-US');
-      this.startDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.startTimeOrig = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.startDateOrigView = this.startDateOrigView;
-
-    }
-    if (this.usageHistoryList[i].endDateOrig !== null && this.usageHistoryList[i].endDateOrig !== undefined) {
-      date = new Date(this.usageHistoryList[i].endDateOrig);
-      const datePipe = new DatePipe('en-US');
-      this.endDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.endTimeOrig = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.endDateOrigView = this.endDateOrigView;
-
-    }
-    if (this.usageHistoryList[i].billingDate !== null && this.usageHistoryList[i].billingDate !== undefined) {
-      date = new Date(this.usageHistoryList[i].billingDate);
-      const datePipe = new DatePipe('en-US');
-      this.billingDateView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.billingTime = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.billingDateView = this.billingDateView;
-
-    }
-    this.userObj.forceStore = true;
-    this.userObj2 = $.extend(true, [], this.userObj);
-  }
-  searchData() {
-    document.getElementById('loader').classList.add('loading');
-    if ((this.f.year.value !== undefined && this.f.year.value !== '') || (this.f.month.value !== undefined && this.f.month.value !== '')) {
-      if ((this.f.year.value !== undefined && this.f.year.value !== '') || (this.f.month.value !== undefined && this.f.month.value !== '')) {
-        this.usageHistoryList = new Array;
-        for (const eChargeList of this.users.electricityChargeList) {
-          this.filterCheck = true;
-          if ((this.f.year.value !== undefined && this.f.year.value !== '') && (this.f.month.value !== undefined && this.f.month.value !== '')) {
-            this.filterCheck = false;
-            if (eChargeList.year === this.f.year.value && eChargeList.month === this.f.month.value) {
-              this.filterCheck = true;
-            }
-          } else if (this.f.year.value !== undefined && this.f.year.value !== '') {
-            this.filterCheck = false;
-            if (eChargeList.year === this.f.year.value) {
-              this.filterCheck = true;
-            }
-          } else if (this.f.month.value !== undefined && this.f.month.value !== '') {
-            this.filterCheck = false;
-            if (eChargeList.month === this.f.month.value) {
-              this.filterCheck = true;
-            }
-          } if (this.filterCheck) {
-            this.usageHistoryList.push(eChargeList);
-          }
-        }
-        $('#example').dataTable().fnDestroy();
-        $(document).ready(function () {
-          $('#example').dataTable().fnDestroy();
-          setTimeout(function () {
-            $('#example').DataTable({
-              'responsive': true,
-              'pagingType': 'full',
-              'columnDefs': [{
-                'targets': 'no-sort', // column or columns numbers
-                'orderable': false, // set orderable for selected columns
-              }],
-              'retrieve': true
-            });
-          }, 1500);
-        });
-        console.log(this.usageHistoryList);
-        document.getElementById('loader').classList.remove('loading');
-      } else {
-        this.usageHistoryList = this.users.electricityChargeList;
-        $('#example').dataTable().fnDestroy();
-        $(document).ready(function () {
-          $('#example').dataTable().fnDestroy();
-          setTimeout(function () {
-            $('#example').DataTable({
-              'responsive': true,
-              'pagingType': 'full',
-              'columnDefs': [{
-                'targets': 'no-sort', // column or columns numbers
-                'orderable': false, // set orderable for selected columns
-              }],
-              'retrieve': true
-            });
-          }, 1500);
-        });
-        document.getElementById('loader').classList.remove('loading');
-      }
-    }
+    this.findGasList(true, params);
   }
 
   get f() { return this.electricityForm.controls; }

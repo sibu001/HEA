@@ -96,15 +96,6 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
       this.validateAllFormFields(this.alertMessagesForm);
     }
   }
-  // validateForm() {
-  //   for (const key of Object.keys(this.alertMessagesForm.controls)) {
-  //     if (this.alertMessagesForm.controls[key].invalid) {
-  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-  //       invalidControl.focus();
-  //       break;
-  //     }
-  //   }
-  // }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {

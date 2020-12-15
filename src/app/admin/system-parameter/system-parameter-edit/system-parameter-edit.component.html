@@ -12,6 +12,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="paramCode"
                 formControlName="paramCode">
+                <div *ngIf="f.paramCode.invalid && (f.paramCode.dirty ||
+                f.paramCode.touched)">
+                <span class="error" *ngIf="f.paramCode.errors.required">
+                  Parameter Code Id is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -19,6 +25,12 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Description:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control" formControlName="description" id="description">
+              <div *ngIf="f.description.invalid && (f.description.dirty ||
+              f.description.touched)">
+              <span class="error" *ngIf="f.description.errors.required">
+                Description Id is required.
+              </span>
+            </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>

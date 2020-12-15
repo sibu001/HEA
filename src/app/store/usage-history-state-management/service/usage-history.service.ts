@@ -115,8 +115,8 @@ export class UsageHistoryService {
     return this.store.dispatch(new DeleteShareMyDataByIdAction(id));
   }
 
-  loadGasList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
-    return this.store.dispatch(new GetGasListAction(force, filter));
+  loadGasList(force: boolean, userId: any, filter: any): Observable<UsageHistoryManagementState> {
+    return this.store.dispatch(new GetGasListAction(force, userId, filter));
   }
 
   GetGasByIdAction(id: number): Observable<UsageHistoryManagementState> {
@@ -131,8 +131,8 @@ export class UsageHistoryService {
     return this.store.dispatch(new DeleteGasByIdAction(id));
   }
 
-  loadGasChargeList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
-    return this.store.dispatch(new GetGasChargeListAction(force, filter));
+  loadGasChargeList(force: boolean, userId: any, filter: any): Observable<UsageHistoryManagementState> {
+    return this.store.dispatch(new GetGasChargeListAction(force, userId, filter));
   }
 
   GetGasChargeByIdAction(id: number): Observable<UsageHistoryManagementState> {
@@ -147,8 +147,8 @@ export class UsageHistoryService {
     return this.store.dispatch(new DeleteGasChargeByIdAction(id));
   }
 
-  loadGasSmartMeterList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
-    return this.store.dispatch(new GetGasSmartMeterListAction(force, filter));
+  loadGasSmartMeterList(force: boolean, userId: any, filter: any): Observable<UsageHistoryManagementState> {
+    return this.store.dispatch(new GetGasSmartMeterListAction(force, userId, filter));
   }
 
   GetGasSmartMeterByIdAction(id: number): Observable<UsageHistoryManagementState> {
@@ -163,8 +163,8 @@ export class UsageHistoryService {
     return this.store.dispatch(new DeleteGasSmartMeterByIdAction(id));
   }
 
-  loadElectricityList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
-    return this.store.dispatch(new GetElectricityListAction(force, filter));
+  loadElectricityList(force: boolean, userId: any, filter: any): Observable<UsageHistoryManagementState> {
+    return this.store.dispatch(new GetElectricityListAction(force, userId, filter));
   }
 
   GetElectricityByIdAction(id: number): Observable<UsageHistoryManagementState> {
@@ -179,8 +179,8 @@ export class UsageHistoryService {
     return this.store.dispatch(new DeleteElectricityByIdAction(id));
   }
 
-  loadElectricityChargeMyDataList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
-    return this.store.dispatch(new GetElectricityChargeListAction(force, filter));
+  loadElectricityChargeList(force: boolean, userId: any, filter: any): Observable<UsageHistoryManagementState> {
+    return this.store.dispatch(new GetElectricityChargeListAction(force, userId, filter));
   }
 
   GetElectricityChargeByIdAction(id: number): Observable<UsageHistoryManagementState> {
@@ -195,8 +195,8 @@ export class UsageHistoryService {
     return this.store.dispatch(new DeleteElectricityChargeByIdAction(id));
   }
 
-  loadElectricitySmartMeterList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
-    return this.store.dispatch(new GetElectricitySmartMeterListAction(force, filter));
+  loadElectricitySmartMeterList(force: boolean, userId: any, filter: any): Observable<UsageHistoryManagementState> {
+    return this.store.dispatch(new GetElectricitySmartMeterListAction(force, userId, filter));
   }
 
   GetElectricitySmartMeterByIdAction(id: number): Observable<UsageHistoryManagementState> {
@@ -211,8 +211,8 @@ export class UsageHistoryService {
     return this.store.dispatch(new DeleteElectricitySmartMeterByIdAction(id));
   }
 
-  loadElectricityDailySmartMeterList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
-    return this.store.dispatch(new GetElectricityDailySmartMeterListAction(force, filter));
+  loadElectricityDailySmartMeterList(force: boolean, userId: any, filter: any): Observable<UsageHistoryManagementState> {
+    return this.store.dispatch(new GetElectricityDailySmartMeterListAction(force, userId, filter));
   }
 
   GetElectricityDailySmartMeterByIdAction(id: number): Observable<UsageHistoryManagementState> {

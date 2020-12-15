@@ -25,7 +25,12 @@ import { UsageHistoryService } from '../store/usage-history-state-management/ser
       UsageHistoryManagementState
     ]),
   ],
-  declarations: [GasListComponent, GasChargeComponent, GasSmartMeterComponent, GasUsagePopupComponent],
+  declarations: [
+    GasListComponent,
+    GasChargeComponent,
+    GasSmartMeterComponent,
+    GasUsagePopupComponent
+  ],
   providers: [UsageHistoryService]
 })
 export class GasModule { }

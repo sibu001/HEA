@@ -136,6 +136,7 @@ export class LoginComponent implements OnInit {
       .subscribe(
         (data) => {
           const response = JSON.parse(JSON.stringify(data));
+          this.users.outhMeResponse = { user: response };
           this.users.userData = response;
           this.users.name = response.name;
           this.loginService.setUser(this.users);

@@ -15,11 +15,11 @@
               Place Code:
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="text" formControlName="placeCode" class="form-control
+              <input type="text" formControlName="place" class="form-control
                 form-control-sm">
-              <div *ngIf="f.placeCode.invalid && (f.placeCode.dirty ||
-                f.placeCode.touched)">
-                <span class="error" *ngIf="f.placeCode.errors.required">
+              <div *ngIf="f.place.invalid && (f.place.dirty ||
+                f.place.touched)">
+                <span class="error" *ngIf="f.place.errors.required">
                   Place Code is required.
                 </span>
               </div>

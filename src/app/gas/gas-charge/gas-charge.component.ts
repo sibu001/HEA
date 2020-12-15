@@ -1,257 +1,88 @@
-import { DatePipe } from '@angular/common';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { AdminFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
+import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
 import { GasUsagePopupComponent } from '../gas-usage-popup/gas-usage-popup.component';
-declare var $: any;
 @Component({
   selector: 'app-gas-charge',
   templateUrl: './gas-charge.component.html',
   styleUrls: ['./gas-charge.component.css']
 })
-export class GasChargeComponent implements OnInit, AfterViewInit {
+export class GasChargeComponent implements OnInit {
   users: Users = new Users();
-  errorMessage: string;
-  useTypes: string;
-  usageHistoryList: any[] = [];
-  // year: any;
-  // month: any;
-  gasForm: FormGroup = this.fb.group({
-    year: this.fb.control(''),
-    month: this.fb.control(''),
-  });
-  userObj: any;
-  userObj2: any;
-  startDateView: any;
-  endDateView: any;
-  startDateOrigView: any;
-  endDateOrigView: any;
-  billingDateView: any;
-  filtercheck: boolean;
-  // auditId: string;
-  // customerName: string;
-  isAdminView = false;
+  gasForm: FormGroup;
   dataSource: any;
   usageHistoryData = {
     content: [],
     totalElements: 0,
   };
-  i = 0;
   keys = TableColumnData.GAS_KEYS;
   constructor(private loginService: LoginService,
-    private route: ActivatedRoute,
     private router: Router,
-    private fb: FormBuilder,
-    private dialog: MatDialog) {
-    this.route.queryParams.subscribe(params => {
-      this.isAdminView = params['isAdminView'];
-    });
+    private readonly usageHistoryService: UsageHistoryService,
+    private readonly fb: FormBuilder,
+    public dialog: MatDialog) {
     this.users = this.loginService.getUser();
-    if (this.isAdminView) {
-
-      this.users.outhMeResponse = {};
-      this.users.outhMeResponse.userId = '2139';
-      // this.getUserById();
+    this.adminFilter = JSON.parse(localStorage.getItem('gasChargeFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null) {
+      this.adminFilter = new AdminFilter();
     }
-    this.usageHistoryList = new Array;
-    this.getGasList();
   }
+  private readonly subscriptions: Subscription = new Subscription();
+  public adminFilter: AdminFilter;
 
-  // getUserById(): any {
-  //   this.users.outhMeResponse = {};
-  //   this.users.outhMeResponse.userId = '2139';
-  // }
   ngOnInit() {
-    if (this.isAdminView) {
-      this.gasForm.addControl('auditId', this.fb.control(''));
-      this.gasForm.addControl('customerName', this.fb.control(''));
-    }
-    if ((this.f.year.value !== undefined && this.f.year.value !== '') || (this.f.month.value !== undefined && this.f.month.value !== '')) {
-      this.searchData();
-    }
+    this.setUpForm(this.adminFilter.gasChargeFilter.formValue);
+    this.search(this.adminFilter.gasChargeFilter.page, false);
   }
-  ngAfterViewInit() {
-    $(document).ready(function () {
-      setTimeout(function () {
-        $('#example').DataTable({
-          'responsive': true,
-          'pagingType': 'full',
-          'columnDefs': [{
-            'targets': [0, 3, 4, 5], // column or columns numbers
-            'orderable': false, // set orderable for selected columns
-          }],
-          'retrieve': true
-        });
-      }, 1500);
+
+  setUpForm(event: any) {
+    this.gasForm = this.fb.group({
+      year: [event !== undefined && event !== null ? event.year : ''],
+      month: [event !== undefined && event !== null ? event.month : ''],
     });
+    if (this.users.role === 'ADMIN') {
+      this.gasForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
+      this.gasForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
+    }
   }
 
-  getGasList() {
-    this.perFormGetList('gasCharge');
-  }
-
-  perFormGetList1(useTypes) {
-    this.router.navigate(['/gasList/' + useTypes]);
-  }
-  perFormGetList(useTypes) {
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('users/' + this.users.outhMeResponse.userId + '/usage/gas?type=' + useTypes).subscribe(
-      data => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(data));
-        this.users.types = useTypes;
-        this.users.gasChargeList = new Array;
-        this.users.gasChargeList = response.data;
-        this.loginService.setUser(this.users);
-        this.usageHistoryList = new Array;
-        this.usageHistoryList = response.data;
-        this.usageHistoryData.content = response.data;
+  findGasList(force: boolean, filter: any): void {
+    this.adminFilter.gasChargeFilter.formValue = this.gasForm.value;
+    localStorage.setItem('gasChargeFilter', JSON.stringify(this.adminFilter));
+    this.usageHistoryService.loadGasChargeList(force, this.users.outhMeResponse.user.id, filter);
+    this.subscriptions.add(this.usageHistoryService.getGasChargeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((gasList: any) => {
+        this.usageHistoryData.content = gasList.data;
         this.dataSource = [...this.usageHistoryData.content];
-        if ((this.f.year.value !== undefined && this.f.year.value !== '') || (this.f.month.value !== undefined && this.f.month.value !== '')) {
-          this.searchData();
-        }
-        $(document).ready(function () {
-          $('#example').dataTable().fnDestroy();
-          setTimeout(function () {
-            $('#example').DataTable({
-              'responsive': true,
-              'pagingType': 'full',
-              'columnDefs': [{
-                'targets': [0, 3, 4, 5], // column or columns numbers
-                'orderable': false, // set orderable for selected columns
-              }],
-              'retrieve': true
-            });
-          }, 1500);
-        });
-      },
-      error => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(error));
-        console.log(error);
-        this.errorMessage = response.error_description;
-
-      }
-    );
-
+      }));
   }
 
-  increment(i) {
-    this.i = i;
-    this.userObj = this.usageHistoryList[i];
-    let date;
-    if (this.usageHistoryList[i].startDate !== null && this.usageHistoryList[i].startDate !== undefined) {
-      date = new Date(this.usageHistoryList[i].startDate);
-      const datePipe = new DatePipe('en-US');
-      this.startDateView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.startTime = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.startDateView = this.startDateView;
-
+  search(event: any, isSearch: boolean): void {
+    this.adminFilter.gasChargeFilter.page = event;
+    const params = new HttpParams()
+      .set('type', 'gasCharge')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
+      .set('month', (this.gasForm.value.month !== null ? this.gasForm.value.month : ''));
+    if (this.users.role === 'ADMIN') {
+      params.set('auditId', this.gasForm.value.auditId !== null ? this.gasForm.value.auditId : '');
+      params.set('customerName', this.gasForm.value.customerName !== null ? this.gasForm.value.customerName : '');
     }
-    if (this.usageHistoryList[i].endDate !== null && this.usageHistoryList[i].endDate !== undefined) {
-      date = new Date(this.usageHistoryList[i].endDate);
-      const datePipe = new DatePipe('en-US');
-      this.endDateView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.endTime = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.endDateView = this.endDateView;
-
-    }
-    if (this.usageHistoryList[i].startDateOrig !== null && this.usageHistoryList[i].startDateOrig !== undefined) {
-      date = new Date(this.usageHistoryList[i].startDateOrig);
-      const datePipe = new DatePipe('en-US');
-      this.startDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.startTimeOrig = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.startDateOrigView = this.startDateOrigView;
-
-    }
-    if (this.usageHistoryList[i].endDateOrig !== null && this.usageHistoryList[i].endDateOrig !== undefined) {
-      date = new Date(this.usageHistoryList[i].endDateOrig);
-      const datePipe = new DatePipe('en-US');
-      this.endDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.endTimeOrig = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.endDateOrigView = this.endDateOrigView;
-
-    }
-    if (this.usageHistoryList[i].billingDate !== null && this.usageHistoryList[i].billingDate !== undefined) {
-      date = new Date(this.usageHistoryList[i].billingDate);
-      const datePipe = new DatePipe('en-US');
-      this.billingDateView = datePipe.transform(date, 'yyyy-MM-dd');
-      this.userObj.billingTime = datePipe.transform(date, 'HH:mm:ss');
-      this.userObj.billingDateView = this.billingDateView;
-
-    }
-    this.userObj.forceStore = true;
-    this.userObj2 = $.extend(true, [], this.userObj);
-  }
-  searchData() {
-    document.getElementById('loader').classList.add('loading');
-    if ((this.f.year.value !== undefined && this.f.year.value !== '') || (this.f.month.value !== undefined && this.f.month.value !== '')) {
-      this.usageHistoryList = new Array;
-      for (const gesChargeList of this.users.gasChargeList) {
-        this.filtercheck = true;
-        if ((this.f.year.value !== undefined && this.f.year.value !== '') && (this.f.month.value !== undefined && this.f.month.value !== '')) {
-          this.filtercheck = false;
-          if (gesChargeList.year === this.f.year.value && gesChargeList.month === this.f.month.value) {
-            this.filtercheck = true;
-          }
-        } else if (this.f.year.value !== undefined && this.f.year.value !== '') {
-          this.filtercheck = false;
-          if (gesChargeList.year === this.f.year.value) {
-            this.filtercheck = true;
-          }
-        } else if (this.f.month.value !== undefined && this.f.month.value !== '') {
-          this.filtercheck = false;
-          if (gesChargeList.month === this.f.month.value) {
-            this.filtercheck = true;
-          }
-        } if (this.filtercheck) {
-          this.usageHistoryList.push(gesChargeList);
-        }
-      }
-      this.usageHistoryData.content = this.usageHistoryList;
-      this.dataSource = [...this.usageHistoryData.content];
-      $('#example').dataTable().fnDestroy();
-      $(document).ready(function () {
-        $('#example').dataTable().fnDestroy();
-        setTimeout(function () {
-          $('#example').DataTable({
-            'responsive': true,
-            'pagingType': 'full',
-            'columnDefs': [{
-              'targets': [0, 3, 4, 5], // column or columns numbers
-              'orderable': false, // set orderable for selected columns
-            }],
-            'retrieve': true
-          });
-        }, 1500);
-      });
-      console.log(this.usageHistoryList);
-      document.getElementById('loader').classList.remove('loading');
-    } else {
-      this.usageHistoryList = this.users.gasChargeList;
-      this.usageHistoryData.content = this.usageHistoryList;
-      this.dataSource = [...this.usageHistoryData.content];
-      $('#example').dataTable().fnDestroy();
-      $(document).ready(function () {
-        $('#example').dataTable().fnDestroy();
-        setTimeout(function () {
-          $('#example').DataTable({
-            'responsive': true,
-            'pagingType': 'full',
-            'columnDefs': [{
-              'targets': [0, 3, 4, 5], // column or columns numbers
-              'orderable': false, // set orderable for selected columns
-            }],
-            'retrieve': true
-          });
-        }, 1500);
-      });
-      document.getElementById('loader').classList.remove('loading');
-    }
+    this.findGasList(true, params);
   }
 
   get f() { return this.gasForm.controls; }
@@ -266,4 +97,6 @@ export class GasChargeComponent implements OnInit, AfterViewInit {
       console.log('The dialog was closed' + result);
     });
   }
+
+
 }

@@ -1,9 +1,16 @@
+import { HttpParams } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { AdminFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
+import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
+import { GasUsagePopupComponent } from '../gas-usage-popup/gas-usage-popup.component';
 declare var $: any;
 
 @Component({
@@ -11,144 +18,88 @@ declare var $: any;
   templateUrl: './gas-smart-meter.component.html',
   styleUrls: ['./gas-smart-meter.component.css']
 })
-export class GasSmartMeterComponent implements OnInit, AfterViewInit {
+export class GasSmartMeterComponent implements OnInit {
   users: Users = new Users();
-  errorMessage: string;
-  useTypes: string;
-  usageHistoryList: any[] = [];
-  // year: any;
-  // month: any;
-  // day: any;
-  // hour: any;
-  // auditId: string;
-  // customerName: string;
-  gasForm: FormGroup = this.fb.group({
-    year: this.fb.control(''),
-    month: this.fb.control(''),
-    day: this.fb.control(''),
-    hour: this.fb.control(''),
-  });
-  isAdminView = false;
+  gasForm: FormGroup;
   dataSource: any;
   usageHistoryData = {
     content: [],
     totalElements: 0,
   };
   keys = TableColumnData.SMART_METER_KEYS;
-  constructor(
-    private loginService: LoginService,
-    private route: ActivatedRoute,
-    private router: Router,
-    private fb: FormBuilder
+  constructor(private loginService: LoginService,
+    private readonly usageHistoryService: UsageHistoryService,
+    private readonly fb: FormBuilder,
+    public dialog: MatDialog
   ) {
-    this.route.queryParams.subscribe(params => {
-      this.isAdminView = params['isAdminView'];
-    });
     this.users = this.loginService.getUser();
-    if (this.isAdminView) {
-
-      this.users.outhMeResponse = {};
-      this.users.outhMeResponse.userId = '2139';
-      // this.getUserById();
+    this.adminFilter = JSON.parse(localStorage.getItem('gasSmartMeterFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null) {
+      this.adminFilter = new AdminFilter();
     }
-    this.perFormGetList('smartMeterGas');
   }
+  private readonly subscriptions: Subscription = new Subscription();
+  public adminFilter: AdminFilter;
 
-  // getUserById(): any {
-  //   this.users.outhMeResponse = {};
-  //   this.users.outhMeResponse.userId = '2139';
-  // }
   ngOnInit() {
-    if (this.isAdminView) {
-      this.gasForm.addControl('auditId', this.fb.control(''));
-      this.gasForm.addControl('customerName', this.fb.control(''));
+    this.setUpForm(this.adminFilter.gasSmartMeterFilter.formValue);
+    this.search(this.adminFilter.gasSmartMeterFilter.page, false);
+  }
+
+  setUpForm(event: any) {
+    this.gasForm = this.fb.group({
+      year: [event !== undefined && event !== null ? event.year : ''],
+      month: [event !== undefined && event !== null ? event.month : ''],
+      day: [event !== undefined && event !== null ? event.day : ''],
+      hour: [event !== undefined && event !== null ? event.hour : ''],
+    });
+    if (this.users.role === 'ADMIN') {
+      this.gasForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
+      this.gasForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
     }
   }
-  ngAfterViewInit() {
-    setTimeout(function () {
-      $('#example').DataTable({
-        'pagingType': 'full',
-        'columnDefs': [{
-          'targets': [0, 3, 4, 5], // column or columns numbers
-          'orderable': false,  // set orderable for selected columns
-        }],
-      });
-      const table = $('#example').DataTable();
-      // pay attention to capital D, which is mandatory to retrieve "api" data-tables' object, as @Lionel said
 
-      $('#year').on('keyup click', function () {
-        table.columns([1]).search($(this).val()).draw();
-      });
-
-      $('#month').on('keyup click', function () {
-        table.column(2).search($(this).val()).draw();
-      });
-      $('#day').on('keyup click', function () {
-        table.column(3).search($(this).val()).draw();
-      });
-
-      $('#hour').on('keyup click', function () {
-        table.column(4).search($(this).val()).draw();
-      });
-
-    }, 1500);
-  }
-
-  perFormGetList(useTypes) {
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('users/' + this.users.outhMeResponse.userId + '/' + useTypes).subscribe(
-      data => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(data));
-        this.users.types = useTypes;
-        this.users.gasSmartMeterList = new Array;
-        this.users.gasSmartMeterList = response.data;
-        this.loginService.setUser(this.users);
-        this.usageHistoryList = new Array;
-        this.usageHistoryList = response.data;
-        this.usageHistoryData.content = response.data;
+  findGasList(force: boolean, filter: any): void {
+    this.adminFilter.gasSmartMeterFilter.formValue = this.gasForm.value;
+    localStorage.setItem('gasSmartMeterFilter', JSON.stringify(this.adminFilter));
+    this.usageHistoryService.loadGasSmartMeterList(force, this.users.outhMeResponse.user.id, filter);
+    this.subscriptions.add(this.usageHistoryService.getGasSmartMeterList().pipe(skipWhile((item: any) => !item))
+      .subscribe((gasList: any) => {
+        this.usageHistoryData.content = gasList.data;
         this.dataSource = [...this.usageHistoryData.content];
-      },
-      error => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(error));
-        console.log(error);
-        this.errorMessage = response.error_description;
-
-      }
-    );
-
+      }));
   }
-  searchData() {
 
-    //   document.getElementById("loader").classList.add('loading');
-    //   this.usageHistoryList = new Array;
+  search(event: any, isSearch: boolean): void {
+    this.adminFilter.gasSmartMeterFilter.page = event;
+    const params = new HttpParams()
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
+      .set('day', (this.gasForm.value.day !== null ? this.gasForm.value.day : ''))
+      .set('hour', (this.gasForm.value.hour !== null ? this.gasForm.value.hour : ''))
+      .set('month', (this.gasForm.value.month !== null ? this.gasForm.value.month : ''));
+    if (this.users.role === 'ADMIN') {
+      params.set('auditId', this.gasForm.value.auditId !== null ? this.gasForm.value.auditId : '');
+      params.set('customerName', this.gasForm.value.customerName !== null ? this.gasForm.value.customerName : '');
+    }
+    this.findGasList(true, params);
+  }
 
-    //   console.log(this.users.usesList);
-    //   for (let useList of this.users.usesList) {
-    //     if (this.month != undefined && this.month != null && this.year != undefined && this.year != null) {
-    //       if (useList.year == this.year && useList.month == this.month) {
-    //         this.usageHistoryList.push(useList);
-    //       }
-    //     } else if (this.year != undefined && this.year != null) {
-    //       if (useList.year == this.year) {
-    //         this.usageHistoryList.push(useList);
-    //       }
-    //     } else if (this.month != undefined && this.month != null) {
-    //       if (useList.month == this.month) {
-    //         this.usageHistoryList.push(useList);
-    //       }
-    //     } else {
-    //       this.usageHistoryList.push(useList);
-    //     }
-    //   }
-    //   $(document).ready(function () {
+  get f() { return this.gasForm.controls; }
 
-    //     $('#example').on('draw.dt', function () {
-
-    //     });
-    //   });
-    //   console.log(this.usageHistoryList);
-    //   document.getElementById("loader").classList.remove('loading');
+  showPopUp(): any {
+    const dialogRef = this.dialog.open(GasUsagePopupComponent, {
+      width: '70vw',
+      height: '70vh',
+      data: {}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed' + result);
+    });
   }
 }

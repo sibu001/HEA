@@ -52,7 +52,7 @@ export class HeadersComponent implements OnInit {
       } if (document.getElementById('menu_option')) {
         document.getElementById('menu_option').classList.add('header_menu_none');
       }
-      this.headerResposiveMenu();
+      this.headerResponsiveMenu();
     }
     this.hideResponsiveMenu();
   }
@@ -64,12 +64,12 @@ export class HeadersComponent implements OnInit {
       }
       if (this.users.surveyLength <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false)) {
         setTimeout(() => {
-          this.headerResposiveMenu();
+          this.headerResponsiveMenu();
         }, 300);
       }
     }
   }
-  headerResposiveMenu() {
+  headerResponsiveMenu() {
     if (document.getElementById('_home1')) {
       document.getElementById('_home1').classList.add('header_menu_none');
     }
@@ -106,6 +106,9 @@ export class HeadersComponent implements OnInit {
           this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile' : true)) {
         this.router.navigate(['/accountDetail']);
       }
+      if(this.users.role=='ADMIN'){
+        this.router.navigate(['/accountDetail']);
+      }
     } else if (numbers === 4) {
       if (this.users.surveyLength > 3) {
         this.router.navigate(['/topicshistory']);
@@ -132,12 +135,12 @@ export class HeadersComponent implements OnInit {
   back() {
     this.isResponsive = false;
   }
-  openfeedbackpage() {
+  openFeedBackPage() {
     document.getElementById('feedback1').classList.add('feedbackDivCss');
     document.getElementById('feedback2').classList.add('feedbackiframeCss');
     document.getElementById('feedback3').classList.add('feedBackDiv1');
   }
-  closefeedbackpage() {
+  closeFeedBackPage() {
     document.getElementById('feedback1').classList.remove('feedbackDivCss');
     document.getElementById('feedback2').classList.remove('feedbackiframeCss');
     document.getElementById('feedback3').classList.remove('feedBackDiv1');

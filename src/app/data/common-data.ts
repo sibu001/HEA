@@ -1050,28 +1050,6 @@ export class TableColumnData {
         { key: 'Y', value: 'Year' },
     ];
 
-    static readonly CUSTOMER_GROUP_DATA: any[] = [
-        { key: '', value: '' },
-        { key: '1', value: 'CEC' },
-        { key: '2', value: 'EUMV' },
-        { key: '5', value: 'HEA' },
-        { key: '6', value: 'Vermont VEIC (disabled)' },
-        { key: '7', value: 'Home Energy Tuneup' },
-        { key: '8', value: 'Test Accounts' },
-        { key: '9', value: 'Alameda' },
-        { key: '10', value: 'PG&amp;E Direct Pay (disabled)' },
-        { key: '11', value: 'SVEW (disabled)' },
-        { key: '12', value: 'CalWater (disabled)' },
-        { key: '13', value: 'Claremont' },
-        { key: '14', value: 'Purissima Water (disabled)' },
-        { key: '15', value: 'Energy Fitness (disabled)' },
-        { key: '16', value: 'Dr Power' },
-        { key: '17', value: 'Pay for Performance' },
-        { key: '18', value: 'Sunnyvale Green At Home (disabled)' },
-        { key: '20', value: 'ConSol PG&amp;E' },
-        { key: '23', value: 'SC High Energy' },
-        { key: '24', value: 'Rising Sun' }
-    ];
 
     static readonly CUSTOMER_GROUP_MAIL_PART_KEYS: Array<TABLECOLUMN> = [
         { key: 'customerGroupName', sort: 'customerGroupName', displayName: 'customerGroupName' },

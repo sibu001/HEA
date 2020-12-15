@@ -95,7 +95,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   setForm(event: any) {
     this.placeForm = this.fb.group({
       id: this.fb.control(this.id !== undefined ? this.id : ''),
-      placeCode: this.fb.control(event !== undefined ? event.id : '', Validators.required),
+      place: this.fb.control(event !== undefined ? event.id : '', Validators.required),
       placeName: this.fb.control(event !== undefined ? event.placeName : '', Validators.required),
       stationId: this.fb.control(event !== undefined ? event.stationId : ''),
       timezone: this.fb.control(event !== undefined ? event.timezone : 'America/Los_Angeles'),

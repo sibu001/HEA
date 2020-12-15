@@ -174,7 +174,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       activationDate: [event !== undefined ? (this.datePipe.transform(event.activationDate, 'MM/dd/yyyy h:mm:ss')) : ''],
       staffPermission: [event !== undefined ? event.staffPermission : true],
       findReason: [event !== undefined ? event.findReason : ''],
-      phoneNumber: [event !== undefined ? event.phoneNumber : ''],
+      phoneNumber: [event !== undefined ? event.phoneNumber : '', Validators.required],
       placeCode: [event !== undefined ? event.placeCode : 'ALAMEDA'],
       city: [event !== undefined ? event.city : ''],
       postalCode: [event !== undefined ? event.postalCode : ''],
@@ -248,7 +248,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         userId: [event !== undefined ? event.user.userId : ''],
         username: [event !== undefined ? event.user.username : ''],
         name: [event !== undefined ? event.user.name : '', Validators.required],
-        email: [event !== undefined ? event.user.email : '', Validators.required],
+        email: [event !== undefined ? event.user.email : '', [Validators.required, Validators.email, Validators.pattern('^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$')]],
         staffPhoneNumber: [event !== undefined ? event.user.staffPhoneNumber : ''],
         status: [event !== undefined ? event.user.status : 0],
         deleted: [event !== undefined ? event.user.deleted : ''],
@@ -279,13 +279,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       passwordForm: this.formBuilder.group(
         {
           password: ['',
-            [
-              Validators.required,
-              Validators.minLength(this.minLength),
-              Validators.maxLength(this.maxLength)
-            ]
           ],
-          confirmPassword: ['', Validators.required],
+          confirmPassword: [''],
         },
         { validator: MustMatch('password', 'confirmPassword') }),
       activationMail: [false],
@@ -635,6 +630,15 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   }
 
   save() {
+    if (this.p.password.value) {
+      this.p.password.setValidators([Validators.required,
+      Validators.minLength(this.minLength),
+      Validators.maxLength(this.maxLength)]);
+      this.p.confirmPassword.setValidators([Validators.required]);
+    }
+    // if (this.p.password.value && this.p1.valid) {
+    //   this.getValidateNewPassword(this.p.password.value);
+    // }
     if (this.customerForm.valid) {
       if (this.id !== null && this.id !== undefined) {
         if (this.customerForm.value.repeatedActivationMail) {
@@ -664,7 +668,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
           }));
       }
     } else {
-      this.validateForm();
+      this.validateAllFormFields(this.customerForm);
+      const user = this.customerForm.controls.user as FormGroup;
+      this.validateAllFormFields(user);
     }
   }
 
@@ -690,24 +696,16 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       }));
   }
 
-  validateForm() {
-    for (const key of Object.keys(this.customerForm.controls)) {
-      if (this.customerForm.controls[key].invalid && key === 'user') {
-        const user = this.customerForm.controls.user as FormGroup;
-        for (const keys of Object.keys(user.controls)) {
-          if (user.controls[keys].invalid) {
-            const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + keys + '"]');
-            invalidControl.focus();
-            break;
-          }
-        }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
       }
-      if (this.customerForm.controls[key].invalid && key !== 'user') {
-        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-        invalidControl.focus();
-        break;
-      }
-    }
+    });
   }
   get f() { return this.customerForm.controls; }
   get p() {

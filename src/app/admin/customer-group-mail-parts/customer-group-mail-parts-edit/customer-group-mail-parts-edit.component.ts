@@ -11,6 +11,8 @@ import {
   LinkService,
   ToolbarService
 } from '@syncfusion/ej2-angular-richtexteditor';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { skipWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'app-customer-group-mail-parts-edit',
@@ -40,10 +42,11 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
   };
   id: any;
   partForm: FormGroup;
-  customerGroupData: any[] = TableColumnData.CUSTOMER_GROUP_MAIL_PART_KEYS;
+  customerGroupData: any[];
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemService: SystemService,
     private readonly location: Location) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
@@ -52,12 +55,19 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-
+    this.findCustomerGroup(false, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
     }
   }
 
+  findCustomerGroup(force: boolean, filter: any) {
+    this.systemService.loadCustomerGroupList(force, filter);
+    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerGroupList: any) => {
+        this.customerGroupData = customerGroupList;
+      }));
+  }
   setForm(event: any) {
     this.partForm = this.formBuilder.group({
       customerGroup: [event !== undefined ? event.customerGroup : ''],

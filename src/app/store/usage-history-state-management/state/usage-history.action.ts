@@ -70,7 +70,7 @@ export class DeleteShareMyDataByIdAction {
 
 export class GetGasListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_GAS_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly userId: any, readonly filter: any) {
     }
 }
 
@@ -93,7 +93,7 @@ export class DeleteGasByIdAction {
 
 export class GetGasChargeListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_GAS_CHARGE_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly userId: any, readonly filter: any) {
     }
 }
 
@@ -116,7 +116,7 @@ export class DeleteGasChargeByIdAction {
 
 export class GetGasSmartMeterListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_GAS_SMART_METER_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly userId: any, readonly filter: any) {
     }
 }
 
@@ -140,7 +140,7 @@ export class DeleteGasSmartMeterByIdAction {
 
 export class GetElectricityListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_ELECTRICITY_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly userId: any, readonly filter: any) {
     }
 }
 
@@ -163,7 +163,7 @@ export class DeleteElectricityByIdAction {
 
 export class GetElectricityChargeListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_ELECTRICITY_CHARGE_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly userId: any, readonly filter: any) {
     }
 }
 
@@ -186,7 +186,7 @@ export class DeleteElectricityChargeByIdAction {
 
 export class GetElectricitySmartMeterListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_ELECTRICITY_SMART_METER_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly userId: any, readonly filter: any) {
     }
 }
 
@@ -209,7 +209,7 @@ export class DeleteElectricitySmartMeterByIdAction {
 
 export class GetElectricityDailySmartMeterListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_ELECTRICITY_DAILY_SMART_METER_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly userId: any, readonly filter: any) {
     }
 }
 

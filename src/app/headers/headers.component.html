@@ -2,13 +2,13 @@
     <div data-qa="popup-mode-drawer_right" mode="drawer_right" width="800" class="feedbackCss" open="true"
         id="feedback2">
         <img alt="close-typeform" data-qa="popup-close-button" mode="drawer_right" src="./assets/images/cross.gif"
-            class="feedbackiframe" (click)="closefeedbackpage()" id="feedback1">
+            class="feedbackiframe" (click)="closeFeedBackPage()" id="feedback1">
         <iframe [src]="iframeUrl | safe: 'resourceUrl'" data-qa="iframe" frameborder="0" height="100%" width="100%"
             style="border: 0px;">
         </iframe>
     </div>
 </div>
-<button class="feedbackButton" (click)="openfeedbackpage()">FeedBack</button>
+<button class="feedbackButton" *ngIf="users?.role=='USERS'" (click)="openFeedBackPage()">FeedBack</button>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation" *ngIf="!isResponsive">
     <div class="container-fluid">
         <div class="row">

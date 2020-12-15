@@ -43,3 +43,9 @@ select {
   padding-right: 30px;
   background-position-x: 98%;
 }
+
+@media (min-width: 200px) and (max-width: 767px) {
+ .marginTop{
+   margin-top: 20%;
+ }
+}

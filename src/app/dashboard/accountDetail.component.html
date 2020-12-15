@@ -8,85 +8,162 @@
                         <p class="Account">Account Settings</p>
                         <form class="form-horizontal" action="/action_page.php">
                             <div class="form-group">
-                                <label class="control-label col-sm-2 col-xs-3" for="Username">Username:</label>
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="Username">Username:</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <input type="text" class="form-control" id="Username" name="username" [(ngModel)]="users.outhMeResponse.user.username">
+                                    <input type="text" class="form-control"
+                                        id="Username" name="username"
+                                        [(ngModel)]="users.outhMeResponse.user.username">
                                 </div>
                                 <div class="col-sm-4 col-xs-2">
-                                        <img src="assets/images/icon_help.svg" style="float: right; margin-top: 0%;margin-left: 5px;" class="media-object" id="help_btn1" (click)="helpHide=!helpHide">
+                                    <img src="assets/images/icon_help.svg"
+                                        style="float: right; margin-top:
+                                        0%;margin-left: 5px;"
+                                        class="media-object" id="help_btn1"
+                                        (click)="helpHide=!helpHide">
                                 </div>
-                                <div class="row" id="helpiconcontainresponsive" class="help" *ngIf="helpHide">
+                                <div class="row" id="helpiconcontainresponsive"
+                                    class="help" *ngIf="helpHide">
                                     <div class="col-sm-12 col-xs-12">
-                                        <p class="demo1">This is your user name for this service.
-                                            <span class="hidebuttondemo" (click)="helpHide=!helpHide">hide</span>
+                                        <p class="demo1">This is your user name
+                                            for this service.
+                                            <span class="hidebuttondemo"
+                                                (click)="helpHide=!helpHide">hide</span>
                                         </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2 col-xs-3" for="mail">E-mail:</label>
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="mail">E-mail:</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <input type="text" class="form-control" id="mail" name="email" [(ngModel)]="users.outhMeResponse.user.email">
+                                    <input type="text" class="form-control"
+                                        id="mail" name="email"
+                                        [(ngModel)]="users.outhMeResponse.user.email">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2 col-xs-3" for="name">Name:</label>
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="name">Name:</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <input type="text" class="form-control" id="name" name="Name" [(ngModel)]="users.outhMeResponse.user.name">
+                                    <input type="text" class="form-control"
+                                        id="name" name="Name"
+                                        [(ngModel)]="users.outhMeResponse.user.name">
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="users.role!='USERS'">
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="name">Status:</label>
+                                <div class="col-sm-6 col-xs-7">
+                                    <select class="form-control form-control-sm"
+                                        id="status" name="status"
+                                        [(ngModel)]="users.outhMeResponse.user.status">
+                                        <option value="0">Active (0)</option>
+                                        <option value="10">In registration (10)</option>
+                                        <option value="90">Blocked (90)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="users.role=='USERS'">
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="phone">Phone number:</label>
+                                <div class="col-sm-6 col-xs-7">
+                                    <input type="text" class="form-control"
+                                        id="phone" name="phone"
+                                        [(ngModel)]="users.outhMeResponse.phoneNumber">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2 col-xs-3" for="phone">Phone number:</label>
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="pwd">New password:</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <input type="text" class="form-control" id="phone" name="phone" [(ngModel)]="users.outhMeResponse.phoneNumber">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-2 col-xs-3" for="pwd">New password:</label>
-                                <div class="col-sm-6 col-xs-7">
-                                    <input type="password" class="form-control" id="pwd">
+                                    <input type="password" class="form-control"
+                                        id="pwd">
                                 </div>
                                 <div class="col-sm-4 col-xs-2">
-                                        <img src="assets/images/icon_help.svg" style="float:right; margin-top: 0%;margin-left: 5px;" class="media-object" id="help_btn1" (click)="helpHide1=!helpHide1">
+                                    <img src="assets/images/icon_help.svg"
+                                        style="float:right; margin-top:
+                                        0%;margin-left: 5px;"
+                                        class="media-object" id="help_btn1"
+                                        (click)="helpHide1=!helpHide1">
                                 </div>
-                                <div class="row" id="helpiconcontainresponsive" *ngIf="helpHide1">
+                                <div class="row" id="helpiconcontainresponsive"
+                                    *ngIf="helpHide1">
                                     <div class="col-sm-12 col-xs-12">
-                                        <p class="demo1">This is where you can change your password for this service.
-                                            <span class="hidebuttondemo" (click)="helpHide1=!helpHide1">hide</span>
+                                        <p class="demo1">This is where you can
+                                            change your password for this
+                                            service.
+                                            <span class="hidebuttondemo"
+                                                (click)="helpHide1=!helpHide1">hide</span>
                                         </p>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="control-label col-sm-2 col-xs-3" for="newPwd">New password (repeat):</label>
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="newPwd">New password (repeat):</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <input type="password" class="form-control" id="newPwd">
+                                    <input type="password" class="form-control"
+                                        id="newPwd">
                                 </div>
                             </div>
-                            <div class="form-group" *ngIf="users.outhMeResponse.calWaterAccount!=null&&users.outhMeResponse.calWaterAccount!=undefined">
-                                <label class="control-label col-sm-2 col-xs-3" for="pwd">CalWater account:</label>
+                            <div class="form-group" *ngIf="users.role!='USERS'">
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="phone">Customer View:</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <p class="accountcss">{{users.outhMeResponse.calWaterAccount}}<a class="a_edit" (click)="edit(3)">Edit</a></p>
+                                    <select class="form-control form-control-sm"
+                                        id="customerViewConfigurationId"
+                                        name="customerViewConfiguration"
+                                        [(ngModel)]="users.outhMeResponse.user.customerViewConfigurationId">
+                                        <option value="-1">Standard</option>
+                                        <option *ngFor="let viewConfiguration of
+                                            viewConfigurationList"
+                                            [value]="viewConfiguration.viewConfigurationId">
+                                            {{viewConfiguration.configurationName}}</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="form-group" *ngIf="users.outhMeResponse.purismaAccount!=null&&users.outhMeResponse.purismaAccount!=undefined">
-                                <label class="control-label col-sm-2 col-xs-3" for="pwd">Purissima account:</label>
+                            <div class="form-group"
+                                *ngIf="users.outhMeResponse.calWaterAccount!=null&&users.outhMeResponse.calWaterAccount!=undefined
+                                && users.role=='USERS'">
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="pwd">CalWater account:</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <p class="accountcss">{{users.outhMeResponse.purismaAccount}}<a class="a_edit" (click)="edit(3)">Edit</a></p>
+                                    <p class="accountcss">{{users.outhMeResponse.calWaterAccount}}<a
+                                            class="a_edit" (click)="edit(3)">Edit</a></p>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-2 col-xs-3" for="address">Address:</label>
+                            <div class="form-group"
+                                *ngIf="users.outhMeResponse.purismaAccount!=null&&users.outhMeResponse.purismaAccount!=undefined&&
+                                users.role=='USERS'">
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="pwd">Purissima account:</label>
+                                <div class="col-sm-6 col-xs-7">
+                                    <p class="accountcss">{{users.outhMeResponse.purismaAccount}}<a
+                                            class="a_edit" (click)="edit(3)">Edit</a></p>
+                                </div>
+                            </div>
+                            <div class="form-group" *ngIf="users.role=='USERS'">
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="address">Address:</label>
                                 <div class="col-sm-6 col-xs-7">
                                     <p class="accountcss">{{users.outhMeResponse.pgeAddress}}</p>
                                 </div>
                                 <div class="col-sm-4 col-xs-2">
-                                        <img src="assets/images/icon_help.svg" style="float:right; margin-top: 0%;margin-left: 5px;"class="media-object" id="help_btn1" (click)="helpHide2=!helpHide2">
+                                    <img src="assets/images/icon_help.svg"
+                                        style="float:right; margin-top:
+                                        0%;margin-left: 5px;"
+                                        class="media-object" id="help_btn1"
+                                        (click)="helpHide2=!helpHide2">
                                 </div>
-                                <div class="row" id="helpiconcontainresponsive" *ngIf="helpHide2">
+                                <div class="row" id="helpiconcontainresponsive"
+                                    *ngIf="helpHide2">
                                     <div class="col-sm-12 col-xs-12">
-                                        <p class="demo1">Please contact your utility to change this address information.
-                                            <span class="hidebuttondemo" (click)="helpHide2=!helpHide2">hide</span>
+                                        <p class="demo1">Please contact your
+                                            utility to change this address
+                                            information.
+                                            <span class="hidebuttondemo"
+                                                (click)="helpHide2=!helpHide2">hide</span>
                                         </p>
                                     </div>
                                 </div>
@@ -94,8 +171,8 @@
                         </form>
                     </div>
                 </div>
-                <hr/>
-                <div class="row">
+                <hr>
+                <div class="row" *ngIf="users.role=='USERS'">
                     <div class="col-sm-6 col-xs-4">
                         <h3 class="Account">Home Profile</h3>
                         <hr>
@@ -109,36 +186,50 @@
                     <div class="col-sm-3 col-xs-4">
                         <h3 class="Account">Data from Zillow</h3>
                         <hr>
-                        <p *ngIf="users.outhMeResponse.zillowConstructionSQFT!=null&&users.outhMeResponse.zillowConstructionSQFT!=undefined">{{users.outhMeResponse.zillowConstructionSQFT}}</p>
-                        <p *ngIf="users.outhMeResponse.zillowConstructionSQFT==null||users.outhMeResponse.zillowConstructionSQFT==undefined">-</p>
+                        <p
+                            *ngIf="users.outhMeResponse.zillowConstructionSQFT!=null&&users.outhMeResponse.zillowConstructionSQFT!=undefined">{{users.outhMeResponse.zillowConstructionSQFT}}</p>
+                        <p
+                            *ngIf="users.outhMeResponse.zillowConstructionSQFT==null||users.outhMeResponse.zillowConstructionSQFT==undefined">-</p>
                         <hr>
-                        <p *ngIf="users.outhMeResponse.zillowLotSize!=null&&users.outhMeResponse.zillowLotSize!=undefined">{{users.outhMeResponse.zillowLotSize}}</p>
-                        <p *ngIf="users.outhMeResponse.zillowLotSize==null||users.outhMeResponse.zillowLotSize==undefined">-</p>
+                        <p
+                            *ngIf="users.outhMeResponse.zillowLotSize!=null&&users.outhMeResponse.zillowLotSize!=undefined">{{users.outhMeResponse.zillowLotSize}}</p>
+                        <p
+                            *ngIf="users.outhMeResponse.zillowLotSize==null||users.outhMeResponse.zillowLotSize==undefined">-</p>
                         <hr>
-                        <p *ngIf="users.outhMeResponse.zillowYearBuilt!=null&&users.outhMeResponse.zillowYearBuilt!=undefined">{{users.outhMeResponse.zillowYearBuilt}}</p>
-                        <p *ngIf="users.outhMeResponse.zillowYearBuilt==null||users.outhMeResponse.zillowYearBuilt==undefined">-</p>
+                        <p
+                            *ngIf="users.outhMeResponse.zillowYearBuilt!=null&&users.outhMeResponse.zillowYearBuilt!=undefined">{{users.outhMeResponse.zillowYearBuilt}}</p>
+                        <p
+                            *ngIf="users.outhMeResponse.zillowYearBuilt==null||users.outhMeResponse.zillowYearBuilt==undefined">-</p>
                         <hr>
                     </div>
                     <div class="col-sm-3 col-xs-4">
                         <h3 class="Account">User entered data</h3>
                         <hr>
-                        <p>{{users.outhMeResponse.constructionSQFT}}<a  *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(1)">Edit</a></p>
+                        <p>{{users.outhMeResponse.constructionSQFT}}<a
+                                *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0"
+                                class="a_edit" (click)="edit(1)">Edit</a></p>
                         <hr>
                         <!-- <p>{{users.outhMeResponse.lotSize}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(2)">Edit</a></p> -->
                         <p>{{users.outhMeResponse.lotSize}}</p>
                         <hr>
-                        <p>{{users.outhMeResponse.yearBuilt}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(3)">Edit</a></p>
+                        <p>{{users.outhMeResponse.yearBuilt}}<a
+                                *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0"
+                                class="a_edit" (click)="edit(3)">Edit</a></p>
                         <hr>
                     </div>
                 </div>
-                <br/>
-                <div class="row">
+                <br>
+                <div class="row" *ngIf="users.role=='USERS'">
                     <div class="col-sm-12 col-xs-12">
-                        <p class="utility"><img _ngcontent-c2="" class="dot" src="assets/images/dot03.gif">&nbsp;Utility Credentials</p>
+                        <p class="utility"><img _ngcontent-c2=""
+                                class="dot"
+                                src="assets/images/dot03.gif">&nbsp;Utility
+                            Credentials</p>
                         <div class="table-responsive">
                             <table class="table">
                                 <thead>
-                                    <tr style="background: #000; color: #fff;">
+                                    <tr style="background: #000; color:
+                                        #fff;">
                                         <th>Credential Type</th>
                                         <th>Active</th>
                                         <th>Login</th>
@@ -146,11 +237,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let credentialsList of customerCredentialsList">
+                                    <tr *ngFor="let credentialsList of
+                                        customerCredentialsList">
                                         <td>{{credentialsList.credentialTypeCode}}</td>
-                                        <td><span *ngIf="credentialsList.active"><img class="dot" src="assets/images/icon_check_orange.png"></span></td>
+                                        <td><span
+                                                *ngIf="credentialsList.active"><img
+                                                    class="dot"
+                                                    src="assets/images/icon_check_orange.png"></span></td>
                                         <td>{{credentialsList.login}}</td>
-                                        <td>{{credentialsList.lastSuccessfulUsageDate| date : "MM/dd/yyyy hh:mm:ss"}}</td>
+                                        <td>{{credentialsList.lastSuccessfulUsageDate|
+                                            date : "MM/dd/yyyy
+                                            hh:mm:ss"}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -158,79 +255,113 @@
                     </div>
                 </div>
                 <div class="row">
-                     <div class="col-sm-8 col-xs-7">
+                    <div class="col-sm-8 col-xs-7">
                         <p class="utility">Connect your account with:</p>
                     </div>
                     <div class="col-sm-1 col-xs-1">
                         <img src="assets/images/facebook.png">
                     </div>
-                    <div class="col-sm-3 col-xs-4" style="text-align: end;">
-                    <img src="assets/images/google2.jpg">
-                </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-xs-3">
-                        <button class="btn btn-primary" type="button" [routerLink]="['/dashboard']">Cancel</button>
+                    <div class="col-sm-3 col-xs-4 button-responsive" style="text-align:
+                        end;">
+                        <img src="assets/images/google2.jpg">
                     </div>
-                    <div class="col-sm-6 col-xs-9" style="text-align:right;">
-                        <button class="btn btn-primary" type="button" (click)="postCustomerData()">Save</button>
+                </div>
+                <div class="row row-top-margin">
+                    <div class="col-sm-6 col-xs-3">
+                        <button class="btn btn-primary" type="button"
+                            (click)="cancel()">Cancel</button>
+                    </div>
+                    <div class="col-sm-6 col-xs-9"
+                        style="text-align:right;">
+                        <button class="btn btn-primary" type="button"
+                            (click)="postCustomerData()">Save</button>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3 rightColumn">
+            <div class="col-sm-3 rightColumn" *ngIf="users.role=='USERS'">
                 <p class="Energy_anaiytic">
-                    <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
+                    <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered
+                    by Home Energy Analytics, Inc.</p>
                 <p class="feedback">Send feedback to</p>
                 <p class="link_hea">
-                    <a  href = "mailto:info@hea.com" class="info_hea">info@hea.com</a>
+                    <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
                 </p>
                 <hr>
                 <ul class="leaks">
                     <li>
-                        <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
+                        <a class="a_history"
+                            [routerLink]="['/topicshistory']">Topics
+                            history</a>
                     </li>
                     <li>
-                        <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
+                        <a class="a_history"
+                            [routerLink]="['/customerEventList']">Events
+                            history</a>
                     </li>
                     <li>
-                        <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
+                        <a class="a_history"
+                            [routerLink]="['/MailArchiveList']">Mail
+                            archive</a>
                     </li>
                     <li>
-                        <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
+                        <a class="a_history"
+                            [routerLink]="['/surveyRecommendationList']">Recommendations</a>
                     </li>
                     <li>
-                        <div class="dropdown" style="margin-left: 20px;">
-                            <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
+                        <div class="dropdown" style="margin-left:
+                            20px;">
+                            <a class="dropdown-toggle" id="menu1"
+                                data-toggle="dropdown">Usage history
                             </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasList']">Gas</a>
+                            <ul class="dropdown-menu" role="menu"
+                                aria-labelledby="menu1">
+                                <li role="presentation"
+                                    style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/gas/gasList']">Gas</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasChargeList']">Gas charge</a>
+                                <li role="presentation"
+                                    style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/gas/gasChargeList']">Gas
+                                        charge</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricityUsageList']">Electricity</a>
+                                <li role="presentation"
+                                    style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricityUsageList']">Electricity</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricity/electricityChargeList']">Electricity charge</a>
+                                <li role="presentation"
+                                    style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricity/electricityChargeList']">Electricity
+                                        charge</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricity/electricitySmartMeterList']">Electric smart meter</a>
+                                <li role="presentation"
+                                    style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/electricity/electricitySmartMeterList']">Electric
+                                        smart meter</a>
                                 </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasSmartMeterList']">Gas smart meter</a>
+                                <li role="presentation"
+                                    style="padding-bottom: 5px;">
+                                    <a role="menuitem" tabindex="-1"
+                                        [routerLink]="['/gas/gasSmartMeterList']">Gas
+                                        smart meter</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                 </ul>
             </div>
+            <div class="col-sm-3 rightColumn" *ngIf="users.role!='USERS'">
+                <app-sidebar></app-sidebar>
+            </div>
         </div>
     </div>
 </section>
 <br/><br/>
-<style>
+        <style>
     .Account {
         font-size: 21px;
         color: #000;
@@ -336,4 +467,12 @@
         position: absolute;
         right: 0;
     }
+    .row-top-margin{
+        margin-top: 15px;;
+    }
+    @media only screen and (min-width: 200px) and (max-width: 485px) {
+    .button-responsive{
+        display: inline-table;
+    }
+}
 </style>

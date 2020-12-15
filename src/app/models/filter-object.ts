@@ -63,4 +63,32 @@ export class AdminFilter {
         page: null,
         formValue: null
     };
+    public gasFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public gasChargeFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public gasSmartMeterFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public electricityFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public electricityChargeFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public electricitySmartMeterFilter: any = {
+        page: null,
+        formValue: null
+    };
+    public electricityDailySmartMeterFilter: any = {
+        page: null,
+        formValue: null
+    };
 }

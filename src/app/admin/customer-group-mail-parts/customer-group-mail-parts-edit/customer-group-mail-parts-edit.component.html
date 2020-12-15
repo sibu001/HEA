@@ -11,7 +11,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Customer Group:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="customerGroup" id="customerGroup">
-                <option *ngFor='let customer of customerGroupData' [value]="customer">{{customer.value}}</option>
+                <option *ngFor='let customer of customerGroupData' [value]="customer.groupCode">{{customer.groupName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

@@ -83,7 +83,7 @@
               <input type="text" class="form-control form-control-sm" id="email" formControlName="email">
               <div *ngIf="f1.email.invalid && (f1.email.dirty ||
                 f1.email.touched)">
-                <span class="error" *ngIf="f1.email.errors.required">
+                <span class="error" *ngIf="f1.email.errors.required || f1.email.errors.pattern">
                   Email is required.
                 </span>
               </div>
@@ -104,6 +104,12 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="phoneNumber" formControlName="phoneNumber">
+              <div *ngIf="f.phoneNumber.invalid && (f.phoneNumber.dirty ||
+                f.phoneNumber.touched)">
+                <span class="error" *ngIf="f.phoneNumber.errors.required">
+                  Phone Number is required.
+                </span>
+              </div>
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -467,7 +473,7 @@
         </form>
 
         <!-- Utility Credentials -->
-        <div class="row">
+        <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
               <img src="assets/images/dot03.gif" class="dot pointer"><strong>Utility
@@ -486,7 +492,7 @@
         </div>
 
         <!-- Alerts notes -->
-        <div class="row">
+        <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
               <img src="assets/images/dot03.gif" class="dot pointer">
@@ -506,7 +512,7 @@
         </div>
 
         <!-- Customer Events -->
-        <div class="row">
+        <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
               <img src="assets/images/dot03.gif" class="dot
@@ -525,7 +531,7 @@
 
 
         <!-- Staff Notes -->
-        <div class="row">
+        <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
               <img src="assets/images/dot03.gif" class="dot pointer"><strong>Staff
@@ -542,7 +548,7 @@
           </div>
         </div>
         <!-- Customer Files (Note: Changes in Sandbox also affect Production version) -->
-        <div class="row">
+        <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
               <img src="assets/images/dot03.gif" class="dot pointer"><strong>Customer

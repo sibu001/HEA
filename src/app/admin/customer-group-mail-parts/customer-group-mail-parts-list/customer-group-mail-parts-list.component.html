@@ -14,8 +14,8 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName='customerGroup' id='customerGroup'>
-                <option *ngFor='let customerGroup of customerGroupData' [value]="customerGroup.key">
-                  {{customerGroup.value}}</option>
+                <option *ngFor='let customerGroup of customerGroupData' [value]="customerGroup.groupCode">
+                  {{customerGroup.groupName}}</option>
               </select>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
