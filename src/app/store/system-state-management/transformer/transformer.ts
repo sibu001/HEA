@@ -16,4 +16,18 @@ export class SystemTransformer {
         });
         return dataSourceList;
     }
+    static transformRole(src: any): any {
+        const dataSourceList: any = [];
+        src.list.forEach(element => {
+            let dataSourceObject: any = {};
+            dataSourceObject = element;
+            if (element.permanent) {
+                element.permanent = 'Permanent';
+            } else {
+                element.permanent = 'User defined';
+            }
+            dataSourceList.push(dataSourceObject);
+        });
+        return { list: dataSourceList };
+    }
 }

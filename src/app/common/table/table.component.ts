@@ -232,7 +232,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   linkCall(routerLink: any, queryParam: any, col: any) {
     const event = {
-      routLink: routerLink,
+      routeLink: routerLink,
       queryParam: queryParam,
       value: col
     };

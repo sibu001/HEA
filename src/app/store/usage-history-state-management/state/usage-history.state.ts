@@ -367,7 +367,7 @@ export class UsageHistoryManagementState {
                     tap(
                         (response: any) => {
                             document.getElementById('loader').classList.remove('loading');
-                            const res = UsageHistoryTransformer.transformGasChargeList(response);
+                            const res = UsageHistoryTransformer.transformGasList(response);
                             ctx.patchState({
                                 gasChargeList: res,
                             });

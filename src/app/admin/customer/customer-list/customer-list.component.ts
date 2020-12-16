@@ -132,7 +132,6 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   getViewConfigurationList(url: any) {
     this.subscriptions.add(this.customerService.loadCustomerViewConfigurationList(Number(this.searchForm.controls['customerView'].value), url).pipe(skipWhile((item: any) => !item))
       .subscribe((customerList1: any) => {
-        console.log(customerList1);
         const tableValue = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value), customerList1.customerManagement.customerViewConfigurationList);
         this.keys = tableValue.key;
         const customerValue = Transformer.transformCustomerTableData(customerList1.customerManagement.customerViewConfigurationList, Number(this.searchForm.controls['customerView'].value), tableValue.dataKey);
@@ -173,7 +172,6 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   getCustomerList(url: any) {
     this.subscriptions.add(this.customerService.loadCustomerList(true, url, Number(this.searchForm.controls['customerView'].value)).pipe(skipWhile((item: any) => !item))
       .subscribe((customerList1: any) => {
-        console.log(customerList1.customerManagement.customerList);
         const tableValue = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value), customerList1.customerManagement.customerList);
         this.keys = tableValue.key;
         const customerValue = Transformer.transformCustomerTableData(customerList1.customerManagement.customerList, Number(this.searchForm.controls['customerView'].value), tableValue.dataKey);
@@ -196,6 +194,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('loadCustomers', 'true')
         .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
         .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+        .set('filter.setupReportKey', 'true')
         .set('filter.auditId', (this.searchForm.controls['auditId'].value !== null ? this.searchForm.controls['auditId'].value : ''))
         .set('filter.customerGroupId', (this.searchForm.controls['customerGroup'].value !== null ? this.searchForm.controls['customerGroup'].value : ''))
         .set('filter.customerName', (this.searchForm.controls['customerName'].value !== null ? this.searchForm.controls['customerName'].value : ''))
@@ -317,14 +316,18 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     });
   }
   handleLink(event: any) {
-    this.subscriptions.add(this.customerService.loadCustomerById(event.value.customerId).pipe(skipWhile((item: any) => !item))
-      .subscribe((customer: any) => {
-        this.users.outhMeResponse = customer.customerManagement.customer;
-        this.users.theme = customer.customerManagement.customer.customerGroup.theme;
-        this.users.recommendationStatusChange = true;
-        this.loginService.setUser(this.users);
-        this.router.navigate([event.routLink], { queryParams: event.queryParam });
-      }));
+    if (event.routeLink === 'userReportLink.do') {
+      window.open(window.location.origin + '/hea-web/' + event.routeLink + '?reportKey=' + event.value.reportKey + '&userReportType=userHistory', '_blank');
+    } else {
+      this.subscriptions.add(this.customerService.loadCustomerById(event.value.customerId).pipe(skipWhile((item: any) => !item))
+        .subscribe((customer: any) => {
+          this.users.outhMeResponse = customer.customerManagement.customer;
+          this.users.theme = customer.customerManagement.customer.customerGroup.theme;
+          this.users.recommendationStatusChange = true;
+          this.loginService.setUser(this.users);
+          this.router.navigate([event.routeLink], { queryParams: event.queryParam });
+        }));
+    }
   }
 
   ngOnDestroy(): void {
@@ -332,7 +335,6 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   }
 
   onImageClickEvent(event: any): void {
-    console.log(event);
     if (event.col.attributeType === 'N') {
       this.addStaffNote(event);
     } else if (event.col.attributeType === 'E') {

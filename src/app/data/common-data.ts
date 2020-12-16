@@ -49,8 +49,9 @@ export class TableColumnData {
         { key: 'electricityInUse', displayName: 'Electricity', type: 'image' },
         { key: 'heatingInUse', displayName: 'Heating', type: 'image' },
         { key: 'waterInUse', displayName: 'Water', type: 'image' },
-        { key: 'lastSuccessfulUsageDate', displayName: 'Last Usage', isDate: true },
-        { key: 'authorizationEndDate', displayName: 'Auth End Date', isDate: true },
+        { key: 'lastSuccessfulUsageDate', displayName: 'Last Usage'},
+        { key: 'authorizationStartDate', displayName: 'Auth Start Date'},
+        { key: 'authorizationEndDate', displayName: 'Auth End Date'},
         { key: 'authorizationStatus', displayName: 'Auth Status' }
     ];
 

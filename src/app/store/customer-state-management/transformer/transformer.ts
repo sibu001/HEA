@@ -1,3 +1,5 @@
+import { DatePipe } from '@angular/common';
+
 export class Transformer {
     static transformCustomerTableData(src: any, viewType: number, dataKey?: any): any {
         const dataSource: any = {
@@ -14,6 +16,7 @@ export class Transformer {
                 dataSourceObj.joinDate = new Date(element.createdDate);
                 dataSourceObj.maxAlertLevel = element.maxAlertLevel;
                 dataSourceObj.customerId = element.customerId;
+                dataSourceObj.reportKey = element.reportKey;
                 dataSource.list.push(dataSourceObj);
             });
             dataSource.startRow = src.startRow;
@@ -25,7 +28,19 @@ export class Transformer {
                 let i = 0;
                 const dataSourceObj: any = {};
                 element.columns.forEach(columnValue => {
-                    dataSourceObj[dataKey[i]] = columnValue.value;
+                    if (dataKey[i].pattern === '###,##0 th') {
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (parseFloat(columnValue.value).toFixed(0) + ' th') : '';
+                    } else if (dataKey[i].pattern === '#,##0 W' || dataKey[i].pattern === '###,##0 W') {
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (parseFloat(columnValue.value).toFixed(0) + ' W') : '';
+                    } else if (dataKey[i].pattern === '###,##0 kWh') {
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (parseFloat(columnValue.value).toFixed(0) + ' kWh') : '';
+                    } else if (dataKey[i].pattern === '#,###' || dataKey[i].pattern === '##' || dataKey[i].pattern === '##0') {
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (parseFloat(columnValue.value).toFixed(0)) : '';
+                    } else if (dataKey[i].pattern === '$#,##0') {
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? ('$' + parseFloat(columnValue.value).toFixed(0)) : '';
+                    } else {
+                        dataSourceObj[dataKey[i].definition] = columnValue.value;
+                    }
                     i++;
                 });
                 dataSourceObj.customerId = element.customerId;
@@ -70,7 +85,7 @@ export class Transformer {
                             queryParam: {}
                         },
                         {
-                            routerLink: 'https://sandbox.hea.com/hea-web/userReportLink.do',
+                            routerLink: 'userReportLink.do',
                             displayName: 'User History',
                             queryParam: {}
                         }
@@ -111,13 +126,19 @@ export class Transformer {
                 keyObj = element;
                 if (element.label === 'Files') {
                     keyObj.key = 'files';
-                    dataKey[i] = 'files';
+                    element.definition = 'files';
+                    dataKey[i] = element;
                 } else if (element.label === 'IntNotes') {
                     keyObj.key = 'staffNote';
-                    dataKey[i] = 'staffNote';
+                    element.definition = 'staffNote';
+                    dataKey[i] = element;
+                } if (element.definition === 'activationDate' || element.definition === 'user.lastSuccessfulUtilityReadDate') {
+                    keyObj.key = element.definition;
+                    keyObj.isDate = true;
+                    dataKey[i] = element;
                 } else {
                     keyObj.key = element.definition;
-                    dataKey[i] = element.definition;
+                    dataKey[i] = element;
                 }
 
                 keyObj.displayName = element.label;
@@ -163,8 +184,12 @@ export class Transformer {
             dataSourceObj.electricityInUse = element.electricityInUse ? 'assets/images/icon_check_orange.png' : '';
             dataSourceObj.heatingInUse = element.heatingInUse ? 'assets/images/icon_check_orange.png' : '';
             dataSourceObj.waterInUse = element.waterInUse ? 'assets/images/icon_check_orange.png' : '';
-            dataSourceObj.authorizationEndDate = element.authorizationEndDate ? new Date(element.authorizationEndDate) : '';
-            dataSourceObj.lastSuccessfulUsageDate = element.lastSuccessfulUsageDate ? new Date(element.lastSuccessfulUsageDate) : '';
+            dataSourceObj.authorizationEndDate = element.authorizationEndDate ? new DatePipe('en-US').transform(new Date(element.authorizationEndDate), 'MM/dd/yyyy') : '';
+            dataSourceObj.authorizationStartDate = element.authorizationStartDate ? new DatePipe('en-US').transform(new Date(element.authorizationStartDate), 'MM/dd/yyyy') : '';
+            dataSourceObj.lastSuccessfulUsageDate = element.lastSuccessfulUsageDate ? new DatePipe('en-US').transform(new Date(element.lastSuccessfulUsageDate), 'MM/dd/yyyy, h:mm:ss') : '';
+            if (dataSourceObj.authorizationStatus === '1') {
+                dataSourceObj.authorizationStatus = 'Active';
+            }
             dataSource.push(dataSourceObj);
         });
         return dataSource;

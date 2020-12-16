@@ -40,8 +40,12 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   customerForm: FormGroup;
   passwordForm: FormGroup;
   customerGroupList: any;
+  programGroupList: any;
   coachUserList: any;
+  customerGroupCode: any;
+  energyCoach: any;
   pgeHasPoolDisabled = false;
+  helpHide: boolean;
   placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
   credentialsKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_CREDENTIAL_KEY;
@@ -135,12 +139,15 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         if (this.isForce) {
           this.router.navigate(['admin/customer/customerEdit'], { queryParams: { 'id': customer.customerId } });
         }
+        this.customerGroupCode = customer.customerGroup.groupCode;
+        this.energyCoach = customer.coachUser.name;
         this.setForm(customer);
       }));
   }
   loadCustomerGroup() {
     this.systemService.loadCoachUserList(true, '?filter.withRole=COACH');
     this.systemService.loadCustomerGroupList(false, '');
+    this.systemService.loadProgramGroupsList(false, '');
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
         this.customerGroupList = customerGroupList;
@@ -148,6 +155,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemService.getCoachUserList().pipe(skipWhile((item: any) => !item))
       .subscribe((coachUserList: any) => {
         this.coachUserList = coachUserList.list;
+      }));
+    this.subscriptions.add(this.systemService.getProgramGroupList().pipe(skipWhile((item: any) => !item))
+      .subscribe((programGroupList: any) => {
+        this.programGroupList = programGroupList;
       }));
 
   }
@@ -157,11 +168,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       confirmPassword: ['']
     }, { validator: MustMatch('password', 'confirmPassword') });
   }
-  // checkPasswords(group: FormGroup) { // here we have the 'passwords' group
-  //   const pass = group.get('password').value;
-  //   const confirmPass = group.get('confirmPassword').value;
-  //   return pass === confirmPass ? null : { notSame: true };
-  // }
+
   setForm(event: any) {
     this.customerForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
@@ -238,7 +245,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       viewedHomepage: [event !== undefined ? event.viewedHomepage : ''],
       stopJob: [event !== undefined ? event.stopJob : ''],
       allowUIVersion: [event !== undefined ? event.allowUIVersion : ''],
-      uiVersion: [event !== undefined ? event.uiVersion : 'V1'],
+      uiVersion: [event !== undefined && event.uiVersion ? event.uiVersion : 'V1'],
       programGroup: [event !== undefined ? event.programGroup : null],
       coachUser: [event !== undefined ? event.customerGroup : null],
       registrationDate: [event !== undefined ? (this.datePipe.transform(event.registrationDate, 'MM/dd/yyyy h:mm:ss')) : null],
@@ -265,6 +272,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         customerViewConfigurationId: [event !== undefined ? event.user.customerViewConfigurationId : ''],
         passwordChangeDate: [event !== undefined ? event.user.passwordChangeDate : ''],
         id: [event !== undefined ? event.user.id : ''],
+        
       }),
       customerGroup: [event !== undefined ? event.customerGroup : {}],
       place: this.formBuilder.group({

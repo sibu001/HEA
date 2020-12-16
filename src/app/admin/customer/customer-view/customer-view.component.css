@@ -44,9 +44,60 @@ section.space-top {
   padding-left: 0px !important;
 }
 
-.paddingTop{
+.paddingTop {
   padding-top: 3%;
 }
-.marginTop{
-  margin-top: 5%;;
+.marginTop {
+  margin-top: 5%;
+}
+
+div#helpiconcontainresponsive {
+  margin-top: 49px;
+  display: block;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+span.hidebuttondemo {
+  color: #75ba18;
+  display: block;
+  text-align: right;
+  font-weight: 500;
+  margin-top: 3px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+img#help_btn1 {
+  width: 33px;
+  cursor: pointer;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+  div#helpiconcontainresponsive {
+    margin-top: 42px;
+    display: block !important;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  img#help_btn1 {
+    width: 33px;
+    cursor: pointer;
+    margin-top: 11px;
+  }
+  .rightColumn {
+    min-height: 100% !important;
+    position: unset !important;
+  }
+}
+
+p.demo1 {
+  background-color: #f9f9f9;
+  font-weight: 500;
+  padding: 15px 15px 15px 15px;
+  line-height: 1.4;
+  text-align: justify;
+  color: #000;
+  font-size: 16px;
+  margin-top: 12px;
 }

@@ -557,7 +557,7 @@ export class SystemManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.credentialTypes , action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.credentialTypes, action.filter)
                 .pipe(
                     tap((response: any) => {
                         const res = SystemTransformer.transformCredentialType(response);
@@ -676,8 +676,9 @@ export class SystemManagementState {
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
+                        const res = SystemTransformer.transformRole(response.data);
                         ctx.patchState({
-                            roleList: response.data,
+                            roleList: res,
                         });
                     },
                         error => {
