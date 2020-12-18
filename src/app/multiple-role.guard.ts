@@ -4,7 +4,7 @@ import { Users } from './models/user';
 import { LoginService } from './services/login.service'
 
 @Injectable()
-export class RoleGuard implements CanActivate {
+export class MultipleRoleGuardService implements CanActivate {
     users: Users = new Users();
     constructor(private loginService: LoginService, private router: Router) {
         this.users = this.loginService.getUser();
@@ -12,7 +12,7 @@ export class RoleGuard implements CanActivate {
 
     canActivate(): boolean {
         this.users = this.loginService.getUser();
-        if (!this.loginService.isLoggedIn() || (this.users.role !== 'ADMIN' && this.users.role !== 'COACH')) {
+        if (!this.loginService.isLoggedIn() || this.users.role !== 'ADMIN') {
             this.router.navigate(['/login']);
             return false;
         }

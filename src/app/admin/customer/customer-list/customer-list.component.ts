@@ -42,6 +42,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0,
   };
+  pageIndex: any;
+  isCheckBox: boolean;
   public fileObject: any;
 
   private readonly subscriptions: Subscription = new Subscription();
@@ -183,14 +185,15 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   getFilterUrl(event: any, isSearch: boolean): any {
     this.customerView = this.searchForm.controls.customerView.value !== undefined && this.searchForm.controls.customerView.value !== null ? this.searchForm.controls.customerView.value : '-1';
     let params;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     if ((Number(this.searchForm.controls['customerView'].value)) === null || (Number(this.searchForm.controls['customerView'].value)) === -1) {
+      this.isCheckBox = true;
       params = new HttpParams()
         .set('filter.disableTotalSize', 'false')
         .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
         .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
           (event.pageIndex * event.pageSize) + '' : '0'))
-        .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-        .set('clearOrder', '' + isSearch)
         .set('loadCustomers', 'true')
         .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
         .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
@@ -209,15 +212,14 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('filter.coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
         .set('filter.credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
     } else {
+      this.isCheckBox = false;
       params = new HttpParams()
         .set('disableTotalSize', 'false')
         .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
         .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
           (event.pageIndex * event.pageSize) + '' : '0'))
-        .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-        .set('clearOrder', '' + isSearch)
         .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-        .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+        .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
         .set('auditId', (this.searchForm.controls['auditId'].value !== null ? this.searchForm.controls['auditId'].value : ''))
         .set('customerGroupId', (this.searchForm.controls['customerGroup'].value !== null ? this.searchForm.controls['customerGroup'].value : ''))
         .set('customerName', (this.searchForm.controls['customerName'].value !== null ? this.searchForm.controls['customerName'].value : ''))

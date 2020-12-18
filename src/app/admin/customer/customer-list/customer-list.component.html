@@ -161,14 +161,14 @@
                         <p class="Messages">
                             <img class="pointer" src="assets/images/dot03.gif" class="dot">Customers (Number of Records
                             =
-                            {{this.CustomerData.totalElements}})
+                            {{this.CustomerData.totalElements | number:'1.0':'en-US'}})
                         </p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <app-table [keys]="keys" [isPaginate]="true" [checkbox]=true [isSearch]="false" [showCSVExportButton]='showCSVExportButton'
-                            [data]="dataSource" [totalElement]="CustomerData.totalElements"
+                        <app-table [keys]="keys" [isPaginate]="true" [checkbox]="isCheckBox" [isSearch]="false" [showCSVExportButton]='showCSVExportButton'
+                            [data]="dataSource" [totalElement]="CustomerData.totalElements" [pageIndex]="pageIndex"
                             (changePageEvent)="findCustomer($event,false)" (goToEditEvent)="goToEditCustomer($event)"
                             (imageEvent)='onImageClickEvent($event)' (checkBoxChangeEvent)="checkBoxChangeEvent($event)" (addEvent)='addNewCustomer()' (handleLinkEvent)="handleLink($event)"
                             class="customerTable">

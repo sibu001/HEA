@@ -19,6 +19,7 @@ import { HeadersComponent } from './headers/headers.component';
 import { RoleGuard } from './role.guard';
 import { UtilityService } from './services/utility.service';
 import { MatSnackBarModule } from '@angular/material';
+import { MultipleRoleGuardService } from './multiple-role.guard';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { MatSnackBarModule } from '@angular/material';
     MatSnackBarModule
   ],
   exports: [HeaderModule],
-  providers: [LoginService, AuthGuard, RoleGuard, UtilityService, {
+  providers: [LoginService, AuthGuard, RoleGuard, MultipleRoleGuardService, UtilityService, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthorizationInterceptor,
     multi: true

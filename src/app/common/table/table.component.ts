@@ -7,7 +7,6 @@ import {
   SimpleChanges,
   Output,
   EventEmitter,
-  AfterViewChecked,
   ChangeDetectorRef,
 } from '@angular/core';
 import { Page } from '../../models/page';
@@ -15,7 +14,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Router } from '@angular/router';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
@@ -45,6 +43,7 @@ export class TableComponent implements OnInit, OnChanges {
   @ViewChild(MatSort) sort: MatSort;
   @Input() data: any;
   @Input() totalElement: any;
+  @Input() pageIndex: Number;
   @Input() keys: any;
   @Input() id: any;
   @Input() sideBorder: Boolean = false;
@@ -79,19 +78,16 @@ export class TableComponent implements OnInit, OnChanges {
   page = new Page();
   url: String;
   totalLength: Number;
+  pageIndexNumber: Number;
   pageEvent: PageEvent;
   selection = new SelectionModel<any>(true, []);
   tableForm: FormGroup = this.formBuilder.group({});
   constructor(
     private changeDetectorRefs: ChangeDetectorRef,
-    private router: Router,
     private formBuilder: FormBuilder
   ) { }
   ngOnInit() {
     this.changeDetectorRefs.detectChanges();
-    // }
-
-    // ngAfterViewChecked() {
     const list = document.getElementsByClassName('mat-paginator-range-label');
     if (list.length > 0) {
       list[0].remove();
@@ -109,8 +105,8 @@ export class TableComponent implements OnInit, OnChanges {
     if (changes['data'] && changes['data'].currentValue) {
       this.data = changes['data'].currentValue;
       this.totalLength = this.totalElement;
+      this.pageIndexNumber = this.pageIndex;
       this.dataSource = new MatTableDataSource(this.data);
-      this.loadPagination();
       if (this.selectionList.length > 0) {
         this.selectionList.forEach(e => {
           this.dataSource.data.every((row) => {
@@ -147,10 +143,6 @@ export class TableComponent implements OnInit, OnChanges {
         }
       });
     }
-  }
-
-  loadPagination() {
-    this.dataSource.sort = this.sort;
   }
 
   editColumn(col: any, row: any) {

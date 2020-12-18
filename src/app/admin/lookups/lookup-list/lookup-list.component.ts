@@ -69,6 +69,7 @@ export class LookupListComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemUtilityService.loadLookupCount().pipe(skipWhile((item: any) => !item))
       .subscribe((systemParameterCount: any) => {
         this.lookupData.totalElements = systemParameterCount.systemUtilityManagement.lookupCount;
+        this.totalElement = systemParameterCount.systemUtilityManagement.lookupCount;
 
         this.systemUtilityService.loadLookupList(force, filter);
         this.subscriptions.add(this.systemUtilityService.getLookupList().pipe(skipWhile((item: any) => !item))

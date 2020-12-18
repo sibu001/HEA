@@ -113,7 +113,7 @@ export class LoginComponent implements OnInit {
         (data) => {
           const response = JSON.parse(JSON.stringify(data));
           for (const roles of response) {
-            if (roles.roleCode === 'ADMIN') {
+            if (roles.roleCode !== 'USERS') {
               this.users.role = roles.roleCode;
               this.users.userId = userId;
               this.users.allSurveyCheck = true;
@@ -122,7 +122,7 @@ export class LoginComponent implements OnInit {
               break;
             }
           }
-          if (this.users.role !== 'ADMIN') {
+          if (this.users.role === 'USERS') {
             this.postGetCustomerData(userId, 'USERS');
           }
         },

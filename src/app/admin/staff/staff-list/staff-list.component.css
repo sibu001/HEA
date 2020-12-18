@@ -1,34 +1,45 @@
 section.space-top {
-    margin-top: 5.3em;
-  }
-  .heading {
-    font-size: 21px;
-    color: #000;
-    font-weight: 600;
-  }
-  .filterLabel {
-    color: #000;
-    font-weight: 600;
-    font-size: 13px;
-  }
-  p.messages {
-    font-size: 14px;
-    font-weight: 600;
-  }
-  .messageName {
-    margin-left: 4px;
-  }
-  .btn-primary {
-    color: #fff;
-    background-color: #76ba19;
-    border-color: #76ba19;
-    padding: 4px 23px;
-    border-radius: 3px;
-  }
-  .show-button {
-    text-align: right;
-    margin-top: 15px;
-  }
-  .rowMargin{
-      margin-left: 10px;
-  }
+  margin-top: 5.3em;
+}
+.heading {
+  font-size: 21px;
+  color: #000;
+  font-weight: 600;
+}
+.filterLabel {
+  color: #000;
+  font-weight: 600;
+  font-size: 13px;
+}
+p.messages {
+  font-size: 14px;
+  font-weight: 600;
+}
+.messageName {
+  margin-left: 4px;
+}
+.btn-primary {
+  color: #fff;
+  background-color: #76ba19;
+  border-color: #76ba19;
+  padding: 4px 23px;
+  border-radius: 3px;
+}
+.show-button {
+  text-align: right;
+  margin-top: 15px;
+}
+.rowMargin {
+  margin-left: 10px;
+}
+
+::ng-deep .staff-table .mat-column-status {
+  flex: none;
+  width: 100px;
+}
+
+
+::ng-deep .staff-table .mat-column-createdDate {
+  flex: none;
+  width: 100px;
+}

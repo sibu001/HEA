@@ -140,7 +140,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
           this.router.navigate(['admin/customer/customerEdit'], { queryParams: { 'id': customer.customerId } });
         }
         this.customerGroupCode = customer.customerGroup.groupCode;
-        this.energyCoach = customer.coachUser.name;
+        if (customer.coachUser) {
+          this.energyCoach = customer.coachUser.name;
+        }
         this.setForm(customer);
       }));
   }
@@ -272,7 +274,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         customerViewConfigurationId: [event !== undefined ? event.user.customerViewConfigurationId : ''],
         passwordChangeDate: [event !== undefined ? event.user.passwordChangeDate : ''],
         id: [event !== undefined ? event.user.id : ''],
-        
       }),
       customerGroup: [event !== undefined ? event.customerGroup : {}],
       place: this.formBuilder.group({

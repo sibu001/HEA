@@ -6,6 +6,7 @@ export class Transformer {
             list: []
         };
         if (viewType === -1) {
+            let i = src.startRow + 1;
             src.list.forEach(element => {
                 const dataSourceObj: any = {};
                 dataSourceObj.auditId = element.auditId;
@@ -17,6 +18,8 @@ export class Transformer {
                 dataSourceObj.maxAlertLevel = element.maxAlertLevel;
                 dataSourceObj.customerId = element.customerId;
                 dataSourceObj.reportKey = element.reportKey;
+                dataSourceObj.serialNumber = i;
+                i++;
                 dataSource.list.push(dataSourceObj);
             });
             dataSource.startRow = src.startRow;
@@ -24,25 +27,28 @@ export class Transformer {
             dataSource.totalSize = src.totalSize;
             dataSource.hasNext = src.hasNext;
         } else {
+            let j = src.data.customerList.startOfCurrentPage + 1;
             src.data.customerList.list.forEach(element => {
                 let i = 0;
                 const dataSourceObj: any = {};
                 element.columns.forEach(columnValue => {
                     if (dataKey[i].pattern === '###,##0 th') {
-                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (parseFloat(columnValue.value).toFixed(0) + ' th') : '';
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB') + ' th') : '';
                     } else if (dataKey[i].pattern === '#,##0 W' || dataKey[i].pattern === '###,##0 W') {
-                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (parseFloat(columnValue.value).toFixed(0) + ' W') : '';
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB') + ' W') : '';
                     } else if (dataKey[i].pattern === '###,##0 kWh') {
-                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (parseFloat(columnValue.value).toFixed(0) + ' kWh') : '';
-                    } else if (dataKey[i].pattern === '#,###' || dataKey[i].pattern === '##' || dataKey[i].pattern === '##0') {
-                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (parseFloat(columnValue.value).toFixed(0)) : '';
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB') + ' kWh') : '';
+                    } else if (dataKey[i].pattern === '#,###' || dataKey[i].pattern === '##' || dataKey[i].pattern === '##0' || dataKey[i].pattern === '###,##0') {
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB')) : '';
                     } else if (dataKey[i].pattern === '$#,##0') {
-                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? ('$' + parseFloat(columnValue.value).toFixed(0)) : '';
+                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? ('$' + (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB'))) : '';
                     } else {
                         dataSourceObj[dataKey[i].definition] = columnValue.value;
                     }
                     i++;
                 });
+                dataSourceObj.serialNumber = j;
+                j++;
                 dataSourceObj.customerId = element.customerId;
                 dataSource.list.push(dataSourceObj);
             });
@@ -56,8 +62,18 @@ export class Transformer {
     static transformCustomerTableKey(viewType: number, data: any): any {
         let key: Array<any> = [];
         const dataKey: Array<any> = [];
+        key.push({
+            key: 'serialNumber',
+            displayName: '#',
+            isEdit: true
+        })
         if (viewType === -1) {
             key = [
+                {
+                    key: 'serialNumber',
+                    displayName: '#',
+                    isEdit: true
+                },
                 {
                     key: 'auditId',
                     displayName: 'Audit Id',
@@ -164,6 +180,11 @@ export class Transformer {
         src.list.forEach(element => {
             const dataSourceObj: any = element;
             dataSourceObj.createdDate = new Date(element.createdDate);
+            if (element.status === 0) {
+                dataSourceObj.status = 'Active (0)';
+            } else if (element.status === 90) {
+                dataSourceObj.status = 'Blocked (90)';
+            }
             dataSource.list.push(dataSourceObj);
         });
         dataSource.startRow = src.startRow;

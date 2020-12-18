@@ -45,7 +45,7 @@ export class customerEventViewComponent implements OnInit {
       data => {
         document.getElementById("loader").classList.remove('loading');
         let response = JSON.parse(JSON.stringify(data));
-        this.customerEventList = response.data;
+        this.customerEventList = response;
         this.users.customerEventList = this.customerEventList;
         if (!this.users.addEvent) {
           this.modifyAllow = this.customerEventDetails.modifyAllowed;

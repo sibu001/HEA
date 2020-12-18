@@ -49,9 +49,9 @@ export class TableColumnData {
         { key: 'electricityInUse', displayName: 'Electricity', type: 'image' },
         { key: 'heatingInUse', displayName: 'Heating', type: 'image' },
         { key: 'waterInUse', displayName: 'Water', type: 'image' },
-        { key: 'lastSuccessfulUsageDate', displayName: 'Last Usage'},
-        { key: 'authorizationStartDate', displayName: 'Auth Start Date'},
-        { key: 'authorizationEndDate', displayName: 'Auth End Date'},
+        { key: 'lastSuccessfulUsageDate', displayName: 'Last Usage' },
+        { key: 'authorizationStartDate', displayName: 'Auth Start Date' },
+        { key: 'authorizationEndDate', displayName: 'Auth End Date' },
         { key: 'authorizationStatus', displayName: 'Auth Status' }
     ];
 
@@ -800,6 +800,7 @@ export class TableColumnData {
         { key: 'username', sort: 'username', displayName: 'Username', isEdit: true },
         { key: 'email', sort: 'email', displayName: 'E-mail' },
         { key: 'status', displayName: 'Status' },
+        { key: 'name', displayName: 'Name' },
         { key: 'createdDate', sort: 'createdDate', displayName: 'Join Data', isDate: true },
     ];
 

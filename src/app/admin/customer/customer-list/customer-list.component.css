@@ -95,7 +95,7 @@ p.Messages {
 }
 
 .dot {
-  padding: 10px;
+  padding: 10px 10px 10px 0px;
 }
 
 .content {
@@ -104,11 +104,6 @@ p.Messages {
   padding-top: 35px;
 }
 
-/* .form-control {
-  height: 25px !important;
-  padding: 1px 1px !important;
-  font-size: medium !important;
-} */
 @media (max-width: 768px) {
   .padded-control {
     padding-bottom: 5px;
@@ -164,6 +159,11 @@ input[type="file"] {
 }
 ::ng-deep .customerTable {
   word-break: break-all;
+}
+
+::ng-deep .customerTable .mat-column-serialNumber{
+  flex: none;
+  width: 55px;
 }
 
 .responsive-desktop{

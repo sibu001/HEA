@@ -68,6 +68,7 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemUtilityService.loadSystemParameterCount().pipe(skipWhile((item: any) => !item))
     .subscribe((systemParameterCount: any) => {
       this.systemParameterData.totalElements = systemParameterCount.systemUtilityManagement.systemParameterCount;
+      this.totalElement = systemParameterCount.systemUtilityManagement.systemParameterCount;
     }));
     this.systemUtilityService.loadSystemParameterList(force, filter);
     this.subscriptions.add(this.systemUtilityService.getSystemParameterList().pipe(skipWhile((item: any) => !item))
