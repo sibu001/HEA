@@ -62,7 +62,7 @@
           <div class="row rowPadding">
             <div class="col-sm-12 show-button">
               <button type="button" class="btn btn-primary"
-                (click)="findCustomerComparisonGroup(true,'')">Show</button>
+                (click)="search(undefined,true)">Show</button>
             </div>
           </div>
         </form>
@@ -70,7 +70,7 @@
           <div class="col-sm-12">
             <p class="messages">
               <img src="assets/images/dot03.gif" class="dot pointer">
-              <span class="messageName">Customers Comparison Group List</span>
+              <span class="messageName">Customers Comparison Group (Number of Records = {{customerComparisonGroupData.totalElements}})</span>
             </p>
           </div>
         </div>
@@ -79,7 +79,7 @@
             <app-table [isHideAdd]="true" [keys]="keys" [isPaginate]="true"
               [isSearch]="false" [data]="dataSource"
               [totalElement]="customerComparisonGroupData.totalElements"
-              (changePageEvent)="findCustomerComparisonGroup(true,'')"
+              (changePageEvent)="search($event,false)"
               (goToEditEvent)="gotoEditCustomerComparisonGroup($event)">
             </app-table>
           </div>
@@ -118,7 +118,8 @@
                   (click)='goToBatchAdd()'>Batch
                   Add</button>
               </div>
-              <div class="col-sm-5 col-md-5 col-lg-5 col-xs-12" style="text-align: center; margin-top: 10px;">
+              <div class="col-sm-5 col-md-5 col-lg-5 col-xs-12"
+                style="text-align: center; margin-top: 10px;">
                 <button class="btn btn-primary"
                   (click)='goToBatchRemove()'>Batch
                   Remove</button>

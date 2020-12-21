@@ -7,6 +7,7 @@ import { AppConstant } from 'src/app/utility/app.constant';
 import { SystemUtilityTransformer } from '../transformer/transformer';
 import {
     DeleteCustomerComparisonGroupByIdAction,
+    DeleteCustomerComparisonGroupInBatchAction,
     DeleteCustomerEventTypeByIdAction,
     DeleteDegreeDaysByIdAction,
     DeleteFactorByIdAction,
@@ -18,13 +19,18 @@ import {
     DeleteWeatherStationByIdAction,
     DeleteZipCodeByIdAction,
     GetCustomerComparisonGroupByIdAction,
+    GetCustomerComparisonGroupCountAction,
+    GetCustomerComparisonGroupCustomerAction,
+    GetCustomerComparisonGroupDescriptionAction,
     GetCustomerComparisonGroupListAction,
     GetCustomerEventTypeByIdAction,
     GetCustomerEventTypeCountAction,
     GetCustomerEventTypeListAction,
     GetDegreeDaysByIdAction,
+    GetDegreeDaysCountAction,
     GetDegreeDaysListAction,
     GetFactorByIdAction,
+    GetFactorCountAction,
     GetFactorListAction,
     GetLoadLookupCountAction,
     GetLogsByIdAction,
@@ -42,9 +48,14 @@ import {
     GetWeatherStationByIdAction,
     GetWeatherStationListAction,
     GetZipCodeListAction,
+    RecalculateFactorAction,
+    RecalculateFactorForAllCityAction,
+    RemoveFactorForAllCityAction,
     SaveCustomerComparisonGroupAction,
+    SaveCustomerComparisonGroupInBatchAction,
     SaveCustomerEventTypeAction,
     SaveDegreeDaysAction,
+    SaveDegreeDaysUsingFileAction,
     SaveFactorAction,
     SaveLogsAction,
     SaveLookupAction,
@@ -75,8 +86,12 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         customerEventType: undefined,
         customerEventTypeCount: undefined,
         customerComparisonGroupList: undefined,
+        customerComparisonGroupCount: undefined,
         customerComparisonGroup: undefined,
+        customerComparisonGroupDescription: undefined,
+        customerComparisonGroupCustomer: undefined,
         factorList: undefined,
+        factorCount: undefined,
         factor: undefined,
         lookupList: undefined,
         lookup: undefined,
@@ -91,6 +106,7 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         weatherStationList: undefined,
         weatherStation: undefined,
         degreeDaysList: undefined,
+        degreeDaysCount: undefined,
         degreeDays: undefined,
         zipCodeList: undefined,
         zipCode: undefined,
@@ -132,6 +148,16 @@ export class SystemUtilityManagementState {
     @Selector()
     static getCustomerComparisonGroupById(state: SystemUtilityManagementModel): any {
         return state.customerComparisonGroup;
+    }
+
+    @Selector()
+    static getCustomerComparisonGroupDescription(state: SystemUtilityManagementModel): any {
+        return state.customerComparisonGroupDescription;
+    }
+
+    @Selector()
+    static getCustomerComparisonGroupCustomer(state: SystemUtilityManagementModel): any {
+        return state.customerComparisonGroupCustomer;
     }
 
     @Selector()
@@ -418,7 +444,7 @@ export class SystemUtilityManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.customerComparisonGroups + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.customerComparisonGroups, action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -432,6 +458,24 @@ export class SystemUtilityManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetCustomerComparisonGroupCountAction)
+    getCustomerComparisonGroupCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerComparisonGroupCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customerComparisonGroups + '/count')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerComparisonGroupCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.errorMessage);
+                    }));
+
     }
 
     @Action(GetCustomerComparisonGroupByIdAction)
@@ -503,6 +547,72 @@ export class SystemUtilityManagementState {
                     }));
     }
 
+    @Action(GetCustomerComparisonGroupDescriptionAction)
+    getCustomerComparisonGroupDescription(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerComparisonGroupDescriptionAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customerComparisonGroups + '/' + action.customerComparisonGroupsId + '/description')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerComparisonGroupDescription: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.errorMessage);
+                    }));
+    }
+
+    @Action(GetCustomerComparisonGroupCustomerAction)
+    getCustomerComparisonGroupCustomer(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerComparisonGroupCustomerAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customerComparisonGroups + '/' + action.customerComparisonGroupsId + '/customers')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerComparisonGroupCustomer: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.errorMessage);
+                    }));
+    }
+
+    @Action(DeleteCustomerComparisonGroupInBatchAction)
+    deleteCustomerComparisonGroupInBatch(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteCustomerComparisonGroupInBatchAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.customerComparisonGroupRemoveBatch, AppConstant.customerComparisonGroups + '/batchRemove')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(SaveCustomerComparisonGroupInBatchAction)
+    saveCustomerComparisonGroupInBatch(ctx: StateContext<SystemUtilityManagementModel>, action: SaveCustomerComparisonGroupInBatchAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.customerComparisonGroupAddBatch, AppConstant.customerComparisonGroups + '/batchAdd')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+
+
     @Action(GetFactorListAction)
     getAllFactorList(ctx: StateContext<SystemUtilityManagementModel>, action: GetFactorListAction): Actions {
         const force: boolean = action.force || SystemUtilityManagementState.getFactorList(ctx.getState()) === undefined;
@@ -512,10 +622,10 @@ export class SystemUtilityManagementState {
             result = this.loginService.performGetWithParams(AppConstant.factor, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformFactorTableData(response);
+                        const res = SystemUtilityTransformer.transformTableData(response, action.filter);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            factorList: response,
+                            factorList: res,
                         });
                     },
                         error => {
@@ -525,6 +635,24 @@ export class SystemUtilityManagementState {
         }
         return result;
     }
+
+    @Action(GetFactorCountAction)
+    getFactorCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetFactorCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.factor + '/count', action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        factorCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
 
     @Action(GetFactorByIdAction)
     getFactorById(ctx: StateContext<SystemUtilityManagementModel>, action: GetFactorByIdAction): Actions {
@@ -591,6 +719,51 @@ export class SystemUtilityManagementState {
                     error => {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(RemoveFactorForAllCityAction)
+    removeFactorForAllCity(ctx: StateContext<SystemUtilityManagementModel>, action: RemoveFactorForAllCityAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.factor + '/' + action.id + '/forAllCities')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(RecalculateFactorAction)
+    recalculateFactor(ctx: StateContext<SystemUtilityManagementModel>, action: RecalculateFactorAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.factor + '/' + action.id + '/recalculateFactor')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Recalculated Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(RecalculateFactorForAllCityAction)
+    recalculateFactorForALllCity(ctx: StateContext<SystemUtilityManagementModel>, action: RecalculateFactorForAllCityAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.factor + '/' + action.id + '/recalculateFactorForAllCities')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Recalculated Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -1094,10 +1267,10 @@ export class SystemUtilityManagementState {
             result = this.loginService.performGetWithParams(AppConstant.degreeDays, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformLogTableData(response);
+                        const res = SystemUtilityTransformer.transformTableData(response, action.filter);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            degreeDaysList: response,
+                            degreeDaysList: res,
                         });
                     },
                         error => {
@@ -1106,6 +1279,23 @@ export class SystemUtilityManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetDegreeDaysCountAction)
+    getDegreeDaysCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetDegreeDaysCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.degreeDays + '/count', action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        degreeDaysCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
     }
 
     @Action(GetDegreeDaysByIdAction)
@@ -1169,6 +1359,25 @@ export class SystemUtilityManagementState {
                     ctx.patchState({
                         degreeDays: response,
                     });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveDegreeDaysUsingFileAction)
+    saveDegreeDaysUsingFile(ctx: StateContext<SystemUtilityManagementModel>, action: SaveDegreeDaysUsingFileAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostMultiPartFromData(action.degreeDays, AppConstant.degreeDays + '/files')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    if (response.errorMessage) {
+                        this.utilityService.showSuccessMessage(response.errorMessage);
+                    } else {
+                        this.utilityService.showSuccessMessage('Save Successfully');
+                    }
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

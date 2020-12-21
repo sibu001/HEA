@@ -5,9 +5,13 @@ export interface SystemUtilityManagementModel {
     customerEventType: any;
     customerEventTypeCount: any;
     customerComparisonGroupList: any;
+    customerComparisonGroupCount: any;
     customerComparisonGroup: any;
+    customerComparisonGroupDescription: any;
+    customerComparisonGroupCustomer: any;
     factorList: any;
     factor: any;
+    factorCount: any;
     lookupList: any;
     lookup: any;
     lookupCount: any;
@@ -21,6 +25,7 @@ export interface SystemUtilityManagementModel {
     weatherStationList: any;
     weatherStation: any;
     degreeDaysList: any;
+    degreeDaysCount: any;
     degreeDays: any;
     zipCodeList: any;
     zipCode: any;

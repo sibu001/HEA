@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -22,7 +22,7 @@ export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit, OnD
   public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService: SystemService,
+    private readonly el: ElementRef,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
     private readonly location: Location) {
@@ -59,11 +59,30 @@ export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit, OnD
     this.location.back();
   }
   save() {
-
+    if (this.customerComparisonGroupForm.valid) {
+      this.subscriptions.add(this.systemUtilityService.deleteCustomerComparisonGroupInBatch(this.customerComparisonGroupForm.value).pipe(
+        skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.location.back();
+        }));
+    } else {
+      this.validateForm();
+    }
   }
   delete() {
 
   }
+  validateForm() {
+    for (const key of Object.keys(this.customerComparisonGroupForm.controls)) {
+      if (this.customerComparisonGroupForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
+
+  get f() { return this.customerComparisonGroupForm.controls; }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

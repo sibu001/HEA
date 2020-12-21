@@ -118,10 +118,10 @@ export class TableColumnData {
 
     static readonly CUSTOMER_COMPARISON_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
         { displayName: 'Comparison Code', key: 'comparisonCode', sort: 'comparisonCode' },
-        { displayName: 'Group Name', key: 'groupName', sort: 'groupName' },
-        { displayName: 'Order', key: 'order', sort: 'order' },
-        { displayName: 'Weather Station', key: 'weatherStation', sort: 'weatherStation' },
-        { displayName: 'Costumers', key: 'costumers', sort: 'customers' },
+        { displayName: 'Group Name', key: 'groupName', sort: 'groupName', isEdit: true },
+        { displayName: 'Order', key: 'orderNumber', sort: 'orderNumber' },
+        { displayName: 'Weather Station', key: 'weatherStationId', sort: 'weatherStationId' },
+        { displayName: 'Costumers', key: 'numOfCustomers', sort: 'numOfCustomers' },
 
     ];
 
@@ -139,9 +139,9 @@ export class TableColumnData {
     ];
 
     static readonly HOUSE_SIZE_DATA: Array<any> = [
-        { key: 'LT_1750', value: '&lt; 1750 sf' },
-        { key: 'LT_3500', value: '&gt; 1750 sf and &lt; 3500 sf' },
-        { key: 'GT_3500', value: '&gt; 3500 sf' },
+        { key: 'LT_1750', value: '< 1750 sf' },
+        { key: 'LT_3500', value: '> 1750 sf and < 3500 sf' },
+        { key: 'GT_3500', value: '> 3500 sf' },
     ];
 
     static readonly HOUSE_TYPE_DATA: Array<any> = [
@@ -171,10 +171,11 @@ export class TableColumnData {
     ];
 
     static readonly FACTOR_KEY: Array<TABLECOLUMN> = [
-        { key: 'factorCode', sort: 'factorCode', displayName: 'Factor Code' },
+        { key: 'serialNumber', displayName: '#' },
+        { key: 'factorCode', sort: 'factorCode', displayName: 'Factor Code', isEdit: true },
         { key: 'place', sort: 'place', displayName: 'Place' },
         { key: 'year', sort: 'year', displayName: 'Year' },
-        { key: 'name', sort: 'name', displayName: 'Name' },
+        { key: 'factorName', sort: 'factorName', displayName: 'Name' },
         { key: 'value', sort: 'value', displayName: 'Value' }
     ];
 
@@ -282,7 +283,8 @@ export class TableColumnData {
     ];
 
     static readonly DEGREE_DAY_KEY: Array<TABLECOLUMN> = [
-        { key: 'stationId', sort: 'stationId', displayName: 'Station ID' },
+        { key: 'serialNumber', displayName: '#' },
+        { key: 'stationId', sort: 'stationId', displayName: 'Station ID', isEdit: true },
         { key: 'type', sort: 'type', displayName: 'Type' },
         { key: 'date', sort: 'date', displayName: 'Date' },
         { key: 'baseTemperature', sort: 'baseTemperature', displayName: 'Base Temprature' },

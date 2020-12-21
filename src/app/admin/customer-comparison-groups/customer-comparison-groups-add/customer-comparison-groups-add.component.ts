@@ -1,10 +1,9 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -13,10 +12,12 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   templateUrl: './customer-comparison-groups-add.component.html',
   styleUrls: ['./customer-comparison-groups-add.component.css']
 })
-export class CustomerComparisonGroupsAddComponent implements OnInit {
+export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
   id: any;
   customerComparisonGroupForm: FormGroup;
   isForce = false;
+  customerComparisonGroupDescriptionList: any;
+  customerComparisonGroupCustomerList: any;
   public weatherStationIds: Array<any>;
   public houseSizeData: Array<any> = TableColumnData.HOUSE_SIZE_DATA;
   public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
@@ -45,11 +46,28 @@ export class CustomerComparisonGroupsAddComponent implements OnInit {
 
   loadCustomerComparisonGroupById() {
     this.subscriptions.add(this.systemUtilityService.getCustomerComparisonGroupById().pipe(skipWhile((item: any) => !item))
-      .subscribe((credentialType: any) => {
+      .subscribe((customerComparisonGroup: any) => {
         if (this.isForce) {
-          this.router.navigate(['admin/customerComparisonGroup/comparisonGroupEdit'], { queryParams: { 'id': credentialType.id } });
+          this.router.navigate(['admin/customerComparisonGroup/comparisonGroupAdd'], { queryParams: { 'id': customerComparisonGroup.id } });
         }
-        this.setForm(credentialType);
+        this.loadCustomerComparisonGroupDescription(customerComparisonGroup.id);
+        this.loadCustomerComparisonGroupCustomer(customerComparisonGroup.id);
+        this.setForm(customerComparisonGroup);
+      }));
+  }
+  loadCustomerComparisonGroupDescription(id: any) {
+    this.systemUtilityService.loadCustomerComparisonGroupDescription(id);
+    this.subscriptions.add(this.systemUtilityService.getCustomerComparisonGroupDescription().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerComparisonGroupDescription: any) => {
+        this.customerComparisonGroupDescriptionList = customerComparisonGroupDescription.data;
+      }));
+  }
+
+  loadCustomerComparisonGroupCustomer(id: any) {
+    this.systemUtilityService.loadCustomerComparisonGroupCustomer(id);
+    this.subscriptions.add(this.systemUtilityService.getCustomerComparisonGroupCustomer().pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.customerComparisonGroupCustomerList = response.data;
       }));
   }
 
@@ -66,19 +84,20 @@ export class CustomerComparisonGroupsAddComponent implements OnInit {
     this.customerComparisonGroupForm = this.formBuilder.group({
       comparisonCode: [event !== undefined ? event.comparisonCode : 'Cooling'],
       groupName: [event !== undefined ? event.groupName : '', Validators.required],
-      order: [event !== undefined ? event.order : 0],
+      orderNumber: [event !== undefined ? event.orderNumber : 0],
       weatherStationId: [event !== undefined ? event.weatherStationId : ''],
       homeSize: [event !== undefined ? event.homeSize : ''],
       homeType: [event !== undefined ? event.homeType : ''],
       occupancy: [event !== undefined ? event.occupancy : ''],
       poolOrSpa: [event !== undefined ? event.poolOrSpa : ''],
-      naturalGasData: [event !== undefined ? event.natualGasData : ''],
-      electricData: [event !== undefined ? event.electricData : ''],
-      waterData: [event !== undefined ? event.waterData : ''],
-      electricWaterHeater: [event !== undefined ? event.electricWaterHeater : ''],
-      EV: [event !== undefined ? event.EV : ''],
+      gas: [event !== undefined ? event.gas : ''],
+      electricity: [event !== undefined ? event.electricity : ''],
+      water: [event !== undefined ? event.water : ''],
+      elecWaterHeating: [event !== undefined ? event.elecWaterHeating : ''],
+      ev: [event !== undefined ? event.ev : ''],
       lotSize: [event !== undefined ? event.lotSize : ''],
       note: [event !== undefined ? event.note : ''],
+      numOfCustomers: [event !== undefined ? event.numOfCustomers : '']
     });
   }
   back() {

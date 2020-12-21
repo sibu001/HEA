@@ -61,7 +61,7 @@
         <p class="messages">
           <img src='assets/images/dot03.gif' class='dot'>
           <span class="messageName">Factors (Number of Records = {{totalElement}})</span></p>
-        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
+        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [pageIndex]="pageIndex"
           [totalElement]="factorData.totalElements" (changePageEvent)="search($event,false)"
           (goToEditEvent)="goToEditFactor($event)" (addEvent)='addFactor()'>
         </app-table>

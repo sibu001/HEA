@@ -1,11 +1,11 @@
 import { Location } from '@angular/common';
+import { ElementRef } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -22,17 +22,17 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   public yesNoData: Array<any> = TableColumnData.YES_NO_DATA;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService: SystemService,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly location: Location) {
+    private readonly location: Location,
+    private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
   }
 
   ngOnInit() {
-    this.findWeatherStation(false,'');
+    this.findWeatherStation(false, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
     }
@@ -74,12 +74,30 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
     this.location.back();
   }
   save() {
-
+    if (this.customerComparisonGroupForm.valid) {
+      this.subscriptions.add(this.systemUtilityService.saveCustomerComparisonGroupInBatch(this.customerComparisonGroupForm.value).pipe(
+        skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.location.back();
+        }));
+    } else {
+      this.validateForm();
+    }
   }
   delete() {
 
   }
+  validateForm() {
+    for (const key of Object.keys(this.customerComparisonGroupForm.controls)) {
+      if (this.customerComparisonGroupForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
 
+  get f() { return this.customerComparisonGroupForm.controls; }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }

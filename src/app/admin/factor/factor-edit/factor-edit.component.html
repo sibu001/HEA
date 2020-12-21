@@ -12,6 +12,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="FactorCode" formControlName="factorCode">
+                <div *ngIf="f.factorCode.invalid && (f.factorCode.dirty ||
+                f.factorCode.touched)">
+                <span class="error" *ngIf="f.factorCode.errors.required">
+                  Factor Code is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -54,8 +60,9 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Value:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="value"
-                id="value">
+              <input type="text" class="form-control"
+                formControlName="factorValue"
+                id="factorValue">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -70,7 +77,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Name:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="name"
+              <input type="text" class="form-control"
+                formControlName="factorName"
                 id="name">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -148,8 +156,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="isActive">
-                <input type="checkbox" formControlName="isActive" id="isActive"
-                  />
+                <input type="checkbox" formControlName="active" id="isActive" />
                 Active
               </label>
             </div>
@@ -163,28 +170,36 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-      
+
           <div class="row rowPadding paddingTop">
             <div class="col-sm-5 col-md-5 col-lg-5 col-xs-3
               display-inline-button-big">
               <button type="button" class="btn btn-primary" (click)="back()">Back</button>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3
-              display-inline-button-big" [ngClass]="{'display-responsive-big3':
-              id!==undefined&&id!==null}" style="text-align: end;">
+              display-inline-button-big" style="text-align: end;">
               <button type="button" class="btn btn-primary"
-                (click)="recalculate()" *ngIf="id!==undefined&&id!==null">
+                (click)="recalculate()">
                 Recalculate
               </button>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3
               display-inline-button-big" [ngClass]="{'display-responsive-big2':
               id!==undefined&&id!==null}" style="text-align: end;">
-              <button type="button" class="btn btn-primary" (click)="delete()"  *ngIf="id!==undefined&&id!==null">Delete</button>
+              <button type="button" class="btn btn-primary" (click)="delete()"
+                *ngIf="id!==undefined&&id!==null">Delete</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3 align-right"
               [ngClass]="{'display-responsive-big': id!==undefined&&id!==null}">
               <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12 align-right">
+              <label for="selectAllCity">
+                <input type="checkbox" formControlName="selectAllCity" id="selectAllCity" />
+                do it for all cities
+              </label>
             </div>
           </div>
         </form>

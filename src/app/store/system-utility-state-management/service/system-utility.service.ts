@@ -58,7 +58,18 @@ import {
   GetLookupValueByIdAction,
   DeleteLookupValueByIdAction,
   SaveLookupValueAction,
-  UpdateLookupValueAction
+  UpdateLookupValueAction,
+  GetCustomerComparisonGroupCountAction,
+  GetCustomerComparisonGroupCustomerAction,
+  GetCustomerComparisonGroupDescriptionAction,
+  SaveCustomerComparisonGroupInBatchAction,
+  DeleteCustomerComparisonGroupInBatchAction,
+  GetFactorCountAction,
+  RemoveFactorForAllCityAction,
+  RecalculateFactorForAllCityAction,
+  RecalculateFactorAction,
+  GetDegreeDaysCountAction,
+  SaveDegreeDaysUsingFileAction
 } from '../state/system-utility.action';
 import { SystemUtilityManagementState } from '../state/system-utility.state';
 
@@ -90,6 +101,14 @@ export class SystemUtilityService {
 
   getCustomerComparisonGroupById(): Observable<any> {
     return this.store.select(SystemUtilityManagementState.getCustomerComparisonGroupById);
+  }
+
+  getCustomerComparisonGroupCustomer(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getCustomerComparisonGroupCustomer);
+  }
+
+  getCustomerComparisonGroupDescription(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getCustomerComparisonGroupDescription);
   }
 
   getFactorList(): Observable<any> {
@@ -188,6 +207,10 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetCustomerComparisonGroupListAction(force, filter));
   }
 
+  loadCustomerComparisonGroupCount(): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerComparisonGroupCountAction());
+  }
+
   loadCustomerComparisonGroupById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetCustomerComparisonGroupByIdAction(id));
   }
@@ -204,8 +227,28 @@ export class SystemUtilityService {
     return this.store.dispatch(new DeleteCustomerComparisonGroupByIdAction(id));
   }
 
+  loadCustomerComparisonGroupCustomer(customerComparisonGroupId: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerComparisonGroupCustomerAction(customerComparisonGroupId));
+  }
+
+  loadCustomerComparisonGroupDescription(customerComparisonGroupId: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerComparisonGroupDescriptionAction(customerComparisonGroupId));
+  }
+
+  saveCustomerComparisonGroupInBatch(customerComparisonGroupAddBatch: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveCustomerComparisonGroupInBatchAction(customerComparisonGroupAddBatch));
+  }
+
+  deleteCustomerComparisonGroupInBatch(customerComparisonGroupRemoveBatch: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteCustomerComparisonGroupInBatchAction(customerComparisonGroupRemoveBatch));
+  }
+
   loadFactorList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetFactorListAction(force, filter));
+  }
+
+  loadFactorCount(filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetFactorCountAction(filter));
   }
 
   loadFactorById(id: number): Observable<SystemUtilityManagementState> {
@@ -223,6 +266,19 @@ export class SystemUtilityService {
   deleteFactorById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new DeleteFactorByIdAction(id));
   }
+
+  removeFactorForAllCity(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new RemoveFactorForAllCityAction(id));
+  }
+
+  recalculateFactor(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new RecalculateFactorAction(id));
+  }
+
+  recalculateFactorForAllCity(id: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new RecalculateFactorForAllCityAction(id));
+  }
+
 
   loadLookupList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetLookupListAction(force, filter));
@@ -336,6 +392,10 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetDegreeDaysListAction(force, filter));
   }
 
+  loadDegreeDaysCount(filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetDegreeDaysCountAction(filter));
+  }
+
   loadDegreeDaysById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetDegreeDaysByIdAction(id));
   }
@@ -350,6 +410,10 @@ export class SystemUtilityService {
 
   deleteDegreeDaysById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new DeleteDegreeDaysByIdAction(id));
+  }
+
+  saveDegreeDaysUsingFile(degreeDaysFile: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new SaveDegreeDaysUsingFileAction(degreeDaysFile));
   }
 
   loadZipCodeList(placeCode: any, filter: any): Observable<SystemUtilityManagementState> {

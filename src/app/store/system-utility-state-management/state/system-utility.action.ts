@@ -11,15 +11,24 @@ export enum SystemActionTypes {
     SAVE_CUSTOMER_EVENT_TYPE = 'Save Customer Event Type',
     DELETE_CUSTOMER_EVENT_TYPE_BY_ID = 'Delete Customer Event Type By Id',
     GET_CUSTOMER_COMPARISON_GROUP_LIST = 'Get All Customer Comparison Group List',
+    GET_CUSTOMER_COMPARISON_GROUP_COUNT = 'Get Customer Comparison Group Count',
     GET_CUSTOMER_COMPARISON_GROUP_BY_ID = 'Get Customer Comparison Group By Id',
     UPDATE_CUSTOMER_COMPARISON_GROUP = 'Update Customer Comparison Group',
     SAVE_CUSTOMER_COMPARISON_GROUP = 'Save Customer Comparison Group',
     DELETE_CUSTOMER_COMPARISON_GROUP_BY_ID = 'Delete Customer Comparison Group By Id',
+    GET_CUSTOMER_COMPARISON_GROUP_DESCRIPTION = 'Get All Customer Comparison Group Description',
+    GET_CUSTOMER_COMPARISON_GROUP_CUSTOMER = 'Get All Customer Comparison Group Customer',
+    SAVE_CUSTOMER_COMPARISON_GROUP_IN_BATCH = 'Save Customer Comparison Group in Batch',
+    DELETE_CUSTOMER_COMPARISON_GROUP_IN_BATCH = 'Delete Customer Comparison Group in Batch',
     GET_FACTOR_LIST = 'Get All Factor List',
+    GET_FACTOR_COUNT = 'Get Factor Count',
     GET_FACTOR_BY_ID = 'Get Factor By Id',
     SAVE_FACTOR = 'Save Factor',
     UPDATE_FACTOR = 'Update Factor',
     DELETE_FACTOR_BY_ID = 'Delete Factor By Id',
+    REMOVE_FACTOR_FOR_ALL_CITY = 'Remove Factor For All City',
+    RECALCULATE_FACTOR = 'Recalculate Factor',
+    RECALCULATE_FACTOR_FOR_ALL_CITY = 'Recalculate Factor For All City',
     GET_LOOKUP_LIST = 'Get All Lookup List',
     GET_LOOKUP_COUNT = 'Get Lookup count',
     GET_LOOKUP_BY_ID = 'Get Lookup By Id',
@@ -48,9 +57,11 @@ export enum SystemActionTypes {
     UPDATE_WEATHER_STATION = 'Update WeatherStation',
     DELETE_WEATHER_STATION_BY_ID = 'Delete WeatherStation By Id',
     GET_DEGREE_DAYS_LIST = 'Get All DegreeDays List',
+    GET_DEGREE_DAYS_COUNT = 'Get DegreeDays Count',
     GET_DEGREE_DAYS_BY_ID = 'Get DegreeDays By Id',
     SAVE_DEGREE_DAYS = 'Save DegreeDays',
     UPDATE_DEGREE_DAYS = 'Update DegreeDays',
+    SAVE_DEGREE_DAYS_FILE = 'Save Degree Days Using File',
     DELETE_DEGREE_DAYS_BY_ID = 'Delete DegreeDays By Id',
     GET_ZIP_CODE_LIST = 'Get All ZIpCode List',
     SAVE_ZIP_CODE = 'Save ZIpCode',
@@ -125,6 +136,10 @@ export class GetCustomerComparisonGroupListAction {
     }
 }
 
+export class GetCustomerComparisonGroupCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_COMPARISON_GROUP_COUNT;
+}
+
 export class GetCustomerComparisonGroupByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_COMPARISON_GROUP_BY_ID;
     constructor(readonly id: number) {
@@ -148,9 +163,39 @@ export class DeleteCustomerComparisonGroupByIdAction {
     }
 }
 
+export class GetCustomerComparisonGroupDescriptionAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_COMPARISON_GROUP_DESCRIPTION;
+    constructor(readonly customerComparisonGroupsId: any) {
+    }
+}
+
+export class GetCustomerComparisonGroupCustomerAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_COMPARISON_GROUP_CUSTOMER;
+    constructor(readonly customerComparisonGroupsId: any) {
+    }
+}
+
+export class SaveCustomerComparisonGroupInBatchAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_CUSTOMER_COMPARISON_GROUP_IN_BATCH;
+    constructor(readonly customerComparisonGroupAddBatch: any) {
+    }
+}
+
+export class DeleteCustomerComparisonGroupInBatchAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_CUSTOMER_COMPARISON_GROUP_IN_BATCH;
+    constructor(readonly customerComparisonGroupRemoveBatch: any) {
+    }
+}
+
 export class GetFactorListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_FACTOR_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetFactorCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_FACTOR_COUNT;
+    constructor(readonly filter: any) {
     }
 }
 
@@ -174,6 +219,24 @@ export class UpdateFactorAction {
 
 export class DeleteFactorByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_FACTOR_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class RemoveFactorForAllCityAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.REMOVE_FACTOR_FOR_ALL_CITY;
+    constructor(readonly id: number) {
+    }
+}
+
+export class RecalculateFactorAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.RECALCULATE_FACTOR;
+    constructor(readonly id: number) {
+    }
+}
+
+export class RecalculateFactorForAllCityAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.RECALCULATE_FACTOR_FOR_ALL_CITY;
     constructor(readonly id: number) {
     }
 }
@@ -343,6 +406,12 @@ export class GetDegreeDaysListAction {
     }
 }
 
+export class GetDegreeDaysCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_DEGREE_DAYS_COUNT;
+    constructor(readonly filter: any) {
+    }
+}
+
 export class GetDegreeDaysByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_DEGREE_DAYS_BY_ID;
     constructor(readonly id: number) {
@@ -364,6 +433,12 @@ export class UpdateDegreeDaysAction {
 export class DeleteDegreeDaysByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_DEGREE_DAYS_BY_ID;
     constructor(readonly id: number) {
+    }
+}
+
+export class SaveDegreeDaysUsingFileAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_DEGREE_DAYS_FILE;
+    constructor(readonly degreeDays: any) {
     }
 }
 

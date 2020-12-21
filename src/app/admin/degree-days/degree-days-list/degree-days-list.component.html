@@ -12,8 +12,7 @@
             <div class='col-sm-3 col-md-3 col-lg-3 col-xs-6'>
               <input type="file" class="custom-file-input" style='font-size:
                 smaller;text-align:right'
-                name="customerFile" id="fileBody"
-                formControlName='fileBody'>
+                name="degreeDaysFile" id="degreeDaysFile" formControlName='degreeDaysFile' (change)="handleFileInput($event.target.files)">
             </div>
             <div class='col-sm-1 col-lg-1 col-md-1 col-xs-0' style='text-align:
               right;'>
@@ -101,7 +100,7 @@
             <p class="messages">
               <img src="assets/images/dot03.gif" class="dot pointer">
               <span class="messageName">Degree days (Number of Records =
-                {{degreeDayData.totalElements}})</span>
+                {{totalElement}})</span>
             </p>
           </div>
         </div>

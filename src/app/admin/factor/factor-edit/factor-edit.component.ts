@@ -1,9 +1,10 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { UtilityService } from 'src/app/services/utility.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -25,6 +26,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
+    private readonly utilityService: UtilityService,
     private readonly activateRoute: ActivatedRoute,
     private readonly router: Router,
     private readonly el: ElementRef) {
@@ -51,15 +53,16 @@ export class FactorEditComponent implements OnInit, OnDestroy {
       place: [event !== undefined ? event.place : ''],
       comparisonCode: [event !== undefined ? event.comparisonCode : ''],
       year: [event !== undefined ? event.year : ''],
-      value: [event !== undefined ? event.value : ''],
+      factorValue: [event !== undefined ? event.factorValue : ''],
       dimension: [event !== undefined ? event.dimension : ''],
-      name: [event !== undefined ? event.name : ''],
+      factorName: [event !== undefined ? event.factorName : ''],
       sourceUrl: [event !== undefined ? event.sourceUrl : ''],
       calculationType: [event !== undefined ? event.calculationType : ''],
       calculationRule: [event !== undefined ? event.calculationRule : ''],
       calculationPeriod: [event !== undefined ? event.calculationPeriod : ''],
-      isActive: [event !== undefined ? event.isActive : ''],
-      comments: [event !== undefined ? event.comments : '']
+      active: [event !== undefined ? event.active : ''],
+      comments: [event !== undefined ? event.comments : ''],
+      selectAllCity: [false]
     });
   }
 
@@ -76,7 +79,16 @@ export class FactorEditComponent implements OnInit, OnDestroy {
 
   }
   recalculate() {
-
+    if (this.id) {
+      if (this.factorForm.value.selectAllCity) {
+        this.systemUtilityService.recalculateFactorForAllCity(this.id);
+      } else {
+        this.systemUtilityService.recalculateFactor(this.id);
+      }
+    } else {
+      this.validateAllFormFields(this.factorForm);
+      this.utilityService.showErrorMessage('id to load is required for loading');
+    }
   }
 
   loadFactorById() {
@@ -93,10 +105,17 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.systemUtilityService.deleteFactorById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': true } });
-      }));
+    if (this.factorForm.value.selectAllCity) {
+      this.subscriptions.add(this.systemUtilityService.removeFactorForAllCity(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': true } });
+        }));
+    } else {
+      this.subscriptions.add(this.systemUtilityService.deleteFactorById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   save() {
@@ -112,13 +131,26 @@ export class FactorEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.systemUtilityService.saveFactor(this.factorForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
+            this.id = response.id;
             this.isForce = true;
             this.loadFactorById();
           }));
       }
     } else {
-      this.validateForm();
+      this.validateAllFormFields(this.factorForm);
     }
+  }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    this.validateForm();
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
   }
   validateForm() {
     for (const key of Object.keys(this.factorForm.controls)) {

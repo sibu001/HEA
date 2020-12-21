@@ -18,6 +18,8 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class DegreeDaysListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.DEGREE_DAY_KEY;
   public dataSource: any;
+  public fileObject: any;
+  public totalElement = 0;
   public degreeDayData = {
     content: [],
     totalElements: 0,
@@ -55,9 +57,9 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
       }));
   }
 
-  setUpForm(event: any) {
+  setUpForm(event: any): void {
     this.degreeDayForm = this.fb.group({
-      fileBody: [event !== undefined && event !== null ? event.fileBody : ''],
+      degreeDaysFile: [event !== undefined && event !== null ? event.degreeDaysFile : ''],
       stationId: [event !== undefined && event !== null ? event.stationId : ''],
       valueDateFrom: [event !== undefined && event !== null ? event.valueDateFrom : ''],
       type: [event !== undefined && event !== null ? event.type : ''],
@@ -69,36 +71,44 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
   findDegreeDays(force: boolean, filter: any): void {
     this.adminFilter.degreeDaysFilter.formValue = this.degreeDayForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.systemUtilityService.loadDegreeDaysList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getDegreeDaysList().pipe(skipWhile((item: any) => !item))
-      .subscribe((degreeDaysList: any) => {
-        this.degreeDayData.content = degreeDaysList.list;
-        this.degreeDayData.totalElements = degreeDaysList.totalSize;
-        this.dataSource = [...this.degreeDayData.content];
+    this.subscriptions.add(this.systemUtilityService.loadDegreeDaysCount(filter).pipe(skipWhile((item: any) => !item))
+      .subscribe((degreeDaysListCount: any) => {
+        this.degreeDayData.totalElements = degreeDaysListCount.systemUtilityManagement.degreeDaysCount;
+        this.totalElement = degreeDaysListCount.systemUtilityManagement.degreeDaysCount;
+        this.systemUtilityService.loadDegreeDaysList(force, filter);
+        this.subscriptions.add(this.systemUtilityService.getDegreeDaysList().pipe(skipWhile((item: any) => !item))
+          .subscribe((degreeDaysList: any) => {
+            this.degreeDayData.content = degreeDaysList.list;
+            this.degreeDayData.totalElements = degreeDaysList.totalSize;
+            this.dataSource = [...this.degreeDayData.content];
+          }));
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.degreeDaysFilter.page = event;
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
-      .set('degreeDaysId', '')
-      .set('filter.stationId', (this.degreeDayForm.value.stationId !== null ? this.degreeDayForm.value.stationId : ''))
-      .set('filter.valueDateFrom', (this.degreeDayForm.value.valueDateFrom !== null ? this.degreeDayForm.value.valueDateFrom : ''))
-      .set('filter.type', (this.degreeDayForm.value.type !== null ? this.degreeDayForm.value.type : ''))
-      .set('filter.valueDateTo', (this.degreeDayForm.value.valueDateTo !== null ? this.degreeDayForm.value.valueDateTo : ''))
-      .set('filter.base', (this.degreeDayForm.value.base !== null ? this.degreeDayForm.value.base : ''));
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('stationId', (this.degreeDayForm.value.stationId !== null ? this.degreeDayForm.value.stationId : ''))
+      .set('valueDateFrom', (this.degreeDayForm.value.valueDateFrom !== null ? this.degreeDayForm.value.valueDateFrom : ''))
+      .set('type', (this.degreeDayForm.value.type !== null ? this.degreeDayForm.value.type : ''))
+      .set('valueDateTo', (this.degreeDayForm.value.valueDateTo !== null ? this.degreeDayForm.value.valueDateTo : ''))
+      .set('base', (this.degreeDayForm.value.base !== null ? this.degreeDayForm.value.base : ''));
     this.findDegreeDays(true, params);
   }
-  upload(): any {
 
+  handleFileInput(file: any): void {
+    this.fileObject = file[0];
+  }
+
+  upload(): void {
+    if (this.degreeDayForm.value.degreeDaysFile) {
+      this.systemUtilityService.saveDegreeDaysUsingFile(this.fileObject);
+    }
   }
 
   ngOnDestroy(): void {

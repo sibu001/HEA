@@ -43,7 +43,7 @@ export class TableComponent implements OnInit, OnChanges {
   @ViewChild(MatSort) sort: MatSort;
   @Input() data: any;
   @Input() totalElement: any;
-  @Input() pageIndex: Number;
+  @Input() pageIndex: any;
   @Input() keys: any;
   @Input() id: any;
   @Input() sideBorder: Boolean = false;
@@ -78,7 +78,7 @@ export class TableComponent implements OnInit, OnChanges {
   page = new Page();
   url: String;
   totalLength: Number;
-  pageIndexNumber: Number;
+  pageIndexNumber = 0;
   pageEvent: PageEvent;
   selection = new SelectionModel<any>(true, []);
   tableForm: FormGroup = this.formBuilder.group({});
@@ -105,7 +105,9 @@ export class TableComponent implements OnInit, OnChanges {
     if (changes['data'] && changes['data'].currentValue) {
       this.data = changes['data'].currentValue;
       this.totalLength = this.totalElement;
-      this.pageIndexNumber = this.pageIndex;
+      if (this.pageIndex) {
+        this.pageIndexNumber = this.pageIndex;
+      }
       this.dataSource = new MatTableDataSource(this.data);
       if (this.selectionList.length > 0) {
         this.selectionList.forEach(e => {

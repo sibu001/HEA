@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer, OnDestroy } from '@angular/core';
 import { LoginService } from "src/app/services/login.service";
 import { Users } from "src/app/models/user";
 import { Router } from '@angular/router';
@@ -12,7 +12,7 @@ declare var $: any;
   templateUrl: './accountDetail.component.html',
   styleUrls: ['../survey/topichistory.component.css']
 })
-export class AccountDetailComponent implements OnInit {
+export class AccountDetailComponent implements OnInit, OnDestroy {
   @ViewChild('inp1') inp1: ElementRef;
   helpHide: boolean;
   helpHide1: boolean;

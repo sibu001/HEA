@@ -91,4 +91,8 @@ export class AdminFilter {
         page: null,
         formValue: null
     };
+    public customerComparisonGroup: any = {
+        page: null,
+        formValue: null
+    };
 }

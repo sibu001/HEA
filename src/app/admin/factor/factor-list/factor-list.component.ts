@@ -20,6 +20,7 @@ export class FactorListComponent implements OnInit, OnDestroy {
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.FACTOR_KEY;
   public dataSource: any;
+  public pageIndex: any;
   public totalElement = 0;
   public factorData = {
     content: [],
@@ -70,7 +71,7 @@ export class FactorListComponent implements OnInit, OnDestroy {
     this.factorForm = this.fb.group({
       factorCode: [event !== undefined && event !== null ? event.factorCode : ''],
       place: [event !== undefined && event !== null ? event.place : ''],
-      isActive: [event !== undefined && event !== null ? event.isActive : ''],
+      isActive: [event !== undefined && event !== null ? event.isActive : true],
       year: [event !== undefined && event !== null ? event.year : ''],
       factorName: [event !== undefined && event !== null ? event.factorName : '']
     });
@@ -79,32 +80,35 @@ export class FactorListComponent implements OnInit, OnDestroy {
   findFactor(force: boolean, filter: any): void {
     this.adminFilter.factorFilter.formValue = this.factorForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.systemUtilityService.loadFactorList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getFactorList().pipe(skipWhile((item: any) => !item))
-      .subscribe((factorList: any) => {
-        this.factorData.content = factorList.list;
-        this.factorData.totalElements = factorList.totalSize;
-        this.dataSource = [...this.factorData.content];
+    this.subscriptions.add(this.systemUtilityService.loadFactorCount(filter).pipe(skipWhile((item: any) => !item))
+      .subscribe((factorListCount: any) => {
+        this.factorData.totalElements = factorListCount.systemUtilityManagement.factorCount;
+        this.totalElement = factorListCount.systemUtilityManagement.factorCount;
+        this.systemUtilityService.loadFactorList(force, filter);
+        this.subscriptions.add(this.systemUtilityService.getFactorList().pipe(skipWhile((item: any) => !item))
+          .subscribe((factorList: any) => {
+            this.factorData.content = factorList;
+            this.dataSource = [...this.factorData.content];
+          }));
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.factorFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
       .set('factorId', '')
-      .set('filter.factorCode', (this.factorForm.value.factorCode !== null ? this.factorForm.value.factorCode : ''))
-      .set('filter.place', (this.factorForm.value.place !== null ? this.factorForm.value.place : ''))
-      .set('filter.active', (this.factorForm.value.active !== null ? this.factorForm.value.active : ''))
-      .set('filter.year', (this.factorForm.value.year !== null ? this.factorForm.value.year : ''))
-      .set('filter.factorName', (this.factorForm.value.factorName !== null ? this.factorForm.value.factorName : ''));
+      .set('factorCode', (this.factorForm.value.factorCode !== null ? this.factorForm.value.factorCode : ''))
+      .set('place', (this.factorForm.value.place !== null ? this.factorForm.value.place : ''))
+      .set('active', (this.factorForm.value.isActive !== null ? this.factorForm.value.isActive : ''))
+      .set('year', (this.factorForm.value.year !== null ? this.factorForm.value.year : ''))
+      .set('factorName', (this.factorForm.value.factorName !== null ? this.factorForm.value.factorName : ''));
     this.findFactor(true, params);
   }
   ngOnDestroy(): void {
