@@ -70,14 +70,14 @@
           <div class="col-sm-12">
             <p class="messages">
               <img src="assets/images/dot03.gif" class="dot pointer">
-              <span class="messageName">Customers Comparison Group (Number of Records = {{customerComparisonGroupData.totalElements}})</span>
+              <span class="messageName">Customers Comparison Group (Number of Records = {{customerComparisonGroupData.totalElements | number:'1.0':'en-US'}})</span>
             </p>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
             <app-table [isHideAdd]="true" [keys]="keys" [isPaginate]="true"
-              [isSearch]="false" [data]="dataSource"
+              [isSearch]="false" [data]="dataSource" [pageIndex]="pageIndex"
               [totalElement]="customerComparisonGroupData.totalElements"
               (changePageEvent)="search($event,false)"
               (goToEditEvent)="gotoEditCustomerComparisonGroup($event)">

@@ -1,11 +1,11 @@
 import { Location } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -26,16 +26,11 @@ export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit, OnD
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
     private readonly location: Location) {
-    this.activateRoute.queryParams.subscribe(params => {
-      this.id = params['id'];
-    });
   }
 
   ngOnInit() {
     this.findWeatherStation(false, '');
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   findWeatherStation(force: boolean, filter: any): void {
@@ -45,22 +40,21 @@ export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit, OnD
         this.weatherStationIds = weatherStationList;
       }));
   }
-  findProgramGroup(): void {
-  }
+
 
   setForm(event: any) {
     this.customerComparisonGroupForm = this.formBuilder.group({
       comparisonCode: [event !== undefined ? event.comparisonCode : 'Cooling'],
-      order: [event !== undefined ? event.order : ''],
-      weatherStationId: [event !== undefined ? event.weatherStationId : ''],
+      orderNumber: [event !== undefined ? event.orderNumber : ''],
+      weatherStation: [event !== undefined ? event.weatherStation : ''],
     });
   }
   back() {
     this.location.back();
   }
-  save() {
+  delete() {
     if (this.customerComparisonGroupForm.valid) {
-      this.subscriptions.add(this.systemUtilityService.deleteCustomerComparisonGroupInBatch(this.customerComparisonGroupForm.value).pipe(
+      this.subscriptions.add(this.systemUtilityService.deleteCustomerComparisonGroupInBatch(this.setHttpParameter()).pipe(
         skipWhile((item: any) => !item))
         .subscribe((response: any) => {
           this.location.back();
@@ -69,8 +63,13 @@ export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit, OnD
       this.validateForm();
     }
   }
-  delete() {
 
+  setHttpParameter(): HttpParams {
+    const params = new HttpParams()
+      .set('comparisonCode', this.customerComparisonGroupForm.value.comparisonCode)
+      .set('orderNumber', this.customerComparisonGroupForm.value.orderNumber)
+      .set('weatherStation', this.customerComparisonGroupForm.value.weatherStation);
+    return params;
   }
   validateForm() {
     for (const key of Object.keys(this.customerComparisonGroupForm.controls)) {

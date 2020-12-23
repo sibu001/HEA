@@ -23,9 +23,11 @@
               Comparison code
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="comparisonCode" class="form-control form-control-sm" formControlName="comparisonCode">
+              <select id="comparisonCode" class="form-control form-control-sm"
+                formControlName="comparisonCode">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let comparisonCode of comparisonCodeDropdownData" [value]='comparisonCode.key'>
+                <option *ngFor="let comparisonCode of
+                  comparisonCodeDropdownData" [value]='comparisonCode.key'>
                   {{comparisonCode.value}}</option>
               </select>
             </div>
@@ -36,7 +38,8 @@
               Order:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="order" formControlName="order">
+              <input type="text" class="form-control form-control-sm"
+                id="fallbackOrder" formControlName="fallbackOrder">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -45,19 +48,24 @@
               Group by Weather Station:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" id="groupByWeather" formControlName="groupByWeather">
+              <input type="checkbox" id="hasWeatherStation"
+                formControlName="hasWeatherStation">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf="customerComparisonGroupForm.controls['groupByWeather'].value" class="row borderBottom rowPadding">
+          <div
+            *ngIf="customerComparisonGroupForm.controls['hasWeatherStation'].value"
+            class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Weather Station
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="weatherStationId" class='form-control form-control-sm' name="weatherStationId"
-                formControlName="weatherStationId">
+              <select id="weatherStation" class='form-control form-control-sm'
+                name="weatherStation"
+                formControlName="weatherStation">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let stationId of weatherStationIds" [value]="stationId.stationId">
+                <option *ngFor="let stationId of weatherStationIds"
+                  [value]="stationId.stationId">
                   {{stationId.stationName}}
                 </option>
               </select>
@@ -70,7 +78,8 @@
               Group by Home Type
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" id="groupByHomeType" formControlName="groupByHomeType">
+              <input type="checkbox" id="hasHomeType"
+                formControlName="hasHomeType">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -79,7 +88,8 @@
               Group by Home Size
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" id="groupByHomeSize" formControlName="groupByHomeSize">
+              <input type="checkbox" id="hasHomeSize"
+                formControlName="hasHomeSize">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -89,7 +99,8 @@
               Group by Occupancy
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" id="groupByOccupancy" formControlName="groupByOccupancy">
+              <input type="checkbox" id="hasOccupancy"
+                formControlName="hasOccupancy">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -98,7 +109,8 @@
               Group by Pool or Spa
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" id="groupByPoolOrSpa" formControlName="groupByPoolOrSpa">
+              <input type="checkbox" id="hasPoolOrSpa"
+                formControlName="hasPoolOrSpa">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -107,16 +119,18 @@
               Group by Gas
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" id="groupByGas" formControlName="groupByGas">
+              <input type="checkbox" id="hasGas" formControlName="hasGas">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf="customerComparisonGroupForm.controls['groupByGas'].value" class="row borderBottom rowPadding">
+          <div *ngIf="customerComparisonGroupForm.controls['hasGas'].value"
+            class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Natural Gas Data:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class='form-control form-control-sm' formControlName="naturalGasData" id="naturalGasData">
+              <select class='form-control form-control-sm' formControlName="gas"
+                id="gas">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let yesNo of yesNoData" [value]="yesNo.key">{{yesNo.value}}</option>
               </select>
@@ -129,18 +143,21 @@
               Group by Electricity
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" id="groupByElectricity" formControlName="groupByElectricity">
+              <input type="checkbox" id="hasElectricity"
+                formControlName="hasElectricity">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf="customerComparisonGroupForm.controls['groupByElectricity'].value"
+          <div
+            *ngIf="customerComparisonGroupForm.controls['hasElectricity'].value"
             class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Electric Data
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class='form-control form-control-sm' formControlName="electricData" id="electricData">
+              <select class='form-control form-control-sm'
+                formControlName="electricity" id="electricity">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let yesNo of yesNoData" [value]="yesNo.key">{{yesNo.value}}</option>
               </select>
@@ -152,17 +169,19 @@
               Group by Water
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" id="groupByWater" formControlName="groupByWater">
+              <input type="checkbox" id="hasWater" formControlName="hasWater">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf="customerComparisonGroupForm.controls['groupByWater'].value" class="row borderBottom rowPadding">
+          <div *ngIf="customerComparisonGroupForm.controls['hasWater'].value"
+            class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Water Data
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
 
-              <select class='form-control form-control-sm' formControlName="waterData" id="waterData">
+              <select class='form-control form-control-sm'
+                formControlName="water" id="water">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let yesNo of yesNoData" [value]="yesNo.key">{{yesNo.value}}</option>
               </select>
@@ -175,7 +194,8 @@
               Group by Electric Water Heater
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="groupByElectricWaterHeater" id="groupByElectricWaterHeater">
+              <input type="checkbox" formControlName="hasElecHeating"
+                id="hasElecHeating">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -184,7 +204,7 @@
               Group by EV
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="groupByEV" id="groupByEV">
+              <input type="checkbox" formControlName="hasEV" id="hasEV">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -193,28 +213,26 @@
               Group by Lot Size
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="groupByLotSize" id="groupByLotSize">
+              <input type="checkbox" formControlName="hasLotSize"
+                id="hasLotSize">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row rowPadding">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;">
-              <button type="button" class="btn btn-primary" (click)="back()">Back</button></div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6 row">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;">
-                <button type="button" class="btn btn-primary" style="float:right;" (click)="delete()"
-                  *ngIf="id!==undefined&&id!==null">Delete</button>
-              </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-4" style="display: inline-table;">
-                <button type="button" class="btn btn-primary" style="float:right;" (click)="save()">Save</button>
-              </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display:
+              inline-table;">
+              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+              <button type="button" class="btn btn-primary" style="float:right;"
+                (click)="save()">Save</button>
             </div>
           </div>
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar ></app-sidebar>
+        <app-sidebar></app-sidebar>
       </div>
     </div>
   </div>

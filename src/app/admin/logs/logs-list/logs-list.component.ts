@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -21,6 +21,7 @@ export class LogsListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.LOGS_KEYS;
   public dataSource: any;
   public totalElement = 0;
+  public pageIndex: any;
   public logsData = {
     content: [],
     totalElements: 0,
@@ -59,32 +60,34 @@ export class LogsListComponent implements OnInit, OnDestroy {
   findLogs(force: boolean, filter: any): void {
     this.adminFilter.logFilter.formValue = this.logsForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.systemUtilityService.loadLogsList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getLogsList().pipe(skipWhile((item: any) => !item))
-      .subscribe((logsList: any) => {
-        this.logsData.content = logsList.list;
-        this.logsData.totalElements = logsList.totalSize;
-        this.dataSource = [...this.logsData.content];
+    this.subscriptions.add(this.systemUtilityService.loadLogsCount(filter).pipe(skipWhile((item: any) => !item))
+      .subscribe((logsCount: any) => {
+        this.logsData.totalElements = logsCount.systemUtilityManagement.logCount;
+        this.totalElement = logsCount.systemUtilityManagement.logCount;;
+        this.systemUtilityService.loadLogsList(force, filter);
+        this.subscriptions.add(this.systemUtilityService.getLogsList().pipe(skipWhile((item: any) => !item))
+          .subscribe((logsList: any) => {
+            this.logsData.content = logsList;
+            this.dataSource = [...this.logsData.content];
+          }));
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.logFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
-      .set('logId', '')
-      .set('filter.username', (this.logsForm.value.username !== null ? this.logsForm.value.username : ''))
-      .set('filter.recordType', (this.logsForm.value.recordType !== null ? this.logsForm.value.recordType : ''))
-      .set('filter.entity', (this.logsForm.value.entity !== null ? this.logsForm.value.entity : ''))
-      .set('filter.entityReference', (this.logsForm.value.entityReference !== null ? this.logsForm.value.entityReference : ''))
-      .set('filter.comment', (this.logsForm.value.recordType !== null ? this.logsForm.value.comment : ''));
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('username', (this.logsForm.value.username !== null ? this.logsForm.value.username : ''))
+      .set('recordType', (this.logsForm.value.recordType !== null ? this.logsForm.value.recordType : ''))
+      .set('entity', (this.logsForm.value.entity !== null ? this.logsForm.value.entity : ''))
+      .set('entityReference', (this.logsForm.value.entityReference !== null ? this.logsForm.value.entityReference : ''))
+      .set('comment', (this.logsForm.value.recordType !== null ? this.logsForm.value.comment : ''));
     this.findLogs(true, params);
   }
   ngOnDestroy(): void {

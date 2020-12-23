@@ -19,6 +19,7 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
 
   public keys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_COMPARISON_GROUP_COLUMN_DATA;
   public dataSource: any;
+  public pageIndex: any;
   public weatherStationIds: Array<any>;
   public houseSizeData: Array<any> = TableColumnData.HOUSE_SIZE_DATA;
   public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
@@ -66,7 +67,7 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
   findCustomerComparisonGroup(force: boolean, filter: HttpParams): void {
     this.adminFilter.customerComparisonGroup.formValue = this.customerComparisonGroupForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.systemUtilityService.loadCustomerComparisonGroupCount().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemUtilityService.loadCustomerComparisonGroupCount(filter).pipe(skipWhile((item: any) => !item))
       .subscribe((customerComparisonGroupCount: any) => {
         this.customerComparisonGroupData.totalElements = customerComparisonGroupCount.systemUtilityManagement.customerComparisonGroupCount;
         this.systemUtilityService.loadCustomerComparisonGroupList(force, filter);

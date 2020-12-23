@@ -25,7 +25,7 @@
               Order:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="order" formControlName="order">
+              <input type="text" class="form-control form-control-sm" id="orderNumber" formControlName="orderNumber">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -34,8 +34,8 @@
               Weather Station
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="weatherStationId" class='form-control form-control-sm' name="weatherStationId"
-                formControlName="weatherStationId">
+              <select id="weatherStation" class='form-control form-control-sm' name="weatherStation"
+                formControlName="weatherStation">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let stationId of weatherStationIds" [value]="stationId.stationId">{{stationId.stationName}}</option>
               </select>
@@ -47,7 +47,6 @@
               <button type="button" class="btn btn-primary" (click)="back()">Back</button></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
               <button type="button" class="btn btn-primary" style="float:right;" (click)="delete()">
-                <!-- *ngIf="id!==undefined&&id!==null" -->
                 Delete</button>
             </div>
           </div>

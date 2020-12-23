@@ -11,7 +11,6 @@ import {
     DeleteCustomerEventTypeByIdAction,
     DeleteDegreeDaysByIdAction,
     DeleteFactorByIdAction,
-    DeleteLogsByIdAction,
     DeleteLookupByIdAction,
     DeleteLookupValueByIdAction,
     DeletePlaceByIdAction,
@@ -33,7 +32,7 @@ import {
     GetFactorCountAction,
     GetFactorListAction,
     GetLoadLookupCountAction,
-    GetLogsByIdAction,
+    GetLogsCountAction,
     GetLogsListAction,
     GetLookupByIdAction,
     GetLookupListAction,
@@ -57,7 +56,6 @@ import {
     SaveDegreeDaysAction,
     SaveDegreeDaysUsingFileAction,
     SaveFactorAction,
-    SaveLogsAction,
     SaveLookupAction,
     SaveLookupValueAction,
     SavePlaceAction,
@@ -68,7 +66,6 @@ import {
     UpdateCustomerEventTypeAction,
     UpdateDegreeDaysAction,
     UpdateFactorAction,
-    UpdateLogsAction,
     UpdateLookupAction,
     UpdateLookupValueAction,
     UpdatePlaceAction,
@@ -102,6 +99,7 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         systemParameter: undefined,
         systemParameterCount: undefined,
         logList: undefined,
+        logCount: undefined,
         logs: undefined,
         weatherStationList: undefined,
         weatherStation: undefined,
@@ -448,8 +446,9 @@ export class SystemUtilityManagementState {
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
+                        const res = SystemUtilityTransformer.transformTableData(response, action.filter)
                         ctx.patchState({
-                            customerComparisonGroupList: response,
+                            customerComparisonGroupList: res,
                         });
                     },
                         error => {
@@ -463,7 +462,7 @@ export class SystemUtilityManagementState {
     @Action(GetCustomerComparisonGroupCountAction)
     getCustomerComparisonGroupCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerComparisonGroupCountAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.customerComparisonGroups + '/count')
+        return this.loginService.performGetWithParams(AppConstant.customerComparisonGroups + '/count', action.filter)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -584,7 +583,7 @@ export class SystemUtilityManagementState {
     @Action(DeleteCustomerComparisonGroupInBatchAction)
     deleteCustomerComparisonGroupInBatch(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteCustomerComparisonGroupInBatchAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.customerComparisonGroupRemoveBatch, AppConstant.customerComparisonGroups + '/batchRemove')
+        return this.loginService.performPostWithParam('', AppConstant.customerComparisonGroups + '/batchRemove', action.customerComparisonGroupRemoveBatch)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -599,7 +598,7 @@ export class SystemUtilityManagementState {
     @Action(SaveCustomerComparisonGroupInBatchAction)
     saveCustomerComparisonGroupInBatch(ctx: StateContext<SystemUtilityManagementModel>, action: SaveCustomerComparisonGroupInBatchAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.customerComparisonGroupAddBatch, AppConstant.customerComparisonGroups + '/batchAdd')
+        return this.loginService.performPostWithParam('', AppConstant.customerComparisonGroups + '/batchAdd', action.customerComparisonGroupAddBatch)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -1085,10 +1084,10 @@ export class SystemUtilityManagementState {
             result = this.loginService.performGetWithParams(AppConstant.logs, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformLogTableData(response);
+                        const res = SystemUtilityTransformer.transformTableData(response, action.filter);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            logList: response,
+                            logList: res,
                         });
                     },
                         error => {
@@ -1099,66 +1098,15 @@ export class SystemUtilityManagementState {
         return result;
     }
 
-    @Action(GetLogsByIdAction)
-    getLogsById(ctx: StateContext<SystemUtilityManagementModel>, action: GetLogsByIdAction): Actions {
+    @Action(GetLogsCountAction)
+    getLogCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetLogsCountAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.logs + '/' + action.id)
+        return this.loginService.performGetWithParams(AppConstant.logs + '/count', action.filter)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        logs: response,
-                    });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
-                    }));
-    }
-
-    @Action(DeleteLogsByIdAction)
-    deleteLogsById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteLogsByIdAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.logs + '/' + action.id)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
-                    }));
-    }
-
-    @Action(SaveLogsAction)
-    saveLogs(ctx: StateContext<SystemUtilityManagementModel>, action: SaveLogsAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.factor, AppConstant.logs)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
-                    ctx.patchState({
-                        logs: response,
-                    });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
-                    }));
-    }
-
-    @Action(UpdateLogsAction)
-    updateLogs(ctx: StateContext<SystemUtilityManagementModel>, action: UpdateLogsAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.factor, AppConstant.logs + '/' + action.id)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
-                    ctx.patchState({
-                        logs: response,
+                        logCount: response,
                     });
                 },
                     error => {
@@ -1267,7 +1215,7 @@ export class SystemUtilityManagementState {
             result = this.loginService.performGetWithParams(AppConstant.degreeDays, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        const res = SystemUtilityTransformer.transformTableData(response, action.filter);
+                        const res = SystemUtilityTransformer.transformDegreeDaysTableData(response, action.filter);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             degreeDaysList: res,

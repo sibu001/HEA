@@ -1,8 +1,8 @@
 import { Location } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { ElementRef } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -23,19 +23,13 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
-    private readonly activateRoute: ActivatedRoute,
     private readonly location: Location,
     private readonly el: ElementRef) {
-    this.activateRoute.queryParams.subscribe(params => {
-      this.id = params['id'];
-    });
   }
 
   ngOnInit() {
     this.findWeatherStation(false, '');
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   findWeatherStation(force: boolean, filter: any): void {
@@ -52,22 +46,22 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   setForm(event: any) {
     this.customerComparisonGroupForm = this.formBuilder.group({
       comparisonCode: [event !== undefined ? event.comparisonCode : 'Cooling'],
-      order: [event !== undefined ? event.order : ''],
-      groupByWeather: [event !== undefined ? event.groupByWeather : ''],
-      weatherStationId: [event !== undefined ? event.weatherStationId : ''],
-      groupByHomeSize: [event !== undefined ? event.groupByHomeSize : ''],
-      groupByHomeType: [event !== undefined ? event.homeType : ''],
-      groupByOccupancy: [event !== undefined ? event.occupancy : ''],
-      groupByPoolOrSpa: [event !== undefined ? event.poolOrSpa : ''],
-      groupByGas: [event !== undefined ? event.groupByGas : ''],
-      naturalGasData: [event !== undefined ? event.naturalGasData : ''],
-      groupByElectricity: [event !== undefined ? event.groupByElectricity : ''],
-      electricData: [event !== undefined ? event.electricData : ''],
-      groupByWater: [event !== undefined ? event.groupByWater : ''],
-      waterData: [event !== undefined ? event.waterData : ''],
-      groupByElectricWaterHeater: [event !== undefined ? event.groupByElectricWaterHeater : ''],
-      groupByEV: [event !== undefined ? event.groupByEV : ''],
-      groupByLotSize: [event !== undefined ? event.groupByLotSize : ''],
+      fallbackOrder: [event !== undefined ? event.fallbackOrder : ''],
+      hasWeatherStation: [event !== undefined ? event.hasWeatherStation : ''],
+      weatherStation: [event !== undefined ? event.weatherStation : ''],
+      hasHomeSize: [event !== undefined ? event.hasHomeSize : ''],
+      hasHomeType: [event !== undefined ? event.homeType : ''],
+      hasOccupancy: [event !== undefined ? event.hasOccupancy : ''],
+      hasPoolOrSpa: [event !== undefined ? event.hasPoolOrSpa : ''],
+      hasGas: [event !== undefined ? event.hasGas : ''],
+      gas: [event !== undefined ? event.gas : ''],
+      hasElectricity: [event !== undefined ? event.hasElectricity : ''],
+      electricity: [event !== undefined ? event.electricity : ''],
+      hasWater: [event !== undefined ? event.hasWater : ''],
+      water: [event !== undefined ? event.water : ''],
+      hasElecHeating: [event !== undefined ? event.hasElecHeating : ''],
+      hasEV: [event !== undefined ? event.hasEV : ''],
+      hasLotSize: [event !== undefined ? event.hasLotSize : true],
     });
   }
   back() {
@@ -75,7 +69,7 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   }
   save() {
     if (this.customerComparisonGroupForm.valid) {
-      this.subscriptions.add(this.systemUtilityService.saveCustomerComparisonGroupInBatch(this.customerComparisonGroupForm.value).pipe(
+      this.subscriptions.add(this.systemUtilityService.saveCustomerComparisonGroupInBatch(this.setHttpParameter()).pipe(
         skipWhile((item: any) => !item))
         .subscribe((response: any) => {
           this.location.back();
@@ -87,6 +81,29 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   delete() {
 
   }
+
+  setHttpParameter(): HttpParams {
+    const params = new HttpParams()
+      .set('comparisonCode', this.customerComparisonGroupForm.value.comparisonCode)
+      .set('fallbackOrder', this.customerComparisonGroupForm.value.fallbackOrder)
+      .set('hasWeatherStation', this.customerComparisonGroupForm.value.hasWeatherStation)
+      .set('weatherStation', this.customerComparisonGroupForm.value.weatherStation)
+      .set('hasHomeSize', this.customerComparisonGroupForm.value.hasHomeSize)
+      .set('hasHomeType', this.customerComparisonGroupForm.value.hasHomeType)
+      .set('hasOccupancy', this.customerComparisonGroupForm.value.hasOccupancy)
+      .set('hasPoolOrSpa', this.customerComparisonGroupForm.value.hasPoolOrSpa)
+      .set('hasGas', this.customerComparisonGroupForm.value.hasGas)
+      .set('gas', this.customerComparisonGroupForm.value.gas)
+      .set('hasElectricity', this.customerComparisonGroupForm.value.hasElectricity)
+      .set('electricity', this.customerComparisonGroupForm.value.electricity)
+      .set('hasWater', this.customerComparisonGroupForm.value.hasWater)
+      .set('water', this.customerComparisonGroupForm.value.water)
+      .set('hasElecHeating', this.customerComparisonGroupForm.value.hasElecHeating)
+      .set('hasEV', this.customerComparisonGroupForm.value.hasEV)
+      .set('hasLotSize', this.customerComparisonGroupForm.value.hasLotSize)
+    return params;
+  }
+
   validateForm() {
     for (const key of Object.keys(this.customerComparisonGroupForm.controls)) {
       if (this.customerComparisonGroupForm.controls[key].invalid) {

@@ -1,7 +1,6 @@
-import { Component, ElementRef, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
@@ -16,63 +15,49 @@ import { SystemThreadInfoComponent } from '../../system-jobs/system-thread-info/
 export class AlertMessagesEditComponent implements OnInit, OnDestroy {
 
   public alertMessagesForm: FormGroup;
+  public id: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public dialogRef: MatDialogRef<SystemThreadInfoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public readonly formBuilder: FormBuilder,
-    private readonly systemMeasurementService: SystemMeasurementService,
-    private readonly activateRoute: ActivatedRoute,
-    private readonly router: Router,
-    private readonly el: ElementRef) { }
+    private readonly systemMeasurementService: SystemMeasurementService) { }
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.data !== undefined || this.data.id !== undefined) {
-      this.systemMeasurementService.loadScriptBatchById(Number(this.data.id));
+    if (this.data !== undefined && this.data.id !== undefined) {
+      this.id = this.data.id;
+      this.systemMeasurementService.loadAlertMessageById(Number(this.data.id));
       this.loadAlertMessagesById();
     }
   }
 
   onNoClick() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
 
   loadAlertMessagesById() {
-    this.subscriptions.add(this.systemMeasurementService.getScriptBatchById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemMeasurementService.getAlertMessageById().pipe(skipWhile((item: any) => !item))
       .subscribe((alertMessage: any) => {
-        this.setForm(alertMessage);
+        this.setForm(alertMessage.data);
       }));
   }
   setForm(event: any) {
-
     this.alertMessagesForm = this.formBuilder.group({
-      target: [event !== undefined ? event.target : ''],
-      alertType: [event !== undefined ? event.alertType : ''],
-      alertLevel: [event !== undefined ? event.alertLevel : ''],
-      isActive: [event !== undefined ? event.isActive : ''],
-      spelFilter: [event !== undefined ? event.spelFilter : ''],
-      message: [event !== undefined ? event.message : ''],
+      target: [event !== undefined ? event.target : 'C'],
+      alertType: [event !== undefined ? event.alertType : 'L'],
+      alertLevel: [event !== undefined ? event.alertLevel : '10'],
+      active: [event !== undefined ? event.active : true],
+      filter: [event !== undefined ? event.filter : ''],
+      messageTemplate: [event !== undefined ? event.messageTemplate : ''],
     });
-  }
-  back() {
-    this.router.navigate(['admin/alertMessages/alertMessagesList']);
-  }
-
-  goToDebug() {
-    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: {} });
-
-  }
-
-  runNow() {
-
   }
 
   delete() {
     if (confirm('Are you sure you want to delete?')) {
       this.subscriptions.add(this.systemMeasurementService.deleteAlertMessageById(this.data.id).pipe(skipWhile((item: any) => !item))
         .subscribe((response: any) => {
-          this.router.navigate(['admin/alertMessages/alertMessagesList'], { queryParams: { 'force': true } });
+          this.dialogRef.close(true);
         }));
     }
   }
@@ -83,13 +68,13 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.systemMeasurementService.updateAlertMessage(this.data.id, this.alertMessagesForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            this.dialogRef.close();
+            this.dialogRef.close(true);
           }));
       } else {
         this.subscriptions.add(this.systemMeasurementService.saveAlertMessage(this.alertMessagesForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            this.dialogRef.close();
+            this.dialogRef.close(true);
           }));
       }
     } else {

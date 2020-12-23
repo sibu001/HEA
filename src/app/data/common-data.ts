@@ -117,11 +117,12 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_COMPARISON_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
+        { key: 'serialNumber', displayName: '#' },
         { displayName: 'Comparison Code', key: 'comparisonCode', sort: 'comparisonCode' },
         { displayName: 'Group Name', key: 'groupName', sort: 'groupName', isEdit: true },
         { displayName: 'Order', key: 'orderNumber', sort: 'orderNumber' },
         { displayName: 'Weather Station', key: 'weatherStationId', sort: 'weatherStationId' },
-        { displayName: 'Costumers', key: 'numOfCustomers', sort: 'numOfCustomers' },
+        { displayName: 'Costumers', key: 'numOfCustomers' },
 
     ];
 
@@ -236,11 +237,12 @@ export class TableColumnData {
     ];
 
     static readonly LOGS_KEYS: Array<TABLECOLUMN> = [
+        { key: 'serialNumber', displayName: '#' },
         { key: 'username', sort: 'username', displayName: 'Username' },
         { key: 'recordType', sort: 'recordType', displayName: 'Record Type' },
         { key: 'comment', sort: 'comment', displayName: 'Comment' },
-        { key: 'entry', sort: 'entry', displayName: 'Entity' },
-        { key: 'logDate', sort: 'logDate', displayName: 'Log Date' }
+        { key: 'entity', sort: 'entity', displayName: 'Entity' },
+        { key: 'logDate', sort: 'logDate', displayName: 'Log Date', isDate: true }
     ];
 
     static readonly BASE_TEMPERATURE: Array<any> = [
@@ -284,11 +286,11 @@ export class TableColumnData {
 
     static readonly DEGREE_DAY_KEY: Array<TABLECOLUMN> = [
         { key: 'serialNumber', displayName: '#' },
-        { key: 'stationId', sort: 'stationId', displayName: 'Station ID', isEdit: true },
+        { key: 'stationId', sort: 'stationId', displayName: 'Station ID' },
         { key: 'type', sort: 'type', displayName: 'Type' },
-        { key: 'date', sort: 'date', displayName: 'Date' },
-        { key: 'baseTemperature', sort: 'baseTemperature', displayName: 'Base Temprature' },
-        { key: 'degreeDays', sort: 'degreeDays', displayName: 'Degree Days' },
+        { key: 'createdDate', sort: 'createdDate', displayName: 'Date', isDate: true },
+        { key: 'base', sort: 'base', displayName: 'Base Temprature' },
+        { key: 'value', sort: 'value', displayName: 'Degree Days' },
     ];
 
     static readonly CIMIS_STATION_KEY: Array<TABLECOLUMN> = [
@@ -526,13 +528,13 @@ export class TableColumnData {
     ];
 
     static readonly ALERT_MESSAGE_KEY: Array<TABLECOLUMN> = [
-        { key: 'id', sort: 'id', displayName: 'Id' },
-        { key: 'target', sort: 'target', displayName: 'Target' },
+        { key: 'id', sort: 'id', displayName: 'Id', isEdit: true },
+        { key: 'target', sort: 'target', displayName: 'Target', isEdit: true },
         { key: 'alertType', sort: 'alertType', displayName: 'Alert Type' },
         { key: 'alertLevel', sort: 'alertLevel', displayName: 'Alert Level' },
-        { key: 'message', sort: 'message', displayName: 'Message' },
-        { key: 'createdDate', sort: 'createdDate', displayName: 'Created Date' },
-        { key: 'active', displayName: 'Active' },
+        { key: 'messageTemplate', sort: 'messageTemplate', displayName: 'Message' },
+        { key: 'createdDate', sort: 'createdDate', displayName: 'Created Date', isDate: true },
+        { key: 'active', displayName: 'Active', type: 'image' },
     ];
 
     static readonly TOPIC_DESCRIPTION_KEY: Array<TABLECOLUMN> = [

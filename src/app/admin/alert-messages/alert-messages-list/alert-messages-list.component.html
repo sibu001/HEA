@@ -52,6 +52,7 @@
               [isSearch]="false" [data]="dataSource"
               [totalElement]="alertMessagesData.totalElements"
               (changePageEvent)="search($event)"
+              (goToEditEvent)="onAddAlertMessages($event)"
               (addEvent)='onAddAlertMessages($event)'>
             </app-table>
           </div>

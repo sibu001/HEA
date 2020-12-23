@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { CustomerGroupRoutingModule } from './degree-days-routing.module';
 import { DegreeDaysListComponent } from './degree-days-list/degree-days-list.component';
@@ -30,6 +30,6 @@ import { SystemUtilityService } from 'src/app/store/system-utility-state-managem
     ]),
   ],
   declarations: [DegreeDaysListComponent],
-  providers: [SystemService, SystemUtilityService]
+  providers: [SystemService, SystemUtilityService, DatePipe]
 })
 export class DegreeDaysModule { }

@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -19,6 +20,7 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.DEGREE_DAY_KEY;
   public dataSource: any;
   public fileObject: any;
+  public pageIndex: any;
   public totalElement = 0;
   public degreeDayData = {
     content: [],
@@ -31,6 +33,7 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
   public baseTemp: Array<any> = TableColumnData.BASE_TEMPERATURE;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
+    private readonly datePipe: DatePipe,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
@@ -61,9 +64,9 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
     this.degreeDayForm = this.fb.group({
       degreeDaysFile: [event !== undefined && event !== null ? event.degreeDaysFile : ''],
       stationId: [event !== undefined && event !== null ? event.stationId : ''],
-      valueDateFrom: [event !== undefined && event !== null ? event.valueDateFrom : ''],
+      valueDateFrom: [event && event.valueDateFrom ? new Date(event.valueDateFrom) : ''],
       type: [event !== undefined && event !== null ? event.type : ''],
-      valueDateTo: [event !== undefined && event !== null ? event.valueDateTo : ''],
+      valueDateTo: [event && event.valueDateTo ? new Date(event.valueDateTo) : ''],
       base: [event !== undefined && event !== null ? event.base : ''],
     });
   }
@@ -78,8 +81,7 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
         this.systemUtilityService.loadDegreeDaysList(force, filter);
         this.subscriptions.add(this.systemUtilityService.getDegreeDaysList().pipe(skipWhile((item: any) => !item))
           .subscribe((degreeDaysList: any) => {
-            this.degreeDayData.content = degreeDaysList.list;
-            this.degreeDayData.totalElements = degreeDaysList.totalSize;
+            this.degreeDayData.content = degreeDaysList;
             this.dataSource = [...this.degreeDayData.content];
           }));
       }));
@@ -87,6 +89,8 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.degreeDaysFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
@@ -94,9 +98,9 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
       .set('stationId', (this.degreeDayForm.value.stationId !== null ? this.degreeDayForm.value.stationId : ''))
-      .set('valueDateFrom', (this.degreeDayForm.value.valueDateFrom !== null ? this.degreeDayForm.value.valueDateFrom : ''))
+      .set('valueDateFrom', (this.degreeDayForm.value.valueDateFrom ? this.datePipe.transform(this.degreeDayForm.value.valueDateFrom, 'MM/dd/yyyy') : ''))
       .set('type', (this.degreeDayForm.value.type !== null ? this.degreeDayForm.value.type : ''))
-      .set('valueDateTo', (this.degreeDayForm.value.valueDateTo !== null ? this.degreeDayForm.value.valueDateTo : ''))
+      .set('valueDateTo', (this.degreeDayForm.value.valueDateTo ? this.datePipe.transform(this.degreeDayForm.value.valueDateTo, 'MM/dd/yyyy') : ''))
       .set('base', (this.degreeDayForm.value.base !== null ? this.degreeDayForm.value.base : ''));
     this.findDegreeDays(true, params);
   }

@@ -32,11 +32,6 @@ import {
   DeleteSystemParameterByIdAction,
   GetSystemParameterByIdAction,
   UpdateSystemParameterAction,
-  DeleteLogsByIdAction,
-  GetLogsByIdAction,
-  GetLogsListAction,
-  SaveLogsAction,
-  UpdateLogsAction,
   DeleteDegreeDaysByIdAction,
   DeleteWeatherStationByIdAction,
   GetDegreeDaysByIdAction,
@@ -69,7 +64,9 @@ import {
   RecalculateFactorForAllCityAction,
   RecalculateFactorAction,
   GetDegreeDaysCountAction,
-  SaveDegreeDaysUsingFileAction
+  SaveDegreeDaysUsingFileAction,
+  GetLogsListAction,
+  GetLogsCountAction
 } from '../state/system-utility.action';
 import { SystemUtilityManagementState } from '../state/system-utility.state';
 
@@ -207,8 +204,8 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetCustomerComparisonGroupListAction(force, filter));
   }
 
-  loadCustomerComparisonGroupCount(): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetCustomerComparisonGroupCountAction());
+  loadCustomerComparisonGroupCount(filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerComparisonGroupCountAction(filter));
   }
 
   loadCustomerComparisonGroupById(id: number): Observable<SystemUtilityManagementState> {
@@ -352,20 +349,8 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetLogsListAction(force, filter));
   }
 
-  loadLogsById(id: number): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetLogsByIdAction(id));
-  }
-
-  saveLogs(logs: any): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new SaveLogsAction(logs));
-  }
-
-  updateLogs(id: number, logs: any): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new UpdateLogsAction(id, logs));
-  }
-
-  deleteLogsById(id: number): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new DeleteLogsByIdAction(id));
+  loadLogsCount(filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetLogsCountAction(filter));
   }
 
   loadWeatherStationList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {

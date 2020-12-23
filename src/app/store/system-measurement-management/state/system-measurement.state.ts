@@ -4,6 +4,7 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { SystemMeasurementUtilityTransformer } from '../transformer/transformet';
 import {
     DeleteAlertMessageByIdAction,
     DeleteCimisMeasurementByIdAction,
@@ -694,10 +695,10 @@ export class SystemMeasurementManagementState {
             result = this.loginService.performGetWithParams(AppConstant.alertMessage, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformLogTableData(response);
+                        const res = SystemMeasurementUtilityTransformer.transformAlertMessageTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            alertMessageList: response,
+                            alertMessageList: res,
                         });
                     },
                         error => {
@@ -732,7 +733,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -754,7 +755,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 

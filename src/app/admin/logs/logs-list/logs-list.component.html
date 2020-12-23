@@ -82,10 +82,10 @@
           <p class="messages">
             <img src='assets/images/dot03.gif' class='dot'>
             <span class="messageName">Logs (Number of Records =
-              {{totalElement}})
+              {{totalElement | number:'1.0':'en-US'}})
             </span></p>
           <app-table [isHideAdd]=true [keys]="keys" [isPaginate]="true"
-            [isSearch]="false" [data]="dataSource"
+            [isSearch]="false" [data]="dataSource" [pageIndex]="pageIndex"
             [totalElement]="logsData.totalElements"
             (changePageEvent)="search($event,false)">
           </app-table>

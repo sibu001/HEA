@@ -52,7 +52,7 @@
     </div>
     <div class="col-sm-8 col-xs-12">
       <label>
-        <input type="checkbox" class="form-check-input" formControlName="isActive" id="isActive" />
+        <input type="checkbox" class="form-check-input" formControlName="active" id="active" />
         Active
       </label>
     </div>
@@ -62,7 +62,7 @@
       SpEL Filter:
     </div>
     <div class="col-sm-8 col-xs-12">
-      <textarea class="form-control form-control-sm" formControlName="spelFilter" id="spelFilter"></textarea>
+      <textarea class="form-control form-control-sm" formControlName="filter" id="filter"></textarea>
     </div>
   </div>
   <div class="row rowPadding borderBottom">
@@ -70,12 +70,15 @@
       Message:
     </div>
     <div class="col-sm-8 col-xs-12">
-      <textarea class="form-control form-control-sm" formControlName="message" id="message"></textarea>
+      <textarea class="form-control form-control-sm" formControlName="messageTemplate" id="messageTemplate"></textarea>
     </div>
   </div>
   <div class="row rowPadding">
     <div class="col-xs-6 col-sm-8 col-md-8 col-lg-8 align-right">
       <button type="button" class="btn btn-primary" (click)='onSaveClick()'>Save</button>
+    </div>
+    <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 align-right" *ngIf="id">
+      <button type="button" class="btn btn-primary" (click)='delete()'>Delete</button>
     </div>
     <div class="col-xs-6 col-sm-2 col-md-2 col-lg-2 align-right">
       <button type="button" class="btn btn-primary" (click)='onNoClick()'>Close</button>

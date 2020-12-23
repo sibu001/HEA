@@ -47,6 +47,7 @@ export enum SystemActionTypes {
     UPDATE_SYSTEM_PARAMETER = 'Update System Parameter',
     DELETE_SYSTEM_PARAMETER_BY_ID = 'Delete System Parameter By Id',
     GET_LOGS_LIST = 'Get All Logs List',
+    GET_LOGS_COUNT = 'Get Logs Count',
     GET_LOGS_BY_ID = 'Get Logs By Id',
     SAVE_LOGS = 'Save Logs',
     UPDATE_LOGS = 'Update Logs',
@@ -138,6 +139,8 @@ export class GetCustomerComparisonGroupListAction {
 
 export class GetCustomerComparisonGroupCountAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_COMPARISON_GROUP_COUNT;
+    constructor(readonly filter: any) {
+    }
 }
 
 export class GetCustomerComparisonGroupByIdAction {
@@ -345,27 +348,9 @@ export class GetLogsListAction {
     }
 }
 
-export class GetLogsByIdAction {
-    static readonly type: SystemActionTypes = SystemActionTypes.GET_LOGS_BY_ID;
-    constructor(readonly id: number) {
-    }
-}
-
-export class SaveLogsAction {
-    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_LOGS;
-    constructor(readonly factor: any) {
-    }
-}
-
-export class UpdateLogsAction {
-    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_LOGS;
-    constructor(readonly id: number, readonly factor: any) {
-    }
-}
-
-export class DeleteLogsByIdAction {
-    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_LOGS_BY_ID;
-    constructor(readonly id: number) {
+export class GetLogsCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_LOGS_COUNT;
+    constructor(readonly filter: any) {
     }
 }
 
