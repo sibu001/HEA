@@ -119,12 +119,12 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   save() {
     if (this.placeForm.valid) {
       if (this.id !== null && this.id !== undefined) {
-        this.subscriptions.add(this.systemUtilityService.updatePlace(this.id, this.placeForm.value).pipe(
+        this.placeForm.value.id = this.placeForm.value.place;
+        this.subscriptions.add(this.systemUtilityService.updatePlace(this.placeForm.value.id, this.placeForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
             this.loadPlaceById();
-            this.router.navigate(['admin/place/placeList'], { queryParams: { 'force': this.isForce } });
           }));
       } else {
         this.subscriptions.add(this.systemUtilityService.savePlace(this.placeForm.value).pipe(

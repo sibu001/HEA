@@ -16,8 +16,10 @@ import {
     GetAlertMessageByIdAction,
     GetAlertMessageListAction,
     GetCimisMeasurementByIdAction,
+    GetCimisMeasurementCountAction,
     GetCimisMeasurementListAction,
     GetCimisStationByIdAction,
+    GetCimisStationCountAction,
     GetCimisStationListAction,
     GetEC2InstanceByIdAction,
     GetEC2InstanceListAction,
@@ -48,8 +50,10 @@ import { SystemMeasurementModel } from './system-measurement.model';
     name: 'systemMeasurement',
     defaults: {
         cimisStationList: undefined,
+        cimisStationCount: undefined,
         cimisStation: undefined,
         cimisMeasurementList: undefined,
+        cimisMeasurementCount: undefined,
         cimisMeasurement: undefined,
         scriptConsoleList: undefined,
         scriptConsole: undefined,
@@ -149,18 +153,35 @@ export class SystemMeasurementManagementState {
             result = this.loginService.performGetWithParams(AppConstant.cimisStation, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformLogTableData(response);
+                        const res = SystemMeasurementUtilityTransformer.transformCimisStationTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            cimisStationList: response,
+                            cimisStationList: res,
                         });
                     },
                         error => {
                             document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.message);
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
+    }
+
+    @Action(GetCimisStationCountAction)
+    getCimisStationCount(ctx: StateContext<SystemMeasurementModel>, action: GetCimisStationCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.cimisStation + '/count', action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        cimisStationCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
     @Action(GetCimisStationByIdAction)
@@ -176,7 +197,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -187,11 +208,11 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -209,7 +230,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -227,7 +248,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -240,18 +261,35 @@ export class SystemMeasurementManagementState {
             result = this.loginService.performGetWithParams(AppConstant.cimisMeasurement, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformLogTableData(response);
+                        const res = SystemMeasurementUtilityTransformer.transformCimisMeasurementTableData(response, action.filter);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            cimisMeasurementList: response,
+                            cimisMeasurementList: res,
                         });
                     },
                         error => {
                             document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.message);
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
+    }
+
+    @Action(GetCimisMeasurementCountAction)
+    getCimisMeasurementCount(ctx: StateContext<SystemMeasurementModel>, action: GetCimisMeasurementCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.cimisMeasurement + '/count', action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        cimisMeasurementCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
     @Action(GetCimisMeasurementByIdAction)
@@ -267,7 +305,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -282,7 +320,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -300,7 +338,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -318,7 +356,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -339,7 +377,7 @@ export class SystemMeasurementManagementState {
                     },
                         error => {
                             document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.message);
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
@@ -358,7 +396,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -373,7 +411,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -391,7 +429,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -409,7 +447,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -430,7 +468,7 @@ export class SystemMeasurementManagementState {
                     },
                         error => {
                             document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.message);
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
@@ -449,7 +487,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -464,7 +502,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -482,7 +520,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -500,7 +538,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -521,7 +559,7 @@ export class SystemMeasurementManagementState {
                     },
                         error => {
                             document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.message);
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
@@ -540,7 +578,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -555,7 +593,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -573,7 +611,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -591,7 +629,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -612,7 +650,7 @@ export class SystemMeasurementManagementState {
                     },
                         error => {
                             document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.message);
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
@@ -631,7 +669,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -646,7 +684,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -664,7 +702,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -682,7 +720,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -703,7 +741,7 @@ export class SystemMeasurementManagementState {
                     },
                         error => {
                             document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.message);
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
@@ -722,7 +760,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -737,7 +775,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -773,7 +811,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 }

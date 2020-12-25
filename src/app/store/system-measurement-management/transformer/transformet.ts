@@ -1,3 +1,5 @@
+import { DatePipe } from '@angular/common';
+
 export class SystemMeasurementUtilityTransformer {
     static transformAlertMessageTableData(src: any): any {
         const dataSourceList: any = [];
@@ -39,4 +41,32 @@ export class SystemMeasurementUtilityTransformer {
         };
     }
 
+    static transformCimisMeasurementTableData(src: any, filter: any): any {
+        const dataSourceList: any = [];
+        let index = 1;
+        if (filter && filter.get('startRow')) {
+            index = Number(filter.get('startRow')) + 1;
+        }
+        src.forEach(element => {
+            let dataSourceObject: any = {};
+            dataSourceObject = element;
+            dataSourceObject.serialNumber = index;
+            dataSourceObject.cmDateTime = element.cmDateTime ? new DatePipe('en-US').transform(new Date(element.cmDateTime), 'MM/dd/yyyy') : '';
+            dataSourceObject.irradiance = element.irradiance + ' Ly/day';
+            index++;
+            dataSourceList.push(dataSourceObject);
+        });
+        return dataSourceList;
+    }
+
+    static transformCimisStationTableData(src: any): any {
+        const dataSourceList: any = [];
+        src.forEach(element => {
+            let dataSourceObject: any = {};
+            dataSourceObject = element;
+            dataSourceObject.isActive = element.isActive ? 'yes' : 'no';
+            dataSourceList.push(dataSourceObject);
+        });
+        return dataSourceList;
+    }
 }

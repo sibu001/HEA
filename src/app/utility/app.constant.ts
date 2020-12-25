@@ -33,8 +33,8 @@ export class AppConstant {
     public static logs = 'logs';
     public static weatherStation = 'weatherStations';
     public static degreeDays = 'degreeDays';
-    public static cimisStation = '';
-    public static cimisMeasurement = '';
+    public static cimisStation = 'cimisStations';
+    public static cimisMeasurement = 'cimisMeasurements';
     public static scriptConsole = '';
     public static scriptBatch = '';
     public static systemJobs = '';

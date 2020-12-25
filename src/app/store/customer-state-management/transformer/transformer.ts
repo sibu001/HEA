@@ -39,7 +39,8 @@ export class Transformer {
                     } else if (dataKey[i].pattern === '###,##0 kWh') {
                         dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB') + ' kWh') : '';
                     } else if (dataKey[i].pattern === '#,###' || dataKey[i].pattern === '##' || dataKey[i].pattern === '##0' || dataKey[i].pattern === '###,##0') {
-                        dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB')) : '';
+                        dataSourceObj[dataKey[i].definition] = (columnValue.value !== undefined && columnValue.value !== null && columnValue.value !== '') ?
+                            (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB')) : '';
                     } else if (dataKey[i].pattern === '$#,##0') {
                         dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? ('$' + (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB'))) : '';
                     } else {
@@ -84,6 +85,7 @@ export class Transformer {
                     key: 'name',
                     displayName: 'Name',
                     sort: 'name',
+                    isEdit: true
                 },
                 {
                     key: 'links',

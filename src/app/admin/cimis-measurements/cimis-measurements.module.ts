@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { CimisMeasurementsRoutingModule } from './cimis-measurements-routing.module';
 import { CimisMeasurementsListComponent } from './cimis-measurements-list/cimis-measurements-list.component';
@@ -30,6 +30,6 @@ import { SystemMeasurementService } from 'src/app/store/system-measurement-manag
     CimisMeasurementsRoutingModule
   ],
   declarations: [CimisMeasurementsListComponent],
-  providers: [SystemService, SystemMeasurementService]
+  providers: [SystemService, SystemMeasurementService, DatePipe]
 })
 export class CimisMeasurementsModule { }

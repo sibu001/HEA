@@ -36,22 +36,23 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   }
   setForm(event: any) {
     this.cimisStationForm = this.formBuilder.group({
-      stationNumber: [event !== undefined ? event.stationNumber : '', Validators.required],
-      stationName: [event !== undefined ? event.stationName : '', Validators.required],
-      country: [event !== undefined ? event.country : '', Validators.required],
+      stationNbr: [event !== undefined ? event.stationNbr : '', Validators.required],
+      name: [event !== undefined ? event.name : '', Validators.required],
+      county: [event !== undefined ? event.county : '', Validators.required],
       city: [event !== undefined ? event.city : '', Validators.required],
       regionalOffice: [event !== undefined ? event.regionalOffice : '', Validators.required],
       elevation: [event !== undefined ? event.elevation : '', Validators.required],
       groundCover: [event !== undefined ? event.groundCover : '', Validators.required],
       latitude: [event !== undefined ? event.latitude : '', Validators.required],
       longitude: [event !== undefined ? event.longitude : '', Validators.required],
-      active: [event !== undefined ? event.active : ''],
-      etoStation: [event !== undefined ? event.etoStation : ''],
+      isActive: [event !== undefined ? event.isActive : ''],
+      isEtoStation: [event !== undefined ? event.isEtoStation : ''],
       zipCodes: [event !== undefined ? event.zipCodes : '']
     });
   }
 
   loadCimisStationById() {
+    this.systemMeasurementService.loadCimisStationById(this.id);
     this.subscriptions.add(this.systemMeasurementService.getCimisStationById().pipe(skipWhile((item: any) => !item))
       .subscribe((cimisStation: any) => {
         if (this.isForce) {

@@ -1,7 +1,9 @@
 export interface SystemMeasurementModel {
     cimisStationList: any;
+    cimisStationCount: any;
     cimisStation: any;
     cimisMeasurementList: any;
+    cimisMeasurementCount: any;
     cimisMeasurement: any;
     scriptConsoleList: any;
     scriptConsole: any;

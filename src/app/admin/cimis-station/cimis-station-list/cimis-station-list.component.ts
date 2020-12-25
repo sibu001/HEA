@@ -20,6 +20,7 @@ export class CimisStationListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.CIMIS_STATION_KEY;
   public dataSource: any;
   public force = false;
+  public pageIndex: any;
   public stationData = {
     content: [],
     totalElements: 0,
@@ -58,37 +59,38 @@ export class CimisStationListComponent implements OnInit, OnDestroy {
     this.stationForm = this.fb.group({
       stationNbr: [event !== undefined && event !== null ? event.stationNbr : ''],
       name: [event !== undefined && event !== null ? event.name : ''],
-      isActive: [event !== undefined && event !== null ? event.isActive : ''],
+      isActive: [event !== undefined && event !== null ? event.isActive : true],
     });
   }
 
   findCimisStation(force: boolean, filter: any): void {
     this.adminFilter.cimisStationFilter.formValue = this.stationForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.systemMeasurementService.loadCimisStationList(force, filter);
-    this.subscriptions.add(this.systemMeasurementService.getCimisStationList().pipe(skipWhile((item: any) => !item))
-      .subscribe((cimisStationList: any) => {
-        this.stationData.content = cimisStationList.list;
-        this.stationData.totalElements = cimisStationList.totalSize;
-        this.dataSource = [...this.stationData.content];
+    this.subscriptions.add(this.systemMeasurementService.loadCimisStationCount(filter).pipe(skipWhile((item: any) => !item))
+      .subscribe((cimisListCount: any) => {
+        this.stationData.totalElements = cimisListCount.systemMeasurement.cimisStationCount;
+        this.systemMeasurementService.loadCimisStationList(force, filter);
+        this.subscriptions.add(this.systemMeasurementService.getCimisStationList().pipe(skipWhile((item: any) => !item))
+          .subscribe((cimisStationList: any) => {
+            this.stationData.content = cimisStationList;
+            this.dataSource = [...this.stationData.content];
+          }));
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.cimisStationFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
-      .set('stationNbr', '')
-      .set('filter.stationNbr', (this.stationForm.value.stationNbr !== null ? this.stationForm.value.stationNbr : ''))
-      .set('filter.name', (this.stationForm.value.name !== null ? this.stationForm.value.name : ''))
-      .set('filter.isActive', (this.stationForm.value.isActive !== null ? this.stationForm.value.isActive : ''));
+      .set('stationNbr', (this.stationForm.value.stationNbr !== null ? this.stationForm.value.stationNbr : ''))
+      .set('name', (this.stationForm.value.name !== null ? this.stationForm.value.name : ''))
+      .set('isActive', (this.stationForm.value.isActive !== null ? this.stationForm.value.isActive : ''));
     this.findCimisStation(true, params);
   }
   ngOnDestroy(): void {

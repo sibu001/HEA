@@ -105,7 +105,7 @@ export class TableComponent implements OnInit, OnChanges {
     if (changes['data'] && changes['data'].currentValue) {
       this.data = changes['data'].currentValue;
       this.totalLength = this.totalElement;
-      if (this.pageIndex) {
+      if (this.pageIndex !== undefined && this.pageIndex !== null) {
         this.pageIndexNumber = this.pageIndex;
       }
       this.dataSource = new MatTableDataSource(this.data);

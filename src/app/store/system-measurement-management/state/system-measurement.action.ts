@@ -1,10 +1,12 @@
 export enum SystemMeasurementActionTypes {
     GET_CIMIS_STATION_LIST = 'Get All CimisStation List',
+    GET_CIMIS_STATION_COUNT = 'Get Cimis Station Count',
     GET_CIMIS_STATION_BY_ID = 'Get CimisStation By Id',
     SAVE_CIMIS_STATION = 'Save CimisStation',
     UPDATE_CIMIS_STATION = 'Update CimisStation',
     DELETE_CIMIS_STATION_BY_ID = 'Delete CimisStation By Id',
     GET_CIMIS_MEASUREMENT_LIST = 'Get All CimisMeasurement List',
+    GET_CIMIS_MEASUREMENT_COUNT = 'Get Cimis Measurement Count',
     GET_CIMIS_MEASUREMENT_BY_ID = 'Get CimisMeasurement By Id',
     SAVE_CIMIS_MEASUREMENT = 'Save CimisMeasurement',
     UPDATE_CIMIS_MEASUREMENT = 'Update CimisMeasurement',
@@ -42,6 +44,12 @@ export class GetCimisStationListAction {
     }
 }
 
+export class GetCimisStationCountAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_CIMIS_STATION_COUNT;
+    constructor(readonly filter: any) {
+    }
+}
+
 export class GetCimisStationByIdAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_CIMIS_STATION_BY_ID;
     constructor(readonly id: number) {
@@ -71,6 +79,13 @@ export class GetCimisMeasurementListAction {
     constructor(readonly force: boolean, readonly filter: any) {
     }
 }
+
+export class GetCimisMeasurementCountAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_CIMIS_MEASUREMENT_COUNT;
+    constructor(readonly filter: any) {
+    }
+}
+
 
 export class GetCimisMeasurementByIdAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_CIMIS_MEASUREMENT_BY_ID;

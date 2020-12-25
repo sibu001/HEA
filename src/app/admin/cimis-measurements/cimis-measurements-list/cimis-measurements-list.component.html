@@ -14,7 +14,7 @@
               <select formControlName="stationNbr" class="form-control">
                 <option value='' selected></option>
                 <option *ngFor='let station of cimisStation'
-                  [value]='station.key'>{{station.value}}</option>
+                  [value]='station.stationNbr'>{{station.stationNbrAndName}}</option>
               </select>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0">
@@ -28,7 +28,7 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <p-calendar formControlName='cmDateTimeFrom' id="cmDateTimeFrom"
-                dateFormat="dd/mm/yy" showIcon=true
+                dateFormat="mm/dd/yy" showIcon=true
                 showButtonBar="true"></p-calendar>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0">
@@ -42,7 +42,7 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <p-calendar formControlName='cmDateTimeTo' id="cmDateTimeTo"
-                dateFormat="dd/mm/yy" showIcon=true
+                dateFormat="mm/dd/yy" showIcon=true
                 showButtonBar="true"></p-calendar>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0">
@@ -61,14 +61,14 @@
               <img src="assets/images/dot03.gif" class="dot pointer">
               <span class="messageName">CIMIS measurements  (Number of Records
                 =
-                {{measurementsData.totalElements}})</span>
+                {{totalElement | number:'1.0':'en-US'}})</span>
             </p>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
-              [data]="dataSource" [isHideAdd]=true
+              [data]="dataSource" [isHideAdd]=true [pageIndex]="pageIndex"
               [totalElement]="measurementsData.totalElements"
               (changePageEvent)="search($event, false)">
             </app-table>

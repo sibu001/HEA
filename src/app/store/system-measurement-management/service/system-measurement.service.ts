@@ -36,7 +36,9 @@ import {
   GetAlertMessageByIdAction,
   GetAlertMessageListAction,
   SaveAlertMessageAction,
-  UpdateAlertMessageAction
+  UpdateAlertMessageAction,
+  GetCimisMeasurementCountAction,
+  GetCimisStationCountAction
 } from '../state/system-measurement.action';
 import { SystemMeasurementManagementState } from '../state/system-measurement.state';
 
@@ -106,6 +108,10 @@ export class SystemMeasurementService {
     return this.store.dispatch(new GetCimisStationListAction(force, filter));
   }
 
+  loadCimisStationCount(filter: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetCimisStationCountAction(filter));
+  }
+
   loadCimisStationById(id: number): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new GetCimisStationByIdAction(id));
   }
@@ -124,6 +130,10 @@ export class SystemMeasurementService {
 
   loadCimisMeasurementList(force: boolean, filter: any): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new GetCimisMeasurementListAction(force, filter));
+  }
+
+  loadCimisMeasurementCount(filter: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetCimisMeasurementCountAction(filter));
   }
 
   loadCimisMeasurementById(id: number): Observable<SystemMeasurementManagementState> {

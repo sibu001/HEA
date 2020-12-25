@@ -19,7 +19,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class StaffEditComponent implements OnInit, OnDestroy {
 
   id: any;
-  public keys: Array<TABLECOLUMN> = TableColumnData.ROLE_KEY;
+  public keys: Array<TABLECOLUMN> = TableColumnData.ROLE_KEY_FOR_STAFF;
   public roleSelectionList: any = [];
   public topicKeys: Array<TableColumnData> = TableColumnData.TOPIC_GROUP_COLUMN_DATA;
   public surveyVersionSettingList: Array<any> = TableColumnData.SURVEY_VERSION_SETTING_DATA;
