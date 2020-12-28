@@ -12,8 +12,10 @@
               Batch Name:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="batchName" formControlName="batchName" />
-              <div *ngIf="f.batchName.invalid && (f.batchName.dirty || f.batchName.touched)">
+              <input type="text" class="form-control form-control-sm"
+                id="batchName" formControlName="batchName" />
+              <div *ngIf="f.batchName.invalid && (f.batchName.dirty ||
+                f.batchName.touched)">
                 <span class="error" *ngIf="f.batchName.errors.required">
                   Batch Name is required.
                 </span>
@@ -26,11 +28,13 @@
               Period:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="period" formControlName="period">
-                <option *ngFor='let period of periodData' [value]="period.key">{{period.value}}</option>
+              <select class="form-control form-control-sm" id="batchPeriod"
+                formControlName="batchPeriod">
+                <option *ngFor='let period of periodData' [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
-              <div *ngIf="f.period.invalid && (f.period.dirty || f.period.touched)">
-                <span class="error" *ngIf="f.period.errors.required">
+              <div *ngIf="f.batchPeriod.invalid && (f.batchPeriod.dirty ||
+                f.batchPeriod.touched)">
+                <span class="error" *ngIf="f.batchPeriod.errors.required">
                   Batch Period is required.
                 </span>
               </div>
@@ -42,8 +46,10 @@
               Period day:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="periodDay" formControlName="periodDay" />
-              <div *ngIf="f.periodDay.invalid && (f.periodDay.dirty || f.periodDay.touched)">
+              <input type="text" class="form-control form-control-sm"
+                id="periodDay" formControlName="periodDay" />
+              <div *ngIf="f.periodDay.invalid && (f.periodDay.dirty ||
+                f.periodDay.touched)">
                 <span class="error" *ngIf="f.periodDay.errors.required">
                   Period Day is required.
                 </span>
@@ -56,7 +62,8 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label>
-                <input type="checkbox" id="forEachCustomer" formControlName="forEachCustomer" />
+                <input type="checkbox" id="forEachCustomer"
+                  formControlName="forEachCustomer" />
                 For each customer
               </label>
             </div>
@@ -67,11 +74,10 @@
               Calculation Type:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="calculationType" (change)="changeTheme($event)"
+              <select class="form-control form-control-sm" id="calculationType"
+                (change)="changeTheme($event)"
                 formControlName="calculationType">
-                <option value="javascript">JavaScript</option>
-                <option value="spel" selected="selected">SpEL</option>
-                <option value="webharvest">WebHarvest script</option>
+                <option *ngFor='let calculation of calculationTypeList' [value]="calculation.lookupValue">{{calculation.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -81,8 +87,10 @@
               Batch Filter:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control form-control-sm" id="batchFilter" formControlName="batchFilter"></textarea>
-              <div *ngIf="f.batchFilter.invalid && (f.batchFilter.dirty ||f.batchFilter.touched)">
+              <textarea class="form-control form-control-sm" cols="20" rows="6"
+                id="batchFilter" formControlName="batchFilter"></textarea>
+              <div *ngIf="f.batchFilter.invalid && (f.batchFilter.dirty
+                ||f.batchFilter.touched)">
                 <span class="error" *ngIf="f.batchFilter.errors.required">
                   Batch Filter is required.
                 </span>
@@ -95,12 +103,16 @@
               Topic:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class='form-control form-control-sm' id="topic" name="topic">
+              <select class='form-control form-control-sm'
+                id="surveyDescriptionId" name="surveyDescriptionId"
+                formControlName="surveyDescriptionId">
                 <option value="" selected></option>
                 <option *ngFor='let topic of topicData' [value]="topic.key">{{topic.value}}</option>
               </select>
-              <div *ngIf="f.topic.invalid && (f.topic.dirty ||f.topic.touched)">
-                <span class="error" *ngIf="f.topic.errors.required">
+              <div *ngIf="f.surveyDescriptionId.invalid &&
+                (f.surveyDescriptionId.dirty ||f.surveyDescriptionId.touched)">
+                <span class="error"
+                  *ngIf="f.surveyDescriptionId.errors.required">
                   Topic is required.
                 </span>
               </div>
@@ -111,22 +123,24 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Calculation:
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <div class='border '>
-                <ngx-codemirror id="calculation" formControlName="calculation" [options]="codeMirrorOptions">
+                <ngx-codemirror id="calculation" formControlName="calculation"
+                  [options]="codeMirrorOptions">
                 </ngx-codemirror>
               </div>
               <span class="debug" (click)="goToDebug()">Debug</span>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Mail Address:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="mailAddress" formControlName="mailAddress" />
-              <div *ngIf="f.mailAddress.invalid && (f.mailAddress.dirty || f.mailAddress.touched)">
+              <input type="text" class="form-control form-control-sm"
+                id="mailAddress" formControlName="mailAddress" />
+              <div *ngIf="f.mailAddress.invalid && (f.mailAddress.dirty ||
+                f.mailAddress.touched)">
                 <span class="error" *ngIf="f.mailAddress.errors.required">
                   Mail Address is required.
                 </span>
@@ -139,7 +153,8 @@
               Comments:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class='form-control' id="comments" formControlName="comments"></textarea>
+              <textarea class='form-control' id="comments"
+                formControlName="comments"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -157,12 +172,15 @@
 
           <div class="row" *ngIf="id!==undefined&&id!==null">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="customerGroupKey" [data]="customerDataSource" [isDelete]=false
-                [totalElement]="customerData.totalElements" [checkbox]=true>
+              <app-table [keys]="customerGroupKey" [data]="customerDataSource"
+                [isDelete]=false
+                [totalElement]="customerData.totalElements" [checkbox]=true
+                (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)" [isHideAdd]="true" 
+                id='groupCode' [selectionList]='topicGroupSelectionList'>
               </app-table>
             </div>
           </div>
-  
+
           <div class="row rowPadding paddingTop">
             <div class="col-sm-5 col-md-5 col-lg-5 col-xs-3
               display-inline-button-big">
@@ -179,10 +197,11 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3
               display-inline-button-big" [ngClass]="{'display-responsive-big2':
               id!==undefined&&id!==null}" style="text-align: end;">
-              <button type="button" class="btn btn-primary" (click)="delete()"  *ngIf="id!==undefined&&id!==null">Delete</button>
+              <button type="button" class="btn btn-primary" (click)="delete()"
+                *ngIf="id!==undefined&&id!==null">Delete</button>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
-              [ngClass]="{'display-responsive-big': id!==undefined&&id!==null}">
+              [ngClass]="{'display-responsive-big': id!==undefined&&id!==null}"  style="text-align: end;">
               <button type="button" class="btn btn-primary" (click)="save()">Save</button>
             </div>
           </div>

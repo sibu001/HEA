@@ -29,8 +29,8 @@ import {
     GetProgramGroupListByCustomerGroupIdAction,
     GetRoleByIdAction,
     GetRoleListAction,
-    GetScrapingPeriodListAction,
-    GetScrapingUtilityListAction,
+    GetLookupValueScrapingPeriodListAction,
+    GetLookupValueBatchPeriodListAction,
     GetThemesListAction,
     GetViewConfigurationListAction,
     SaveCredentialTypeAction,
@@ -42,7 +42,14 @@ import {
     UpdateCustomerAlertTypeAction,
     UpdateCustomerGroupAction,
     UpdateProgramGroupAction,
-    UpdateRoleAction
+    UpdateRoleAction,
+    GetLookupValueHomeOccupancyListAction,
+    GetLookupValueHomeTypeListAction,
+    GetLookupValueHomeSizeListAction,
+    GetLookupValueComparisonCodeListAction,
+    GetLookupValueLotSizeListAction,
+    GetLookupValueCalculationTypeListAction,
+    GetLookupValueScrapingUtilityListAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -64,10 +71,18 @@ import { SystemManagementModel } from './system.model';
         roleList: undefined,
         role: undefined,
         themesList: undefined,
-        scrapingUtility: undefined,
+        batchPeriod: undefined,
         scrapingPeriod: undefined,
+        homeType: undefined,
+        homeOccupancy: undefined,
+        homeSize: undefined,
+        comparisonCode: undefined,
+        lotSize: undefined,
+        calculationType: undefined,
+        scrapingUtility: undefined,
         error: undefined
     }
+
 })
 
 @Injectable()
@@ -151,13 +166,48 @@ export class SystemManagementState {
     }
 
     @Selector()
-    static getScrapingUtilityList(state: SystemManagementModel): any {
-        return state.scrapingUtility;
+    static getBatchPeriodList(state: SystemManagementModel): any {
+        return state.batchPeriod;
     }
 
     @Selector()
     static getScrapingPeriodList(state: SystemManagementModel): any {
         return state.scrapingPeriod;
+    }
+
+    @Selector()
+    static getCalculationTypeList(state: SystemManagementModel): any {
+        return state.calculationType;
+    }
+
+    @Selector()
+    static getScrapingUtilityList(state: SystemManagementModel): any {
+        return state.scrapingUtility;
+    }
+
+    @Selector()
+    static getHomeTypeList(state: SystemManagementModel): any {
+        return state.homeType;
+    }
+
+    @Selector()
+    static getHomeOccupancyList(state: SystemManagementModel): any {
+        return state.homeOccupancy;
+    }
+
+    @Selector()
+    static getHomeSizeList(state: SystemManagementModel): any {
+        return state.homeSize;
+    }
+
+    @Selector()
+    static getComparisonCodeList(state: SystemManagementModel): any {
+        return state.comparisonCode;
+    }
+
+    @Selector()
+    static getLotSizeList(state: SystemManagementModel): any {
+        return state.lotSize;
     }
 
     @Action(GetCustomerGroupListAction)
@@ -758,48 +808,39 @@ export class SystemManagementState {
                     }));
     }
 
-    @Action(GetScrapingUtilityListAction)
-    getAllScrapingUtilityList(ctx: StateContext<SystemManagementModel>, action: GetScrapingUtilityListAction): Actions {
-        const force: boolean = action.force || SystemManagementState.getScrapingUtilityList(ctx.getState()) === undefined;
-        let result: Actions;
-        if (force) {
-            document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.lookupValues + '/' + action.params)
-                .pipe(
-                    tap((response: any) => {
+    @Action(GetLookupValueBatchPeriodListAction)
+    getAllBatchPeriodList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueBatchPeriodListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/BATCH_PERIOD')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        batchPeriod: response,
+                    });
+                },
+                    error => {
                         document.getElementById('loader').classList.remove('loading');
-                        ctx.patchState({
-                            scrapingUtility: response,
-                        });
-                    },
-                        error => {
-                            document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.error.errorMessage);
-                        }));
-        }
-        return result;
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+
     }
 
-    @Action(GetScrapingPeriodListAction)
-    getAllScrapingPeriodList(ctx: StateContext<SystemManagementModel>, action: GetScrapingPeriodListAction): Actions {
-        const force: boolean = action.force || SystemManagementState.getScrapingPeriodList(ctx.getState()) === undefined;
-        let result: Actions;
-        if (force) {
-            document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.lookupValues + '/' + action.params)
-                .pipe(
-                    tap((response: any) => {
+    @Action(GetLookupValueScrapingPeriodListAction)
+    getAllScrapingPeriodList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueScrapingPeriodListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/SCRAPING_PERIOD')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        scrapingPeriod: response,
+                    });
+                },
+                    error => {
                         document.getElementById('loader').classList.remove('loading');
-                        ctx.patchState({
-                            scrapingPeriod: response,
-                        });
-                    },
-                        error => {
-                            document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.error.errorMessage);
-                        }));
-        }
-        return result;
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
     @Action(GetThemesListAction)
@@ -822,6 +863,125 @@ export class SystemManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetLookupValueHomeTypeListAction)
+    getAllHomeTypeList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueHomeTypeListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/HOME_TYPE')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        homeType: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetLookupValueHomeOccupancyListAction)
+    getAllHomeOccupancyList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueHomeOccupancyListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/HOME_OCCUPANCY')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        homeOccupancy: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetLookupValueHomeSizeListAction)
+    getAllHomeSizeList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueHomeSizeListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/HOME_SIZE')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        homeSize: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetLookupValueComparisonCodeListAction)
+    getAllComparisonCodeList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueComparisonCodeListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/COMPARISON_CODE')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        comparisonCode: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetLookupValueLotSizeListAction)
+    getAllLotSizeList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueLotSizeListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/LOT_SIZE')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        lotSize: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetLookupValueCalculationTypeListAction)
+    getAllCalculationTypeList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueLotSizeListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/CALCULATION_TYPE')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        calculationType: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetLookupValueScrapingUtilityListAction)
+    getAllScrapingUtilityList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueScrapingUtilityListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/CALCULATION_TYPE')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        scrapingUtility: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
     @Action(CustomerGroupError)

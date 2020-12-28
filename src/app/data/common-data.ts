@@ -98,7 +98,7 @@ export class TableColumnData {
     ];
 
     static readonly ROLE_KEY_FOR_STAFF: Array<TABLECOLUMN> = [
-        { displayName: 'Role Code', key: 'roleCode'},
+        { displayName: 'Role Code', key: 'roleCode' },
         { displayName: 'Description', key: 'description' }
     ];
 
@@ -329,16 +329,17 @@ export class TableColumnData {
     ];
 
     static readonly BATCH_SCRIPT_KEY: Array<TABLECOLUMN> = [
-        { key: 'batchName', sort: 'batchName', displayName: 'Batch Name' },
-        { key: 'period', sort: 'period', displayName: 'Period' },
+        { key: 'serialNumber', displayName: '#' },
+        { key: 'batchName', sort: 'batchName', displayName: 'Batch Name', isEdit: true },
+        { key: 'batchPeriod', sort: 'batchPeriod', displayName: 'Period', isEdit: true },
         { key: 'periodDay', sort: 'periodDay', displayName: 'Period Day' },
-        { key: 'mailAddres', sort: 'mailAddres', displayName: 'Mail Address' },
-        { key: 'dateLastExecuted', displayName: 'Date last Executed' }
+        { key: 'mailAddress', sort: 'mailAddress', displayName: 'Mail Address' },
+        { key: 'lastExecutionTime', displayName: 'Date last Executed' }
     ];
 
     static readonly CUSTOMER_GROUP_KEY: Array<TABLECOLUMN> = [
-        { key: 'groupCode', sort: 'groupCode', displayName: 'Group Code' },
-        { key: 'groupName', sort: 'groupName', displayName: 'Group Name' },
+        { key: 'groupCode', displayName: 'Group Code' },
+        { key: 'groupName', displayName: 'Group Name' },
     ];
 
     // Job name	Last fire time	Last Runtime	Next fire time	State

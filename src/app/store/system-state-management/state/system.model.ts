@@ -14,7 +14,14 @@ export interface SystemManagementModel {
     roleList: any;
     role: any;
     themesList: any;
-    scrapingUtility: any;
+    batchPeriod: any;
     scrapingPeriod: any;
+    homeType: any;
+    homeOccupancy: any;
+    homeSize: any;
+    comparisonCode: any;
+    lotSize: any;
+    calculationType: any;
+    scrapingUtility: any;
     error: Error;
 }

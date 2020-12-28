@@ -14,6 +14,7 @@ import { CalendarModule } from 'primeng/primeng';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { SystemMeasurementManagementState } from 'src/app/store/system-measurement-management/state/system-measurement.state';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { SystemMeasurementService } from 'src/app/store/system-measurement-manag
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
-      SystemUtilityManagementState
+      SystemUtilityManagementState,
+      SystemMeasurementManagementState
     ]),
     CommonHEAModule,
     BatchScriptRoutingModule

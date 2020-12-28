@@ -11,8 +11,10 @@ import {
     DeleteCimisStationByIdAction,
     DeleteEC2InstanceByIdAction,
     DeleteScriptBatchByIdAction,
+    DeleteScriptBatchGroupAction,
     DeleteScriptConsoleByIdAction,
     DeleteSystemJobsByIdAction,
+    ExecuteScriptBatchResultAction,
     GetAlertMessageByIdAction,
     GetAlertMessageListAction,
     GetCimisMeasurementByIdAction,
@@ -24,16 +26,20 @@ import {
     GetEC2InstanceByIdAction,
     GetEC2InstanceListAction,
     GetScriptBatchByIdAction,
+    GetScriptBatchCountAction,
+    GetScriptBatchGroupAction,
     GetScriptBatchListAction,
     GetScriptConsoleByIdAction,
     GetScriptConsoleListAction,
     GetSystemJobsByIdAction,
     GetSystemJobsListAction,
+    ProcessScriptBatchAction,
     SaveAlertMessageAction,
     SaveCimisMeasurementAction,
     SaveCimisStationAction,
     SaveEC2InstanceAction,
     SaveScriptBatchAction,
+    SaveScriptBatchGroupAction,
     SaveScriptConsoleAction,
     SaveSystemJobsAction,
     UpdateAlertMessageAction,
@@ -58,6 +64,8 @@ import { SystemMeasurementModel } from './system-measurement.model';
         scriptConsoleList: undefined,
         scriptConsole: undefined,
         scriptBatchList: undefined,
+        scriptBatchCount: undefined,
+        scriptBatchGroup: undefined,
         scriptBatch: undefined,
         systemJobsList: undefined,
         systemJobs: undefined,
@@ -460,10 +468,10 @@ export class SystemMeasurementManagementState {
             result = this.loginService.performGetWithParams(AppConstant.scriptBatch, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformLogTableData(response);
+                        const res = SystemMeasurementUtilityTransformer.transformBatchScriptTableData(response, action.filter);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            scriptBatchList: response,
+                            scriptBatchList: res,
                         });
                     },
                         error => {
@@ -472,6 +480,23 @@ export class SystemMeasurementManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetScriptBatchCountAction)
+    getScriptBatchCount(ctx: StateContext<SystemMeasurementModel>, action: GetScriptBatchCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.scriptBatch + '/count', action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        scriptBatchCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
     @Action(GetScriptBatchByIdAction)
@@ -535,6 +560,84 @@ export class SystemMeasurementManagementState {
                     ctx.patchState({
                         scriptBatch: response,
                     });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(ProcessScriptBatchAction)
+    processScriptBatch(ctx: StateContext<SystemMeasurementModel>, action: ProcessScriptBatchAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.scriptBatch + '/' + action.id + '/process')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Processed Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(ExecuteScriptBatchResultAction)
+    executeScriptBatchResult(ctx: StateContext<SystemMeasurementModel>, action: ExecuteScriptBatchResultAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.scriptBatch + '/' + action.id + '/results')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Result Executed');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetScriptBatchGroupAction)
+    getScriptBatchGroup(ctx: StateContext<SystemMeasurementModel>, action: GetScriptBatchGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.scriptBatch + '/' + action.id + '/batchScriptGroups')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        scriptBatchGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+
+    @Action(SaveScriptBatchGroupAction)
+    saveScriptBatchGroup(ctx: StateContext<SystemMeasurementModel>, action: SaveScriptBatchGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.scriptBatch + '/' + action.id + '/batchScriptGroups/' + action.customerGroupId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(DeleteScriptBatchGroupAction)
+    deleteScriptBatchGroup(ctx: StateContext<SystemMeasurementModel>, action: DeleteScriptBatchGroupAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.scriptBatch + '/' + action.id + '/batchScriptGroups/' + action.customerGroupId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

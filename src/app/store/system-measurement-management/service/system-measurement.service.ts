@@ -38,7 +38,13 @@ import {
   SaveAlertMessageAction,
   UpdateAlertMessageAction,
   GetCimisMeasurementCountAction,
-  GetCimisStationCountAction
+  GetCimisStationCountAction,
+  GetScriptBatchCountAction,
+  ProcessScriptBatchAction,
+  ExecuteScriptBatchResultAction,
+  GetScriptBatchGroupAction,
+  SaveScriptBatchGroupAction,
+  DeleteScriptBatchGroupAction
 } from '../state/system-measurement.action';
 import { SystemMeasurementManagementState } from '../state/system-measurement.state';
 
@@ -176,6 +182,10 @@ export class SystemMeasurementService {
     return this.store.dispatch(new GetScriptBatchListAction(force, filter));
   }
 
+  loadScriptBatchCount(filter: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetScriptBatchCountAction(filter));
+  }
+
   loadScriptBatchById(id: number): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new GetScriptBatchByIdAction(id));
   }
@@ -190,6 +200,26 @@ export class SystemMeasurementService {
 
   deleteScriptBatchById(id: number): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new DeleteScriptBatchByIdAction(id));
+  }
+
+  processScriptBatch(id: number): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new ProcessScriptBatchAction(id));
+  }
+
+  ExecuteScriptBatchResult(id: number): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new ExecuteScriptBatchResultAction(id));
+  }
+
+  getScriptBatchGroup(id: number): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetScriptBatchGroupAction(id));
+  }
+
+  saveScriptBatchGroup(id: number, customerGroupId: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new SaveScriptBatchGroupAction(id, customerGroupId));
+  }
+
+  deleteScriptBatchGroup(id: number, customerGroupId: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new DeleteScriptBatchGroupAction(id, customerGroupId));
   }
 
   loadSystemJobsList(force: boolean, filter: any): Observable<SystemMeasurementManagementState> {

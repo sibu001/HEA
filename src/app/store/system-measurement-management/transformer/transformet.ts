@@ -69,4 +69,44 @@ export class SystemMeasurementUtilityTransformer {
         });
         return dataSourceList;
     }
+
+    static transformBatchScriptTableData(src: any, filter: any): any {
+        const dataSourceList: any = [];
+        let index = 1;
+        if (filter && filter.get('startRow')) {
+            index = Number(filter.get('startRow')) + 1;
+        }
+        src.forEach(element => {
+            let dataSourceObject: any = {};
+            dataSourceObject = element;
+            dataSourceObject.serialNumber = index;
+            dataSourceObject.lastExecutionTime = element.lastExecutionTime ? new DatePipe('en-US').transform(new Date(element.lastExecutionTime), 'MM/dd/yyyy h:mm:ss') : '';
+            switch (element.batchPeriod) {
+                case 'D':
+                    dataSourceObject.batchPeriod = 'Daily';
+                    break;
+                case 'M':
+                    dataSourceObject.batchPeriod = 'Monthly';
+                    break;
+                case 'N':
+                    dataSourceObject.batchPeriod = 'None';
+                    break;
+                case 'S':
+                    dataSourceObject.batchPeriod = 'Single';
+                    break;
+                case 'W':
+                    dataSourceObject.batchPeriod = 'Weekly';
+                    break;
+                case 'Y':
+                    dataSourceObject.batchPeriod = 'Year';
+                    break;
+                default:
+                    break;
+            }
+            index++;
+            dataSourceList.push(dataSourceObject);
+        });
+        return dataSourceList;
+    }
+
 }

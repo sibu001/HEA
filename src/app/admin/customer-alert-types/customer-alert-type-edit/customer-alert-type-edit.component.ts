@@ -60,10 +60,12 @@ export class CustomerAlertTypeEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/customer-alert/customerAlertTypeList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
+    if (confirm('Are you sure you want to delete?')) {
     this.subscriptions.add(this.systemService.deleteCustomerAlertTypeById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/customer-alert/customerAlertTypeList'], { queryParams: { 'force': true } });
       }));
+    }
   }
 
   save() {

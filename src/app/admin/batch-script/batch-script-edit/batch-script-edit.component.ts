@@ -6,6 +6,7 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -15,8 +16,17 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 })
 export class BatchScriptEditComponent implements OnInit, OnDestroy {
 
-  batchScriptForm: FormGroup;
-  id: any;
+  public batchScriptForm: FormGroup;
+  public id: any;
+  public topicGroupCheckBox: any;
+  public topicGroupSelectionList: any = [];
+  public topicDataSource: any;
+  public topicGroupData = {
+    content: [],
+    totalElements: 0,
+  };
+  selectedTopicGroup: any;
+  topicGroupList: any = [];
   codeMirrorOptions: any = {
     theme: 'idea',
     mode: 'application/ld+json',
@@ -34,7 +44,8 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0
   };
-  periodData: any[] = TableColumnData.PERIOD_DATA;
+  periodData: any[];
+  calculationTypeList: any[];
   isForce = false;
   topicData = TableColumnData.TOPIC_DESCRIPTION_DATA;
   private readonly subscriptions: Subscription = new Subscription();
@@ -42,6 +53,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
     private readonly systemMeasurementService: SystemMeasurementService,
     private readonly activateRoute: ActivatedRoute,
     private readonly router: Router,
+    private readonly systemService: SystemService,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
@@ -49,11 +61,29 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadBatchPeriodList();
+    this.loadCalculationTypeList();
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.findBatchCustomerGroup(this.id);
       this.systemMeasurementService.loadScriptBatchById(Number(this.id));
       this.loadBatchScriptById();
     }
+  }
+
+  loadBatchPeriodList(): any {
+    this.systemService.loadBatchPeriodList();
+    this.subscriptions.add(this.systemService.getBatchPeriodList().pipe(skipWhile((item: any) => !item))
+      .subscribe((batchPeriodList: any) => {
+        this.periodData = batchPeriodList.data;
+      }));
+  }
+  loadCalculationTypeList(): any {
+    this.systemService.loadCalculationTypeList();
+    this.subscriptions.add(this.systemService.getBatchPeriodList().pipe(skipWhile((item: any) => !item))
+      .subscribe((calculationTypeList: any) => {
+        this.calculationTypeList = calculationTypeList.data;
+      }));
   }
 
 
@@ -69,12 +99,12 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   setForm(event: any) {
     this.batchScriptForm = this.formBuilder.group({
       batchName: [event !== undefined ? event.batchName : ''],
-      period: [event !== undefined ? event.period : '', Validators.required],
+      batchPeriod: [event !== undefined ? event.batchPeriod : '', Validators.required],
       periodDay: [event !== undefined ? event.periodDay : '', Validators.required],
       forEachCustomer: [event !== undefined ? event.forEachCustomer : ''],
       calculationType: [event !== undefined ? event.calculationType : ''],
       batchFilter: [event !== undefined ? event.batchFilter : ''],
-      topic: [event !== undefined ? event.topic : ''],
+      surveyDescriptionId: [event !== undefined ? event.surveyDescriptionId : ''],
       calculation: [event !== undefined ? event.calculation : ''],
       mailAddress: [event !== undefined ? event.mailAddress : ''],
       comments: [event !== undefined ? event.comments : '']
@@ -103,6 +133,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   save() {
     if (this.batchScriptForm.valid) {
       if (this.id !== null && this.id !== undefined) {
+        this.checkTopicGroup();
         this.subscriptions.add(this.systemMeasurementService.updateScriptBatch(this.id, this.batchScriptForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
@@ -134,6 +165,59 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
 
   changeTheme(event: any): any {
     this.codeMirrorOptions.theme = event.target.value;
+  }
+
+  loadCustomerGroup(force: boolean, filter: any) {
+    this.systemService.loadCustomerGroupList(force, filter);
+    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerGroupList: any) => {
+        this.topicGroupData.content = customerGroupList;
+        this.topicDataSource = [...this.topicGroupData.content];
+      }));
+  }
+
+  findBatchCustomerGroup(batchId: any) {
+    this.subscriptions.add(this.systemMeasurementService.getScriptBatchGroup(batchId).pipe(skipWhile((item: any) => !item))
+      .subscribe((groupList: any) => {
+        this.topicGroupList = groupList.systemMeasurement.scriptBatchGroup;
+        groupList.systemMeasurement.scriptBatchGroup.forEach(element => {
+          this.topicGroupSelectionList.push(element.groupCode);
+        });
+        this.loadCustomerGroup(false, '');
+      }));
+  }
+
+  checkTopicGroup() {
+    for (let index = 0; index < this.topicGroupCheckBox.length; index++) {
+      const element = this.topicGroupCheckBox[index];
+      const i = this.topicGroupList.findIndex((item: any) => item.customerGroupId === element.customerGroupId);
+      if (i !== -1) {
+        this.topicGroupList.splice(i, 1);
+        const j = this.selectedTopicGroup.findIndex((item2: any) => item2.customerGroupId === element.customerGroupId);
+        if (j !== -1) {
+          this.selectedTopicGroup.splice(j, 1);
+        }
+      }
+    }
+    this.deleteTopicGroupOfBatch(this.topicGroupList);
+    this.assignTopicGroupToBatchScript(this.selectedTopicGroup);
+    this.findBatchCustomerGroup(this.id);
+  }
+  assignTopicGroupToBatchScript(topicGroupList: any) {
+    topicGroupList.forEach(element => {
+      this.systemMeasurementService.saveScriptBatchGroup(this.id, element.customerGroupId);
+    });
+  }
+
+  deleteTopicGroupOfBatch(deleteList: any) {
+    deleteList.forEach(element => {
+      this.systemMeasurementService.deleteScriptBatchGroup(this.id, element.customerGroupId);
+    });
+  }
+
+  topicCheckBoxChangeEvent(event: any) {
+    this.selectedTopicGroup = [...event];
+    this.topicGroupCheckBox = event;
   }
 
   get f() { return this.batchScriptForm.controls; }

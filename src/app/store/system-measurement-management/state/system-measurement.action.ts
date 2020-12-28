@@ -17,10 +17,16 @@ export enum SystemMeasurementActionTypes {
     UPDATE_SCRIPT_CONSOLE = 'Update ScriptConsole',
     DELETE_SCRIPT_CONSOLE_BY_ID = 'Delete ScriptConsole By Id',
     GET_SCRIPT_BATCH_LIST = 'Get All ScriptBatch List',
+    GET_SCRIPT_BATCH_COUNT = 'Get ScriptBatch Count',
     GET_SCRIPT_BATCH_BY_ID = 'Get ScriptBatch By Id',
     SAVE_SCRIPT_BATCH = 'Save ScriptBatch',
     UPDATE_SCRIPT_BATCH = 'Update ScriptBatch',
     DELETE_SCRIPT_BATCH_BY_ID = 'Delete ScriptBatch By Id',
+    PROCESS_SCRIPT_BATCH = 'Process Script Batch',
+    EXECUTE_SCRIPT_BATCH_RESULT = 'Execute Script Batch Result',
+    GET_SCRIPT_BATCH_GROUP = 'Get Script Batch Group',
+    SAVE_SCRIPT_BATCH_GROUP = 'Save Script Batch Group',
+    DELETE_SCRIPT_BATCH_GROUP = 'Delete Script Batch Group',
     GET_SYSTEM_JOBS_LIST = 'Get All SystemJobs List',
     GET_SYSTEM_JOBS_BY_ID = 'Get SystemJobs By Id',
     SAVE_SYSTEM_JOBS = 'Save SystemJobs',
@@ -147,6 +153,12 @@ export class GetScriptBatchListAction {
     }
 }
 
+export class GetScriptBatchCountAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_SCRIPT_BATCH_COUNT;
+    constructor(readonly filter: any) {
+    }
+}
+
 export class GetScriptBatchByIdAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_SCRIPT_BATCH_BY_ID;
     constructor(readonly id: number) {
@@ -168,6 +180,36 @@ export class UpdateScriptBatchAction {
 export class DeleteScriptBatchByIdAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.DELETE_SCRIPT_BATCH_BY_ID;
     constructor(readonly id: number) {
+    }
+}
+
+export class ProcessScriptBatchAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.PROCESS_SCRIPT_BATCH;
+    constructor(readonly id: number) {
+    }
+}
+
+export class ExecuteScriptBatchResultAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.EXECUTE_SCRIPT_BATCH_RESULT;
+    constructor(readonly id: number) {
+    }
+}
+
+export class GetScriptBatchGroupAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_SCRIPT_BATCH_GROUP;
+    constructor(readonly id: number) {
+    }
+}
+
+export class SaveScriptBatchGroupAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.SAVE_SCRIPT_BATCH_GROUP;
+    constructor(readonly id: number, readonly customerGroupId: any) {
+    }
+}
+
+export class DeleteScriptBatchGroupAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.DELETE_SCRIPT_BATCH_GROUP;
+    constructor(readonly id: number, readonly customerGroupId: any) {
     }
 }
 

@@ -24,8 +24,8 @@ import {
   GetProgramGroupListByCustomerGroupIdAction,
   GetRoleByIdAction,
   GetRoleListAction,
-  GetScrapingPeriodListAction,
-  GetScrapingUtilityListAction,
+  GetLookupValueScrapingPeriodListAction,
+  GetLookupValueBatchPeriodListAction,
   GetThemesListAction,
   GetViewConfigurationListAction,
   SaveCredentialTypeAction,
@@ -37,7 +37,13 @@ import {
   UpdateCustomerAlertTypeAction,
   UpdateCustomerGroupAction,
   UpdateProgramGroupAction,
-  UpdateRoleAction
+  UpdateRoleAction,
+  GetLookupValueScrapingUtilityListAction,
+  GetLookupValueCalculationTypeListAction,
+  GetLookupValueComparisonCodeListAction,
+  GetLookupValueHomeOccupancyListAction,
+  GetLookupValueHomeTypeListAction,
+  GetLookupValueLotSizeListAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -108,12 +114,40 @@ export class SystemService {
     return this.store.select(SystemManagementState.getThemeList);
   }
 
-  getScrapingUtilityList(): Observable<any> {
-    return this.store.select(SystemManagementState.getScrapingUtilityList);
+  getBatchPeriodList(): Observable<any> {
+    return this.store.select(SystemManagementState.getBatchPeriodList);
   }
 
   getScrapingPeriodList(): Observable<any> {
     return this.store.select(SystemManagementState.getScrapingPeriodList);
+  }
+
+  getCalculationTypeList(): Observable<any> {
+    return this.store.select(SystemManagementState.getCalculationTypeList);
+  }
+
+  getScrapingUtilityList(): Observable<any> {
+    return this.store.select(SystemManagementState.getScrapingUtilityList);
+  }
+
+  getHomeSizeList(): Observable<any> {
+    return this.store.select(SystemManagementState.getHomeSizeList);
+  }
+
+  getHomeOccupancyList(): Observable<any> {
+    return this.store.select(SystemManagementState.getHomeOccupancyList);
+  }
+
+  getHomeTypeList(): Observable<any> {
+    return this.store.select(SystemManagementState.getHomeTypeList);
+  }
+
+  getLotSizeList(): Observable<any> {
+    return this.store.select(SystemManagementState.getLotSizeList);
+  }
+
+  getComparisonCodeList(): Observable<any> {
+    return this.store.select(SystemManagementState.getComparisonCodeList);
   }
 
   loadCustomerGroupList(force: boolean, filter: any): Observable<SystemManagementState> {
@@ -252,11 +286,35 @@ export class SystemService {
     return this.store.dispatch(new GetThemesListAction(force));
   }
 
-  loadScrapingUtilityList(force: boolean, params: any): Observable<SystemManagementState> {
-    return this.store.dispatch(new GetScrapingUtilityListAction(force, params));
+  loadBatchPeriodList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetLookupValueBatchPeriodListAction());
   }
 
-  loadScrapingPeriodList(force: boolean, params: any): Observable<SystemManagementState> {
-    return this.store.dispatch(new GetScrapingPeriodListAction(force, params));
+  loadScrapingPeriodList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetLookupValueScrapingPeriodListAction());
+  }
+
+  loadCalculationTypeList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetLookupValueCalculationTypeListAction());
+  }
+
+  loadHomeTypeList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetLookupValueHomeTypeListAction());
+  }
+
+  loadHomeOccupancyList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetLookupValueHomeOccupancyListAction());
+  }
+
+  loadComparisonCodeList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetLookupValueComparisonCodeListAction());
+  }
+
+  loadLotSizeList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetLookupValueLotSizeListAction());
+  }
+
+  loadScrapingUtilityList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetLookupValueScrapingUtilityListAction());
   }
 }

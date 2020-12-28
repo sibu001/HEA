@@ -56,7 +56,7 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly mailService: MailService) {
     this.loadThemeList();
-    this.loadScrapingUtilityList();
+    this.loadBatchPeriod();
     this.loadScrapingPeriodList();
     this.loadJSPageList();
     this.loadMailDescriptionList();
@@ -137,8 +137,8 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
       }));
   }
 
-  loadScrapingUtilityList(): any {
-    this.systemService.loadScrapingUtilityList(false, 'SCRAPING_UTILITY');
+  loadBatchPeriod(): any {
+    this.systemService.loadScrapingUtilityList();
     this.subscriptions.add(this.systemService.getScrapingUtilityList().pipe(skipWhile((item: any) => !item))
       .subscribe((scrapingUtilityList: any) => {
         this.scrapingUtilityList = scrapingUtilityList.data;
@@ -146,7 +146,7 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
   }
 
   loadScrapingPeriodList(): any {
-    this.systemService.loadScrapingPeriodList(false, 'SCRAPING_PERIOD');
+    this.systemService.loadScrapingPeriodList();
     this.subscriptions.add(this.systemService.getScrapingPeriodList().pipe(skipWhile((item: any) => !item))
       .subscribe((scrapingPeriodList: any) => {
         this.scrapingPeriodList = scrapingPeriodList.data;

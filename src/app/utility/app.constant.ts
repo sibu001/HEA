@@ -36,7 +36,7 @@ export class AppConstant {
     public static cimisStation = 'cimisStations';
     public static cimisMeasurement = 'cimisMeasurements';
     public static scriptConsole = '';
-    public static scriptBatch = '';
+    public static scriptBatch = 'batches';
     public static systemJobs = '';
     public static eC2Instance = '';
     public static alertMessage = 'alertMessageTypes';

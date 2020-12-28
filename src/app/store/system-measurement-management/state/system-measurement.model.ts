@@ -8,7 +8,9 @@ export interface SystemMeasurementModel {
     scriptConsoleList: any;
     scriptConsole: any;
     scriptBatchList: any;
+    scriptBatchCount: any;
     scriptBatch: any;
+    scriptBatchGroup: any;
     systemJobsList: any;
     systemJobs: any;
     ec2InstanceList: any;

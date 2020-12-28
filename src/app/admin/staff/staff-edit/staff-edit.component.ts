@@ -189,14 +189,15 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/staff/staffList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.customerService.deleteStaffById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/staff/staffList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.customerService.deleteStaffById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/staff/staffList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   save() {
-
     if (this.p.password.value) {
       this.p.password.setValidators([Validators.required,
       Validators.minLength(this.minLength),
