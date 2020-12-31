@@ -92,7 +92,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
       .set('filter.periodStart', (this.topicForm.value.periodStart !== null ? this.topicForm.value.periodStart : ''))
       .set('filter.auditId', (this.topicForm.value.auditId !== null ? this.topicForm.value.auditId : ''))
       .set('filter.eventCode', (this.topicForm.value.eventCode !== null ? this.topicForm.value.eventCode : ''))

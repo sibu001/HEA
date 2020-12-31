@@ -23,6 +23,9 @@ import { RouterModule } from '@angular/router';
 import { RoundPipe } from '../pipes/round.pipe';
 import { MatTableExporterModule } from 'mat-table-exporter';
 import { PasswordStrengthComponent } from './password-strength/password-strength.component';
+import { TopicService } from '../store/topic-state-management/service/topic.service';
+import { NgxsModule } from '@ngxs/store';
+import { TopicManagementState } from '../store/topic-state-management/state/topic.state';
 @NgModule({
   imports: [
     CommonModule,
@@ -44,10 +47,14 @@ import { PasswordStrengthComponent } from './password-strength/password-strength
     MatTableExporterModule,
     AgmCoreModule.forRoot({
       apiKey: environment.googleMapAPIKey, libraries: ['places']
-    })
+    }),
+    NgxsModule.forRoot([
+      TopicManagementState
+    ]),
   ],
   declarations: [TableComponent, GoogleMapComponent, SidebarComponent, RoundPipe, PasswordStrengthComponent],
   entryComponents: [GoogleMapComponent],
   exports: [TableComponent, SidebarComponent, RoundPipe, PasswordStrengthComponent],
+  providers: [TopicService]
 })
 export class CommonHEAModule { }

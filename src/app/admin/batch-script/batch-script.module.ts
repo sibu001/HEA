@@ -15,6 +15,8 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SystemMeasurementManagementState } from 'src/app/store/system-measurement-management/state/system-measurement.state';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 
 @NgModule({
   imports: [
@@ -27,12 +29,13 @@ import { SystemMeasurementManagementState } from 'src/app/store/system-measureme
       SystemManagementState,
       CustomerManagementState,
       SystemUtilityManagementState,
-      SystemMeasurementManagementState
+      SystemMeasurementManagementState,
+      TopicManagementState
     ]),
     CommonHEAModule,
     BatchScriptRoutingModule
   ],
   declarations: [BatchScriptListComponent, BatchScriptEditComponent],
-  providers: [SystemService, SystemMeasurementService]
+  providers: [SystemService, SystemMeasurementService, TopicService]
 })
 export class BatchScriptModule { }

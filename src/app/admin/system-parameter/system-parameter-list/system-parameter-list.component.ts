@@ -86,7 +86,7 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
       .set('paramCode', '')
       .set('paramValue', (this.systemParameterForm.value.paramValue !== null && this.systemParameterForm.value.paramValue !== undefined ? this.systemParameterForm.value.paramValue : ''))
       .set('description', (this.systemParameterForm.value.description !== null ? this.systemParameterForm.value.description : ''));

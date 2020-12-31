@@ -51,7 +51,7 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
     const filter = '?filter.startRow=0&formAction='
       + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
       + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
-      + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction : 'ASC')
+      + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC')
       + '&filter.auditId=' + this.myDataForm.value.auditId
       + '&filter.customerName=' + this.myDataForm.value.customerName
       + '&filter.subscriptionId=' + this.myDataForm.value.subscriptionId

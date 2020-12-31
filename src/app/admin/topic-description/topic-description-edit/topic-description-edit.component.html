@@ -159,7 +159,7 @@
               <select class="form-control form-control-sm" id="nextTopic"
                 formControlName="nextTopic">
                 <option value="" selected></option>
-                <option *ngFor='let topic of nextTopic' [value]="topic.key">{{topic.value}}</option>
+                <option *ngFor='let topic of nextTopic' [value]="topic.id">{{topic.label}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

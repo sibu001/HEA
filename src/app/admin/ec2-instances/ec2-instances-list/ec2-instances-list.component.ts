@@ -30,13 +30,20 @@ export class Ec2InstancesListComponent implements OnInit, OnDestroy {
   }
 
   findEC2Instances(force: boolean): void {
-    this.systemMeasurementService.loadSystemJobsList(force, '');
-    this.subscriptions.add(this.systemMeasurementService.getSystemJobsList().pipe(skipWhile((item: any) => !item))
+    this.systemMeasurementService.loadEC2InstanceList(force, '');
+    this.subscriptions.add(this.systemMeasurementService.getEC2InstanceList().pipe(skipWhile((item: any) => !item))
       .subscribe((ec2Instances: any) => {
-        this.ec2InstancesData.content = ec2Instances.list;
-        this.ec2InstancesData.totalElements = ec2Instances.totalSize;
+        this.ec2InstancesData.content = ec2Instances;
         this.dataSource = [...this.ec2InstancesData.content];
       }));
+  }
+
+  startEC2Instance(event: any) {
+    this.systemMeasurementService.startEC2Instance(event.instanceId);
+  }
+
+  stopEC2Instance(event: any) {
+    this.systemMeasurementService.stopEC2Instance(event.instanceId);
   }
 
   search(): void {

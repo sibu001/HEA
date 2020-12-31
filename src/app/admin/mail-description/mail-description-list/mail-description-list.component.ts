@@ -94,7 +94,7 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
       .set('mailDescriptionCode', '')
       .set('active', (this.mailForm.value.isActive !== null ? this.mailForm.value.isActive : true))
       .set('subjectTemplate', (this.mailForm.value.subject !== null ? this.mailForm.value.subject : ''))

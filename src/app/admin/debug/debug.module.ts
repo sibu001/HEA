@@ -10,6 +10,8 @@ import { CustomerManagementState } from 'src/app/store/customer-state-management
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 
 @NgModule({
   imports: [
@@ -21,10 +23,11 @@ import { SystemMeasurementService } from 'src/app/store/system-measurement-manag
     CodemirrorModule,
     NgxsModule.forRoot([
       SystemManagementState,
-      CustomerManagementState
+      CustomerManagementState,
+      TopicManagementState
     ]),
   ],
   declarations: [ScriptDebugConsoleComponent],
-  providers: [SystemService, SystemMeasurementService]
+  providers: [SystemService, SystemMeasurementService, TopicService]
 })
 export class DebugModule { }

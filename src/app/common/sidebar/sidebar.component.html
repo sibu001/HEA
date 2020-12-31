@@ -58,7 +58,7 @@
   </div>
 
   <div *ngIf="showMethod && methodName.length>0"
-    [class.overflow]='methodName.length>0'>
+    [class.overflow]='methodName.length>0' class="method">
     <p class='info'>
       <img src='assets/images/dot03.gif' class='dot'>Method list</p>
     <table>
@@ -69,7 +69,10 @@
       </thead>
       <tbody>
         <tr class="bodderBottom" *ngFor="let method of methodName">
-          <td>{{method}}</td>
+          <td>
+            {{method.name}}(
+            <span *ngFor="let parameter of method.parameterTypes">{{parameter}}</span>)
+          </td>
         </tr>
       </tbody>
     </table>
@@ -114,9 +117,9 @@
           <li><a [routerLink]="['/admin/batchScript/batchScriptList']">Script
               batches</a></li>
           <li><a [routerLink]="['/admin/systemJobs/systemJobsList']">System jobs</a></li>
-          <li><a [routerLink]='["/admin/ec2Instances/ec2InstancesList" ]'>EC2
+          <li><a [routerLink]='[" /admin/ec2Instances/ec2InstancesList" ]'>EC2
               Instances</a></li>
-          <li><a [routerLink]='["/admin/alertMessages/alertMessagesList" ]'>Alert
+          <li><a [routerLink]='[" /admin/alertMessages/alertMessagesList" ]'>Alert
               Messages</a></li>
         </ul>
       </li>
@@ -219,9 +222,9 @@
           aria-expanded='false'
           aria-controls='menuDashboard'>Dashboards</a>
         <ul class='collapse' id='menuDashboard'>
-          <li><a href='{{apiURL + "dashboard.jspage" }}' target='_blank'>Program
+          <li><a href='{{apiURL +" dashboard.jspage" }}' target='_blank'>Program
               Dashboard</a></li>
-          <li><a href='{{apiURL + "status.jspage" }}' target='_blank'>Summary of
+          <li><a href='{{apiURL +" status.jspage" }}' target='_blank'>Summary of
               Customer Status</a></li>
         </ul>
       </li>

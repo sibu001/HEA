@@ -11,11 +11,6 @@ export enum SystemMeasurementActionTypes {
     SAVE_CIMIS_MEASUREMENT = 'Save CimisMeasurement',
     UPDATE_CIMIS_MEASUREMENT = 'Update CimisMeasurement',
     DELETE_CIMIS_MEASUREMENT_BY_ID = 'Delete CimisMeasurement By Id',
-    GET_SCRIPT_CONSOLE_LIST = 'Get All ScriptConsole List',
-    GET_SCRIPT_CONSOLE_BY_ID = 'Get ScriptConsole By Id',
-    SAVE_SCRIPT_CONSOLE = 'Save ScriptConsole',
-    UPDATE_SCRIPT_CONSOLE = 'Update ScriptConsole',
-    DELETE_SCRIPT_CONSOLE_BY_ID = 'Delete ScriptConsole By Id',
     GET_SCRIPT_BATCH_LIST = 'Get All ScriptBatch List',
     GET_SCRIPT_BATCH_COUNT = 'Get ScriptBatch Count',
     GET_SCRIPT_BATCH_BY_ID = 'Get ScriptBatch By Id',
@@ -29,14 +24,16 @@ export enum SystemMeasurementActionTypes {
     DELETE_SCRIPT_BATCH_GROUP = 'Delete Script Batch Group',
     GET_SYSTEM_JOBS_LIST = 'Get All SystemJobs List',
     GET_SYSTEM_JOBS_BY_ID = 'Get SystemJobs By Id',
-    SAVE_SYSTEM_JOBS = 'Save SystemJobs',
-    UPDATE_SYSTEM_JOBS = 'Update SystemJobs',
+    EXECUTE_SYSTEM_JOBS = 'Execute SystemJobs',
+    INTERRUPT_SYSTEM_JOBS = 'Interrupt SystemJobs',
+    PAUSE_SYSTEM_JOBS = 'Pause SystemJobs',
+    RESUME_SYSTEM_JOBS = 'Resume SystemJobs',
+    GET_THREAD_INFO = 'Get Thread Info',
+    GET_OPERATING_SYSTEM_INFO = 'Get Thread Info',
     DELETE_SYSTEM_JOBS_BY_ID = 'Delete SystemJobs By Id',
     GET_EC2_INSTANCE_LIST = 'Get All EC2Instance List',
-    GET_EC2_INSTANCE_BY_ID = 'Get EC2Instance By Id',
-    SAVE_EC2_INSTANCE = 'Save EC2Instance',
-    UPDATE_EC2_INSTANCE = 'Update EC2Instance',
-    DELETE_EC2_INSTANCE_BY_ID = 'Delete EC2Instance By Id',
+    START_EC2_INSTANCE = 'Start EC2Instance',
+    STOP_EC2_INSTANCE = 'Stop EC2Instance',
     GET_ALERT_MESSAGE_LIST = 'Get All AlertMessage List',
     GET_ALERT_MESSAGE_BY_ID = 'Get AlertMessage By Id',
     SAVE_ALERT_MESSAGE = 'Save AlertMessage',
@@ -117,36 +114,6 @@ export class DeleteCimisMeasurementByIdAction {
     }
 }
 
-export class GetScriptConsoleListAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_SCRIPT_CONSOLE_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
-    }
-}
-
-export class GetScriptConsoleByIdAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_SCRIPT_CONSOLE_BY_ID;
-    constructor(readonly id: number) {
-    }
-}
-
-export class SaveScriptConsoleAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.SAVE_SCRIPT_CONSOLE;
-    constructor(readonly scriptConsole: any) {
-    }
-}
-
-export class UpdateScriptConsoleAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.UPDATE_SCRIPT_CONSOLE;
-    constructor(readonly id: number, readonly scriptConsole: any) {
-    }
-}
-
-export class DeleteScriptConsoleByIdAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.DELETE_SCRIPT_CONSOLE_BY_ID;
-    constructor(readonly id: number) {
-    }
-}
-
 export class GetScriptBatchListAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_SCRIPT_BATCH_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
@@ -219,28 +186,36 @@ export class GetSystemJobsListAction {
     }
 }
 
-export class GetSystemJobsByIdAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_SYSTEM_JOBS_BY_ID;
-    constructor(readonly id: number) {
+export class GetOperatingSystemInfoAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_OPERATING_SYSTEM_INFO;
+}
+
+export class ExecuteSystemJobsAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.EXECUTE_SYSTEM_JOBS;
+    constructor(readonly schedulerName: any, readonly groupName: any, readonly jobName: any) {
     }
 }
 
-export class SaveSystemJobsAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.SAVE_SYSTEM_JOBS;
-    constructor(readonly systemJobs: any) {
+export class InterruptSystemJobsAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.INTERRUPT_SYSTEM_JOBS;
+    constructor(readonly schedulerName: any, readonly groupName: any, readonly jobName: any) {
     }
 }
 
-export class UpdateSystemJobsAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.UPDATE_SYSTEM_JOBS;
-    constructor(readonly id: number, readonly systemJobs: any) {
+export class ResumeSystemJobsAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.RESUME_SYSTEM_JOBS;
+    constructor(readonly schedulerName: any, readonly groupName: any, readonly jobName: any) {
     }
 }
 
-export class DeleteSystemJobsByIdAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.DELETE_SYSTEM_JOBS_BY_ID;
-    constructor(readonly id: number) {
+export class PauseSystemJobsAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.PAUSE_SYSTEM_JOBS;
+    constructor(readonly schedulerName: any, readonly groupName: any, readonly jobName: any) {
     }
+}
+
+export class GetThreadInfoAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_THREAD_INFO;
 }
 
 export class GetEC2InstanceListAction {
@@ -249,27 +224,15 @@ export class GetEC2InstanceListAction {
     }
 }
 
-export class GetEC2InstanceByIdAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_EC2_INSTANCE_BY_ID;
-    constructor(readonly id: number) {
+export class StartEC2InstanceAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.START_EC2_INSTANCE;
+    constructor(readonly instanceId: any) {
     }
 }
 
-export class SaveEC2InstanceAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.SAVE_EC2_INSTANCE;
-    constructor(readonly ec2Instance: any) {
-    }
-}
-
-export class UpdateEC2InstanceAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.UPDATE_EC2_INSTANCE;
-    constructor(readonly id: number, readonly ec2Instance: any) {
-    }
-}
-
-export class DeleteEC2InstanceByIdAction {
-    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.DELETE_EC2_INSTANCE_BY_ID;
-    constructor(readonly id: number) {
+export class StopEC2InstanceAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.STOP_EC2_INSTANCE;
+    constructor(readonly instanceId: any) {
     }
 }
 

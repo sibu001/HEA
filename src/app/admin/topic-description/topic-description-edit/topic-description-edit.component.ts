@@ -1,21 +1,19 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
   HtmlEditorService,
   ImageService,
   LinkService,
-  NodeSelection,
-  RichTextEditorComponent,
   ToolbarService
 } from '@syncfusion/ej2-angular-richtexteditor';
 import { Subscription } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
-import { Dialog } from '@syncfusion/ej2-popups';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { skipWhile } from 'rxjs/operators';
 
 
 @Component({
@@ -58,9 +56,9 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
       }]
   };
   topicData = TableColumnData.TOPIC_DESCRIPTION_SELECT_DATA;
-  nextTopic = TableColumnData.TOPIC_DESCRIPTION_DATA;
+  nextTopic: any;
   constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService: SystemService,
+    private readonly topicService: TopicService,
     private readonly activateRoute: ActivatedRoute,
     private readonly location: Location,
     private readonly router: Router) {
@@ -71,6 +69,7 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.loadTopicDescription();
     this.keys = TableColumnData.CUSTOMER_GROUP_KEY;
     this.topicPaneKeys = TableColumnData.TOPIC_PANE_KEY;
     this.recommendationKeys = TableColumnData.RECOMMENDATION_KEY;
@@ -79,6 +78,15 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
     if (this.id !== undefined) {
     }
   }
+
+  loadTopicDescription() {
+    this.topicService.loadTopicDescriptionList(true, '');
+    this.subscriptions.add(this.topicService.getTopicDescriptionList().pipe(skipWhile((item: any) => !item))
+      .subscribe((topicDescriptionList: any) => {
+        this.nextTopic = topicDescriptionList;
+      }));
+  }
+
 
   setForm(event: any) {
     this.topicForm = this.formBuilder.group({

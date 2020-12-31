@@ -91,7 +91,7 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
       .set('filter.reportName', (this.administrativeForm.value.reportName !== null ? this.administrativeForm.value.reportName : ''))
       .set('filter.reportLabel', (this.administrativeForm.value.reportLabel !== null ? this.administrativeForm.value.reportLabel : ''))
       .set('filter.reportType', (this.administrativeForm.value.reportType !== null ? this.administrativeForm.value.reportType : ''));

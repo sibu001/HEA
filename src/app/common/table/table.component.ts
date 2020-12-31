@@ -109,6 +109,7 @@ export class TableComponent implements OnInit, OnChanges {
         this.pageIndexNumber = this.pageIndex;
       }
       this.dataSource = new MatTableDataSource(this.data);
+      this.expandedElement = this.dataSource;
       if (this.selectionList.length > 0) {
         this.selectionList.forEach(e => {
           this.dataSource.data.every((row) => {
@@ -234,8 +235,13 @@ export class TableComponent implements OnInit, OnChanges {
     // this.router.navigate([routerLink], { queryParams: queryParam });
   }
 
-  onButtonEvent(event: any) {
-    this.buttonListEvent.emit(event);
+  onButtonEvent(event: any, col: any, row: any) {
+    const obj = {
+      buttonType: event,
+      column: col,
+      row: row
+    };
+    this.buttonListEvent.emit(obj);
   }
 
   onAddEvent(event: any): any {

@@ -5,16 +5,15 @@ export interface SystemMeasurementModel {
     cimisMeasurementList: any;
     cimisMeasurementCount: any;
     cimisMeasurement: any;
-    scriptConsoleList: any;
-    scriptConsole: any;
     scriptBatchList: any;
     scriptBatchCount: any;
     scriptBatch: any;
     scriptBatchGroup: any;
     systemJobsList: any;
     systemJobs: any;
+    operatingSystemInfo: any;
+    threadInfo: any;
     ec2InstanceList: any;
-    ec2Instance: any;
     alertMessageList: any;
     alertMessage: any;
     error: Error;

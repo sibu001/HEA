@@ -95,4 +95,8 @@ export class AdminFilter {
         page: null,
         formValue: null
     };
+    public topicDescriptionFilter: any = {
+        page: null,
+        formValue: null
+    };
 }

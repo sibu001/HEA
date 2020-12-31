@@ -107,7 +107,7 @@
                 id="surveyDescriptionId" name="surveyDescriptionId"
                 formControlName="surveyDescriptionId">
                 <option value="" selected></option>
-                <option *ngFor='let topic of topicData' [value]="topic.key">{{topic.value}}</option>
+                <option *ngFor='let topic of topicData' [value]="topic.id">{{topic.label}}</option>
               </select>
               <div *ngIf="f.surveyDescriptionId.invalid &&
                 (f.surveyDescriptionId.dirty ||f.surveyDescriptionId.touched)">
@@ -172,9 +172,9 @@
 
           <div class="row" *ngIf="id!==undefined&&id!==null">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="customerGroupKey" [data]="customerDataSource"
+              <app-table [keys]="topicGroupKey" [data]="topicDataSource"
                 [isDelete]=false
-                [totalElement]="customerData.totalElements" [checkbox]=true
+                [totalElement]="topicGroupData.totalElements" [checkbox]=true
                 (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)" [isHideAdd]="true" 
                 id='groupCode' [selectionList]='topicGroupSelectionList'>
               </app-table>

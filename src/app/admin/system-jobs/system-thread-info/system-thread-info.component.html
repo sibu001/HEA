@@ -15,7 +15,7 @@
 <div class="row rowPadding">
   <div class="col-sm-12">
     <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [isHideAdd]=true
-      [totalElement]="systemThreadData.totalElements" (changePageEvent)="search($event)">
+      [totalElement]="systemThreadData.totalElements" class="threadInfo">
     </app-table>
   </div>
 

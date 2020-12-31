@@ -68,7 +68,7 @@ export class ViewConfigurationAttributesComponent implements OnInit, OnDestroy {
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'));
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'));
     this.findAttribute(true, params);
   }
   ngOnDestroy(): void {

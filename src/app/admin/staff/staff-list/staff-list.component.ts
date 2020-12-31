@@ -78,7 +78,7 @@ export class StaffListComponent implements OnInit, OnDestroy {
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
       .set('staffCode', '')
       .set('filter.name', (this.staffForm.value.name !== null ? this.staffForm.value.name : ''))
       .set('filter.username', (this.staffForm.value.userName !== null ? this.staffForm.value.userName : ''))

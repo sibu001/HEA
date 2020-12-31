@@ -18,6 +18,8 @@ import { TopicPaneDataBlockEditComponent } from './topic-pane-data-block-edit/to
 import { TopicPaneDataFieldEditComponent } from './topic-pane-data-field-edit/topic-pane-data-field-edit.component';
 import { TopicPaneChartsEditComponent } from './topic-pane-charts-edit/topic-pane-charts-edit.component';
 import { TopicPaneReportsEditComponent } from './topic-pane-reports-edit/topic-pane-reports-edit.component';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 
 @NgModule({
   imports: [
@@ -29,10 +31,19 @@ import { TopicPaneReportsEditComponent } from './topic-pane-reports-edit/topic-p
     TopicDescriptionRoutingModule,
     NgxsModule.forRoot([
       SystemManagementState,
-      CustomerManagementState
+      CustomerManagementState,
+      TopicManagementState
     ]),
   ],
-  declarations: [TopicDescriptionListComponent, TopicDescriptionEditComponent, TopicDescriptionPaneComponent, TopicDescriptionRecommendationEditComponent, TopicDescriptionVariableEditComponent, TopicPaneDataBlockEditComponent, TopicPaneDataFieldEditComponent, TopicPaneChartsEditComponent, TopicPaneReportsEditComponent],
-  providers: [SystemService]
+  declarations: [TopicDescriptionListComponent,
+    TopicDescriptionEditComponent,
+    TopicDescriptionPaneComponent,
+    TopicDescriptionRecommendationEditComponent,
+    TopicDescriptionVariableEditComponent,
+    TopicPaneDataBlockEditComponent,
+    TopicPaneDataFieldEditComponent,
+    TopicPaneChartsEditComponent,
+    TopicPaneReportsEditComponent],
+  providers: [SystemService, TopicService]
 })
 export class TopicDescriptionModule { }

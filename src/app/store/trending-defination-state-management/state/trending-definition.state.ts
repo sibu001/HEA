@@ -344,7 +344,7 @@ export class TrendingDefinitionState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.trendingPartss + action.filter)
+            result = this.loginService.performGet(AppConstant.trendingParts + action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -363,7 +363,7 @@ export class TrendingDefinitionState {
     @Action(GetTrendingPartsByIdAction)
     getTrendingPartsById(ctx: StateContext<TrendingDefinitionModel>, action: GetTrendingPartsByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.trendingPartss + '/' + action.id)
+        return this.loginService.performGet(AppConstant.trendingParts + '/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -381,7 +381,7 @@ export class TrendingDefinitionState {
     deleteTrendingPartsById(ctx: StateContext<TrendingDefinitionModel>, action: DeleteTrendingPartsByIdAction):
         Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.trendingPartss + '/' + action.id)
+        return this.loginService.performDelete(AppConstant.trendingParts + '/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -396,7 +396,7 @@ export class TrendingDefinitionState {
     @Action(SaveTrendingPartsAction)
     saveTrendingParts(ctx: StateContext<TrendingDefinitionModel>, action: SaveTrendingPartsAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.trendingParts, AppConstant.trendingPartss)
+        return this.loginService.performPost(action.trendingParts, AppConstant.trendingParts)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -414,7 +414,7 @@ export class TrendingDefinitionState {
     @Action(UpdateTrendingPartsAction)
     updateTrendingParts(ctx: StateContext<TrendingDefinitionModel>, action: UpdateTrendingPartsAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.trendingParts, AppConstant.trendingPartss + '/' + action.id)
+        return this.loginService.performPut(action.trendingParts, AppConstant.trendingParts + '/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

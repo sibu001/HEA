@@ -10,6 +10,7 @@ import { NgxsModule } from '@ngxs/store';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemMeasurementManagementState } from 'src/app/store/system-measurement-management/state/system-measurement.state';
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
-      SystemUtilityManagementState
+      SystemUtilityManagementState,
+      SystemMeasurementManagementState
     ]),
   ],
   declarations: [Ec2InstancesListComponent],

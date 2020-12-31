@@ -6,20 +6,22 @@
         <div class="row">
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [isHideAdd]=true
-              [totalElement]="systemJobsData.totalElements" (changePageEvent)="search()">
+              [totalElement]="systemJobsData.totalElements" (changePageEvent)="search()" class="system-job" (buttonListEvent)="handleJob($event)">
             </app-table>
           </div>
         </div>
         <div class='row rowPadding'>
           <div class="col-xs-12 col-sm-6 col-md-7 col-lg-8">
-            <div>Used memory: {{usedMemory}}</div>
-            <div>Free memory: {{freeMemory}}</div>
-            <div>Total memory: {{totalMemory}}</div>
-            <div>Max memory: {{maxMemory}}</div>
+            <div>Used memory: {{operatingSystemInfo?.usedMemory | number:'1.0':'en-US'}} MB</div>
+            <div>Free memory: {{operatingSystemInfo?.freeMemory | number:'1.0':'en-US'}} MB</div>
+            <div>Total memory: {{operatingSystemInfo?.totalMemory | number:'1.0':'en-US'}} MB</div>
+            <div>Max memory: {{operatingSystemInfo?.maxMemory | number:'1.0':'en-US'}} MB</div>
+            <div>Available Processors:: {{operatingSystemInfo?.availableProcessors}}</div>
+            <div>Average Loading: {{operatingSystemInfo?.loadAverage}}%</div>
           </div>
           <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 row rowPadding">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <button type="button" class='btn btn-primary'>Refresh</button>
+              <button type="button" class='btn btn-primary' (click)="search()">Refresh</button>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align: end;">
               <button type="button" class='btn btn-primary' (click)='showThreadInfo()'>Show Thread Info</button>

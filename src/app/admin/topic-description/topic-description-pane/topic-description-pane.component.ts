@@ -4,9 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -65,10 +65,9 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       }]
   };
   topicData = TableColumnData.TOPIC_DESCRIPTION_SELECT_DATA;
-  nextTopic = TableColumnData.TOPIC_DESCRIPTION_DATA;
   constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly topicService: TopicService,
     private readonly location: Location,
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -82,6 +81,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     if (this.id !== undefined) {
     }
   }
+
 
   setForm(event: any) {
     this.paneForm = this.formBuilder.group({

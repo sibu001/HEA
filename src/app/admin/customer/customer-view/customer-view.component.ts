@@ -555,11 +555,15 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.customerService.saveCustomerFile(this.id, this.fileObject, '?description=' + this.description).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.loadCustomerFile(this.id);
+        this.fileObject = undefined;
       }));
   }
 
-  deleteCustomerFile(customerId: any, event: any) {
-    this.subscriptions.add(this.customerService.deleteCustomerFileById(customerId, event.id).pipe(skipWhile((item: any) => !item))
+  handleDeleteEvent(event: any) {
+    this.deleteCustomerFile(this.id, event.name);
+  }
+  deleteCustomerFile(customerId: any, fileName: any) {
+    this.subscriptions.add(this.customerService.deleteCustomerFileById(customerId, fileName).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.loadCustomerFile(customerId);
       }));

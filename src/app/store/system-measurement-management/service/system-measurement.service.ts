@@ -12,26 +12,15 @@ import {
   GetCimisMeasurementListAction,
   SaveCimisMeasurementAction,
   UpdateCimisMeasurementAction,
-  DeleteScriptConsoleByIdAction,
-  GetScriptConsoleByIdAction,
-  GetScriptConsoleListAction,
-  SaveScriptConsoleAction,
-  UpdateScriptConsoleAction,
   DeleteScriptBatchByIdAction,
   GetScriptBatchByIdAction,
   GetScriptBatchListAction,
   SaveScriptBatchAction,
   UpdateScriptBatchAction,
-  DeleteSystemJobsByIdAction,
-  GetSystemJobsByIdAction,
+  GetThreadInfoAction,
+  GetOperatingSystemInfoAction,
   GetSystemJobsListAction,
-  SaveSystemJobsAction,
-  UpdateSystemJobsAction,
   GetEC2InstanceListAction,
-  DeleteEC2InstanceByIdAction,
-  GetEC2InstanceByIdAction,
-  SaveEC2InstanceAction,
-  UpdateEC2InstanceAction,
   DeleteAlertMessageByIdAction,
   GetAlertMessageByIdAction,
   GetAlertMessageListAction,
@@ -44,7 +33,13 @@ import {
   ExecuteScriptBatchResultAction,
   GetScriptBatchGroupAction,
   SaveScriptBatchGroupAction,
-  DeleteScriptBatchGroupAction
+  DeleteScriptBatchGroupAction,
+  ExecuteSystemJobsAction,
+  PauseSystemJobsAction,
+  ResumeSystemJobsAction,
+  InterruptSystemJobsAction,
+  StartEC2InstanceAction,
+  StopEC2InstanceAction
 } from '../state/system-measurement.action';
 import { SystemMeasurementManagementState } from '../state/system-measurement.state';
 
@@ -70,14 +65,6 @@ export class SystemMeasurementService {
     return this.store.select(SystemMeasurementManagementState.getCimisMeasurementById);
   }
 
-  getScriptConsoleList(): Observable<any> {
-    return this.store.select(SystemMeasurementManagementState.getScriptConsoleList);
-  }
-
-  getScriptConsoleById(): Observable<any> {
-    return this.store.select(SystemMeasurementManagementState.getScriptConsoleById);
-  }
-
   getScriptBatchList(): Observable<any> {
     return this.store.select(SystemMeasurementManagementState.getScriptBatchList);
   }
@@ -90,16 +77,16 @@ export class SystemMeasurementService {
     return this.store.select(SystemMeasurementManagementState.getSystemJobsList);
   }
 
-  getSystemJobsById(): Observable<any> {
-    return this.store.select(SystemMeasurementManagementState.getSystemJobsById);
+  getOperatingSystemInfo(): Observable<any> {
+    return this.store.select(SystemMeasurementManagementState.getOperatingSystemInfo);
+  }
+
+  getThreadInfo(): Observable<any> {
+    return this.store.select(SystemMeasurementManagementState.getThreadInfo);
   }
 
   getEC2InstanceList(): Observable<any> {
     return this.store.select(SystemMeasurementManagementState.getEC2InstanceList);
-  }
-
-  getEC2InstanceById(): Observable<any> {
-    return this.store.select(SystemMeasurementManagementState.getEC2InstanceById);
   }
 
   getAlertMessageList(): Observable<any> {
@@ -158,26 +145,6 @@ export class SystemMeasurementService {
     return this.store.dispatch(new DeleteCimisMeasurementByIdAction(id));
   }
 
-  loadScriptConsoleList(force: boolean, filter: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new GetScriptConsoleListAction(force, filter));
-  }
-
-  loadScriptConsoleById(id: number): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new GetScriptConsoleByIdAction(id));
-  }
-
-  saveScriptConsole(logs: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new SaveScriptConsoleAction(logs));
-  }
-
-  updateScriptConsole(id: number, logs: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new UpdateScriptConsoleAction(id, logs));
-  }
-
-  deleteScriptConsoleById(id: number): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new DeleteScriptConsoleByIdAction(id));
-  }
-
   loadScriptBatchList(force: boolean, filter: any): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new GetScriptBatchListAction(force, filter));
   }
@@ -226,40 +193,40 @@ export class SystemMeasurementService {
     return this.store.dispatch(new GetSystemJobsListAction(force, filter));
   }
 
-  loadSystemJobsById(id: number): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new GetSystemJobsByIdAction(id));
+  loadOperatingSystemInfo(): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetOperatingSystemInfoAction());
   }
 
-  saveSystemJobs(logs: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new SaveSystemJobsAction(logs));
+  executeSystemJobs(schedulerName: any, groupName: any, jobName: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new ExecuteSystemJobsAction(schedulerName, groupName, jobName));
   }
 
-  updateSystemJobs(id: number, logs: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new UpdateSystemJobsAction(id, logs));
+  pauseSystemJobs(schedulerName: any, groupName: any, jobName: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new PauseSystemJobsAction(schedulerName, groupName, jobName));
   }
 
-  deleteSystemJobsById(id: number): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new DeleteSystemJobsByIdAction(id));
+  resumeSystemJobs(schedulerName: any, groupName: any, jobName: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new ResumeSystemJobsAction(schedulerName, groupName, jobName));
+  }
+
+  interruptSystemJobs(schedulerName: any, groupName: any, jobName: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new InterruptSystemJobsAction(schedulerName, groupName, jobName));
+  }
+
+  loadThreadInfo(): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetThreadInfoAction());
   }
 
   loadEC2InstanceList(force: boolean, filter: any): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new GetEC2InstanceListAction(force, filter));
   }
 
-  loadEC2InstanceById(id: number): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new GetEC2InstanceByIdAction(id));
+  startEC2Instance(instanceId: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new StartEC2InstanceAction(instanceId));
   }
 
-  saveEC2Instance(logs: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new SaveEC2InstanceAction(logs));
-  }
-
-  updateEC2Instance(id: number, logs: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new UpdateEC2InstanceAction(id, logs));
-  }
-
-  deleteEC2InstanceById(id: number): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new DeleteEC2InstanceByIdAction(id));
+  stopEC2Instance(instanceId: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new StopEC2InstanceAction(instanceId));
   }
 
   loadAlertMessageList(force: boolean, filter: any): Observable<SystemMeasurementManagementState> {

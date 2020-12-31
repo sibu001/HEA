@@ -38,7 +38,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="surveyDescriptionId"
                 formControlName="surveyDescriptionId">
-                <option *ngFor='let topic of topicDescriptionData' [value]="topic.key">{{topic.value}}</option>
+                <option *ngFor='let topic of topicDescriptionData' [value]="topic.id">{{topic.label}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

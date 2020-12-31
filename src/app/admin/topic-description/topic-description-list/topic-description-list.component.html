@@ -1,8 +1,9 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
-          padding-top: 35px;'>
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+        left;padding-left: 40px;
+        padding-top: 35px;'>
         <p class="heading">
           Topic management
         </p>
@@ -12,7 +13,8 @@
               <span class="filterLabel">Topic label:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='topicLabel' id='topicLabel'>
+              <input type="text" class="form-control"
+                formControlName='topicLabel' id='topicLabel'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <label for="isActive">
@@ -24,7 +26,13 @@
               <span class="filterLabel">Customer Group:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName="description" id="description">
+              <select class="form-control form-control-sm" id="customerGroupId"
+              formControlName="customerGroupId">
+              <option value="" selected="selected"></option>
+              <option *ngFor="let group of customerGroupList"
+                [value]="group.customerGroupId">
+                {{group.groupName}}</option>
+            </select>
             </div>
           </div>
 
@@ -33,28 +41,34 @@
               <span class="filterLabel">Search Context Variable:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='searchContextVariable'
+              <input type="text" class="form-control"
+                formControlName='searchContextVariable'
                 id='searchContextVariable'>
             </div>
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary"
+                (click)="search(undefined,true)">Show</button>
             </div>
           </div>
         </form>
         <div class="paddingTop">
           <p class="messages">
             <img src='assets/images/dot03.gif' class='dot'>
-            <span class="messageName">Topic description list (Number of Records = {{totalElement}})</span></p>
-          <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-            [totalElement]="topicData.totalElements" (changePageEvent)="findTopicDescription($event)"
-            (goToEditEvent)="goToEditTopicDescription($event)" (addEvent)='addTopicDescription()'>
+            <span class="messageName">Topic description list (Number of Records
+              = {{totalElement}})</span></p>
+          <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+            [data]="dataSource"
+            [totalElement]="topicData.totalElements"
+            (changePageEvent)="search($event,false)"
+            (goToEditEvent)="goToEditTopicDescription($event)"
+            (addEvent)='addTopicDescription()'>
           </app-table>
         </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar ></app-sidebar>
+        <app-sidebar></app-sidebar>
       </div>
     </div>
   </div>

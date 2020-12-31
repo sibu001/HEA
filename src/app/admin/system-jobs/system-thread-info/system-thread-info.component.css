@@ -16,3 +16,23 @@
 .align-right {
   text-align: right;
 }
+
+::ng-deep .threadInfo .mat-column-buttonList{
+  flex: none;
+  width: 110px;
+}
+
+::ng-deep .threadInfo .mat-column-blw{
+  flex: none;
+  width: 65px;
+}
+
+::ng-deep .threadInfo .mat-column-userTime{
+  flex: none;
+  width: 65px;
+}
+
+::ng-deep .threadInfo .mat-column-cpuTime{
+  flex: none;
+  width: 65px;
+}

@@ -664,6 +664,7 @@
               [isDelete]=true [isFilePreview]=true
               [totalElement]="filesData.totalElements" (addEvent)='addFile()'
               (filePreviewEvent)="previewFile($event)"
+              (deleteEvent)="handleDeleteEvent($event)"
               (handleInLineEditEvent)='handleInLineEditEvent($event)'
               (handleInLineSaveEvent)='handleInLineSaveEvent($event)'>
             </app-table>

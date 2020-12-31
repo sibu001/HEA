@@ -4,16 +4,14 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
-import { SystemMeasurementUtilityTransformer } from '../transformer/transformet';
+import { SystemMeasurementUtilityTransformer } from '../transformer/transformer';
 import {
     DeleteAlertMessageByIdAction,
     DeleteCimisMeasurementByIdAction,
     DeleteCimisStationByIdAction,
-    DeleteEC2InstanceByIdAction,
     DeleteScriptBatchByIdAction,
     DeleteScriptBatchGroupAction,
-    DeleteScriptConsoleByIdAction,
-    DeleteSystemJobsByIdAction,
+    GetThreadInfoAction,
     ExecuteScriptBatchResultAction,
     GetAlertMessageByIdAction,
     GetAlertMessageListAction,
@@ -23,32 +21,28 @@ import {
     GetCimisStationByIdAction,
     GetCimisStationCountAction,
     GetCimisStationListAction,
-    GetEC2InstanceByIdAction,
     GetEC2InstanceListAction,
     GetScriptBatchByIdAction,
     GetScriptBatchCountAction,
     GetScriptBatchGroupAction,
     GetScriptBatchListAction,
-    GetScriptConsoleByIdAction,
-    GetScriptConsoleListAction,
-    GetSystemJobsByIdAction,
+    GetOperatingSystemInfoAction,
     GetSystemJobsListAction,
     ProcessScriptBatchAction,
     SaveAlertMessageAction,
     SaveCimisMeasurementAction,
     SaveCimisStationAction,
-    SaveEC2InstanceAction,
     SaveScriptBatchAction,
     SaveScriptBatchGroupAction,
-    SaveScriptConsoleAction,
-    SaveSystemJobsAction,
     UpdateAlertMessageAction,
     UpdateCimisMeasurementAction,
     UpdateCimisStationAction,
-    UpdateEC2InstanceAction,
     UpdateScriptBatchAction,
-    UpdateScriptConsoleAction,
-    UpdateSystemJobsAction
+    ExecuteSystemJobsAction,
+    InterruptSystemJobsAction,
+    ResumeSystemJobsAction,
+    PauseSystemJobsAction,
+    StartEC2InstanceAction
 } from './system-measurement.action';
 import { SystemMeasurementModel } from './system-measurement.model';
 
@@ -61,16 +55,15 @@ import { SystemMeasurementModel } from './system-measurement.model';
         cimisMeasurementList: undefined,
         cimisMeasurementCount: undefined,
         cimisMeasurement: undefined,
-        scriptConsoleList: undefined,
-        scriptConsole: undefined,
         scriptBatchList: undefined,
         scriptBatchCount: undefined,
         scriptBatchGroup: undefined,
         scriptBatch: undefined,
         systemJobsList: undefined,
         systemJobs: undefined,
+        operatingSystemInfo: undefined,
+        threadInfo: undefined,
         ec2InstanceList: undefined,
-        ec2Instance: undefined,
         alertMessageList: undefined,
         alertMessage: undefined,
         error: undefined
@@ -103,16 +96,6 @@ export class SystemMeasurementManagementState {
     }
 
     @Selector()
-    static getScriptConsoleList(state: SystemMeasurementModel): any {
-        return state.scriptConsoleList;
-    }
-
-    @Selector()
-    static getScriptConsoleById(state: SystemMeasurementModel): any {
-        return state.scriptConsole;
-    }
-
-    @Selector()
     static getScriptBatchList(state: SystemMeasurementModel): any {
         return state.scriptBatchList;
     }
@@ -128,18 +111,18 @@ export class SystemMeasurementManagementState {
     }
 
     @Selector()
-    static getSystemJobsById(state: SystemMeasurementModel): any {
-        return state.systemJobs;
+    static getOperatingSystemInfo(state: SystemMeasurementModel): any {
+        return state.operatingSystemInfo;
+    }
+
+    @Selector()
+    static getThreadInfo(state: SystemMeasurementModel): any {
+        return state.threadInfo;
     }
 
     @Selector()
     static getEC2InstanceList(state: SystemMeasurementModel): any {
         return state.ec2InstanceList;
-    }
-
-    @Selector()
-    static getEC2InstanceById(state: SystemMeasurementModel): any {
-        return state.ec2Instance;
     }
 
     @Selector()
@@ -368,97 +351,6 @@ export class SystemMeasurementManagementState {
                     }));
     }
 
-    @Action(GetScriptConsoleListAction)
-    getAllScriptConsoleList(ctx: StateContext<SystemMeasurementModel>, action: GetScriptConsoleListAction): Actions {
-        const force: boolean = action.force || SystemMeasurementManagementState.getScriptConsoleList(ctx.getState()) === undefined;
-        let result: Actions;
-        if (force) {
-            document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.scriptConsole, action.filter)
-                .pipe(
-                    tap((response: any) => {
-                        // const res = Transformer.transformLogTableData(response);
-                        document.getElementById('loader').classList.remove('loading');
-                        ctx.patchState({
-                            scriptConsoleList: response,
-                        });
-                    },
-                        error => {
-                            document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.error.errorMessage);
-                        }));
-        }
-        return result;
-    }
-
-    @Action(GetScriptConsoleByIdAction)
-    getScriptConsoleById(ctx: StateContext<SystemMeasurementModel>, action: GetScriptConsoleByIdAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.scriptConsole + '/' + action.id)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    ctx.patchState({
-                        scriptConsole: response,
-                    });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
-    }
-
-    @Action(DeleteScriptConsoleByIdAction)
-    deleteScriptConsoleById(ctx: StateContext<SystemMeasurementModel>, action: DeleteScriptConsoleByIdAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.scriptConsole + '/' + action.id)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
-    }
-
-    @Action(SaveScriptConsoleAction)
-    saveScriptConsole(ctx: StateContext<SystemMeasurementModel>, action: SaveScriptConsoleAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.scriptConsole, AppConstant.scriptConsole)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
-                    ctx.patchState({
-                        scriptConsole: response,
-                    });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
-    }
-
-    @Action(UpdateScriptConsoleAction)
-    updateScriptConsole(ctx: StateContext<SystemMeasurementModel>, action: UpdateScriptConsoleAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.scriptConsole, AppConstant.scriptConsole + '/' + action.id)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
-                    ctx.patchState({
-                        scriptConsole: response,
-                    });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
-    }
-
     @Action(GetScriptBatchListAction)
     getAllScriptBatchList(ctx: StateContext<SystemMeasurementModel>, action: GetScriptBatchListAction): Actions {
         const force: boolean = action.force || SystemMeasurementManagementState.getScriptBatchList(ctx.getState()) === undefined;
@@ -654,10 +546,10 @@ export class SystemMeasurementManagementState {
             result = this.loginService.performGetWithParams(AppConstant.systemJobs, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformLogTableData(response);
+                        const res = SystemMeasurementUtilityTransformer.transformSystemJobTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            systemJobsList: response,
+                            systemJobsList: res,
                         });
                     },
                         error => {
@@ -668,15 +560,15 @@ export class SystemMeasurementManagementState {
         return result;
     }
 
-    @Action(GetSystemJobsByIdAction)
-    getSystemJobsById(ctx: StateContext<SystemMeasurementModel>, action: GetSystemJobsByIdAction): Actions {
+    @Action(GetOperatingSystemInfoAction)
+    getOperatingSystemInfo(ctx: StateContext<SystemMeasurementModel>, action: GetOperatingSystemInfoAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.systemJobs + '/' + action.id)
+        return this.loginService.performGet(AppConstant.systemJobs + '/operatingSystemInfo')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        systemJobs: response,
+                        operatingSystemInfo: response,
                     });
                 },
                     error => {
@@ -685,31 +577,16 @@ export class SystemMeasurementManagementState {
                     }));
     }
 
-    @Action(DeleteSystemJobsByIdAction)
-    deleteSystemJobsById(ctx: StateContext<SystemMeasurementModel>, action: DeleteSystemJobsByIdAction): Actions {
+    @Action(GetThreadInfoAction)
+    getThreadInfo(ctx: StateContext<SystemMeasurementModel>, action: GetThreadInfoAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.systemJobs + '/' + action.id)
+        return this.loginService.performGet(AppConstant.threadInfo)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
-    }
-
-    @Action(SaveSystemJobsAction)
-    saveSystemJobs(ctx: StateContext<SystemMeasurementModel>, action: SaveSystemJobsAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.systemJobs, AppConstant.systemJobs)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    const res = SystemMeasurementUtilityTransformer.transformThreadInfoTableData(response);
                     ctx.patchState({
-                        systemJobs: response,
+                        threadInfo: res,
                     });
                 },
                     error => {
@@ -718,17 +595,59 @@ export class SystemMeasurementManagementState {
                     }));
     }
 
-    @Action(UpdateSystemJobsAction)
-    updateSystemJobs(ctx: StateContext<SystemMeasurementModel>, action: UpdateSystemJobsAction): Actions {
+    @Action(ExecuteSystemJobsAction)
+    executeSystemJobs(ctx: StateContext<SystemMeasurementModel>, action: ExecuteSystemJobsAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.systemJobs, AppConstant.systemJobs + '/' + action.id)
+        return this.loginService.performPost('', AppConstant.systemJobs + '/' + action.schedulerName + '/' + action.groupName + '/' + action.jobName + '/executeJob')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
-                    ctx.patchState({
-                        systemJobs: response,
-                    });
+                    this.utilityService.showSuccessMessage('Execute Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(InterruptSystemJobsAction)
+    interruptSystemJobs(ctx: StateContext<SystemMeasurementModel>, action: InterruptSystemJobsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.systemJobs + '/' + action.schedulerName + '/' + action.groupName + '/' + action.jobName + '/interruptJob')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Interrupted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(ResumeSystemJobsAction)
+    resumeSystemJobs(ctx: StateContext<SystemMeasurementModel>, action: ResumeSystemJobsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.systemJobs + '/' + action.schedulerName + '/' + action.groupName + '/' + action.jobName + '/resumeJob')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Resume Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(PauseSystemJobsAction)
+    pauseSystemJobs(ctx: StateContext<SystemMeasurementModel>, action: PauseSystemJobsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.systemJobs + '/' + action.schedulerName + '/' + action.groupName + '/' + action.jobName + '/pauseJob')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Pause Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -745,7 +664,7 @@ export class SystemMeasurementManagementState {
             result = this.loginService.performGetWithParams(AppConstant.eC2Instance, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformLogTableData(response);
+                        const res = SystemMeasurementUtilityTransformer.transformEC2InstanceTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             ec2InstanceList: response,
@@ -759,16 +678,14 @@ export class SystemMeasurementManagementState {
         return result;
     }
 
-    @Action(GetEC2InstanceByIdAction)
-    getEC2InstanceById(ctx: StateContext<SystemMeasurementModel>, action: GetEC2InstanceByIdAction): Actions {
+    @Action(StartEC2InstanceAction)
+    startEC2Instance(ctx: StateContext<SystemMeasurementModel>, action: StartEC2InstanceAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.eC2Instance + '/' + action.id)
+        return this.loginService.performPost('', AppConstant.eC2Instance + '/' + action.instanceId + '/startInstance')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    ctx.patchState({
-                        ec2Instance: response,
-                    });
+                    this.utilityService.showSuccessMessage('Start Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -776,50 +693,14 @@ export class SystemMeasurementManagementState {
                     }));
     }
 
-    @Action(DeleteEC2InstanceByIdAction)
-    deleteEC2InstanceById(ctx: StateContext<SystemMeasurementModel>, action: DeleteEC2InstanceByIdAction): Actions {
+    @Action(StartEC2InstanceAction)
+    stopEC2Instance(ctx: StateContext<SystemMeasurementModel>, action: StartEC2InstanceAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.eC2Instance + '/' + action.id)
+        return this.loginService.performPost('', AppConstant.eC2Instance + '/' + action.instanceId + '/stopInstance')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
-    }
-
-    @Action(SaveEC2InstanceAction)
-    saveEC2Instance(ctx: StateContext<SystemMeasurementModel>, action: SaveEC2InstanceAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.ec2Instance, AppConstant.eC2Instance)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
-                    ctx.patchState({
-                        ec2Instance: response,
-                    });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
-    }
-
-    @Action(UpdateEC2InstanceAction)
-    updateEC2Instance(ctx: StateContext<SystemMeasurementModel>, action: UpdateEC2InstanceAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.ec2Instance, AppConstant.eC2Instance + '/' + action.id)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
-                    ctx.patchState({
-                        ec2Instance: response,
-                    });
+                    this.utilityService.showSuccessMessage('Stop Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

@@ -81,7 +81,7 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
       .set('stationId', '')
       .set('stationId', (this.weatherStationForm.value.stationId !== null ? this.weatherStationForm.value.stationId : ''))
       .set('stationName', (this.weatherStationForm.value.stationName !== null ? this.weatherStationForm.value.stationName : ''));

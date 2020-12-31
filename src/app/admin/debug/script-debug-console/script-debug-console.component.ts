@@ -1,11 +1,11 @@
 import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
-import { TableColumnData } from 'src/app/data/common-data';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -29,12 +29,11 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     matchBrackets: true,
     lint: true,
   };
-  topicDescriptionData: Array<any> = TableColumnData.TOPIC_DESCRIPTION_DATA;
+  topicDescriptionData: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemMeasurementService: SystemMeasurementService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly router: Router,
+    private readonly topicService: TopicService,
     private readonly el: ElementRef,
     private readonly location: Location) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -43,10 +42,18 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadTopicDescription();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.loadScriptConsoleById();
     }
+  }
+  loadTopicDescription() {
+    this.topicService.loadTopicDescriptionList(true, '');
+    this.subscriptions.add(this.topicService.getTopicDescriptionList().pipe(skipWhile((item: any) => !item))
+      .subscribe((topicDescriptionList: any) => {
+        this.topicDescriptionData = topicDescriptionList;
+      }));
   }
 
 
@@ -69,30 +76,30 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
   }
 
   loadScriptConsoleById() {
-    this.subscriptions.add(this.systemMeasurementService.getScriptConsoleById().pipe(skipWhile((item: any) => !item))
-      .subscribe((scriptConsole: any) => {
-        this.setForm(scriptConsole);
-      }));
+    // this.subscriptions.add(this.systemMeasurementService.getScriptConsoleById().pipe(skipWhile((item: any) => !item))
+    //   .subscribe((scriptConsole: any) => {
+    //     this.setForm(scriptConsole);
+    //   }));
   }
 
   executeDebug() {
-    if (this.debugForm.valid) {
-      if (this.id !== null && this.id !== undefined) {
-        this.subscriptions.add(this.systemMeasurementService.updateScriptConsole(this.id, this.debugForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.loadScriptConsoleById();
-          }));
-      } else {
-        this.subscriptions.add(this.systemMeasurementService.saveScriptConsole(this.debugForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.loadScriptConsoleById();
-          }));
-      }
-    } else {
-      this.validateForm();
-    }
+    // if (this.debugForm.valid) {
+    //   if (this.id !== null && this.id !== undefined) {
+    //     this.subscriptions.add(this.systemMeasurementService.updateScriptConsole(this.id, this.debugForm.value).pipe(
+    //       skipWhile((item: any) => !item))
+    //       .subscribe((response: any) => {
+    //         this.loadScriptConsoleById();
+    //       }));
+    //   } else {
+    //     this.subscriptions.add(this.systemMeasurementService.saveScriptConsole(this.debugForm.value).pipe(
+    //       skipWhile((item: any) => !item))
+    //       .subscribe((response: any) => {
+    //         this.loadScriptConsoleById();
+    //       }));
+    //   }
+    // } else {
+    //   this.validateForm();
+    // }
   }
   validateForm() {
     for (const key of Object.keys(this.debugForm.controls)) {

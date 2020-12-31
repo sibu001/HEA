@@ -312,22 +312,6 @@ export class TableColumnData {
         { key: 'irradiance', displayName: 'Irradiance' }
     ];
 
-    static readonly TOPIC_DESCRIPTION_DATA: Array<any> = [
-        { key: '33', value: 'Program Suspended' },
-        { key: '9', value: 'User Profile' },
-        { key: '34', value: 'Solar PV Info' },
-        { key: '16', value: 'Home Profile' },
-        { key: '25', value: 'Service Options' },
-        { key: '10', value: 'Home Energy Profile' },
-        { key: '26', value: 'Program Selector' },
-        { key: '32', value: 'Leaks Intro' },
-        { key: '27', value: 'Always on' },
-        { key: '28', value: 'Variable' },
-        { key: '29', value: 'Heating & amp; Cooling' },
-        { key: '31', value: 'Recurring' },
-        { key: '23', value: 'User Feedback' }
-    ];
-
     static readonly BATCH_SCRIPT_KEY: Array<TABLECOLUMN> = [
         { key: 'serialNumber', displayName: '#' },
         { key: 'batchName', sort: 'batchName', displayName: 'Batch Name', isEdit: true },
@@ -344,37 +328,30 @@ export class TableColumnData {
 
     // Job name	Last fire time	Last Runtime	Next fire time	State
     static readonly SYSTEM_JOBS_KEY: Array<TABLECOLUMN> = [
-        { key: 'jobName', displayName: 'Job name' },
-        { key: 'lastFireTime', displayName: 'Last fire time' },
-        { key: 'lastRuntime', displayName: 'Last Runtime' },
+        { key: 'serialNumber', displayName: '#' },
+        { key: 'name', displayName: 'Job name' },
+        { key: 'prevFireTime', displayName: 'Last fire time' },
+        { key: 'prevRunTime', displayName: 'Last Runtime', },
         { key: 'nextFireTime', displayName: 'Next fire time' },
         { key: 'state', displayName: 'State' },
-        {
-            key: 'buttons', displayName: '', type: 'buttons', buttonList: [
-                { key: 'execute', name: 'Execute' },
-                { key: 'Pause', name: 'pause' }
-            ]
-        },
+        { key: 'buttonList', displayName: '', type: 'buttons' },
     ];
 
     static readonly SYSTEM_THREAD_KEY: Array<TABLECOLUMN> = [
         { key: 'threadName', displayName: 'Thread name' },
-        { key: 'cpuTime', displayName: 'CPU time' },
-        { key: 'usertime', displayName: 'User Runtime' },
+        { key: 'cpuTime', displayName: 'cpu time' },
+        { key: 'userTime', displayName: 'user time' },
         { key: 'blw', displayName: 'bl/w' },
-        {
-            key: 'stackTrack', displayName: 'Stack Track', type: 'buttons', buttonList: [
-                { key: 'stack', name: 'Stack' }
-            ]
-        }
+        { key: 'buttonList', displayName: 'Stack track', type: 'buttons' }
     ];
 
     static readonly EC2_INSTANCE_KEY: Array<TABLECOLUMN> = [
-        { key: 'Name', displayName: 'Name' },
+        { key: 'serialNumber', displayName: '#' },
+        { key: 'name', displayName: 'Name' },
         { key: 'instanceId', displayName: 'Instance ID' },
-        { key: 'state', displayName: 'State' },
+        { key: 'instanceState', displayName: 'State' },
         { key: 'publicDNS', displayName: 'Public DNS' },
-        { key: 'action', displayName: 'Action' },
+        { key: 'buttonList', displayName: 'Action', type: 'buttons' }
     ];
 
     static readonly ALERT_MESSAGE_KEY: Array<TABLECOLUMN> = [
@@ -388,11 +365,12 @@ export class TableColumnData {
     ];
 
     static readonly TOPIC_DESCRIPTION_KEY: Array<TABLECOLUMN> = [
-        { key: 'topicCode', sort: 'topicCode', displayName: 'Topic Code' },
-        { key: 'topicLabel', sort: 'topicLabel', displayName: 'Topic Label' },
-        { key: 'topicReportLabel', sort: 'topicReportLabel', displayName: 'Topic Report Label' },
+        { key: 'serialNumber', displayName: '#' },
+        { key: 'surveyCode', sort: 'surveyCode', displayName: 'Topic Code', isEdit: true },
+        { key: 'label', sort: 'label', displayName: 'Topic Label' },
+        { key: 'reportLabel', sort: 'reportLabel', displayName: 'Topic Report Label' },
         { key: 'active', displayName: 'Active' },
-        { key: 'nextTopicCode', displayName: 'Next Topic Code' }
+        { key: 'nextSurveyCode', displayName: 'Next Topic Code' }
     ];
 
     static readonly TOPIC_DESCRIPTION_SELECT_DATA: Array<any> = [

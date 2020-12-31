@@ -35,11 +35,15 @@ export class AppConstant {
     public static degreeDays = 'degreeDays';
     public static cimisStation = 'cimisStations';
     public static cimisMeasurement = 'cimisMeasurements';
-    public static scriptConsole = '';
+    public static scriptDebugConsole = 'scriptDebug';
     public static scriptBatch = 'batches';
-    public static systemJobs = '';
-    public static eC2Instance = '';
+    public static systemJobs = 'systemJobs';
+    public static threadInfo = 'threadInfo.do';
+    public static eC2Instance = 'ec2Servers';
     public static alertMessage = 'alertMessageTypes';
+    public static topicDescription = 'surveyDescriptions';
+    public static contextMethod = 'context/methods';
+    public static paidService = 'paidServices';
     public static administrativeReport = '';
     public static topic = '';
     public static prospects = '';
@@ -57,7 +61,7 @@ export class AppConstant {
     public static keyIndicator = '';
     public static keyIndicatorVariables = '';
     public static keyIndicatorCustomerGroups = '';
-    public static trendingPartss = '';
+    public static trendingParts = '';
     public static shareMyDataList = '';
     public static shareMyData = '';
     public static gasList = 'gas';

@@ -100,7 +100,7 @@ export class BatchScriptListComponent implements OnInit, OnDestroy {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction : 'ASC'))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
       .set('batchName', (this.batchScriptForm.value.batchName !== null ? this.batchScriptForm.value.batchName : ''))
       .set('batchPeriod', (this.batchScriptForm.value.batchPeriod !== null ? this.batchScriptForm.value.batchPeriod : ''));
     this.findBatchScript(true, params);
