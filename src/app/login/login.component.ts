@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   hide = false;
   theme: string;
   code: string;
-  buildFor = 'Sandbox';
+  buildForSandbox= true;
   @ContentChild('showhideinput') input;
   constructor(
     private router: Router,
@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
     this.loginService.setUser(this.users);
 
     if (window.location.origin === 'https://www.hea.com' || window.location.origin === 'http://www.hea.com') {
-      this.buildFor = 'Live';
+      this.buildForSandbox = false;
     }
   }
   ngOnInit() {
