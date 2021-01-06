@@ -7,15 +7,6 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <form class="form-horizontal">
-                            <!-- <div class="form-group">
-                                <div class="col-lg-1 col-sm-1"></div>
-                                <label class="control-label col-lg-3 col-sm-3">
-                                    <span class="start">Subject:</span>
-                                </label>
-                                <div class="col-lg-3 col-sm-6">
-                                    <input type="text" class="form-control" name="Subject">
-                                </div>
-                            </div> -->
                             <hr>
                             <div class="form-group">
                                 <div class="col-lg-1 col-sm-1"></div>
@@ -27,43 +18,24 @@
                                 </div>
                             </div>
                             <hr>
-                            <!-- <div class="form-group">
-                                <div class="col-lg-1 col-sm-1"></div>
-                                <label class="control-label col-lg-3 col-sm-3">
-                                    <span class="start">Date sent:</span>
-                                </label>
-                                <div class="col-lg-3 col-sm-6">
-                                    <input type="text" class="form-control" name="Date-sent">
-                                </div>
-                            </div>
-                            <hr> -->
                             <div class="form-group">
                                 <div class="col-lg-1 col-sm-1"></div>
                                 <label class="control-label col-lg-3 col-sm-3">
                                     <span class="start">Date sent:</span>
                                 </label>
                                 <div class="col-lg-8 col-sm-6 col-xs-12">
-                                    <p class="subject_text">{{sendDate | date : "MM/dd/y"}}</p>
+                                    <p class="subject_text">{{sendDate | date : "MM/dd/y" : 'PST'}}</p>
                                 </div>
                             </div>
                             <hr>
-                            <!-- <div class="form-group">
-                                <div class="col-lg-1 col-sm-1"></div>
-                                <label class="control-label col-lg-3 col-sm-3">
-                                    <span class="start">To address:</span>
-                                </label>
-                                <div class="col-lg-3 col-sm-6">
-                                    <input type="text" class="form-control" name="address">
-                                </div>
-                            </div>
-                            <hr> -->
+                         
                             <div class="form-group">
                                 <div class="col-lg-1 col-sm-1"></div>
                                 <label class="control-label col-lg-3 col-sm-3">
                                     <span class="start">To address:</span>
                                 </label>
                                 <div class="col-lg-8 col-sm-6 col-xs-12">
-                                    <p class="subject_text">{{addresh}}</p>
+                                    <p class="subject_text">{{address}}</p>
                                 </div>
                             </div>
                         </form>
@@ -75,17 +47,16 @@
                             <div class="row">
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-10">
-
                                     <div style="overflow-x:auto;">
-                                        <div [innerHTML]="users.mailContaint | safeHtml"></div>
+                                        <div [innerHTML]="users.mailContent | safeHtml"></div>
                                     </div>
                                 </div>
                                 <div class="col-sm-1"></div>
                             </div>
                         </div>
-                        <p class="list" style="margin-top:8px">In bounced list:</p>
+                        <p class="list" style="margin-top:8px">In bounced list: {{isBounced}}</p>
                         <hr class="bounced">
-                        <p class="list">Opened:</p>
+                        <p class="list">Opened: {{wasOpened}}</p>
                         <hr class="bounced">
                         <br>
                         <button type="button" class="btn btn-primary" (click)="back()">Back</button>

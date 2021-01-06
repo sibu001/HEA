@@ -29,13 +29,13 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
     if (this.recommendationList.length <= 0 || this.users.recommendationStatusChange) {
       this.getRecommendation();
     }
-    this.getLeake();
+    this.getLeak();
   }
 
   ngOnInit() { }
 
   ngAfterViewInit() {
-    $('#collapse' + this.users.recomandationNo).addClass('in');
+    $('#collapse' + this.users.recommendationNo).addClass('in');
   }
   back() {
     this.location.back();
@@ -105,7 +105,7 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
       this.titleColor = "#76ba19";
       this.statusColor = "#76ba19";
       this.sortingBy = '-priceValue';
-      this.getLeake();
+      this.getLeak();
     } else if (ids == 2) {
       this.titleColor = "#000"
       this.savingColor = "#76ba19";
@@ -122,7 +122,7 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
 
   }
 
-  getLeake() {
+  getLeak() {
     var newList = _.reverse(this.users.recommendationList);
     var groups = _.groupBy(newList, "recommendationId");
     var array = [];

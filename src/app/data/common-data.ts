@@ -1205,4 +1205,13 @@ export class TableColumnData {
         { key: '52', value: 'Enrolled into P4P Program as Metered Reserve' },
         { key: '53', value: 'Log of miscellaneous Coaching Activity' },
     ];
+
+    static readonly MAIL_ARCHIVE_KEY: Array<TABLECOLUMN> = [
+        { key: 'subject', sort: 'subject', displayName: 'Subject', isEdit: true },
+        { key: 'dateSent', sort: 'dateSent', displayName: 'Date sent' },
+        { key: 'sentTo', sort: 'sentTo', displayName: 'Sent to' },
+        { key: 'inBouncedList', displayName: 'Bounced' },
+        { key: 'wasOpened', displayName: 'Opened' },
+        { key: 'permanentLink', displayName: 'Permanent link', isEdit: true }
+    ];
 }

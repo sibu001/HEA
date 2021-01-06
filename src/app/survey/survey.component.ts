@@ -208,7 +208,7 @@ export class SurveyComponent implements AfterViewInit {
   }
 
   surveyRecommendationList(number) {
-    this.users.recomandationNo = number;
+    this.users.recommendationNo = number;
     this.loginService.setUser(this.users);
     this.router.navigate(['/surveyRecommendationList']);
   }

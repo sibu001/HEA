@@ -15,6 +15,7 @@ import { PipeModule } from '../pipes/pipe/pipe.module';
 import { SystemService } from '../store/system-state-management/service/system.service';
 import { NgxsModule } from '@ngxs/store';
 import { SystemManagementState } from '../store/system-state-management/state/system.state';
+import { DatePipe } from '@angular/common';
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -34,9 +35,9 @@ import { SystemManagementState } from '../store/system-state-management/state/sy
         PipeModule,
         NgxsModule.forRoot([
             SystemManagementState,
-          ]),
+        ]),
     ],
-    providers: [SystemService],
+    providers: [SystemService, DatePipe],
     exports: [
 
     ]

@@ -143,7 +143,7 @@
                                                 <div class="col-lg-10 col-sm-9 col-xs-10 high">
                                                     <p>
                                                         <a (click)="leakView(item.parentLeakId)" class="drought">{{item.leak.takebackLabel}}</a>
-                                                        <span class="mo">{{item.parentSurveyRecommendation.takebackValue}}{{item.leak.unit}}</span>
+                                                        <span class="mo">{{item.parentSurveyRecommendation.takebackValue | number:'0.0-0'}}{{item.leak.unit}}</span>
                                                     </p>
                                                 </div>
                                             </div>

@@ -1,194 +1,109 @@
 import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { Users } from "src/app/models/user";
-import { Router } from "@angular/router";
-import { LoginService } from "src/app/services/login.service";
-declare var $: any;
-import { AfterViewInit } from "@angular/core";
-import { Filter } from '../models/filter';
+import { DatePipe, Location } from '@angular/common';
+import { Users } from 'src/app/models/user';
+import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
+import { HttpParams } from '@angular/common/http';
+import { TABLECOLUMN } from '../interface/table-column.interface';
+import { TableColumnData } from '../data/common-data';
+import { FormBuilder, FormGroup } from '@angular/forms';
 @Component({
   selector: 'mailArchiveList',
   templateUrl: './mailArchiveList.component.html',
   styleUrls: ['./mailArchiveList.component.css']
 })
-export class MailArchiveListComponent implements OnInit, AfterViewInit {
+export class MailArchiveListComponent implements OnInit {
   errorMessage: any;
-  subject: string;
   users: Users = new Users();
-  customerMailList: any[] = [];
-  newMailList: any[] = [];
-  startcheck: boolean;
-  endcheck: boolean;
-  startendcheck: boolean;
-  subjectcheck: boolean;
-  filter: Filter = new Filter();
-  startDate: Date = this.filter.startDate;
-  endDate: Date = this.filter.endDate;
-  constructor(private location: Location, private router: Router, private loginService: LoginService) {
-    // this.customerMailList = this.users.customerMailList;
+  mailArchiveForm: FormGroup;
+  public keys: Array<TABLECOLUMN> = TableColumnData.MAIL_ARCHIVE_KEY;
+  dataSource: any;
+  usageHistoryData = {
+    content: [],
+    totalElements: 0,
+  };
+
+  constructor(private location: Location,
+    private router: Router,
+    public fb: FormBuilder,
+    private readonly datePipe: DatePipe,
+    private loginService: LoginService
+  ) {
     this.users = this.loginService.getUser();
-    this.filter = JSON.parse(localStorage.getItem('filter'));
-    if (this.filter == null || this.filter == undefined) {
-      this.filter = new Filter();
-    }
-    if (!this.filter.back) {
-      this.getMailList();
-      this.filter.startDate = null;
-      this.filter.endDate = null;
-      this.filter.subject = "";
-      localStorage.setItem('filter', JSON.stringify(this.filter));
-    } else {
-      this.startDate = this.filter.startDate;
-      this.endDate = this.filter.endDate;
-      this.subject = this.filter.subject;
-    }
   }
   ngOnInit() {
-    if (this.filter.back || ((this.startDate != undefined && this.startDate != null) || (this.endDate != undefined && this.endDate != null) || (this.filter.subject != "" && this.filter.subject != null))) {
-      this.showSearchList();
-    } else {
-      this.filter = new Filter();
-      localStorage.removeItem('filter');
-    }
+    this.setUpForm(undefined);
+    this.search(undefined, false);
   }
-  ngAfterViewInit() {
-    $(document).ready(function () {
-      $("#example").dataTable().fnDestroy();
-      setTimeout(function () {
-        $('#example').DataTable({
-          "responsive": true,
-          "pagingType": "full",
-          "columnDefs": [{
-            "targets": [0, 4, 5, 6], // column or columns numbers
-            "orderable": false, // set orderable for selected columns
-          }],
-          "retrieve": true
-        });
-        $('.dataTables_length').addClass('bs-select');
-      }, 1000);
-    });
-
-  }
-
 
   back() {
     this.location.back();
   }
 
-  getMailList() {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/mails").subscribe(
+  getMailList(params: any) {
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetWithParams('customers/' + this.users.outhMeResponse.customerId + '/mails', params).subscribe(
       data => {
-        // let response = JSON.parse(JSON.parse(JSON.stringify(data))._body);
-        // let response1 = JSON.stringify(data);
-        // response = JSON.parse(response1);
-        let response = JSON.parse(JSON.stringify(data));
-        this.customerMailList = new Array;
-        this.customerMailList = response.data;
-        this.users.customerMailList = this.customerMailList;
-        document.getElementById("loader").classList.remove('loading');
+        const response = JSON.parse(JSON.stringify(data));
+        this.usageHistoryData.content = this.transformMailArchiveList(response);
+        this.dataSource = [...this.usageHistoryData.content];
+        document.getElementById('loader').classList.remove('loading');
       },
       error => {
-        let response = JSON.parse(JSON.parse(JSON.stringify(error))._body);
+        const response = JSON.parse(JSON.parse(JSON.stringify(error))._body);
         this.errorMessage = response.error_description;
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       }
     );
   }
-  mailView(number) {
 
-    this.users.mailContaint = this.customerMailList[number].content;
-    this.users.mailDetail = this.customerMailList[number];
-    this.loginService.setUser(this.users);
-    this.router.navigate(["/MailArchiveView"]);
+  transformMailArchiveList(response): any {
+    const dataSourceList: any = [];
+    response.data.forEach(element => {
+      let dataSourceObject: any = {};
+      dataSourceObject = element;
+      if (element.inBouncedList) {
+        dataSourceObject.inBouncedList = '*';
+      } else {
+        dataSourceObject.inBouncedList = '';
+      }
+      if (element.wasOpened) {
+        dataSourceObject.wasOpened = '*';
+      } else {
+        dataSourceObject.wasOpened = '';
+      }
+      dataSourceObject.dateSent = element.dateSent ? this.datePipe.transform(new Date(element.dateSent), 'MM/dd/yyyy', 'PST') : '';
+      dataSourceObject.permanentLink = 'Permanent link';
+      dataSourceList.push(dataSourceObject);
+    });
+    return dataSourceList;
+  }
+  setUpForm(event: any) {
+    this.mailArchiveForm = this.fb.group({
+      periodStart: [event !== undefined && event !== null ? new Date(event.periodStart) : ''],
+      subject: [event !== undefined && event !== null ? event.subject : ''],
+      periodEnd: [event !== undefined && event !== null ? new Date(event.periodEnd) : '']
+    });
   }
 
-  showSearchList() {
-    document.getElementById("loader").classList.add('loading');
-    if ((this.startDate != undefined && this.startDate != null) || (this.endDate != undefined && this.endDate != null) || (this.filter.subject != "" && this.filter.subject != undefined)) {
-      var startMilliseconds = new Date(this.startDate).getTime();
-      var endMilliseconds = new Date(this.endDate).getTime();
-      this.customerMailList = new Array;
-      this.newMailList = this.users.customerMailList;
-      var self = this;
-      for (let mailList of this.newMailList) {
-        this.startendcheck = true;
-        this.startcheck = true;
-        this.endcheck = true;
-        this.subjectcheck = true;
-        if (this.startDate != undefined && this.endDate != undefined) {
-          this.startendcheck = false;
-          if (mailList.dateSent >= startMilliseconds && mailList.dateSent <= endMilliseconds) {
-            this.startendcheck = true;
-          }
-        }
-        else if (this.startDate != undefined) {
-          this.startcheck = false;
-          if (mailList.dateSent >= startMilliseconds)
-            this.startcheck = true;
-        }
-        else if (this.endDate != undefined) {
-          this.endcheck = false;
-          if (mailList.dateSent <= endMilliseconds) {
-            this.endcheck = true;
-          }
-        }
-        if (this.filter.subject != "" && this.filter.subject != undefined) {
-          this.subjectcheck = false;
-          if (mailList.subject == this.filter.subject) {
-            this.subjectcheck = true;
-          }
-        }
-        if (this.startendcheck == true && this.startcheck == true && this.endcheck == true && this.subjectcheck == true) {
-          this.customerMailList.push(mailList);
-        }
-      }
-      if (this.startDate ? this.startDate = new Date(this.startDate) : false)
-        if (this.endDate ? this.endDate = new Date(this.endDate) : false)
-          this.filter.startDate = this.startDate;
-      this.filter.endDate = this.endDate;
-      localStorage.setItem('filter', JSON.stringify(this.filter));
-      $("#example").dataTable().fnDestroy();
-      if (!this.filter.back) {
-        $(document).ready(function () {
-          setTimeout(function () {
-            $('#example').DataTable({
-              "responsive": true,
-              "pagingType": "full",
-              "columnDefs": [{
-                "targets": [0, 4, 5, 6], // column or columns numbers
-                "orderable": false, // set orderable for selected columns
-              }],
-              "retrieve": true
-            });
-          }, 1500);
-        });
-      } else {
-        this.filter.back = false;
-        localStorage.setItem('filter', JSON.stringify(this.filter));
-      }
-      document.getElementById("loader").classList.remove('loading');
-    }
-    else {
-      localStorage.setItem('filter', JSON.stringify(this.filter));
-      this.getMailList();
-      $("#example").dataTable().fnDestroy();
-      $(document).ready(function () {
-        setTimeout(function () {
-          $('#example').DataTable({
-            "responsive": true,
-            "pagingType": "full",
-            "columnDefs": [{
-              "targets": [0, 4, 5, 6], // column or columns numbers
-              "orderable": false, // set orderable for selected columns
-            }],
-            "retrieve": true
-          });
-        }, 500);
-      });
-      document.getElementById("loader").classList.remove('loading');
-    }
-
-    document.getElementById("loader").classList.remove('loading');
+  search(event: any, isSearch: boolean) {
+    // .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+    // .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+    //   (event.pageIndex * event.pageSize) + '' : '0'))
+    const params = new HttpParams()
+      .set('startRow', '0')
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('periodStart', (this.mailArchiveForm.value.periodStart ? this.datePipe.transform(this.mailArchiveForm.value.periodStart, 'MM/dd/yyyy') : ''))
+      .set('periodEnd', (this.mailArchiveForm.value.periodEnd ? this.datePipe.transform(this.mailArchiveForm.value.periodEnd, 'MM/dd/yyyy') : ''))
+      .set('subject', (this.mailArchiveForm.value.subject !== null ? this.mailArchiveForm.value.subject : ''));
+    this.getMailList(params);
+  }
+  goToEditMailArchive(event: any) {
+    console.log(event);
+    this.users.mailContent = event.content;
+    this.users.mailDetail = event;
+    this.loginService.setUser(this.users);
+    this.router.navigate(['/MailArchiveView']);
   }
 }

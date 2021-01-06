@@ -17,7 +17,7 @@ export class Users {
     public paneNumber = 0;
     public surveyLength: number;
     public leakFocusId = 1;
-    public recomandationNo: number;
+    public recommendationNo: number;
     public dates: Date;
     public treadingLoadsValue: string;
     public trendId = 1;
@@ -43,7 +43,7 @@ export class Users {
     public resourceType = 0;
     public lookupValue: string;
     public trendingProfileData: any;
-    public mailContaint: string;
+    public mailContent: string;
     public mailDetail: any;
     public recommendationStatusChange: boolean;
     public types: string;

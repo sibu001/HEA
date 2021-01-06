@@ -56,7 +56,7 @@
             <mat-cell [class.mat-cell-underline]='col.isEdit' *matCellDef="let
                 row" style="display: grid;">
                 <div *ngIf="col.type!='image' && col.isDate && !col.isAction">
-                    {{row[col.key]|date:'mediumDate'}}</div>
+                    {{row[col.key]|date:'mediumDate' : 'PST'}}</div>
                 <div id='1' *ngIf="col.type==='alert' && !col.isAction">
                     <div class="redAlert" *ngIf="row[col.key]===10">
                         <p id="alertCircle">&nbsp;</p>

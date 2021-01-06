@@ -1,28 +1,28 @@
-import { Component, OnInit, Renderer } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Users } from "src/app/models/user";
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
 declare var $: any;
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
-import * as _ from "lodash";
+import * as _ from 'lodash';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  // @ViewChild('inp1') inp1: ElementRef;
-  hides: boolean = true;
-  count: number = 0;
-  leakPriceValueSum: number = 0;
-  recommendationPriceValueSum: number = 0;
+  hides = true;
+  count = 0;
+  leakPriceValueSum = 0;
+  recommendationPriceValueSum = 0;
+  recommendationLength = 0;
   chartOptions: any;
   errorMessage: string;
   data: any;
   float: string;
-  hideMsgs: boolean = true;
-  hideHelps: boolean = false;
+  hideMsgs = true;
+  hideHelps = false;
   myReportsList: any[] = [];
   recommendationList: any[] = [];
   leakList: any[] = [];
@@ -33,7 +33,9 @@ export class DashboardComponent implements OnInit {
   trendingHomeChart: any;
   trendingParts: any[] = [];
   users: Users = new Users();
-  constructor(private router: Router, private renderer: Renderer, private route: ActivatedRoute, private loginService: LoginService) {
+  constructor(private router: Router,
+    private loginService: LoginService
+  ) {
     this.users = this.loginService.getUser();
     this.count = 0;
     if (this.users.outhMeResponse == undefined) {
@@ -50,23 +52,10 @@ export class DashboardComponent implements OnInit {
     if (this.users.customerMailList.length <= 0) {
       this.getMailList();
     }
-    // if (this.users.recommendationList.length <= 0 || this.users.recommendationStatusChange) {
-    //   this.getRecommendation();
-    // } else {
-    //   this.getRecomendationList(this.users.recommendationList);
-    //   for (let index = 0; index < this.users.recommendationList.length; index++) {
-    //     this.recommendationPriceValueSum = this.users.recommendationList[index].priceValue + this.recommendationPriceValueSum;
-    //   }
-    // }
-    // if (this.users.leakList.length <= 0) {
-    //   this.getLeake();
-    // } else {
-    //   this.leakCalculation();
-    // }
     if (this.users.recommendationList.length <= 0 || this.users.recommendationStatusChange || this.users.leakList.length <= 0) {
       this.getLeaksAndRecommendation();
     } else {
-      this.getRecomendationList(this.users.recommendationList);
+      this.getRecommendationList(this.users.recommendationList);
       for (let index = 0; index < this.users.recommendationList.length; index++) {
         this.recommendationPriceValueSum = this.users.recommendationList[index].priceValue + this.recommendationPriceValueSum;
       }
@@ -83,7 +72,7 @@ export class DashboardComponent implements OnInit {
       } else {
         $(this).addClass('collapsed');
       }
-    })
+    });
     this.scrollTop();
   }
   hideMsg() {
@@ -95,9 +84,9 @@ export class DashboardComponent implements OnInit {
   hide() {
     this.hides = !this.hides;
     if (this.hides) {
-      this.float = "right";
+      this.float = 'right';
     } else {
-      this.float = "left";
+      this.float = 'left';
     }
   }
   leakCalculation() {
@@ -131,12 +120,12 @@ export class DashboardComponent implements OnInit {
   leakView(id) {
     this.users.leakFocusId = id;
     this.loginService.setUser(this.users);
-    this.router.navigate(["leakListView"]);
+    this.router.navigate(['leakListView']);
   }
   surveyRecommendationList(number) {
-    this.users.recomandationNo = number;
+    this.users.recommendationNo = number;
     this.loginService.setUser(this.users);
-    this.router.navigate(["/surveyRecommendationList"]);
+    this.router.navigate(['/surveyRecommendationList']);
 
   }
   calculateFunction(counts) {
@@ -144,26 +133,26 @@ export class DashboardComponent implements OnInit {
   }
 
   getMyReport() {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/user-reports").subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/user-reports').subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         this.users.myReportsData = response;
         this.myReportsList = this.users.myReportsData;
         this.loginService.setUser(this.users);
       },
       error => {
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
         console.log(JSON.parse(JSON.stringify(error)));
       }
     );
   }
   getNextSurvey() {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/surveys/nextSurvey").subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/nextSurvey').subscribe(
       data => {
-        // let response = JSON.parse(JSON.parse(JSON.stringify(data))._body);
-        let response = JSON.parse(JSON.stringify(data));
+        // const response = JSON.parse(JSON.parse(JSON.stringify(data))._body);
+        const response = JSON.parse(JSON.stringify(data));
         // console.log(response.data);
         if (response.data != null) {
           this.nextTopic = response.data.surveyDescription.label;
@@ -174,144 +163,138 @@ export class DashboardComponent implements OnInit {
       },
       error => {
         console.log(JSON.parse(JSON.stringify(error)));
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       }
     );
   }
-  getRecomendationList(recommendationList) {
+  getRecommendationList(recommendationList: any): void {
     this.recommendationList = new Array;
-    for (var index = 0; index < recommendationList.length; index++) {
-      if ((recommendationList[index].status == 'N' || recommendationList[index].status == 'L') && recommendationList[index].parentLeakId != null)
+    let i = 0;
+    for (let index = 0; index < recommendationList.length; index++) {
+      if (recommendationList[index].parentLeakId !== null) {
+        i++;
+      }
+      if ((recommendationList[index].status === 'N' || recommendationList[index].status === 'L') && recommendationList[index].parentLeakId != null) {
         this.recommendationList.push(recommendationList[index]);
+      }
     }
+    this.recommendationLength = i;
   }
   getRecommendation() {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/recommendations").subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/recommendations').subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
-        // console.log(response.data);
-        var newList = _.reverse(response.data);
-        var groups = _.groupBy(newList, "recommendationId");
-        var array = [];
+        const response = JSON.parse(JSON.stringify(data));
+        const newList = _.reverse(response.data);
+        const groups = _.groupBy(newList, 'recommendationId');
+        const array = [];
         _.forOwn(groups, function (value, key) {
           array.push(value[0]);
         });
-        let recommendationsList = array;
+        const recommendationsList = array;
         for (let index = 0; index < recommendationsList.length; index++) {
           this.recommendationPriceValueSum = recommendationsList[index].priceValue + this.recommendationPriceValueSum;
         }
         this.users.recommendationList = array;
         this.users.recommendationStatusChange = false;
         this.loginService.setUser(this.users);
-        this.getRecomendationList(this.users.recommendationList);
-        document.getElementById("loader").classList.remove('loading');
+        this.getRecommendationList(this.users.recommendationList);
+        document.getElementById('loader').classList.remove('loading');
       },
       error => {
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
         console.log(JSON.parse(JSON.stringify(error)));
 
       }
     );
   }
 
-  getLeake() {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/leaks").subscribe(
+  getLeak() {
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/leaks').subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         this.leakList = response.data;
         this.users.leakList = response.data;
         this.loginService.setUser(this.users);
         this.leakCalculation();
-        // for (let index = 0; index < response.data.length; index++) {
-        //   this.leakPriceValueSum = response.data[index].priceValue + this.leakPriceValueSum;
-        // }
-
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       },
       error => {
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
         console.log(JSON.parse(JSON.stringify(error)));
       }
     );
   }
   getLeaksAndRecommendation() {
-    // document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/recommendationsAndLeaks").subscribe(
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/recommendationsAndLeaks').subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
-        // console.log(response.data);
-        var newList = _.reverse(response.data.recommendations);
-        var groups = _.groupBy(newList, "recommendationId");
-        var array = [];
+        const response = JSON.parse(JSON.stringify(data));
+        const newList = _.reverse(response.data.recommendations);
+        const groups = _.groupBy(newList, 'recommendationId');
+        const array = [];
         _.forOwn(groups, function (value, key) {
           array.push(value[0]);
         });
-        let recommendationsList = array;
+        const recommendationsList = array;
         for (let index = 0; index < recommendationsList.length; index++) {
           this.recommendationPriceValueSum = recommendationsList[index].priceValue + this.recommendationPriceValueSum;
         }
         this.users.recommendationList = array;
         this.users.recommendationStatusChange = false;
-        // this.loginService.setUser(this.users);
-        this.getRecomendationList(this.users.recommendationList);
+        this.getRecommendationList(this.users.recommendationList);
         this.leakList = response.data.leaks;
         this.users.leakList = response.data.leaks;
         this.loginService.setUser(this.users);
         this.leakCalculation();
 
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       },
       error => {
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
         console.log(JSON.parse(JSON.stringify(error)));
       }
     );
   }
 
   getMailList() {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/mails").subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/mails').subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         this.users.customerMailList = response.data;
         this.loginService.setUser(this.users);
       },
       error => {
-        let response = JSON.parse(JSON.parse(JSON.stringify(error))._body);
+        const response = JSON.parse(JSON.parse(JSON.stringify(error))._body);
         this.errorMessage = response.error_description;
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       }
     );
   }
   surveyView(surveyCode, surveyId) {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/surveys/" + surveyCode + "/" + surveyId).subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyCode + '/' + surveyId).subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
-        // console.log(response);
+        const response = JSON.parse(JSON.stringify(data));
         this.users.paneNumber = 0;
         this.users.currentPaneNumber = response.data;
         this.loginService.setUser(this.users);
-        this.router.navigate(["/surveyView"]);
-        document.getElementById("loader").classList.remove('loading');
+        this.router.navigate(['/surveyView']);
+        document.getElementById('loader').classList.remove('loading');
       },
       errors => {
         console.log(errors);
-        let response = JSON.parse(JSON.stringify(errors))._body;
-        document.getElementById("loader").classList.remove('loading');
-        // document.getElementById("loader").classList.remove('loading');
-        // this.errorMessage = response.error;
+        document.getElementById('loader').classList.remove('loading');
       }
     );
   }
 
   getTrendingHomeChart() {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/trendingHomeChart").subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingHomeChart').subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         this.trendingHomeChart = response.data;
         var line1 = new Array;
         var line2 = new Array;
@@ -320,29 +303,29 @@ export class DashboardComponent implements OnInit {
         var line5 = new Array;
         var line6 = new Array;
         let i = 0;
-        for (let areaSeries of response.data.chart.series) {
+        for (const areaSeries of response.data.chart.series) {
           if (i == 0) {
-            for (let areaSeriesValue of areaSeries.seriesValues) {
+            for (const areaSeriesValue of areaSeries.seriesValues) {
               line1.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
           } else if (i == 1) {
-            for (let areaSeriesValue of areaSeries.seriesValues) {
+            for (const areaSeriesValue of areaSeries.seriesValues) {
               line2.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
           } else if (i == 2) {
-            for (let areaSeriesValue of areaSeries.seriesValues) {
+            for (const areaSeriesValue of areaSeries.seriesValues) {
               line3.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
           } else if (i == 3) {
-            for (let areaSeriesValue of areaSeries.seriesValues) {
+            for (const areaSeriesValue of areaSeries.seriesValues) {
               line4.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
           } else if (i == 4) {
-            for (let areaSeriesValue of areaSeries.seriesValues) {
+            for (const areaSeriesValue of areaSeries.seriesValues) {
               line5.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
           } else if (i == 5) {
-            for (let areaSeriesValue of areaSeries.seriesValues) {
+            for (const areaSeriesValue of areaSeries.seriesValues) {
               line6.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
           }
@@ -352,42 +335,42 @@ export class DashboardComponent implements OnInit {
           eval(response.data.chart.freeChartConfigurationJS);
         }, 100);
         if (this.users.recommendationList != null && this.users.recommendationList.length > 0 && !this.users.recommendationStatusChange) {
-          document.getElementById("loader").classList.remove('loading');
+          document.getElementById('loader').classList.remove('loading');
         }
         setTimeout(function () {
-          $($("#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend").get(10)).hide();
+          $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
         }, 100);
       },
       error => {
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
         console.log(JSON.parse(JSON.stringify(error)));
       }
     );
   }
   getTrendingProfileChart() {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/trendingHome/trendingParts").subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingHome/trendingParts').subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         this.trendingParts = response.data;
         console.log(response.data);
         setTimeout(function () {
-          for (let areaSeries of response.data[0].trendingCharts) {
+          for (const areaSeries of response.data[0].trendingCharts) {
             if (areaSeries.chart.freeChartConfigurationJS != null) {
               eval(areaSeries.chart.freeChartConfigurationJS);
             }
           }
-          document.getElementById("loader").classList.remove('loading');
+          document.getElementById('loader').classList.remove('loading');
         }, 100);
       },
       error => {
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
         console.log(JSON.parse(JSON.stringify(error)));
       }
     );
   }
   questionHelp() {
-    window.open("https://hea-docs.s3.amazonaws.com/HomeChartHelp.html");
+    window.open('https://hea-docs.s3.amazonaws.com/HomeChartHelp.html');
     return;
   }
 

@@ -2,21 +2,13 @@ section.space-top {
   margin-top: 4.2em;
   margin-bottom: 1em;
 }
-.select_next {
-  font-size: 21px;
-  font-weight: 600;
-  color: #000;
-}
+
 p.accurate {
   color: #4550a1;
   font-size: 17px;
   font-weight: 600;
   text-align: justify;
   margin-top: 20px;
-}
-hr.hr_space {
-  margin-top: 13px;
-  margin-bottom: 20px;
 }
 
 i.fa {
@@ -37,21 +29,7 @@ i.fa {
   padding-left: 40px;
   border-right: 1px solid #d8d8d8;
 }
-.topic_heading {
-  font-weight: 600;
-  font-size: 14px;
-  color: rgb(47%, 59%, 60%);
-  cursor: pointer;
-}
-a.topic_point {
-  color: #76ba19;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
-}
-p.topic_subpoint {
-  margin-bottom: 0px;
-}
+
 i.fa.fa-fw.fa-caret-right.fa_icon {
   float: left;
   margin-top: -10px;
@@ -94,18 +72,14 @@ a.info_hea {
   .col-sm-9.topic_list {
     padding-left: 0px !important;
   }
-  .select_next {
-    padding-left: 10px !important;
-  }
+
   p.accurate {
     padding-left: 0px !important;
   }
   ul.leaks {
     display: none;
   }
-  img.colorbox {
-    margin-left: 1px !important;
-  }
+ 
   div.feedback {
     margin-top: 0em !important;
     height: 100% !important;
@@ -122,9 +96,6 @@ a.info_hea {
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
-  img.colorbox {
-    margin-left: 1px !important;
-  }
   #sub {
     width: 96%;
   }
@@ -207,163 +178,11 @@ p.Messages {
   font-size: 17px;
   font-weight: 600;
 }
-#customers {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-#customers td,
-#customers th {
-  /* border: 1px solid #ddd; */
-  padding: 8px;
-  text-align: center;
-}
-
-#customers tr:nth-child(even) {
-  background-color: #f2f2f2;
-}
-
-#customers tr:nth-child(odd) {
-  background-color: #fff;
-}
-
-#customers th {
-  padding-top: 7px;
-  padding-bottom: 7px;
-  text-align: center;
-  background-color: #000;
-  color: white;
-  font-weight: 100;
-}
 .form-control {
   border-radius: 0px;
   height: 27px;
 }
-a.link {
-  color: #000;
-  text-decoration: underline;
-  cursor: pointer;
-}
-a.link:hover {
-  background-color: #76ba19;
-}
-span.menu3 {
-  border-right: 1px solid #929292;
-  padding-right: 12px;
-}
-span.Energy {
-  color: #76ba19;
-  font-weight: 600;
-  cursor: pointer;
-}
-span.Energy:hover {
-  text-decoration: underline;
-}
-span.title {
-  color: #76ba19;
-  padding-left: 12px;
-  font-weight: 600;
-  cursor: pointer;
-}
-span.title:hover {
-  text-decoration: underline;
-}
-span.next {
-  color: #76ba19;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  display: block;
-  float: right;
-  margin-top: 8px;
-}
-span.next:hover {
-  text-decoration: underline;
-}
-ul.saving {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  font-size: 16px;
-}
 
-ul.saving li {
-  float: left;
-}
-
-ul.saving li a {
-  display: block;
-  padding: 8px 0px 8px 0px;
-  text-decoration: none;
-}
-
-.mail-check {
-  display: block;
-  position: relative;
-  padding-left: 0px;
-  margin-bottom: 12px;
-  cursor: pointer;
-  font-size: 22px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* Hide the browser's default radio button */
-.mail-check input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-}
-
-/* Create a custom radio button */
-.checkmark {
-  position: absolute;
-  top: 0;
-  left: 0px;
-  height: 21px;
-  width: 21px;
-  background-color: #fff;
-  border-radius: 0;
-  border: 1px solid #a7a3a3;
-}
-
-/* On mouse-over, add a grey background color */
-/* .mail-check:hover input ~ .checkmark {
-    background-color: #ccc;
-} */
-
-/* When the radio button is checked, add a blue background */
-.mail-check input:checked ~ .checkmark {
-  background-color: #000;
-}
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-.checkmark:after {
-  content: "";
-  position: absolute;
-  display: none;
-}
-
-/* Show the indicator (dot/circle) when checked */
-.mail-check input:checked ~ .checkmark:after {
-  display: block;
-}
-
-/* Style the indicator (dot/circle) */
-.mail-check .checkmark:after {
-  top: 6.5px;
-  left: 6px;
-  width: 7px;
-  height: 7px;
-  border-radius: 0;
-  background: white;
-}
-img.colorbox {
-  margin-left: -3px;
-}
 .form-control:focus {
   border-color: #ccc;
   outline: 0;
@@ -444,4 +263,25 @@ i.fa.fa-sort.float-right {
   height: 100%;
   position: absolute;
   right: 0;
+}
+
+
+::ng-deep .mail-archive-table .mat-column-wasOpened {
+  flex: none;
+  width: 100px;
+}
+
+::ng-deep .mail-archive-table .mat-column-inBouncedList {
+  flex: none;
+  width: 100px;
+}
+
+::ng-deep .mail-archive-table .mat-column-permanentLink {
+  flex: none;
+  width: 120px;
+}
+
+::ng-deep .mail-archive-table .mat-column-dateSent {
+  flex: none;
+  width: 120px;
 }

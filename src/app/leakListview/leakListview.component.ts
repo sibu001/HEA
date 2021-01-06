@@ -34,7 +34,7 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
     this.location.back();
   }
   surveyRecommendationList(number) {
-    this.users.recomandationNo = number;
+    this.users.recommendationNo = number;
     this.loginService.setUser(this.users);
     this.router.navigate(["/surveyRecommendationList"]);
 

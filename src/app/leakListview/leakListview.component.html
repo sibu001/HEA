@@ -45,17 +45,16 @@
                     </div>
                     <div class="col-lg-5 waste">
                         <p class="waste"> wasted per year:
-                            <span class="dollarwaste">${{leak.priceValue}}</span>
-                            <span class="unitsperyear">{{leak.recommendation.count}} {{leak.recommendation.unit}}</span>
+                            <span class="dollarwaste">${{leak.priceValue| number:'1.0-0'}}</span>
+                            <span class="unitsperyear">{{leak.takebackValue | number:'1.0-0'}} {{leak.recommendation.unit}}</span>
                         </p>
                     </div>
                 </div>
                 <div class="row waste">
                     <div class="col-lg-12 col-xs-12">
                         <p class="waste"> wasted per year:
-                            <span class="dollarwaste">${{leak.priceValue}}</span>
-                            <!-- <span class="unitsperyear">{{leak.count}} {{leak.unit}}</span> -->
-                            <span class="unitsperyear">{{leak.recommendation.count}} {{leak.recommendation.unit}}</span>
+                            <span class="dollarwaste">${{leak.priceValue| number:'1.0-0'}}</span>
+                            <span class="unitsperyear">{{leak.takebackValue | number:'1.0-0'}} {{leak.recommendation.unit}}</span>
                         </p>
                     </div>
                 </div>

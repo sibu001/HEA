@@ -117,10 +117,9 @@
                                         <td> <a (click)="customerEventView(usageList)"
                                                 style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.customerEventType.eventName}}</a>
                                         </td>
-                                        <!-- <td>{{usageList.date | date : "dd-MMM-y"}} - {{usageList.endDate | date : "dd-MMM-y"}}</td> -->
                                         <td> <a (click)="customerEventView(usageList)"
                                                 style="cursor:pointer;color:#000;text-decoration:underline"><span
-                                                    style="display:none;">{{usageList.eventDatetime}}</span>{{usageList.eventDatetime | date : "dd-MMM-y"}}
+                                                    style="display:none;">{{usageList.eventDatetime}}</span>{{usageList.eventDatetime | date : "MMM d, y"}}
                                             </a></td>
                                         <td> <a (click)="customerEventView(usageList)"
                                                 style="cursor:pointer;color:#000;text-decoration:underline">{{usageList.linkedPersonName}}
