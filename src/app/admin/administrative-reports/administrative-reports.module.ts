@@ -13,6 +13,7 @@ import { AdministrativeManagementState } from 'src/app/store/administrative-stat
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 
 @NgModule({
   imports: [
@@ -32,6 +33,6 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     AdministrativeReportsListComponent,
     AdministrativeReportsEditComponent,
     AdministrativeReportsCallComponent],
-  providers: [AdministrativeService]
+  providers: [AdministrativeService, SystemService]
 })
 export class AdministrativeReportsModule { }

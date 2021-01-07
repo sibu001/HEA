@@ -2,12 +2,17 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
+  CallAdministrativeReportAction,
   DeleteAdministrativeReportByIdAction,
+  DeleteAdministrativeReportParamsByIdAction,
   DeleteEventHistoryByIdAction,
   DeleteProspectsByIdAction,
   DeleteTopicByIdAction,
   GetAdministrativeReportByIdAction,
+  GetAdministrativeReportCountAction,
   GetAdministrativeReportListAction,
+  GetAdministrativeReportParamsByIdAction,
+  GetAdministrativeReportParamsListAction,
   GetEventHistoryByIdAction,
   GetEventHistoryListAction,
   GetProspectsByIdAction,
@@ -15,10 +20,12 @@ import {
   GetTopicByIdAction,
   GetTopicListAction,
   SaveAdministrativeReportAction,
+  SaveAdministrativeReportParamsAction,
   SaveEventHistoryAction,
   SaveProspectsAction,
   SaveTopicAction,
   UpdateAdministrativeReportAction,
+  UpdateAdministrativeReportParamsAction,
   UpdateEventHistoryAction,
   UpdateProspectsAction,
   UpdateTopicAction
@@ -43,6 +50,11 @@ export class AdministrativeService {
   getAdministrativeReportById(): Observable<any> {
     return this.store.select(AdministrativeManagementState.getAdministrativeReportById);
   }
+
+  getAdministrativeReportParamsList(): Observable<any> {
+    return this.store.select(AdministrativeManagementState.getAdministrativeReportParamsList);
+  }
+
 
   getTopicList(): Observable<any> {
     return this.store.select(AdministrativeManagementState.getTopicList);
@@ -73,6 +85,10 @@ export class AdministrativeService {
     return this.store.dispatch(new GetAdministrativeReportListAction(force, filter));
   }
 
+  loadAdministrativeReportCount(filter: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetAdministrativeReportCountAction(filter));
+  }
+
   loadAdministrativeReportById(id: number): Observable<AdministrativeManagementState> {
     return this.store.dispatch(new GetAdministrativeReportByIdAction(id));
   }
@@ -87,6 +103,29 @@ export class AdministrativeService {
 
   deleteAdministrativeReportById(id: number): Observable<AdministrativeManagementState> {
     return this.store.dispatch(new DeleteAdministrativeReportByIdAction(id));
+  }
+
+  loadAdministrativeReportParamsList(reportId: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetAdministrativeReportParamsListAction(reportId));
+  }
+
+  loadAdministrativeReportParamsById(reportId: any, id: number): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetAdministrativeReportParamsByIdAction(reportId, id));
+  }
+
+  saveAdministrativeReportParams(reportId: any, parameters: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new SaveAdministrativeReportParamsAction(reportId, parameters));
+  }
+
+  updateAdministrativeReportParams(reportId: any, id: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new UpdateAdministrativeReportParamsAction(reportId, id));
+  }
+
+  deleteAdministrativeReportParamsById(reportId: any, id: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new DeleteAdministrativeReportParamsByIdAction(reportId, id));
+  }
+  callAdministrativeReport(reportId: any, parameters: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new CallAdministrativeReportAction(reportId, parameters));
   }
 
   loadTopicList(force: boolean, filter: any): Observable<AdministrativeManagementState> {

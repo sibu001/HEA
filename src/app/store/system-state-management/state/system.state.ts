@@ -49,7 +49,8 @@ import {
     GetLookupValueComparisonCodeListAction,
     GetLookupValueLotSizeListAction,
     GetLookupValueCalculationTypeListAction,
-    GetLookupValueScrapingUtilityListAction
+    GetLookupValueScrapingUtilityListAction,
+    GetReportTypeListAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -80,6 +81,7 @@ import { SystemManagementModel } from './system.model';
         lotSize: undefined,
         calculationType: undefined,
         scrapingUtility: undefined,
+        reportType: undefined,
         error: undefined
     }
 
@@ -208,6 +210,11 @@ export class SystemManagementState {
     @Selector()
     static getLotSizeList(state: SystemManagementModel): any {
         return state.lotSize;
+    }
+
+    @Selector()
+    static getReportTypeList(state: SystemManagementModel): any {
+        return state.reportType;
     }
 
     @Action(GetCustomerGroupListAction)
@@ -976,6 +983,23 @@ export class SystemManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
                         scrapingUtility: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetReportTypeListAction)
+    getAllReportTypeList(ctx: StateContext<SystemManagementModel>, action: GetReportTypeListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/REPORT_TYPE')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        reportType: response,
                     });
                 },
                     error => {

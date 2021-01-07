@@ -23,5 +23,6 @@ export interface SystemManagementModel {
     lotSize: any;
     calculationType: any;
     scrapingUtility: any;
+    reportType: any;
     error: Error;
 }

@@ -25,11 +25,11 @@
               <span class="filterLabel">Report Type:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <select class="form-control" id="reportType"
+              <select id="reportType" class="form-control form-control-sm"
                 formControlName="reportType">
                 <option value="" selected="selected"></option>
-                <option value="jrxml">Jasper XML format</option>
-                <option value="sql">Report from simple SQL</option>
+                <option *ngFor='let report of reportTypeList'
+                  [value]="report.lookupValue">{{report.valueName}}</option>
               </select>
             </div>
           </div>
@@ -44,9 +44,10 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Report list (Number of Records =
-                {{totalElement}})</span></p>
+                {{totalElement| number:'1.0':'en-US'}})</span></p>
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
               [data]="dataSource"
+              [pageIndex]="pageIndex"
               [totalElement]="reportData.totalElements"
               (changePageEvent)="search($event,false)"
               (addEvent)="addReport()" (goToEditEvent)="goToEditReport($event)"
@@ -56,7 +57,7 @@
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar ></app-sidebar>
+        <app-sidebar></app-sidebar>
       </div>
     </div>
   </div>

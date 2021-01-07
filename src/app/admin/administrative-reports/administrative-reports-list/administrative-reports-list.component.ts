@@ -8,6 +8,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -26,16 +27,19 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 1,
   };
+  public pageIndex: any;
   administrativeForm: FormGroup;
   public force = false;
+  public reportTypeList: any;
   public adminFilter: AdminFilter;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
     private readonly router: Router,
+    private readonly systemService:SystemService,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
-    if (this.adminFilter === undefined || this.adminFilter === null || this.adminFilter.topicFilter === undefined) {
+    if (this.adminFilter === undefined || this.adminFilter === null || this.adminFilter.administrativeFilter === undefined) {
       this.adminFilter = new AdminFilter();
     }
     this.activateRoute.queryParams.subscribe(params => {
@@ -44,20 +48,29 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.setUpForm(this.adminFilter.topicFilter.formValue);
-    this.search(this.adminFilter.topicFilter.page, false);
+    this.loadReportType();
+    this.setUpForm(this.adminFilter.administrativeFilter.formValue);
+    this.search(this.adminFilter.administrativeFilter.page, false);
+  }
+
+  loadReportType() {
+    this.systemService.loadReportTypeList();
+    this.subscriptions.add(this.systemService.getReportTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((reportType: any) => {
+        this.reportTypeList = reportType.data;
+      }));
   }
 
   addReport(): any {
     this.router.navigate(['admin/administrativeReport/administrativeReportEdit']);
   }
 
-  goToEditReport(event): any {
+  goToEditReport(event: any): any {
     this.router.navigate(['admin/administrativeReport/administrativeReportEdit'], { queryParams: { id: event.id } });
   }
 
-  callReport(event): any {
-    this.router.navigate(['admin/administrativeReport/administrativeReportCall'], { queryParams: { id: event.id } });
+  callReport(event: any): any {
+    this.router.navigate(['admin/administrativeReport/administrativeReportCall'], { queryParams: { id: event.row.reportId } });
   }
 
   setUpForm(event: any) {
@@ -69,32 +82,35 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
   }
 
   findAdministrativeReport(force: boolean, filter: any): void {
-    this.adminFilter.topicFilter.formValue = this.administrativeForm.value;
+    this.adminFilter.administrativeFilter.formValue = this.administrativeForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.administrativeService.loadTopicList(force, filter);
-    this.subscriptions.add(this.administrativeService.getTopicList().pipe(skipWhile((item: any) => !item))
-      .subscribe((topicList: any) => {
-        this.reportData.content = topicList.list;
-        this.reportData.totalElements = topicList.totalSize;
-        this.dataSource = [...this.reportData.content];
+    this.subscriptions.add(this.administrativeService.loadAdministrativeReportCount(filter).pipe(skipWhile((item: any) => !item))
+      .subscribe((administrativeReportListCount: any) => {
+        this.reportData.totalElements = administrativeReportListCount.administrativeManagement.administrativeReportCount;
+        this.totalElement = administrativeReportListCount.administrativeManagement.administrativeReportCount;
+        this.administrativeService.loadAdministrativeReportList(force, filter);
+        this.subscriptions.add(this.administrativeService.getAdministrativeReportList().pipe(skipWhile((item: any) => !item))
+          .subscribe((reportList: any) => {
+            this.reportData.content = reportList;
+            this.dataSource = [...this.reportData.content];
+          }));
       }));
   }
 
 
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.topicFilter.page = event;
+    this.adminFilter.administrativeFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
-      .set('filter.reportName', (this.administrativeForm.value.reportName !== null ? this.administrativeForm.value.reportName : ''))
-      .set('filter.reportLabel', (this.administrativeForm.value.reportLabel !== null ? this.administrativeForm.value.reportLabel : ''))
-      .set('filter.reportType', (this.administrativeForm.value.reportType !== null ? this.administrativeForm.value.reportType : ''));
+      .set('reportName', (this.administrativeForm.value.reportName !== null ? this.administrativeForm.value.reportName : ''))
+      .set('reportLabel', (this.administrativeForm.value.reportLabel !== null ? this.administrativeForm.value.reportLabel : ''))
+      .set('reportType', (this.administrativeForm.value.reportType !== null ? this.administrativeForm.value.reportType : ''));
     this.findAdministrativeReport(true, params);
   }
 

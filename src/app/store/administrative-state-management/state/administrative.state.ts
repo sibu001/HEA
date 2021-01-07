@@ -5,6 +5,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { CustomerError } from '../../customer-state-management/state/customer.action';
+import { AdministrativeReportTransformer } from '../transformer/transformer';
 import {
     GetAdministrativeReportListAction,
     GetAdministrativeReportByIdAction,
@@ -25,7 +26,14 @@ import {
     GetEventHistoryByIdAction,
     GetEventHistoryListAction,
     SaveEventHistoryAction,
-    UpdateEventHistoryAction
+    UpdateEventHistoryAction,
+    GetAdministrativeReportCountAction,
+    DeleteAdministrativeReportParamsByIdAction,
+    GetAdministrativeReportParamsByIdAction,
+    GetAdministrativeReportParamsListAction,
+    SaveAdministrativeReportParamsAction,
+    UpdateAdministrativeReportParamsAction,
+    CallAdministrativeReportAction
 } from './administrative.action';
 import { AdministrativeManagementModel } from './administrative.model';
 
@@ -34,7 +42,11 @@ import { AdministrativeManagementModel } from './administrative.model';
     defaults: {
         administrativeReportList: undefined,
         administrativeReport: undefined,
+        administrativeReportCount: undefined,
         administrativeReportDataSource: undefined,
+        administrativeReportParamsList: undefined,
+        administrativeReportParams: undefined,
+        callAdministrativeReport: undefined,
         topicList: undefined,
         topic: undefined,
         prospectsList: undefined,
@@ -62,6 +74,16 @@ export class AdministrativeManagementState {
     @Selector()
     static getAdministrativeReportById(state: AdministrativeManagementModel): any {
         return state.administrativeReport;
+    }
+
+    @Selector()
+    static getAdministrativeReportParamsList(state: AdministrativeManagementModel): any {
+        return state.administrativeReportParamsList;
+    }
+
+    @Selector()
+    static getAdministrativeReportParamsById(state: AdministrativeManagementModel): any {
+        return state.administrativeReportParams;
     }
 
     @Selector()
@@ -104,9 +126,9 @@ export class AdministrativeManagementState {
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        // const dataSource = Transformer.transformAdministrativeReportTableData(response, action.viewType);
+                        const res = AdministrativeReportTransformer.transformTableData(response, action.filter);
                         ctx.patchState({
-                            administrativeReportList: response,
+                            administrativeReportList: res,
                         });
                     },
                         error => {
@@ -115,6 +137,24 @@ export class AdministrativeManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetAdministrativeReportCountAction)
+    getAdministrativeReportCount(ctx: StateContext<AdministrativeManagementModel>, action: GetAdministrativeReportCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.administrativeReport + '/count', action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        administrativeReportCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.errorMessage);
+                    }));
+
     }
 
     @Action(GetAdministrativeReportByIdAction)
@@ -177,6 +217,110 @@ export class AdministrativeManagementState {
                     this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         administrativeReport: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetAdministrativeReportParamsListAction)
+    getAllAdministrativeReportParamsList(ctx: StateContext<AdministrativeManagementModel>, action: GetAdministrativeReportParamsListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.administrativeReport + '/' + action.reportId + '/reportParams')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    // const res = AdministrativeReportTransformer.transformTableData(response, action.filter);
+                    ctx.patchState({
+                        administrativeReportParamsList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetAdministrativeReportParamsByIdAction)
+    getAdministrativeReportParamsById(ctx: StateContext<AdministrativeManagementModel>, action: GetAdministrativeReportParamsByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.administrativeReport + '/' + action.reportId + '/reportParams/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        administrativeReportParams: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteAdministrativeReportParamsByIdAction)
+    deleteAdministrativeReportParamsById(ctx: StateContext<AdministrativeManagementModel>, action: DeleteAdministrativeReportParamsByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.administrativeReport + '/' + action.reportId + '/reportParams/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveAdministrativeReportParamsAction)
+    saveAdministrativeReportParams(ctx: StateContext<AdministrativeManagementModel>, action: SaveAdministrativeReportParamsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.parameters, AppConstant.administrativeReport + '/' + action.reportId + '/reportParams')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        administrativeReport: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateAdministrativeReportParamsAction)
+    updateAdministrativeReportParams(ctx: StateContext<AdministrativeManagementModel>, action: UpdateAdministrativeReportParamsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut('', AppConstant.administrativeReport + '/' + action.reportId + '/reportParams/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        administrativeReport: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(CallAdministrativeReportAction)
+    callAdministrativeReport(ctx: StateContext<AdministrativeManagementModel>, action: CallAdministrativeReportAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.parameters, AppConstant.callAdministrativeReport )
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Call Successfully');
+                    ctx.patchState({
+                        callAdministrativeReport: response,
                     });
                 },
                     error => {

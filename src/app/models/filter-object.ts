@@ -99,4 +99,8 @@ export class AdminFilter {
         page: null,
         formValue: null
     };
+    public administrativeFilter: any = {
+        page: null,
+        formValue: null
+    };
 }

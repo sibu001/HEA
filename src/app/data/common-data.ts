@@ -657,6 +657,7 @@ export class TableColumnData {
     ];
 
     static readonly ADMIN_REPORT_KEYS: Array<TABLECOLUMN> = [
+        { key: 'serialNumber', displayName: '#' },
         { key: 'reportName', sort: 'reportLabel', displayName: 'Report Name', isEdit: true },
         { key: 'reportLabel', sort: 'reportLabel', displayName: 'Report Label' },
         { key: 'reportType', displayName: 'Report Type' },

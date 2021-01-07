@@ -28,8 +28,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="reportType" class="form-control form-control-sm"
                 formControlName="reportType">
-                <option value="jrxml">Jasper XML format</option>
-                <option value="sql" selected="selected">Report from simple SQL</option>
+                <option *ngFor='let report of reportTypeList' [value]="report.lookupValue">{{report.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -60,7 +59,8 @@
               [isDelete]='true' [isHideAdd]='true'
               [isSearch]="false" [data]="dataFieldDataSource"
               [totalElement]="dataFieldData.totalElements"
-              [showAddRowButton]='true' (saveRowEvent)='addParameter()'>
+              (deleteEvent)="deleteParameter($event)"
+              [showAddRowButton]='true' (saveRowEvent)='addParameter($event)'>
             </app-table>
           </div>
 
@@ -74,7 +74,7 @@
               <button type="button" class="btn btn-primary" (click)="delete()"
                 *ngIf="id!==undefined&&id!==null">Delete</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3" style="text-align:end;"
               [ngClass]="{'display-responsive': id!==undefined&&id!==null}">
               <button type="button" class="btn btn-primary" (click)="save()">Save</button>
             </div>

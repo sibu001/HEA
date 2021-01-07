@@ -29,7 +29,6 @@ export class BatchScriptListComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
   public adminFilter: AdminFilter;
-  // periodData = TableColumnData.PERIOD_DATA;
   periodData: any;
   constructor(public fb: FormBuilder,
     private readonly systemMeasurementService: SystemMeasurementService,

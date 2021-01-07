@@ -1,9 +1,16 @@
 export enum AdministrativeActionTypes {
     GET_ADMINISTRATIVE_REPORT_LIST = 'Get All Administrative Report List',
+    GET_ADMINISTRATIVE_REPORT_LIST_COUNT = 'Get All Administrative Report List Count',
     GET_ADMINISTRATIVE_REPORT_BY_ID = 'Get Administrative Report By Id',
     SAVE_ADMINISTRATIVE_REPORT = 'Save Administrative Report',
     UPDATE_ADMINISTRATIVE_REPORT = 'Update Administrative Report',
     DELETE_ADMINISTRATIVE_REPORT_BY_ID = 'Delete Administrative Report By Id',
+    GET_ADMINISTRATIVE_REPORT_PARAMS_LIST = 'Get All Administrative Report Params List',
+    GET_ADMINISTRATIVE_REPORT_PARAMS_BY_ID = 'Get Administrative Report Params By Id',
+    SAVE_ADMINISTRATIVE_REPORT_PARAMS = 'Save Administrative Report Params',
+    UPDATE_ADMINISTRATIVE_REPORT_PARAMS = 'Update Administrative Report Params',
+    DELETE_ADMINISTRATIVE_REPORT_PARAMS_BY_ID = 'Delete Administrative Report Params By Id',
+    CALL_ADMINISTRATIVE_REPORT = 'Call the administrative report',
     GET_TOPIC_LIST = 'Get All Topic List',
     GET_TOPIC_BY_ID = 'Get Topic By Id',
     SAVE_TOPIC = 'Save Topic',
@@ -23,6 +30,12 @@ export enum AdministrativeActionTypes {
 export class GetAdministrativeReportListAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_ADMINISTRATIVE_REPORT_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetAdministrativeReportCountAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_ADMINISTRATIVE_REPORT_LIST_COUNT;
+    constructor(readonly filter: any) {
     }
 }
 
@@ -49,6 +62,43 @@ export class DeleteAdministrativeReportByIdAction {
     constructor(readonly id: number) {
     }
 }
+
+export class GetAdministrativeReportParamsListAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_ADMINISTRATIVE_REPORT_PARAMS_LIST;
+    constructor(readonly reportId: any) {
+    }
+}
+
+export class GetAdministrativeReportParamsByIdAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_ADMINISTRATIVE_REPORT_PARAMS_BY_ID;
+    constructor(readonly reportId: any, readonly id: any) {
+    }
+}
+
+export class SaveAdministrativeReportParamsAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.SAVE_ADMINISTRATIVE_REPORT_PARAMS;
+    constructor(readonly reportId: any, readonly parameters: any) {
+    }
+}
+
+export class UpdateAdministrativeReportParamsAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.UPDATE_ADMINISTRATIVE_REPORT_PARAMS;
+    constructor(readonly reportId: any, readonly id: any) {
+    }
+}
+
+export class DeleteAdministrativeReportParamsByIdAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.DELETE_ADMINISTRATIVE_REPORT_PARAMS_BY_ID;
+    constructor(readonly reportId: any, readonly id: any) {
+    }
+}
+
+export class CallAdministrativeReportAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.CALL_ADMINISTRATIVE_REPORT;
+    constructor(readonly reportId: any, readonly parameters: any) {
+    }
+}
+
 
 export class GetTopicListAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_TOPIC_LIST;

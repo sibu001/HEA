@@ -44,7 +44,8 @@ export class AppConstant {
     public static topicDescription = 'surveyDescriptions';
     public static contextMethod = 'context/methods';
     public static paidService = 'paidServices';
-    public static administrativeReport = '';
+    public static administrativeReport = 'adminReports';
+    public static callAdministrativeReport = 'report.do';
     public static topic = '';
     public static prospects = '';
     public static contextVariable = '';

@@ -42,6 +42,7 @@ export enum SystemActionTypes {
     GET_COMPARISON_CODE_LIST = 'Get Comparison Code List',
     GET_LOT_SIZE_LIST = 'Get Lot Size List',
     GET_SCRAPING_PERIOD_LIST = 'Get Scraping Period List',
+    GET_REPORT_TYPE_LIST = 'Get Report Type List',
     CUSTOMER_GROUP_ERROR = 'Customer Error'
 }
 export class GetCustomerGroupListAction {
@@ -281,6 +282,10 @@ export class GetLookupValueLotSizeListAction {
 
 export class GetLookupValueScrapingPeriodListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_SCRAPING_PERIOD_LIST;
+}
+
+export class GetReportTypeListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_REPORT_TYPE_LIST;
 }
 
 export class CustomerGroupError {

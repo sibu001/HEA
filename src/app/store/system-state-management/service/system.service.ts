@@ -43,7 +43,8 @@ import {
   GetLookupValueComparisonCodeListAction,
   GetLookupValueHomeOccupancyListAction,
   GetLookupValueHomeTypeListAction,
-  GetLookupValueLotSizeListAction
+  GetLookupValueLotSizeListAction,
+  GetReportTypeListAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -128,6 +129,10 @@ export class SystemService {
 
   getScrapingUtilityList(): Observable<any> {
     return this.store.select(SystemManagementState.getScrapingUtilityList);
+  }
+
+  getReportTypeList(): Observable<any> {
+    return this.store.select(SystemManagementState.getReportTypeList);
   }
 
   getHomeSizeList(): Observable<any> {
@@ -316,5 +321,9 @@ export class SystemService {
 
   loadScrapingUtilityList(): Observable<SystemManagementState> {
     return this.store.dispatch(new GetLookupValueScrapingUtilityListAction());
+  }
+
+  loadReportTypeList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetReportTypeListAction());
   }
 }
