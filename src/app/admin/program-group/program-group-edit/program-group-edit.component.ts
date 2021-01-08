@@ -28,6 +28,7 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemService.loadProgramGroupById(Number(this.id));
@@ -72,6 +73,7 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadProgramGroupById();
           }));
       } else {
@@ -79,22 +81,29 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadProgramGroupById();
           }));
       }
     } else {
       this.validateAllFormFields(this.programGroupForm);
+      this.validateForm();
     }
   }
-  // validateForm() {
-  //   for (const key of Object.keys(this.programGroupForm.controls)) {
-  //     if (this.programGroupForm.controls[key].invalid) {
-  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-  //       invalidControl.focus();
-  //       break;
-  //     }
-  //   }
-  // }
+
+  scrollTop() {
+    window.scroll(0, 0);
+  }
+
+  validateForm() {
+    for (const key of Object.keys(this.programGroupForm.controls)) {
+      if (this.programGroupForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {

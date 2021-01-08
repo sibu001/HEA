@@ -106,6 +106,8 @@ export class GetCustomerEventTypeListAction {
 
 export class GetCustomerEventTypeCountAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_EVENT_TYPE_COUNT;
+    constructor(readonly filter: any) {
+    }
 }
 
 export class GetCustomerEventTypeByIdAction {

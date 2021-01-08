@@ -57,6 +57,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() showCSVExportButton: Boolean = false;
   @Input() isFilePreview: Boolean = false;
   @Input() showAddRowButton: Boolean = false;
+  @Input() isShowHeader: Boolean = true;
   @Input() selectionList: Array<any> = [];
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();

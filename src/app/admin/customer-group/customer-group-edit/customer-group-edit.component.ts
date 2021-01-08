@@ -28,9 +28,9 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
   mailDescriptionList: Array<any>;
   placeKey: Array<TABLECOLUMN> = TableColumnData.PLACE_KEY;
   isForce = false;
-  placeCheckBox: any;
+  placeCheckBox: any = [];
   placeList: any = [];
-  selectedPlace: any;
+  selectedPlace: any = [];
   placeData = {
     content: [],
     totalElements: 0
@@ -39,9 +39,9 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
   placeSelectionListData: any = [];
   programGroupKey: Array<TABLECOLUMN> = TableColumnData.PROGRAM_GROUP_KEY;
   programSelectionList: Array<any> = [];
-  programGroupCheckBox: any;
+  programGroupCheckBox: any = [];
   programGroupList: any = [];
-  selectedProgramGroup: any;
+  selectedProgramGroup: any = [];
   programGroupData = {
     content: [],
     totalElements: 0
@@ -68,6 +68,7 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemService.loadCustomerGroupById(Number(this.id));
@@ -77,6 +78,10 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
       this.findProgramGroup();
       this.findPlace(false, '');
     }
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
   loadCustomerGroupById() {
     this.subscriptions.add(this.systemService.getCustomerGroupById().pipe(skipWhile((item: any) => !item))
@@ -226,6 +231,7 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadCustomerGroupById();
           }));
       } else {
@@ -233,6 +239,7 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadCustomerGroupById();
           }));
       }

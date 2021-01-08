@@ -264,7 +264,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -279,7 +279,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         customerGroup: response,
                     });
@@ -297,7 +297,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         customerGroup: response,
                     });
@@ -333,7 +333,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -344,11 +344,11 @@ export class SystemManagementState {
     @Action(AssignPlaceToCustomerGroupAction)
     assignPlaceToCustomerGroup(ctx: StateContext<SystemManagementModel>, action: AssignPlaceToCustomerGroupAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(null, AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.places + '/' + action.placeCode)
+        return this.loginService.performPost({}, AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.places + '/' + action.placeCode)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -381,7 +381,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -392,11 +392,11 @@ export class SystemManagementState {
     @Action(AssignProgramGroupToCustomerGroupAction)
     assignProgramGroupToCustomerGroup(ctx: StateContext<SystemManagementModel>, action: AssignProgramGroupToCustomerGroupAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost('', AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.programGroups + '/' + action.programGroupId)
+        return this.loginService.performPost({}, AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.programGroups + '/' + action.programGroupId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -471,7 +471,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -486,7 +486,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         programGroup: response,
                     });
@@ -504,7 +504,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         programGroup: response,
                     });
@@ -562,7 +562,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -577,7 +577,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         customerAlertType: response,
                     });
@@ -595,7 +595,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         customerAlertType: response,
                     });
@@ -657,7 +657,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -672,7 +672,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         credentialType: response,
                     });
@@ -690,7 +690,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         credentialType: response,
                     });
@@ -771,7 +771,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -786,7 +786,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         role: response,
                     });
@@ -804,7 +804,7 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         role: response,
                     });

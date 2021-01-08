@@ -181,7 +181,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -314,7 +314,7 @@ export class AdministrativeManagementState {
     @Action(CallAdministrativeReportAction)
     callAdministrativeReport(ctx: StateContext<AdministrativeManagementModel>, action: CallAdministrativeReportAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.parameters, AppConstant.callAdministrativeReport )
+        return this.loginService.performPost(action.parameters, AppConstant.callAdministrativeReport)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

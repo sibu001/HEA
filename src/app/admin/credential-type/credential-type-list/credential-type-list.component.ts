@@ -15,7 +15,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   styleUrls: ['./credential-type-list.component.css']
 })
 export class CredentialTypeListComponent implements OnInit, OnDestroy {
-  public keys: Array<TABLECOLUMN>;
+  public keys: Array<TABLECOLUMN> = TableColumnData.CREDENTIAL_TYPE_COLUMN_DATA;
   public dataSource: any;
   public force = false;
   public credentialTypeData = {
@@ -37,8 +37,12 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.keys = TableColumnData.CREDENTIAL_TYPE_COLUMN_DATA;
+    this.scrollTop();
     this.findCredentialType(this.force, '');
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   findCredentialType(force: boolean, filter: any): void {
@@ -57,10 +61,8 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
   search(event: any): void {
     const params = new HttpParams()
     .set('startRow', '0')
-    .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
     .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
     .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
-    .set('credentialTypeCode', '')
     .set('credentialType', (this.credentialTypeForm.value.credentialType !== null ? this.credentialTypeForm.value.credentialType : ''))
     .set('credentialName', (this.credentialTypeForm.value.credentialName !== null ? this.credentialTypeForm.value.credentialName : ''));
 

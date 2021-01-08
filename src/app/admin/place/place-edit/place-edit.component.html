@@ -102,12 +102,11 @@
           <span class='messageName'>Zip Codes</span></p>
         <div *ngIf="id!==undefined" class="row rowPadding form-group form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <app-table [keys]="keys" [isPaginate]="true" [isDelete]='true' [isSearch]="false" [data]="dataSource"
+            <app-table [keys]="keys" [isPaginate]="false" [isDelete]='true' [isSearch]="false" [data]="dataSource" [isShowHeader]="false"
               [totalElement]="zipData.totalElements" (goToEditEvent)="goToEditZipCode($event)"
-              (addEvent)='addZipCode()' (deleteEvent)="deleteZip($event)"></app-table>
+              (addEvent)='addZipCode()' (deleteEvent)="deleteZip($event)" class="zipCodeTable"></app-table>
           </div>
         </div>
-        <hr class="hr_space">
         <div class="row paddingTop form-padding">
           <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1">
             <button type="reset" class="btn btn-primary" (click)='back()'>Cancel</button>

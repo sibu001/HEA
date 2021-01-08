@@ -53,6 +53,7 @@
             <app-table [keys]="keys" [isPaginate]="true"
               [isSearch]="false"
               [data]="dataSource"
+              [pageIndex]="pageIndex"
               [totalElement]="staffData.totalElements"
               (changePageEvent)="search($event,false)"
               (goToEditEvent)="goToEditStaff($event)"

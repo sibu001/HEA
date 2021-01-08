@@ -42,12 +42,15 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.findWeatherStation(true, '');
     this.loadTimeZoneList();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemUtilityService.loadPlaceById(this.id);
       this.loadPlaceById();
+    } else {
+      this.findWeatherStation(true, '');
     }
   }
 
@@ -72,6 +75,10 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed' + result);
     });
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   loadPlaceById() {
@@ -124,6 +131,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadPlaceById();
           }));
       } else {
@@ -131,6 +139,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadPlaceById();
           }));
       }
@@ -151,10 +160,20 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   }
 
   getZipCodeList() {
-    this.subscriptions.add(this.systemUtilityService.loadZipCodeList(this.id, '').pipe(skipWhile((item: any) => !item))
-      .subscribe((zipCodeList: any) => {
-        this.zipData.content = zipCodeList.systemUtilityManagement.zipCodeList;
-        this.dataSource = [...this.zipData.content];
+    this.systemUtilityService.loadWeatherStationList(false, '');
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStationList: any) => {
+        this.placeStationId = weatherStationList;
+        this.subscriptions.add(this.systemUtilityService.loadZipCodeList(this.id, '').pipe(skipWhile((item: any) => !item))
+          .subscribe((zipCodeList: any) => {
+            zipCodeList.systemUtilityManagement.zipCodeList.forEach(element => {
+              let customerGroupObj: any;
+              customerGroupObj = element;
+              customerGroupObj.stationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
+              this.zipData.content.push(customerGroupObj);
+            });
+            this.dataSource = [...this.zipData.content];
+          }));
       }));
   }
 

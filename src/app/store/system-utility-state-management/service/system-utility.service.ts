@@ -180,8 +180,8 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetCustomerEventTypeListAction(force, filter));
   }
 
-  loadCustomerEventTypeCount(): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetCustomerEventTypeCountAction());
+  loadCustomerEventTypeCount(filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerEventTypeCountAction(filter));
   }
 
   loadCustomerEventTypeById(id: number): Observable<SystemUtilityManagementState> {

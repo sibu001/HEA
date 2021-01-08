@@ -299,7 +299,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                   //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         place: response,
                     });
@@ -317,7 +317,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         place: response,
                     });
@@ -353,7 +353,7 @@ export class SystemUtilityManagementState {
     @Action(GetCustomerEventTypeCountAction)
     getCustomerEventTypeCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerEventTypeCountAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.customerEventTypes + '/count')
+        return this.loginService.performGetWithParams(AppConstant.customerEventTypes + '/count', action.filter)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -407,7 +407,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                   //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         customerEventType: response,
                     });
@@ -425,7 +425,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         customerEventType: response,
                     });
@@ -502,7 +502,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -517,7 +517,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         customerComparisonGroup: response,
                     });
@@ -535,7 +535,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         customerComparisonGroup: response,
                     });
@@ -587,7 +587,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -602,7 +602,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -692,7 +692,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                   //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         factor: response,
                     });
@@ -710,7 +710,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         factor: response,
                     });
@@ -846,7 +846,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                   //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         lookup: response,
                     });
@@ -864,7 +864,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         lookup: response,
                     });
@@ -937,7 +937,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                   //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         lookupValue: response,
                     });
@@ -955,7 +955,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         lookupValue: response,
                     });
@@ -1046,7 +1046,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                   //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         systemParameter: response,
                     });
@@ -1064,7 +1064,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         systemParameter: response,
                     });
@@ -1177,7 +1177,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                   //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         weatherStation: response,
                     });
@@ -1195,7 +1195,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         weatherStation: response,
                     });
@@ -1285,7 +1285,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                   //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         degreeDays: response,
                     });
@@ -1303,7 +1303,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         degreeDays: response,
                     });
@@ -1324,7 +1324,7 @@ export class SystemUtilityManagementState {
                     if (response.errorMessage) {
                         this.utilityService.showSuccessMessage(response.errorMessage);
                     } else {
-                        this.utilityService.showSuccessMessage('Save Successfully');
+                       //  this.utilityService.showSuccessMessage('Save Successfully');
                     }
                 },
                     error => {
@@ -1372,7 +1372,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                   //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         zipCode: response,
                     });

@@ -27,11 +27,15 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemUtilityService.loadCustomerEventTypeById(this.id);
       this.loadCredentialTypeById();
     }
+  }
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   loadCredentialTypeById() {
@@ -47,6 +51,7 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
   setForm(event: any) {
     this.eventForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
+      customerEventTypeId: [event !== undefined ? event.customerEventTypeId : ''],
       eventCode: [event !== undefined ? event.eventCode : '', Validators.required],
       eventName: [event !== undefined ? event.eventName : '', Validators.required],
       description: [event !== undefined ? event.description : ''],
@@ -74,6 +79,7 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadCredentialTypeById();
           }));
       } else {
@@ -81,6 +87,7 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadCredentialTypeById();
           }));
       }

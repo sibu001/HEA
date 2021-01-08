@@ -66,26 +66,26 @@ export class Transformer {
         key.push({
             key: 'serialNumber',
             displayName: '#',
-            isEdit: true
+            isUnderline: true
         })
         if (viewType === -1) {
             key = [
                 {
                     key: 'serialNumber',
                     displayName: '#',
-                    isEdit: true
+                    isUnderline: true
                 },
                 {
                     key: 'auditId',
                     displayName: 'Audit Id',
                     sort: 'auditId',
-                    isEdit: true
+                    isUnderline: true
                 },
                 {
                     key: 'name',
                     displayName: 'Name',
                     sort: 'name',
-                    isEdit: true
+                    isUnderline: true
                 },
                 {
                     key: 'links',
@@ -162,7 +162,7 @@ export class Transformer {
                 keyObj.displayName = element.label;
                 keyObj.sort = element.sortAllowed ? element.definition : '';
                 if (i === 0) {
-                    keyObj.isEdit = true;
+                    keyObj.isUnderline = true;
                 }
                 i++;
                 if (element.attributeType === 'A' || element.attributeType === 'E' || element.attributeType === 'N' || element.attributeType === 'D') {
@@ -175,10 +175,14 @@ export class Transformer {
         }
         return { key, dataKey };
     }
-    static transformStaffTableData(src: any): any {
+    static transformStaffTableData(src: any, filter: any): any {
         const dataSource: any = {
             list: []
         };
+        let index = 1;
+        if (filter && filter.get('startRow')) {
+            index = Number(filter.get('startRow')) + 1;
+        }
         src.list.forEach(element => {
             const dataSourceObj: any = element;
             dataSourceObj.createdDate = new Date(element.createdDate);
@@ -187,6 +191,8 @@ export class Transformer {
             } else if (element.status === 90) {
                 dataSourceObj.status = 'Blocked (90)';
             }
+            dataSourceObj.serialNumber = index;
+            index++;
             dataSource.list.push(dataSourceObj);
         });
         dataSource.startRow = src.startRow;

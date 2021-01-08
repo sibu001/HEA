@@ -61,7 +61,7 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
       water: [event !== undefined ? event.water : ''],
       hasElecHeating: [event !== undefined ? event.hasElecHeating : ''],
       hasEV: [event !== undefined ? event.hasEV : ''],
-      hasLotSize: [event !== undefined ? event.hasLotSize : true],
+      hasLotSize: [event !== undefined ? event.hasLotSize : ''],
     });
   }
   back() {

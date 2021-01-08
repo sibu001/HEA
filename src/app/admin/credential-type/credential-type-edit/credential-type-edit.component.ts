@@ -27,11 +27,16 @@ export class CredentialTypeEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemService.loadCredentialTypeById(this.id);
       this.loadCredentialTypeById();
     }
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   loadCredentialTypeById() {
@@ -74,12 +79,14 @@ export class CredentialTypeEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadCredentialTypeById();
           }));
       } else {
         this.subscriptions.add(this.systemService.saveCredentialType(this.credentialTypeForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
+            this.scrollTop();
             this.isForce = true;
             this.loadCredentialTypeById();
           }));

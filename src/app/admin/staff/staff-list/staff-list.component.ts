@@ -19,6 +19,7 @@ export class StaffListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.STAFF_TABLE_COLUMN;
   public dataSource: any;
   public force = false;
+  public pageIndex: any;
   public adminFilter: AdminFilter;
   public staffData = {
     content: [],
@@ -70,16 +71,16 @@ export class StaffListComponent implements OnInit, OnDestroy {
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.staffFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('filter.disableTotalSize', 'false')
       .set('filter.homeowner', 'false')
       .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
-      .set('staffCode', '')
       .set('filter.name', (this.staffForm.value.name !== null ? this.staffForm.value.name : ''))
       .set('filter.username', (this.staffForm.value.userName !== null ? this.staffForm.value.userName : ''))
       .set('filter.status', (this.staffForm.value.status !== null ? this.staffForm.value.status : ''));

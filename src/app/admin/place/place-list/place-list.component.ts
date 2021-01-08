@@ -1,3 +1,4 @@
+import { copyStyles } from '@angular/animations/browser/src/util';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -37,17 +38,30 @@ export class PlaceListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.findPlace(this.force, '');
   }
 
   findPlace(force: boolean, filter: string): any {
-    this.systemUtilityService.loadPlaceList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
-      .subscribe((customerGroupList: any) => {
-        this.placeData.content = customerGroupList;
-        this.dataSource = [...this.placeData.content];
+    this.systemUtilityService.loadWeatherStationList(false, '');
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStationList: any) => {
+        this.systemUtilityService.loadPlaceList(force, filter);
+        this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
+          .subscribe((customerGroupList: any) => {
+            const placeListData: any = [];
+            customerGroupList.forEach(element => {
+              let customerGroupObj: any;
+              customerGroupObj = element;
+              customerGroupObj.stationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
+              placeListData.push(customerGroupObj);
+            });
+            this.placeData.content = placeListData;
+            this.dataSource = [...this.placeData.content];
+          }));
       }));
   }
+
 
   goToEditPlace(event: any): any {
     this.router.navigate(['/admin/place/placeEdit'], { queryParams: { 'id': event.id } });
@@ -57,12 +71,15 @@ export class PlaceListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/place/placeEdit']);
   }
 
+  scrollTop() {
+    window.scroll(0, 0);
+  }
+
   search(event: any): void {
-    const filter = '?filter.startRow=0&formAction='
-      + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
+    const filter = '?filter.startRow=0' + '&sortField='
       + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
       + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC')
-      + '&placeCode=&placeName='
+      + '&placeName='
       + this.placeForm.value.placeName + '&zipCode='
       + this.placeForm.value.zipCode;
     this.findPlace(true, filter);

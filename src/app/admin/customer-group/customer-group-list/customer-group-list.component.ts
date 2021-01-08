@@ -15,7 +15,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   styleUrls: ['./customer-group-list.component.css']
 })
 export class CustomerGroupListComponent implements OnInit, OnDestroy {
-  public keys: Array<TABLECOLUMN>;
+  public keys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_GROUP_COLUMN_DATA;
   public dataSource: any;
   public force = false;
   public customerGroupData = {
@@ -37,11 +37,12 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    document.getElementById('loader').classList.remove('loading');
-    this.keys = TableColumnData.CUSTOMER_GROUP_COLUMN_DATA;
+    this.scrollTop();
     this.findCustomerGroup(this.force, '');
   }
-
+  scrollTop() {
+    window.scroll(0, 0);
+  }
   findCustomerGroup(force: boolean, filter: any) {
     this.systemService.loadCustomerGroupList(force, filter);
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
@@ -55,10 +56,8 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
-      .set('customerGroupId', '')
       .set('groupCode', (this.customerGroupForm.value.groupCode !== null ? this.customerGroupForm.value.groupCode : ''))
       .set('groupName', (this.customerGroupForm.value.groupName !== null ? this.customerGroupForm.value.groupName : ''));
     this.findCustomerGroup(true, params);

@@ -2,83 +2,83 @@ import { TABLECOLUMN } from '../interface/table-column.interface';
 
 export class TableColumnData {
     static readonly PROGRAM_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
-        { key: 'programCode', displayName: 'Group Code', sort: 'programCode', isEdit: true },
-        { key: 'programName', displayName: 'Group Name', sort: 'programName' },
+        { key: 'programCode', isEdit: true, displayName: 'Program Code', sort: 'programCode', isUnderline: true },
+        { key: 'programName', isEdit: true, displayName: 'Program Name', sort: 'programName' },
     ];
 
     static readonly CUSTOMER_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
-        { key: 'customerGroupId', displayName: 'Record Id' },
-        { key: 'groupCode', displayName: 'Group Code', sort: 'groupCode', isEdit: true },
-        { key: 'groupName', displayName: 'Group Name', sort: 'groupName' },
-        { key: 'registrationUrl', displayName: 'Registration Url' },
-        { key: 'baseDirectory', displayName: 'Base Directory', sort: 'baseDirectory' },
-        { key: 'auditIdPattern', displayName: 'Audit Id Pattern' }
+        { key: 'customerGroupId', isEdit: true, displayName: 'Record Id' },
+        { key: 'groupCode', isEdit: true, displayName: 'Group Code', sort: 'groupCode', isUnderline: true },
+        { key: 'groupName', isEdit: true, displayName: 'Group Name', sort: 'groupName' },
+        { key: 'registrationUrl', isEdit: true, displayName: 'Registration Url' },
+        { key: 'baseDirectory', isEdit: true, displayName: 'Base Directory', sort: 'baseDirectory' },
+        { key: 'auditIdPattern', isEdit: true, displayName: 'Audit Id Pattern' }
     ];
 
     static readonly CREDENTIAL_TYPE_COLUMN_DATA: Array<TABLECOLUMN> = [
-        { key: 'credentialType', displayName: 'Credential Type', sort: 'credentialType', isEdit: true },
-        { key: 'credentialName', displayName: 'Credential Name', sort: 'credentialName' },
-        { key: 'utilityName', displayName: 'Utility Name', sort: 'utilityName' },
-        { key: 'loginScript', displayName: 'Login', sort: 'loginScript' },
-        { key: 'script', displayName: 'Scripts' }
+        { key: 'credentialType', isEdit: true, displayName: 'Credential Type', sort: 'credentialType', isUnderline: true },
+        { key: 'credentialName', isEdit: true, displayName: 'Credential Name', sort: 'credentialName' },
+        { key: 'utilityName', isEdit: true, displayName: 'Utility Name', sort: 'utilityName' },
+        { key: 'loginScript', isEdit: true, displayName: 'Login', sort: 'loginScript' },
+        { key: 'script', isEdit: true, displayName: 'Scripts' }
     ];
 
     static readonly CUSTOMER_ALERT_TYPE_COLUMN_DATA: Array<TABLECOLUMN> = [
-        { key: 'alertCode', displayName: 'Alert Code', sort: 'alertCode', isEdit: true },
-        { key: 'alertName', displayName: 'Alert Name', sort: 'alertName' },
-        { key: 'note', displayName: 'Note', sort: 'note' },
+        { key: 'alertCode', isEdit: true, displayName: 'Alert Code', sort: 'alertCode', isUnderline: true },
+        { key: 'alertName', isEdit: true, displayName: 'Alert Name', sort: 'alertName' },
+        { key: 'note', isEdit: true, displayName: 'Note', sort: 'note' },
     ];
 
     static readonly PLACE_KEY: Array<TABLECOLUMN> = [
-        { key: 'place', displayName: 'Place Code' },
-        { key: 'placeName', displayName: 'Place Name' },
+        { key: 'place', isEdit: true, displayName: 'Place Code' },
+        { key: 'placeName', isEdit: true, displayName: 'Place Name' },
     ];
 
     static readonly PROGRAM_GROUP_KEY: Array<TABLECOLUMN> = [
-        { key: 'programCode', displayName: 'Program Code', isId: true },
-        { key: 'programName', displayName: 'Program Name' },
+        { key: 'programCode', isEdit: true, displayName: 'Program Code', isId: true },
+        { key: 'programName', isEdit: true, displayName: 'Program Name' },
     ];
 
     static readonly CUSTOMER_CREDENTIAL_KEY: Array<TABLECOLUMN> = [
-        { key: 'credentialType', displayName: 'Credential Type', isEdit: true },
-        { key: 'active', displayName: 'Active', type: 'image', isEdit: true },
-        { key: 'login', displayName: 'Login' },
-        { key: 'password', displayName: 'Password' },
-        { key: 'dataInUse', displayName: 'Customer Data', type: 'image' },
-        { key: 'utilityInUse', displayName: 'Utility Data', type: 'image' },
-        { key: 'electricityInUse', displayName: 'Electricity', type: 'image' },
-        { key: 'heatingInUse', displayName: 'Heating', type: 'image' },
-        { key: 'waterInUse', displayName: 'Water', type: 'image' },
-        { key: 'lastSuccessfulUsageDate', displayName: 'Last Usage' },
-        { key: 'authorizationStartDate', displayName: 'Auth Start Date' },
-        { key: 'authorizationEndDate', displayName: 'Auth End Date' },
-        { key: 'authorizationStatus', displayName: 'Auth Status' }
+        { key: 'credentialType', isEdit: true, displayName: 'Credential Type', isUnderline: true },
+        { key: 'active', isEdit: true, displayName: 'Active', type: 'image', isUnderline: true },
+        { key: 'login', isEdit: true, displayName: 'Login' },
+        { key: 'password', isEdit: true, displayName: 'Password' },
+        { key: 'dataInUse', isEdit: true, displayName: 'Customer Data', type: 'image' },
+        { key: 'utilityInUse', isEdit: true, displayName: 'Utility Data', type: 'image' },
+        { key: 'electricityInUse', isEdit: true, displayName: 'Electricity', type: 'image' },
+        { key: 'heatingInUse', isEdit: true, displayName: 'Heating', type: 'image' },
+        { key: 'waterInUse', isEdit: true, displayName: 'Water', type: 'image' },
+        { key: 'lastSuccessfulUsageDate', isEdit: true, displayName: 'Last Usage' },
+        { key: 'authorizationStartDate', isEdit: true, displayName: 'Auth Start Date' },
+        { key: 'authorizationEndDate', isEdit: true, displayName: 'Auth End Date' },
+        { key: 'authorizationStatus', isEdit: true, displayName: 'Auth Status' }
     ];
 
     static readonly CUSTOMER_ALERT_KEY: Array<TABLECOLUMN> = [
-        { key: 'customerAlertType', displayName: 'Customer Alert Type', isEdit: true },
-        { key: 'alertLevels', displayName: 'Alert Level' },
-        { key: 'note', displayName: 'Notes' }
+        { key: 'customerAlertType', isEdit: true, displayName: 'Customer Alert Type', isUnderline: true },
+        { key: 'alertLevels', isEdit: true, displayName: 'Alert Level' },
+        { key: 'note', isEdit: true, displayName: 'Notes' }
     ];
 
     static readonly CUSTOMER_EVENT_KEY: Array<TABLECOLUMN> = [
-        { key: 'eventType', displayName: 'Event Type', isEdit: true },
-        { key: 'eventDatetime', displayName: 'Event Date', isDate: true },
-        { key: 'description', displayName: 'Note' },
-        { key: 'linkedPersonName', displayName: 'Author' }
+        { key: 'eventType', isEdit: true, displayName: 'Event Type', isUnderline: true },
+        { key: 'eventDatetime', isEdit: true, displayName: 'Event Date', isDate: true },
+        { key: 'description', isEdit: true, displayName: 'Note' },
+        { key: 'linkedPersonName', isEdit: true, displayName: 'Author' }
     ];
 
     static readonly CUSTOMER_STAFF_KEY: Array<TABLECOLUMN> = [
-        { key: 'staff', displayName: 'Staff', isEdit: true },
-        { key: 'noteDate', displayName: 'Date', isDate: true },
-        { key: 'note', displayName: 'Note' }
+        { key: 'staff', isEdit: true, displayName: 'Staff', isUnderline: true },
+        { key: 'noteDate', isEdit: true, displayName: 'Date', isDate: true },
+        { key: 'note', isEdit: true, displayName: 'Note' }
     ];
 
     static readonly CUSTOMER_FILE_KEY: Array<TABLECOLUMN> = [
-        { key: 'name', displayName: 'File Name' },
-        { key: 'timestamp', displayName: 'Time Stamp' },
-        { key: 'description', displayName: 'Description', type: 'textArea' },
-        { key: 'size', displayName: 'Size' }
+        { key: 'name', isEdit: true, displayName: 'File Name' },
+        { key: 'timestamp', isEdit: true, displayName: 'Time Stamp' },
+        { key: 'description', isEdit: true, displayName: 'Description', type: 'textArea' },
+        { key: 'size', isEdit: true, displayName: 'Size' }
     ];
 
     static readonly STATUS_DATA: Array<any> = [
@@ -92,42 +92,42 @@ export class TableColumnData {
     ];
 
     static readonly ROLE_KEY: Array<TABLECOLUMN> = [
-        { displayName: 'Role Code', key: 'roleCode', isEdit: true },
-        { displayName: 'Permanent', key: 'permanent' },
-        { displayName: 'Description', key: 'description' }
+        { isEdit: true, displayName: 'Role Code', key: 'roleCode', isUnderline: true },
+        { isEdit: true, displayName: 'Permanent', key: 'permanent' },
+        { isEdit: true, displayName: 'Description', key: 'description' }
     ];
 
     static readonly ROLE_KEY_FOR_STAFF: Array<TABLECOLUMN> = [
-        { displayName: 'Role Code', key: 'roleCode' },
-        { displayName: 'Description', key: 'description' }
+        { isEdit: true, displayName: 'Role Code', key: 'roleCode' },
+        { isEdit: true, displayName: 'Description', key: 'description' }
     ];
 
     static readonly PLACE_LIST_KEY: Array<TABLECOLUMN> = [
-        { displayName: 'Place', sort: 'place', key: 'place', isEdit: true },
-        { displayName: 'Place Name', sort: 'placeName', key: 'placeName' },
-        { displayName: 'Weather Station', key: 'stationId' }
+        { isEdit: true, displayName: 'Place', sort: 'place', key: 'place', isUnderline: true },
+        { isEdit: true, displayName: 'Place Name', sort: 'placeName', key: 'placeName' },
+        { isEdit: true, displayName: 'Weather Station', key: 'stationId' }
     ];
 
     static readonly ZIP_CODE_KEY: Array<TABLECOLUMN> = [
-        { displayName: 'Zip Code', key: 'zipCode' },
-        { displayName: 'Description', key: 'stationId' }
+        { isEdit: true, displayName: 'Zip Code', key: 'zipCode' },
+        { isEdit: true, displayName: 'Description', key: 'stationId' }
     ];
 
 
     static readonly CUSTOMER_EVENT_TYPE_COLUMN_DATA: Array<TABLECOLUMN> = [
-        { displayName: 'Event Code', key: 'eventCode', sort: 'eventCode', isEdit: true },
-        { displayName: 'Event Name', key: 'eventName', sort: 'eventName' },
-        { displayName: 'Shared', key: 'shared', sort: 'shared' },
-        { displayName: 'Only One', key: 'onlyOne', sort: 'onlyOne' }
+        { isEdit: true, displayName: 'Event Code', key: 'eventCode', sort: 'eventCode', isUnderline: true },
+        { isEdit: true, displayName: 'Event Name', key: 'eventName', sort: 'eventName' },
+        { isEdit: true, displayName: 'Shared', key: 'shared', sort: 'shared' },
+        { isEdit: true, displayName: 'Only One', key: 'onlyOne', sort: 'onlyOne' }
     ];
 
     static readonly CUSTOMER_COMPARISON_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { displayName: 'Comparison Code', key: 'comparisonCode', sort: 'comparisonCode' },
-        { displayName: 'Group Name', key: 'groupName', sort: 'groupName', isEdit: true },
-        { displayName: 'Order', key: 'orderNumber', sort: 'orderNumber' },
-        { displayName: 'Weather Station', key: 'weatherStationId', sort: 'weatherStationId' },
-        { displayName: 'Costumers', key: 'numOfCustomers' },
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { isEdit: true, displayName: 'Comparison Code', key: 'comparisonCode', sort: 'comparisonCode' },
+        { isEdit: true, displayName: 'Group Name', key: 'groupName', sort: 'groupName', isUnderline: true },
+        { isEdit: true, displayName: 'Order', key: 'orderNumber', sort: 'orderNumber' },
+        { isEdit: true, displayName: 'Weather Station', key: 'weatherStationId', sort: 'weatherStationId' },
+        { isEdit: true, displayName: 'Costumers', key: 'numOfCustomers' },
 
     ];
 
@@ -177,12 +177,12 @@ export class TableColumnData {
     ];
 
     static readonly FACTOR_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { key: 'factorCode', sort: 'factorCode', displayName: 'Factor Code', isEdit: true },
-        { key: 'place', sort: 'place', displayName: 'Place' },
-        { key: 'year', sort: 'year', displayName: 'Year' },
-        { key: 'factorName', sort: 'factorName', displayName: 'Name' },
-        { key: 'value', sort: 'value', displayName: 'Value' }
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'factorCode', sort: 'factorCode', isEdit: true, displayName: 'Factor Code', isUnderline: true },
+        { key: 'place', sort: 'place', isEdit: true, displayName: 'Place' },
+        { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
+        { key: 'factorName', sort: 'factorName', isEdit: true, displayName: 'Name' },
+        { key: 'value', sort: 'value', isEdit: true, displayName: 'Value' }
     ];
 
     static readonly CALCULATION_TYPE: Array<any> = [
@@ -219,35 +219,35 @@ export class TableColumnData {
 
 
     static readonly LOOKUP_KEYS: Array<TABLECOLUMN> = [
-        { key: 'lookupCode', sort: 'lookupCode', displayName: 'Lookup Code', isEdit: true },
-        { key: 'lookupName', sort: 'lookupName', displayName: 'Lookup Name' },
-        { key: 'defaultValue', sort: 'defaultValue', displayName: 'Default Value' },
+        { key: 'lookupCode', sort: 'lookupCode', isEdit: true, displayName: 'Lookup Code', isUnderline: true },
+        { key: 'lookupName', sort: 'lookupName', isEdit: true, displayName: 'Lookup Name' },
+        { key: 'defaultValue', sort: 'defaultValue', isEdit: true, displayName: 'Default Value' },
     ];
 
     static readonly LOOKUP_VALUE_KEYS: Array<TABLECOLUMN> = [
-        { key: 'lookupValue', displayName: 'Lookup Value' },
-        { key: 'valueName', displayName: 'Value Name' },
+        { key: 'lookupValue', isEdit: true, displayName: 'Lookup Value' },
+        { key: 'valueName', isEdit: true, displayName: 'Value Name' },
     ];
 
     static readonly SYSTEM_PARAMETER_KEYS: Array<TABLECOLUMN> = [
-        { key: 'paramCode', sort: 'paramCode', displayName: 'Parameter Code', isEdit: true },
-        { key: 'description', sort: 'description', displayName: 'Description' },
-        { key: 'paramValue', sort: 'paramValue', displayName: 'Parameter Value' },
-        { key: 'format', sort: 'format', displayName: 'Format' },
+        { key: 'paramCode', sort: 'paramCode', isEdit: true, displayName: 'Parameter Code', isUnderline: true },
+        { key: 'description', sort: 'description', isEdit: true, displayName: 'Description' },
+        { key: 'paramValue', sort: 'paramValue', isEdit: true, displayName: 'Parameter Value' },
+        { key: 'format', sort: 'format', isEdit: true, displayName: 'Format' },
     ];
 
     static readonly WEATHER_STATION_KEYS: Array<TABLECOLUMN> = [
-        { key: 'stationId', sort: 'stationId', displayName: 'Station Id', isEdit: true },
-        { key: 'stationName', sort: 'stationName', displayName: 'Station Name' },
+        { key: 'stationId', sort: 'stationId', isEdit: true, displayName: 'Station Id', isUnderline: true },
+        { key: 'stationName', sort: 'stationName', isEdit: true, displayName: 'Station Name' },
     ];
 
     static readonly LOGS_KEYS: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { key: 'username', sort: 'username', displayName: 'Username' },
-        { key: 'recordType', sort: 'recordType', displayName: 'Record Type' },
-        { key: 'comment', sort: 'comment', displayName: 'Comment' },
-        { key: 'entity', sort: 'entity', displayName: 'Entity' },
-        { key: 'logDate', sort: 'logDate', displayName: 'Log Date', isDate: true }
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'username', sort: 'username', isEdit: true, displayName: 'Username' },
+        { key: 'recordType', sort: 'recordType', isEdit: true, displayName: 'Record Type' },
+        { key: 'comment', sort: 'comment', isEdit: true, displayName: 'Comment' },
+        { key: 'entity', sort: 'entity', isEdit: true, displayName: 'Entity' },
+        { key: 'logDate', sort: 'logDate', isEdit: true, displayName: 'Log Date', isDate: true }
     ];
 
     static readonly BASE_TEMPERATURE: Array<any> = [
@@ -290,87 +290,87 @@ export class TableColumnData {
     ];
 
     static readonly DEGREE_DAY_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { key: 'stationId', sort: 'stationId', displayName: 'Station ID' },
-        { key: 'type', sort: 'type', displayName: 'Type' },
-        { key: 'createdDate', sort: 'createdDate', displayName: 'Date', isDate: true },
-        { key: 'base', sort: 'base', displayName: 'Base Temprature' },
-        { key: 'value', sort: 'value', displayName: 'Degree Days' },
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'stationId', sort: 'stationId', isEdit: true, displayName: 'Station ID' },
+        { key: 'type', sort: 'type', isEdit: true, displayName: 'Type' },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Date', isDate: true },
+        { key: 'base', sort: 'base', isEdit: true, displayName: 'Base Temprature' },
+        { key: 'value', sort: 'value', isEdit: true, displayName: 'Degree Days' },
     ];
 
     static readonly CIMIS_STATION_KEY: Array<TABLECOLUMN> = [
-        { key: 'stationNbr', sort: 'stationNbr', displayName: 'Station Number', isEdit: true },
-        { key: 'name', sort: 'name', displayName: 'Station Name' },
-        { key: 'isActive', sort: 'isActive', displayName: 'Active?' }
+        { key: 'stationNbr', sort: 'stationNbr', isEdit: true, displayName: 'Station Number', isUnderline: true },
+        { key: 'name', sort: 'name', isEdit: true, displayName: 'Station Name' },
+        { key: 'isActive', sort: 'isActive', isEdit: true, displayName: 'Active?' }
     ];
 
     static readonly CIMIS_MEASUREMENTS_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { key: 'stationNbr', sort: 'stationNbr', displayName: 'Station Number' },
-        { key: 'cmDateTime', sort: 'cmDateTime', displayName: 'Date' },
-        { key: 'hour', sort: 'hour', displayName: 'Hour' },
-        { key: 'irradiance', displayName: 'Irradiance' }
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'stationNbr', sort: 'stationNbr', isEdit: true, displayName: 'Station Number' },
+        { key: 'cmDateTime', sort: 'cmDateTime', isEdit: true, displayName: 'Date' },
+        { key: 'hour', sort: 'hour', isEdit: true, displayName: 'Hour' },
+        { key: 'irradiance', isEdit: true, displayName: 'Irradiance' }
     ];
 
     static readonly BATCH_SCRIPT_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { key: 'batchName', sort: 'batchName', displayName: 'Batch Name', isEdit: true },
-        { key: 'batchPeriod', sort: 'batchPeriod', displayName: 'Period', isEdit: true },
-        { key: 'periodDay', sort: 'periodDay', displayName: 'Period Day' },
-        { key: 'mailAddress', sort: 'mailAddress', displayName: 'Mail Address' },
-        { key: 'lastExecutionTime', displayName: 'Date last Executed' }
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'batchName', sort: 'batchName', isEdit: true, displayName: 'Batch Name', isUnderline: true },
+        { key: 'batchPeriod', sort: 'batchPeriod', isEdit: true, displayName: 'Period', isUnderline: true },
+        { key: 'periodDay', sort: 'periodDay', isEdit: true, displayName: 'Period Day' },
+        { key: 'mailAddress', sort: 'mailAddress', isEdit: true, displayName: 'Mail Address' },
+        { key: 'lastExecutionTime', isEdit: true, displayName: 'Date last Executed' }
     ];
 
     static readonly CUSTOMER_GROUP_KEY: Array<TABLECOLUMN> = [
-        { key: 'groupCode', displayName: 'Group Code' },
-        { key: 'groupName', displayName: 'Group Name' },
+        { key: 'groupCode', isEdit: true, displayName: 'Group Code' },
+        { key: 'groupName', isEdit: true, displayName: 'Group Name' },
     ];
 
     // Job name	Last fire time	Last Runtime	Next fire time	State
     static readonly SYSTEM_JOBS_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { key: 'name', displayName: 'Job name' },
-        { key: 'prevFireTime', displayName: 'Last fire time' },
-        { key: 'prevRunTime', displayName: 'Last Runtime', },
-        { key: 'nextFireTime', displayName: 'Next fire time' },
-        { key: 'state', displayName: 'State' },
-        { key: 'buttonList', displayName: '', type: 'buttons' },
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'name', isEdit: true, displayName: 'Job name' },
+        { key: 'prevFireTime', isEdit: true, displayName: 'Last fire time' },
+        { key: 'prevRunTime', isEdit: true, displayName: 'Last Runtime', },
+        { key: 'nextFireTime', isEdit: true, displayName: 'Next fire time' },
+        { key: 'state', isEdit: true, displayName: 'State' },
+        { key: 'buttonList', isEdit: true, displayName: '', type: 'buttons' },
     ];
 
     static readonly SYSTEM_THREAD_KEY: Array<TABLECOLUMN> = [
-        { key: 'threadName', displayName: 'Thread name' },
-        { key: 'cpuTime', displayName: 'cpu time' },
-        { key: 'userTime', displayName: 'user time' },
-        { key: 'blw', displayName: 'bl/w' },
-        { key: 'buttonList', displayName: 'Stack track', type: 'buttons' }
+        { key: 'threadName', isEdit: true, displayName: 'Thread name' },
+        { key: 'cpuTime', isEdit: true, displayName: 'cpu time' },
+        { key: 'userTime', isEdit: true, displayName: 'user time' },
+        { key: 'blw', isEdit: true, displayName: 'bl/w' },
+        { key: 'buttonList', isEdit: true, displayName: 'Stack track', type: 'buttons' }
     ];
 
     static readonly EC2_INSTANCE_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { key: 'name', displayName: 'Name' },
-        { key: 'instanceId', displayName: 'Instance ID' },
-        { key: 'instanceState', displayName: 'State' },
-        { key: 'publicDNS', displayName: 'Public DNS' },
-        { key: 'buttonList', displayName: 'Action', type: 'buttons' }
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'name', isEdit: true, displayName: 'Name' },
+        { key: 'instanceId', isEdit: true, displayName: 'Instance ID' },
+        { key: 'instanceState', isEdit: true, displayName: 'State' },
+        { key: 'publicDNS', isEdit: true, displayName: 'Public DNS' },
+        { key: 'buttonList', isEdit: true, displayName: 'Action', type: 'buttons' }
     ];
 
     static readonly ALERT_MESSAGE_KEY: Array<TABLECOLUMN> = [
-        { key: 'id', sort: 'id', displayName: 'Id', isEdit: true },
-        { key: 'target', sort: 'target', displayName: 'Target', isEdit: true },
-        { key: 'alertType', sort: 'alertType', displayName: 'Alert Type' },
-        { key: 'alertLevel', sort: 'alertLevel', displayName: 'Alert Level' },
-        { key: 'messageTemplate', sort: 'messageTemplate', displayName: 'Message' },
-        { key: 'createdDate', sort: 'createdDate', displayName: 'Created Date', isDate: true },
-        { key: 'active', displayName: 'Active', type: 'image' },
+        { key: 'id', sort: 'id', isEdit: true, displayName: 'Id', isUnderline: true },
+        { key: 'target', sort: 'target', isEdit: true, displayName: 'Target', isUnderline: true },
+        { key: 'alertType', sort: 'alertType', isEdit: true, displayName: 'Alert Type' },
+        { key: 'alertLevel', sort: 'alertLevel', isEdit: true, displayName: 'Alert Level' },
+        { key: 'messageTemplate', sort: 'messageTemplate', isEdit: true, displayName: 'Message' },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Created Date', isDate: true },
+        { key: 'active', isEdit: true, displayName: 'Active', type: 'image' },
     ];
 
     static readonly TOPIC_DESCRIPTION_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { key: 'surveyCode', sort: 'surveyCode', displayName: 'Topic Code', isEdit: true },
-        { key: 'label', sort: 'label', displayName: 'Topic Label' },
-        { key: 'reportLabel', sort: 'reportLabel', displayName: 'Topic Report Label' },
-        { key: 'active', displayName: 'Active' },
-        { key: 'nextSurveyCode', displayName: 'Next Topic Code' }
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'surveyCode', sort: 'surveyCode', isEdit: true, displayName: 'Topic Code', isUnderline: true },
+        { key: 'label', sort: 'label', isEdit: true, displayName: 'Topic Label' },
+        { key: 'reportLabel', sort: 'reportLabel', isEdit: true, displayName: 'Topic Report Label' },
+        { key: 'active', isEdit: true, displayName: 'Active' },
+        { key: 'nextSurveyCode', isEdit: true, displayName: 'Next Topic Code' }
     ];
 
     static readonly TOPIC_DESCRIPTION_SELECT_DATA: Array<any> = [
@@ -410,61 +410,61 @@ export class TableColumnData {
     ];
 
     static readonly TOPIC_PANE_KEY: Array<TABLECOLUMN> = [
-        { key: 'paneCode', displayName: 'Pane Code' },
-        { key: 'label', displayName: 'Label' },
-        { key: 'orderNumber', displayName: 'Order Number' },
-        { key: 'section', displayName: 'Section' },
-        { key: 'isSection', displayName: 'Is Section' }
+        { key: 'paneCode', isEdit: true, displayName: 'Pane Code' },
+        { key: 'label', isEdit: true, displayName: 'Label' },
+        { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
+        { key: 'section', isEdit: true, displayName: 'Section' },
+        { key: 'isSection', isEdit: true, displayName: 'Is Section' }
     ];
 
     static readonly RECOMMENDATION_KEY: Array<TABLECOLUMN> = [
-        { key: 'Code', displayName: 'Code' },
-        { key: 'type', displayName: 'Type' },
-        { key: 'label', displayName: 'Label' },
+        { key: 'Code', isEdit: true, displayName: 'Code' },
+        { key: 'type', isEdit: true, displayName: 'Type' },
+        { key: 'label', isEdit: true, displayName: 'Label' },
     ];
 
     static readonly RECOMMENDATION_EDIT_KEY: Array<TABLECOLUMN> = [
-        { key: 'Code', displayName: 'Code' },
-        { key: 'label', displayName: 'Label' },
+        { key: 'Code', isEdit: true, displayName: 'Code' },
+        { key: 'label', isEdit: true, displayName: 'Label' },
     ];
 
     static readonly TOPIC_VARIABLES_KEYS: Array<TABLECOLUMN> = [
-        { key: 'field', displayName: 'Field' },
-        { key: 'comments', displayName: 'Comments' },
-        { key: 'calculationPeriod', displayName: 'Calculation Period' },
+        { key: 'field', isEdit: true, displayName: 'Field' },
+        { key: 'comments', isEdit: true, displayName: 'Comments' },
+        { key: 'calculationPeriod', isEdit: true, displayName: 'Calculation Period' },
     ];
 
 
     static readonly PANE_DATA_BLOCK_KEY: Array<TABLECOLUMN> = [
-        { key: 'blockCode', displayName: 'Block Code' },
-        { key: 'orderNumber', displayName: 'Order Number' },
-        { key: 'label', displayName: 'Label' },
-        { key: 'isArray', displayName: 'Is Array' }
+        { key: 'blockCode', isEdit: true, displayName: 'Block Code' },
+        { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
+        { key: 'label', isEdit: true, displayName: 'Label' },
+        { key: 'isArray', isEdit: true, displayName: 'Is Array' }
     ];
 
     static readonly PANE_DATA_FIELD_KEY: Array<TABLECOLUMN> = [
-        { key: 'fieldCode', displayName: 'Field Code' },
-        { key: 'orderNumber', displayName: 'Order Number' },
-        { key: 'label', displayName: 'Label' },
+        { key: 'fieldCode', isEdit: true, displayName: 'Field Code' },
+        { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
+        { key: 'label', isEdit: true, displayName: 'Label' },
     ];
 
     static readonly PANE_CHART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'chartCode', displayName: 'Chart Code' },
-        { key: 'orderNumber', displayName: 'Order Number' },
-        { key: 'chartTitle', displayName: 'Chart Title' },
+        { key: 'chartCode', isEdit: true, displayName: 'Chart Code' },
+        { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
+        { key: 'chartTitle', isEdit: true, displayName: 'Chart Title' },
     ];
 
     static readonly CHART_SERIES_FIELD_KEY: Array<TABLECOLUMN> = [
-        { key: 'seriesCode', displayName: 'Series Code' },
-        { key: 'seriesName', displayName: 'Series Name' },
-        { key: 'orderNumber', displayName: 'Order Number' },
-        { key: 'seriesColor', displayName: 'Series Color' },
-        { key: 'seriesStrokeWidth', displayName: 'Series Stroke Width' },
+        { key: 'seriesCode', isEdit: true, displayName: 'Series Code' },
+        { key: 'seriesName', isEdit: true, displayName: 'Series Name' },
+        { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
+        { key: 'seriesColor', isEdit: true, displayName: 'Series Color' },
+        { key: 'seriesStrokeWidth', isEdit: true, displayName: 'Series Stroke Width' },
     ];
 
     static readonly PANE_REPORT_KEYS: Array<TABLECOLUMN> = [
-        { key: 'reportCode', displayName: 'Report Code' },
-        { key: 'reportLabel', displayName: 'Report Label' },
+        { key: 'reportCode', isEdit: true, displayName: 'Report Code' },
+        { key: 'reportLabel', isEdit: true, displayName: 'Report Label' },
     ];
 
     static readonly PANE_DATA: Array<any> = [
@@ -576,7 +576,7 @@ export class TableColumnData {
 
     static readonly REPORT_PARAMETER_KEY: Array<TABLECOLUMN> = [
         {
-            key: 'dataField', displayName: 'Data Field', addRowType: 'select', option:
+            key: 'dataField', isEdit: true, displayName: 'Data Field', addRowType: 'select', option:
                 [
                     { key: '1246', value: 'Do you have a solar PV system at your home?&nbsp;(pv_ConfirmPV)' },
                     { key: '1248', value: 'Install date&nbsp;(pv_InstallDate)' },
@@ -621,7 +621,7 @@ export class TableColumnData {
                 ]
         },
         {
-            key: 'reportParameter', displayName: 'Report Parameter', addRowType: 'select', option:
+            key: 'reportParameter', isEdit: true, displayName: 'Report Parameter', addRowType: 'select', option:
                 [
                     { key: '37', value: 'Program Name Filter' },
                 ]
@@ -629,11 +629,12 @@ export class TableColumnData {
     ];
 
     static readonly STAFF_TABLE_COLUMN: Array<TABLECOLUMN> = [
-        { key: 'username', sort: 'username', displayName: 'Username', isEdit: true },
-        { key: 'email', sort: 'email', displayName: 'E-mail' },
-        { key: 'status', displayName: 'Status' },
-        { key: 'name', displayName: 'Name' },
-        { key: 'createdDate', sort: 'createdDate', displayName: 'Join Data', isDate: true },
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'username', sort: 'username', isEdit: true, displayName: 'Username', isUnderline: true },
+        { key: 'email', sort: 'email', isEdit: true, displayName: 'E-mail' },
+        { key: 'status', isEdit: true, displayName: 'Status' },
+        { key: 'name', isEdit: true, displayName: 'Name' },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Join Date', isDate: true },
     ];
 
     static readonly SURVEY_VERSION_SETTING_DATA: Array<any> = [
@@ -643,40 +644,40 @@ export class TableColumnData {
     ];
 
     static readonly TOPIC_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
-        { key: 'groupCode', displayName: 'Group Code' },
-        { key: 'groupName', displayName: 'Group Name' },
+        { key: 'groupCode', isEdit: true, displayName: 'Group Code' },
+        { key: 'groupName', isEdit: true, displayName: 'Group Name' },
     ];
 
     static readonly TOPIC_KEYS: Array<TABLECOLUMN> = [
-        { key: 'label', sort: 'label', displayName: 'Label', isEdit: true },
-        { key: 'user', displayName: 'User' },
-        { key: 'group', displayName: 'Group' },
-        { key: 'startDate', sort: 'startDate', displayName: 'Start Date' },
-        { key: 'modifiedDate', sort: 'modifiedDate', displayName: 'Modified Date' },
-        { key: 'completedDate', sort: 'completedDate', displayName: 'Completed Date' },
+        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
+        { key: 'user', isEdit: true, displayName: 'User' },
+        { key: 'group', isEdit: true, displayName: 'Group' },
+        { key: 'startDate', sort: 'startDate', isEdit: true, displayName: 'Start Date' },
+        { key: 'modifiedDate', sort: 'modifiedDate', isEdit: true, displayName: 'Modified Date' },
+        { key: 'completedDate', sort: 'completedDate', isEdit: true, displayName: 'Completed Date' },
     ];
 
     static readonly ADMIN_REPORT_KEYS: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
-        { key: 'reportName', sort: 'reportLabel', displayName: 'Report Name', isEdit: true },
-        { key: 'reportLabel', sort: 'reportLabel', displayName: 'Report Label' },
-        { key: 'reportType', displayName: 'Report Type' },
-        { key: 'embeddedReport', displayName: 'Embedded Report' },
-        { key: 'callReport', displayName: '', type: 'image', imagePath: 'assets/images/ico_pdf.gif', event: 'callReport' },
+        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'reportName', sort: 'reportLabel', isEdit: true, displayName: 'Report Name', isUnderline: true },
+        { key: 'reportLabel', sort: 'reportLabel', isEdit: true, displayName: 'Report Label' },
+        { key: 'reportType', isEdit: true, displayName: 'Report Type' },
+        { key: 'embeddedReport', isEdit: true, displayName: 'Embedded Report' },
+        { key: 'callReport', isEdit: true, displayName: '', type: 'image', imagePath: 'assets/images/ico_pdf.gif', event: 'callReport' },
     ];
 
     static readonly ADMIN_REPORT_PARAMETER_KEYS: Array<TABLECOLUMN> = [
-        { key: 'parameterName', displayName: 'Parameter Name' },
-        { key: 'defaultValue', displayName: 'Default Value' },
-        { key: 'parameterLabel', displayName: 'Parameter Label' },
+        { key: 'parameterName', isEdit: true, displayName: 'Parameter Name' },
+        { key: 'defaultValue', isEdit: true, displayName: 'Default Value' },
+        { key: 'parameterLabel', isEdit: true, displayName: 'Parameter Label' },
     ];
 
     static readonly EVENT_HISTORY_KEYS: Array<TABLECOLUMN> = [
-        { key: 'customer', sort: 'customer', displayName: 'customer', isEdit: true },
-        { key: 'eventCode', sort: 'eventCode', displayName: 'Event Code' },
-        { key: 'eventName', displayName: 'Event Name' },
-        { key: 'date', displayName: 'Date' },
-        { key: 'author', displayName: 'Author' },
+        { key: 'customer', sort: 'customer', isEdit: true, displayName: 'customer', isUnderline: true },
+        { key: 'eventCode', sort: 'eventCode', isEdit: true, displayName: 'Event Code' },
+        { key: 'eventName', isEdit: true, displayName: 'Event Name' },
+        { key: 'date', isEdit: true, displayName: 'Date' },
+        { key: 'author', isEdit: true, displayName: 'Author' },
     ];
     static readonly CUSTOMER_EVENT_TYPE: Array<any> = [
         {
@@ -845,35 +846,35 @@ export class TableColumnData {
     ];
 
     static readonly PROSPECTS_KEY: Array<TABLECOLUMN> = [
-        { key: 'registrationId', sort: 'registrationId', displayName: 'ID' },
-        { key: 'program', sort: 'program', displayName: 'Program' },
-        { key: 'name', sort: 'name', displayName: 'Name' },
-        { key: 'field6', sort: 'field6', displayName: 'Page' },
-        { key: 'email', sort: 'email', displayName: 'Email' },
-        { key: 'coachUserId', sort: 'coachUserId', displayName: 'CoachID' },
-        { key: 'createdDate', sort: 'createdDate', displayName: 'Date', isDate: true },
-        { key: 'optOutMail', sort: 'optOutMail', displayName: 'Opt Out Mail', isDate: true }
+        { key: 'registrationId', sort: 'registrationId', isEdit: true, displayName: 'ID' },
+        { key: 'program', sort: 'program', isEdit: true, displayName: 'Program' },
+        { key: 'name', sort: 'name', isEdit: true, displayName: 'Name' },
+        { key: 'field6', sort: 'field6', isEdit: true, displayName: 'Page' },
+        { key: 'email', sort: 'email', isEdit: true, displayName: 'Email' },
+        { key: 'coachUserId', sort: 'coachUserId', isEdit: true, displayName: 'CoachID' },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Date', isDate: true },
+        { key: 'optOutMail', sort: 'optOutMail', isEdit: true, displayName: 'Opt Out Mail', isDate: true }
     ];
 
     static readonly MAIL_DESC_KEYS: Array<TABLECOLUMN> = [
-        { key: 'id', sort: 'id', displayName: 'ID' },
-        { key: 'mailName', sort: 'mailName', displayName: 'Mail Name', isEdit: true },
-        { key: 'mailPeriod', sort: 'mailPeriod', displayName: 'Period', isEdit: true },
-        { key: 'periodDayRule', sort: 'periodDayRule', displayName: 'Period Day' },
-        { key: 'lastMaxProcessedTime', sort: 'lastMaxProcessedTime', displayName: 'Runtime' },
-        { key: 'subjectTemplate', sort: 'subjectTemplate', displayName: 'Subject' },
+        { key: 'id', sort: 'id', isEdit: true, displayName: 'ID' },
+        { key: 'mailName', sort: 'mailName', isEdit: true, displayName: 'Mail Name', isUnderline: true },
+        { key: 'mailPeriod', sort: 'mailPeriod', isEdit: true, displayName: 'Period', isUnderline: true },
+        { key: 'periodDayRule', sort: 'periodDayRule', isEdit: true, displayName: 'Period Day' },
+        { key: 'lastMaxProcessedTime', sort: 'lastMaxProcessedTime', isEdit: true, displayName: 'Runtime' },
+        { key: 'subjectTemplate', sort: 'subjectTemplate', isEdit: true, displayName: 'Subject' },
     ];
 
     static readonly CONTENT_PART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'label', displayName: 'Label', isEdit: true },
-        { key: 'order', displayName: 'Order' },
-        { key: 'contentFilter', displayName: 'Content Filter' },
+        { key: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
+        { key: 'order', isEdit: true, displayName: 'Order' },
+        { key: 'contentFilter', isEdit: true, displayName: 'Content Filter' },
     ];
 
     static readonly VARIABLE_KEYS: Array<TABLECOLUMN> = [
-        { key: 'fieldCode', displayName: 'Field Code', isEdit: true },
-        { key: 'order', displayName: 'Order' },
-        { key: 'calculationRule', displayName: 'Calculation Rule' },
+        { key: 'fieldCode', isEdit: true, displayName: 'Field Code', isUnderline: true },
+        { key: 'order', isEdit: true, displayName: 'Order' },
+        { key: 'calculationRule', isEdit: true, displayName: 'Calculation Rule' },
     ];
 
     static readonly PERIOD_DATA: any[] = [
@@ -887,9 +888,9 @@ export class TableColumnData {
 
 
     static readonly CUSTOMER_GROUP_MAIL_PART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'customerGroupName', sort: 'customerGroupName', displayName: 'customerGroupName' },
-        { key: 'header', displayName: 'Header', isEdit: true },
-        { key: 'footer', displayName: 'Footer', isEdit: true },
+        { key: 'customerGroupName', sort: 'customerGroupName', isEdit: true, displayName: 'customerGroupName' },
+        { key: 'header', isEdit: true, displayName: 'Header', isUnderline: true },
+        { key: 'footer', isEdit: true, displayName: 'Footer', isUnderline: true },
     ];
 
     static readonly MAIL_TYPE: any[] = [
@@ -971,10 +972,10 @@ export class TableColumnData {
     ];
 
     static readonly USER_REPORTS_KEYS: Array<TABLECOLUMN> = [
-        { key: 'order', displayName: 'Order' },
-        { key: 'reportType', displayName: 'Report Type' },
-        { key: 'displayLabel', sort: 'displayLabel', displayName: 'Display Label', isEdit: true },
-        { key: 'label', sort: 'label', displayName: 'Label', isEdit: true },
+        { key: 'order', isEdit: true, displayName: 'Order' },
+        { key: 'reportType', isEdit: true, displayName: 'Report Type' },
+        { key: 'displayLabel', sort: 'displayLabel', isEdit: true, displayName: 'Display Label', isUnderline: true },
+        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
     ];
 
     static readonly USER_REPORT_DATA: any[] = [
@@ -1003,26 +1004,26 @@ export class TableColumnData {
         { key: 'waterProgress', value: 'Water Progress' },
     ];
     static readonly JS_PAGES_KEYS: Array<TABLECOLUMN> = [
-        { key: 'code', sort: 'code', displayName: 'Code', isEdit: true },
-        { key: 'name', sort: 'name', displayName: 'Page Name' },
-        { key: 'template', displayName: 'Template' },
-        { key: 'showInMenu', displayName: 'Show In Menu' },
+        { key: 'code', sort: 'code', isEdit: true, displayName: 'Code', isUnderline: true },
+        { key: 'name', sort: 'name', isEdit: true, displayName: 'Page Name' },
+        { key: 'template', isEdit: true, displayName: 'Template' },
+        { key: 'showInMenu', isEdit: true, displayName: 'Show In Menu' },
     ];
 
     static readonly VIEW_CONF_KEYS: Array<TABLECOLUMN> = [
-        { key: 'name', sort: 'name', displayName: 'Name', isEdit: true },
-        { key: 'username', sort: 'username', displayName: 'User Name' },
-        { key: 'shared', displayName: 'Shared' },
-        { key: 'baseEntity', displayName: 'Base Entity' },
-        { key: 'attributes', displayName: '', type: 'link', links: [{ routerLink: '/admin/viewConfiguration/viewConfigurationAttributeList', displayName: 'Attributes', queryParam: {} }] },
+        { key: 'name', sort: 'name', isEdit: true, displayName: 'Name', isUnderline: true },
+        { key: 'username', sort: 'username', isEdit: true, displayName: 'User Name' },
+        { key: 'shared', isEdit: true, displayName: 'Shared' },
+        { key: 'baseEntity', isEdit: true, displayName: 'Base Entity' },
+        { key: 'attributes', isEdit: true, displayName: '', type: 'link', links: [{ routerLink: '/admin/viewConfiguration/viewConfigurationAttributeList', isEdit: true, displayName: 'Attributes', queryParam: {} }] },
     ];
 
     static readonly ATTRIBUTE_LIST_KEYS: Array<TABLECOLUMN> = [
-        { key: 'columnOrder', sort: 'columnOrder', displayName: 'Column Order', isEdit: true },
-        { key: 'definition', sort: 'definition', displayName: 'Definition' },
-        { key: 'label', sort: 'label', displayName: 'Label' },
-        { key: 'attributeType', sort: 'attributeType', displayName: 'Attribute Type' },
-        { key: 'sortAllow', sort: 'sortAllow', displayName: 'Sort Allow' },
+        { key: 'columnOrder', sort: 'columnOrder', isEdit: true, displayName: 'Column Order', isUnderline: true },
+        { key: 'definition', sort: 'definition', isEdit: true, displayName: 'Definition' },
+        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label' },
+        { key: 'attributeType', sort: 'attributeType', isEdit: true, displayName: 'Attribute Type' },
+        { key: 'sortAllow', sort: 'sortAllow', isEdit: true, displayName: 'Sort Allow' },
     ];
 
     static readonly ATTRIBUTE_TYPE_DATA: any[] = [
@@ -1098,63 +1099,63 @@ export class TableColumnData {
     ];
 
     static readonly TRENDING_PART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'label', sort: 'label', displayName: 'Label', isEdit: true },
-        { key: 'orderNumber', sort: 'orderNumber', displayName: 'Order Number' },
-        { key: 'explanation', sort: 'Explanation', displayName: 'Explanation' },
+        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
+        { key: 'orderNumber', sort: 'orderNumber', isEdit: true, displayName: 'Order Number' },
+        { key: 'explanation', sort: 'Explanation', isEdit: true, displayName: 'Explanation' },
     ];
 
     static readonly TRENDING_CHART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'chartCode', displayName: 'Chart Code', isEdit: true },
-        { key: 'orderNumber', displayName: 'Order Number' },
-        { key: 'resourceUse', displayName: 'Resource Use' },
-        { key: 'unitType ', displayName: 'Unit Type' },
-        { key: 'useType', displayName: 'Use Type' },
+        { key: 'chartCode', isEdit: true, displayName: 'Chart Code', isUnderline: true },
+        { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
+        { key: 'resourceUse', isEdit: true, displayName: 'Resource Use' },
+        { key: 'unitType ', isEdit: true, displayName: 'Unit Type' },
+        { key: 'useType', isEdit: true, displayName: 'Use Type' },
     ];
 
     static readonly SUMMARY_CHART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'chartCode', sort: 'chartCode', displayName: 'Chart Code', isEdit: true },
-        { key: 'orderNumber', sort: 'orderNumber', displayName: 'Order Number' },
-        { key: 'resourceUse', displayName: 'Resource Use' },
-        { key: 'unitType ', displayName: 'Unit Type' },
-        { key: 'useType', displayName: 'Use Type' },
+        { key: 'chartCode', sort: 'chartCode', isEdit: true, displayName: 'Chart Code', isUnderline: true },
+        { key: 'orderNumber', sort: 'orderNumber', isEdit: true, displayName: 'Order Number' },
+        { key: 'resourceUse', isEdit: true, displayName: 'Resource Use' },
+        { key: 'unitType ', isEdit: true, displayName: 'Unit Type' },
+        { key: 'useType', isEdit: true, displayName: 'Use Type' },
     ];
     static readonly DATA_SET_KEYS: Array<TABLECOLUMN> = [
-        { key: 'queryParameter', displayName: 'Query Parameter', addRowType: 'text' },
-        { key: 'calculationFormula', displayName: 'Calculation Formula', addRowType: 'textarea' },
+        { key: 'queryParameter', isEdit: true, displayName: 'Query Parameter', addRowType: 'text' },
+        { key: 'calculationFormula', isEdit: true, displayName: 'Calculation Formula', addRowType: 'textarea' },
     ];
 
     static readonly GAS_KEYS: Array<TABLECOLUMN> = [
-        { key: 'year', sort: 'year', displayName: 'Year' },
-        { key: 'month', sort: 'month', displayName: 'Month' },
-        { key: 'billingPeriod', displayName: 'Billing Period' },
-        { key: 'billingDate', displayName: 'Billing Date' },
-        { key: 'value', displayName: 'Value' },
+        { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
+        { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
+        { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
+        { key: 'billingDate', isEdit: true, displayName: 'Billing Date' },
+        { key: 'value', isEdit: true, displayName: 'Value' },
     ];
 
     static readonly SMART_METER_KEYS: Array<TABLECOLUMN> = [
-        { key: 'year', sort: 'year', displayName: 'Year' },
-        { key: 'month', sort: 'month', displayName: 'Month' },
-        { key: 'day', sort: 'day', displayName: 'Day' },
-        { key: 'hour', sort: 'hour', displayName: 'Hour' },
-        { key: 'value', displayName: 'Value' },
+        { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
+        { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
+        { key: 'day', sort: 'day', isEdit: true, displayName: 'Day' },
+        { key: 'hour', sort: 'hour', isEdit: true, displayName: 'Hour' },
+        { key: 'value', isEdit: true, displayName: 'Value' },
     ];
 
     static readonly SMART_METER_DAILY_KEYS: Array<TABLECOLUMN> = [
-        { key: 'year', sort: 'year', displayName: 'Year' },
-        { key: 'month', sort: 'month', displayName: 'Month' },
-        { key: 'day', sort: 'day', displayName: 'Day' },
-        { key: 'value', displayName: 'Value' },
+        { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
+        { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
+        { key: 'day', sort: 'day', isEdit: true, displayName: 'Day' },
+        { key: 'value', isEdit: true, displayName: 'Value' },
     ];
 
     static readonly SHARE_MY_DATA_KEYS: Array<TABLECOLUMN> = [
-        { key: 'auditId', sort: 'auditId', displayName: 'Audit Id', isEdit: true },
-        { key: 'subscriptionId', sort: 'subscriptionId', displayName: 'Subscription Id' },
-        { key: 'createdDate', sort: 'createdDate', displayName: 'Created Date' },
-        { key: 'account', sort: 'account', displayName: 'Account' },
-        { key: 'name', sort: 'name', displayName: 'Name' },
-        { key: 'city', sort: 'city', displayName: 'City' },
-        { key: 'address', sort: 'address', displayName: 'Address' },
-        { key: 'createNew', displayName: 'create New?' },
+        { key: 'auditId', sort: 'auditId', isEdit: true, displayName: 'Audit Id', isUnderline: true },
+        { key: 'subscriptionId', sort: 'subscriptionId', isEdit: true, displayName: 'Subscription Id' },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Created Date' },
+        { key: 'account', sort: 'account', isEdit: true, displayName: 'Account' },
+        { key: 'name', sort: 'name', isEdit: true, displayName: 'Name' },
+        { key: 'city', sort: 'city', isEdit: true, displayName: 'City' },
+        { key: 'address', sort: 'address', isEdit: true, displayName: 'Address' },
+        { key: 'createNew', isEdit: true, displayName: 'create New?' },
     ];
 
     static readonly EVENT_TYPE_DATA: Array<any> = [
@@ -1208,11 +1209,11 @@ export class TableColumnData {
     ];
 
     static readonly MAIL_ARCHIVE_KEY: Array<TABLECOLUMN> = [
-        { key: 'subject', sort: 'subject', displayName: 'Subject', isEdit: true },
-        { key: 'dateSent', sort: 'dateSent', displayName: 'Date sent' },
-        { key: 'sentTo', sort: 'sentTo', displayName: 'Sent to' },
-        { key: 'inBouncedList', displayName: 'Bounced' },
-        { key: 'wasOpened', displayName: 'Opened' },
-        { key: 'permanentLink', displayName: 'Permanent link', isEdit: true }
+        { key: 'subject', sort: 'subject', isEdit: true, displayName: 'Subject', isUnderline: true },
+        { key: 'dateSent', sort: 'dateSent', isEdit: true, displayName: 'Date sent' },
+        { key: 'sentTo', sort: 'sentTo', isEdit: true, displayName: 'Sent to' },
+        { key: 'inBouncedList', isEdit: true, displayName: 'Bounced' },
+        { key: 'wasOpened', isEdit: true, displayName: 'Opened' },
+        { key: 'permanentLink', isEdit: true, displayName: 'Permanent link', isUnderline: true }
     ];
 }

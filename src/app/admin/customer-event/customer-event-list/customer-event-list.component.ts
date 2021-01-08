@@ -37,11 +37,15 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.search(undefined, false);
+  }
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   findCustomerEventType(force: boolean, filter: any): void {
-    this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeCount().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeCount(filter).pipe(skipWhile((item: any) => !item))
       .subscribe((customerEventTypeCount: any) => {
         this.customerEventTypeData.totalElements = customerEventTypeCount.systemUtilityManagement.customerEventTypeCount;
         this.systemUtilityService.loadCustomerEventTypeList(force, filter);
@@ -70,10 +74,8 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
-      .set('customerEventTypeId', '')
       .set('eventCode', (this.customerGroupForm.value.eventCode !== null ? this.customerGroupForm.value.eventCode : ''))
       .set('eventName', (this.customerGroupForm.value.eventName !== null ? this.customerGroupForm.value.eventName : ''));
     this.findCustomerEventType(true, params);

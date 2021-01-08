@@ -36,6 +36,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
     });
   }
   ngOnInit() {
+    this.scrollTop();
     this.findWeatherStation(true, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
@@ -104,12 +105,16 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/customerComparisonGroup/comparisonGroupList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
+    if (confirm('Are you sure you want to delete?')) {
     this.subscriptions.add(this.systemUtilityService.deleteCustomerComparisonGroupById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/customerComparisonGroup/comparisonGroupList'], { queryParams: { 'force': true } });
       }));
+    }
   }
-
+  scrollTop() {
+    window.scroll(0, 0);
+  }
   save() {
     if (this.customerComparisonGroupForm.valid) {
       if (this.id !== null && this.id !== undefined) {
@@ -117,6 +122,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadCustomerComparisonGroupById();
           }));
       } else {
@@ -124,6 +130,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadCustomerComparisonGroupById();
           }));
       }

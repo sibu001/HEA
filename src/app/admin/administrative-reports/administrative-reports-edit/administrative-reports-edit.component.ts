@@ -59,7 +59,7 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
     });
   }
   back(): any {
-    this.router.navigate([' admin/administrativeReport/administrativeReportList']);
+    this.router.navigate(['admin/administrativeReport/administrativeReportList']);
   }
 
   loadAdministrativeReportById() {

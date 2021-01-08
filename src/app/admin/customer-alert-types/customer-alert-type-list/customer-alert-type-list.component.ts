@@ -16,7 +16,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   styleUrls: ['./customer-alert-type-list.component.css']
 })
 export class CustomerAlertTypeListComponent implements OnInit, OnDestroy {
-  public keys: Array<TABLECOLUMN>;
+  public keys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_ALERT_TYPE_COLUMN_DATA;
   public dataSource: any;
   public force = false;
   public customerAlertTypeData = {
@@ -38,9 +38,12 @@ export class CustomerAlertTypeListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    document.getElementById('loader').classList.remove('loading');
-    this.keys = TableColumnData.CUSTOMER_ALERT_TYPE_COLUMN_DATA;
+    this.scrollTop();
     this.findCustomerAlertType(this.force, '');
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   findCustomerAlertType(force: boolean, filter: any): void {
@@ -54,13 +57,11 @@ export class CustomerAlertTypeListComponent implements OnInit, OnDestroy {
 
   search(event: any): void {
     const params = new HttpParams()
-    .set('startRow', '0')
-    .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-    .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-    .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
-    .set('customerAlertTypeId', '')
-    .set('alertCode', (this.customerAlertTypeForm.value.alertCode !== null ? this.customerAlertTypeForm.value.alertCode : ''))
-    .set('alertName', (this.customerAlertTypeForm.value.alertName !== null ? this.customerAlertTypeForm.value.alertName : ''));
+      .set('startRow', '0')
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('alertCode', (this.customerAlertTypeForm.value.alertCode !== null ? this.customerAlertTypeForm.value.alertCode : ''))
+      .set('alertName', (this.customerAlertTypeForm.value.alertName !== null ? this.customerAlertTypeForm.value.alertName : ''));
     this.findCustomerAlertType(true, params);
   }
 

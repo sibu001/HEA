@@ -16,7 +16,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 })
 export class ProgramGroupListComponent implements OnInit, OnDestroy {
 
-  public keys: Array<TABLECOLUMN>;
+  public keys: Array<TABLECOLUMN> = TableColumnData.PROGRAM_GROUP_COLUMN_DATA;
   public dataSource: any;
   public force = false;
   public programGroupData = {
@@ -38,9 +38,12 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    document.getElementById('loader').classList.remove('loading');
-    this.keys = TableColumnData.PROGRAM_GROUP_COLUMN_DATA;
+    this.scrollTop();
     this.search(undefined, this.force);
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   findProgramGroup(filter: any, force: boolean): void {
@@ -55,10 +58,8 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
   search(event: any, force: boolean): void {
     const params = new HttpParams()
       .set('startRow', '0')
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
-      .set('programGroupId', '')
       .set('programCode', (this.programGroupForm.value.programCode !== null ? this.programGroupForm.value.programCode : ''))
       .set('programName', (this.programGroupForm.value.programName !== null ? this.programGroupForm.value.programName : ''));
     this.findProgramGroup(params, force);

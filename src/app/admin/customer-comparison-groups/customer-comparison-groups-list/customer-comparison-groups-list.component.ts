@@ -50,11 +50,14 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.findWeatherStation(false, '');
     this.setUpForm(this.adminFilter.customerComparisonGroup.formValue);
     this.search(this.adminFilter.customerComparisonGroup.page, false);
   }
-
+  scrollTop() {
+    window.scroll(0, 0);
+  }
   setUpForm(event: any) {
     this.customerComparisonGroupForm = this.fb.group({
       comparisonCode: [event !== undefined && event !== null ? event.comparisonCode : ''],

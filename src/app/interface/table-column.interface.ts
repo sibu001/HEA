@@ -5,6 +5,7 @@ export interface TABLECOLUMN {
     type?: string;
     imagePath?: string;
     isEdit?: boolean;
+    isUnderline?: boolean;
     links?: Array<any>;
     event?: string;
     buttonList?: Array<any>;
