@@ -1218,3 +1218,7 @@ table.jqplot-table-legend {
     margin-top: 40px !important;
   }
 }
+
+.cdk-global-overlay-wrapper{
+  justify-content: center;
+}

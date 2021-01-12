@@ -65,7 +65,7 @@ export class SystemUtilityTransformer {
             let dataSourceObject: any = {};
             dataSourceObject = element;
             dataSourceObject.base = element.base + ' ' + element.unit;
-            dataSourceObject.value = parseFloat(element.value).toFixed(4)+ ' ' + element.unit;
+            dataSourceObject.value = parseFloat(element.value).toFixed(4) + ' ' + element.unit;
             dataSourceObject.serialNumber = index;
             index++;
             dataSourceList.push(dataSourceObject);

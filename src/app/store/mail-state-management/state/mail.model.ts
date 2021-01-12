@@ -7,4 +7,7 @@ export interface MailManagementModel {
     mailContentPartList: any;
     mailContentPart: any;
     mailDescriptionCustomerGroupList: any;
+    customerGroupMailPartList: any;
+    customerGroupMailPart: any;
+    customerGroupMailPartCount: any;
 }

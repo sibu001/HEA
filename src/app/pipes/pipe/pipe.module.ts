@@ -5,6 +5,7 @@ import { SearchFilterPipe } from '../searchPipe';
 import { SortGridPipe } from '../sorting';
 import { SafePipe } from '../safeStyle';
 import { SafeUrlPipe } from '../safe-url.pipe';
+import { SortPipe } from '../sort.pipe';
 
 @NgModule({
   imports: [
@@ -15,14 +16,16 @@ import { SafeUrlPipe } from '../safe-url.pipe';
     SafeHtmlPipe,
     SafePipe,
     SafeUrlPipe,
-    SearchFilterPipe
+    SearchFilterPipe,
+    SortPipe
   ],
   exports: [
     SortGridPipe,
     SafeHtmlPipe,
     SafePipe,
     SafeUrlPipe,
-    SearchFilterPipe
+    SearchFilterPipe,
+    SortPipe
   ]
 })
 export class PipeModule { }

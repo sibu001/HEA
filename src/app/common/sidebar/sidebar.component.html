@@ -1,11 +1,12 @@
 <div class='container-fluid'>
   <div *ngIf='!showDataFields && !showMethod && !showTopicVariableFields'>
     <div class="row sidebar-heading-row">
-      <div class="col-xs-1 col-sm-1 sidebar-heading-div">
+      <!-- <div class="col-xs-1 col-sm-1 sidebar-heading-div">
         <img src='assets/images/dot03.gif' class='dot'>
-      </div>
-      <div class="col-xs-11 col-sm-11 sidebar-heading-div sidebar-info">
+      </div> -->
+      <div class="col-xs-12 col-sm-12 sidebar-heading-div sidebar-info">
         <p class='info'>
+          <img src='assets/images/dot03.gif' class='dot top-dot'>
           HEA Administrator's Home Page</p>
       </div>
     </div>
@@ -117,9 +118,9 @@
           <li><a [routerLink]="['/admin/batchScript/batchScriptList']">Script
               batches</a></li>
           <li><a [routerLink]="['/admin/systemJobs/systemJobsList']">System jobs</a></li>
-          <li><a [routerLink]='[" /admin/ec2Instances/ec2InstancesList" ]'>EC2
+          <li><a [routerLink]='["/admin/ec2Instances/ec2InstancesList" ]'>EC2
               Instances</a></li>
-          <li><a [routerLink]='[" /admin/alertMessages/alertMessagesList" ]'>Alert
+          <li><a [routerLink]='["/admin/alertMessages/alertMessagesList" ]'>Alert
               Messages</a></li>
         </ul>
       </li>

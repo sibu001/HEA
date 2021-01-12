@@ -16,7 +16,13 @@ export enum MailActionTypes {
     DELETE_MAIL_CONTENT_PART_BY_ID = 'Delete Mail Content Part By Id',
     GET_CUSTOMER_GROUP_LIST_BY_MAIL_DESCRIPTION_ID = 'Fet Customer Group List By Mail Description Id',
     ASSIGN_CUSTOMER_GROUP_TO_MAIL_DESCRIPTION = 'Assign Customer Group To Mail Description',
-    DELETE_MAIL_DESCRIPTION_CUSTOMER_GROUP = 'Delete Customer Group Of Mail Description'
+    DELETE_MAIL_DESCRIPTION_CUSTOMER_GROUP = 'Delete Customer Group Of Mail Description',
+    GET_CUSTOMER_GROUP_MAIL_PART_LIST = 'Get All Customer Group Mail Part List',
+    GET_CUSTOMER_GROUP_MAIL_PART_LIST_COUNT = 'Get All Customer Group Mail Part List Count',
+    GET_CUSTOMER_GROUP_MAIL_PART_BY_ID = 'Get Customer Group Mail Part By Id',
+    SAVE_CUSTOMER_GROUP_MAIL_PART = 'Save Customer Group Mail Part',
+    UPDATE_CUSTOMER_GROUP_MAIL_PART = 'Update Customer Group Mail Part',
+    DELETE_CUSTOMER_GROUP_MAIL_PART_BY_ID = 'Delete Customer Group Mail Part By Id',
 }
 
 export class GetMailDescriptionListAction {
@@ -124,5 +130,41 @@ export class AssignCustomerGroupToMailDescriptionAction {
 export class DeleteMailDescriptionCustomerGroupAction {
     static readonly type: MailActionTypes = MailActionTypes.DELETE_MAIL_DESCRIPTION_CUSTOMER_GROUP;
     constructor(readonly mailDescriptionId: any, readonly groupCode: any) {
+    }
+}
+
+export class GetCustomerGroupMailPartListAction {
+    static readonly type: MailActionTypes = MailActionTypes.GET_CUSTOMER_GROUP_MAIL_PART_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetCustomerGroupMailPartCountAction {
+    static readonly type: MailActionTypes = MailActionTypes.GET_CUSTOMER_GROUP_MAIL_PART_LIST_COUNT;
+    constructor(readonly filter: any) {
+    }
+}
+
+export class GetCustomerGroupMailPartByIdAction {
+    static readonly type: MailActionTypes = MailActionTypes.GET_CUSTOMER_GROUP_MAIL_PART_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
+
+export class SaveCustomerGroupMailPartAction {
+    static readonly type: MailActionTypes = MailActionTypes.SAVE_CUSTOMER_GROUP_MAIL_PART;
+    constructor(readonly customerGroupMailPart: any) {
+    }
+}
+
+export class UpdateCustomerGroupMailPartAction {
+    static readonly type: MailActionTypes = MailActionTypes.UPDATE_CUSTOMER_GROUP_MAIL_PART;
+    constructor(readonly id: number, readonly customerGroupMailPart: any) {
+    }
+}
+
+export class DeleteCustomerGroupMailPartByIdAction {
+    static readonly type: MailActionTypes = MailActionTypes.DELETE_CUSTOMER_GROUP_MAIL_PART_BY_ID;
+    constructor(readonly id: number) {
     }
 }

@@ -170,7 +170,7 @@
                                     <div class="form-group" style="height: 34px;"
                                       *ngIf="surveyAnswerValue.dataField.inputType=='select'">
                                       <select name="pool/spa" class="form-control" [(ngModel)]="surveyAnswerValue.value"
-                                        (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',surveyAnswerValue.dataField.onChangeRefresh)">
+                                        (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',surveyAnswerValue.dataField.onChangeRefresh,'')">
                                         <option *ngFor="let optionList of surveyAnswerValue.dataField.fieldValues"
                                           [value]="optionList.value" class="options">{{optionList.name}}</option>
                                       </select>&nbsp;
@@ -297,7 +297,7 @@
                                 <input type="radio" [name]="answersList.dataField.field" [id]="k"
                                   [value]="dataFieldValue.value" [(ngModel)]="answersList.value"
                                   [checked]="'Y'==dataFieldValue.value"
-                                  (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh)">
+                                  (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh,answersList.value)">
                                 <span class="checkmark1"></span>
                               </label>
                             </div>
@@ -716,7 +716,7 @@
                                 <form class="form-tag">
                                   <div class="form-group" style="height: 34px;">
                                     <select name="pool/spa" class="form-control" [(ngModel)]="answersList.value"
-                                      (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh)">
+                                      (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh,'')">
                                       <option *ngFor="let optionList of answersList.dataField.fieldValues"
                                         [value]="optionList.value" class="options">{{optionList.name}}</option>
                                     </select>&nbsp;
@@ -927,14 +927,14 @@
         <div class="row footerRow" *ngIf="users.currentPaneNumber.currentPane!=null">
           <div class="col-sm-6 col-xs-6">
             <a *ngIf="users.currentPaneNumber.currentPane.showPrev">
-              <button type="button" class="btn btn-primary" (click)="prev('prev',users.paneNumber)">prev</button>
+              <button type="button" class="btn btn-primary" (click)="prev('prev',users.paneNumber)" [disabled]="disableButton">prev</button>
               <span class="sr-only">Previous</span>
             </a>
           </div>
           <div class="col-sm-6 col-xs-6 next_button">
             <a *ngIf="users.currentPaneNumber.currentPane.showNext" class="right">
               <button type="button" class="btn btn-primary" id="_next"
-                (click)="next('next',users.paneNumber)">next</button>
+                (click)="next('next',users.paneNumber)" [disabled]="disableButton">next</button>
               <span class="sr-only">Next</span>
             </a>
           </div>

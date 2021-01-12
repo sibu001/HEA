@@ -74,7 +74,7 @@ export class SystemJobsListComponent implements OnInit, OnDestroy {
         .subscribe((operatingSystemInfo: any) => {
           this.search();
         }));
-    }  else if (event.buttonType.key === 'resume') {
+    } else if (event.buttonType.key === 'resume') {
       this.subscriptions.add(this.systemMeasurementService.resumeSystemJobs(event.row.schedulerName, event.row.group, event.row.methodName).pipe(skipWhile((item: any) => !item))
         .subscribe((operatingSystemInfo: any) => {
           this.search();

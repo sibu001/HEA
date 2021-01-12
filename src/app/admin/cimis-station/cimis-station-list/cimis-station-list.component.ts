@@ -28,7 +28,6 @@ export class CimisStationListComponent implements OnInit, OnDestroy {
   stationForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: AdminFilter;
-  public baseTemp: Array<any> = TableColumnData.BASE_TEMPERATURE;
   constructor(public fb: FormBuilder,
     private readonly systemMeasurementService: SystemMeasurementService,
     private readonly activateRoute: ActivatedRoute,
@@ -87,7 +86,7 @@ export class CimisStationListComponent implements OnInit, OnDestroy {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('stationNbr', (this.stationForm.value.stationNbr !== null ? this.stationForm.value.stationNbr : ''))
       .set('name', (this.stationForm.value.name !== null ? this.stationForm.value.name : ''))
       .set('isActive', (this.stationForm.value.isActive !== null ? this.stationForm.value.isActive : ''));

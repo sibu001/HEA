@@ -5,7 +5,6 @@ import { CustomerGroupMailPartsRoutingModule } from './customer-group-mail-parts
 import { CustomerGroupMailPartsListComponent } from './customer-group-mail-parts-list/customer-group-mail-parts-list.component';
 import { CommonHEAModule } from 'src/app/common/common.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CustomerGroupMailPartsEditComponent } from './customer-group-mail-parts-edit/customer-group-mail-parts-edit.component';
 import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { NgxsModule } from '@ngxs/store';
@@ -17,6 +16,7 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { CustomerGroupMailPartsEditComponent } from './customer-group-mail-parts-edit/customer-group-mail-parts-edit.component';
 
 @NgModule({
   imports: [

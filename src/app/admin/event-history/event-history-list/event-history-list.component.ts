@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -22,6 +23,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.EVENT_HISTORY_KEYS;
   public dataSource: any;
   public totalElement = 0;
+  public fileObject: any;
   public reportData = {
     content: [{ 'test': 'test' }],
     totalElements: 1,
@@ -34,6 +36,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
     private readonly router: Router,
+    private readonly datePipe: DatePipe,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null || this.adminFilter.eventHistoryFilter === undefined) {
@@ -53,16 +56,16 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/eventHistory/eventHistoryEdit']);
   }
 
-  goToEditEventHistory(event): any {
-    this.router.navigate(['admin/eventHistory/eventHistoryEdit'], { queryParams: { id: event.id } });
+  goToEditEventHistory(event: any): any {
+    this.router.navigate(['admin/eventHistory/eventHistoryEdit'], { queryParams: { customerEventId: event.id, customerId: event.customerId } });
   }
 
   setUpForm(event: any) {
     this.topicForm = this.fb.group({
-      periodStart: [event !== undefined && event !== null ? event.periodStart : ''],
+      periodStart: [event && event.periodStart ? new Date(event.periodStart) : ''],
       auditId: [event !== undefined && event !== null ? event.auditId : ''],
       eventCode: [event !== undefined && event !== null ? event.eventCode : ''],
-      periodEnd: [event !== undefined && event !== null ? event.periodEnd : ''],
+      periodEnd: [event && event.periodEnd ? new Date(event.periodEnd) : ''],
       customerName: [event !== undefined && event !== null ? event.customerName : ''],
       eventName: [event !== undefined && event !== null ? event.eventName : ''],
       eventFile: [event !== undefined && event !== null ? event.eventFile : ''],
@@ -72,12 +75,16 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   findEventHistory(force: boolean, filter: any): void {
     this.adminFilter.eventHistoryFilter.formValue = this.topicForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.administrativeService.loadTopicList(force, filter);
-    this.subscriptions.add(this.administrativeService.getTopicList().pipe(skipWhile((item: any) => !item))
-      .subscribe((topicList: any) => {
-        this.reportData.content = topicList.list;
-        this.reportData.totalElements = topicList.totalSize;
-        this.dataSource = [...this.reportData.content];
+    this.subscriptions.add(this.administrativeService.getEventHistoryCount(filter).pipe(skipWhile((item: any) => !item))
+      .subscribe((eventHistoryCount: any) => {
+        this.reportData.totalElements = eventHistoryCount.administrativeManagement.eventHistoryCount;
+        this.totalElement = eventHistoryCount.administrativeManagement.eventHistoryCount;
+        this.administrativeService.loadEventHistoryList(force, filter);
+        this.subscriptions.add(this.administrativeService.getEventHistoryList().pipe(skipWhile((item: any) => !item))
+          .subscribe((eventHistoryList: any) => {
+            this.reportData.content = eventHistoryList;
+            this.dataSource = [...this.reportData.content];
+          }));
       }));
   }
 
@@ -85,22 +92,30 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   search(event: any, isSearch: boolean): void {
     this.adminFilter.eventHistoryFilter.page = event;
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
-      .set('filter.periodStart', (this.topicForm.value.periodStart !== null ? this.topicForm.value.periodStart : ''))
-      .set('filter.auditId', (this.topicForm.value.auditId !== null ? this.topicForm.value.auditId : ''))
-      .set('filter.eventCode', (this.topicForm.value.eventCode !== null ? this.topicForm.value.eventCode : ''))
-      .set('filter.periodEnd', (this.topicForm.value.periodEnd !== null ? this.topicForm.value.periodEnd : ''))
-      .set('filter.customerName', (this.topicForm.value.customerName !== null ? this.topicForm.value.customerName : ''))
-      .set('filter.eventName', (this.topicForm.value.eventName !== null ? this.topicForm.value.eventName : ''))
-      .set('filter.eventFile', (this.topicForm.value.eventFile !== null ? this.topicForm.value.eventFile : ''));
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      .set('dateFrom', (this.topicForm.value.periodStart ? this.datePipe.transform(this.topicForm.value.periodStart, 'MM/dd/yyyy') : ''))
+      .set('customer.auditId', (this.topicForm.value.auditId !== null ? this.topicForm.value.auditId : ''))
+      .set('customerEventType.eventCode', (this.topicForm.value.eventCode !== null ? this.topicForm.value.eventCode : ''))
+      .set('dateTo', (this.topicForm.value.periodEnd ? this.datePipe.transform(this.topicForm.value.periodEnd, 'MM/dd/yyyy') : ''))
+      .set('customer.user.name', (this.topicForm.value.customerName !== null ? this.topicForm.value.customerName : ''))
+      .set('customerEventType.eventName', (this.topicForm.value.eventName !== null ? this.topicForm.value.eventName : ''))
+      .set('eventFile', (this.topicForm.value.eventFile !== null ? this.topicForm.value.eventFile : ''));
     this.findEventHistory(true, params);
+
+  }
+
+  handleFileInput(file: any) {
+    this.fileObject = file[0];
+  }
+
+  uploadEventHistoryFile() {
+    if (this.fileObject) {
+      this.administrativeService.uploadEventHistoryFile(this.fileObject);
+    }
   }
 
   ngOnDestroy(): void {

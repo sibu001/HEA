@@ -4,20 +4,26 @@ import { Observable } from 'rxjs';
 import {
   AssignCustomerGroupToMailDescriptionAction,
   DeleteContextVariableByIdAction,
+  DeleteCustomerGroupMailPartByIdAction,
   DeleteMailContentPartByIdAction,
   DeleteMailDescriptionByIdAction,
   DeleteMailDescriptionCustomerGroupAction,
   GetContextVariableByIdAction,
   GetContextVariableListAction,
   GetCustomerGroupListByMailDescriptionIdAction,
+  GetCustomerGroupMailPartByIdAction,
+  GetCustomerGroupMailPartCountAction,
+  GetCustomerGroupMailPartListAction,
   GetMailContentPartByIdAction,
   GetMailContentPartListAction,
   GetMailDescriptionByIdAction,
   GetMailDescriptionListAction,
   SaveContextVariableAction,
+  SaveCustomerGroupMailPartAction,
   SaveMailContentPartAction,
   SaveMailDescriptionAction,
   UpdateContextVariableAction,
+  UpdateCustomerGroupMailPartAction,
   UpdateMailContentPartAction,
   UpdateMailDescriptionAction
 } from '../state/mail.action';
@@ -57,6 +63,14 @@ export class MailService {
 
   getMailContentPartById(): Observable<any> {
     return this.store.select(MailManagementState.getMailContentPartById);
+  }
+
+  getCustomerGroupMailPartList(): Observable<any> {
+    return this.store.select(MailManagementState.getCustomerGroupMailPartList);
+  }
+
+  getCustomerGroupMailPartById(): Observable<any> {
+    return this.store.select(MailManagementState.getCustomerGroupMailPartById);
   }
 
   loadMailDescriptionList(force: boolean, filter: any): Observable<MailManagementState> {
@@ -131,4 +145,27 @@ export class MailService {
     return this.store.dispatch(new DeleteMailDescriptionCustomerGroupAction(mailDescriptionId, groupCode));
   }
 
+  loadCustomerGroupMailPartList(force: boolean, filter: any): Observable<MailManagementState> {
+    return this.store.dispatch(new GetCustomerGroupMailPartListAction(force, filter));
+  }
+
+  loadCustomerGroupMailPartCount(filter: any): Observable<MailManagementState> {
+    return this.store.dispatch(new GetCustomerGroupMailPartCountAction(filter));
+  }
+
+  loadCustomerGroupMailPartById(id: number): Observable<MailManagementState> {
+    return this.store.dispatch(new GetCustomerGroupMailPartByIdAction(id));
+  }
+
+  saveCustomerGroupMailPart(customer: any): Observable<MailManagementState> {
+    return this.store.dispatch(new SaveCustomerGroupMailPartAction(customer));
+  }
+
+  updateCustomerGroupMailPart(id: number, customer: any): Observable<MailManagementState> {
+    return this.store.dispatch(new UpdateCustomerGroupMailPartAction(id, customer));
+  }
+
+  deleteCustomerGroupMailPartById(id: number): Observable<MailManagementState> {
+    return this.store.dispatch(new DeleteCustomerGroupMailPartByIdAction(id));
+  }
 }

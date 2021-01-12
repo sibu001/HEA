@@ -106,7 +106,7 @@ export class HeadersComponent implements OnInit {
           this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile' : true)) {
         this.router.navigate(['/accountDetail']);
       }
-      if(this.users.role=='ADMIN'){
+      if (this.users.role == 'ADMIN') {
         this.router.navigate(['/accountDetail']);
       }
     } else if (numbers === 4) {
@@ -148,10 +148,12 @@ export class HeadersComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    // this.innerWidth = window.innerWidth;
     if (window.innerWidth >= 767) {
       this.isResponsive = false;
     }
+  }
 
+  openCustomerChat() {
+    window.open(window.location.origin + '/hea-web/chatMain.do', '_blank');
   }
 }

@@ -60,11 +60,11 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
 
   search(event: any): void {
     const params = new HttpParams()
-    .set('startRow', '0')
-    .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-    .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
-    .set('credentialType', (this.credentialTypeForm.value.credentialType !== null ? this.credentialTypeForm.value.credentialType : ''))
-    .set('credentialName', (this.credentialTypeForm.value.credentialName !== null ? this.credentialTypeForm.value.credentialName : ''));
+      .set('startRow', '0')
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      .set('credentialType', (this.credentialTypeForm.value.credentialType !== null ? this.credentialTypeForm.value.credentialType : ''))
+      .set('credentialName', (this.credentialTypeForm.value.credentialName !== null ? this.credentialTypeForm.value.credentialName : ''));
 
     this.findCredentialType(true, params);
   }

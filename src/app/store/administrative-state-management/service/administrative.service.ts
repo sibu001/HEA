@@ -13,7 +13,9 @@ import {
   GetAdministrativeReportListAction,
   GetAdministrativeReportParamsByIdAction,
   GetAdministrativeReportParamsListAction,
+  GetCustomerListAction,
   GetEventHistoryByIdAction,
+  GetEventHistoryCountAction,
   GetEventHistoryListAction,
   GetProspectsByIdAction,
   GetProspectsListAction,
@@ -28,7 +30,8 @@ import {
   UpdateAdministrativeReportParamsAction,
   UpdateEventHistoryAction,
   UpdateProspectsAction,
-  UpdateTopicAction
+  UpdateTopicAction,
+  UploadEventHistoryFileAction
 } from '../state/administrative.action';
 import { AdministrativeManagementState } from '../state/administrative.state';
 
@@ -172,19 +175,31 @@ export class AdministrativeService {
     return this.store.dispatch(new GetEventHistoryListAction(force, filter));
   }
 
-  loadEventHistoryById(id: number): Observable<AdministrativeManagementState> {
-    return this.store.dispatch(new GetEventHistoryByIdAction(id));
+  getEventHistoryCount(filter: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetEventHistoryCountAction(filter));
   }
 
-  saveEventHistory(customer: any): Observable<AdministrativeManagementState> {
-    return this.store.dispatch(new SaveEventHistoryAction(customer));
+  loadEventHistoryById(customerId: any, customerEventId: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetEventHistoryByIdAction(customerId, customerEventId));
   }
 
-  updateEventHistory(id: number, customer: any): Observable<AdministrativeManagementState> {
-    return this.store.dispatch(new UpdateEventHistoryAction(id, customer));
+  saveEventHistory(customerId: any, customer: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new SaveEventHistoryAction(customerId, customer));
   }
 
-  deleteEventHistoryById(id: number): Observable<AdministrativeManagementState> {
-    return this.store.dispatch(new DeleteEventHistoryByIdAction(id));
+  updateEventHistory(customerId: any, customerEventId: any, customer: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new UpdateEventHistoryAction(customerId, customerEventId, customer));
+  }
+
+  uploadEventHistoryFile(fileBody: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new UploadEventHistoryFileAction(fileBody));
+  }
+
+  deleteEventHistoryById(customerId: any, customerEventId: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new DeleteEventHistoryByIdAction(customerId, customerEventId));
+  }
+
+  loadCustomerList(filter: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetCustomerListAction(filter));
   }
 }

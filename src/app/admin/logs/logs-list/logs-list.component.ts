@@ -82,7 +82,7 @@ export class LogsListComponent implements OnInit, OnDestroy {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('username', (this.logsForm.value.username !== null ? this.logsForm.value.username : ''))
       .set('recordType', (this.logsForm.value.recordType !== null ? this.logsForm.value.recordType : ''))
       .set('entity', (this.logsForm.value.entity !== null ? this.logsForm.value.entity : ''))

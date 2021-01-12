@@ -74,7 +74,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() handleLinkEvent: EventEmitter<any> = new EventEmitter();
   @Output() handleInLineEditEvent: EventEmitter<any> = new EventEmitter();
   @Output() handleInLineSaveEvent: EventEmitter<any> = new EventEmitter();
-  expandedElement: any = null;
+  expandedElement: any = [];
   showInput: Boolean = false;
   page = new Page();
   url: String;
@@ -83,6 +83,7 @@ export class TableComponent implements OnInit, OnChanges {
   pageEvent: PageEvent;
   selection = new SelectionModel<any>(true, []);
   tableForm: FormGroup = this.formBuilder.group({});
+  isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   constructor(
     private changeDetectorRefs: ChangeDetectorRef,
     private formBuilder: FormBuilder
@@ -110,7 +111,6 @@ export class TableComponent implements OnInit, OnChanges {
         this.pageIndexNumber = this.pageIndex;
       }
       this.dataSource = new MatTableDataSource(this.data);
-      this.expandedElement = this.dataSource;
       if (this.selectionList.length > 0) {
         this.selectionList.forEach(e => {
           this.dataSource.data.every((row) => {
@@ -210,6 +210,7 @@ export class TableComponent implements OnInit, OnChanges {
 
   goToEdit(event: any, col: any): any {
     if (col.isEdit) {
+      event.col = col;
       this.goToEditEvent.emit(event);
     }
   }

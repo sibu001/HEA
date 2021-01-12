@@ -1,5 +1,6 @@
 <div class="row">
   <div class="col-sm-12">
+    <h4><strong *ngIf="isList"> Staff notes</strong></h4>
     <button (click)="onNoClick()" class="closeButton" cdkFocusInitial>
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -31,7 +32,7 @@
             Date:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-            <p-calendar formControlName='noteDate' id="noteDate"
+            <p-calendar formControlName='noteDate' id="noteDate" showSeconds="true" hourFormat="24"
             showIcon=true showTime="true"></p-calendar>
           </div>
         </div>
@@ -56,11 +57,13 @@
         </div>
         <div class="col-sm-6 col-xs-6 " style="text-align: end;">
           <div class="row" *ngIf="isList">
+            <div class="col-sm-4 col-xs-12"  *ngIf="!showDelete">
+            </div>
             <div class="col-sm-4 col-xs-12">
               <button type="button" class="btn btn-primary btn-padding" (click)="save()">Save</button>
             </div>
-            <div class="col-sm-4 col-xs-12">
-              <button type="button" class="btn btn-primary btn-padding" *ngIf="showDelete" (click)="delete()">Delete</button>
+            <div class="col-sm-4 col-xs-12"  *ngIf="showDelete">
+              <button type="button" class="btn btn-primary btn-padding" (click)="delete()">Delete</button>
             </div>
             <div class="col-sm-4 col-xs-12">
               <button type="button" class="btn btn-primary btn-padding" (click)="onNoClick()">Cancel</button>

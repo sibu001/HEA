@@ -31,11 +31,12 @@ export class CustomerEventTypeComponent implements OnInit {
     public dialogRef: MatDialogRef<CustomerEventTypeComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     const users = JSON.parse(localStorage.getItem('users'));
-    this.author = users.username;
-    this.authorType = 'staff';
+    this.author = users.name;
+    this.authorType = 'Staff';
   }
 
   ngOnInit() {
+    this.setForm(undefined);
     this.loadCustomerEventType();
     if (this.data.isList) {
       const eventObj = {

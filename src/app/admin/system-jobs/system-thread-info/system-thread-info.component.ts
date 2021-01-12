@@ -32,6 +32,7 @@ export class SystemThreadInfoComponent implements OnInit {
     this.systemMeasurementService.loadThreadInfo();
     this.subscriptions.add(this.systemMeasurementService.getThreadInfo().pipe(skipWhile((item: any) => !item))
     .subscribe((systemJobs: any) => {
+      console.log(systemJobs);
       this.systemThreadData.content = systemJobs;
       this.dataSource = [...this.systemThreadData.content];
     }));

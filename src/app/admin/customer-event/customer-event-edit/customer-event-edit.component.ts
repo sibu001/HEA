@@ -50,13 +50,13 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.eventForm = this.formBuilder.group({
-      id: [event !== undefined ? event.id : ''],
-      customerEventTypeId: [event !== undefined ? event.customerEventTypeId : ''],
+      id: [event !== undefined ? event.id : null],
+      customerEventTypeId: [event !== undefined ? event.customerEventTypeId : null],
       eventCode: [event !== undefined ? event.eventCode : '', Validators.required],
       eventName: [event !== undefined ? event.eventName : '', Validators.required],
       description: [event !== undefined ? event.description : ''],
-      shared: [event !== undefined ? event.shared : ''],
-      onlyOne: [event !== undefined ? event.onlyOne : ''],
+      shared: [event !== undefined ? event.shared : false],
+      onlyOne: [event !== undefined ? event.onlyOne : false],
     });
   }
 

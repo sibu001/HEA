@@ -23,6 +23,7 @@ import { CalendarModule } from 'primeng/primeng';
 import { AddFileComponent } from './add-file/add-file.component';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { PipeModule } from 'src/app/pipes/pipe/pipe.module';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { SystemUtilityService } from 'src/app/store/system-utility-state-managem
     MatDialogModule,
     DragDropModule,
     CalendarModule,
+    PipeModule,
     AgmCoreModule.forRoot({
       apiKey: environment.googleMapAPIKey,
       libraries: ['places']

@@ -130,8 +130,8 @@ export class SystemMeasurementUtilityTransformer {
                 { key: 'pause', name: 'Pause', isShow: (element.state === 0 ? true : false) },
                 { key: 'resume', name: 'Resume', isShow: (element.state === 1 ? true : false) },
             ];
-            if (element.state == 0) {
-                dataSourceObject.state = 'Normal'
+            if (element.state === 0) {
+                dataSourceObject.state = 'Normal';
             } else if (element.state === 1) {
                 dataSourceObject.state = 'Paused';
             }
@@ -151,6 +151,13 @@ export class SystemMeasurementUtilityTransformer {
             dataSourceObject.buttonList = [
                 { key: 'stackTrack', name: 'Stack', isShow: true },
             ];
+            dataSourceObject.detailRow = true;
+            // const className = [];
+            // element.threadInfo.stackTrace.forEach(elements => {
+            //     className.push(elements.className);
+            // });
+            // dataSourceObject.element = { data: className };
+            dataSourceObject.element = element;
             dataSourceList.push(dataSourceObject);
         });
         return dataSourceList;

@@ -46,11 +46,12 @@ export class AppConstant {
     public static paidService = 'paidServices';
     public static administrativeReport = 'adminReports';
     public static callAdministrativeReport = 'report.do';
+    public static customerGroupMailPart = 'customerGroupMailParts';
     public static topic = '';
     public static prospects = '';
     public static contextVariable = '';
     public static mailContentPart = '';
-    public static eventHistory = '';
+    public static eventHistory = 'customerEvents';
     public static userReportDefinitions = '';
     public static userReportDefinitionContextVariableTypes = '';
     public static userReportDefinitionContentParts = '';

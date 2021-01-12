@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 
 @Component({
   selector: 'app-customer-alert',
@@ -13,17 +14,19 @@ import { CustomerService } from 'src/app/store/customer-state-management/service
 })
 export class CustomerAlertComponent implements OnInit {
   customerAlertForm: FormGroup;
-  customerAlertTypes: Array<any> = TableColumnData.CUSTOMER_ALERT_TYPE;
+  customerAlertTypes: Array<any>;
   alertLevels: Array<any> = TableColumnData.ALERT_LEVEL;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly customerService: CustomerService,
+    private readonly systemService: SystemService,
     private readonly el: ElementRef,
     public dialogRef: MatDialogRef<CustomerAlertComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+    this.findCustomerAlertType(true, '');
     this.setForm(undefined);
     if (this.data.row !== undefined) {
       this.customerService.loadAlertById(this.data.customerId, this.data.row.id);
@@ -32,6 +35,14 @@ export class CustomerAlertComponent implements OnInit {
           this.setForm(response.data);
         }));
     }
+  }
+
+  findCustomerAlertType(force: boolean, filter: any): void {
+    this.systemService.loadGetCustomerAlertTypeList(force, filter);
+    this.subscriptions.add(this.systemService.getCustomerAlertTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerAlertTypeList: any) => {
+        this.customerAlertTypes = customerAlertTypeList;
+      }));
   }
 
   onNoClick() {

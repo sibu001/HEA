@@ -4,6 +4,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AdministrativeManagementState } from '../../administrative-state-management/state/administrative.state';
 import { CustomerError } from '../../customer-state-management/state/customer.action';
 import { MailTransformer } from '../transformer/transformer';
 import {
@@ -24,7 +25,13 @@ import {
     UpdateMailContentPartAction,
     GetCustomerGroupListByMailDescriptionIdAction,
     DeleteMailDescriptionCustomerGroupAction,
-    AssignCustomerGroupToMailDescriptionAction
+    AssignCustomerGroupToMailDescriptionAction,
+    DeleteCustomerGroupMailPartByIdAction,
+    GetCustomerGroupMailPartByIdAction,
+    GetCustomerGroupMailPartCountAction,
+    GetCustomerGroupMailPartListAction,
+    SaveCustomerGroupMailPartAction,
+    UpdateCustomerGroupMailPartAction
 } from './mail.action';
 import { MailManagementModel } from './mail.model';
 
@@ -39,7 +46,10 @@ import { MailManagementModel } from './mail.model';
         mailDescriptionList: undefined,
         mailDescriptionDataSourceList: undefined,
         mailDescription: undefined,
-        mailDescriptionCustomerGroupList: undefined
+        mailDescriptionCustomerGroupList: undefined,
+        customerGroupMailPartList: undefined,
+        customerGroupMailPart: undefined,
+        customerGroupMailPartCount: undefined
     }
 })
 
@@ -82,6 +92,16 @@ export class MailManagementState {
     @Selector()
     static getMailContentPartById(state: MailManagementModel): any {
         return state.mailContentPart;
+    }
+
+    @Selector()
+    static getCustomerGroupMailPartList(state: MailManagementModel): any {
+        return state.customerGroupMailPartList;
+    }
+
+    @Selector()
+    static getCustomerGroupMailPartById(state: MailManagementModel): any {
+        return state.customerGroupMailPart;
     }
 
 
@@ -395,6 +415,115 @@ export class MailManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Save Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetCustomerGroupMailPartListAction)
+    getAllCustomerGroupMailPartList(ctx: StateContext<MailManagementModel>, action: GetCustomerGroupMailPartListAction): Actions {
+        const force: boolean = action.force || MailManagementState.getCustomerGroupMailPartList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.customerGroupMailPart, action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        const res = MailTransformer.transformCustomerGroupMailPartTableData(response, action.filter);
+                        ctx.patchState({
+                            customerGroupMailPartList: res,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetCustomerGroupMailPartCountAction)
+    getCustomerGroupMailPartCount(ctx: StateContext<MailManagementModel>, action: GetCustomerGroupMailPartCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.customerGroupMailPart + '/count', action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerGroupMailPartCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.errorMessage);
+                    }));
+
+    }
+
+    @Action(GetCustomerGroupMailPartByIdAction)
+    getCustomerGroupMailPartById(ctx: StateContext<MailManagementModel>, action: GetCustomerGroupMailPartByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customerGroupMailPart + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerGroupMailPart: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(DeleteCustomerGroupMailPartByIdAction)
+    deleteCustomerGroupMailPartById(ctx: StateContext<MailManagementModel>, action: DeleteCustomerGroupMailPartByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.customerGroupMailPart + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(SaveCustomerGroupMailPartAction)
+    saveCustomerGroupMailPart(ctx: StateContext<MailManagementModel>, action: SaveCustomerGroupMailPartAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.customerGroupMailPart, AppConstant.customerGroupMailPart)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        customerGroupMailPart: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UpdateCustomerGroupMailPartAction)
+    updateCustomerGroupMailPart(ctx: StateContext<MailManagementModel>, action: UpdateCustomerGroupMailPartAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut(action.customerGroupMailPart, AppConstant.customerGroupMailPart + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
+                    ctx.patchState({
+                        customerGroupMailPart: response,
+                    });
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

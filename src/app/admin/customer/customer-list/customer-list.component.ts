@@ -26,12 +26,12 @@ import { StaffNoteComponent } from '../staff-note/staff-note.component';
 })
 export class CustomerListComponent implements OnInit, OnDestroy {
   public keys: any;
-  public customerGroupList: any;
-  public viewConfigurationList: any;
-  public programGroupList: any;
-  public customerAlertTypeList: any;
-  public credentialTypeList: any;
-  public coachUserList: any;
+  public customerGroupList: any = [];
+  public viewConfigurationList: any = [];
+  public programGroupList: any = [];
+  public customerAlertTypeList: any = [];
+  public credentialTypeList: any = [];
+  public coachUserList: any = [];
   public dataSource: any;
   public customerView = -1;
   public adminFilter: AdminFilter;
@@ -105,6 +105,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    this.scrollTop();
   }
 
   findPlace(force: boolean, filter: string): any {
@@ -270,6 +271,10 @@ export class CustomerListComponent implements OnInit, OnDestroy {
           this.findCustomer(this.adminFilter.customerFilter.page, false);
         }
       }));
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   addEditCustomerEvent(event: any) {

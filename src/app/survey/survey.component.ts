@@ -12,6 +12,7 @@ export class SurveyComponent implements AfterViewInit {
   @ViewChild('inp1') inp1: ElementRef;
   @ViewChild('panel') public panel: ElementRef;
   inputErrorMessage: string;
+  disableButton = false;
   qusHide: boolean;
   chartHelpHide: boolean;
   hideBlockArrow: boolean;
@@ -188,7 +189,7 @@ export class SurveyComponent implements AfterViewInit {
       this.router.navigate(['/topicshistory']);
     } else {
       if (this.users.currentPaneNumber.currentPaneAnswers.length > 0 || this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
-        this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false);
+        this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
       } else {
         this.nextPane(this.users.currentPaneNumber);
       }
@@ -200,7 +201,7 @@ export class SurveyComponent implements AfterViewInit {
     this.chartHelpHide = false;
     this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
-      this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false);
+      this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
     } else {
       this.previousPane(this.users.currentPaneNumber);
     }
@@ -212,7 +213,7 @@ export class SurveyComponent implements AfterViewInit {
     this.loginService.setUser(this.users);
     this.router.navigate(['/surveyRecommendationList']);
   }
-  postSurveyAnswerData(currentPaneAnswers, currentPaneBlocks, id, value) {
+  postSurveyAnswerData(currentPaneAnswers: any, currentPaneBlocks: any, id: any, value: any, event?: any) {
     if ((id == 'change' && value) || id == 'next' || id == 'prev') {
       document.getElementById('loader').classList.add('loading');
       let data;
@@ -257,6 +258,12 @@ export class SurveyComponent implements AfterViewInit {
           document.getElementById('loader').classList.remove('loading');
         }
       );
+    } else if (this.users.currentPaneNumber.currentPane.paneCode === 'prf_welcome') {
+      if (event !== 'Y') {
+        this.disableButton = true;
+      } else {
+        this.disableButton = false;
+      }
     }
   }
 

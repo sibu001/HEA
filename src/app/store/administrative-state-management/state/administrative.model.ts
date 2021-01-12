@@ -11,5 +11,7 @@ export interface AdministrativeManagementModel {
     prospectsList: any;
     prospects: any;
     eventHistoryList: any;
+    eventHistoryCount: any;
     eventHistory: any;
+    customerList: any;
 }

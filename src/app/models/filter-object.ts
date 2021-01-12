@@ -103,4 +103,9 @@ export class AdminFilter {
         page: null,
         formValue: null
     };
+
+    public customerGroupMailPartFilter: any = {
+        page: null,
+        formValue: null
+    };
 }

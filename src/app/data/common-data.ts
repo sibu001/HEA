@@ -56,27 +56,27 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_ALERT_KEY: Array<TABLECOLUMN> = [
-        { key: 'customerAlertType', isEdit: true, displayName: 'Customer Alert Type', isUnderline: true },
+        { key: 'customerAlertType', isEdit: true, displayName: 'Customer Alert Type' },
         { key: 'alertLevels', isEdit: true, displayName: 'Alert Level' },
         { key: 'note', isEdit: true, displayName: 'Notes' }
     ];
 
     static readonly CUSTOMER_EVENT_KEY: Array<TABLECOLUMN> = [
-        { key: 'eventType', isEdit: true, displayName: 'Event Type', isUnderline: true },
-        { key: 'eventDatetime', isEdit: true, displayName: 'Event Date', isDate: true },
+        { key: 'eventType', isEdit: true, displayName: 'Event Type' },
+        { key: 'eventDatetime', isEdit: true, displayName: 'Event Date' },
         { key: 'description', isEdit: true, displayName: 'Note' },
         { key: 'linkedPersonName', isEdit: true, displayName: 'Author' }
     ];
 
     static readonly CUSTOMER_STAFF_KEY: Array<TABLECOLUMN> = [
-        { key: 'staff', isEdit: true, displayName: 'Staff', isUnderline: true },
-        { key: 'noteDate', isEdit: true, displayName: 'Date', isDate: true },
+        { key: 'staff', isEdit: true, displayName: 'Staff' },
+        { key: 'noteDate', isEdit: true, displayName: 'Date' },
         { key: 'note', isEdit: true, displayName: 'Note' }
     ];
 
     static readonly CUSTOMER_FILE_KEY: Array<TABLECOLUMN> = [
         { key: 'name', isEdit: true, displayName: 'File Name' },
-        { key: 'timestamp', isEdit: true, displayName: 'Time Stamp' },
+        { key: 'timestamp', isEdit: true, displayName: 'Timestamp' },
         { key: 'description', isEdit: true, displayName: 'Description', type: 'textArea' },
         { key: 'size', isEdit: true, displayName: 'Size' }
     ];
@@ -189,26 +189,6 @@ export class TableColumnData {
         { key: 'javascript', value: 'JavaScript' },
         { key: 'spel', value: 'SpEL', selected: true },
         { key: 'webharvest', value: 'WebHarvest script' },
-    ];
-
-    static readonly CUSTOMER_ALERT_TYPE: Array<any> = [
-        { customerAlertTypeId: 1, name: 'Email address bouncing' },
-        { customerAlertTypeId: 2, name: 'Problem with Energy Profile' },
-        { customerAlertTypeId: 3, name: 'Moved out of home being monitored' },
-        { customerAlertTypeId: 4, name: 'Opted In for Program Specific Survey' },
-        { customerAlertTypeId: 5, name: 'Problem with utility account or utility data' },
-        { customerAlertTypeId: 6, name: 'Unusually Short Utility Billing Month' },
-        { customerAlertTypeId: 7, name: 'Problem with Heating or Cooling Regression Results' },
-        { customerAlertTypeId: 8, name: 'Zero Variable Electric Load for one or more months' },
-        { customerAlertTypeId: 9, name: 'Dr Power account' },
-        { customerAlertTypeId: 10, name: 'Offline Authorization' },
-        { customerAlertTypeId: 11, name: 'Cooling load was double counted and fixed' },
-        { customerAlertTypeId: 12, name: 'Heating load was double counted and fixed' },
-        { customerAlertTypeId: 13, name: '3rd party electric charges' },
-        { customerAlertTypeId: 14, name: 'Other Space Heating Fuel?' },
-        { customerAlertTypeId: 15, name: 'Other Water Heating Fuel ?' },
-        { customerAlertTypeId: 16, name: 'Multiple homes under a single account' },
-        { customerAlertTypeId: 16, name: 'Multiple services under a single account' },
     ];
 
     static readonly ALERT_LEVEL: Array<any> = [
@@ -673,176 +653,11 @@ export class TableColumnData {
     ];
 
     static readonly EVENT_HISTORY_KEYS: Array<TABLECOLUMN> = [
-        { key: 'customer', sort: 'customer', isEdit: true, displayName: 'customer', isUnderline: true },
-        { key: 'eventCode', sort: 'eventCode', isEdit: true, displayName: 'Event Code' },
-        { key: 'eventName', isEdit: true, displayName: 'Event Name' },
-        { key: 'date', isEdit: true, displayName: 'Date' },
-        { key: 'author', isEdit: true, displayName: 'Author' },
-    ];
-    static readonly CUSTOMER_EVENT_TYPE: Array<any> = [
-        {
-            id: '1',
-            code: '',
-            name: 'Assigned to High Heating or Cooling Program Group'
-        },
-        {
-            id: '2',
-            code: '',
-            name: 'Assign to High Plug Loads Program Group'
-        },
-        {
-            id: '3',
-            code: '',
-            name: 'Assigned to High Heating/Cooling Loads Program Group'
-        },
-        {
-            id: '5',
-            code: '',
-            name: 'New real-time energy monitor was installed'
-        },
-        {
-            id: '6',
-            code: '',
-            name: 'Completed a home energy consultation with an expert'
-        },
-        {
-            id: '9',
-            code: '',
-            name: 'Started charging an electric vehicle at home'
-        },
-        {
-            id: '10',
-            code: '',
-            name: 'Started charging an electric vehicle (sub-metered)'
-        },
-        {
-            id: '11',
-            code: '',
-            name: 'Added, removed or updated a major appliance'
-        },
-        { id: '12', code: '', name: 'Change in average home occupancy' },
-        { id: '13', code: '', name: 'Significant home remodel or retrofit' },
-        {
-            id: '14',
-            code: '',
-            name: 'Completed a simple Energy Efficiency measure'
-        },
-        { id: '15', code: '', name: 'Change in behavior affecting energy use' },
-        {
-            id: '16',
-            code: '',
-            name: 'Unassigned from High Heating/Cooling Loads Program Group'
-        },
-        {
-            id: '17',
-            code: '',
-            name: 'Unassigned from High Plug Loads Program Group'
-        },
-        {
-            id: '18',
-            code: '',
-            name: 'Unassigned from High Heating/Cooling Loads Program Group'
-        },
-        {
-            id: '19',
-            code: '',
-            name: 'Assigned to High Variable Loads Program Group'
-        },
-        {
-            id: '20',
-            code: '',
-            name: 'Unassigned from High Variable Loads Program Group'
-        },
-        {
-            id: '21',
-            code: '',
-            name: 'Completed initial Home Energy Profile for EUMV'
-        },
-        {
-            id: '22',
-            code: '',
-            name: 'Completed online smart meter audit for EUMV'
-        },
-        {
-            id: '23',
-            code: '',
-            name: 'Assigned to High Recurring Loads Program Group'
-        },
-        {
-            id: '24',
-            code: '',
-            name: 'Unassigned from High Recurring Loads Program Group'
-        },
-        { id: '25', code: '', name: 'Assigned to Low Energy Program Group' },
-        {
-            id: '26',
-            code: '',
-            name: 'Unassigned from Low Energy Program Group'
-        },
-        {
-            id: '27',
-            code: '',
-            name: 'Assigned to Detailed Online Audit Program'
-        },
-        { id: '28', code: '', name: 'Unassigned from Online Program' },
-        { id: '29', code: '', name: 'Temporary increase in energy use' },
-        {
-            id: '30',
-            code: '',
-            name: 'Solar PV system installed and generating electricity'
-        },
-        { id: '31', code: '', name: 'Problem with Energy Profile Detected' },
-        { id: '32', code: '', name: 'Problem with Energy Profile now fixed' },
-        { id: '33', code: '', name: 'Moved to a new home' },
-        {
-            id: '34',
-            code: '',
-            name: 'Opt-in for optional Program-specific Survey'
-        },
-        { id: '36', code: '', name: 'Received an energy saving device' },
-        {
-            id: '39',
-            code: '',
-            name: 'Air conditioning optimizer installed by home professional'
-        },
-        {
-            id: '40',
-            code: '',
-            name: 'In-home energy audit performed by professional'
-        },
-        { id: '41', code: '', name: 'Account specific notes' },
-        {
-            id: '42',
-            code: '',
-            name: 'Double-countedrecurring or base load detected and fixed'
-        },
-        {
-            id: '43',
-            code: '',
-            name: 'Double-counted recurring or base load detected and fixed'
-        },
-        { id: '44', code: '', name: 'Enrolled into P4P Program' },
-        { id: '45', code: '', name: 'Removed from P4P Program' },
-        { id: '46', code: '', name: 'Determined Eligible for P4P Program' },
-        { id: '47', code: '', name: 'Temporary decrease in energy use' },
-        {
-            id: '48',
-            code: '',
-            name: 'Stopped charging an electric vehicle at home'
-        },
-        { id: '49', code: '', name: 'Determined  ineligible for P4P Program' },
-        { id: '50', code: '', name: 'Applied for Peninsula Climate Comfort' },
-        {
-            id: '51',
-            code: '',
-            name: 'Completion  date for Home Energy Profile topic'
-        },
-        {
-            id: '52',
-            code: '',
-            name: 'Enrolled into P4P Program as Metered Reserve'
-        },
-        { id: '53', code: '', name: 'Log of miscellaneous Coaching Activity' }
+        { key: 'customerName', sort: 'customer', isEdit: true, displayName: 'Customer' },
+        { key: 'eventCode', sort: 'eventCode', isEdit: true, displayName: 'Event Code', isUnderline: true },
+        { key: 'eventName', sort: 'eventName', isEdit: true, displayName: 'Event Name' },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Date' },
+        { key: 'linkedPersonName', sort: 'linkedPersonName', isEdit: true, displayName: 'Author' },
     ];
 
     static readonly PROSPECTS_KEY: Array<TABLECOLUMN> = [
@@ -888,7 +703,8 @@ export class TableColumnData {
 
 
     static readonly CUSTOMER_GROUP_MAIL_PART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'customerGroupName', sort: 'customerGroupName', isEdit: true, displayName: 'customerGroupName' },
+        { key: 'serialNumber', displayName: '#' },
+        { key: 'groupName', sort: 'groupName', displayName: 'Customer Group Name' },
         { key: 'header', isEdit: true, displayName: 'Header', isUnderline: true },
         { key: 'footer', isEdit: true, displayName: 'Footer', isUnderline: true },
     ];

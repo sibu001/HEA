@@ -59,7 +59,7 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
     const params = new HttpParams()
       .set('startRow', '0')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('programCode', (this.programGroupForm.value.programCode !== null ? this.programGroupForm.value.programCode : ''))
       .set('programName', (this.programGroupForm.value.programName !== null ? this.programGroupForm.value.programName : ''));
     this.findProgramGroup(params, force);

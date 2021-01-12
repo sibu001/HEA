@@ -1,4 +1,5 @@
 import { copyStyles } from '@angular/animations/browser/src/util';
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -39,10 +40,10 @@ export class PlaceListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.scrollTop();
-    this.findPlace(this.force, '');
+    this.findPlace(this.force, null);
   }
 
-  findPlace(force: boolean, filter: string): any {
+  findPlace(force: boolean, filter: HttpParams): any {
     this.systemUtilityService.loadWeatherStationList(false, '');
     this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
       .subscribe((weatherStationList: any) => {
@@ -76,13 +77,13 @@ export class PlaceListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any): void {
-    const filter = '?filter.startRow=0' + '&sortField='
-      + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
-      + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC')
-      + '&placeName='
-      + this.placeForm.value.placeName + '&zipCode='
-      + this.placeForm.value.zipCode;
-    this.findPlace(true, filter);
+      const params = new HttpParams()
+      .set('startRow', '0')
+      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      .set('placeName', (this.placeForm.value.placeName !== null ? this.placeForm.value.placeName : ''))
+      .set('zipCode', (this.placeForm.value.zipCode !== null ? this.placeForm.value.zipCode : ''));
+    this.findPlace(true, params);
   }
 
   ngOnDestroy(): void {

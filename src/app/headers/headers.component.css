@@ -15,7 +15,6 @@ span.menu {
 span.username {
   border-right: 1px solid #000;
   padding-right: 12px;
-  cursor: pointer;
 }
 span.menu:hover {
   text-decoration: underline;
@@ -175,4 +174,84 @@ p.menuresponsive {
 }
 .header_menu_display {
   display: block;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #76ba19;
+  border-color: #76ba19;
+  padding: 4px 12px;
+  font-size: 12px;
+  font-family: "Montserrat";
+}
+.responsive-btn {
+  font-size: 12px !important;
+}
+
+.adminButton {
+  margin-top: 4px;
+  margin-right: 4px;
+}
+
+.btn-primary.active.focus,
+.btn-primary.active:focus,
+.btn-primary.active:hover,
+.btn-primary:active.focus,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.open > .dropdown-toggle.btn-primary.focus,
+.open > .dropdown-toggle.btn-primary:focus,
+.open > .dropdown-toggle.btn-primary:hover {
+  color: #fff;
+  background-color: #76ba19;
+  border-color: #76ba19;
+  padding: 4px 12px;
+  border-radius: 3px;
+}
+.btn.active.focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn:active:focus,
+.btn:focus {
+  outline: 0px auto -webkit-focus-ring-color;
+  outline-offset: 0px;
+}
+.btn.active,
+.btn:active {
+  background-image: none;
+  outline: 0;
+  box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.125);
+}
+
+.customer-chat-button{
+  right: 0px;
+  bottom: 0px;
+  padding: 8px 14px 8px 14px;
+  border-bottom: 0px;
+  border: 1px solid #578ea9;
+  color: white !important;
+  display: block;
+  position: fixed;
+  background-color: #578ea9!important;
+  font-size: 15px !important;
+  font-family: Arial;
+  line-height: 15px;
+  opacity: 1;
+  z-index: 999995;
+  cursor: pointer;
+  text-decoration: none !important;
+  border-radius: 7px 7px 0px 0px;
+  -moz-border-radius: 7px 7px 0px 0px;
+  transform-origin: 100% 100% 0;
+  -webkit-transform-origin: 97% 100% 0;
+  -ms-transform-origin: 100% 100% 0;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -ms-transform: rotate(-90deg) scale(1.02);
+  -moz-transform: rotate(-90deg);
+  transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -webkit-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
 }

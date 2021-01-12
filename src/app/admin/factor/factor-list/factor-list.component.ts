@@ -102,7 +102,7 @@ export class FactorListComponent implements OnInit, OnDestroy {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('factorId', '')
       .set('factorCode', (this.factorForm.value.factorCode !== null ? this.factorForm.value.factorCode : ''))
       .set('place', (this.factorForm.value.place !== null ? this.factorForm.value.place : ''))

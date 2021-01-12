@@ -137,7 +137,8 @@
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <select class="form-control form-control-sm" formControlName="energyCoach">
                                 <option value=""></option>
-                                <option *ngFor="let coachUser of coachUserList" [value]="coachUser.userId">
+                                <option value="-1">Unassigned</option>
+                                <option *ngFor="let coachUser of coachUserList | sortBy : 'name' " [value]="coachUser.userId">
                                     {{coachUser.name}}</option>
                             </select>
                         </div>

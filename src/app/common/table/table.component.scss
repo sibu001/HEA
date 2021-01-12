@@ -14,6 +14,21 @@
 .table-wrapper {
   width: 100%;
 }
+.element-row {
+  position: relative;
+}
+
+.element-row:not(.expanded) {
+  cursor: pointer;
+}
+
+.element-row:not(.expanded):hover {
+  background: #f5f5f5;
+}
+
+.element-row.expanded {
+  border-bottom-color: transparent;
+}
 
 .mat-header-row {
   color: black;
@@ -250,7 +265,7 @@ mat-header-cell:last-of-type {
   }
 }
 
-.mat-column-serialNumber{
+.mat-column-serialNumber {
   flex: none;
   width: 70px;
 }
@@ -274,4 +289,12 @@ tr.example-element-row:not(.example-expanded-row):active {
 .example-element-detail {
   overflow: hidden;
   display: flex;
+}
+
+.ng-trigger-detailExpand {
+  border: none;
+}
+
+.mat-column-expandedDetail{
+  display: block;
 }

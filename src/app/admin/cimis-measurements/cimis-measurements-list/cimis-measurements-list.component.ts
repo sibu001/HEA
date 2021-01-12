@@ -31,7 +31,6 @@ export class CimisMeasurementsListComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
   public adminFilter: AdminFilter;
-  public baseTemp: Array<any> = TableColumnData.BASE_TEMPERATURE;
   constructor(public fb: FormBuilder,
     private readonly datePipe: DatePipe,
     private readonly systemMeasurementService: SystemMeasurementService,
@@ -94,7 +93,7 @@ export class CimisMeasurementsListComponent implements OnInit, OnDestroy {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('stationNbr', (this.measurementsForm.value.stationNbr !== null ? this.measurementsForm.value.stationNbr : ''))
       .set('cmDateTimeFrom', (this.measurementsForm.value.cmDateTimeFrom ? this.datePipe.transform(this.measurementsForm.value.cmDateTimeFrom, 'MM/dd/yyyy') : ''))
       .set('cmDateTimeTo', (this.measurementsForm.value.cmDateTimeTo ? this.datePipe.transform(this.measurementsForm.value.cmDateTimeTo, 'MM/dd/yyyy') : ''));

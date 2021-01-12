@@ -85,7 +85,7 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('viewConfigurationId', '')
       .set('filter.configurationName', (this.viewConfiguration.value.configurationName !== null ? this.viewConfiguration.value.configurationName : ''))
       .set('filter.user.name', (this.viewConfiguration.value.userName !== null ? this.viewConfiguration.value.userName : ''));

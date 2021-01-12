@@ -96,7 +96,7 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('stationId', (this.degreeDayForm.value.stationId !== null ? this.degreeDayForm.value.stationId : ''))
       .set('valueDateFrom', (this.degreeDayForm.value.valueDateFrom ? this.datePipe.transform(this.degreeDayForm.value.valueDateFrom, 'MM/dd/yyyy') : ''))
       .set('type', (this.degreeDayForm.value.type !== null ? this.degreeDayForm.value.type : ''))

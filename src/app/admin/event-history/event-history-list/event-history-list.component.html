@@ -11,7 +11,7 @@
               <span class="filterLabel">Period Start:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <p-calendar formControlName='periodStart' dateFormat="MM/dd/yyyy"
+              <p-calendar formControlName='periodStart'  dateFormat="mm/dd/yy"
                 id='periodStart' showIcon=true
                 showButtonBar="true">
               </p-calendar>
@@ -37,7 +37,7 @@
               <span class="filterLabel">Period End:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <p-calendar formControlName='periodEnd' dateFormat="MM/dd/yyyy"
+              <p-calendar formControlName='periodEnd'  dateFormat="mm/dd/yy"
                 id='periodEnd' showIcon=true
                 showButtonBar="true">
               </p-calendar>
@@ -65,10 +65,10 @@
               <span class="filterLabel">Upload file with events:</span>
             </div>
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              <input type="file" formControlName="eventFile" id="eventFile">
+              <input type="file" formControlName="eventFile" id="eventFile" (change)="handleFileInput($event.target.files)">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12" style="text-align: end;">
-              <button type="button" class="btn btn-primary">Upload</button>
+              <button type="button" class="btn btn-primary" (click)="uploadEventHistoryFile()">Upload</button>
             </div>
           </div>
           <div class="row rowPadding">

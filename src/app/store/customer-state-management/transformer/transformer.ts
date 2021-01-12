@@ -67,23 +67,26 @@ export class Transformer {
             key: 'serialNumber',
             displayName: '#',
             isUnderline: true
-        })
+        });
         if (viewType === -1) {
             key = [
                 {
                     key: 'serialNumber',
                     displayName: '#',
+                    isEdit: true,
                     isUnderline: true
                 },
                 {
                     key: 'auditId',
                     displayName: 'Audit Id',
+                    isEdit: true,
                     sort: 'auditId',
                     isUnderline: true
                 },
                 {
                     key: 'name',
                     displayName: 'Name',
+                    isEdit: true,
                     sort: 'name',
                     isUnderline: true
                 },
@@ -116,22 +119,26 @@ export class Transformer {
                 {
                     key: 'notes',
                     displayName: 'Notes',
+                    isEdit: true,
                     sort: 'notes'
                 },
                 {
                     key: 'place',
                     displayName: 'Place',
+                    isEdit: true,
                     sort: 'place'
                 },
                 {
                     key: 'joinDate',
                     displayName: 'Join Date',
+                    isEdit: true,
                     sort: 'joinDate',
                     isDate: true
                 },
                 {
                     key: 'maxAlertLevel',
                     displayName: '',
+                    isEdit: true,
                     sort: 'maxAlertLevel',
                     type: 'alert',
                     event: ''
@@ -164,6 +171,7 @@ export class Transformer {
                 if (i === 0) {
                     keyObj.isUnderline = true;
                 }
+                keyObj.isEdit = true;
                 i++;
                 if (element.attributeType === 'A' || element.attributeType === 'E' || element.attributeType === 'N' || element.attributeType === 'D') {
                     keyObj.imagePath = 'assets/images/ico_add.gif';
@@ -245,7 +253,7 @@ export class Transformer {
         src.data.forEach(element => {
             const dataSourceObj: any = element;
             dataSourceObj.eventType = element.customerEventType.eventName + ' (' + element.customerEventType.eventCode + ')';
-            dataSourceObj.eventDatetime = element.eventDatetime ? new Date(element.eventDatetime) : '';
+            dataSourceObj.eventDatetime = element.eventDatetime ? new DatePipe('en-US').transform(new Date(element.eventDatetime), 'MM/dd/yyyy HH:mm:ss') : '';
             dataSource.push(dataSourceObj);
         });
         return dataSource;
@@ -256,7 +264,7 @@ export class Transformer {
         src.data.forEach(element => {
             const dataSourceObj: any = element;
             dataSourceObj.staff = element.user.name;
-            dataSourceObj.noteDate = element.noteDate ? new Date(element.noteDate) : '';
+            dataSourceObj.noteDate = element.noteDate ? new DatePipe('en-US').transform(new Date(element.noteDate), 'MM/dd/yyyy HH:mm:ss') : '';
             dataSource.push(dataSourceObj);
         });
         return dataSource;
@@ -272,6 +280,7 @@ export class Transformer {
             const newArray = element.fileName.split('/');
             dataSourceObj.name = newArray[newArray.length - 1];
             dataSourceObj.isInlineEdit = true;
+            dataSourceObj.timestamp = element.timestamp ? new DatePipe('en-US').transform(new Date(element.timestamp), 'MM/dd/yyyy HH:mm:ss') : '';
             dataSource.list.push(dataSourceObj);
         });
         return dataSource;

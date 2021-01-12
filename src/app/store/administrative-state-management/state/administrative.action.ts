@@ -22,10 +22,13 @@ export enum AdministrativeActionTypes {
     UPDATE_PROSPECTS = 'Update Prospects',
     DELETE_PROSPECTS_BY_ID = 'Delete Prospects By Id',
     GET_EVENT_HISTORY_LIST = 'Get All EventHistory List',
+    GET_EVENT_HISTORY_COUNT = 'Get All EventHistory Count',
     GET_EVENT_HISTORY_BY_ID = 'Get EventHistory By Id',
     SAVE_EVENT_HISTORY = 'Save EventHistory',
     UPDATE_EVENT_HISTORY = 'Update EventHistory',
+    UPLOAD_EVENT_HISTORY_FILE = 'Upload Event History File',
     DELETE_EVENT_HISTORY_BY_ID = 'Delete EventHistory By Id',
+    GET_CUSTOMER_LIST = 'Get Customer List'
 }
 export class GetAdministrativeReportListAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_ADMINISTRATIVE_REPORT_LIST;
@@ -167,26 +170,44 @@ export class GetEventHistoryListAction {
     }
 }
 
+export class GetEventHistoryCountAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_EVENT_HISTORY_COUNT;
+    constructor(readonly filter: any) {
+    }
+}
+
 export class GetEventHistoryByIdAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_EVENT_HISTORY_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly customerId: any, readonly customerEventId: any) {
     }
 }
 
 export class SaveEventHistoryAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.SAVE_EVENT_HISTORY;
-    constructor(readonly eventHistory: any) {
+    constructor(readonly customerId: any, readonly eventHistory: any) {
     }
 }
 
 export class UpdateEventHistoryAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.UPDATE_EVENT_HISTORY;
-    constructor(readonly id: number, readonly eventHistory: any) {
+    constructor(readonly customerId: any, readonly customerEventId: any, readonly eventHistory: any) {
+    }
+}
+
+export class UploadEventHistoryFileAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.UPLOAD_EVENT_HISTORY_FILE;
+    constructor(readonly fileBody: any) {
     }
 }
 
 export class DeleteEventHistoryByIdAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.DELETE_EVENT_HISTORY_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly customerId: any, readonly customerEventId: any) {
+    }
+}
+
+export class GetCustomerListAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_CUSTOMER_LIST;
+    constructor(readonly filter: any) {
     }
 }

@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-12">
-    <h4 style="margin-top: 0px;"><strong> Customer Event </strong>
+    <h4 style="margin-top: 0px;" ><strong *ngIf="isList" > Customer Event </strong>
       <button (click)="onNoClick()" class="closeButton" style="margin-top: 0px;" cdkFocusInitial>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -78,7 +78,7 @@
             Event Date:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-            <p-calendar formControlName='eventDatetime' id="eventDatetime"
+            <p-calendar formControlName='eventDatetime' id="eventDatetime"  showSeconds="true" hourFormat="24"
               showIcon=true showTime="true"></p-calendar>
           </div>
         </div>
@@ -129,13 +129,16 @@
         </div>
         <div class="col-sm-6 col-xs-6"style="text-align: end;">
           <div class="row" *ngIf="isList">
+            <div class="col-sm-4 col-xs-12" *ngIf="!showDelete">
+             
+            </div>
             <div class="col-sm-4 col-xs-12">
               <button type="button" class="btn btn-primary btn-padding"
                 (click)="save()">Save</button>
             </div>
-            <div class="col-sm-4 col-xs-12">
+            <div class="col-sm-4 col-xs-12" *ngIf="showDelete">
               <button type="button" class="btn btn-primary btn-padding"
-                *ngIf="showDelete" (click)="delete()">Delete</button>
+                 (click)="delete()">Delete</button>
             </div>
             <div class="col-sm-4 col-xs-12">
               <button type="button" class="btn btn-primary btn-padding"

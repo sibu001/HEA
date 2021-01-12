@@ -1,20 +1,24 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
-          padding-top: 35px;'>
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+        left;padding-left: 40px;
+        padding-top: 35px;'>
         <p class="heading">
           Customer Group Mail Parts
         </p>
         <form [formGroup]='mailForm'>
-          <div class="row rowPadding" (submit)="search()">
+          <div class="row rowPadding">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Customer Group:</span>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control" formControlName='customerGroup' id='customerGroup'>
-                <option *ngFor='let customerGroup of customerGroupData' [value]="customerGroup.groupCode">
+              <select class="form-control" formControlName='customerGroup'
+                id='customerGroup'>
+                <option></option>
+                <option *ngFor='let customerGroup of customerGroupData'
+                  [value]="customerGroup.id">
                   {{customerGroup.groupName}}</option>
               </select>
             </div>
@@ -23,7 +27,8 @@
 
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" (click)="search(undefined,true)" class="btn
+                btn-primary">Show</button>
             </div>
           </div>
 
@@ -31,9 +36,12 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Customer Group Mail Part List</span></p>
-            <app-table [keys]="keys" [isPaginate]="true" (goToEditEvent)='goToEditMailParts($event)'
+            <app-table [keys]="keys" [isPaginate]="true"
+              (goToEditEvent)='goToEditMailParts($event)'
               (addEvent)='addMailParts()' [isSearch]="false" [data]="dataSource"
-              [totalElement]="mailData.totalElements" (changePageEvent)="findMailPart($event)">
+              [pageIndex]="pageIndex"
+              [totalElement]="mailData.totalElements"
+              (changePageEvent)="search($event,false)">
             </app-table>
           </div>
         </form>

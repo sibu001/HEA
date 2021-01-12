@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -35,7 +35,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: './customer-view.component.html',
   styleUrls: ['./customer-view.component.css']
 })
-export class CustomerViewComponent implements OnInit, OnDestroy {
+export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   matcher = new MyErrorStateMatcher();
   customerForm: FormGroup;
   passwordForm: FormGroup;
@@ -43,6 +43,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   programGroupList: any;
   coachUserList: any;
   customerGroupCode: any;
+  customerData: any;
   energyCoach: any;
   pgeHasPoolDisabled = false;
   helpHide: boolean;
@@ -110,6 +111,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       this.id = params['id'];
     });
   }
+  ngAfterViewInit(): void {
+  }
 
   ngOnInit() {
     this.findPlace(true, '');
@@ -126,6 +129,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  scrollTop() {
+    window.scroll(0, 0);
+  }
+
   findPlace(force: boolean, filter: string): any {
     this.systemUtilityService.loadPlaceList(force, filter);
     this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
@@ -136,12 +143,16 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   loadCustomerById() {
     this.subscriptions.add(this.customerService.getCustomerById().pipe(skipWhile((item: any) => !item))
       .subscribe((customer: any) => {
+        this.customerData = customer;
         if (this.isForce) {
           this.router.navigate(['admin/customer/customerEdit'], { queryParams: { 'id': customer.customerId } });
         }
         this.customerGroupCode = customer.customerGroup.groupCode;
         if (customer.coachUser) {
           this.energyCoach = customer.coachUser.name;
+        }
+        if (customer) {
+          this.scrollTop();
         }
         this.setForm(customer);
       }));
@@ -249,7 +260,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       allowUIVersion: [event !== undefined ? event.allowUIVersion : ''],
       uiVersion: [event !== undefined && event.uiVersion ? event.uiVersion : 'V1'],
       programGroup: [event !== undefined ? event.programGroup : null],
-      coachUser: [event !== undefined ? event.customerGroup : null],
+      coachUser: [event !== undefined ? event.coachUser : null],
       registrationDate: [event !== undefined ? (this.datePipe.transform(event.registrationDate, 'MM/dd/yyyy h:mm:ss')) : null],
       vacaCalculationDate: [event !== undefined ? (this.datePipe.transform(event.vacaCalculationDate, 'MM/dd/yyyy h:mm:ss')) : null],
       lastMonthlyCalc: [event !== undefined ? (this.datePipe.transform(event.lastMonthlyCalc, 'MM/dd/yyyy h:mm:ss')) : null],
@@ -638,7 +649,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
   }
 
   previewFile(event: any) {
-    const url = window.location.origin + '/' + event.fileName + '?preview=true&fileName=Test.txt';
+    const url = window.location.origin + '/hea-web/' + event.fileName + '?preview=true&fileName=' + event.name;
     window.open(url, '_blank');
   }
 
@@ -649,10 +660,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
       Validators.maxLength(this.maxLength)]);
       this.p.confirmPassword.setValidators([Validators.required]);
     }
-    // if (this.p.password.value && this.p1.valid) {
-    //   this.getValidateNewPassword(this.p.password.value);
-    // }
     if (this.customerForm.valid) {
+      if (this.customerForm.value.user.lastSuccessfulUtilityReadDate) {
+        this.customerForm.value.user.lastSuccessfulUtilityReadDate = this.customerData.user.lastSuccessfulUtilityReadDate;
+      }
       if (this.id !== null && this.id !== undefined) {
         if (this.customerForm.value.repeatedActivationMail) {
           const mailObj = {
@@ -671,12 +682,14 @@ export class CustomerViewComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.customerService.updateCustomer(this.id, this.customerForm.value).pipe(skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadCustomerById();
           }));
       } else {
         this.subscriptions.add(this.customerService.saveCustomer(this.customerForm.value).pipe(skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.scrollTop();
             this.loadCustomerById();
           }));
       }

@@ -33,7 +33,10 @@ import {
     GetAdministrativeReportParamsListAction,
     SaveAdministrativeReportParamsAction,
     UpdateAdministrativeReportParamsAction,
-    CallAdministrativeReportAction
+    CallAdministrativeReportAction,
+    GetEventHistoryCountAction,
+    UploadEventHistoryFileAction,
+    GetCustomerListAction
 } from './administrative.action';
 import { AdministrativeManagementModel } from './administrative.model';
 
@@ -52,7 +55,9 @@ import { AdministrativeManagementModel } from './administrative.model';
         prospectsList: undefined,
         prospects: undefined,
         eventHistoryList: undefined,
+        eventHistoryCount: undefined,
         eventHistory: undefined,
+        customerList: undefined,
     }
 })
 
@@ -196,7 +201,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         administrativeReport: response,
                     });
@@ -214,7 +219,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         administrativeReport: response,
                     });
@@ -282,7 +287,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         administrativeReport: response,
                     });
@@ -300,7 +305,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         administrativeReport: response,
                     });
@@ -391,7 +396,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         topic: response,
                     });
@@ -409,7 +414,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');4
                     ctx.patchState({
                         topic: response,
                     });
@@ -481,7 +486,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         prospects: response,
                     });
@@ -499,7 +504,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // // this.utilityService.showSuccessMessage('Updated Successfully');4
                     ctx.patchState({
                         prospects: response,
                     });
@@ -519,10 +524,10 @@ export class AdministrativeManagementState {
             result = this.loginService.performGetWithParams(AppConstant.eventHistory, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        // const res = Transformer.transformEventHistoryTableData(response);
+                        const res = AdministrativeReportTransformer.transformEventHistoryTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            eventHistoryList: response,
+                            eventHistoryList: res,
                         });
                     },
                         error => {
@@ -534,10 +539,28 @@ export class AdministrativeManagementState {
         return result;
     }
 
+    @Action(GetEventHistoryCountAction)
+    getAllEventHistoryCount(ctx: StateContext<AdministrativeManagementModel>, action: GetEventHistoryCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.eventHistory + '/count', action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        eventHistoryCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
     @Action(GetEventHistoryByIdAction)
     getEventHistoryById(ctx: StateContext<AdministrativeManagementModel>, action: GetEventHistoryByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.eventHistory + '/' + action.id)
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.eventHistory + '/' + action.customerEventId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -554,11 +577,11 @@ export class AdministrativeManagementState {
     @Action(DeleteEventHistoryByIdAction)
     deleteEventHistoryById(ctx: StateContext<AdministrativeManagementModel>, action: DeleteEventHistoryByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.eventHistory + '/' + action.id)
+        return this.loginService.performDelete(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.eventHistory + '/' + action.customerEventId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    // this.utilityService.showSuccessMessage(response.message);
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -569,11 +592,11 @@ export class AdministrativeManagementState {
     @Action(SaveEventHistoryAction)
     saveEventHistory(ctx: StateContext<AdministrativeManagementModel>, action: SaveEventHistoryAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.eventHistory, AppConstant.eventHistory)
+        return this.loginService.performPost(action.eventHistory, AppConstant.customer + '/' + action.customerId + '/' + AppConstant.eventHistory)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         eventHistory: response,
                     });
@@ -587,11 +610,11 @@ export class AdministrativeManagementState {
     @Action(UpdateEventHistoryAction)
     updateEventHistory(ctx: StateContext<AdministrativeManagementModel>, action: UpdateEventHistoryAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.eventHistory, AppConstant.eventHistory + '/' + action.id)
+        return this.loginService.performPut(action.eventHistory, AppConstant.customer + '/' + action.customerId + '/' + AppConstant.eventHistory + '/' + action.customerEventId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         eventHistory: response,
                     });
@@ -599,6 +622,35 @@ export class AdministrativeManagementState {
                     error => {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UploadEventHistoryFileAction)
+    uploadEventHistoryFile(ctx: StateContext<AdministrativeManagementModel>, action: UploadEventHistoryFileAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostMultiPartFromData(action.fileBody, AppConstant.eventHistory + '/files')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetCustomerListAction)
+    getAllCustomerList(ctx: StateContext<AdministrativeManagementModel>, action: GetCustomerListAction): Actions {
+        return this.loginService.performGetWithParams(AppConstant.customer, action.filter)
+            .pipe(
+                tap((response: any) => {
+                    ctx.patchState({
+                        customerList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 

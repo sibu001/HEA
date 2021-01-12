@@ -23,7 +23,7 @@
 </div>
 
 <div class="example-container mat-elevation-z0 table-wrapper">
-    <mat-table [dataSource]="dataSource" matTableExporter
+    <mat-table [dataSource]="dataSource" matTableExporter multiTemplateDataRows
         #exporter="matTableExporter" matSort (matSortChange)="sortData($event)"
         class="table">
         <ng-container matColumnDef="select">
@@ -53,7 +53,8 @@
                 class="text-nowrap">
                 {{col.displayName}}
             </mat-header-cell>
-            <mat-cell [class.mat-cell-underline]='col.isUnderline' *matCellDef="let
+            <mat-cell [class.mat-cell-underline]='col.isUnderline'
+                *matCellDef="let
                 row" style="display: grid;">
                 <div *ngIf="col.type!='image' && col.isDate && !col.isAction">
                     {{row[col.key]|date:'mediumDate' : 'PST'}}</div>
@@ -142,13 +143,26 @@
 
             </mat-cell>
         </ng-container>
+        <ng-container matColumnDef="expandedDetail">
+            <mat-cell *matCellDef="let detail">
+                <p *ngFor="let expandedData of detail.element.threadInfo.stackTrace">
+                    {{expandedData.className}}
+                </p>
+            </mat-cell>
+        </ng-container>
         <div *ngIf="isShowHeader">
-        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         </div>
 
         <mat-row *matRowDef="let row; columns: displayedColumns;"
             [ngClass]="{'border-left-green': sideBorder && !row.accountLocked,
-            'border-left-red': sideBorder && row.accountLocked}">
+            'border-left-red': sideBorder && row.accountLocked}"
+            class="element-row"
+            [class.expanded]="expandedElement == row"
+            (click)="expandedElement= expandedElement === row ? null : row">
+        </mat-row>
+        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+            [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'" style="overflow: hidden">
         </mat-row>
     </mat-table>
     <div *ngIf='(dataSource===undefined || dataSource===null) && !showInput '
