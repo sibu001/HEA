@@ -105,7 +105,7 @@ export class TopicManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    // this.utilityService.showSuccessMessage(response.message);
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -120,7 +120,7 @@ export class TopicManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         topicDescription: response,
                     });
@@ -138,7 +138,7 @@ export class TopicManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         topicDescription: response,
                     });
@@ -174,7 +174,7 @@ export class TopicManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Debug Successfully');
+                    // this.utilityService.showSuccessMessage('Debug Successfully');
                     ctx.patchState({
                         scriptDebug: response,
                     });

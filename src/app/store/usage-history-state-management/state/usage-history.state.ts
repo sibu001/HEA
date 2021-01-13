@@ -223,7 +223,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -245,7 +245,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             shareMyData: response,
                         });
@@ -320,7 +320,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -342,7 +342,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             gas: response,
                         });
@@ -416,7 +416,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -438,7 +438,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             gasCharge: response,
                         });
@@ -511,7 +511,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -533,7 +533,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             gasSmartMeter: response,
                         });
@@ -607,7 +607,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -629,7 +629,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             electricity: response,
                         });
@@ -702,7 +702,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -724,7 +724,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             electricityCharge: response,
                         });
@@ -798,7 +798,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -820,7 +820,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             electricitySmartMeter: response,
                         });
@@ -893,7 +893,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -915,7 +915,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             electricityDailySmartMeter: response,
                         });
@@ -994,7 +994,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1016,7 +1016,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             waterCharge: response,
                         });
@@ -1096,7 +1096,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1118,7 +1118,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             water: response,
                         });
@@ -1198,7 +1198,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Deleted Successfully');
+                        // this.utilityService.showSuccessMessage('Deleted Successfully');
                     },
                     (error) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1220,7 +1220,7 @@ export class UsageHistoryManagementState {
                 tap(
                     (response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showSuccessMessage('Updated Successfully');
+                        // this.utilityService.showSuccessMessage('Updated Successfully');
                         ctx.patchState({
                             waterSmartMeter: response,
                         });

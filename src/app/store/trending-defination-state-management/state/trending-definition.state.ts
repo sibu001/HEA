@@ -114,7 +114,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -129,7 +129,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         keyIndicator: response,
                     });
@@ -147,7 +147,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         keyIndicator: response,
                     });
@@ -204,7 +204,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -219,7 +219,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         keyIndicatorVariable: response,
                     });
@@ -237,7 +237,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         keyIndicatorVariable: response,
                     });
@@ -294,7 +294,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -309,7 +309,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         keyIndicatorCustomerGroup: response,
                     });
@@ -327,7 +327,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         keyIndicatorCustomerGroup: response,
                     });
@@ -385,7 +385,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -400,7 +400,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         trendingParts: response,
                     });
@@ -418,7 +418,7 @@ export class TrendingDefinitionState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         trendingParts: response,
                     });

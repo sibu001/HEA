@@ -199,7 +199,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -214,7 +214,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         cimisStation: response,
                     });
@@ -232,7 +232,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         cimisStation: response,
                     });
@@ -307,7 +307,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    // this.utilityService.showSuccessMessage(response.message);
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -322,7 +322,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         cimisMeasurement: response,
                     });
@@ -340,7 +340,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         cimisMeasurement: response,
                     });
@@ -415,7 +415,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    // this.utilityService.showSuccessMessage(response.message);
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -430,7 +430,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         scriptBatch: response,
                     });
@@ -448,7 +448,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         scriptBatch: response,
                     });
@@ -466,7 +466,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Processed Successfully');
+                    // this.utilityService.showSuccessMessage('Processed Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -481,7 +481,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Result Executed');
+                    // this.utilityService.showSuccessMessage('Result Executed');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -514,7 +514,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -529,7 +529,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -602,7 +602,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Execute Successfully');
+                    // this.utilityService.showSuccessMessage('Execute Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -617,7 +617,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Interrupted Successfully');
+                    // this.utilityService.showSuccessMessage('Interrupted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -632,7 +632,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Resume Successfully');
+                    // this.utilityService.showSuccessMessage('Resume Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -647,7 +647,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Pause Successfully');
+                    // this.utilityService.showSuccessMessage('Pause Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -685,7 +685,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Start Successfully');
+                    // this.utilityService.showSuccessMessage('Start Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -700,7 +700,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Stop Successfully');
+                    // this.utilityService.showSuccessMessage('Stop Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -755,7 +755,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -770,7 +770,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Save Successfully');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         alertMessage: response,
                     });
@@ -788,7 +788,7 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Updated Successfully');
+                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         alertMessage: response,
                     });

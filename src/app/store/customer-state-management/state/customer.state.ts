@@ -289,7 +289,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    // this.utilityService.showSuccessMessage(response.message);
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

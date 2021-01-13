@@ -15,6 +15,7 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { AdministrativeManagementState } from 'src/app/store/administrative-state-management/state/administrative.state';
 import { MatAutocompleteModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import { LoginService } from 'src/app/services/login.service';
 
 @NgModule({
   imports: [
@@ -36,6 +37,6 @@ import { MatAutocompleteModule, MatFormFieldModule, MatInputModule } from '@angu
     ]),
   ],
   declarations: [EventHistoryListComponent, EventHistoryEditComponent],
-  providers: [CustomerService, SystemUtilityService, AdministrativeService, DatePipe]
+  providers: [CustomerService, SystemUtilityService, AdministrativeService, DatePipe,LoginService]
 })
 export class EventHistoryModule { }

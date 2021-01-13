@@ -78,7 +78,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
   loadCalculationTypeList(): any {
     this.systemService.loadCalculationTypeList();
-    this.subscriptions.add(this.systemService.getBatchPeriodList().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((calculationTypeList: any) => {
         this.calculationTypeList = calculationTypeList.data;
       }));
@@ -94,11 +94,11 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
 
   loadBatchScriptById() {
     this.subscriptions.add(this.systemMeasurementService.getScriptBatchById().pipe(skipWhile((item: any) => !item))
-      .subscribe((factor: any) => {
+      .subscribe((response: any) => {
         if (this.isForce) {
-          this.router.navigate(['admin/batchScript/batchScriptEdit'], { queryParams: { 'id': factor.id } });
+          this.router.navigate(['admin/batchScript/batchScriptEdit'], { queryParams: { 'id': response.id } });
         }
-        this.setForm(factor);
+        this.setForm(response);
       }));
   }
   setForm(event: any) {
@@ -120,8 +120,10 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
 
   goToDebug() {
-    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: {} });
-
+    this.subscriptions.add(this.systemService.setDebugConsoleData(this.batchScriptForm.value).pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { id: this.id } });
+      }));
   }
 
   runNow() {

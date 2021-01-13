@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
@@ -16,7 +18,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   styleUrls: ['./event-history-edit.component.css']
 })
 export class EventHistoryEditComponent implements OnInit, OnDestroy {
-
+  users: Users = new Users();
   customerEventId: any;
   customerId: any;
   customerList: any = [];
@@ -28,13 +30,18 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly fb: FormBuilder,
+    private readonly loginService: LoginService,
     private readonly administrativeService: AdministrativeService,
     private readonly activateRoute: ActivatedRoute,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly customerService: CustomerService,
     private readonly router: Router,
     private readonly el: ElementRef) {
-
+    this.users = this.loginService.getUser();
+    this.customerList = this.users.searchUserList;
+    if (this.customerList.length > 0) {
+      this.customerData = this.customerList[0];
+    }
     this.activateRoute.queryParams.subscribe(params => {
       this.customerEventId = params['customerEventId'];
       this.customerId = params['customerId'];
@@ -49,15 +56,15 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadCustomerById() {
-    this.customerService.loadCustomerById(this.customerId);
-    this.subscriptions.add(this.customerService.getCustomerById().pipe(skipWhile((item: any) => !item))
-      .subscribe((customer: any) => {
-        this.customerData = customer;
-
-      }));
-  }
   setForm(event: any) {
+    let linkedPerson = 'Staff';
+    if (event && event.linkedPersonType === 1) {
+      linkedPerson = 'Customer';
+    } else if (event && event.linkedPersonType === 2) {
+      linkedPerson = 'Staff';
+    } else if (event && event.linkedPersonType === 3) {
+      linkedPerson = 'Partner';
+    }
     this.eventForm = this.fb.group({
       id: [event !== undefined ? event.id : null],
       customerEventId: [event !== undefined ? event.customerEventId : null],
@@ -69,7 +76,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       eventCode: [event !== undefined ? event.eventCode : ''],
       description: [event !== undefined ? event.description : ''],
       modifyAllowed: [event !== undefined ? event.modifyAllowed : ''],
-      linkedPersonType: [event !== undefined ? event.linkedPersonType : ''],
+      linkedPersonType: [event !== undefined ? linkedPerson : ''],
       linkedPersonName: [event !== undefined ? event.linkedPersonName : ''],
       customerEventType: this.fb.group({
         id: [event !== undefined ? event.customerEventType.id : ''],
@@ -97,8 +104,10 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
         this.customerList = customerList.administrativeManagement.customerList.list;
       }));
   }
+
   handleAutoComplete(event: any): any {
-    // console.log(event.option.value);
+    this.users.searchUserList[0] = event.option.value;
+    this.loginService.setUser(this.users);
     this.eventForm.controls['auditId'].setValue(event.option.value.auditId);
     this.eventForm.controls['customerName'].setValue(event.option.value.user.name);
   }

@@ -27,7 +27,7 @@
                   Customer Name:
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                  <input type="text" matInput
+                  <input type="text" matInput  class='form-control form-control-sm'
                     (input)="search($event.target.value)"
                     formControlName="customerName"
                     [matAutocomplete]="auto">
@@ -86,7 +86,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <p-calendar formControlName='eventDatetime' dateFormat="mm/dd/yy"
                 id='eventDatetime' showIcon=true showSeconds="true"
-                hourFormat="24" showTime="true"
+                showTime="true"
                 showButtonBar="true">
               </p-calendar>
             </div>

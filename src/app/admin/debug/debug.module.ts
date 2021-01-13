@@ -12,6 +12,12 @@ import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { SystemMeasurementManagementState } from 'src/app/store/system-measurement-management/state/system-measurement.state';
+import { AutoCompleteModule } from 'primeng/primeng';
+import { MatAutocompleteModule, MatInputModule } from '@angular/material';
+import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { AdministrativeManagementState } from 'src/app/store/administrative-state-management/state/administrative.state';
+import { LoginService } from 'src/app/services/login.service';
 
 @NgModule({
   imports: [
@@ -20,14 +26,19 @@ import { TopicService } from 'src/app/store/topic-state-management/service/topic
     ReactiveFormsModule,
     FormsModule,
     CommonHEAModule,
+    MatAutocompleteModule,
+    AutoCompleteModule,
+    MatInputModule,
     CodemirrorModule,
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
-      TopicManagementState
+      TopicManagementState,
+      SystemMeasurementManagementState,
+      AdministrativeManagementState
     ]),
   ],
   declarations: [ScriptDebugConsoleComponent],
-  providers: [SystemService, SystemMeasurementService, TopicService]
+  providers: [SystemService, SystemMeasurementService, TopicService, AdministrativeService, LoginService]
 })
 export class DebugModule { }

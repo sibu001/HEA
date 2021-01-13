@@ -50,7 +50,8 @@ import {
     GetLookupValueLotSizeListAction,
     GetLookupValueCalculationTypeListAction,
     GetLookupValueScrapingUtilityListAction,
-    GetReportTypeListAction
+    GetReportTypeListAction,
+    SetDebugConsoleData
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -82,6 +83,7 @@ import { SystemManagementModel } from './system.model';
         calculationType: undefined,
         scrapingUtility: undefined,
         reportType: undefined,
+        debugConsoleData: undefined,
         error: undefined
     }
 
@@ -215,6 +217,11 @@ export class SystemManagementState {
     @Selector()
     static getReportTypeList(state: SystemManagementModel): any {
         return state.reportType;
+    }
+
+    @Selector()
+    static getDebugConsoleData(state: SystemManagementModel): any {
+        return state.debugConsoleData;
     }
 
     @Action(GetCustomerGroupListAction)
@@ -1014,6 +1021,14 @@ export class SystemManagementState {
         ctx.patchState({
             error: action.error,
             customerGroupList: undefined
+        });
+    }
+
+    @Action(SetDebugConsoleData)
+    setDebugConsoleData(ctx: StateContext<SystemManagementModel>, action: SetDebugConsoleData): void {
+        /* istanbul ignore next */
+        ctx.patchState({
+            debugConsoleData: action.debugData
         });
     }
 }

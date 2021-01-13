@@ -704,7 +704,7 @@ export class TableColumnData {
 
     static readonly CUSTOMER_GROUP_MAIL_PART_KEYS: Array<TABLECOLUMN> = [
         { key: 'serialNumber', displayName: '#' },
-        { key: 'groupName', sort: 'groupName', displayName: 'Customer Group Name' },
+        { key: 'groupName', sort: 'customerGroup.groupName', displayName: 'Customer Group Name' },
         { key: 'header', isEdit: true, displayName: 'Header', isUnderline: true },
         { key: 'footer', isEdit: true, displayName: 'Footer', isUnderline: true },
     ];

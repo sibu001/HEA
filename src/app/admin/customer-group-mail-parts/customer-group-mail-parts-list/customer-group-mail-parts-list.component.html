@@ -36,7 +36,7 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Customer Group Mail Part List</span></p>
-            <app-table [keys]="keys" [isPaginate]="true"
+            <app-table [keys]="keys" [isPaginate]="false"
               (goToEditEvent)='goToEditMailParts($event)'
               (addEvent)='addMailParts()' [isSearch]="false" [data]="dataSource"
               [pageIndex]="pageIndex"

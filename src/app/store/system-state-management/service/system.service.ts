@@ -44,7 +44,8 @@ import {
   GetLookupValueHomeOccupancyListAction,
   GetLookupValueHomeTypeListAction,
   GetLookupValueLotSizeListAction,
-  GetReportTypeListAction
+  GetReportTypeListAction,
+  SetDebugConsoleData
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -153,6 +154,10 @@ export class SystemService {
 
   getComparisonCodeList(): Observable<any> {
     return this.store.select(SystemManagementState.getComparisonCodeList);
+  }
+
+  getDebugConsoleData(): Observable<any> {
+    return this.store.select(SystemManagementState.getDebugConsoleData);
   }
 
   loadCustomerGroupList(force: boolean, filter: any): Observable<SystemManagementState> {
@@ -325,5 +330,9 @@ export class SystemService {
 
   loadReportTypeList(): Observable<SystemManagementState> {
     return this.store.dispatch(new GetReportTypeListAction());
+  }
+
+  setDebugConsoleData(debugData: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new SetDebugConsoleData(debugData));
   }
 }

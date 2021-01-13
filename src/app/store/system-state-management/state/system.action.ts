@@ -43,7 +43,8 @@ export enum SystemActionTypes {
     GET_LOT_SIZE_LIST = 'Get Lot Size List',
     GET_SCRAPING_PERIOD_LIST = 'Get Scraping Period List',
     GET_REPORT_TYPE_LIST = 'Get Report Type List',
-    CUSTOMER_GROUP_ERROR = 'Customer Error'
+    CUSTOMER_GROUP_ERROR = 'Customer Error',
+    SET_DEBUG_CONSOLE_DATA = 'Set Debug Console Data',
 }
 export class GetCustomerGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_LIST;
@@ -291,5 +292,11 @@ export class GetReportTypeListAction {
 export class CustomerGroupError {
     static readonly type: SystemActionTypes = SystemActionTypes.CUSTOMER_GROUP_ERROR;
     constructor(readonly error: Error) {
+    }
+}
+
+export class SetDebugConsoleData {
+    static readonly type: SystemActionTypes = SystemActionTypes.SET_DEBUG_CONSOLE_DATA;
+    constructor(readonly debugData: Error) {
     }
 }

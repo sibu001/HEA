@@ -186,7 +186,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -272,7 +272,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Deleted Successfully');
+                    // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -287,7 +287,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage('Save Successfully');
+                    // // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         administrativeReport: response,
                     });
@@ -323,7 +323,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Call Successfully');
+                    // this.utilityService.showSuccessMessage('Call Successfully');
                     ctx.patchState({
                         callAdministrativeReport: response,
                     });
@@ -381,7 +381,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    // this.utilityService.showSuccessMessage(response.message);
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -471,7 +471,7 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage(response.message);
+                    // this.utilityService.showSuccessMessage(response.message);
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
