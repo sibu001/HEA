@@ -984,7 +984,7 @@ export class SystemManagementState {
     @Action(GetLookupValueScrapingUtilityListAction)
     getAllScrapingUtilityList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueScrapingUtilityListAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.lookupValues + '/CALCULATION_TYPE')
+        return this.loginService.performGet(AppConstant.lookupValues + '/SCRAPING_UTILITY')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

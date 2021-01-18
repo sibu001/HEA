@@ -51,6 +51,7 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly el: ElementRef,
     private readonly dynamicViewService: DynamicViewService,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly router: Router,
@@ -62,8 +63,10 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     this.loadMailDescriptionList();
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
-      this.findPlaceListByCustomerGroupId();
-      this.findProgramGroupListByCustomerGroupId();
+      if (this.id) {
+        this.findPlaceListByCustomerGroupId();
+        this.findProgramGroupListByCustomerGroupId();
+      }
     });
   }
 
@@ -239,12 +242,16 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.id = response.systemManagement.customerGroup.customerGroupId;
             this.scrollTop();
+            this.checkPlace();
+            this.checkProgramGroup();
             this.loadCustomerGroupById();
           }));
       }
     } else {
       this.validateAllFormFields(this.customerGroupForm);
+      this.validateForm();
     }
   }
 
@@ -326,7 +333,15 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
       this.systemService.deleteProgramGroupOfCustomerGroup(this.id, element.programGroupId);
     });
   }
-
+  validateForm() {
+    for (const key of Object.keys(this.customerGroupForm.controls)) {
+      if (this.customerGroupForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {

@@ -54,7 +54,9 @@ export class PlaceListComponent implements OnInit, OnDestroy {
             customerGroupList.forEach(element => {
               let customerGroupObj: any;
               customerGroupObj = element;
-              customerGroupObj.stationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
+              if (element.stationId) {
+                customerGroupObj.weatherStationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
+              }
               placeListData.push(customerGroupObj);
             });
             this.placeData.content = placeListData;
@@ -77,7 +79,7 @@ export class PlaceListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any): void {
-      const params = new HttpParams()
+    const params = new HttpParams()
       .set('startRow', '0')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))

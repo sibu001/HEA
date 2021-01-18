@@ -1,8 +1,9 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align: left;padding-left: 40px;
-          padding-top: 35px;'>
+      <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
+        left;padding-left: 40px;
+        padding-top: 35px;'>
         <!-- <p class='Messages'>
               <img src='assets/images/dot03.gif' class='dot'>
           <span class="messageName">Role</span>
@@ -22,7 +23,8 @@
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
               <span *ngIf="roleCode!==undefined">{{roleCode}}</span>
-              <input *ngIf="roleCode===undefined" type="text" formControlName="roleCode" class="form-control
+              <input *ngIf="roleCode===undefined" type="text"
+                formControlName="roleCode" class="form-control
                 form-control-sm">
               <div *ngIf="f.roleCode.invalid && (f.roleCode.dirty
                 ||
@@ -38,21 +40,27 @@
               Description:
             </div>
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-              <input type="text" formControlName="description" class="form-control form-control-sm">
+              <input type="text" formControlName="description"
+                class="form-control form-control-sm">
             </div>
           </div>
           <div class="row paddingTop rowPadding">
-            <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1 display-inline-button-medium">
+            <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1
+              display-inline-button-medium">
               <button type="text" class="btn btn-primary" (click)='back()'>Cancel</button>
             </div>
-            <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9" style="text-align: end;">
-              <!-- <div class="col-xs-6 col-sm-10 col-md-10 col-lg-10" style="text-align: end;"> -->
-                <button type="text" class="btn btn-primary" (click)="save()">Save</button>
-              <!-- </div> -->
+            <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2
+              display-responsive-medium" *ngIf="roleCode===undefined||permanent"
+              style="text-align: end;">
             </div>
-            <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2 display-responsive-medium" style="text-align: end;">
-              <button type="text" class="btn btn-primary" (click)="delete()"
-                *ngIf="roleCode!=undefined&&!permanent">Delete</button>
+            <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9" style="text-align:
+              end;">
+              <button type="text" class="btn btn-primary" (click)="save()">Save</button>
+            </div>
+            <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2
+              display-responsive-medium" *ngIf="roleCode!=undefined&&!permanent"
+              style="text-align: end;">
+              <button type="text" class="btn btn-primary" (click)="delete()">Delete</button>
             </div>
           </div>
 

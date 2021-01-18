@@ -29,3 +29,8 @@ p.messages {
   text-align: right;
   margin-top: 15px;
 }
+
+::ng-deep .customer-alert-type-table .mat-column-alertCode {
+  flex: none;
+  width: 140px;
+}

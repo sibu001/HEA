@@ -86,7 +86,7 @@ export class SaveAdministrativeReportParamsAction {
 
 export class UpdateAdministrativeReportParamsAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.UPDATE_ADMINISTRATIVE_REPORT_PARAMS;
-    constructor(readonly reportId: any, readonly id: any) {
+    constructor(readonly reportId: any, readonly id: any, readonly paramObj: any) {
     }
 }
 

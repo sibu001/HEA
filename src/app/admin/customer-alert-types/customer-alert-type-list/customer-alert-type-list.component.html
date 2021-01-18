@@ -40,7 +40,8 @@
           <div class="col-sm-12" >
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
               [totalElement]="customerAlertTypeData.totalElements" (changePageEvent)="search($event)"
-              (goToEditEvent)="goToEditEventAlertType($event)"  (addEvent)="addCustomerAlertType()">
+              (goToEditEvent)="goToEditEventAlertType($event)"  (addEvent)="addCustomerAlertType()"
+              class="customer-alert-type-table">
             </app-table>
           </div>
         </div>

@@ -59,3 +59,18 @@ p.messages {
     display: none;
   }
 }
+
+::ng-deep .customer-comparison-table .mat-column-orderNumber {
+  flex: none;
+  width: 100px;
+}
+
+::ng-deep .customer-comparison-table .mat-column-numOfCustomers {
+  flex: none;
+  width: 110px;
+}
+
+::ng-deep .customer-comparison-table .mat-column-weatherStationId {
+  flex: none;
+  width: 140px;
+}

@@ -33,3 +33,13 @@ p.messages {
 .paddingTop {
   padding-top: 3%;
 }
+
+::ng-deep .customer-event-table .mat-column-shared {
+  flex: none;
+  width: 100px;
+}
+
+::ng-deep .customer-event-table .mat-column-onlyOne {
+  flex: none;
+  width: 100px;
+}

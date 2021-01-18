@@ -29,6 +29,7 @@ export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit, OnD
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.findWeatherStation(false, '');
     this.setForm(undefined);
   }
@@ -41,6 +42,9 @@ export class CustomerComparisonGroupsBatchRemoveComponent implements OnInit, OnD
       }));
   }
 
+  scrollTop() {
+    window.scroll(0, 0);
+  }
 
   setForm(event: any) {
     this.customerComparisonGroupForm = this.formBuilder.group({

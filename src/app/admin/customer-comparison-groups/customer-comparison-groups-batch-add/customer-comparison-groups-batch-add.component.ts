@@ -30,6 +30,7 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   ngOnInit() {
     this.findWeatherStation(false, '');
     this.setForm(undefined);
+    this.scrollTop();
   }
 
   findWeatherStation(force: boolean, filter: any): void {
@@ -38,6 +39,10 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
       .subscribe((weatherStationList: any) => {
         this.weatherStationIds = weatherStationList;
       }));
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   findProgramGroup(): void {

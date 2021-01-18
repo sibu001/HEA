@@ -1,9 +1,14 @@
 export class MailTransformer {
-    static transformMailDescription(src: any): any {
+    static transformMailDescription(src: any, filter: any): any {
         const dataSourceList: any = [];
+        let index = 1;
+        if (filter && filter.get('startRow')) {
+            index = Number(filter.get('startRow')) + 1;
+        }
         src.data.forEach(element => {
             let dataSourceObject: any = {};
             dataSourceObject = element;
+            dataSourceObject.serialNumber = index;
             switch (element.mailPeriod) {
                 case 'M':
                     dataSourceObject.mailPeriod = 'Monthly';
@@ -28,6 +33,7 @@ export class MailTransformer {
             }
             dataSourceList.push(dataSourceObject);
         });
+        index++;
         return { data: dataSourceList };
     }
 

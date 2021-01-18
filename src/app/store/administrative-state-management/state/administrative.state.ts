@@ -226,7 +226,8 @@ export class AdministrativeManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        console.log(error);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -289,7 +290,7 @@ export class AdministrativeManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        administrativeReport: response,
+                        administrativeReportParams: response,
                     });
                 },
                     error => {
@@ -301,13 +302,13 @@ export class AdministrativeManagementState {
     @Action(UpdateAdministrativeReportParamsAction)
     updateAdministrativeReportParams(ctx: StateContext<AdministrativeManagementModel>, action: UpdateAdministrativeReportParamsAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut('', AppConstant.administrativeReport + '/' + action.reportId + '/reportParams/' + action.id)
+        return this.loginService.performPut(action.paramObj, AppConstant.administrativeReport + '/' + action.reportId + '/reportParams/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        administrativeReport: response,
+                        administrativeReportParams: response,
                     });
                 },
                     error => {

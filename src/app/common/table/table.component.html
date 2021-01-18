@@ -70,6 +70,7 @@
                     </div>
                 </div>
                 <div id='2' *ngIf="col.type!='image' &&col.type!='buttons' &&
+                    col.type!=='input'&&
                     col.type!='alert' &&
                     !col.isDate && !col.isAction"
                     (click)='goToEdit(row,col);'>
@@ -88,11 +89,15 @@
                 </div>
                 <div id='4' *ngIf="col.type=='image' && !col.changeable &&
                     !col.isAction" class="center">
-                    <img *ngIf="col.imagePath!==undefined" [src]='col.imagePath'
+                    <img id="1" *ngIf="col.imagePath!==undefined" [src]='col.imagePath'
                         (click)="imageClickEvent(col,row)" class="tableImage">
-                    <img *ngIf="row[col.key]!==undefined &&
-                        col.imagePath===undefined" [src]='row[col.key]'
+                    <img id="2" *ngIf="row[col.key]!==undefined &&
+                        col.imagePath===undefined && row[col.key]!=='addInlineInput'" [src]='row[col.key]'
                         (click)="imageClickEvent(col,row)" class="tableImage">
+                    <button class='btn btn-primary' *ngIf="row[col.key]=='addInlineInput'"
+                        (click)='onSaveNewRowEvent(col,row)'>
+                        Save
+                    </button>
                 </div>
                 <div id='5' *ngIf="col.type=='buttons' && !col.isAction">
                     <div class='inline-table btnPadding' *ngFor='let button of
@@ -108,6 +113,16 @@
                         <a
                             (click)='linkCall(link.routerLink,link.queryParam,row)'
                             class="anchorClass">{{link.displayName}}</a>
+                    </div>
+                </div>
+                <div id='8' *ngIf="col.type=='input' && !col.isAction">
+                    <div [formGroup]='row.tableForm' *ngIf="row.isInputEdit">
+                        <input type="text"
+                            class='form-control' (keyup)="inputChange(col,row)"
+                            [formControlName]='col.key' [id]="col.key">
+                    </div>
+                    <div  *ngIf="!row.isInputEdit">
+                        {{row[col.key]}}
                     </div>
                 </div>
                 <div id='7' *ngIf="col.type!='image'&& col.isAction && action">
@@ -145,7 +160,8 @@
         </ng-container>
         <ng-container matColumnDef="expandedDetail">
             <mat-cell *matCellDef="let detail">
-                <p *ngFor="let expandedData of detail.element.threadInfo.stackTrace">
+                <p *ngFor="let expandedData of
+                    detail.element.threadInfo.stackTrace">
                     {{expandedData.className}}
                 </p>
             </mat-cell>
@@ -161,8 +177,10 @@
             [class.expanded]="expandedElement == row"
             (click)="expandedElement= expandedElement === row ? null : row">
         </mat-row>
-        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
-            [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'" style="overflow: hidden">
+        <mat-row *matRowDef="let row; columns: ['expandedDetail']; when:
+            isExpansionDetailRow"
+            [@detailExpand]="row.element == expandedElement ? 'expanded' :
+            'collapsed'" style="overflow: hidden">
         </mat-row>
     </mat-table>
     <div *ngIf='(dataSource===undefined || dataSource===null) && !showInput '
@@ -228,6 +246,12 @@
             style="text-align:right;">
             <button class="btn btn-primary" type="button"
                 (click)="onAddRowEvent()">Add Row</button>
+        </div>
+        <div *ngIf="showAddInputButton && !showRowInput" class="col-sm-6 col-xs-12
+            fixed-add-button"
+            style="text-align:right;">
+            <button class="btn btn-primary" type="button"
+                (click)="onAddNewRowEvent()">Add</button>
         </div>
     </div>
     <div class="row">

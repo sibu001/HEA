@@ -103,3 +103,8 @@ input[type="file"]::-webkit-file-upload-button {
 input[type="file"] {
   text-align: left;
 }
+
+::ng-deep .administrative-table .mat-column-action {
+  flex: none;
+  width: 100px;
+}

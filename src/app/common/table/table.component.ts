@@ -14,7 +14,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 export interface UserData {
@@ -57,18 +57,23 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() showCSVExportButton: Boolean = false;
   @Input() isFilePreview: Boolean = false;
   @Input() showAddRowButton: Boolean = false;
+  @Input() showAddInputButton: Boolean = false;
   @Input() isShowHeader: Boolean = true;
+  @Input() isInlineEdit: Boolean = false;
   @Input() selectionList: Array<any> = [];
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
   @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() imageEvent: EventEmitter<any> = new EventEmitter();
+  @Output() saveNewRowEvent: EventEmitter<any> = new EventEmitter();
+  @Output() inputChangeEvent: EventEmitter<any> = new EventEmitter();
   @Output() filePreviewEvent: EventEmitter<any> = new EventEmitter();
   @Output() addEvent: EventEmitter<any> = new EventEmitter();
   @Output() bulkDeleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() checkBoxChangeEvent: EventEmitter<any> = new EventEmitter();
   @Output() toggleSaveButtonEvent: EventEmitter<any> = new EventEmitter();
+  @Output() addNewRowEvent: EventEmitter<any> = new EventEmitter();
   @Output() saveRowEvent: EventEmitter<any> = new EventEmitter();
   @Output() buttonListEvent: EventEmitter<any> = new EventEmitter();
   @Output() handleLinkEvent: EventEmitter<any> = new EventEmitter();
@@ -76,6 +81,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Output() handleInLineSaveEvent: EventEmitter<any> = new EventEmitter();
   expandedElement: any = [];
   showInput: Boolean = false;
+  showRowInput: Boolean = false;
   page = new Page();
   url: String;
   totalLength: Number;
@@ -83,6 +89,7 @@ export class TableComponent implements OnInit, OnChanges {
   pageEvent: PageEvent;
   selection = new SelectionModel<any>(true, []);
   tableForm: FormGroup = this.formBuilder.group({});
+  tableValueFormArray = new FormArray([]);
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   constructor(
     private changeDetectorRefs: ChangeDetectorRef,
@@ -110,6 +117,7 @@ export class TableComponent implements OnInit, OnChanges {
       if (this.pageIndex !== undefined && this.pageIndex !== null) {
         this.pageIndexNumber = this.pageIndex;
       }
+      this.showRowInput = false;
       this.dataSource = new MatTableDataSource(this.data);
       if (this.selectionList.length > 0) {
         this.selectionList.forEach(e => {
@@ -136,6 +144,9 @@ export class TableComponent implements OnInit, OnChanges {
       }
     }
     this.setForm();
+    if (this.isInlineEdit) {
+      this.setExistingDataForm();
+    }
   }
 
   setForm() {
@@ -145,6 +156,24 @@ export class TableComponent implements OnInit, OnChanges {
         if (key.required) {
           this.tableForm.controls[key.key].setValidators(Validators.required);
         }
+      });
+    }
+  }
+
+  setExistingDataForm() {
+    if (this.dataSource !== undefined) {
+      this.dataSource.data.forEach(data => {
+        const tempForm: FormGroup = this.formBuilder.group({});
+        if (this.keys !== undefined) {
+          this.keys.forEach(key => {
+            console.log(key);
+            tempForm.addControl(key.key, this.formBuilder.control(data[key.key]));
+            if (key.required) {
+              this.tableForm.controls[key.key].setValidators(Validators.required);
+            }
+          });
+        }
+        data.tableForm = tempForm;
       });
     }
   }
@@ -223,6 +252,14 @@ export class TableComponent implements OnInit, OnChanges {
     this.imageEvent.emit({ key: col.key, eventType: col.event, row: row, col: col });
   }
 
+  onSaveNewRowEvent(col: any, row: any) {
+    this.saveNewRowEvent.emit({ row: row, col: col, data: this.dataSource });
+  }
+
+  inputChange(col: any, row: any) {
+    this.inputChangeEvent.emit({ row: row, col: col, data: this.dataSource });
+  }
+
   filePreview(event: any) {
     this.filePreviewEvent.emit(event);
   }
@@ -253,6 +290,11 @@ export class TableComponent implements OnInit, OnChanges {
   onAddRowEvent(): any {
     this.showInput = true;
     this.toggleSaveButtonEvent.emit();
+  }
+
+  onAddNewRowEvent() {
+    this.showRowInput = true;
+    this.addNewRowEvent.emit();
   }
 
   validateAllFormFields(formGroup: FormGroup): any {

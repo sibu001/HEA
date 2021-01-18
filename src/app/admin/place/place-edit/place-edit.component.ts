@@ -70,6 +70,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ZipCodeEditComponent, {
       width: '500px',
       height: 'auto',
+      disableClose: true,
       data: { event }
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -160,16 +161,20 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   }
 
   getZipCodeList() {
+    
     this.systemUtilityService.loadWeatherStationList(false, '');
     this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
       .subscribe((weatherStationList: any) => {
         this.placeStationId = weatherStationList;
         this.subscriptions.add(this.systemUtilityService.loadZipCodeList(this.id, '').pipe(skipWhile((item: any) => !item))
           .subscribe((zipCodeList: any) => {
+            this.zipData.content = [];
             zipCodeList.systemUtilityManagement.zipCodeList.forEach(element => {
               let customerGroupObj: any;
               customerGroupObj = element;
-              customerGroupObj.stationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
+              if (element.stationId) {
+                customerGroupObj.stationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
+              }
               this.zipData.content.push(customerGroupObj);
             });
             this.dataSource = [...this.zipData.content];
@@ -181,6 +186,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(ZipCodeEditComponent, {
       width: '500px',
       height: 'auto',
+      disableClose: true,
       data: {
         placeCode: this.id
       }

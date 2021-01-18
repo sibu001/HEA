@@ -120,8 +120,8 @@ export class AdministrativeService {
     return this.store.dispatch(new SaveAdministrativeReportParamsAction(reportId, parameters));
   }
 
-  updateAdministrativeReportParams(reportId: any, id: any): Observable<AdministrativeManagementState> {
-    return this.store.dispatch(new UpdateAdministrativeReportParamsAction(reportId, id));
+  updateAdministrativeReportParams(reportId: any, id: any, paramObj: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new UpdateAdministrativeReportParamsAction(reportId, id, paramObj));
   }
 
   deleteAdministrativeReportParamsById(reportId: any, id: any): Observable<AdministrativeManagementState> {

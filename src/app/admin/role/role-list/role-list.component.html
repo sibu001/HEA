@@ -13,7 +13,7 @@
         </div>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+            <app-table [keys]="keys" [isPaginate]="false" [isSearch]="false"
               [data]="dataSource"
               [totalElement]="rolesData.totalElements"
               (changePageEvent)="findRole()"

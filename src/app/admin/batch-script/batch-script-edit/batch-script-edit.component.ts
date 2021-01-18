@@ -188,7 +188,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
       .subscribe((groupList: any) => {
         this.topicGroupList = groupList.systemMeasurement.scriptBatchGroup;
         groupList.systemMeasurement.scriptBatchGroup.forEach(element => {
-          this.topicGroupSelectionList.push(element.groupCode);
+          this.topicGroupSelectionList.push(element.customerGroup.groupCode);
         });
         this.loadCustomerGroup(false, '');
       }));

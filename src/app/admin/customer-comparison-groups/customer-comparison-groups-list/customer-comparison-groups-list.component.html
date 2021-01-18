@@ -80,7 +80,8 @@
               [isSearch]="false" [data]="dataSource" [pageIndex]="pageIndex"
               [totalElement]="customerComparisonGroupData.totalElements"
               (changePageEvent)="search($event,false)"
-              (goToEditEvent)="gotoEditCustomerComparisonGroup($event)">
+              (goToEditEvent)="gotoEditCustomerComparisonGroup($event)"
+              class="customer-comparison-table">
             </app-table>
           </div>
         </div>

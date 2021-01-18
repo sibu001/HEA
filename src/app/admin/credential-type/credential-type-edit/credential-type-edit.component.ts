@@ -56,7 +56,7 @@ export class CredentialTypeEditComponent implements OnInit, OnDestroy {
       dataScrapingScript: [event !== undefined ? event.dataScrapingScript : null],
       electricityScrapingScript: [event !== undefined ? event.electricityScrapingScript : null],
       heatingScrapingScript: [event !== undefined ? event.heatingScrapingScript : null],
-      loginScript: [event !== undefined ? event.loginScript :null],
+      loginScript: [event !== undefined ? event.loginScript : null],
       utilityName: [event !== undefined ? event.utilityName : '', Validators.required],
       utilityScrapingScript: [event !== undefined ? event.utilityScrapingScript : null],
       waterScrapingScript: [event !== undefined ? event.waterScrapingScript : null]
@@ -66,10 +66,12 @@ export class CredentialTypeEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/credential-type/credentialTypeList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.systemService.deleteCredentialTypeById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/credential-type/credentialTypeList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.systemService.deleteCredentialTypeById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/credential-type/credentialTypeList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   save() {

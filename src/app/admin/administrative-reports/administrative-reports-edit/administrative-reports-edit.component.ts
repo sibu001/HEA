@@ -18,13 +18,17 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
 
   id: any;
   reportForm: FormGroup;
+  reportObject: any;
   dataFieldKeys: TABLECOLUMN[] = TableColumnData.ADMIN_REPORT_PARAMETER_KEYS;
   dataFieldData = {
     content: [],
     totalElements: 0
   };
   isForce = false;
+  showAddButton = false;
+  isChangeParam = false;
   dataFieldDataSource: any;
+  parameters: any;
   reportTypeList: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
@@ -66,12 +70,59 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
     this.administrativeService.loadAdministrativeReportById(Number(this.id));
     this.subscriptions.add(this.administrativeService.getAdministrativeReportById().pipe(skipWhile((item: any) => !item))
       .subscribe((report: any) => {
-        this.dataFieldDataSource = report.reportParams;
+        this.reportObject = report;
+        if (report.report) {
+          this.dataFieldKeys[0].type = undefined;
+        } else {
+          this.dataFieldKeys[0].type = 'input';
+        }
+        if (!(report.reportParams && report.reportParams.length > 0)) {
+          this.showAddButton = false;
+        }
+        report.reportParams.forEach((element: any) => {
+          if (!report.report) {
+            element.action = 'assets/images/ico_minus.gif';
+            this.showAddButton = true;
+            element.isInputEdit = false;
+          } else {
+            this.showAddButton = false;
+            element.isInputEdit = true;
+          }
+        });
+        this.parameters = JSON.parse(JSON.stringify(report.reportParams));
+        this.dataFieldDataSource = [...this.parameters];
         if (this.isForce) {
           this.router.navigate(['admin/administrativeReport/administrativeReportEdit'], { queryParams: { 'id': report.id } });
         }
         this.setForm(report);
       }));
+  }
+
+  addNewRow() {
+    this.parameters.push({
+      action: 'addInlineInput',
+      defaultValue: '',
+      parameterLabel: '',
+      parameterName: '',
+      reportId: this.id,
+      isInputEdit: true
+    });
+    this.dataFieldDataSource = [...this.parameters];
+  }
+
+  addNewParameter(event: any) {
+    this.addParameter(event.row.tableForm.value);
+  }
+
+  prepareChangeParameter(event: any) {
+    if (this.reportObject.report) {
+      this.isChangeParam = true;
+      const i = this.reportForm.value.reportParams.findIndex((item: any) => item.reportParamId === event.row.reportParamId);
+      if (i !== -1) {
+        this.reportForm.value.reportParams[i].defaultValue = event.row.tableForm.value.defaultValue;
+        this.reportForm.value.reportParams[i].parameterLabel = event.row.tableForm.value.parameterLabel;
+      }
+    }
   }
 
   loadReportType() {
@@ -121,25 +172,16 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
   }
 
   addParameter(event: any): any {
-    // if (this.id !== null && this.id !== undefined) {
-    //   this.subscriptions.add(this.administrativeService.updateAdministrativeReportParams(this.id, event.id).pipe(
-    //     skipWhile((item: any) => !item))
-    //     .subscribe((response: any) => {
-    //       this.isForce = true;
-    //       this.loadAdministrativeReportById();
-    //     }));
-    // } else {
-      this.subscriptions.add(this.administrativeService.saveAdministrativeReportParams(this.id, event.value).pipe(
-        skipWhile((item: any) => !item))
-        .subscribe((response: any) => {
-          this.isForce = true;
-          this.loadAdministrativeReportById();
-        }));
-    // }
+    this.subscriptions.add(this.administrativeService.saveAdministrativeReportParams(this.id, event).pipe(
+      skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.isForce = true;
+        this.loadAdministrativeReportById();
+      }));
   }
 
   deleteParameter(event: any) {
-    this.subscriptions.add(this.administrativeService.deleteAdministrativeReportParamsById(this.id, event.id).pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.administrativeService.deleteAdministrativeReportParamsById(this.id, event.row.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.isForce = true;
         this.loadAdministrativeReportById();

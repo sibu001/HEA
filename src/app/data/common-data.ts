@@ -105,12 +105,12 @@ export class TableColumnData {
     static readonly PLACE_LIST_KEY: Array<TABLECOLUMN> = [
         { isEdit: true, displayName: 'Place', sort: 'place', key: 'place', isUnderline: true },
         { isEdit: true, displayName: 'Place Name', sort: 'placeName', key: 'placeName' },
-        { isEdit: true, displayName: 'Weather Station', key: 'stationId' }
+        { isEdit: true, displayName: 'Weather Station', key: 'weatherStationId' }
     ];
 
     static readonly ZIP_CODE_KEY: Array<TABLECOLUMN> = [
-        { isEdit: true, displayName: 'Zip Code', key: 'zipCode' },
-        { isEdit: true, displayName: 'Description', key: 'stationId' }
+        { displayName: 'Zip Code', key: 'zipCode' },
+        { displayName: 'Description', key: 'stationId' }
     ];
 
 
@@ -647,9 +647,10 @@ export class TableColumnData {
     ];
 
     static readonly ADMIN_REPORT_PARAMETER_KEYS: Array<TABLECOLUMN> = [
-        { key: 'parameterName', isEdit: true, displayName: 'Parameter Name' },
-        { key: 'defaultValue', isEdit: true, displayName: 'Default Value' },
-        { key: 'parameterLabel', isEdit: true, displayName: 'Parameter Label' },
+        { key: 'parameterName', isEdit: true, displayName: 'Parameter Name', type: 'input' },
+        { key: 'defaultValue', isEdit: true, displayName: 'Default Value', type: 'input' },
+        { key: 'parameterLabel', isEdit: true, displayName: 'Parameter Label', type: 'input' },
+        { key: 'action', displayName: '', type: 'image' },
     ];
 
     static readonly EVENT_HISTORY_KEYS: Array<TABLECOLUMN> = [
@@ -672,6 +673,7 @@ export class TableColumnData {
     ];
 
     static readonly MAIL_DESC_KEYS: Array<TABLECOLUMN> = [
+        { key: 'serialNumber', displayName: '#' },
         { key: 'id', sort: 'id', isEdit: true, displayName: 'ID' },
         { key: 'mailName', sort: 'mailName', isEdit: true, displayName: 'Mail Name', isUnderline: true },
         { key: 'mailPeriod', sort: 'mailPeriod', isEdit: true, displayName: 'Period', isUnderline: true },

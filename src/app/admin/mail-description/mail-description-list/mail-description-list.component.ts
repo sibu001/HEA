@@ -66,7 +66,7 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
     this.mailForm = this.fb.group({
       subject: [event !== undefined && event !== null ? event.subject : ''],
       isActive: [event !== undefined && event !== null ? event.isActive : ''],
-      mailPeriod: [event !== undefined && event !== null ? event.mailPeriod : '0']
+      mailPeriod: [event !== undefined && event !== null ? event.mailPeriod : '']
     });
   }
 

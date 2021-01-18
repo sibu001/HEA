@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse, HttpHeaderResponse, HttpSentEvent, HttpProgressEvent, HttpUserEvent } from '@angular/common/http';
 import { LoginService } from '../services/login.service';
-import { Users } from "src/app/models/user";
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/switchMap';
 
-import { BehaviorSubject, Observable } from "rxjs";
-import { Router } from "@angular/router";
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { Router } from '@angular/router';
 
 
 @Injectable()
@@ -17,7 +16,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     isRefreshingToken: boolean = false;
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-    constructor(private loginService: LoginService,private router: Router) {
+    constructor(private loginService: LoginService, private router: Router) {
 
     }
 
@@ -36,12 +35,12 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             if (error instanceof HttpErrorResponse) {
                 switch ((<HttpErrorResponse>error).status) {
                     case 400:
-                        //return this.handle400Error(error);
+                    //return this.handle400Error(error);
                     case 401:
                         return this.handle401Error(req, next);
                 }
             } else {
-                return Observable.throw(error);
+                return throwError(error);
             }
         });
 
@@ -64,8 +63,8 @@ export class AuthorizationInterceptor implements HttpInterceptor {
                 this.isRefreshingToken = false;
                 return next.handle(this.addToken(req, response.token));
             }, error => {
-                if(this.loginService.getUser().token!=null&&this.loginService.getUser().token!=undefined){
-                return this.loginService.logout();
+                if (this.loginService.getUser().token != null && this.loginService.getUser().token != undefined) {
+                    return this.loginService.logout();
                 }
             });
         } else {
