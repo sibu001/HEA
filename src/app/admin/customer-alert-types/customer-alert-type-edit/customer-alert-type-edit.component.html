@@ -57,7 +57,7 @@
               <select class="form-control form-control-sm" id="customerEventTypeIdUp"
                 formControlName="customerEventTypeIdUp">
                 <option value=""></option>
-                <option *ngFor='let event of eventType' [value]="event.key">{{event.value}}</option>
+                <option *ngFor='let event of eventType' [value]="event.customerEventTypeId">{{event.eventName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -70,7 +70,7 @@
               <select class="form-control form-control-sm" id="customerEventTypeIdDown"
                 formControlName="customerEventTypeIdDown">
                 <option value=""></option>
-                <option *ngFor='let event of eventType' [value]="event.key">{{event.value}}</option>
+                <option *ngFor='let event of eventType' [value]="event.customerEventTypeId">{{event.eventName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -83,7 +83,7 @@
               <select class="form-control form-control-sm" id="customerEventTypeIdLevel"
                 formControlName="customerEventTypeIdLevel">
                 <option value=""></option>
-                <option *ngFor='let event of eventType' [value]="event.key">{{event.value}}</option>
+                <option *ngFor='let event of eventType' [value]="event.customerEventTypeId">{{event.eventName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

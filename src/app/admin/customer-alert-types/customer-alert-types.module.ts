@@ -10,6 +10,8 @@ import { CommonHEAModule } from 'src/app/common/common.module';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
+import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 
 @NgModule({
   imports: [
@@ -19,10 +21,11 @@ import { SystemManagementState } from 'src/app/store/system-state-management/sta
     CustomerAlertTypesRoutingModule,
     NgxsModule.forRoot([
       SystemManagementState,
-      CustomerManagementState
+      CustomerManagementState,
+      SystemUtilityManagementState
     ]),
   ],
   declarations: [CustomerAlertTypeListComponent, CustomerAlertTypeEditComponent],
-  providers: [SystemService]
+  providers: [SystemService, SystemUtilityService]
 })
 export class CustomerAlertTypesModule { }

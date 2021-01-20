@@ -24,7 +24,6 @@ export class JsPagesListComponent implements OnInit, OnDestroy {
     totalElements: 0,
   };
 
-  periodData: any[] = TableColumnData.PERIOD_DATA;
   jsPagesForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;

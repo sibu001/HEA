@@ -32,6 +32,8 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
   };
   isForce = false;
   public customerGroupKeys = TableColumnData.CUSTOMER_GROUP_KEY;
+  public jsPageTemplate = TableColumnData.JS_PAGE_TEMPLATE;
+  public jsPageGroup = TableColumnData.JS_PAGE_GROUP;
   public customerGroupDataSource: any;
   public totalElement = 0;
   public customerGroupData = {

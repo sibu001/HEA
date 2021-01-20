@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -19,16 +20,17 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
   customerComparisonGroupDescriptionList: any;
   customerComparisonGroupCustomerList: any;
   public weatherStationIds: Array<any>;
-  public houseSizeData: Array<any> = TableColumnData.HOUSE_SIZE_DATA;
-  public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
-  public houseTypeData: Array<any> = TableColumnData.HOUSE_TYPE_DATA;
-  public occupancyData: Array<any> = TableColumnData.OCCUPANCY_DATA;
+  public houseSizeData: Array<any>;
+  public comparisonCodeDropdownData: Array<any>;
+  public houseTypeData: Array<any>;
+  public occupancyData: Array<any>;
   public yesNoData: Array<any> = TableColumnData.YES_NO_DATA;
-  public lotSizeData: Array<any> = TableColumnData.LOT_SIZE_DATA;
+  public lotSizeData: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemService: SystemService,
     private readonly router: Router,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -37,6 +39,11 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.scrollTop();
+    this.loadHomeSize();
+    this.loadLotSize();
+    this.loadHomeOccupancy();
+    this.loadHomeType();
+    this.loadComparisonCode();
     this.findWeatherStation(true, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
@@ -56,6 +63,46 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
         this.setForm(customerComparisonGroup);
       }));
   }
+  loadComparisonCode() {
+    this.systemService.loadComparisonCodeList();
+    this.subscriptions.add(this.systemService.getComparisonCodeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((comparisonCode: any) => {
+        this.comparisonCodeDropdownData = comparisonCode.data;
+      }));
+  }
+
+  loadHomeSize() {
+    this.systemService.loadHomeSizeList();
+    this.subscriptions.add(this.systemService.getHomeSizeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((homeSize: any) => {
+        this.houseSizeData = homeSize.data;
+      }));
+  }
+
+  loadHomeType() {
+    this.systemService.loadHomeTypeList();
+    this.subscriptions.add(this.systemService.getHomeTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((homeType: any) => {
+        this.houseTypeData = homeType.data;
+      }));
+  }
+
+  loadHomeOccupancy() {
+    this.systemService.loadHomeOccupancyList();
+    this.subscriptions.add(this.systemService.getHomeOccupancyList().pipe(skipWhile((item: any) => !item))
+      .subscribe((occupancyList: any) => {
+        this.occupancyData = occupancyList.data;
+      }));
+  }
+
+  loadLotSize() {
+    this.systemService.loadLotSizeList();
+    this.subscriptions.add(this.systemService.getLotSizeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((lotSizeList: any) => {
+        this.lotSizeData = lotSizeList.data;
+      }));
+  }
+
   loadCustomerComparisonGroupDescription(id: any) {
     this.systemUtilityService.loadCustomerComparisonGroupDescription(id);
     this.subscriptions.add(this.systemUtilityService.getCustomerComparisonGroupDescription().pipe(skipWhile((item: any) => !item))
@@ -106,10 +153,10 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
   }
   delete() {
     if (confirm('Are you sure you want to delete?')) {
-    this.subscriptions.add(this.systemUtilityService.deleteCustomerComparisonGroupById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/customerComparisonGroup/comparisonGroupList'], { queryParams: { 'force': true } });
-      }));
+      this.subscriptions.add(this.systemUtilityService.deleteCustomerComparisonGroupById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/customerComparisonGroup/comparisonGroupList'], { queryParams: { 'force': true } });
+        }));
     }
   }
   scrollTop() {

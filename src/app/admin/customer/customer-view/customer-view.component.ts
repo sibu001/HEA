@@ -49,6 +49,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   helpHide: boolean;
   placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
+  electricModelList: Array<any> = TableColumnData.ELECTRIC_MODEL;
+  naturalGasHeatingModelList: Array<any> = TableColumnData.NATURAL_GAS_HEATING_MODEL;
+  smartMeterElectricPeriodList: Array<any> = TableColumnData.SMART_METER_ELECTRIC_PERIOD;
+  uiVersionList: Array<any> = TableColumnData.UI_VERSION;
   credentialsKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_CREDENTIAL_KEY;
   public credentialsDataSource: any;
   public credentialsData = {

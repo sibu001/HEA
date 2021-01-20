@@ -7,6 +7,7 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -21,8 +22,8 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
   public dataSource: any;
   public pageIndex: any;
   public weatherStationIds: Array<any>;
-  public houseSizeData: Array<any> = TableColumnData.HOUSE_SIZE_DATA;
-  public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
+  public houseSizeData: Array<any>;
+  public comparisonCodeDropdownData: Array<any>;
   public customerComparisonGroupData = {
     content: [],
     totalElements: 0,
@@ -39,6 +40,7 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
   constructor(public fb: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly router: Router,
+    private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute) {
     this.activateRoute.queryParams.subscribe(params => {
       this.force = params['force'];
@@ -51,6 +53,8 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
 
   ngOnInit() {
     this.scrollTop();
+    this.loadHomeSize();
+    this.loadComparisonCode();
     this.findWeatherStation(false, '');
     this.setUpForm(this.adminFilter.customerComparisonGroup.formValue);
     this.search(this.adminFilter.customerComparisonGroup.page, false);
@@ -58,6 +62,23 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
   scrollTop() {
     window.scroll(0, 0);
   }
+
+  loadHomeSize() {
+    this.systemService.loadHomeSizeList();
+    this.subscriptions.add(this.systemService.getHomeSizeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((homeSize: any) => {
+        this.houseSizeData = homeSize.data;
+      }));
+  }
+
+  loadComparisonCode() {
+    this.systemService.loadComparisonCodeList();
+    this.subscriptions.add(this.systemService.getComparisonCodeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((comparisonCode: any) => {
+        this.comparisonCodeDropdownData = comparisonCode.data;
+      }));
+  }
+
   setUpForm(event: any) {
     this.customerComparisonGroupForm = this.fb.group({
       comparisonCode: [event !== undefined && event !== null ? event.comparisonCode : ''],

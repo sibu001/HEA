@@ -75,9 +75,7 @@
               <select class="form-control form-control-sm" id="scriptType"
                 (change)="changeTheme($event)"
                 formControlName="scriptType">
-                <option value="javascript">JavaScript</option>
-                <option value="spel" selected="selected">SpEL</option>
-                <option value="webharvest">WebHarvest script</option>
+                <option *ngFor='let calculation of calculationTypeList' [value]="calculation.lookupValue">{{calculation.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -98,14 +96,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="event" class='form-control' formControlName="event">
                 <option value=""></option>
-                <option value="OPEN">Open</option>
-                <option value="SAVE">Save</option>
-                <option value="INIT">Initialization</option>
-                <option value="RECALCULATE">Recalculate</option>
-                <option value="RECALCULATE_AFTER_RESCRAPE">Recalculate after
-                  re-scrape</option>
-                <option value="VALIDATE" selected="selected">Validate</option>
-                <option value="PERIOD">Periodically</option>
+                <option *ngFor='let group of scriptDebugEventList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

@@ -52,3 +52,8 @@ p.messages {
 ::ng-deep .system-job .btn-primary {
   padding: 4px 6px 4px 6px !important;
 }
+
+::ng-deep .system-job .mat-column-buttonList {
+  flex: none;
+  width: 150px;
+}

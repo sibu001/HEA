@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -17,13 +18,14 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class MailContextVariablesComponent implements OnInit, OnDestroy {
   id: any;
   contentForm: FormGroup;
-  calculationType = TableColumnData.CALCULATION_TYPE;
+  calculationType: any;
   private readonly subscriptions: Subscription = new Subscription();
   isForce = false;
   constructor(
     private readonly fb: FormBuilder,
     private readonly mailService: MailService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemService:SystemService,
     private readonly router: Router,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -32,11 +34,20 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadCalculationType();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.mailService.loadContextVariableById(this.id);
       this.loadContextVariableById();
     }
+  }
+
+  loadCalculationType() {
+    this.systemService.loadCalculationTypeList();
+    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((calculationType: any) => {
+        this.calculationType = calculationType.data;
+      }));
   }
 
   setForm(event: any) {

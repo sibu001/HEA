@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { TableColumnData } from 'src/app/data/common-data';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { Page } from 'src/app/models/page';
 import { Users } from 'src/app/models/user';
@@ -38,6 +39,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   public users: Users = new Users();
   public checkBoxValue: any;
   public showCSVExportButton = false;
+  public statusData: any[] = TableColumnData.STATUS_DATA;
   public CustomerData = {
     content: [],
     totalElements: 0,

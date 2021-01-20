@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { UtilityService } from 'src/app/services/utility.service';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -18,8 +19,9 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   id: any;
   factorForm: FormGroup;
   public placeData: Array<any>;
-  public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
-  public calculationType: Array<any> = TableColumnData.CALCULATION_TYPE;
+  public comparisonCodeDropdownData: Array<any>;
+  public calculationType: Array<any>;
+  public periodData: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
   isForce = false;
   userId: any;
@@ -27,6 +29,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     private readonly formBuilder: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly utilityService: UtilityService,
+    private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
     private readonly router: Router,
     private readonly el: ElementRef) {
@@ -38,12 +41,39 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadBatchPeriodList();
+    this.loadComparisonCode();
+    this.loadCalculationType();
     this.findPlace(true, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemUtilityService.loadFactorById(this.id);
       this.loadFactorById();
     }
+  }
+
+  loadComparisonCode() {
+    this.systemService.loadComparisonCodeList();
+    this.subscriptions.add(this.systemService.getComparisonCodeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((comparisonCode: any) => {
+        this.comparisonCodeDropdownData = comparisonCode.data;
+      }));
+  }
+
+  loadCalculationType() {
+    this.systemService.loadCalculationTypeList();
+    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((calculationType: any) => {
+        this.calculationType = calculationType.data;
+      }));
+  }
+
+  loadBatchPeriodList(): any {
+    this.systemService.loadBatchPeriodList();
+    this.subscriptions.add(this.systemService.getBatchPeriodList().pipe(skipWhile((item: any) => !item))
+      .subscribe((batchPeriodList: any) => {
+        this.periodData = batchPeriodList.data;
+      }));
   }
 
   setForm(event: any) {

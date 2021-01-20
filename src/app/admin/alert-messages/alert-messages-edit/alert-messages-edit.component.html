@@ -19,8 +19,8 @@
     </div>
     <div class="control-label col-sm-8 col-xs-12">
       <select formControlName="target" id='target' class="form-control form-control-sm">
-        <option value="C">Customers</option>
-        <option value="U">Staff</option>
+        <option *ngFor='let targetObj of targetList'
+        [value]="targetObj.key">{{targetObj.value}}</option>
       </select>
     </div>
   </div>
@@ -30,8 +30,8 @@
     </div>
     <div class="col-sm-8 col-xs-12">
       <select formControlName="alertType" id='alertType' class="form-control form-control-sm">
-        <option value="L">On Login</option>
-        <option value="S">Now</option>
+        <option *ngFor='let alertObj of alertTypeList'
+        [value]="alertObj.key">{{alertObj.value}}</option>
       </select>
     </div>
   </div>
@@ -41,9 +41,8 @@
     </div>
     <div class="col-sm-8 col-xs-12">
       <select formControlName="alertLevel" id='alertLevel' class="form-control form-control-sm">
-        <option value="0">Informational</option>
-        <option value="5">Warning</option>
-        <option value="10">Error</option>
+        <option *ngFor='let alertLevelObj of alertLevelList'
+        [value]="alertLevelObj.key">{{alertLevelObj.value}}</option>
       </select>
     </div>
   </div>

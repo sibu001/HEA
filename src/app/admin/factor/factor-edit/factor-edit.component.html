@@ -42,9 +42,8 @@
                 class="form-control">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let comparisonCode of
-                  comparisonCodeDropdownData" [value]="comparisonCode.key">
-                  {{ comparisonCode.value }}
-                </option>
+                  comparisonCodeDropdownData" [value]='comparisonCode.lookupValue'>
+                  {{comparisonCode.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -98,9 +97,8 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="calculationType" class="form-control"
                 formControlName="calculationType">
-                <option *ngFor="let type of calculationType" [value]="type.key"
-                  [selected]="type.selected">
-                  {{ type.value }}
+                <option *ngFor="let type of calculationType" [value]="type.valueName">
+                  {{ type.lookupValue }}
                 </option>
               </select>
             </div>
@@ -135,10 +133,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="calculationPeriod" class="form-control"
                 formControlName="calculationPeriod">
-                <option value="D" selected="selected">Daily</option>
-                <option value="M">Monthly</option>
-                <option value="W">Weekly</option>
-                <option value="Y">Year</option>
+                <option *ngFor='let period of periodData' [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

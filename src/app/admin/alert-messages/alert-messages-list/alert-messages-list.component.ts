@@ -20,6 +20,8 @@ import { AlertMessagesEditComponent } from '../alert-messages-edit/alert-message
 export class AlertMessagesListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.ALERT_MESSAGE_KEY;
   public dataSource: any;
+  targetList: any[] = TableColumnData.TARGET;
+  alertTypeList: any[] = TableColumnData.ALERT_TYPE;
   public alertMessagesData = {
     content: [],
     totalElements: 0,

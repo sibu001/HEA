@@ -17,8 +17,8 @@
                 formControlName="comparisonCode">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let comparisonCode of
-                  comparisonCodeDropdownData" [value]='comparisonCode.key'>
-                  {{comparisonCode.value}}</option>
+                  comparisonCodeDropdownData" [value]='comparisonCode.lookupValue'>
+                  {{comparisonCode.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -75,7 +75,7 @@
                 <select class='form-control form-control-sm'
                   formControlName="homeSize" id="homeSize" name="homeSize">
                   <option value="" selected="selected"></option>
-                  <option *ngFor="let size of houseSizeData" [value]="size.key">{{size.value}}</option>
+                  <option *ngFor="let size of houseSizeData" [value]="size.lookupValue">{{size.valueName}}</option>
                 </select>
 
               </div>
@@ -90,7 +90,7 @@
                   class="form-control form-control-sm">
                   <option value="" selected="selected"></option>
                   <option *ngFor='let houseType of houseTypeData'
-                    [value]='houseType.key'>{{houseType.value}}</option>
+                    [value]='houseType.lookupValue'>{{houseType.valueName}}</option>
                 </select>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -105,7 +105,7 @@
                   formControlName="occupancy" id="occupancy">
                   <option value="" selected="selected"></option>
                   <option *ngFor='let occupancy of occupancyData '
-                    [value]="occupancy.key">{{occupancy.value}}</option>
+                    [value]="occupancy.lookupValue">{{occupancy.valueName}}</option>
                 </select>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -209,7 +209,7 @@
                   formControlName="lotSize" id="lotSize">
                   <option value="" selected="selected"></option>
                   <option *ngFor='let lotSize of lotSizeData'
-                    [value]='lotSize.key'>{{lotSize.value}}</option>
+                    [value]='lotSize.lookupValue'>{{lotSize.valueName}}</option>
                 </select>
 
               </div>

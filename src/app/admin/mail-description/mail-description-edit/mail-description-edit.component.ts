@@ -23,7 +23,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   public customerGroupKeys = TableColumnData.CUSTOMER_GROUP_KEY;
   contentPartsKeys = TableColumnData.CONTENT_PART_KEYS;
   variableKeys = TableColumnData.VARIABLE_KEYS;
-  periodData: any[] = TableColumnData.PERIOD_DATA;
+  periodData: any[];
   public customerGroupDataSource: any;
   public contentPartsDataSource: any;
   public variableDataSource: any;
@@ -62,6 +62,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadScrapingPeriodList();
     this.loadCustomerGroup(false, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
@@ -70,6 +71,13 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  loadScrapingPeriodList(): any {
+    this.systemService.loadScrapingPeriodList();
+    this.subscriptions.add(this.systemService.getScrapingPeriodList().pipe(skipWhile((item: any) => !item))
+      .subscribe((scrapingPeriodList: any) => {
+        this.periodData = scrapingPeriodList.data;
+      }));
+  }
   setForm(event: any) {
     this.topicForm = this.fb.group({
       sourceType: [event !== undefined ? event.sourceType : ''],

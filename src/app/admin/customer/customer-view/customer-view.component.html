@@ -279,9 +279,9 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="elHeatingModel"
                 formControlName="elHeatingModel">
-                <option value="0">Auto</option>
-                <option value="11">Seasonal Model</option>
-                <option value="13" selected="selected">Daily Combined Model</option>
+                <option *ngFor="let group of electricModelList"
+                  [value]="group.key">
+                  {{group.value}}</option>
               </select>
             </div>
           </div>
@@ -292,9 +292,9 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="ngHeatingModel"
                 formControlName="ngHeatingModel">
-                <option value="0">Auto</option>
-                <option value="1" selected="selected">Seasonal Model</option>
-                <option value="3">5-day MA Linear Regression Model</option>
+                <option *ngFor="let group of naturalGasHeatingModelList"
+                  [value]="group.key">
+                  {{group.value}}</option>
               </select>
             </div>
           </div>
@@ -499,9 +499,9 @@
               <select class="form-control form-control-sm" id="smePeriod"
                 formControlName="smePeriod" disabled="true">
                 <option value=""></option>
-                <option value="1">One Hour</option>
-                <option value="2">30 min</option>
-                <option value="4" selected="selected">15 min</option>
+                <option *ngFor="let group of smartMeterElectricPeriodList"
+                  [value]="group.key">
+                  {{group.value}}</option>
               </select>
             </div>
           </div>
@@ -542,8 +542,9 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="uiVersion"
                 formControlName="uiVersion">
-                <option value="V1">"classic" version</option>
-                <option value="V2">The new responsive version</option>
+                <option *ngFor="let group of uiVersionList"
+                  [value]="group.key">
+                  {{group.value}}</option>
               </select>
             </div>
           </div>

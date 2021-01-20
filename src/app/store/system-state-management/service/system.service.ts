@@ -45,7 +45,8 @@ import {
   GetLookupValueHomeTypeListAction,
   GetLookupValueLotSizeListAction,
   GetReportTypeListAction,
-  SetDebugConsoleData
+  SetDebugConsoleData,
+  GetLookupValueHomeSizeListAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -314,6 +315,10 @@ export class SystemService {
 
   loadHomeOccupancyList(): Observable<SystemManagementState> {
     return this.store.dispatch(new GetLookupValueHomeOccupancyListAction());
+  }
+
+  loadHomeSizeList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetLookupValueHomeSizeListAction());
   }
 
   loadComparisonCodeList(): Observable<SystemManagementState> {

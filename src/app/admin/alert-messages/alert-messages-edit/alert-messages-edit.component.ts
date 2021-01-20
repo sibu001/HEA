@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { TableColumnData } from 'src/app/data/common-data';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { SystemThreadInfoComponent } from '../../system-jobs/system-thread-info/system-thread-info.component';
@@ -16,6 +17,9 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
 
   public alertMessagesForm: FormGroup;
   public id: any;
+  targetList: any[] = TableColumnData.TARGET;
+  alertTypeList: any[] = TableColumnData.ALERT_TYPE;
+  alertLevelList: any[] = TableColumnData.ALERT_LEVEL_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public dialogRef: MatDialogRef<SystemThreadInfoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,

@@ -42,7 +42,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Period:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="period" id="period">
-                <option *ngFor='let period of periodData' [value]="period.key">{{period.value}}</option>
+                <option *ngFor='let period of periodData' [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

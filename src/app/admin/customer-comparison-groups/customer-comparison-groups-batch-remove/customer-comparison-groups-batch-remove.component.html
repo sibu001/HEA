@@ -14,8 +14,9 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="comparisonCode" class="form-control form-control-sm" formControlName="comparisonCode">
-                <option *ngFor="let comparisonCode of comparisonCodeDropdownData" [value]='comparisonCode.key'>
-                  {{comparisonCode.value}}</option>
+                <option *ngFor="let comparisonCode of
+                  comparisonCodeDropdownData" [value]='comparisonCode.lookupValue'>
+                  {{comparisonCode.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

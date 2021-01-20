@@ -20,8 +20,8 @@ export class AdministrativeReportsCallComponent implements OnInit, OnDestroy {
   reportForm: FormGroup;
   reportName: string;
   reportType: string;
+  formatList: any[] = TableColumnData.REPORT_FORMATE;
   reportParameter: any[] = [];
-  dataFieldKeys: TABLECOLUMN[];
   dataFieldData = {
     content: [],
     totalElements: 0
@@ -39,7 +39,6 @@ export class AdministrativeReportsCallComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.dataFieldKeys = TableColumnData.ADMIN_REPORT_PARAMETER_KEYS;
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.administrativeService.loadAdministrativeReportById(this.id);

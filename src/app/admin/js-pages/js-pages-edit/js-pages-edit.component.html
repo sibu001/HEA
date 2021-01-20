@@ -25,9 +25,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="template" id="template">
-                <option value="jsPageWithoutTemplate">JS Page Without Template</option>
-                <option value="jsPageWithRightMenu">JS Page With Right Menu</option>
-                <option value="jsPageWithoutMenu">JS Page Without Menu</option>
+                <option *ngFor='let group of jsPageTemplate' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -69,9 +67,7 @@
                 </div>
                 <div *ngIf="f.selectGroup.value" class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                   <select class="form-control" id="selectGroupMode" formControlName="selectGroupMode">
-                    <option value="A" selected="selected">Allow All</option>
-                    <option value="W">Allow All with waring</option>
-                    <option value="S">Select single value</option>
+                    <option *ngFor='let group of jsPageGroup' [value]="group.key">{{group.value}}</option>
                   </select>
                 </div>
               </div>
@@ -90,9 +86,7 @@
                 </div>
                 <div *ngIf="f.selectCoach.value" class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                   <select class="form-control" id="selectCoachMode" formControlName="selectCoachMode">
-                    <option value="A" selected="selected">Allow All</option>
-                    <option value="W">Allow All with waring</option>
-                    <option value="S">Select single value</option>
+                    <option *ngFor='let group of jsPageGroup' [value]="group.key">{{group.value}}</option>
                   </select>
                 </div>
               </div>
@@ -111,9 +105,7 @@
                 </div>
                 <div *ngIf="f.selectCity.value" class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                   <select class="form-control" id="selectCityMode" formControlName="selectCityMode">
-                    <option value="A" selected="selected">Allow All</option>
-                    <option value="W">Allow All with waring</option>
-                    <option value="S">Select single value</option>
+                    <option *ngFor='let group of jsPageGroup' [value]="group.key">{{group.value}}</option>
                   </select>
                 </div>
               </div>
@@ -131,22 +123,18 @@
                 </div>
                 <div *ngIf="f.selectPage.value" class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                   <select class="form-control" id="selectPageMode" formControlName="selectPageMode">
-                    <option value="A" selected="selected">Allow All</option>
-                    <option value="W">Allow All with waring</option>
-                    <option value="S">Select single value</option>
+                    <option *ngFor='let group of jsPageGroup' [value]="group.key">{{group.value}}</option>
                   </select>
                 </div>
               </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-
           <div *ngIf='f.selectGroup.value && f.needAuthorization.value' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0">Specify Select Mode:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" id="selectAllMode" formControlName="selectAllMode">
-                <option value="A" selected="selected">Allow All</option>
-                <option value="W">Allow All with waring</option>
+                <option *ngFor='let group of jsPageGroup' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

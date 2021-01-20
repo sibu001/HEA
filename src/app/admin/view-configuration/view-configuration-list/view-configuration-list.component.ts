@@ -25,7 +25,6 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
   };
   filter = false;
   cache = false;
-  periodData: any[] = TableColumnData.PERIOD_DATA;
   viewConfiguration: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;

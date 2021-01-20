@@ -89,13 +89,9 @@
                         <div class="col-md-4 col-lg-4 col-sm-6">
                             <select class="form-control form-control-sm" id="status" formControlName="status">
                                 <option value=""></option>
-                                <option value="0">Active (0)</option>
-                                <option value="10">In registration (10)</option>
-                                <option value="20">Bad utility credentials (20)</option>
-                                <option value="50">In progress (50)</option>
-                                <option value="80">Pending (80)</option>
-                                <option value="85">PG&amp;E account pending (85)</option>
-                                <option value="90">Blocked (90)</option>
+                                <option *ngFor="let statusObj of
+                                statusData" [value]="statusObj.key">
+                                {{statusObj.value}}</option>
                             </select>
                         </div>
                     </div>

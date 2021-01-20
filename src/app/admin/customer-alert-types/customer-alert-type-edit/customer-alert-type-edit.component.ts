@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -17,10 +18,11 @@ export class CustomerAlertTypeEditComponent implements OnInit, OnDestroy {
   id: any;
   isForce = false;
   private readonly subscriptions: Subscription = new Subscription();
-  eventType = TableColumnData.EVENT_TYPE_DATA;
+  eventType: any;
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemUtilityService: SystemUtilityService,
     private readonly router: Router,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -30,15 +32,18 @@ export class CustomerAlertTypeEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.scrollTop();
+    this.loadCustomerEventTypeList();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemService.loadCustomerAlertTypeById(Number(this.id));
       this.loadCustomerAlertTypeById();
     }
   }
+
   scrollTop() {
     window.scroll(0, 0);
   }
+
   loadCustomerAlertTypeById() {
     this.subscriptions.add(this.systemService.getCustomerAlertTypeById().pipe(skipWhile((item: any) => !item))
       .subscribe((customerAlertType: any) => {
@@ -48,6 +53,15 @@ export class CustomerAlertTypeEditComponent implements OnInit, OnDestroy {
         this.setForm(customerAlertType);
       }));
   }
+
+  loadCustomerEventTypeList() {
+    this.systemUtilityService.loadCustomerEventTypeList(true, '');
+    this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((credentialTypeList: any) => {
+        this.eventType = credentialTypeList;
+      }));
+  }
+
   setForm(event: any) {
     this.customerAlertTypeForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
@@ -65,10 +79,10 @@ export class CustomerAlertTypeEditComponent implements OnInit, OnDestroy {
   }
   delete() {
     if (confirm('Are you sure you want to delete?')) {
-    this.subscriptions.add(this.systemService.deleteCustomerAlertTypeById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/customer-alert/customerAlertTypeList'], { queryParams: { 'force': true } });
-      }));
+      this.subscriptions.add(this.systemService.deleteCustomerAlertTypeById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/customer-alert/customerAlertTypeList'], { queryParams: { 'force': true } });
+        }));
     }
   }
 

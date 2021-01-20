@@ -16,8 +16,8 @@
                 class="form-control">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let comparisonCode of
-                  comparisonCodeDropdownData" [value]='comparisonCode.key'>
-                  {{comparisonCode.value}}</option>
+                  comparisonCodeDropdownData" [value]='comparisonCode.lookupValue'>
+                  {{comparisonCode.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
@@ -53,7 +53,7 @@
               <select id="homeSize" formControlName="homeSize"
                 class="form-control form-control-sm">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let size of houseSizeData" [value]="size.key">{{size.value}}</option>
+                <option *ngFor="let size of houseSizeData" [value]="size.lookupValue">{{size.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">

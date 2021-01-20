@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { TableColumnData } from 'src/app/data/common-data';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
@@ -26,6 +27,8 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
   customerList: any = [];
   customerData: any;
   users: Users = new Users();
+  calculationTypeList: any[] = [];
+  scriptDebugEventList: any[] = TableColumnData.SCRIPT_DEBUG_EVENT;
   codeMirrorOptions: any = {
     theme: 'idea',
     mode: 'application/ld+json',
@@ -44,6 +47,7 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     private readonly loginService: LoginService,
     private readonly systemMeasurementService: SystemMeasurementService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemService: SystemService,
     private readonly administrativeService: AdministrativeService,
     private readonly el: ElementRef,
     private readonly location: Location) {
@@ -58,7 +62,9 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.getPaidServiceId();
+    this.loadCalculationTypeList();
     this.loadTopicDescription();
     this.setForm(undefined);
     if (this.id !== undefined) {
@@ -73,6 +79,17 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
       }));
   }
 
+  scrollTop() {
+    window.scroll(0, 0);
+  }
+
+  loadCalculationTypeList(): any {
+    this.systemService.loadCalculationTypeList();
+    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((calculationTypeList: any) => {
+        this.calculationTypeList = calculationTypeList.data;
+      }));
+  }
   handleAutoComplete(event: any): any {
     this.users.searchUserList[0] = event.option.value;
     this.loginService.setUser(this.users);

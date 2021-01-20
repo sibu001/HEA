@@ -37,3 +37,33 @@ p.messages {
     padding: 0px;
   }
 }
+
+::ng-deep .alert-message-table .mat-column-id{
+  flex: none;
+  width: 70px;
+}
+
+::ng-deep .alert-message-table .mat-column-createdDate{
+  flex: none;
+  width: 100px;
+}
+
+::ng-deep .alert-message-table .mat-column-active{
+  flex: none;
+  width: 80px;
+}
+
+::ng-deep .alert-message-table .mat-column-target{
+  flex: none;
+  width: 100px;
+}
+
+::ng-deep .alert-message-table .mat-column-alertType{
+  flex: none;
+  width: 100px;
+}
+
+::ng-deep .alert-message-table .mat-column-alertLevel{
+  flex: none;
+  width: 100px;
+}

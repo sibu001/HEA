@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -18,19 +19,29 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   id: any;
   customerComparisonGroupForm: FormGroup;
   public weatherStationIds: Array<any>;
-  public comparisonCodeDropdownData: Array<any> = TableColumnData.COMPARISON_CODE_DROPDOWN_DATA;
+  public comparisonCodeDropdownData: Array<any>;
   public yesNoData: Array<any> = TableColumnData.YES_NO_DATA;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
+    private readonly systemService:SystemService,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly location: Location,
     private readonly el: ElementRef) {
   }
 
   ngOnInit() {
+    this.loadComparisonCode();
     this.findWeatherStation(false, '');
     this.setForm(undefined);
     this.scrollTop();
+  }
+
+  loadComparisonCode() {
+    this.systemService.loadComparisonCodeList();
+    this.subscriptions.add(this.systemService.getComparisonCodeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((comparisonCode: any) => {
+        this.comparisonCodeDropdownData = comparisonCode.data;
+      }));
   }
 
   findWeatherStation(force: boolean, filter: any): void {

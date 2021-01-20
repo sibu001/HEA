@@ -8,6 +8,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -26,13 +27,14 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   };
   filter = false;
   cache = false;
-  periodData: any[] = TableColumnData.PERIOD_DATA;
+  periodData: any[];
   mailForm: FormGroup;
   public force = false;
   public adminFilter: AdminFilter;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly mailService: MailService,
+    private readonly systemService:SystemService,
     private readonly router: Router,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
@@ -45,10 +47,18 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.loadScrapingPeriodList();
     this.setUpForm(this.adminFilter.mailDescriptionFilter.formValue);
     this.search(this.adminFilter.mailDescriptionFilter.page, false);
   }
 
+  loadScrapingPeriodList(): any {
+    this.systemService.loadScrapingPeriodList();
+    this.subscriptions.add(this.systemService.getScrapingPeriodList().pipe(skipWhile((item: any) => !item))
+      .subscribe((scrapingPeriodList: any) => {
+        this.periodData = scrapingPeriodList.data;
+      }));
+  }
 
   addMailDescriptions(): any {
     this.router.navigate(['/admin/mailDescription/mailDescriptionEdit']);
