@@ -22,10 +22,9 @@ export class AdministrativeReportTransformer {
         src.forEach(element => {
             let dataSourceObject: any = {};
             dataSourceObject = element;
-            dataSourceObject.customerName = element.customerId;
             dataSourceObject.eventCode = element.customerEventType.eventCode;
             dataSourceObject.eventName = element.customerEventType.eventName;
-            dataSourceObject.createdDate = element.eventDatetime ? new DatePipe('en-US').transform(new Date(element.eventDatetime), 'MMM d, y', 'PST') : '';
+            dataSourceObject.createdDate = element.eventDatetime ? new DatePipe('en-US').transform(element.eventDatetime, 'MMM d, y', 'PST') : '';
             dataSourceList.push(dataSourceObject);
         });
         return dataSourceList;

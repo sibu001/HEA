@@ -355,7 +355,7 @@ export class TableColumnData {
     ];
 
     static readonly EVENT_HISTORY_KEYS: Array<TABLECOLUMN> = [
-        { key: 'customerName', sort: 'customer', isEdit: true, displayName: 'Customer' },
+        { key: 'customerName', sort: 'customer.user.name', isEdit: true, displayName: 'Customer' },
         { key: 'eventCode', sort: 'eventCode', isEdit: true, displayName: 'Event Code', isUnderline: true },
         { key: 'eventName', sort: 'eventName', isEdit: true, displayName: 'Event Name' },
         { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Date' },
@@ -512,6 +512,16 @@ export class TableColumnData {
         { id: 85, value: 'PG&amp;E account pending (85)' },
     ];
 
+    static readonly STATUS_DATA_FOR_STAFF: Array<any> = [
+        { id: 0, value: 'Active (0)' },
+        { id: 10, value: 'In registration (10)' },
+        { id: 90, value: 'Blocked (90)' },
+    ];
+
+    static readonly STATUS_DATA_FOR_STAFF_LIST: Array<any> = [
+        { id: 0, value: 'Active (0)' },
+        { id: 90, value: 'Blocked (90)' },
+    ];
     static readonly YES_NO_DATA: Array<any> = [
         { key: 'Y', value: 'Yes' },
         { key: 'N', value: 'No' }
@@ -997,4 +1007,96 @@ export class TableColumnData {
         { key: 'W', value: 'Allow All with waring' },
         { key: 'S', value: 'Select single value' },
     ];
+
+    static readonly RECORD_TYPE: any[] = [
+        { key: 'U', value: 'Update' },
+        { key: 'I', value: 'New' },
+        { key: 'E', value: 'Error' },
+        { key: 'S', value: 'Start' },
+        { key: 'F', value: 'Finish' },
+    ];
+
+    static readonly SOURCE_TYPE: any[] = [
+        { key: 'CUST', value: 'By Customer' },
+        { key: 'REG', value: 'By Registration' },
+    ];
+
+    static readonly CONTENT_TYPE: any[] = [
+        { key: 'application/csv', value: 'CSV' },
+        { key: 'H', value: 'HTML' },
+        { key: 'T', value: 'Text' },
+    ];
+
+    static readonly TOOL_TYPE: any[] = [
+        { key: 'jschart', value: 'Free JS Charts' },
+        { key: 'jfreechart', value: 'jFreeChart' },
+        { key: 'jqplot', value: 'jqPlot' },
+    ];
+
+    static readonly CHART_TYPE: any[] = [
+        { key: 'area', value: 'Area chart' },
+        { key: 'bar', value: 'Bar category chart' },
+        { key: 'line', value: 'Line category chart' },
+        { key: 'pie', value: 'Pie chart' },
+        { key: 'stackedArea', value: 'Stacked area category chart' },
+        { key: 'stackedBar', value: 'Stacked bar category chart' },
+        { key: 'timeSeries', value: 'Time series chart' },
+    ];
+
+    static readonly FONT_STYLE: any[] = [
+        { key: '0', value: 'Plain' },
+        { key: '1', value: 'Bold' },
+        { key: '2', value: 'Italic' },
+        { key: '3', value: 'Bold/Italic' },
+    ];
+
+    static readonly LOCATION: any[] = [
+        { key: 'nw', value: 'Top/Right' },
+        { key: 'n', value: 'Top' },
+        { key: 'ne', value: 'Top/Left' },
+        { key: 'e', value: 'Left' },
+        { key: 'se', value: 'Bottom/Left' },
+        { key: 's', value: 'Bottom' },
+        { key: 'sw', value: 'Bottom/Right' },
+        { key: 'w', value: 'Right' },
+    ];
+
+    static readonly RESOURCE_USE: any[] = [
+        { key: 'hhe', value: 'Household Energy' },
+        { key: 'electricity', value: 'Electricity Only' },
+        { key: 'naturalGas', value: 'Natural Gas Only' },
+        { key: 'water', value: 'Water' },
+        { key: 'ghg', value: 'GHG' },
+    ];
+
+
+    static readonly UNIT_TYPE: any[] = [
+        { key: 'cost', value: 'Cost' },
+        { key: 'use', value: 'Use' },
+    ];
+
+    static readonly USE_TYPE: any[] = [
+        { key: 'airTravel', value: 'Air Travel' },
+        { key: 'all', value: 'All Loads' },
+        { key: 'allSources', value: 'All Sources' },
+        { key: 'baseLoads', value: 'Always on' },
+        { key: 'carTravel', value: 'Car Travel' },
+        { key: 'electricity', value: 'Electricity' },
+        { key: 'indoorWater', value: 'Indoor Water' },
+        { key: 'naturalGas', value: 'Natural Gas' },
+        { key: 'outdoorWater', value: 'Outdoor Water' },
+        { key: 'recurring', value: 'Recurring' },
+        { key: 'summerCooling', value: 'Summer Cooling' },
+        { key: 'variable', value: 'Variable' },
+        { key: 'water', value: 'Water' },
+        { key: 'winterSpaceHeating', value: 'Winter Space Heating' },
+    ];
+
+    static readonly SERIES_QUERY_TYPE: any[] = [
+        { key: 'javaScript', value: 'JavaScript' },
+        { key: 'spel', value: 'SpEL' },
+        { key: 'sql', value: 'SQL' },
+        { key: 'webharvest', value: 'WebHarvest script' },
+    ];
 }
+

@@ -1,27 +1,41 @@
 
 <h1 mat-dialog-title cdkDrag cdkDragRootElement=".cdk-overlay-pane"
-cdkDragHandle>Google Map <button (click)="onNoClick()" class="closeButton" cdkFocusInitial><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8pt" height="8pt" viewBox="0 0 8 8" version="1.1">
-  <g id="surface1">
-  <path style=" stroke:none;fill-rule:nonzero;fill:76ba19;fill-opacity:1;" d="M 0.109375 0.644531 C -0.0351562 0.5 -0.0351562 0.257812 0.109375 0.109375 C 0.257812 -0.0351562 0.492188 -0.0351562 0.644531 0.109375 L 3.84375 3.3125 L 7.050781 0.109375 C 7.195312 -0.0351562 7.4375 -0.0351562 7.578125 0.109375 C 7.726562 0.257812 7.726562 0.5 7.578125 0.644531 L 4.378906 3.84375 L 7.578125 7.050781 C 7.726562 7.195312 7.726562 7.433594 7.578125 7.585938 C 7.433594 7.726562 7.195312 7.726562 7.050781 7.585938 L 3.84375 4.378906 L 0.644531 7.585938 C 0.492188 7.726562 0.257812 7.726562 0.109375 7.585938 C -0.0351562 7.433594 -0.0351562 7.195312 0.109375 7.050781 L 3.3125 3.84375 Z M 0.109375 0.644531 "/>
-  </g>
-  </svg>
-  </button></h1>
+  cdkDragHandle>Google Map <button (click)="onNoClick()" class="closeButton"
+    cdkFocusInitial><svg xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink" width="8pt" height="8pt"
+      viewBox="0 0 8 8" version="1.1">
+      <g id="surface1">
+        <path style="stroke:none;fill-rule:nonzero;fill:#76ba19;fill-opacity:1;"
+          d="M 0.109375 0.644531 C -0.0351562 0.5 -0.0351562 0.257812 0.109375
+          0.109375 C 0.257812 -0.0351562 0.492188 -0.0351562 0.644531 0.109375 L
+          3.84375 3.3125 L 7.050781 0.109375 C 7.195312 -0.0351562 7.4375
+          -0.0351562 7.578125 0.109375 C 7.726562 0.257812 7.726562 0.5 7.578125
+          0.644531 L 4.378906 3.84375 L 7.578125 7.050781 C 7.726562 7.195312
+          7.726562 7.433594 7.578125 7.585938 C 7.433594 7.726562 7.195312
+          7.726562 7.050781 7.585938 L 3.84375 4.378906 L 0.644531 7.585938 C
+          0.492188 7.726562 0.257812 7.726562 0.109375 7.585938 C -0.0351562
+          7.433594 -0.0351562 7.195312 0.109375 7.050781 L 3.3125 3.84375 Z M
+          0.109375 0.644531"/>
+        </g>
+      </svg>
+    </button></h1>
 
-<div mat-dialog-content>
-<agm-map
-  [latitude]="lat"
-  [longitude]="lng"
-  [zoom]="zoom"
-  [disableDefaultUI]="false"
-  [zoomControl]="true"
-  [mapTypeControl]='true'
-  [mapTypeId]="'hybrid'"
-  [fullscreenControl]='true' [streetViewControl]="true" [rotateControl]="true" [tilt]='45'>
-  
-  <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-</agm-map>
-</div>
-<div mat-dialog-actions>
-  <button mat-button class="mapButton" (click)="newWindow()">New Window</button>
-  <button mat-button class="mapButton" (click)="onNoClick()">Close</button>
-</div>
+  <div mat-dialog-content>
+    <agm-map
+      [latitude]="lat"
+      [longitude]="lng"
+      [zoom]="zoom"
+      [disableDefaultUI]="false"
+      [zoomControl]="true"
+      [mapTypeControl]='true'
+      [mapTypeId]="'hybrid'"
+      [fullscreenControl]='true' [streetViewControl]="true"
+      [rotateControl]="true" [tilt]='45'>
+
+      <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+    </agm-map>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button class="mapButton" (click)="newWindow()">New Window</button>
+    <button mat-button class="mapButton" (click)="onNoClick()">Close</button>
+  </div>

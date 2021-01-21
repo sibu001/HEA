@@ -32,10 +32,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Series Query Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="seriesQueryType" formControlName="seriesQueryType">
-                <option value="javascript">JavaScript</option>
-                <option value="spel">SpEL</option>
-                <option value="sql" selected="selected">SQL</option>
-                <option value="webharvest">WebHarvest script</option>
+                <option *ngFor='let group of seriesQueryList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

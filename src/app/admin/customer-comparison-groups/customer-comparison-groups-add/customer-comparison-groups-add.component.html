@@ -17,7 +17,8 @@
                 formControlName="comparisonCode">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let comparisonCode of
-                  comparisonCodeDropdownData" [value]='comparisonCode.lookupValue'>
+                  comparisonCodeDropdownData"
+                  [value]='comparisonCode.lookupValue'>
                   {{comparisonCode.valueName}}</option>
               </select>
             </div>
@@ -44,7 +45,8 @@
               Order:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="orderNumber"
+              <input type="text" class="form-control form-control-sm"
+                id="orderNumber"
                 formControlName="orderNumber">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -75,7 +77,8 @@
                 <select class='form-control form-control-sm'
                   formControlName="homeSize" id="homeSize" name="homeSize">
                   <option value="" selected="selected"></option>
-                  <option *ngFor="let size of houseSizeData" [value]="size.lookupValue">{{size.valueName}}</option>
+                  <option *ngFor="let size of houseSizeData"
+                    [value]="size.lookupValue">{{size.valueName}}</option>
                 </select>
 
               </div>
@@ -222,12 +225,12 @@
               </div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <input type="text" class="show-value" id="numOfCustomers"
-                formControlName="numOfCustomers">
-                
+                  formControlName="numOfCustomers" disabled>
                 <p>
-                 <span *ngFor="let customer of customerComparisonGroupCustomerList">
-                   {{customer}}, 
-                 </span>
+                  <span *ngFor="let customer of
+                    customerComparisonGroupCustomerList">
+                    {{customer}},
+                  </span>
                 </p>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -240,7 +243,8 @@
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 This comparison group includes homes -
                 <ul>
-                  <li *ngFor="let description of customerComparisonGroupDescriptionList">{{description}}</li>
+                  <li *ngFor="let description of
+                    customerComparisonGroupDescriptionList">{{description}}</li>
                 </ul>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -262,6 +266,8 @@
                 Updated Date:
               </div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="show-value" id="updatedDate"
+                  formControlName="updatedDate" disabled>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
@@ -270,20 +276,25 @@
                 Updated By:
               </div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="show-value" id="updatedBy"
+                  formControlName="updatedBy" disabled>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
             <div class="row rowPadding">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6"  style='display:inline-table;'><button
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6"
+                style='display:inline-table;'><button
                   type="button" class="btn btn-primary"
                   (click)="back()">Back</button></div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6 row">
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6"  style='display:inline-table;'>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6"
+                  style='display:inline-table;'>
                   <button type="button" class="btn btn-primary"
                     style="float:right;" (click)="delete()"
                     *ngIf="id!==undefined && id!==null">Delete</button>
                 </div>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-4" style='display:inline-table;'>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-4"
+                  style='display:inline-table;'>
                   <button type="button" class="btn btn-primary"
                     style="float:right;" (click)="save()">Save</button>
                 </div>

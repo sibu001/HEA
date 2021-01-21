@@ -25,8 +25,7 @@
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
               <select class="form-control form-control-sm"
                 id="status" formControlName="status">
-                <option value="0">Active (0)</option>
-                <option value="90">Blocked (90)</option>
+                <option *ngFor='let group of statusList' [value]="group.id">{{group.value}}</option>
               </select>
             </div>
           </div>

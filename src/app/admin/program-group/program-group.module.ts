@@ -11,6 +11,8 @@ import { NgxsModule } from '@ngxs/store';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { RouterModule } from '@angular/router';
+import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 
 @NgModule({
   imports: [
@@ -21,10 +23,11 @@ import { RouterModule } from '@angular/router';
     ProgramGroupRoutingModule,
     NgxsModule.forRoot([
       SystemManagementState,
-      CustomerManagementState
+      CustomerManagementState,
+      SystemUtilityManagementState
     ]),
   ],
   declarations: [ProgramGroupListComponent, ProgramGroupEditComponent],
-  providers: [SystemService]
+  providers: [SystemService, SystemUtilityService]
 })
 export class ProgramGroupModule { }

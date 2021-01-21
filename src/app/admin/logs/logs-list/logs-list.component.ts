@@ -19,6 +19,7 @@ export class LogsListComponent implements OnInit, OnDestroy {
 
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.LOGS_KEYS;
+  public recordTypeList: any[] = TableColumnData.RECORD_TYPE;
   public dataSource: any;
   public totalElement = 0;
   public pageIndex: any;

@@ -1,61 +1,76 @@
 <!--CL login Page  -->
 <div class="container-fluid"
-    *ngIf="theme=='HEA'||theme=='CEC'||theme=='CL'||theme=='EF'||theme=='P4P'||theme=='MBL'||theme=='AC' ||theme=='HET' ||theme=='MV'||theme=='SNV' ||theme=='VT'||theme=='TST'||theme=='CSP'||theme=='RS'">
+    *ngIf="theme=='HEA'||theme=='CEC'||theme=='CL'||theme=='EF'||theme=='P4P'||theme=='MBL'||theme=='AC'
+    ||theme=='HET' ||theme=='MV'||theme=='SNV'
+    ||theme=='VT'||theme=='TST'||theme=='CSP'||theme=='RS'">
     <div class="row top">
         <div class="col-sm-3">
-            <p class="registrationTextHIresponsive" *ngIf="buildForSandbox">Build for Sandbox</p>
+            <p class="registrationTextHIresponsive" *ngIf="buildForSandbox">Build
+                for Sandbox</p>
         </div>
         <div class="col-sm-6">
             <div *ngIf="theme=='HEA'||theme=='CEC'">
                 <p class="smartAuditTextCL">
-                    <img src="assets/images/healogo.png" class="dr_center-block2CL"> </p>
+                    <img src="assets/images/healogo.png"
+                        class="dr_center-block2CL"> </p>
                 <p class="smartAuditTextCL">Login to the Smart Audit</p>
             </div>
 
             <div *ngIf="theme=='CL'">
                 <p class="smartAuditTextCL">
-                    <img src="assets/images/CL/logo_cl.png" class="dr_center-block2CL"> </p>
-                <p class="smartAuditTextCL">Login to the CHERP Home Energy Analyzer</p>
+                    <img src="assets/images/CL/logo_cl.png"
+                        class="dr_center-block2CL"> </p>
+                <p class="smartAuditTextCL">Login to the CHERP Home Energy
+                    Analyzer</p>
             </div>
             <div *ngIf="theme=='EF'">
                 <p class="smartAuditTextCL">
-                    <img src="assets/images/logo-ef.png" class="dr_center-block2EF"> </p>
+                    <img src="assets/images/logo-ef.png"
+                        class="dr_center-block2EF"> </p>
                 <p class="smartAuditTextCL">Home Energy Profile</p>
             </div>
             <div *ngIf="theme=='P4P'">
                 <p class="smartAuditTextHI">
-                    <img src="assets/images/HI_02-03.png" class="dr_center-block2P4P"> </p>
+                    <img src="assets/images/HI_02-03.png"
+                        class="dr_center-block2P4P"> </p>
                 <p class="smartAuditTextHI">login to Smart Audit</p>
             </div>
             <div *ngIf="theme=='MBL'||theme == 'CSP' ||theme == 'RS'">
                 <p class="smartAuditTextHI">
-                    <img src="assets/images/HI_02-03.png" class="dr_center-block2P4P"> </p>
+                    <img src="assets/images/HI_02-03.png"
+                        class="dr_center-block2P4P"> </p>
                 <p class="smartAuditTextHI">login to Smart Audit</p>
             </div>
             <div *ngIf="theme=='AC'">
                 <p class="smartAuditTextHI">
-                    <img src="assets/images/AC/logo_gahhe.png" class="dr_center-block2AC"> </p>
+                    <img src="assets/images/AC/logo_gahhe.png"
+                        class="dr_center-block2AC"> </p>
                 <p class="smartAuditTextHI">login to the Home Energy Analyzer</p>
             </div>
             <div *ngIf="theme=='HET'||theme=='TST'">
                 <p class="smartAuditTextHI">
-                    <img src="assets/images/HET/logo_het.png" class="dr_center-block2HET"> </p>
+                    <img src="assets/images/HET/logo_het.png"
+                        class="dr_center-block2HET"> </p>
                 <p class="smartAuditTextHI">Home Energy Profile</p>
             </div>
             <div *ngIf="theme=='MV'">
                 <p class="smartAuditTextHI">
-                    <img src="assets/images/MV/logo_gahhe.png" class="dr_center-block2MV"> </p>
+                    <img src="assets/images/MV/logo_gahhe.png"
+                        class="dr_center-block2MV"> </p>
                 <p class="smartAuditTextHI">Login to the EUMV Navigator</p>
             </div>
             <div *ngIf="theme=='SNV'">
                 <p class="smartAuditTextHI">
-                    <img src="assets/images/SNV/logo_snv.png" class="dr_center-block2SNV"> </p>
+                    <img src="assets/images/SNV/logo_snv.png"
+                        class="dr_center-block2SNV"> </p>
                 <p class="smartAuditTextHI">Login to the Smart Audit</p>
             </div>
             <div *ngIf="theme=='VT'">
                 <p class="smartAuditTextHI">
-                    <img src="assets/images/VT/logo_ev.gif" class="dr_center-block2VT"> </p>
-                <p class="smartAuditTextHI">Login for the Home Energy Insights Study</p>
+                    <img src="assets/images/VT/logo_ev.gif"
+                        class="dr_center-block2VT"> </p>
+                <p class="smartAuditTextHI">Login for the Home Energy Insights
+                    Study</p>
             </div>
             <div class="mainLoginCL">
                 <p class="errorTextCL">
@@ -65,23 +80,29 @@
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="email">username</label>
                         <div class="col-sm-8">
-                            <input type="email" class="form-control" id="email" placeholder="enter username"
-                                name="email" [(ngModel)]="users.username" (keyup.enter)="login()">
+                            <input type="email" class="form-control" id="email"
+                                placeholder="enter username"
+                                name="email" [(ngModel)]="users.username"
+                                (keyup.enter)="login()">
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
                     <div class="form-group">
                         <label class="control-label col-sm-3" for="pwd">password</label>
                         <div class="col-sm-8">
-                            <input [type]="show ? 'password':'text'" pInputText class="form-control" id="pwd"
-                                placeholder="enter password" name="pwd" [(ngModel)]="users.password"
+                            <input [type]="show ? 'password':'text'" pInputText
+                                class="form-control" id="pwd"
+                                placeholder="enter password" name="pwd"
+                                [(ngModel)]="users.password"
                                 (keyup.enter)="login()" #inp />
                             <div class="pll">
                                 <a (click)="toggleShow()" *ngIf="show">
-                                    <img src="assets/images/eyes_img1.png" class="eye">
+                                    <img src="assets/images/eyes_img1.png"
+                                        class="eye">
                                 </a>
                                 <a (click)="toggleShow()" *ngIf="hide">
-                                    <img src="assets/images/eyes_img2.png" class="eye">
+                                    <img src="assets/images/eyes_img2.png"
+                                        class="eye">
                                 </a>
                             </div>
                         </div>
@@ -90,15 +111,18 @@
                     <div class="form-group">
                         <div class="col-sm-11">
                             <!-- <img src="assets/images/login.png" class="loginCL" (click)="login()"> -->
-                            <button type="button" class="btn btn-primary" id="_login" (click)="login()">login</button>
+                            <button type="button" class="btn btn-primary"
+                                id="_login" (click)="login()">login</button>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-sm-11">
                             <p class="registarCL">
                                 <span class="dont">Don't have a login? </span>
-                                <a class="anchor" [routerLink]="['/customerRegistration']"
-                                    [queryParams]="{'theme':theme}">Register here</a>
+                                <a class="anchor"
+                                    [routerLink]="['/customerRegistration']"
+                                    [queryParams]="{'theme':theme}">Register
+                                    here</a>
                             </p>
                         </div>
                         <div class="col-sm-2">
@@ -110,12 +134,16 @@
                 <div class="row">
                     <div class="col-sm-6">
                         <p class="forgotPasswordCL">I
-                            <a class="anchor" [routerLink]="['/forgotpassword']">forgot</a> my password</p>
+                            <a class="anchor"
+                                [routerLink]="['/forgotpassword']">forgot</a> my
+                            password</p>
                     </div>
                     <div class="col-sm-6">
                         <p class="socialImageCL">
-                            <img src="assets/images/fb.png" class="fblogin" (click)="login()">
-                            <img src="assets/images/google.png" class="googlelogin" (click)="login()">
+                            <img src="assets/images/fb.png" class="fblogin"
+                                (click)="login()">
+                            <img src="assets/images/google.png"
+                                class="googlelogin" (click)="login()">
                         </p>
                     </div>
                 </div>
@@ -123,31 +151,40 @@
                 <br>
                 <div class="media">
                     <div class="media-left media-top">
-                        <img src="assets/images/PGE_Spot_full_rgb_pos_sm.jpg" class="media-object" style="width:80px"
+                        <img src="assets/images/PGE_Spot_full_rgb_pos_sm.jpg"
+                            class="media-object" style="width:80px"
                             (click)="login()">
                     </div>
                     <div class="media-body">
                         <p class="footerimageCL">
-                            PG&E refers to Pacific Gas and Electric Company, a subsidiary of PG&E Corporation 2017,
+                            PG&E refers to Pacific Gas and Electric Company, a
+                            subsidiary of PG&E Corporation 2017,
                             Pacific Gas and Electric Company.
-                            All rights reserved,These offerings are funded by California Utility customers and
+                            All rights reserved,These offerings are funded by
+                            California Utility customers and
                             admistered
-                            by PG&E under the auspices of the California Public Utility Commissio HEA offers energy
+                            by PG&E under the auspices of the California Public
+                            Utility Commissio HEA offers energy
                             efficiency
-                            programs on behalf of Pacific Gas and Electric Company to its customers.
+                            programs on behalf of Pacific Gas and Electric
+                            Company to its customers.
                         </p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-sm-3">
-            <p class="registrationTextHI" *ngIf="buildForSandbox">Build for Sandbox</p>
+            <p class="registrationTextHI" *ngIf="buildForSandbox">Build for
+                Sandbox</p>
         </div>
     </div>
 
 </div>
 <div class="container-fluid"
-    *ngIf="theme !='HEA' && theme !='CEC' && theme !='CL' && theme !='EF' && theme !='P4P' && theme !='MBL' && theme !='AC' &&theme !='HET' && theme !='MV' && theme !='SNV' && theme !='VT' && theme !='TST' && theme !='CSP' && theme !='RS'">
+    *ngIf="theme !='HEA' && theme !='CEC' && theme !='CL' && theme !='EF' &&
+    theme !='P4P' && theme !='MBL' && theme !='AC' &&theme !='HET' && theme
+    !='MV' && theme !='SNV' && theme !='VT' && theme !='TST' && theme !='CSP' &&
+    theme !='RS'">
     <h1>Unknown error</h1>
     <p>What does it mean?</p>
     <ul>

@@ -25,9 +25,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Tool Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="toolType" formControlName="toolType">
-                <option value="jschart" selected="selected">Free JS Charts</option>
-                <option value="jfreechart">jFreeChart</option>
-                <option value="jqplot">jqPlot</option>
+                <option *ngFor='let group of toolTypeList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -68,13 +66,7 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="chartType" formControlName="chartType">
-                <option value="area">Area chart</option>
-                <option value="bar">Bar category chart</option>
-                <option value="line">Line category chart</option>
-                <option value="pie" selected="selected">Pie chart</option>
-                <option value="stackedArea">Stacked area category chart</option>
-                <option value="stackedBar">Stacked bar category chart</option>
-                <option value="timeSeries">Time series chart</option>
+                <option *ngFor='let group of chartTypeList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -219,10 +211,7 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" formControlName="titleFontStyle" id="titleFontStyle">
-                <option value="0" selected="selected">Plain</option>
-                <option value="1">Bold</option>
-                <option value="2">Italic</option>
-                <option value="3">Bold/Italic</option>
+                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -282,10 +271,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Style:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" formControlName="legendFontStyle" id="legendFontStyle">
-                <option value="0" selected="selected">Plain</option>
-                <option value="1">Bold</option>
-                <option value="2">Italic</option>
-                <option value="3">Bold/Italic</option>
+                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -303,14 +289,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="legendLocation" formControlName="legendLocation">
                 <option value=""></option>
-                <option value="nw">Top/Right</option>
-                <option value="n">Top</option>
-                <option value="ne">Top/Left</option>
-                <option value="e" selected="selected">Left</option>
-                <option value="se">Bottom/Left</option>
-                <option value="s">Bottom</option>
-                <option value="sw">Bottom/Right</option>
-                <option value="w">Right</option>
+                <option *ngFor='let group of locationLIst' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -361,10 +340,7 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" formControlName="rangeFontStyle" id="rangeFontStyle">
-                <option value="0" selected="selected">Plain</option>
-                <option value="1">Bold</option>
-                <option value="2">Italic</option>
-                <option value="3">Bold/Italic</option>
+                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -486,10 +462,7 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" formControlName="domainFontStyle" id="domainFontStyle">
-                <option value="0" selected="selected">Plain</option>
-                <option value="1">Bold</option>
-                <option value="2">Italic</option>
-                <option value="3">Bold/Italic</option>
+                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -593,11 +566,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="resourceUse" formControlName="resourceUse">
                 <option value=""></option>
-                <option value="hhe">Household Energy</option>
-                <option value="electricity" selected="selected">Electricity Only</option>
-                <option value="naturalGas">Natural Gas Only</option>
-                <option value="water">Water</option>
-                <option value="ghg">GHG</option>
+                <option *ngFor='let group of resourceUseList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -608,8 +577,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="unitType" formControlName="unitType">
                 <option value=""></option>
-                <option value="cost">Cost</option>
-                <option value="use">Use</option>
+                <option *ngFor='let group of unitTypeList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -620,20 +588,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="useType" formControlName="useType">
                 <option value=""></option>
-                <option value="airTravel">Air Travel</option>
-                <option value="all">All Loads</option>
-                <option value="allSources">All Sources</option>
-                <option value="baseLoads">Always on</option>
-                <option value="carTravel">Car Travel</option>
-                <option value="electricity">Electricity</option>
-                <option value="indoorWater">Indoor Water</option>
-                <option value="naturalGas">Natural Gas</option>
-                <option value="outdoorWater">Outdoor Water</option>
-                <option value="recurring">Recurring</option>
-                <option value="summerCooling">Summer Cooling</option>
-                <option value="variable" selected="selected">Variable</option>
-                <option value="water">Water</option>
-                <option value="winterSpaceHeating">Winter Space Heating</option>
+                <option *ngFor='let group of useTypeList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

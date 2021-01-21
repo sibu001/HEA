@@ -8,7 +8,7 @@
         viewBox="0 0 8 8" version="1.1">
         <g id="surface1">
           <path
-            style="stroke:none;fill-rule:nonzero;fill:76ba19;fill-opacity:1;"
+            style="stroke:none;fill-rule:nonzero;fill:#76ba19;fill-opacity:1;"
             d="M 0.109375 0.644531 C -0.0351562 0.5 -0.0351562 0.257812 0.109375
             0.109375 C 0.257812 -0.0351562 0.492188 -0.0351562 0.644531 0.109375
             L 3.84375 3.3125 L 7.050781 0.109375 C 7.195312 -0.0351562 7.4375
@@ -32,14 +32,15 @@
             Date:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-            <p-calendar formControlName='noteDate' id="noteDate" showSeconds="true" hourFormat="24"
-            showIcon=true showTime="true"></p-calendar>
+            <p-calendar formControlName='noteDate' id="noteDate"
+              showSeconds="true" hourFormat="24"
+              showIcon=true showTime="true"></p-calendar>
           </div>
         </div>
 
         <div class="row rowPadding borderBottom">
           <div class="control-label col-sm-4 col-xs-12">
-           Note:
+            Note:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
             <textarea class="form-control textarea_scroll" rows="3" id="note"
@@ -51,25 +52,32 @@
         <div class="col-sm-6 col-xs-6" *ngIf="!isList">
         </div>
         <div class="col-sm-6 col-xs-6" *ngIf="isList">
-          <button type="button" class="btn btn-primary btn-padding" (click)="prev()" *ngIf="staffNoteList.length>1">&lt;</button>
-          <button type="button" class="btn btn-primary btn-padding" (click)="newEvent()">New</button>
-          <button type="button" class="btn btn-primary btn-padding" (click)="next()" *ngIf="staffNoteList.length>1">&gt;</button>
+          <button type="button" class="btn btn-primary btn-padding"
+            (click)="prev()" *ngIf="staffNoteList.length>1">&lt;</button>
+          <button type="button" class="btn btn-primary btn-padding"
+            (click)="newEvent()">New</button>
+          <button type="button" class="btn btn-primary btn-padding"
+            (click)="next()" *ngIf="staffNoteList.length>1">&gt;</button>
         </div>
-        <div class="col-sm-6 col-xs-6 " style="text-align: end;">
+        <div class="col-sm-6 col-xs-6"style="text-align: end;">
           <div class="row" *ngIf="isList">
-            <div class="col-sm-4 col-xs-12"  *ngIf="!showDelete">
+            <div class="col-sm-4 col-xs-12" *ngIf="!showDelete">
             </div>
             <div class="col-sm-4 col-xs-12">
-              <button type="button" class="btn btn-primary btn-padding" (click)="save()">Save</button>
+              <button type="button" class="btn btn-primary btn-padding"
+                (click)="save()">Save</button>
             </div>
-            <div class="col-sm-4 col-xs-12"  *ngIf="showDelete">
-              <button type="button" class="btn btn-primary btn-padding" (click)="delete()">Delete</button>
+            <div class="col-sm-4 col-xs-12" *ngIf="showDelete">
+              <button type="button" class="btn btn-primary btn-padding"
+                (click)="delete()">Delete</button>
             </div>
             <div class="col-sm-4 col-xs-12">
-              <button type="button" class="btn btn-primary btn-padding" (click)="onNoClick()">Cancel</button>
+              <button type="button" class="btn btn-primary btn-padding"
+                (click)="onNoClick()">Cancel</button>
             </div>
           </div>
-          <button type="button" class="btn btn-primary btn-padding"  *ngIf="!isList" (click)="save()">Save</button>
+          <button type="button" class="btn btn-primary btn-padding"
+            *ngIf="!isList" (click)="save()">Save</button>
         </div>
       </div>
     </div>

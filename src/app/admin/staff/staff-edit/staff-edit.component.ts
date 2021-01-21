@@ -21,6 +21,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.ROLE_KEY_FOR_STAFF;
   public roleSelectionList: any = [];
+  public statusList: any[] = TableColumnData.STATUS_DATA_FOR_STAFF;
   public topicKeys: Array<TableColumnData> = TableColumnData.TOPIC_GROUP_COLUMN_DATA;
   public surveyVersionSettingList: Array<any> = TableColumnData.SURVEY_VERSION_SETTING_DATA;
   public viewConfigurationList: any;
@@ -168,7 +169,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       email: [event !== undefined ? event.email : '', Validators.required],
       staffPhoneNumber: [event !== undefined ? event.staffPhoneNumber : ''],
       name: [event !== undefined ? event.name : ''],
-      status: [event !== undefined ? event.status : '0'],
+      status: [event !== undefined ? event.status : 0],
       passwordForm: this.fb.group({
         password: [event !== undefined && event.password1 ? event.password1 : '',
         ],

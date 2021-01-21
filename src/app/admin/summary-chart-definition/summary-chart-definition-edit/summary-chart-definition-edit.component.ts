@@ -25,10 +25,15 @@ export class SummaryChartDefinitionEditComponent implements OnInit {
     totalElements: 0
   };
   chartDataSource: any;
-  paneData = TableColumnData.PANE_DATA;
-  inputData = TableColumnData.INPUT_TYPE_DATA;
   colorData = TableColumnData.COLOR_DATA;
   fontData = TableColumnData.FONT_STYLE_DATA;
+  toolTypeList = TableColumnData.TOOL_TYPE;
+  chartTypeList = TableColumnData.CHART_TYPE;
+  fontStyleList = TableColumnData.FONT_STYLE;
+  locationList = TableColumnData.LOCATION;
+  resourceUseList = TableColumnData.RESOURCE_USE;
+  unitTypeList = TableColumnData.UNIT_TYPE;
+  useTypeList = TableColumnData.USE_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
   public tools: object = {
     items: ['Undo', 'Redo', '|',

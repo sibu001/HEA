@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   hide = false;
   theme: string;
   code: string;
-  buildForSandbox= true;
+  buildForSandbox = true;
   @ContentChild('showhideinput') input;
   constructor(
     private router: Router,

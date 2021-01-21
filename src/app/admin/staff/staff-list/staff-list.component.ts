@@ -17,6 +17,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 })
 export class StaffListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.STAFF_TABLE_COLUMN;
+  public statusList: any[] = TableColumnData.STATUS_DATA_FOR_STAFF_LIST;
   public dataSource: any;
   public force = false;
   public pageIndex: any;

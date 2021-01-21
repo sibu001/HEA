@@ -23,6 +23,8 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   public customerGroupKeys = TableColumnData.CUSTOMER_GROUP_KEY;
   contentPartsKeys = TableColumnData.CONTENT_PART_KEYS;
   variableKeys = TableColumnData.VARIABLE_KEYS;
+  sourceTypeList: any[] = TableColumnData.SOURCE_TYPE;
+  contentTypeList: any[] = TableColumnData.CONTENT_TYPE;
   periodData: any[];
   public customerGroupDataSource: any;
   public contentPartsDataSource: any;

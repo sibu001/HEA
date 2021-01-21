@@ -58,6 +58,7 @@ export class CustomerAlertTypeListComponent implements OnInit, OnDestroy {
   search(event: any): void {
     const params = new HttpParams()
       .set('startRow', '0')
+      .set('useLikeSearch', 'true')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('alertCode', (this.customerAlertTypeForm.value.alertCode !== null ? this.customerAlertTypeForm.value.alertCode : ''))

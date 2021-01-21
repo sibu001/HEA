@@ -105,6 +105,26 @@ input[type="file"]::-webkit-file-upload-button {
 input[type="file"] {
   text-align: left;
 }
-::ng-deep .ui-calendar.ui-calendar-w-btn input{
-  width: 100%!important;
+::ng-deep .ui-calendar.ui-calendar-w-btn input {
+  width: 100% !important;
+}
+
+::ng-deep .event-history-table .mat-column-linkedPersonName {
+  flex: none;
+  width: 110px;
+}
+
+::ng-deep .event-history-table .mat-column-createdDate {
+  flex: none;
+  width: 110px;
+}
+
+::ng-deep .event-history-table .mat-column-customerName {
+  flex: none;
+  width: 160px;
+}
+
+::ng-deep .event-history-table .mat-column-eventCode {
+  flex: none;
+  width: 140px;
 }

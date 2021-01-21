@@ -6,6 +6,7 @@ import { skipWhile } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { Location } from '@angular/common';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 
 @Component({
   selector: 'app-program-group-edit',
@@ -16,10 +17,12 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
   programGroupForm: FormGroup;
   id: any;
   isForce = false;
+  customerEventTypeList: any[] = [];
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemUtilityService: SystemUtilityService,
     private readonly router: Router,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -29,11 +32,20 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.scrollTop();
+    this.loadCustomerEvent();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemService.loadProgramGroupById(Number(this.id));
       this.loadProgramGroupById();
     }
+  }
+
+  loadCustomerEvent() {
+    this.systemUtilityService.loadCustomerEventTypeList(true, '');
+    this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((credentialTypeList: any) => {
+        this.customerEventTypeList = credentialTypeList;
+      }));
   }
   loadProgramGroupById() {
     this.subscriptions.add(this.systemService.getProgramGroupById().pipe(skipWhile((item: any) => !item))

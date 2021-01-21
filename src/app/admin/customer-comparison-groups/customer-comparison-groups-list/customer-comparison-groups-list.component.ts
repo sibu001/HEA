@@ -118,6 +118,7 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('useLikeSearch', 'true')
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : ''))
       .set('comparisonCode', (this.customerComparisonGroupForm.value.comparisonCode !== null ? this.customerComparisonGroupForm.value.comparisonCode : ''))
       .set('groupName', (this.customerComparisonGroupForm.value.groupName !== null ? this.customerComparisonGroupForm.value.groupName : ''))

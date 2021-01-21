@@ -23,11 +23,7 @@
               <select class="form-control" formControlName="recordType"
                 id="recordType">
                 <option value="" selected="selected"></option>
-                <option value="U">Update</option>
-                <option value="I">New</option>
-                <option value="E">Error</option>
-                <option value="S">Start</option>
-                <option value="F">Finish</option>
+                <option *ngFor='let group of recordTypeList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">

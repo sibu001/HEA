@@ -1,14 +1,16 @@
 <div class="row">
   <div class="col-sm-12">
-    <h4 style="margin-top: 0px;" ><strong *ngIf="isList" > Customer Event </strong>
-      <button (click)="onNoClick()" class="closeButton" style="margin-top: 0px;" cdkFocusInitial>
+    <h4 style="margin-top: 0px;"><strong *ngIf="isList"> Customer Event
+      </strong>
+      <button (click)="onNoClick()" class="closeButton" style="margin-top: 0px;"
+        cdkFocusInitial>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink" width="8pt" height="8pt"
           viewBox="0 0 8 8" version="1.1">
           <g id="surface1">
             <path
-              style="stroke:none;fill-rule:nonzero;fill:76ba19;fill-opacity:1;"
+              style="stroke:none;fill-rule:nonzero;fill:#76ba19;fill-opacity:1;"
               d="M 0.109375 0.644531 C -0.0351562 0.5 -0.0351562 0.257812
               0.109375
               0.109375 C 0.257812 -0.0351562 0.492188 -0.0351562 0.644531
@@ -78,7 +80,8 @@
             Event Date:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-            <p-calendar formControlName='eventDatetime' id="eventDatetime"  showSeconds="true" hourFormat="24"
+            <p-calendar formControlName='eventDatetime' id="eventDatetime"
+              showSeconds="true" hourFormat="24"
               showIcon=true showTime="true"></p-calendar>
           </div>
         </div>
@@ -127,10 +130,10 @@
           <button type="button" class="btn btn-primary btn-padding"
             (click)="next()" *ngIf="customerEventList.length>1">&gt;</button>
         </div>
-        <div class="col-sm-6 col-xs-6"style="text-align: end;">
+        <div class="col-sm-6 col-xs-6" style="text-align: end;">
           <div class="row" *ngIf="isList">
             <div class="col-sm-4 col-xs-12" *ngIf="!showDelete">
-             
+
             </div>
             <div class="col-sm-4 col-xs-12">
               <button type="button" class="btn btn-primary btn-padding"
@@ -138,7 +141,7 @@
             </div>
             <div class="col-sm-4 col-xs-12" *ngIf="showDelete">
               <button type="button" class="btn btn-primary btn-padding"
-                 (click)="delete()">Delete</button>
+                (click)="delete()">Delete</button>
             </div>
             <div class="col-sm-4 col-xs-12">
               <button type="button" class="btn btn-primary btn-padding"

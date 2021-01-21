@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,6 +32,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
     private readonly systemService: SystemService,
+    private readonly datePipe: DatePipe,
     private readonly router: Router,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -63,6 +65,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
         this.setForm(customerComparisonGroup);
       }));
   }
+  
   loadComparisonCode() {
     this.systemService.loadComparisonCodeList();
     this.subscriptions.add(this.systemService.getComparisonCodeList().pipe(skipWhile((item: any) => !item))
@@ -145,7 +148,9 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
       ev: [event !== undefined ? event.ev : ''],
       lotSize: [event !== undefined ? event.lotSize : ''],
       note: [event !== undefined ? event.note : ''],
-      numOfCustomers: [event !== undefined ? event.numOfCustomers : '']
+      numOfCustomers: [event !== undefined ? event.numOfCustomers : ''],
+      updatedBy: [event !== undefined ? event.updatedBy : ''],
+      updatedDate: [event !== undefined ? this.datePipe.transform(event.updatedDate, 'yyyy-MM-dd HH:mm:ss', 'PST') : ''],
     });
   }
   back() {

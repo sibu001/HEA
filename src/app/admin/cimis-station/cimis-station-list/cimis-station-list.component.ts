@@ -86,6 +86,7 @@ export class CimisStationListComponent implements OnInit, OnDestroy {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('useLikeSearch', 'true')
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('stationNbr', (this.stationForm.value.stationNbr !== null ? this.stationForm.value.stationNbr : ''))
       .set('name', (this.stationForm.value.name !== null ? this.stationForm.value.name : ''))

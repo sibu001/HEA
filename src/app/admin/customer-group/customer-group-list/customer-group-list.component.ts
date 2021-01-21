@@ -56,6 +56,7 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
         (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('useLikeSearch', 'true')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('groupCode', (this.customerGroupForm.value.groupCode !== null ? this.customerGroupForm.value.groupCode : ''))

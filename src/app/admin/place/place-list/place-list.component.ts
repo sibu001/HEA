@@ -82,6 +82,7 @@ export class PlaceListComponent implements OnInit, OnDestroy {
     const params = new HttpParams()
       .set('startRow', '0')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('useLikeSearch', 'true')
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('placeName', (this.placeForm.value.placeName !== null ? this.placeForm.value.placeName : ''))
       .set('zipCode', (this.placeForm.value.zipCode !== null ? this.placeForm.value.zipCode : ''));

@@ -17,9 +17,10 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Source Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control" formControlName="sourceType" id="sourceType">
-                <option selected=selected value="CUST">By Customer</option>
-                <option value="REG">By Registration</option>
+              <select class="form-control" formControlName="sourceType"
+                id="sourceType">
+                <option *ngFor='let group of sourceTypeList'
+                  [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -27,14 +28,16 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Name:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="mailName" id="mailName">
+              <input type="text" class="form-control" formControlName="mailName"
+                id="mailName">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Filter:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="mailFilter" id="mailFilter"></textarea>
+              <textarea class="form-control" formControlName="mailFilter"
+                id="mailFilter"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -42,42 +45,51 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Period:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="period" id="period">
-                <option *ngFor='let period of periodData' [value]="period.lookupValue">{{period.valueName}}</option>
+                <option *ngFor='let period of periodData'
+                  [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Intra-Period trigger:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Intra-Period
+              trigger:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class='form-control form-control-sm' formControlName="periodDayRule"
+              <textarea class='form-control form-control-sm'
+                formControlName="periodDayRule"
                 id="periodDayRule"> </textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after this many days:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after
+              this many days:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class='form-control form-control-sm' formControlName="stopDays" id="stopDays">
+              <input type="text" class='form-control form-control-sm'
+                formControlName="stopDays" id="stopDays">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after this many Messages:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after
+              this many Messages:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class='form-control form-control-sm' formControlName="stopNumber" id="stopNumber">
+              <input type="text" class='form-control form-control-sm'
+                formControlName="stopNumber" id="stopNumber">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop Sending Reset Period:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop Sending Reset
+              Period:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class='form-control form-control-sm' formControlName="resetPeriod" id="resetPeriod">
-                <option *ngFor='let period of periodData' [value]="period.key">{{period.value}}</option>
+              <select class='form-control form-control-sm'
+                formControlName="resetPeriod" id="resetPeriod">
+                <option *ngFor='let period of periodData' [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -86,7 +98,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop Date Rule:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class='form-control form-control-sm' formControlName="stopDateRule"
+              <textarea class='form-control form-control-sm'
+                formControlName="stopDateRule"
                 id="stopDateRule"> </textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -95,7 +108,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Subject Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class='form-control form-control-sm' formControlName="subjectTemplate"
+              <textarea class='form-control form-control-sm'
+                formControlName="subjectTemplate"
                 id="subjectTemplate"> </textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -104,33 +118,38 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class='form-control form-control-sm' formControlName="contentType" id="contentType">
-                <option value="application/csv">CSV</option>
-                <option value="H">HTML</option>
-                <option value="T">Text</option>
+              <select class='form-control form-control-sm'
+                formControlName="contentType" id="contentType">
+                <option *ngFor='let group of contentTypeList'
+                  [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Use Customer Group Header:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Use Customer Group
+              Header:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="includeHeader" id="includeHeader">
+              <input type="checkbox" formControlName="includeHeader"
+                id="includeHeader">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Use Customer Group Footer:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Use Customer Group
+              Footer:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="includeFooter" id="includeFooter">
+              <input type="checkbox" formControlName="includeFooter"
+                id="includeFooter">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">cc Energy Coach:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="ccCoachUser" id="ccCoachUser">
+              <input type="checkbox" formControlName="ccCoachUser"
+                id="ccCoachUser">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -142,16 +161,20 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Allow Force Send for Admin:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Allow Force Send
+              for Admin:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="allowAdminForce" id="allowAdminForce">
+              <input type="checkbox" formControlName="allowAdminForce"
+                id="allowAdminForce">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Ignore Opt Out mail flag:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Ignore Opt Out
+              mail flag:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="ignoreOptOutMail" id="ignoreOptOutMail">
+              <input type="checkbox" formControlName="ignoreOptOutMail"
+                id="ignoreOptOutMail">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -163,7 +186,8 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Processed Time:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Processed
+              Time:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
 
             </div>
@@ -171,7 +195,8 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Next Permanent Topic:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Next Permanent
+              Topic:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
 
             </div>
@@ -179,15 +204,18 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Processed Time:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Processed
+              Time:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <button class="btn btn-primary" (click)='showStackTrace()'>Show Stack</button>
+              <button class="btn btn-primary" (click)='showStackTrace()'>Show
+                Stack</button>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calls in the last session:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calls in the last
+              session:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
             </div>
           </div>
@@ -199,7 +227,8 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Time for the last session:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Time for the
+              last session:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
             </div>
           </div>
@@ -208,9 +237,12 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Customer groups</span></p>
-            <app-table [keys]="customerGroupKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true
-              [isSearch]="false" [data]="customerGroupDataSource" [totalElement]="customerGroupData.totalElements"
-              (checkBoxChangeEvent)="customerGroupCheckBoxChangeEvent($event)"  id='groupCode' [selectionList]='customerGroupSelectionList'>
+            <app-table [keys]="customerGroupKeys" [isPaginate]="false"
+              [checkbox]=true [isHideAdd]=true
+              [isSearch]="false" [data]="customerGroupDataSource"
+              [totalElement]="customerGroupData.totalElements"
+              (checkBoxChangeEvent)="customerGroupCheckBoxChangeEvent($event)"
+              id='groupCode' [selectionList]='customerGroupSelectionList'>
             </app-table>
           </div>
 
@@ -218,8 +250,10 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Mail Content Parts</span></p>
-            <app-table [keys]="contentPartsKeys" [isPaginate]="true" [isSearch]="true" [data]="contentPartsDataSource"
-              [totalElement]="contentPartsData.totalElements" (addEvent)='addContentParts()'
+            <app-table [keys]="contentPartsKeys" [isPaginate]="true"
+              [isSearch]="true" [data]="contentPartsDataSource"
+              [totalElement]="contentPartsData.totalElements"
+              (addEvent)='addContentParts()'
               (goToEditEvent)='goToEditContentParts()'>
             </app-table>
           </div>
@@ -228,8 +262,10 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Context variables</span></p>
-            <app-table [keys]="variableKeys" [isPaginate]="true" [isSearch]="false" [data]="variableDataSource"
-              [totalElement]="variableData.totalElements" (addEvent)='addVariable()'
+            <app-table [keys]="variableKeys" [isPaginate]="true"
+              [isSearch]="false" [data]="variableDataSource"
+              [totalElement]="variableData.totalElements"
+              (addEvent)='addVariable()'
               (goToEditEvent)='goToEditVariable()'>
             </app-table>
           </div>
@@ -243,12 +279,14 @@
               display-inline-button-big" [ngClass]="{'display-responsive-big3':
               id!==undefined&&id!==null}" style="text-align: end;">
               <button type="button" class="btn btn-primary"
-                (click)=" Preview()" *ngIf="id!==undefined&&id!==null">
+                (click)="Preview()" *ngIf="id!==undefined&&id!==null">
                 Preview
               </button>
             </div>
-            <div class="col-sm-2 col-md-1 col-lg-2 col-xs-3"  [ngClass]="{'display-responsive-big3':
-            id!==undefined&&id!==null}" style="text-align: end;" *ngIf="id !== undefined && id !== null">
+            <div class="col-sm-2 col-md-1 col-lg-2 col-xs-3"
+              [ngClass]="{'display-responsive-big3':
+              id!==undefined&&id!==null}" style="text-align: end;" *ngIf="id !==
+              undefined && id !== null">
               <button class="btn btn-primary" (click)='callMailReminder()'>
                 Call Mail Reminder
               </button>
@@ -256,10 +294,12 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3
               display-inline-button-big" [ngClass]="{'display-responsive-big2':
               id!==undefined&&id!==null}" style="text-align: end;">
-              <button type="button" class="btn btn-primary" (click)="delete()"  *ngIf="id!==undefined&&id!==null">Delete</button>
+              <button type="button" class="btn btn-primary" (click)="delete()"
+                *ngIf="id!==undefined&&id!==null">Delete</button>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
-              [ngClass]="{'display-responsive-big': id!==undefined&&id!==null}"  style="text-align: end;">
+              [ngClass]="{'display-responsive-big': id!==undefined&&id!==null}"
+              style="text-align: end;">
               <button type="button" class="btn btn-primary" (click)="save()">Save</button>
             </div>
           </div>

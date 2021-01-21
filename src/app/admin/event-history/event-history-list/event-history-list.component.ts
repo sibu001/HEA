@@ -95,7 +95,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortField', (event && event.sort.active !== undefined ? (event.sort.active === 'customerName' ? 'customer.user.name' : event.sort.active) : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('dateFrom', (this.topicForm.value.periodStart ? this.datePipe.transform(this.topicForm.value.periodStart, 'MM/dd/yyyy') : ''))
       .set('customer.auditId', (this.topicForm.value.auditId !== null ? this.topicForm.value.auditId : ''))

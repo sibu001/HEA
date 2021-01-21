@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { CustomerComparisonGroupsRoutingModule } from './customer-comparison-groups-routing.module';
 import { CustomerComparisonGroupsListComponent } from './customer-comparison-groups-list/customer-comparison-groups-list.component';
@@ -37,6 +37,6 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     CustomerComparisonGroupsBatchAddComponent,
     CustomerComparisonGroupsBatchRemoveComponent
   ],
-  providers: [SystemService, SystemUtilityService]
+  providers: [SystemService, SystemUtilityService, DatePipe]
 })
 export class CustomerComparisonGroupsModule { }

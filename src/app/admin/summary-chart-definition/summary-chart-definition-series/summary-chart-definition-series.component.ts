@@ -19,6 +19,7 @@ export class SummaryChartDefinitionSeriesComponent implements OnInit, OnDestroy 
   private readonly subscriptions: Subscription = new Subscription();
   colorData = TableColumnData.COLOR_DATA;
   keys: TABLECOLUMN[] = TableColumnData.DATA_SET_KEYS;
+  seriesQueryList = TableColumnData.SERIES_QUERY_TYPE;
   data = {
     content: [],
     totalElements: 0
