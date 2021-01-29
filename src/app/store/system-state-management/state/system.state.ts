@@ -51,7 +51,9 @@ import {
     GetLookupValueCalculationTypeListAction,
     GetLookupValueScrapingUtilityListAction,
     GetReportTypeListAction,
-    SetDebugConsoleData
+    SetDebugConsoleData,
+    GetMailPeriodListAction,
+    GetContentTypeListAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -84,6 +86,8 @@ import { SystemManagementModel } from './system.model';
         scrapingUtility: undefined,
         reportType: undefined,
         debugConsoleData: undefined,
+        mailPeriod: undefined,
+        contentType: undefined,
         error: undefined
     }
 
@@ -222,6 +226,16 @@ export class SystemManagementState {
     @Selector()
     static getDebugConsoleData(state: SystemManagementModel): any {
         return state.debugConsoleData;
+    }
+
+    @Selector()
+    static getMailPeriod(state: SystemManagementModel): any {
+        return state.mailPeriod;
+    }
+
+    @Selector()
+    static getContentType(state: SystemManagementModel): any {
+        return state.contentType;
     }
 
     @Action(GetCustomerGroupListAction)
@@ -1007,6 +1021,40 @@ export class SystemManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
                         reportType: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetMailPeriodListAction)
+    getAllMailPeriodList(ctx: StateContext<SystemManagementModel>, action: GetMailPeriodListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/MAIL_PERIOD')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        mailPeriod: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetContentTypeListAction)
+    getAllContentTypeList(ctx: StateContext<SystemManagementModel>, action: GetContentTypeListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupValues + '/CONTENT_TYPE')
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        contentType: response,
                     });
                 },
                     error => {

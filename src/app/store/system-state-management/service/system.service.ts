@@ -46,7 +46,9 @@ import {
   GetLookupValueLotSizeListAction,
   GetReportTypeListAction,
   SetDebugConsoleData,
-  GetLookupValueHomeSizeListAction
+  GetLookupValueHomeSizeListAction,
+  GetMailPeriodListAction,
+  GetContentTypeListAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -159,6 +161,14 @@ export class SystemService {
 
   getDebugConsoleData(): Observable<any> {
     return this.store.select(SystemManagementState.getDebugConsoleData);
+  }
+
+  getMailPeriod(): Observable<any> {
+    return this.store.select(SystemManagementState.getMailPeriod);
+  }
+
+  getContentType(): Observable<any> {
+    return this.store.select(SystemManagementState.getContentType);
   }
 
   loadCustomerGroupList(force: boolean, filter: any): Observable<SystemManagementState> {
@@ -335,6 +345,14 @@ export class SystemService {
 
   loadReportTypeList(): Observable<SystemManagementState> {
     return this.store.dispatch(new GetReportTypeListAction());
+  }
+
+  loadMailPeriodList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetMailPeriodListAction());
+  }
+
+  loadContentTypeList(): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetContentTypeListAction());
   }
 
   setDebugConsoleData(debugData: any): Observable<SystemManagementState> {

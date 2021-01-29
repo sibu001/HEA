@@ -3,8 +3,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -22,12 +24,18 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0
   };
+  calculationTypeList: any[] = [];
   dataFieldDataSource: any;
   paneData = TableColumnData.PANE_DATA;
   inputData = TableColumnData.INPUT_TYPE_DATA;
+  sourceTypeList: any[] = TableColumnData.TOPIC_SOURCE_TYPE;
+  dataTypeList: any[] = TableColumnData.DATA_TYPE;
+  calculationEventList: any[] = TableColumnData.CALCULATION_EVENT_TYPE;
+  calculationPeriodList: any[] = TableColumnData.CALCULATION_PERIOD;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemService: SystemService,
     private readonly location: Location,
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -36,7 +44,13 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     });
   }
 
-
+  loadCalculationTypeList(): any {
+    this.systemService.loadCalculationTypeList();
+    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((calculationTypeList: any) => {
+        this.calculationTypeList = calculationTypeList.data;
+      }));
+  }
   ngOnInit() {
     this.dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
     this.setForm(undefined);

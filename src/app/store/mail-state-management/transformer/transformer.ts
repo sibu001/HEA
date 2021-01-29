@@ -1,3 +1,5 @@
+import { AppUtility } from 'src/app/utility/app.utility';
+
 export class MailTransformer {
     static transformMailDescription(src: any, filter: any): any {
         const dataSourceList: any = [];
@@ -9,6 +11,7 @@ export class MailTransformer {
             let dataSourceObject: any = {};
             dataSourceObject = element;
             dataSourceObject.serialNumber = index;
+            dataSourceObject.totalProcessedTime = AppUtility.convertMillisecondToTime(element.totalProcessedTime);
             switch (element.mailPeriod) {
                 case 'M':
                     dataSourceObject.mailPeriod = 'Monthly';
@@ -32,8 +35,8 @@ export class MailTransformer {
                     break;
             }
             dataSourceList.push(dataSourceObject);
+            index++;
         });
-        index++;
         return { data: dataSourceList };
     }
 

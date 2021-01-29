@@ -54,3 +54,7 @@ select {
     text-align: left !important;
   }
 }
+
+.formInput{
+  width: 80px;
+}

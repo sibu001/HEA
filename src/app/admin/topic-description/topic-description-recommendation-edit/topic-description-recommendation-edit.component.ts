@@ -20,6 +20,11 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   id: any;
   recommendationForm: FormGroup;
   recommendationKeys: TABLECOLUMN[];
+  recommendationLeakTypeList: any = TableColumnData.RECOMMENDATION_LEAK_TYPE;
+  actionTypeList: any = TableColumnData.ACTION_TYPE;
+  priceCalculationType: any = TableColumnData.PRICE_CALCULATION_TYPE;
+  imageList: any = TableColumnData.IMAGE_LIST;
+  iconList: any = TableColumnData.ICON_LIST;
   dataSource: any;
   recommendationData = {
     content: [],

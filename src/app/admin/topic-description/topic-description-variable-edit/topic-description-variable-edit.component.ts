@@ -3,6 +3,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
+import { TableColumnData } from 'src/app/data/common-data';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -13,9 +16,12 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy {
   id: any;
   variableForm: FormGroup;
+  calculationPeriodList: any[] = TableColumnData.CALCULATION_PERIOD;
+  calculationTypeList: any[] = [];
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemService: SystemService,
     private readonly location: Location,
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -25,9 +31,18 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
 
 
   ngOnInit() {
+    this.loadCalculationTypeList();
     this.setForm(undefined);
     if (this.id !== undefined) {
     }
+  }
+
+  loadCalculationTypeList(): any {
+    this.systemService.loadCalculationTypeList();
+    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((calculationTypeList: any) => {
+        this.calculationTypeList = calculationTypeList.data;
+      }));
   }
 
   setForm(event: any): any {

@@ -4,7 +4,6 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
-import { AdministrativeManagementState } from '../../administrative-state-management/state/administrative.state';
 import { CustomerError } from '../../customer-state-management/state/customer.action';
 import { MailTransformer } from '../transformer/transformer';
 import {
@@ -31,7 +30,8 @@ import {
     GetCustomerGroupMailPartCountAction,
     GetCustomerGroupMailPartListAction,
     SaveCustomerGroupMailPartAction,
-    UpdateCustomerGroupMailPartAction
+    UpdateCustomerGroupMailPartAction,
+    GetMailDescriptionCountAction
 } from './mail.action';
 import { MailManagementModel } from './mail.model';
 
@@ -40,10 +40,12 @@ import { MailManagementModel } from './mail.model';
     name: 'mailManagement',
     defaults: {
         mailContentPartList: undefined,
+        mailContentPartCount: undefined,
         mailContentPart: undefined,
         contextVariableList: undefined,
         contextVariable: undefined,
         mailDescriptionList: undefined,
+        mailDescriptionCount: undefined,
         mailDescriptionDataSourceList: undefined,
         mailDescription: undefined,
         mailDescriptionCustomerGroupList: undefined,
@@ -62,11 +64,6 @@ export class MailManagementState {
     @Selector()
     static getMailDescriptionList(state: MailManagementModel): any {
         return state.mailDescriptionList;
-    }
-
-    @Selector()
-    static getMailDescriptionDataSourceList(state: MailManagementModel): any {
-        return state.mailDescriptionDataSourceList;
     }
 
     @Selector()
@@ -108,19 +105,15 @@ export class MailManagementState {
     @Action(GetMailDescriptionListAction)
     getAllMailDescriptionList(ctx: StateContext<MailManagementModel>, action: GetMailDescriptionListAction): Actions {
         const force: boolean = action.force || MailManagementState.getMailDescriptionList(ctx.getState()) === undefined;
-        let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.mailDescription, action.filter)
+            return this.loginService.performGetWithParams(AppConstant.mailDescription, action.filter)
                 .pipe(
                     tap((response: any) => {
                         const res = MailTransformer.transformMailDescription(response, action.filter);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            mailDescriptionList: response,
-                        });
-                        ctx.patchState({
-                            mailDescriptionDataSourceList: res,
+                            mailDescriptionList: res,
                         });
                     },
                         error => {
@@ -129,7 +122,24 @@ export class MailManagementState {
                             ctx.dispatch(new CustomerError(error));
                         }));
         }
-        return result;
+    }
+
+    @Action(GetMailDescriptionCountAction)
+    getAllMailDescriptionCount(ctx: StateContext<MailManagementModel>, action: GetMailDescriptionCountAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.mailDescription + '/count', action.filter)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        mailContentPartCount: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.errorMessage);
+                    }));
+
     }
 
     @Action(GetMailDescriptionByIdAction)

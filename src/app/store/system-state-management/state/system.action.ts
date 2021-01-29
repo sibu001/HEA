@@ -43,6 +43,8 @@ export enum SystemActionTypes {
     GET_LOT_SIZE_LIST = 'Get Lot Size List',
     GET_SCRAPING_PERIOD_LIST = 'Get Scraping Period List',
     GET_REPORT_TYPE_LIST = 'Get Report Type List',
+    GET_MAIL_PERIOD_LIST = 'Get Mail Period List',
+    GET_CONTENT_TYPE_LIST = 'Get Content Type List',
     CUSTOMER_GROUP_ERROR = 'Customer Error',
     SET_DEBUG_CONSOLE_DATA = 'Set Debug Console Data',
 }
@@ -287,6 +289,14 @@ export class GetLookupValueScrapingPeriodListAction {
 
 export class GetReportTypeListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_REPORT_TYPE_LIST;
+}
+
+export class GetMailPeriodListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_MAIL_PERIOD_LIST;
+}
+
+export class GetContentTypeListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_CONTENT_TYPE_LIST;
 }
 
 export class CustomerGroupError {

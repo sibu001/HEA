@@ -1,5 +1,6 @@
 export enum MailActionTypes {
     GET_MAIL_DESCRIPTION_LIST = 'Get All MailDescription List',
+    GET_MAIL_DESCRIPTION_COUNT = 'Get All MailDescription Count',
     GET_MAIL_DESCRIPTION_BY_ID = 'Get MailDescription By Id',
     SAVE_MAIL_DESCRIPTION = 'Save MailDescription',
     UPDATE_MAIL_DESCRIPTION = 'Update MailDescription',
@@ -28,6 +29,12 @@ export enum MailActionTypes {
 export class GetMailDescriptionListAction {
     static readonly type: MailActionTypes = MailActionTypes.GET_MAIL_DESCRIPTION_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetMailDescriptionCountAction {
+    static readonly type: MailActionTypes = MailActionTypes.GET_MAIL_DESCRIPTION_COUNT;
+    constructor(readonly filter: any) {
     }
 }
 

@@ -178,8 +178,8 @@ p.menuresponsive {
 
 .btn-primary {
   color: #fff;
-  background-color: #76ba19;
-  border-color: #76ba19;
+  background-color: #f3905c;
+  border-color: #f3905c;
   padding: 4px 12px;
   font-size: 12px;
   font-family: "Montserrat";
@@ -203,8 +203,8 @@ p.menuresponsive {
 .open > .dropdown-toggle.btn-primary:focus,
 .open > .dropdown-toggle.btn-primary:hover {
   color: #fff;
-  background-color: #76ba19;
-  border-color: #76ba19;
+  background-color: #f3905c;
+  border-color: #f3905c;
   padding: 4px 12px;
   border-radius: 3px;
 }

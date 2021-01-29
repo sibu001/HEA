@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
@@ -31,8 +31,11 @@ export class DashboardComponent implements OnInit {
   surveyCode: string;
   surveyId: number;
   trendingHomeChart: any;
+  trendingHomeChartCopy: any;
   trendingParts: any[] = [];
   users: Users = new Users();
+  globalM = 0;
+  globalK = 0;
   constructor(private router: Router,
     private loginService: LoginService
   ) {
@@ -296,6 +299,7 @@ export class DashboardComponent implements OnInit {
       data => {
         const response = JSON.parse(JSON.stringify(data));
         this.trendingHomeChart = response.data;
+        this.trendingHomeChartCopy = JSON.parse(JSON.stringify(this.trendingHomeChart));
         var line1 = new Array;
         var line2 = new Array;
         var line3 = new Array;
@@ -346,6 +350,68 @@ export class DashboardComponent implements OnInit {
         console.log(JSON.parse(JSON.stringify(error)));
       }
     );
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    const self = this;
+    self.globalM++;
+    this.trendingHomeChart = undefined;
+    setTimeout(function () {
+      self.globalK++;
+      var line1 = new Array;
+      var line2 = new Array;
+      var line3 = new Array;
+      var line4 = new Array;
+      var line5 = new Array;
+      var line6 = new Array;
+      let i = 0;
+      for (const areaSeries of self.trendingHomeChartCopy.chart.series) {
+        if (i == 0) {
+          for (const areaSeriesValue of areaSeries.seriesValues) {
+            line1.push([areaSeriesValue.label, areaSeriesValue.value]);
+          }
+        } else if (i == 1) {
+          for (const areaSeriesValue of areaSeries.seriesValues) {
+            line2.push([areaSeriesValue.label, areaSeriesValue.value]);
+          }
+        } else if (i == 2) {
+          for (const areaSeriesValue of areaSeries.seriesValues) {
+            line3.push([areaSeriesValue.label, areaSeriesValue.value]);
+          }
+        } else if (i == 3) {
+          for (const areaSeriesValue of areaSeries.seriesValues) {
+            line4.push([areaSeriesValue.label, areaSeriesValue.value]);
+          }
+        } else if (i == 4) {
+          for (const areaSeriesValue of areaSeries.seriesValues) {
+            line5.push([areaSeriesValue.label, areaSeriesValue.value]);
+          }
+        } else if (i == 5) {
+          for (const areaSeriesValue of areaSeries.seriesValues) {
+            line6.push([areaSeriesValue.label, areaSeriesValue.value]);
+          }
+        }
+        i++;
+      }
+      if (self.globalM === self.globalK) {
+        self.trendingHomeChart = self.trendingHomeChartCopy;
+      }
+      setTimeout(function () {
+        if (self.globalM === self.globalK) {
+          eval(self.trendingHomeChartCopy.chart.freeChartConfigurationJS);
+          self.globalM = 0;
+          self.globalK = 0;
+        }
+      }, 100);
+      if (self.users.recommendationList != null && self.users.recommendationList.length > 0 && !self.users.recommendationStatusChange) {
+        document.getElementById('loader').classList.remove('loading');
+      }
+      setTimeout(function () {
+        $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
+      }, 100);
+      i++;
+    }, 1000);
   }
   getTrendingProfileChart() {
     document.getElementById('loader').classList.add('loading');

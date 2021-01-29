@@ -3,7 +3,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -20,6 +22,7 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
   contentPartsKeys = TableColumnData.CONTENT_PART_KEYS;
   variableKeys = TableColumnData.VARIABLE_KEYS;
   reportType = TableColumnData.USER_REPORT_DATA;
+  contentTypeList: any[] = [];
   public userReportDataSource: any;
   public contentPartsDataSource: any;
   public variableDataSource: any;
@@ -39,6 +42,7 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
+    private readonly systemService: SystemService,
     private readonly location: Location,
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -64,6 +68,15 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
       filter: [event !== undefined ? event.filter : '']
     });
   }
+
+  loadContentTypeList(): any {
+    this.systemService.loadContentTypeList();
+    this.subscriptions.add(this.systemService.getContentType().pipe(skipWhile((item: any) => !item))
+      .subscribe((contentTypeList: any) => {
+        this.contentTypeList = contentTypeList.data;
+      }));
+  }
+
   back() {
     this.location.back();
   }

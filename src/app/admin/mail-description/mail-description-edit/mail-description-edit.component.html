@@ -7,7 +7,7 @@
           <span class="messageName">Mail Description</span>
         </p>
         <form [formGroup]="topicForm" class="form-group form-padding">
-          <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" *ngIf="id">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Id:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               {{id}}
@@ -37,17 +37,24 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Filter:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <textarea class="form-control" formControlName="mailFilter"
-                id="mailFilter"></textarea>
+                id="mailFilter" rows="4" cols="5"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Period:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control" formControlName="period" id="period">
+              <select class="form-control" formControlName="mailPeriod"
+                id="mailPeriod">
                 <option *ngFor='let period of periodData'
                   [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
+              <div *ngIf="f.mailPeriod.invalid && (f.mailPeriod.dirty ||
+                f.mailPeriod.touched)">
+                <span class="error" *ngIf="f.mailPeriod.errors.required">
+                  Period is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -59,6 +66,12 @@
               <textarea class='form-control form-control-sm'
                 formControlName="periodDayRule"
                 id="periodDayRule"> </textarea>
+              <div *ngIf="f.periodDayRule.invalid && (f.periodDayRule.dirty ||
+                f.periodDayRule.touched)">
+                <span class="error" *ngIf="f.periodDayRule.errors.required">
+                  Intra-Period trigger is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -88,9 +101,16 @@
               Period:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class='form-control form-control-sm'
-                formControlName="resetPeriod" id="resetPeriod">
-                <option *ngFor='let period of periodData' [value]="period.lookupValue">{{period.valueName}}</option>
+                formControlName="stopPeriod" id="stopPeriod">
+                <option *ngFor='let period of periodData'
+                  [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
+              <div *ngIf="f.stopPeriod.invalid && (f.stopPeriod.dirty ||
+              f.stopPeriod.touched)">
+              <span class="error" *ngIf="f.stopPeriod.errors.required">
+                Stop Sending Reset Period is required.
+              </span>
+            </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -101,6 +121,12 @@
               <textarea class='form-control form-control-sm'
                 formControlName="stopDateRule"
                 id="stopDateRule"> </textarea>
+                <div *ngIf="f.stopDateRule.invalid && (f.stopDateRule.dirty ||
+                f.stopDateRule.touched)">
+                <span class="error" *ngIf="f.stopDateRule.errors.required">
+                  Stop Date Rule is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -111,6 +137,12 @@
               <textarea class='form-control form-control-sm'
                 formControlName="subjectTemplate"
                 id="subjectTemplate"> </textarea>
+                <div *ngIf="f.subjectTemplate.invalid && (f.subjectTemplate.dirty ||
+                f.subjectTemplate.touched)">
+                <span class="error" *ngIf="f.subjectTemplate.errors.required">
+                  Subject Template is required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -120,8 +152,8 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class='form-control form-control-sm'
                 formControlName="contentType" id="contentType">
-                <option *ngFor='let group of contentTypeList'
-                  [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let contentType of contentTypeList'
+                  [value]="contentType.lookupValue">{{contentType.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -156,7 +188,7 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Active:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="isActive" id="isActive">
+              <input type="checkbox" formControlName="active" id="active">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -181,7 +213,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Calls:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-
+              <input type="text" class='show-value'
+                formControlName="totalCalls" id="totalCalls" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -189,40 +222,43 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Processed
               Time:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-
+              <input type="text" class='show-value'
+                formControlName="totalProcessedTimeShow" id="totalProcessedTime"
+                disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Next Permanent
-              Topic:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Processed
               Time:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <button class="btn btn-primary" (click)='showStackTrace()'>Show
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <input type="text" class='show-value formInput'
+                formControlName="maxProcessedTimeShow" id="maxProcessedTime"
+                disabled>
+              <input type="text" class='show-value formInput'
+                formControlName="maxProcessedIdShow" id="maxProcessedId"
+                disabled>
+              <button class="btn btn-primary" (click)='showStackTrace()'
+                *ngIf="maxProcessedStack">Show
                 Stack</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calls in the last
               session:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <input type="text" class='show-value'
+                formControlName="lastCalls" id="lastCalls" disabled>
             </div>
           </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Last Session Time:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <input type="text" class='show-value'
+                formControlName="lastProcessedTimeShow" id="lastProcessedTime"
+                disabled>
             </div>
           </div>
 
@@ -230,6 +266,12 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Time for the
               last session:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <input type="text" class='show-value formInput'
+                formControlName="lastMaxProcessedTimeShow" id="lastMaxProcessedTime"
+                disabled>
+              <input type="text" class='show-value formInput'
+                formControlName="lastMaxProcessedIdShow" id="lastMaxProcessedId"
+                disabled>
             </div>
           </div>
 
@@ -242,7 +284,7 @@
               [isSearch]="false" [data]="customerGroupDataSource"
               [totalElement]="customerGroupData.totalElements"
               (checkBoxChangeEvent)="customerGroupCheckBoxChangeEvent($event)"
-              id='groupCode' [selectionList]='customerGroupSelectionList'>
+              id='mailPeriod' [selectionList]='customerGroupSelectionList'>
             </app-table>
           </div>
 
@@ -251,7 +293,7 @@
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Mail Content Parts</span></p>
             <app-table [keys]="contentPartsKeys" [isPaginate]="true"
-              [isSearch]="true" [data]="contentPartsDataSource"
+              [isSearch]="false" [data]="contentPartsDataSource"
               [totalElement]="contentPartsData.totalElements"
               (addEvent)='addContentParts()'
               (goToEditEvent)='goToEditContentParts()'>
@@ -296,6 +338,8 @@
               id!==undefined&&id!==null}" style="text-align: end;">
               <button type="button" class="btn btn-primary" (click)="delete()"
                 *ngIf="id!==undefined&&id!==null">Delete</button>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2" *ngIf="!id">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
               [ngClass]="{'display-responsive-big': id!==undefined&&id!==null}"

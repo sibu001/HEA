@@ -62,3 +62,17 @@ select {
   margin-left: 10px;
   display: inline;
 }
+::ng-deep .mail-description-table .mat-column-id {
+  flex: none;
+  width: 80px;
+}
+
+::ng-deep .mail-description-table .mat-column-periodDayRule{
+  flex: none;
+  width: 100px;
+}
+
+::ng-deep .mail-description-table .mat-column-subjectTemplate{
+  flex: none;
+  width: 340px;
+}

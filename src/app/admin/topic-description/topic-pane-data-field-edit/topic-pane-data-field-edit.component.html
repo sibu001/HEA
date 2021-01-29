@@ -48,10 +48,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Source:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="source" formControlName="source">
-                <option value="pge">PGE</option>
-                <option value="system" selected="selected">System</option>
-                <option value="user">User</option>
-                <option value="zillow">Zillow</option>
+                <option *ngFor='let group of sourceTypeList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -61,10 +58,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Data Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="dataType" formControlName="dataType">
-                <option value="boolean" selected="selected">Boolean</option>
-                <option value="datetime">DateTime</option>
-                <option value="number">Number</option>
-                <option value="text">Text</option>
+                <option *ngFor='let group of dataTypeList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -112,9 +106,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Rule Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" formControlName="calculationType" id="calculationType">
-                <option value="javascript" selected="selected">JavaScript</option>
-                <option value="spel">SpEL</option>
-                <option value="webharvest">WebHarvest script</option>
+                <option *ngFor='let calculation of calculationTypeList' [value]="calculation.lookupValue">{{calculation.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -134,11 +126,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Event:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" formControlName="calculationEvent" id="calculationEvent">
-                <option value="always">Always</option>
-                <option value="open">On Pane open</option>
-                <option value="save" selected="selected">On Pane save</option>
-                <option value="once">Only once</option>
-                <option value="period">Period</option>
+                <option *ngFor='let group of calculationEventList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -148,15 +136,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Period:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="calculationPeriod" formControlName="calculationPeriod">
-                <option value="B">After new bill</option>
-                <option value="E">After new Electric bill</option>
-                <option value="G">After new Gas bill</option>
-                <option value="V">After new Water bill</option>
-                <option value="A">Always</option>
-                <option value="D" selected="selected">Daily</option>
-                <option value="M">Monthly</option>
-                <option value="W">Weekly</option>
-                <option value="Y">Year</option>
+                <option *ngFor='let group of calculationPeriodList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

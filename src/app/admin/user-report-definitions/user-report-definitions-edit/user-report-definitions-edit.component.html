@@ -43,9 +43,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="contentType" class='form-control form-control-sm' formControlName="contentType">
-                <option value="application/csv">CSV</option>
-                <option value="H">HTML</option>
-                <option value="T">Text</option>
+                <option *ngFor='let contentType of contentTypeList' [value]="contentType.lookupValue">{{contentType.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

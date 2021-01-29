@@ -47,9 +47,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="nextPane" id="nextPane">
                 <option value=""></option>
-                <option value="323" selected="selected">Explanation (sp_explainItCEC)</option>
-                <option value="379">Explanation (sp_explainItCW)</option>
-                <option value="391">Explanation (sp_explainItPending)</option>
+                <option *ngFor='let group of nextPaneSectionList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

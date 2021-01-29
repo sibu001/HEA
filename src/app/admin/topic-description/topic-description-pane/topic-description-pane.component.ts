@@ -23,6 +23,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
   chartKeys = TableColumnData.PANE_CHART_KEYS;
   reportKeys = TableColumnData.PANE_REPORT_KEYS;
+  nextPaneSectionList: any[] = TableColumnData.NEXT_PANE_SECTION;
   public dataBlockDataSource: any;
   public dataFieldDataSource: any;
   public chartDataSource: any;

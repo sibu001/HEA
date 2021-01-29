@@ -21,11 +21,14 @@ export class SurveyComponent implements AfterViewInit {
   paneList: any;
   divHeight: any;
   colors: string;
+  paneCharts: any;
   currentPaneAnswers: any[] = [];
   totalPanes: any[] = [];
   // border: string;
   selectDate: Date;
   users: Users = new Users();
+  globalM = 0;
+  globalK = 0;
   constructor(private loginService: LoginService, private router: Router, private renderer: Renderer) {
     this.users = this.loginService.getUser();
 
@@ -98,6 +101,7 @@ export class SurveyComponent implements AfterViewInit {
     }
   }
   chartDataConfiguration() {
+    this.paneCharts = JSON.parse(JSON.stringify(this.users.currentPaneNumber.paneCharts));
     let line1;
     let line2;
     let line3;
@@ -172,6 +176,100 @@ export class SurveyComponent implements AfterViewInit {
         eval(news);
       }
     }
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    const self = this;
+    self.globalM++;
+    this.users.currentPaneNumber.paneCharts = undefined;
+    setTimeout(function () {
+      self.globalK++;
+      console.log(self.globalK);
+      if (self.paneCharts.length > 0) {
+        const panechart = self.paneCharts;
+        const j = 0;
+        console.log(self.globalM === self.globalK);
+        if (self.globalM === self.globalK) {
+          self.users.currentPaneNumber.paneCharts = self.paneCharts;
+          setTimeout(function () {
+            let line1;
+            let line2;
+            let line3;
+            let line4;
+            let line5;
+            let line6;
+            let line7;
+            for (const paneCharts of panechart) {
+              line1 = new Array;
+              line2 = new Array;
+              line3 = new Array;
+              line4 = new Array;
+              line5 = new Array;
+              line6 = new Array;
+              line7 = new Array;
+              for (const areaSeries of paneCharts.chart.series) {
+                if (areaSeries.chartSeries.field == 'line1') {
+                  for (const areaSeriesValue of areaSeries.seriesValues) {
+                    line1.push([areaSeriesValue.label, areaSeriesValue.value]);
+                  }
+                } else if (areaSeries.chartSeries.field == 'line2') {
+                  for (const areaSeriesValue of areaSeries.seriesValues) {
+                    line2.push([areaSeriesValue.label, areaSeriesValue.value]);
+                  }
+                } else if (areaSeries.chartSeries.field == 'line3') {
+                  for (const areaSeriesValue of areaSeries.seriesValues) {
+                    line3.push([areaSeriesValue.label, areaSeriesValue.value]);
+                  }
+                } else if (areaSeries.chartSeries.field == 'line4') {
+                  for (const areaSeriesValue of areaSeries.seriesValues) {
+                    line4.push([areaSeriesValue.label, areaSeriesValue.value]);
+                  }
+                } else if (areaSeries.chartSeries.field == 'line5') {
+                  for (const areaSeriesValue of areaSeries.seriesValues) {
+                    line5.push([areaSeriesValue.label, areaSeriesValue.value]);
+                  }
+                } else if (areaSeries.chartSeries.field == 'line6') {
+                  for (const areaSeriesValue of areaSeries.seriesValues) {
+                    line6.push([areaSeriesValue.label, areaSeriesValue.value]);
+                  }
+                } else if (areaSeries.chartSeries.field == 'line7') {
+                  for (const areaSeriesValue of areaSeries.seriesValues) {
+                    line7.push([areaSeriesValue.label, areaSeriesValue.value]);
+                  }
+                }
+              }
+              let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot;
+              console.log(self.users.currentPaneNumber.paneCharts);
+              eval(paneCharts.chart.freeChartConfigurationJS);
+              self.globalM = 0;
+              self.globalK = 0;
+              if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
+                const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
+                const news = scriptTag.replace('<script>', '');
+                $('#content').bind(
+                  eval(news)
+                );
+              }
+              if (paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">') != -1) {
+                const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
+                const news = scriptTag.replace('<script type="text/javascript" language="javascript">', '');
+                $('#content').bind(
+                  eval(news)
+                );
+              }
+            }
+          }, 200);
+        }
+      }
+      if (self.users.currentPaneNumber.currentPane.htmPageText != null) {
+        if (self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
+          const scriptTag = self.users.currentPaneNumber.currentPane.htmPageText.substring(self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'), self.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
+          const news = scriptTag.replace('<script type="text/javascript">', '');
+          eval(news);
+        }
+      }
+    }, 1500);
   }
   progressShow() {
     this.totalPanes = new Array;

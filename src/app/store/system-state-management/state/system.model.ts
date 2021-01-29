@@ -24,6 +24,8 @@ export interface SystemManagementModel {
     calculationType: any;
     scrapingUtility: any;
     reportType: any;
+    mailPeriod: any;
+    contentType: any;
     debugConsoleData: any;
     error: Error;
 }

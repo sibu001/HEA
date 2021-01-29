@@ -42,9 +42,9 @@
                                     class="fa fa-fw fa-caret-right fa_icon">
                                 &nbsp;&nbsp;
 
-                                <a class="topic_heading" id="topic{{i}}">{{userSurveyList.surveyDescription.label}}&nbsp;&nbsp;({{
+                                <a class="topic_heading" id="topic{{i}}">{{userSurveyList.surveyDescription.label}}&nbsp;&nbsp;<span *ngIf="userSurveyList.finishedDate">({{
                                     userSurveyList.finishedDate | date
-                                    : "MM/dd/y HH:mm" : 'PST' }})</a>
+                                    : "MM/dd/y HH:mm" : 'PST' }})</span></a>
                             </div>
                             <div id="collapse{{userSurveyList.surveyId}}"
                                 class="panel-collapse collapse">

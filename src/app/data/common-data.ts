@@ -379,7 +379,7 @@ export class TableColumnData {
         { key: 'mailName', sort: 'mailName', isEdit: true, displayName: 'Mail Name', isUnderline: true },
         { key: 'mailPeriod', sort: 'mailPeriod', isEdit: true, displayName: 'Period', isUnderline: true },
         { key: 'periodDayRule', sort: 'periodDayRule', isEdit: true, displayName: 'Period Day' },
-        { key: 'lastMaxProcessedTime', sort: 'lastMaxProcessedTime', isEdit: true, displayName: 'Runtime' },
+        { key: 'totalProcessedTime', sort: 'totalProcessedTime', isEdit: true, displayName: 'Runtime' },
         { key: 'subjectTemplate', sort: 'subjectTemplate', isEdit: true, displayName: 'Subject' },
     ];
 
@@ -1021,12 +1021,6 @@ export class TableColumnData {
         { key: 'REG', value: 'By Registration' },
     ];
 
-    static readonly CONTENT_TYPE: any[] = [
-        { key: 'application/csv', value: 'CSV' },
-        { key: 'H', value: 'HTML' },
-        { key: 'T', value: 'Text' },
-    ];
-
     static readonly TOOL_TYPE: any[] = [
         { key: 'jschart', value: 'Free JS Charts' },
         { key: 'jfreechart', value: 'jFreeChart' },
@@ -1097,6 +1091,91 @@ export class TableColumnData {
         { key: 'spel', value: 'SpEL' },
         { key: 'sql', value: 'SQL' },
         { key: 'webharvest', value: 'WebHarvest script' },
+    ];
+
+    static readonly FORMAT_TYPE: any[] = [
+        { key: 'N', value: 'Number' },
+        { key: 'C', value: 'String' },
+        { key: 'D', value: 'Date' },
+    ];
+
+    static readonly NEXT_PANE_SECTION: any[] = [
+        { key: '323', value: 'Explanation (sp_explainItCEC)' },
+        { key: '379', value: 'Explanation (sp_explainItCW)' },
+        { key: '391', value: 'Explanation (sp_explainItPending)' },
+    ];
+
+    static readonly RECOMMENDATION_LEAK_TYPE: any[] = [
+        { key: '2', value: 'Leaks' },
+        { key: '3', value: 'Recommendations' },
+        { key: '1', value: 'Unique' },
+    ];
+
+    static readonly ACTION_TYPE: any[] = [
+        { key: 'installation', value: 'Installation' },
+        { key: 'habit', value: 'Habit' },
+        { key: 'other', value: 'Other' },
+    ];
+
+    static readonly PRICE_CALCULATION_TYPE: any[] = [
+        { key: 'F', value: 'By formula' },
+        { key: 'P', value: 'Percent from Leak value' },
+    ];
+
+    static readonly IMAGE_LIST: any[] = [
+        { key: 'leakghg.png', value: 'CO2' },
+        { key: 'leakdiscovery.png', value: 'Discovery' },
+        { key: 'leakelectric.png', value: 'Electric' },
+        { key: 'leakgas.png', value: 'Gas' },
+        { key: 'leakwater.png', value: 'Water' },
+
+    ];
+
+    static readonly ICON_LIST: any[] = [
+        { key: 'leakghg-mini.png', value: 'CO2' },
+        { key: 'leakdiscovery-mini.png', value: 'Discovery' },
+        { key: 'leakelectric-mini.png', value: 'Electric' },
+        { key: 'leakgas-mini.png', value: 'Gas' },
+        { key: 'leakwater-mini.png', value: 'Water' },
+    ];
+
+    static readonly CALCULATION_PERIOD: any[] = [
+        { key: 'B', value: 'After new bill' },
+        { key: 'E', value: 'After new Electric bill' },
+        { key: 'G', value: 'After new Gas bill' },
+        { key: 'V', value: 'After new Water bill' },
+        { key: 'A', value: 'Always' },
+        { key: 'D', value: 'Daily' },
+        { key: 'M', value: 'Monthly' },
+        { key: 'W', value: 'Weekly' },
+        { key: 'Y', value: 'Year' },
+    ];
+
+    static readonly TOPIC_SOURCE_TYPE: any[] = [
+        { key: 'pge', value: 'PGE' },
+        { key: 'system', value: 'System' },
+        { key: 'user', value: 'User' },
+        { key: 'zillow', value: 'Zillow' },
+    ];
+
+    static readonly DATA_TYPE: any[] = [
+        { key: 'boolean', value: 'Boolean' },
+        { key: 'datetime', value: 'DateTime' },
+        { key: 'number', value: 'Number' },
+        { key: 'text', value: 'Text' },
+    ];
+
+    static readonly CALCULATION_EVENT_TYPE: any[] = [
+        { key: 'always', value: 'Always' },
+        { key: 'open', value: 'On Pane open' },
+        { key: 'save', value: 'On Pane save' },
+        { key: 'once', value: 'Only once' },
+        { key: 'period', value: 'Period' },
+    ];
+
+    static readonly VALUE_TYPE: any[] = [
+        { key: 'C', value: 'String' },
+        { key: 'N', value: 'Number' },
     ];
 }
 

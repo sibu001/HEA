@@ -20,6 +20,7 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.MAIL_DESC_KEYS;
   public dataSource: any;
+  public pageIndex: any;
   public totalElement = 0;
   public mailData = {
     content: [],
@@ -34,7 +35,7 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly mailService: MailService,
-    private readonly systemService:SystemService,
+    private readonly systemService: SystemService,
     private readonly router: Router,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
@@ -75,7 +76,7 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   setUpForm(event: any) {
     this.mailForm = this.fb.group({
       subject: [event !== undefined && event !== null ? event.subject : ''],
-      isActive: [event !== undefined && event !== null ? event.isActive : ''],
+      isActive: [event !== undefined && event !== null ? event.isActive : true],
       mailPeriod: [event !== undefined && event !== null ? event.mailPeriod : '']
     });
   }
@@ -83,12 +84,16 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   findMailDescription(force: boolean, filter: any): void {
     this.adminFilter.mailDescriptionFilter.formValue = this.mailForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.mailService.loadMailDescriptionList(force, filter);
-    this.subscriptions.add(this.mailService.getMailDescriptionDataSourceList().pipe(skipWhile((item: any) => !item))
-      .subscribe((mailDescriptionList: any) => {
-        this.mailData.content = mailDescriptionList.data;
-        // this.mailData.totalElements = mailDescriptionList.data.length;
-        this.dataSource = [...this.mailData.content];
+    this.subscriptions.add(this.mailService.loadMailDescriptionCount(filter).pipe(skipWhile((item: any) => !item))
+      .subscribe((mailDescriptionCount: any) => {
+        this.mailData.totalElements = mailDescriptionCount.mailManagement.mailContentPartCount.data;
+        this.totalElement = mailDescriptionCount.mailManagement.mailContentPartCount.data;
+        this.mailService.loadMailDescriptionList(force, filter);
+        this.subscriptions.add(this.mailService.getMailDescriptionList().pipe(skipWhile((item: any) => !item))
+          .subscribe((mailDescriptionList: any) => {
+            this.mailData.content = mailDescriptionList.data;
+            this.dataSource = [...this.mailData.content];
+          }));
       }));
   }
 
@@ -98,14 +103,15 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.mailDescriptionFilter.page = event;
-    // .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
-      .set('mailDescriptionCode', '')
       .set('active', (this.mailForm.value.isActive !== null ? this.mailForm.value.isActive : true))
       .set('subjectTemplate', (this.mailForm.value.subject !== null ? this.mailForm.value.subject : ''))
       .set('mailPeriod', (this.mailForm.value.mailPeriod !== null ? this.mailForm.value.mailPeriod : ''));

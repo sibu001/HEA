@@ -17,6 +17,7 @@ import {
   GetMailContentPartByIdAction,
   GetMailContentPartListAction,
   GetMailDescriptionByIdAction,
+  GetMailDescriptionCountAction,
   GetMailDescriptionListAction,
   SaveContextVariableAction,
   SaveCustomerGroupMailPartAction,
@@ -39,10 +40,6 @@ export class MailService {
 
   getMailDescriptionList(): Observable<any> {
     return this.store.select(MailManagementState.getMailDescriptionList);
-  }
-
-  getMailDescriptionDataSourceList(): Observable<any> {
-    return this.store.select(MailManagementState.getMailDescriptionDataSourceList);
   }
 
   getMailDescriptionById(): Observable<any> {
@@ -75,6 +72,10 @@ export class MailService {
 
   loadMailDescriptionList(force: boolean, filter: any): Observable<MailManagementState> {
     return this.store.dispatch(new GetMailDescriptionListAction(force, filter));
+  }
+
+  loadMailDescriptionCount(filter: any): Observable<MailManagementState> {
+    return this.store.dispatch(new GetMailDescriptionCountAction(filter));
   }
 
   loadMailDescriptionById(id: number): Observable<MailManagementState> {

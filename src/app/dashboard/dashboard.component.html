@@ -16,7 +16,7 @@
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-3 responsive-header">
                 <div class="back color">
                     <!-- leak view -->
                     <div class="back-color-silver">
@@ -140,7 +140,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-9">
+            <div class="col-sm-9 responsive-header">
                 <!-- show message -->
                 <div class="messages_top"
                     *ngIf="users.customerMailList!=null&&users.customerMailList!=undefined&&hideMsgs">
@@ -233,7 +233,7 @@
                 <div class="row">
                     <div class="col-sm-12" *ngIf="trendingHomeChart!=undefined">
                         <div [innerHTML]="trendingHomeChart.chart.freeChartDiv |
-                            safeHtml" class="chartDiv"></div>
+                            safeHtml" class="chartDiv" id="resizable2" ></div>
                     </div>
                 </div>
 

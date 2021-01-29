@@ -90,6 +90,7 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
         this.calculationTypeList = calculationTypeList.data;
       }));
   }
+
   handleAutoComplete(event: any): any {
     this.users.searchUserList[0] = event.option.value;
     this.loginService.setUser(this.users);

@@ -30,6 +30,13 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
   inputData = TableColumnData.INPUT_TYPE_DATA;
   colorData = TableColumnData.COLOR_DATA;
   fontData = TableColumnData.FONT_STYLE_DATA;
+  toolTypeList: any = TableColumnData.TOOL_TYPE;
+  chartTypList: any = TableColumnData.CHART_TYPE;
+  fontStyleList: any = TableColumnData.FONT_STYLE;
+  locationList: any = TableColumnData.LOCATION;
+  resourceUseList: any = TableColumnData.RESOURCE_USE;
+  unitTypeList: any = TableColumnData.UNIT_TYPE;
+  useTypeList: any = TableColumnData.USE_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
   public tools: object = {
     items: ['Undo', 'Redo', '|',

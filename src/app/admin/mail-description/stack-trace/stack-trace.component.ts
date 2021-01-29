@@ -10,9 +10,11 @@ import { SystemThreadInfoComponent } from '../../system-jobs/system-thread-info/
   styleUrls: ['./stack-trace.component.css']
 })
 export class StackTraceComponent implements OnInit {
-
+  maxProcessedStack: any;
   constructor(public dialogRef: MatDialogRef<SystemThreadInfoComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any) {
+    this.maxProcessedStack = this.data.maxProcessedStack;
+  }
 
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');

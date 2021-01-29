@@ -18,9 +18,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Type</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="type" class='form-control form-control-sm' formControlName="type">
-                <option value="2">Leaks</option>
-                <option value="3">Recommendations</option>
-                <option value="1" selected="selected">Unique</option>
+                <option *ngFor='let group of recommendationLeakTypeList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -78,9 +76,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Action Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="actionType" id="actionType">
-                <option selected="selected" value="habit">Habit</option>
-                <option value="installation">Installation</option>
-                <option value="other">Other</option>
+                <option *ngFor='let group of actionTypeList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -99,8 +95,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Price Calculation Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="priceValueAlgType" formControlName="priceValueAlgType">
-                <option value="F" selected="selected">By formula</option>
-                <option value="P">Percent from Leak value</option>
+                <option *ngFor='let group of priceCalculationType' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -127,11 +122,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Image:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" formControlName="image" id="image">
-                <option value="leakghg.png">CO2</option>
-                <option value="leakdiscovery.png">Discovery</option>
-                <option value="leakelectric.png" selected="selected">Electric</option>
-                <option value="leakgas.png">Gas</option>
-                <option value="leakwater.png">Water</option>
+                <option *ngFor='let group of imageList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -140,11 +131,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Icon:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control  form-control-sm" formControlName="icon" id="icon">
-                <option value="leakghg-mini.png">CO2</option>
-                <option value="leakdiscovery-mini.png">Discovery</option>
-                <option value="leakelectric-mini.png">Electric</option>
-                <option value="leakgas-mini.png">Gas</option>
-                <option value="leakwater-mini.png">Water</option>
+                <option *ngFor='let group of iconList' [value]="group.key">{{group.value}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

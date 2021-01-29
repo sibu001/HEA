@@ -19,6 +19,7 @@ export class ViewConfigurationAttributesEditComponent implements OnInit, OnDestr
   isForce = false;
   attributeTypeData = TableColumnData.ATTRIBUTE_TYPE_DATA;
   definitionData = TableColumnData.DEFINITION_DATA;
+  valueTypeList: any[] = TableColumnData.VALUE_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,

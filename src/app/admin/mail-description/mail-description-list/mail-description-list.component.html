@@ -44,13 +44,15 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Mail Descriptions (Number of Records =
-                {{totalElement}})</span></p>
+                {{totalElement | number:'1.0':'en-US'}})</span></p>
             <app-table [keys]="keys" [isPaginate]="true"
               (goToEditEvent)='goToEditMailDescription($event)'
               (addEvent)='addMailDescriptions()' [isSearch]="false"
               [data]="dataSource"
+              [pageIndex]="pageIndex"
               [totalElement]="mailData.totalElements"
-              (changePageEvent)="search($event,false)">
+              (changePageEvent)="search($event,false)"
+              class="mail-description-table">
             </app-table>
           </div>
         </form>

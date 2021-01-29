@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { StackTraceComponent } from '../stack-trace/stack-trace.component';
 
@@ -20,11 +21,11 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
 
   id: any;
   topicForm: FormGroup;
+  contentTypeList: any = [];
   public customerGroupKeys = TableColumnData.CUSTOMER_GROUP_KEY;
   contentPartsKeys = TableColumnData.CONTENT_PART_KEYS;
   variableKeys = TableColumnData.VARIABLE_KEYS;
   sourceTypeList: any[] = TableColumnData.SOURCE_TYPE;
-  contentTypeList: any[] = TableColumnData.CONTENT_TYPE;
   periodData: any[];
   public customerGroupDataSource: any;
   public contentPartsDataSource: any;
@@ -47,6 +48,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   customerGroupCheckBox: any;
   selectedCustomerGroup: any;
   customerGroupList: any = [];
+  maxProcessedStack: any;
   public customerGroupSelectionList: any = [];
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
@@ -64,7 +66,9 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.loadScrapingPeriodList();
+    this.scrollTop();
+    this.loadMailPeriodList();
+    this.loadContentTypeList();
     this.loadCustomerGroup(false, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
@@ -73,32 +77,55 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadScrapingPeriodList(): any {
-    this.systemService.loadScrapingPeriodList();
-    this.subscriptions.add(this.systemService.getScrapingPeriodList().pipe(skipWhile((item: any) => !item))
-      .subscribe((scrapingPeriodList: any) => {
-        this.periodData = scrapingPeriodList.data;
+  scrollTop() {
+    window.scroll(0, 0);
+  }
+
+  loadMailPeriodList(): any {
+    this.systemService.loadMailPeriodList();
+    this.subscriptions.add(this.systemService.getMailPeriod().pipe(skipWhile((item: any) => !item))
+      .subscribe((mailPeriodList: any) => {
+        this.periodData = mailPeriodList.data;
       }));
   }
+
+  loadContentTypeList(): any {
+    this.systemService.loadContentTypeList();
+    this.subscriptions.add(this.systemService.getContentType().pipe(skipWhile((item: any) => !item))
+      .subscribe((contentTypeList: any) => {
+        this.contentTypeList = contentTypeList.data;
+      }));
+  }
+
   setForm(event: any) {
     this.topicForm = this.fb.group({
-      sourceType: [event !== undefined ? event.sourceType : ''],
+      sourceType: [event !== undefined ? event.sourceType : 'CUST'],
       mailName: [event !== undefined ? event.mailName : ''],
       mailFilter: [event !== undefined ? event.mailFilter : ''],
-      period: [event !== undefined ? event.period : '', Validators.required],
+      mailPeriod: [event !== undefined ? event.mailPeriod : 'M', Validators.required],
       periodDayRule: [event !== undefined ? event.periodDayRule : '', Validators.required],
       stopDays: [event !== undefined ? event.stopDays : ''],
       stopNumber: [event !== undefined ? event.stopNumber : ''],
-      resetPeriod: [event !== undefined ? event.resetPeriod : '', Validators.required],
+      stopPeriod: [event !== undefined ? event.stopPeriod : 'D', Validators.required],
       stopDateRule: [event !== undefined ? event.stopDateRule : '', Validators.required],
       subjectTemplate: [event !== undefined ? event.subjectTemplate : '', Validators.required],
-      contentType: [event !== undefined ? event.contentType : ''],
-      includeHeader: [event !== undefined ? event.includeHeader : ''],
-      includeFooter: [event !== undefined ? event.includeFooter : ''],
-      ccCoachUser: [event !== undefined ? event.ccCoachUser : ''],
-      isActive: [event !== undefined ? event.isActive : ''],
-      allowAdminForce: [event !== undefined ? event.allowAdminForce : ''],
-      ignoreOptOutMail: [event !== undefined ? event.ignoreOptOutMail : '']
+      contentType: [event !== undefined ? event.contentType : 'H'],
+      includeHeader: [event !== undefined ? event.includeHeader : false],
+      includeFooter: [event !== undefined ? event.includeFooter : false],
+      ccCoachUser: [event !== undefined ? event.ccCoachUser : false],
+      active: [event !== undefined ? event.active : false],
+      allowAdminForce: [event !== undefined ? event.allowAdminForce : false],
+      ignoreOptOutMail: [event !== undefined ? event.ignoreOptOutMail : false],
+      totalCalls: [event !== undefined ? event.totalCalls : ''],
+      totalProcessedTimeShow: [event !== undefined ? AppUtility.convertMillisecondToTime(event.totalProcessedTime) : '00:00:00'],
+      maxProcessedTimeShow: [event !== undefined ? AppUtility.convertMillisecondToTime(event.maxProcessedTime) : '00:00:00'],
+      maxProcessedId: [event !== undefined ? event.maxProcessedId : ''],
+      maxProcessedIdShow: [event !== undefined && event.maxProcessedId ? '(' + event.maxProcessedId + ')' : ''],
+      lastCalls: [event !== undefined ? event.lastCalls : ''],
+      lastProcessedTimeShow: [event !== undefined ? AppUtility.convertMillisecondToTime(event.lastProcessedTime) : '00:00:00'],
+      lastMaxProcessedTimeShow: [event !== undefined ? AppUtility.convertMillisecondToTime(event.lastMaxProcessedTime) : '00:00:00'],
+      lastMaxProcessedId: [event !== undefined ? event.lastMaxProcessedId : ''],
+      lastMaxProcessedIdShow: [event !== undefined && event.lastMaxProcessedId ? '(' + event.lastMaxProcessedId + ')' : ''],
     });
   }
 
@@ -128,7 +155,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(StackTraceComponent, {
       width: '550px',
       height: '300px',
-      data: {}
+      data: { 'maxProcessedStack': this.maxProcessedStack }
     });
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed' + result);
@@ -141,10 +168,12 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   loadMailDescriptionById() {
     this.subscriptions.add(this.mailService.getMailDescriptionById().pipe(skipWhile((item: any) => !item))
       .subscribe((mailDescription: any) => {
+        this.scrollTop();
         if (this.isForce) {
-          this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': mailDescription.id } });
+          this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': mailDescription.data.id } });
         }
-        this.setForm(mailDescription);
+        this.maxProcessedStack = mailDescription.data ? mailDescription.data.maxProcessedStack : null;
+        this.setForm(mailDescription.data);
       }));
   }
 
@@ -164,10 +193,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
       }));
   }
 
-
   back() {
     this.router.navigate(['admin/mailDescription/mailDescriptionList'], { queryParams: { 'force': this.isForce } });
   }
+
   delete() {
     this.subscriptions.add(this.mailService.deleteMailDescriptionById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
@@ -185,14 +214,19 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
             this.loadMailDescriptionById();
           }));
       } else {
-        this.subscriptions.add(this.mailService.saveMailDescription(this.topicForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.loadMailDescriptionById();
-          }));
+        this.topicForm.value.totalProcessedTime = '';
+        this.topicForm.value.maxProcessedTime = '';
+        this.topicForm.value.lastProcessedTime = '';
+        this.topicForm.value.lastMaxProcessedTime = '';
+          this.subscriptions.add(this.mailService.saveMailDescription(this.topicForm.value).pipe(
+            skipWhile((item: any) => !item))
+            .subscribe((response: any) => {
+              this.isForce = true;
+              this.loadMailDescriptionById();
+            }));
       }
     } else {
+      this.validateAllFormFields(this.topicForm);
       this.validateForm();
     }
   }
@@ -258,6 +292,17 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
         break;
       }
     }
+  }
+
+  validateAllFormFields(formGroup: FormGroup) {
+    Object.keys(formGroup.controls).forEach(field => {
+      const control = formGroup.get(field);
+      if (control instanceof FormControl) {
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {
+        this.validateAllFormFields(control);
+      }
+    });
   }
 
   get f() { return this.topicForm.controls; }

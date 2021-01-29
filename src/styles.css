@@ -162,19 +162,19 @@ div.factoid > div > p {
   }
 }
 
-@media only screen and (min-device-width: 769px) and (max-device-width: 900px) {
+@media only screen and (min-width: 769px) and (max-width: 900px) {
   .accurate > p > img {
     width: 400px !important;
   }
 }
 
-@media only screen and (min-device-width: 901px) and (max-device-width: 992px) {
+@media only screen and (min-width: 901px) and (max-width: 992px) {
   .accurate > p > img {
     width: 525px !important;
   }
 }
 
-@media only screen and (min-device-width: 993px) and (max-device-width: 1300px) {
+@media only screen and (min-width: 993px) and (max-width: 1300px) {
   .accurate > p > img {
     width: 600px !important;
   }
@@ -234,7 +234,7 @@ div.factoid > div > p {
   margin-left: 0px !important;
 }
 
-@media only screen and (min-device-width: 300px) and (max-device-width: 350px) {
+@media only screen and (min-width: 300px) and (max-width: 350px) {
   /*dashboard chart css  */
   .chartDiv > div {
     width: 300px !important;
@@ -273,7 +273,7 @@ div.factoid > div > p {
   }
 }
 
-@media only screen and (min-device-width: 351px) and (max-device-width: 400px) {
+@media only screen and (min-width: 351px) and (max-width: 400px) {
   /*dashboard chart css  */
   .chartDiv > div {
     width: 318px !important;
@@ -303,7 +303,7 @@ div.factoid > div > p {
   }
 }
 
-@media only screen and (min-device-width: 401px) and (max-device-width: 480px) {
+@media only screen and (min-width: 401px) and (max-width: 480px) {
   /*dashboard chart css  */
   .chartDiv > div {
     width: 370px !important;
@@ -333,7 +333,7 @@ div.factoid > div > p {
   }
 }
 
-@media only screen and (min-device-width: 481px) and (max-device-width: 520px) {
+@media only screen and (min-width: 481px) and (max-width: 520px) {
   /*dashboard chart css  */
   .chartDiv > div {
     width: 450px !important;
@@ -363,7 +363,7 @@ div.factoid > div > p {
   }
 }
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 767px) {
+@media only screen and (min-width: 320px) and (max-width: 767px) {
   /* #chartSeasonalPie{
         width:125px !important;
     } */
@@ -376,7 +376,7 @@ div.factoid > div > p {
   }
 }
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 480px) {
+@media only screen and (min-width: 320px) and (max-width: 480px) {
   .qtip.qtip-default {
     left: 170px !important;
   }
@@ -488,7 +488,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   margin-left: 12px !important;
 }
 
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
   div.back.color {
     background-color: #fbfbfb !important;
     padding: 28px 0px 28px 0px !important;
@@ -499,7 +499,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 320px) and (max-device-width: 350px) {
+@media only screen and (min-width: 320px) and (max-width: 350px) {
   .trendingProfileChart > div {
     width: 285px !important;
     height: 100% !important;
@@ -534,7 +534,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 351px) and (max-device-width: 375px) {
+@media only screen and (min-width: 351px) and (max-width: 375px) {
   .trendingProfileChart > div {
     width: 322px !important;
     height: 100% !important;
@@ -566,7 +566,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 376px) and (max-device-width: 414px) {
+@media only screen and (min-width: 376px) and (max-width: 414px) {
   .trendingProfileChart > div {
     width: 345px !important;
     height: 100% !important;
@@ -598,7 +598,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 415px) and (max-device-width: 480px) {
+@media only screen and (min-width: 415px) and (max-width: 480px) {
   .trendingProfileChart > div {
     width: 375px !important;
     height: 100% !important;
@@ -630,7 +630,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 481px) and (max-device-width: 515px) {
+@media only screen and (min-width: 481px) and (max-width: 515px) {
   .trendingProfileChart > div {
     width: 460px !important;
     height: 100% !important;
@@ -662,7 +662,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 516px) and (max-device-width: 580px) {
+@media only screen and (min-width: 516px) and (max-width: 580px) {
   /*dashboard chart css  */
   .chartDiv > div {
     width: 450px !important;
@@ -700,7 +700,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 581px) and (max-device-width: 615px) {
+@media only screen and (min-width: 581px) and (max-width: 615px) {
   /*dashboard chart css  */
   .chartDiv > div {
     width: 540px !important;
@@ -738,7 +738,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 616px) and (max-device-width: 768px) {
+@media only screen and (min-width: 616px) and (max-width: 768px) {
   /*dashboard chart css  */
   .chartDiv > div {
     width: 550px !important;
@@ -779,7 +779,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 769px) and (max-device-width: 815px) {
+@media only screen and (min-width: 769px) and (max-width: 815px) {
   .chartDiv > div > :nth-child(2) {
     float: unset !important;
   }
@@ -804,7 +804,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 816px) and (max-device-width: 930px) {
+@media only screen and (min-width: 816px) and (max-width: 930px) {
   .chartDiv > div > :nth-child(2) {
     float: unset !important;
   }
@@ -834,7 +834,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 931px) and (max-device-width: 980px) {
+@media only screen and (min-width: 931px) and (max-width: 980px) {
   .chartDiv > div > :nth-child(2) {
     float: unset !important;
   }
@@ -844,7 +844,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-device-width: 931px) and (max-device-width: 1223px) {
+@media only screen and (min-width: 931px) and (max-width: 1223px) {
   .trendingProfileChart > :nth-child(2) {
     width: 132% !important;
     margin-top: 6em !important;

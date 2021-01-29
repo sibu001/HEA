@@ -18,6 +18,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   private readonly subscriptions: Subscription = new Subscription();
   colorData = TableColumnData.COLOR_DATA;
   keys: TABLECOLUMN[] = TableColumnData.DATA_SET_KEYS;
+  seriesQueryTypeList: any[] = TableColumnData.SERIES_QUERY_TYPE;
   data = {
     content: [],
     totalElements: 0
