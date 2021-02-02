@@ -124,13 +124,13 @@ export class DeleteMailContentPartByIdAction {
 
 export class GetCustomerGroupListByMailDescriptionIdAction {
     static readonly type: MailActionTypes = MailActionTypes.GET_CUSTOMER_GROUP_LIST_BY_MAIL_DESCRIPTION_ID;
-    constructor(readonly force: boolean, readonly mailDescriptionId: any) {
+    constructor(readonly mailDescriptionId: any) {
     }
 }
 
 export class AssignCustomerGroupToMailDescriptionAction {
     static readonly type: MailActionTypes = MailActionTypes.ASSIGN_CUSTOMER_GROUP_TO_MAIL_DESCRIPTION;
-    constructor(readonly mailDescriptionId: any, readonly groupCode: any) {
+    constructor(readonly mailDescriptionId: any, readonly groupCode: any, readonly params: any) {
     }
 }
 

@@ -88,6 +88,7 @@ export class TableComponent implements OnInit, OnChanges {
   pageIndexNumber = 0;
   pageEvent: PageEvent;
   selection = new SelectionModel<any>(true, []);
+  selectionOptional = new SelectionModel<any>(true, []);
   tableForm: FormGroup = this.formBuilder.group({});
   tableValueFormArray = new FormArray([]);
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
@@ -231,8 +232,16 @@ export class TableComponent implements OnInit, OnChanges {
 
   checkBoxChange(): any {
     this.checkBoxChangeEvent.emit(this.selection.selected);
-
   }
+
+  checkBoxChangeOptional(event: any, row: any) {
+     const i = this.dataSource.data.findIndex((item: any) => item.groupCode === row.groupCode);
+     if (i !== -1) {
+      this.dataSource.data[i].optional = event.checked;
+     }
+     this.checkBoxChangeEvent.emit(this.selection.selected);
+  }
+
   refresh() {
     this.changeDetectorRefs.detectChanges();
   }

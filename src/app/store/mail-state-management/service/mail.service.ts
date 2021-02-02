@@ -134,12 +134,12 @@ export class MailService {
     return this.store.dispatch(new DeleteMailContentPartByIdAction(id));
   }
 
-  loadCustomerGroupListByMailDescriptionId(force: boolean, mailDescriptionId: any): Observable<MailManagementState> {
-    return this.store.dispatch(new GetCustomerGroupListByMailDescriptionIdAction(force, mailDescriptionId));
+  loadCustomerGroupListByMailDescriptionId(mailDescriptionId: any): Observable<MailManagementState> {
+    return this.store.dispatch(new GetCustomerGroupListByMailDescriptionIdAction(mailDescriptionId));
   }
 
-  assignCustomerGroupToMailDescription(mailDescriptionId: any, groupCode: any): Observable<MailManagementState> {
-    return this.store.dispatch(new AssignCustomerGroupToMailDescriptionAction(mailDescriptionId, groupCode));
+  assignCustomerGroupToMailDescription(mailDescriptionId: any, groupCode: any, params: any): Observable<MailManagementState> {
+    return this.store.dispatch(new AssignCustomerGroupToMailDescriptionAction(mailDescriptionId, groupCode, params));
   }
 
   deleteCustomerGroupByMailDescriptionId(mailDescriptionId: any, groupCode: any): Observable<MailManagementState> {

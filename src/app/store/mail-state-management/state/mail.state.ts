@@ -385,9 +385,9 @@ export class MailManagementState {
     }
 
     @Action(GetCustomerGroupListByMailDescriptionIdAction)
-    getAllRoleListByUserId(ctx: StateContext<MailManagementModel>, action: GetCustomerGroupListByMailDescriptionIdAction): Actions {
+    getCustomerGroupListByMailDescriptionId(ctx: StateContext<MailManagementModel>, action: GetCustomerGroupListByMailDescriptionIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.users + '/' + action.mailDescriptionId + '/' + AppConstant.roles)
+        return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.customerGroups)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -403,9 +403,9 @@ export class MailManagementState {
 
 
     @Action(DeleteMailDescriptionCustomerGroupAction)
-    deleteUserRole(ctx: StateContext<MailManagementModel>, action: DeleteMailDescriptionCustomerGroupAction): Actions {
+    deleteCustomerGroupListByMailDescriptionId(ctx: StateContext<MailManagementModel>, action: DeleteMailDescriptionCustomerGroupAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.users + '/' + action.mailDescriptionId + '/' + AppConstant.roles + '/' + action.groupCode)
+        return this.loginService.performDelete(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.customerGroups + '/' + action.groupCode)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -418,9 +418,9 @@ export class MailManagementState {
     }
 
     @Action(AssignCustomerGroupToMailDescriptionAction)
-    saveRole(ctx: StateContext<MailManagementModel>, action: AssignCustomerGroupToMailDescriptionAction): Actions {
+    saveCustomerGroupListByMailDescriptionId(ctx: StateContext<MailManagementModel>, action: AssignCustomerGroupToMailDescriptionAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost('', AppConstant.users + '/' + action.mailDescriptionId + '/' + AppConstant.roles + '/' + action.groupCode)
+        return this.loginService.performPostWithParam('', AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.customerGroups + '/' + action.groupCode, action.params)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

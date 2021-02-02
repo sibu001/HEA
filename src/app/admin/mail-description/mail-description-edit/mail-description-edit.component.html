@@ -121,12 +121,12 @@
               <textarea class='form-control form-control-sm'
                 formControlName="stopDateRule"
                 id="stopDateRule"> </textarea>
-                <div *ngIf="f.stopDateRule.invalid && (f.stopDateRule.dirty ||
+                <!-- <div *ngIf="f.stopDateRule.invalid && (f.stopDateRule.dirty ||
                 f.stopDateRule.touched)">
                 <span class="error" *ngIf="f.stopDateRule.errors.required">
                   Stop Date Rule is required.
                 </span>
-              </div>
+              </div> -->
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -284,7 +284,7 @@
               [isSearch]="false" [data]="customerGroupDataSource"
               [totalElement]="customerGroupData.totalElements"
               (checkBoxChangeEvent)="customerGroupCheckBoxChangeEvent($event)"
-              id='mailPeriod' [selectionList]='customerGroupSelectionList'>
+              id='groupCode' [selectionList]='customerGroupSelectionList'>
             </app-table>
           </div>
 
