@@ -19,6 +19,8 @@ import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { PipeModule } from 'src/app/pipes/pipe/pipe.module';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 
 @NgModule({
   imports: [
@@ -33,7 +35,8 @@ import { PipeModule } from 'src/app/pipes/pipe/pipe.module';
       SystemManagementState,
       CustomerManagementState,
       SystemUtilityManagementState,
-      DynamicViewManagementState
+      DynamicViewManagementState,
+      TopicManagementState
     ]),
   ],
   providers: [
@@ -42,7 +45,8 @@ import { PipeModule } from 'src/app/pipes/pipe/pipe.module';
     LoginService,
     SystemUtilityService,
     CustomerService,
-    DynamicViewService
+    DynamicViewService,
+    TopicService
   ],
   declarations: [
     JsPagesListComponent,

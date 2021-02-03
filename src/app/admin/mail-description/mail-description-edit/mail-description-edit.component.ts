@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { AppUtility } from 'src/app/utility/app.utility';
@@ -21,6 +20,8 @@ import { StackTraceComponent } from '../stack-trace/stack-trace.component';
 export class MailDescriptionEditComponent implements OnInit, OnDestroy {
 
   id: any;
+  helpHide: boolean;
+  hideHelp: any[] = [false, false, false, false, false, false, false, false, false];
   topicForm: FormGroup;
   contentTypeList: any = [];
   public customerGroupKeys = TableColumnData.CUSTOMER_GROUP_KEY;
@@ -57,7 +58,6 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder,
     private readonly mailService: MailService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly customerService: CustomerService,
     private readonly systemService: SystemService,
     private readonly router: Router,
     private readonly dialog: MatDialog,
@@ -76,6 +76,8 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
       this.mailService.loadMailDescriptionById(this.id);
       this.loadMailDescriptionById();
       this.findUserCustomerGroup(this.id);
+      this.loadMailContentPartList();
+      this.loadContextVariableList();
     } else {
       this.loadCustomerGroup(false, '');
     }
@@ -135,22 +137,6 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
 
   copy(): any { }
 
-  addContentParts(): any {
-    this.router.navigate(['/admin/mailDescription/mailContentParts']);
-  }
-
-  addVariable(): any {
-    this.router.navigate(['/admin/mailDescription/mailContextVariables']);
-  }
-
-  goToEditContentParts(): any {
-    this.router.navigate(['/admin/mailDescription/mailContentParts'], { queryParams: { id: this.id } });
-  }
-
-  goToEditVariable(): any {
-    this.router.navigate(['/admin/mailDescription/mailContextVariables'], { queryParams: { id: this.id } });
-  }
-
   Preview() {
     this.router.navigate(['/admin/mailDescription/mailDescriptionPreview'], { queryParams: { id: this.id } });
   }
@@ -166,8 +152,9 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  callMailReminder(): any { }
-
+  callMailSender(): any {
+    this.mailService.mailDescriptionProcess(this.id);
+  }
 
   loadMailDescriptionById() {
     this.subscriptions.add(this.mailService.getMailDescriptionById().pipe(skipWhile((item: any) => !item))
@@ -179,22 +166,6 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
         }
         this.maxProcessedStack = mailDescription.data ? mailDescription.data.maxProcessedStack : null;
         this.setForm(mailDescription.data);
-      }));
-  }
-
-  loadMailContentPartList() {
-    this.mailService.loadMailContentPartList();
-    this.subscriptions.add(this.mailService.getMailContentPartList().pipe(skipWhile((item: any) => !item))
-      .subscribe((mailContentPartList: any) => {
-
-      }));
-  }
-
-  loadContextVariableList() {
-    this.mailService.loadContextVariableList();
-    this.subscriptions.add(this.mailService.getContextVariableList().pipe(skipWhile((item: any) => !item))
-      .subscribe((contextVariableList: any) => {
-
       }));
   }
 
@@ -262,6 +233,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
         this.customerGroupDataSource = [...this.customerGroupData.content];
       }));
   }
+
   checkCustomerGroup() {
     for (let index = 0; index < this.customerGroupList.length; index++) {
       const i = this.customerGroupCheckBox.findIndex((item: any) => (item.customerGroupId === this.customerGroupList[index].customerGroupId && item.optional !== this.customerGroupList[index].optional));
@@ -285,6 +257,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.assignCustomerGroupToMailDescription(this.updateCustomerGroup);
     // this.findUserCustomerGroup(this.id);
   }
+
   assignCustomerGroupToMailDescription(customerGroupList: any) {
     customerGroupList.forEach(element => {
       const params = new HttpParams()
@@ -304,6 +277,37 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.customerGroupCheckBox = event;
   }
 
+  loadMailContentPartList() {
+    this.mailService.loadMailContentPartList(this.id);
+    this.subscriptions.add(this.mailService.getMailContentPartList().pipe(skipWhile((item: any) => !item))
+      .subscribe((mailContentPartList: any) => {
+        this.contentPartsDataSource = mailContentPartList.data;
+      }));
+  }
+
+  addContentParts(): any {
+    this.router.navigate(['/admin/mailDescription/mailContentParts'], { queryParams: { id: this.id } });
+  }
+
+  goToEditContentParts(event: any): any {
+    this.router.navigate(['/admin/mailDescription/mailContentParts'], { queryParams: { id: this.id, contentId: event.id } });
+  }
+
+  loadContextVariableList() {
+    this.mailService.loadContextVariableList(this.id);
+    this.subscriptions.add(this.mailService.getContextVariableList().pipe(skipWhile((item: any) => !item))
+      .subscribe((contextVariableList: any) => {
+        this.variableDataSource = contextVariableList.data;
+      }));
+  }
+
+  addVariable(): any {
+    this.router.navigate(['/admin/mailDescription/mailContextVariables'], { queryParams: { id: this.id } });
+  }
+
+  goToEditVariable(event: any): any {
+    this.router.navigate(['/admin/mailDescription/mailContextVariables'], { queryParams: { id: this.id, variableId: event.id } });
+  }
 
   validateForm() {
     for (const key of Object.keys(this.topicForm.controls)) {

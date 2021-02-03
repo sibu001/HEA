@@ -18,6 +18,8 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 
 @NgModule({
   imports: [
@@ -30,11 +32,12 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
       SystemManagementState,
       CustomerManagementState,
       SystemUtilityManagementState,
-      DynamicViewManagementState
+      DynamicViewManagementState,
+      TopicManagementState
     ]),
   ],
   providers: [SystemService, DatePipe, LoginService, SystemUtilityService,
-    CustomerService, DynamicViewService],
+    CustomerService, DynamicViewService, TopicService],
   declarations: [ViewConfigurationListComponent, ViewConfigurationEditComponent, ViewConfigurationAttributesComponent, ViewConfigurationAttributesEditComponent]
 })
 export class ViewConfigurationModule { }

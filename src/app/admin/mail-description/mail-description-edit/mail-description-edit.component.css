@@ -55,6 +55,59 @@ select {
   }
 }
 
-.formInput{
+.formInput {
   width: 80px;
+}
+
+::ng-deep .mail-customer-group .mat-column-optional {
+  flex: none;
+  width: 100px;
+}
+
+::ng-deep .mail-content-part .mat-column-contentOrder {
+  flex: none;
+  width: 80px;
+}
+
+::ng-deep .mail-variable .mat-column-orderNumber {
+  flex: none;
+  width: 80px;
+}
+
+::ng-deep .mail-variable .mat-column-field {
+  flex: none;
+  width: 250px;
+}
+
+img#help_btn {
+  width: 33px;
+  cursor: pointer;
+}
+
+div#help-icon-contain-responsive {
+  margin-top: 5px;
+  display: block;
+  margin-left: 0px;
+  margin-right: 0px;
+}
+
+span.hide-button{
+  color: #75ba18;
+  display: block;
+  text-align: right;
+  font-weight: 500;
+  margin-top: 3px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+p.help-text {
+  background-color: #f9f9f9;
+  font-weight: 500;
+  padding: 15px 15px 15px 15px;
+  line-height: 1.4;
+  text-align: justify;
+  color: #000;
+  font-size: 16px;
+  margin-top: 12px;
 }

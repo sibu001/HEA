@@ -1,19 +1,23 @@
 .mat-dialog-actions {
-    float: right;
-  }
-  .btn {
-    color: #fff;
-    background-color: #76ba19;
-    border-color: #76ba19;
-  }
-  
-  .btn-padding {
-    margin-left: 1px;
-    margin-right: 1px;
-    padding: 4px;
-  }
-  
-  .align-right {
-    text-align: right;
-  }
-  
+  float: right;
+}
+.btn {
+  color: #fff;
+  background-color: #76ba19;
+  border-color: #76ba19;
+}
+
+.btn-padding {
+  margin-left: 1px;
+  margin-right: 1px;
+  padding: 4px;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.stack-data {
+  border-bottom: 1px solid;
+  padding: 15px 0px 15px 9px;
+}

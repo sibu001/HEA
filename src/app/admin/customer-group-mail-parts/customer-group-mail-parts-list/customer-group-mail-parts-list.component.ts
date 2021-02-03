@@ -93,7 +93,7 @@ export class CustomerGroupMailPartsListComponent implements OnInit, OnDestroy {
       // .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       // .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       //   (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('sortField', (event && event.sort.active !== undefined ? 'customerGroup.groupName' : ''))
+      .set('sortField', 'customerGroup.groupName')
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('customerGroupId', (this.mailForm.value.customerGroup !== null ? this.mailForm.value.customerGroup : ''));
     this.findCustomerGroupMailPart(true, params);

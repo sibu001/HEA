@@ -25,6 +25,7 @@ export class AppConstant {
     public static lookupValues = 'lookupValues';
     public static themes = 'themes';
     public static mailDescription = 'mailDescriptions';
+    public static mailDescriptionProcess = 'process';
     public static customerComparisonGroups = 'customerComparisonGroups';
     public static factor = 'factors';
     public static lookup = 'lookups';
@@ -49,8 +50,9 @@ export class AppConstant {
     public static customerGroupMailPart = 'customerGroupMailParts';
     public static topic = '';
     public static prospects = '';
-    public static contextVariable = '';
-    public static mailContentPart = '';
+    public static contextVariable = 'mailVariables';
+    public static mailContentPart = 'mailContents';
+    public static generateEmbedImage = 'generateEmbedImage';
     public static eventHistory = 'customerEvents';
     public static userReportDefinitions = '';
     public static userReportDefinitionContextVariableTypes = '';

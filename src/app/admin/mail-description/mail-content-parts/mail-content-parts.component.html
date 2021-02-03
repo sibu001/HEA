@@ -18,14 +18,14 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="order" id="order">
+              <input type="text" class="form-control" formControlName="contentOrder" id="contentOrder">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content Filter:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="contentFilter" id="contentFilter"></textarea>
+              <textarea class="form-control" formControlName="contentFilterRule" id="contentFilterRule"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -41,10 +41,10 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm' formControlName="content"
-                id="content"> </textarea>
-              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value' [toolbarSettings]='tools' formControlName='content'
-                id='content'>
+              <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm' formControlName="contentTemplate"
+                id="contentTemplate" rows="12" cols="12"> </textarea>
+              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value' [toolbarSettings]='tools' formControlName='contentTemplate'
+                id='contentTemplate'>
               </ejs-richtexteditor>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -71,7 +71,7 @@
               <span class="filterLabel">Image:</span>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="file" formControlName="imageFile" id="imageFile">
+              <input type="file" formControlName="imageFile" id="imageFile" (change)="handleFileInput($event.target.files)">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
             </div>
@@ -83,7 +83,11 @@
               <input type="text" class='form-control form-control-sm' formControlName="embeddedImage"
                 id="embeddedImage">
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <button type="button" class="btn btn-primary" (click)="generate()" style="text-align: end;">
+                Generate
+              </button>
+            </div>
           </div>
 
           <div class="row rowPadding">

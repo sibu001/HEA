@@ -15,9 +15,11 @@ export enum MailActionTypes {
     SAVE_MAIL_CONTENT_PART = 'Save Mail Content Part',
     UPDATE_MAIL_CONTENT_PART = 'Update Mail Content Part',
     DELETE_MAIL_CONTENT_PART_BY_ID = 'Delete Mail Content Part By Id',
+    GENERATE_EMBED_IMAGE = 'Generate Embed Image',
     GET_CUSTOMER_GROUP_LIST_BY_MAIL_DESCRIPTION_ID = 'Fet Customer Group List By Mail Description Id',
     ASSIGN_CUSTOMER_GROUP_TO_MAIL_DESCRIPTION = 'Assign Customer Group To Mail Description',
     DELETE_MAIL_DESCRIPTION_CUSTOMER_GROUP = 'Delete Customer Group Of Mail Description',
+    MAIL_DESCRIPTION_PROCESS = 'Mail Description Process',
     GET_CUSTOMER_GROUP_MAIL_PART_LIST = 'Get All Customer Group Mail Part List',
     GET_CUSTOMER_GROUP_MAIL_PART_LIST_COUNT = 'Get All Customer Group Mail Part List Count',
     GET_CUSTOMER_GROUP_MAIL_PART_BY_ID = 'Get Customer Group Mail Part By Id',
@@ -64,61 +66,67 @@ export class DeleteMailDescriptionByIdAction {
 
 export class GetContextVariableListAction {
     static readonly type: MailActionTypes = MailActionTypes.GET_CONTEXT_VARIABLE_LIST;
-    constructor() {
+    constructor(readonly mailDescriptionId: any) {
     }
 }
 
 export class GetContextVariableByIdAction {
     static readonly type: MailActionTypes = MailActionTypes.GET_CONTEXT_VARIABLE_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly mailDescriptionId: any, readonly mailVariableId: number) {
     }
 }
 
 export class SaveContextVariableAction {
     static readonly type: MailActionTypes = MailActionTypes.SAVE_CONTEXT_VARIABLE;
-    constructor(readonly contextVariable: any) {
+    constructor(readonly mailDescriptionId: any, readonly contextVariableObj: any) {
     }
 }
 
 export class UpdateContextVariableAction {
     static readonly type: MailActionTypes = MailActionTypes.UPDATE_CONTEXT_VARIABLE;
-    constructor(readonly id: number, readonly contextVariable: any) {
+    constructor(readonly mailDescriptionId: any, readonly mailVariableId: number, readonly contextVariableObj: any) {
     }
 }
 
 export class DeleteContextVariableByIdAction {
     static readonly type: MailActionTypes = MailActionTypes.DELETE_CONTEXT_VARIABLE_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly mailDescriptionId: any, readonly mailVariableId: number) {
     }
 }
 
 export class GetMailContentPartListAction {
     static readonly type: MailActionTypes = MailActionTypes.GET_MAIL_CONTENT_PART_LIST;
-    constructor() {
+    constructor(readonly mailDescriptionId: any) {
     }
 }
 
 export class GetMailContentPartByIdAction {
     static readonly type: MailActionTypes = MailActionTypes.GET_MAIL_CONTENT_PART_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly mailDescriptionId: any, readonly mailContentId: number) {
     }
 }
 
 export class SaveMailContentPartAction {
     static readonly type: MailActionTypes = MailActionTypes.SAVE_MAIL_CONTENT_PART;
-    constructor(readonly mailContentPart: any) {
+    constructor(readonly mailDescriptionId: any, readonly mailContentObj: any) {
     }
 }
 
 export class UpdateMailContentPartAction {
     static readonly type: MailActionTypes = MailActionTypes.UPDATE_MAIL_CONTENT_PART;
-    constructor(readonly id: number, readonly mailContentPart: any) {
+    constructor(readonly mailDescriptionId: any, readonly mailContentId: number, readonly mailContentObj: any) {
     }
 }
 
 export class DeleteMailContentPartByIdAction {
     static readonly type: MailActionTypes = MailActionTypes.DELETE_MAIL_CONTENT_PART_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly mailDescriptionId: any, readonly mailContentId: number) {
+    }
+}
+
+export class GenerateEmbedImageAction {
+    static readonly type: MailActionTypes = MailActionTypes.GENERATE_EMBED_IMAGE;
+    constructor(readonly mailDescriptionId: any, readonly mailContentId: number, readonly fileObj: any, readonly params: any) {
     }
 }
 
@@ -137,6 +145,12 @@ export class AssignCustomerGroupToMailDescriptionAction {
 export class DeleteMailDescriptionCustomerGroupAction {
     static readonly type: MailActionTypes = MailActionTypes.DELETE_MAIL_DESCRIPTION_CUSTOMER_GROUP;
     constructor(readonly mailDescriptionId: any, readonly groupCode: any) {
+    }
+}
+
+export class MailDescriptionProcessAction {
+    static readonly type: MailActionTypes = MailActionTypes.MAIL_DESCRIPTION_PROCESS;
+    constructor(readonly mailDescriptionId: any) {
     }
 }
 

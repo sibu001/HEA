@@ -14,7 +14,6 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class UserReportPreviewComponent implements OnInit {
   id: any;
   contentForm: FormGroup;
-  mailType = TableColumnData.MAIL_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,

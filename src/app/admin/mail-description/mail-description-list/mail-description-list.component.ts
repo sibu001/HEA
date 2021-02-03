@@ -48,9 +48,14 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.scrollTop();
     this.loadScrapingPeriodList();
     this.setUpForm(this.adminFilter.mailDescriptionFilter.formValue);
     this.search(this.adminFilter.mailDescriptionFilter.page, false);
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   loadScrapingPeriodList(): any {

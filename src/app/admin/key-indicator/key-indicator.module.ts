@@ -15,6 +15,8 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 
 @NgModule({
   imports: [
@@ -27,10 +29,11 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
       SystemManagementState,
       CustomerManagementState,
       SystemUtilityManagementState,
-      MailManagementState
+      MailManagementState,
+      TopicManagementState
     ]),
   ],
   declarations: [KeyIndicatorListComponent, KeyIndicatorEditComponent, KeyIndicatorVariableComponent],
-  providers: [SystemService, MailService, CustomerService],
+  providers: [SystemService, MailService, CustomerService, TopicService],
 })
 export class KeyIndicatorModule { }

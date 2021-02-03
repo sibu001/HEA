@@ -13,6 +13,14 @@ p.info {
   margin-top: 4px;
 }
 
+p.method-info {
+  color: #000000;
+  padding: 0;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 0 0 0 0px;
+  margin-top: 4px;
+}
 a {
   /* color: #76ba19 !important; */
   /* font-size: medium; */
@@ -71,6 +79,9 @@ th {
 
 .dot {
   padding: 10px;
+}
+.method-dot {
+  padding: 0px 10px 0px 0px;
 }
 .top-dot {
   padding: 10px 10px 10px 0px;

@@ -31,7 +31,9 @@ import {
     GetCustomerGroupMailPartListAction,
     SaveCustomerGroupMailPartAction,
     UpdateCustomerGroupMailPartAction,
-    GetMailDescriptionCountAction
+    GetMailDescriptionCountAction,
+    GenerateEmbedImageAction,
+    MailDescriptionProcessAction
 } from './mail.action';
 import { MailManagementModel } from './mail.model';
 
@@ -49,6 +51,7 @@ import { MailManagementModel } from './mail.model';
         mailDescriptionDataSourceList: undefined,
         mailDescription: undefined,
         mailDescriptionCustomerGroupList: undefined,
+        mailEmbedImage: undefined,
         customerGroupMailPartList: undefined,
         customerGroupMailPart: undefined,
         customerGroupMailPartCount: undefined
@@ -213,13 +216,13 @@ export class MailManagementState {
     @Action(GetContextVariableListAction)
     getAllContextVariableList(ctx: StateContext<MailManagementModel>, action: GetContextVariableListAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.contextVariable)
+        return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.contextVariable)
             .pipe(
                 tap((response: any) => {
-                    // const res = Transformer.transformContextVariableTableData(response);
+                    const res = MailTransformer.transformContextVariableTableData(response);
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        contextVariableList: response,
+                        contextVariableList: res,
                     });
                 },
                     error => {
@@ -232,7 +235,7 @@ export class MailManagementState {
     @Action(GetContextVariableByIdAction)
     getContextVariableById(ctx: StateContext<MailManagementModel>, action: GetContextVariableByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.contextVariable + '/' + action.id)
+        return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.contextVariable + '/' + action.mailVariableId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -249,7 +252,7 @@ export class MailManagementState {
     @Action(DeleteContextVariableByIdAction)
     deleteContextVariableById(ctx: StateContext<MailManagementModel>, action: DeleteContextVariableByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.contextVariable + '/' + action.id)
+        return this.loginService.performDelete(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.contextVariable + '/' + action.mailVariableId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -264,7 +267,7 @@ export class MailManagementState {
     @Action(SaveContextVariableAction)
     saveContextVariable(ctx: StateContext<MailManagementModel>, action: SaveContextVariableAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.contextVariable, AppConstant.contextVariable)
+        return this.loginService.performPost(action.contextVariableObj, AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.contextVariable)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -282,7 +285,7 @@ export class MailManagementState {
     @Action(UpdateContextVariableAction)
     updateContextVariable(ctx: StateContext<MailManagementModel>, action: UpdateContextVariableAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.contextVariable, AppConstant.contextVariable + '/' + action.id)
+        return this.loginService.performPut(action.contextVariableObj, AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.contextVariable + '/' + action.mailVariableId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -300,7 +303,7 @@ export class MailManagementState {
     @Action(GetMailContentPartListAction)
     getAllMailContentPartList(ctx: StateContext<MailManagementModel>, action: GetMailContentPartListAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.mailContentPart)
+        return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart)
             .pipe(
                 tap((response: any) => {
                     // const res = Transformer.transformMailContentPartTableData(response);
@@ -319,7 +322,7 @@ export class MailManagementState {
     @Action(GetMailContentPartByIdAction)
     getMailContentPartById(ctx: StateContext<MailManagementModel>, action: GetMailContentPartByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.mailContentPart + '/' + action.id)
+        return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart + '/' + action.mailContentId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -336,7 +339,7 @@ export class MailManagementState {
     @Action(DeleteMailContentPartByIdAction)
     deleteMailContentPartById(ctx: StateContext<MailManagementModel>, action: DeleteMailContentPartByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.mailContentPart + '/' + action.id)
+        return this.loginService.performDelete(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart + '/' + action.mailContentId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -351,7 +354,7 @@ export class MailManagementState {
     @Action(SaveMailContentPartAction)
     saveMailContentPart(ctx: StateContext<MailManagementModel>, action: SaveMailContentPartAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.mailContentPart, AppConstant.mailContentPart)
+        return this.loginService.performPost(action.mailContentObj, AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -369,7 +372,7 @@ export class MailManagementState {
     @Action(UpdateMailContentPartAction)
     updateMailContentPart(ctx: StateContext<MailManagementModel>, action: UpdateMailContentPartAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.mailContentPart, AppConstant.mailContentPart + '/' + action.id)
+        return this.loginService.performPut(action.mailContentObj, AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart + '/' + action.mailContentId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -377,6 +380,38 @@ export class MailManagementState {
                     ctx.patchState({
                         mailContentPart: response,
                     });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GenerateEmbedImageAction)
+    generateEmbedImage(ctx: StateContext<MailManagementModel>, action: GenerateEmbedImageAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostMultiPartFromData(action.fileObj,
+            AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart + '/' + action.mailContentId + '/' + AppConstant.generateEmbedImage, action.params)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        mailEmbedImage: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(MailDescriptionProcessAction)
+    mailDescriptionProcess(ctx: StateContext<MailManagementModel>, action: MailDescriptionProcessAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailDescriptionProcess)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

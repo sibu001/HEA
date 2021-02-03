@@ -19,6 +19,8 @@ import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
 import { MailManagementState } from 'src/app/store/mail-state-management/state/mail.state';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 
 @NgModule({
   imports: [
@@ -30,7 +32,8 @@ import { CustomerService } from 'src/app/store/customer-state-management/service
       SystemManagementState,
       CustomerManagementState,
       SystemUtilityManagementState,
-      MailManagementState
+      MailManagementState,
+      TopicManagementState
     ]),
     MailDescriptionRoutingModule,
     RichTextEditorModule,
@@ -43,7 +46,7 @@ import { CustomerService } from 'src/app/store/customer-state-management/service
     MailDescriptionPreviewComponent,
     StackTraceComponent
   ],
-  providers: [SystemService, MailService, CustomerService],
+  providers: [SystemService, MailService, CustomerService, TopicService],
   entryComponents: [StackTraceComponent]
 })
 export class MailDescriptionModule { }

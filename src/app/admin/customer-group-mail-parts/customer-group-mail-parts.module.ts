@@ -17,6 +17,8 @@ import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { CustomerGroupMailPartsEditComponent } from './customer-group-mail-parts-edit/customer-group-mail-parts-edit.component';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 
 @NgModule({
   imports: [
@@ -31,10 +33,11 @@ import { CustomerGroupMailPartsEditComponent } from './customer-group-mail-parts
       CustomerManagementState,
       DynamicViewManagementState,
       MailManagementState,
-      SystemUtilityManagementState
+      SystemUtilityManagementState,
+      TopicManagementState
     ]),
   ],
   declarations: [CustomerGroupMailPartsListComponent, CustomerGroupMailPartsEditComponent],
-  providers: [SystemService, DynamicViewService, MailService, SystemUtilityService]
+  providers: [SystemService, DynamicViewService, MailService, SystemUtilityService, TopicService]
 })
 export class CustomerGroupMailPartsModule { }

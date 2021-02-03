@@ -16,34 +16,83 @@
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Source Type:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <select class="form-control" formControlName="sourceType"
                 id="sourceType">
                 <option *ngFor='let group of sourceTypeList'
                   [value]="group.key">{{group.value}}</option>
               </select>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
+              <img src="assets/images/icon_help.svg"
+                style="float: right; margin-top:
+                0%;margin-left: 5px;"
+                class="media-object" id="help_btn"
+                (click)="hideHelp[0]=!hideHelp[0]">
+            </div>
+            <div class="row" id="help-icon-contain-responsive"
+              class="help" *ngIf="hideHelp[0]">
+              <div class="col-sm-12 col-xs-12">
+                <p class="help-text">We have different lists of users in our
+                  system. Which group should this message be sent to?
+                  <span class="hide-button"
+                    (click)="hideHelp[0]=!hideHelp[0]">hide</span>
+                </p>
+              </div>
+            </div>
           </div>
+
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Name:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <input type="text" class="form-control" formControlName="mailName"
                 id="mailName">
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
+              <img src="assets/images/icon_help.svg"
+                style="float: right; margin-top:
+                0%;margin-left: 5px;"
+                class="media-object" id="help_btn"
+                (click)="hideHelp[1]=!hideHelp[1]">
+            </div>
+            <div class="row" id="help-icon-contain-responsive"
+              class="help" *ngIf="hideHelp[1]">
+              <div class="col-sm-12 col-xs-12">
+                <p class="help-text">An internal name for this message.
+                  <span class="hide-button"
+                    (click)="hideHelp[1]=!hideHelp[1]">hide</span>
+                </p>
+              </div>
+            </div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Filter:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <textarea class="form-control" formControlName="mailFilter"
                 id="mailFilter" rows="4" cols="5"></textarea>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
+              <img src="assets/images/icon_help.svg"
+                style="float: right; margin-top:
+                0%;margin-left: 5px;"
+                class="media-object" id="help_btn"
+                (click)="hideHelp[2]=!hideHelp[2]">
+            </div>
+            <div class="row" id="help-icon-contain-responsive"
+              class="help" *ngIf="hideHelp[2]">
+              <div class="col-sm-12 col-xs-12">
+                <p class="help-text">A SpEL expression that determines when this
+                  message is sent, and to which users. The return type is
+                  boolean.
+                  <span class="hide-button"
+                    (click)="hideHelp[2]=!hideHelp[2]">hide</span>
+                </p>
+              </div>
+            </div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Period:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <select class="form-control" formControlName="mailPeriod"
                 id="mailPeriod">
                 <option *ngFor='let period of periodData'
@@ -56,13 +105,28 @@
                 </span>
               </div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
+              <img src="assets/images/icon_help.svg"
+                style="float: right; margin-top:
+                0%;margin-left: 5px;"
+                class="media-object" id="help_btn"
+                (click)="hideHelp[3]=!hideHelp[3]">
+            </div>
+            <div class="row" id="help-icon-contain-responsive"
+              class="help" *ngIf="hideHelp[3]">
+              <div class="col-sm-12 col-xs-12">
+                <p class="help-text">How often is this message sent.
+                  <span class="hide-button"
+                    (click)="hideHelp[3]=!hideHelp[3]">hide</span>
+                </p>
+              </div>
+            </div>
           </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Intra-Period
               trigger:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <textarea class='form-control form-control-sm'
                 formControlName="periodDayRule"
                 id="periodDayRule"> </textarea>
@@ -73,62 +137,140 @@
                 </span>
               </div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
+              <img src="assets/images/icon_help.svg"
+                style="float: right; margin-top:
+                0%;margin-left: 5px;"
+                class="media-object" id="help_btn"
+                (click)="hideHelp[4]=!hideHelp[4]">
+            </div>
+            <div class="row" id="help-icon-contain-responsive"
+              class="help" *ngIf="hideHelp[4]">
+              <div class="col-sm-12 col-xs-12">
+                <p class="help-text">A SpEL expression that has to return an
+                  integer. It specifies at which point within the defined period
+                  the message will be triggered (which day of the week, or day
+                  of the month, or month of the year, or the 0 value for any
+                  day).
+                  <span class="hide-button"
+                    (click)="hideHelp[4]=!hideHelp[4]">hide</span>
+                </p>
+              </div>
+            </div>
           </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after
               this many days:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <input type="text" class='form-control form-control-sm'
                 formControlName="stopDays" id="stopDays">
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
+              <img src="assets/images/icon_help.svg"
+                style="float: right; margin-top:
+                0%;margin-left: 5px;"
+                class="media-object" id="help_btn"
+                (click)="hideHelp[5]=!hideHelp[5]">
+            </div>
+            <div class="row" id="help-icon-contain-responsive"
+              class="help" *ngIf="hideHelp[5]">
+              <div class="col-sm-12 col-xs-12">
+                <p class="help-text">Optional. Specify the number of days
+                  between the first and last copy of this message sent to each
+                  user.
+                  <span class="hide-button"
+                    (click)="hideHelp[5]=!hideHelp[5]">hide</span>
+                </p>
+              </div>
+            </div>
           </div>
-
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after
               this many Messages:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <input type="text" class='form-control form-control-sm'
                 formControlName="stopNumber" id="stopNumber">
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
+              <img src="assets/images/icon_help.svg"
+                style="float: right; margin-top:
+                0%;margin-left: 5px;"
+                class="media-object" id="help_btn"
+                (click)="hideHelp[6]=!hideHelp[6]">
+            </div>
+            <div class="row" id="help-icon-contain-responsive"
+              class="help" *ngIf="hideHelp[6]">
+              <div class="col-sm-12 col-xs-12">
+                <p class="help-text">Optional. Specify the number of days
+                  between the first and last copy of this message sent to each
+                  user.
+                  <span class="hide-button"
+                    (click)="hideHelp[6]=!hideHelp[6]">hide</span>
+                </p>
+              </div>
+            </div>
           </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop Sending Reset
               Period:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <select class='form-control form-control-sm'
                 formControlName="stopPeriod" id="stopPeriod">
                 <option *ngFor='let period of periodData'
                   [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
               <div *ngIf="f.stopPeriod.invalid && (f.stopPeriod.dirty ||
-              f.stopPeriod.touched)">
-              <span class="error" *ngIf="f.stopPeriod.errors.required">
-                Stop Sending Reset Period is required.
-              </span>
+                f.stopPeriod.touched)">
+                <span class="error" *ngIf="f.stopPeriod.errors.required">
+                  Stop Sending Reset Period is required.
+                </span>
+              </div>
             </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
+              <img src="assets/images/icon_help.svg"
+                style="float: right; margin-top:
+                0%;margin-left: 5px;"
+                class="media-object" id="help_btn"
+                (click)="hideHelp[7]=!hideHelp[7]">
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="row" id="help-icon-contain-responsive"
+              class="help" *ngIf="hideHelp[7]">
+              <div class="col-sm-12 col-xs-12">
+                <p class="help-text">
+                  <span class="hide-button"
+                    (click)="hideHelp[7]=!hideHelp[7]">hide</span>
+                </p>
+              </div>
+            </div>
           </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop Date Rule:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <textarea class='form-control form-control-sm'
                 formControlName="stopDateRule"
                 id="stopDateRule"> </textarea>
-                <!-- <div *ngIf="f.stopDateRule.invalid && (f.stopDateRule.dirty ||
-                f.stopDateRule.touched)">
-                <span class="error" *ngIf="f.stopDateRule.errors.required">
-                  Stop Date Rule is required.
-                </span>
-              </div> -->
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
+              <img src="assets/images/icon_help.svg"
+                style="float: right; margin-top:
+                0%;margin-left: 5px;"
+                class="media-object" id="help_btn"
+                (click)="hideHelp[8]=!hideHelp[8]">
+            </div>
+            <div class="row" id="help-icon-contain-responsive"
+              class="help" *ngIf="hideHelp[8]">
+              <div class="col-sm-12 col-xs-12">
+                <p class="help-text">A SpEL expression such as
+                  #convertToDate(#nvl(user.passwordChangeDate,
+                  user.createdDate)).rollDaysForwards(60).
+                  <span class="hide-button"
+                    (click)="hideHelp[8]=!hideHelp[8]">hide</span>
+                </p>
+              </div>
+            </div>
           </div>
 
           <div class="row borderBottom rowPadding">
@@ -137,7 +279,8 @@
               <textarea class='form-control form-control-sm'
                 formControlName="subjectTemplate"
                 id="subjectTemplate"> </textarea>
-                <div *ngIf="f.subjectTemplate.invalid && (f.subjectTemplate.dirty ||
+              <div *ngIf="f.subjectTemplate.invalid && (f.subjectTemplate.dirty
+                ||
                 f.subjectTemplate.touched)">
                 <span class="error" *ngIf="f.subjectTemplate.errors.required">
                   Subject Template is required.
@@ -267,7 +410,8 @@
               last session:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <input type="text" class='show-value formInput'
-                formControlName="lastMaxProcessedTimeShow" id="lastMaxProcessedTime"
+                formControlName="lastMaxProcessedTimeShow"
+                id="lastMaxProcessedTime"
                 disabled>
               <input type="text" class='show-value formInput'
                 formControlName="lastMaxProcessedIdShow" id="lastMaxProcessedId"
@@ -284,7 +428,8 @@
               [isSearch]="false" [data]="customerGroupDataSource"
               [totalElement]="customerGroupData.totalElements"
               (checkBoxChangeEvent)="customerGroupCheckBoxChangeEvent($event)"
-              id='groupCode' [selectionList]='customerGroupSelectionList'>
+              id='groupCode' [selectionList]='customerGroupSelectionList'
+              class="mail-customer-group">
             </app-table>
           </div>
 
@@ -292,11 +437,12 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Mail Content Parts</span></p>
-            <app-table [keys]="contentPartsKeys" [isPaginate]="true"
+            <app-table [keys]="contentPartsKeys" [isPaginate]="false"
               [isSearch]="false" [data]="contentPartsDataSource"
               [totalElement]="contentPartsData.totalElements"
               (addEvent)='addContentParts()'
-              (goToEditEvent)='goToEditContentParts()'>
+              (goToEditEvent)='goToEditContentParts($event)'
+              class="mail-content-part">
             </app-table>
           </div>
 
@@ -304,11 +450,12 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Context variables</span></p>
-            <app-table [keys]="variableKeys" [isPaginate]="true"
+            <app-table [keys]="variableKeys" [isPaginate]="false"
               [isSearch]="false" [data]="variableDataSource"
               [totalElement]="variableData.totalElements"
               (addEvent)='addVariable()'
-              (goToEditEvent)='goToEditVariable()'>
+              (goToEditEvent)='goToEditVariable($event)'
+              class="mail-variable">
             </app-table>
           </div>
 
@@ -329,8 +476,8 @@
               [ngClass]="{'display-responsive-big3':
               id!==undefined&&id!==null}" style="text-align: end;" *ngIf="id !==
               undefined && id !== null">
-              <button class="btn btn-primary" (click)='callMailReminder()'>
-                Call Mail Reminder
+              <button class="btn btn-primary" (click)='callMailSender()'>
+                Call Mail Sender
               </button>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3

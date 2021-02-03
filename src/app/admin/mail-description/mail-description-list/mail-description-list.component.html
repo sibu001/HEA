@@ -16,18 +16,20 @@
                 id='subject'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-                <label for="isActive">
-                  <input type="checkbox" formControlName="isActive" id="isActive">
-                  <span class="filterLabel checkbox">Active</span>
-                </label>
+              <label for="isActive">
+                <input type="checkbox" formControlName="isActive" id="isActive">
+                <span class="filterLabel checkbox">Active</span>
+              </label>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
               <span class="filterLabel">Period:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <select class="form-control form-control-sm" id="mailPeriod" formControlName="mailPeriod">
+              <select class="form-control form-control-sm" id="mailPeriod"
+                formControlName="mailPeriod">
                 <option></option>
-                <option *ngFor='let period of periodData' [value]="period.lookupValue">{{period.valueName}}</option>
+                <option *ngFor='let period of periodData'
+                  [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
@@ -40,20 +42,26 @@
             </div>
           </div>
 
-          <div class="paddingTop">
-            <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
-              <span class="messageName">Mail Descriptions (Number of Records =
-                {{totalElement | number:'1.0':'en-US'}})</span></p>
-            <app-table [keys]="keys" [isPaginate]="true"
-              (goToEditEvent)='goToEditMailDescription($event)'
-              (addEvent)='addMailDescriptions()' [isSearch]="false"
-              [data]="dataSource"
-              [pageIndex]="pageIndex"
-              [totalElement]="mailData.totalElements"
-              (changePageEvent)="search($event,false)"
-              class="mail-description-table">
-            </app-table>
+          <div class="row">
+            <div class="col-sm-12">
+              <p class="messages">
+                <img src='assets/images/dot03.gif' class='dot'>
+                <span class="messageName">Mail Descriptions (Number of Records =
+                  {{totalElement | number:'1.0':'en-US'}})</span></p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <app-table [keys]="keys" [isPaginate]="true"
+                (goToEditEvent)='goToEditMailDescription($event)'
+                (addEvent)='addMailDescriptions()' [isSearch]="false"
+                [data]="dataSource"
+                [pageIndex]="pageIndex"
+                [totalElement]="mailData.totalElements"
+                (changePageEvent)="search($event,false)"
+                class="mail-description-table">
+              </app-table>
+            </div>
           </div>
         </form>
       </div>

@@ -18,6 +18,8 @@ import { MailManagementState } from 'src/app/store/mail-state-management/state/m
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 
 @NgModule({
   imports: [
@@ -31,10 +33,11 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
       SystemManagementState,
       CustomerManagementState,
       SystemUtilityManagementState,
-      MailManagementState
+      MailManagementState,
+      TopicManagementState
     ]),
   ],
   declarations: [UserReportDefinitionsComponent, UserReportDefinitionsEditComponent, UserReportContentPartComponent, UserReportContextVariableComponent, UserReportPreviewComponent],
-  providers: [SystemService, MailService, CustomerService],
+  providers: [SystemService, MailService, CustomerService, TopicService],
 })
 export class UserReportDefinitionsModule { }

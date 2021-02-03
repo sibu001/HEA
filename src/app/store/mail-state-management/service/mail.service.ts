@@ -8,6 +8,7 @@ import {
   DeleteMailContentPartByIdAction,
   DeleteMailDescriptionByIdAction,
   DeleteMailDescriptionCustomerGroupAction,
+  GenerateEmbedImageAction,
   GetContextVariableByIdAction,
   GetContextVariableListAction,
   GetCustomerGroupListByMailDescriptionIdAction,
@@ -19,6 +20,7 @@ import {
   GetMailDescriptionByIdAction,
   GetMailDescriptionCountAction,
   GetMailDescriptionListAction,
+  MailDescriptionProcessAction,
   SaveContextVariableAction,
   SaveCustomerGroupMailPartAction,
   SaveMailContentPartAction,
@@ -94,44 +96,52 @@ export class MailService {
     return this.store.dispatch(new DeleteMailDescriptionByIdAction(id));
   }
 
-  loadContextVariableList(): Observable<MailManagementState> {
-    return this.store.dispatch(new GetContextVariableListAction());
+  loadContextVariableList(mailDescriptionId: any): Observable<MailManagementState> {
+    return this.store.dispatch(new GetContextVariableListAction(mailDescriptionId));
   }
 
-  loadContextVariableById(id: number): Observable<MailManagementState> {
-    return this.store.dispatch(new GetContextVariableByIdAction(id));
+  loadContextVariableById(mailDescriptionId: any, mailVariableId: number): Observable<MailManagementState> {
+    return this.store.dispatch(new GetContextVariableByIdAction(mailDescriptionId, mailVariableId));
   }
 
-  saveContextVariable(contextVariable: any): Observable<MailManagementState> {
-    return this.store.dispatch(new SaveContextVariableAction(contextVariable));
+  saveContextVariable(mailDescriptionId: any, contextVariable: any): Observable<MailManagementState> {
+    return this.store.dispatch(new SaveContextVariableAction(mailDescriptionId, contextVariable));
   }
 
-  updateContextVariable(id: number, contextVariable: any): Observable<MailManagementState> {
-    return this.store.dispatch(new UpdateContextVariableAction(id, contextVariable));
+  updateContextVariable(mailDescriptionId: any, mailVariableId: number, contextVariable: any): Observable<MailManagementState> {
+    return this.store.dispatch(new UpdateContextVariableAction(mailDescriptionId, mailVariableId, contextVariable));
   }
 
-  deleteContextVariableById(id: number): Observable<MailManagementState> {
-    return this.store.dispatch(new DeleteContextVariableByIdAction(id));
+  deleteContextVariableById(mailDescriptionId: any, mailVariableId: number): Observable<MailManagementState> {
+    return this.store.dispatch(new DeleteContextVariableByIdAction(mailDescriptionId, mailVariableId));
   }
 
-  loadMailContentPartList(): Observable<MailManagementState> {
-    return this.store.dispatch(new GetMailContentPartListAction());
+  loadMailContentPartList(mailDescriptionId: any): Observable<MailManagementState> {
+    return this.store.dispatch(new GetMailContentPartListAction(mailDescriptionId));
   }
 
-  loadMailContentPartById(id: number): Observable<MailManagementState> {
-    return this.store.dispatch(new GetMailContentPartByIdAction(id));
+  loadMailContentPartById(mailDescriptionId: any, mailContentId: number): Observable<MailManagementState> {
+    return this.store.dispatch(new GetMailContentPartByIdAction(mailDescriptionId, mailContentId));
   }
 
-  saveMailContentPart(mailContentPart: any): Observable<MailManagementState> {
-    return this.store.dispatch(new SaveMailContentPartAction(mailContentPart));
+  saveMailContentPart(mailDescriptionId: any, mailContentObj: any): Observable<MailManagementState> {
+    return this.store.dispatch(new SaveMailContentPartAction(mailDescriptionId, mailContentObj));
   }
 
-  updateMailContentPart(id: number, mailContentPart: any): Observable<MailManagementState> {
-    return this.store.dispatch(new UpdateMailContentPartAction(id, mailContentPart));
+  updateMailContentPart(mailDescriptionId: any, mailContentId: number, mailContentObj: any): Observable<MailManagementState> {
+    return this.store.dispatch(new UpdateMailContentPartAction(mailDescriptionId, mailContentId, mailContentObj));
   }
 
-  deleteMailContentPartById(id: number): Observable<MailManagementState> {
-    return this.store.dispatch(new DeleteMailContentPartByIdAction(id));
+  deleteMailContentPartById(mailDescriptionId: any, mailContentId: number): Observable<MailManagementState> {
+    return this.store.dispatch(new DeleteMailContentPartByIdAction(mailDescriptionId, mailContentId));
+  }
+
+  generateEmbedImage(mailDescriptionId: any, mailContentId: number, fileObj: any, params: any): Observable<MailManagementState> {
+    return this.store.dispatch(new GenerateEmbedImageAction(mailDescriptionId, mailContentId, fileObj, params));
+  }
+
+  mailDescriptionProcess(mailDescriptionId: any): Observable<MailManagementState> {
+    return this.store.dispatch(new MailDescriptionProcessAction(mailDescriptionId));
   }
 
   loadCustomerGroupListByMailDescriptionId(mailDescriptionId: any): Observable<MailManagementState> {

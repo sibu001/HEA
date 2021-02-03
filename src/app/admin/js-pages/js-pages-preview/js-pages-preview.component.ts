@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
+import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -16,7 +17,6 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class JsPagesPreviewComponent implements OnInit {
   id: any;
   jsPreviewForm: FormGroup;
-  mailType = TableColumnData.MAIL_TYPE;
   url: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,

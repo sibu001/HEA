@@ -74,4 +74,16 @@ export class MailTransformer {
         });
         return dataSourceList;
     }
+
+    static transformContextVariableTableData(src: any): any {
+        const dataSourceList: any = [];
+        src.data.forEach(element => {
+            let dataSourceObject: any = {};
+            dataSourceObject = element;
+            dataSourceObject.calculation = element.calculation.substring(0, 60);
+            dataSourceList.push(dataSourceObject);
+        });
+        return { data: dataSourceList };
+    }
+
 }
