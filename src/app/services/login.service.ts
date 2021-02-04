@@ -82,12 +82,13 @@ export class LoginService {
         }
     }
 
-    getMultipartOption() {
+    getMultipartOption(params?: any) {
         if (this.getUser != null) {
             const httpOptions = {
                 headers: new HttpHeaders({
                     'Content-Type': 'multipart/form-data',
                 }), withCredentials: true,
+                params: params,
             };
             return httpOptions;
         }
@@ -126,9 +127,9 @@ export class LoginService {
         const url = this.getFormattedUrl(endpoint);
         return this.http.post(url, object, this.getOptionsMultiPartData());
     }
-    performPostMultiPartFromData(object, endpoint) {
+    performPostMultiPartFromData(object, endpoint, params?: any) {
         const url = this.getFormattedUrl(endpoint);
-        return this.http.post(url, object, this.getMultipartOption());
+        return this.http.post(url, object, this.getMultipartOption(params));
     }
     performPut(object: any, endpoint: any): any {
         const url = this.getFormattedUrl(endpoint);
