@@ -15,6 +15,7 @@ import {
   GetCustomerGroupMailPartByIdAction,
   GetCustomerGroupMailPartCountAction,
   GetCustomerGroupMailPartListAction,
+  GetMailConfigurationListAction,
   GetMailContentPartByIdAction,
   GetMailContentPartListAction,
   GetMailDescriptionByIdAction,
@@ -50,6 +51,10 @@ export class MailService {
 
   getContextVariableList(): Observable<any> {
     return this.store.select(MailManagementState.getContextVariableList);
+  }
+
+  getMailConfigurationList(): Observable<any> {
+    return this.store.select(MailManagementState.getMailConfigurationList);
   }
 
   getContextVariableById(): Observable<any> {
@@ -94,6 +99,10 @@ export class MailService {
 
   deleteMailDescriptionById(id: number): Observable<MailManagementState> {
     return this.store.dispatch(new DeleteMailDescriptionByIdAction(id));
+  }
+
+  loadMailConfigurationList(): Observable<MailManagementState> {
+    return this.store.dispatch(new GetMailConfigurationListAction());
   }
 
   loadContextVariableList(mailDescriptionId: any): Observable<MailManagementState> {

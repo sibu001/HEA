@@ -25,6 +25,7 @@ export class AppConstant {
     public static lookupValues = 'lookupValues';
     public static themes = 'themes';
     public static mailDescription = 'mailDescriptions';
+    public static mailConfiguration = 'mailConfigurations';
     public static mailDescriptionProcess = 'process';
     public static customerComparisonGroups = 'customerComparisonGroups';
     public static factor = 'factors';

@@ -3,6 +3,7 @@ export interface MailManagementModel {
     mailDescriptionCount: any;
     mailDescription: any;
     mailDescriptionDataSourceList: any;
+    mailConfigurationList: any;
     contextVariableList: any;
     contextVariable: any;
     mailContentPartList: any;

@@ -5,6 +5,7 @@ export enum MailActionTypes {
     SAVE_MAIL_DESCRIPTION = 'Save MailDescription',
     UPDATE_MAIL_DESCRIPTION = 'Update MailDescription',
     DELETE_MAIL_DESCRIPTION_BY_ID = 'Delete MailDescription By Id',
+    GET_MAIL_CONFIGURATIONS_LIST = 'Get Mail Configuration List',
     GET_CONTEXT_VARIABLE_LIST = 'Get All Context Variable List',
     GET_CONTEXT_VARIABLE_BY_ID = 'Get Context Variable By Id',
     SAVE_CONTEXT_VARIABLE = 'Save Context Variable',
@@ -62,6 +63,10 @@ export class DeleteMailDescriptionByIdAction {
     static readonly type: MailActionTypes = MailActionTypes.DELETE_MAIL_DESCRIPTION_BY_ID;
     constructor(readonly id: number) {
     }
+}
+
+export class GetMailConfigurationListAction {
+    static readonly type: MailActionTypes = MailActionTypes.GET_MAIL_CONFIGURATIONS_LIST;
 }
 
 export class GetContextVariableListAction {

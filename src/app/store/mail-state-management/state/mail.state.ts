@@ -33,7 +33,8 @@ import {
     UpdateCustomerGroupMailPartAction,
     GetMailDescriptionCountAction,
     GenerateEmbedImageAction,
-    MailDescriptionProcessAction
+    MailDescriptionProcessAction,
+    GetMailConfigurationListAction
 } from './mail.action';
 import { MailManagementModel } from './mail.model';
 
@@ -44,6 +45,7 @@ import { MailManagementModel } from './mail.model';
         mailContentPartList: undefined,
         mailContentPartCount: undefined,
         mailContentPart: undefined,
+        mailConfigurationList: undefined,
         contextVariableList: undefined,
         contextVariable: undefined,
         mailDescriptionList: undefined,
@@ -72,6 +74,11 @@ export class MailManagementState {
     @Selector()
     static getMailDescriptionById(state: MailManagementModel): any {
         return state.mailDescription;
+    }
+
+    @Selector()
+    static getMailConfigurationList(state: MailManagementModel): any {
+        return state.mailConfigurationList;
     }
 
     @Selector()
@@ -205,6 +212,22 @@ export class MailManagementState {
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         mailDescription: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(GetMailConfigurationListAction)
+    getAllMailConfigurationList(ctx: StateContext<MailManagementModel>, action: GetMailConfigurationListAction): Actions {
+        return this.loginService.performGet(AppConstant.mailDescription + '/' + AppConstant.mailConfiguration)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        mailConfigurationList: response,
                     });
                 },
                     error => {

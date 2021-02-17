@@ -53,6 +53,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   customerGroupList: any = [];
   maxProcessedStack: any;
   public customerGroupSelectionList: any = [];
+  public mailConfigurationList: any[];
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly fb: FormBuilder,
@@ -71,6 +72,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.scrollTop();
     this.loadMailPeriodList();
     this.loadContentTypeList();
+    this.loadMailConfigurationList();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.mailService.loadMailDescriptionById(this.id);
@@ -82,6 +84,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
       this.loadCustomerGroup(false, '');
     }
   }
+
 
   scrollTop() {
     window.scroll(0, 0);
@@ -100,6 +103,14 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemService.getContentType().pipe(skipWhile((item: any) => !item))
       .subscribe((contentTypeList: any) => {
         this.contentTypeList = contentTypeList.data;
+      }));
+  }
+
+  loadMailConfigurationList() {
+    this.mailService.loadMailConfigurationList();
+    this.subscriptions.add(this.mailService.getMailConfigurationList().pipe(skipWhile((item: any) => !item))
+      .subscribe((mailConfigurationList: any) => {
+        this.mailConfigurationList = mailConfigurationList.data;
       }));
   }
 
@@ -132,6 +143,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
       lastMaxProcessedTimeShow: [event !== undefined ? AppUtility.convertMillisecondToTime(event.lastMaxProcessedTime) : '00:00:00'],
       lastMaxProcessedId: [event !== undefined ? event.lastMaxProcessedId : ''],
       lastMaxProcessedIdShow: [event !== undefined && event.lastMaxProcessedId ? '(' + event.lastMaxProcessedId + ')' : ''],
+      mailConfiguration: [event !== undefined && event.mailConfiguration ? event.mailConfiguration : ''],
     });
   }
 
