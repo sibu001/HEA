@@ -28,6 +28,7 @@ export class PlaceListComponent implements OnInit, OnDestroy {
     zipCode: ['']
   });
   public force = false;
+  public sortData: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
@@ -40,6 +41,10 @@ export class PlaceListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.scrollTop();
+    this.sortData = {
+      active: 'placeName',
+      direction: 'asc'
+    };
     this.findPlace(this.force, null);
   }
 

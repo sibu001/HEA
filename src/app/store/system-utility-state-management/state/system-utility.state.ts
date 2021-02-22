@@ -90,6 +90,7 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         factorList: undefined,
         factorCount: undefined,
         factor: undefined,
+        recalculateFactor: undefined,
         lookupList: undefined,
         lookup: undefined,
         lookupCount: undefined,
@@ -244,7 +245,7 @@ export class SystemUtilityManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.places , action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.places, action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
@@ -299,14 +300,14 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Save Successfully');
+                    //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         place: response,
                     });
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -324,7 +325,7 @@ export class SystemUtilityManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -407,7 +408,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Save Successfully');
+                    //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         customerEventType: response,
                     });
@@ -524,7 +525,7 @@ export class SystemUtilityManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -542,7 +543,7 @@ export class SystemUtilityManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -692,7 +693,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Save Successfully');
+                    //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         factor: response,
                     });
@@ -739,10 +740,13 @@ export class SystemUtilityManagementState {
     @Action(RecalculateFactorAction)
     recalculateFactor(ctx: StateContext<SystemUtilityManagementModel>, action: RecalculateFactorAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost('', AppConstant.factor + '/' + action.id + '/recalculateFactor')
+        return this.loginService.performPost(action.factor, AppConstant.factor + '/' + action.id + '/recalculateFactor')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        recalculateFactor: response,
+                    });
                     // this.utilityService.showSuccessMessage('Recalculated Successfully');
                 },
                     error => {
@@ -758,6 +762,9 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        recalculateFactor: response,
+                    });
                     // this.utilityService.showSuccessMessage('Recalculated Successfully');
                 },
                     error => {
@@ -792,7 +799,7 @@ export class SystemUtilityManagementState {
     @Action(GetLoadLookupCountAction)
     getLookupCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetLoadLookupCountAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.lookup + '/count')
+        return this.loginService.performGetWithParams(AppConstant.lookup + '/count', action.filter)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -846,7 +853,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Save Successfully');
+                    //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         lookup: response,
                     });
@@ -937,7 +944,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Save Successfully');
+                    //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         lookupValue: response,
                     });
@@ -1046,7 +1053,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Save Successfully');
+                    //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         systemParameter: response,
                     });
@@ -1177,7 +1184,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Save Successfully');
+                    //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         weatherStation: response,
                     });
@@ -1285,7 +1292,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Save Successfully');
+                    //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         degreeDays: response,
                     });
@@ -1324,7 +1331,7 @@ export class SystemUtilityManagementState {
                     if (response.errorMessage) {
                         this.utilityService.showSuccessMessage(response.errorMessage);
                     } else {
-                       //  this.utilityService.showSuccessMessage('Save Successfully');
+                        //  this.utilityService.showSuccessMessage('Save Successfully');
                     }
                 },
                     error => {
@@ -1372,7 +1379,7 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Save Successfully');
+                    //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         zipCode: response,
                     });

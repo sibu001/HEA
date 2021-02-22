@@ -268,8 +268,8 @@ export class SystemUtilityService {
     return this.store.dispatch(new RemoveFactorForAllCityAction(id));
   }
 
-  recalculateFactor(id: number): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new RecalculateFactorAction(id));
+  recalculateFactor(id: number, factor: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new RecalculateFactorAction(id, factor));
   }
 
   recalculateFactorForAllCity(id: number): Observable<SystemUtilityManagementState> {
@@ -281,8 +281,8 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetLookupListAction(force, filter));
   }
 
-  loadLookupCount(): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetLoadLookupCountAction());
+  loadLookupCount(filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetLoadLookupCountAction(filter));
   }
 
   loadLookupById(id: number): Observable<SystemUtilityManagementState> {

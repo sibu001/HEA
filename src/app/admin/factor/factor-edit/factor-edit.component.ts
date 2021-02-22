@@ -1,3 +1,4 @@
+import { DatePipe } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -32,7 +33,8 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
     private readonly router: Router,
-    private readonly el: ElementRef) {
+    private readonly el: ElementRef,
+    private readonly datePipe: DatePipe) {
     const users = JSON.parse(localStorage.getItem('users'));
     this.userId = users.userId;
     this.activateRoute.queryParams.subscribe(params => {
@@ -47,7 +49,6 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     this.findPlace(true, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
-      this.systemUtilityService.loadFactorById(this.id);
       this.loadFactorById();
     }
   }
@@ -90,8 +91,10 @@ export class FactorEditComponent implements OnInit, OnDestroy {
       calculationType: [event !== undefined ? event.calculationType : ''],
       calculationRule: [event !== undefined ? event.calculationRule : ''],
       calculationPeriod: [event !== undefined ? event.calculationPeriod : ''],
+      calculationDate: [event !== undefined ? (this.datePipe.transform(event.calculationDate, 'MM/dd/yyyy HH:mm:ss', 'PST')) : null],
       active: [event !== undefined ? event.active : ''],
       comments: [event !== undefined ? event.comments : ''],
+      valueByComparisonGroup: [event !== undefined ? event.valueByComparisonGroup : ''],
       selectAllCity: [false]
     });
   }
@@ -110,10 +113,21 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   }
   recalculate() {
     if (this.id) {
+      this.factorForm.value.calculationDate = this.factorForm.value.calculationDate ? new Date(this.factorForm.value.calculationDate).getTime() : null;
       if (this.factorForm.value.selectAllCity) {
-        this.systemUtilityService.recalculateFactorForAllCity(this.id);
+        this.subscriptions.add(this.systemUtilityService.recalculateFactorForAllCity(this.id).pipe(skipWhile((item: any) => !item))
+          .subscribe((factor: any) => {
+            this.loadFactorById();
+          }, error => {
+            console.log('error');
+          }));
       } else {
-        this.systemUtilityService.recalculateFactor(this.id);
+        this.subscriptions.add(this.systemUtilityService.recalculateFactor(this.id, null).pipe(skipWhile((item: any) => !item))
+          .subscribe((factor: any) => {
+            this.loadFactorById();
+          }, error => {
+            console.log('error');
+          }));
       }
     } else {
       this.validateAllFormFields(this.factorForm);
@@ -122,6 +136,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   }
 
   loadFactorById() {
+    this.systemUtilityService.loadFactorById(this.id);
     this.subscriptions.add(this.systemUtilityService.getFactorById().pipe(skipWhile((item: any) => !item))
       .subscribe((factor: any) => {
         if (this.isForce) {
@@ -151,6 +166,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   save() {
     if (this.factorForm.valid) {
       if (this.id !== null && this.id !== undefined) {
+        this.factorForm.value.calculationDate = null;
         this.subscriptions.add(this.systemUtilityService.updateFactor(this.id, this.factorForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {

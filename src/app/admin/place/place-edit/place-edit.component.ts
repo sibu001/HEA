@@ -28,6 +28,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   };
   placeForm: FormGroup;
   isForce = false;
+  errorMessage: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly dialog: MatDialog,
@@ -59,6 +60,9 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
       .subscribe((weatherStationList: any) => {
         this.placeStationId = weatherStationList;
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 
@@ -89,6 +93,9 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
           this.router.navigate(['admin/place/placeEdit'], { queryParams: { 'id': place.id } });
         }
         this.setForm(place);
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 
@@ -97,6 +104,9 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemUtilityService.getTimeZoneList().pipe(skipWhile((item: any) => !item))
       .subscribe((timeZoneList: any) => {
         this.timezoneData = timeZoneList.data;
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 
@@ -107,8 +117,8 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
       placeName: this.fb.control(event !== undefined ? event.placeName : '', Validators.required),
       stationId: this.fb.control(event !== undefined ? event.stationId : ''),
       timezone: this.fb.control(event !== undefined ? event.timezone : 'America/Los_Angeles'),
-      latitude: this.fb.control(event !== undefined ? event.latitude : '', Validators.required),
-      longitude: this.fb.control(event !== undefined ? event.longitude : '', Validators.required),
+      latitude: this.fb.control(event !== undefined ? event.latitude : '', [Validators.required, Validators.pattern('^[0-9]+(.[0-9]{0,100})?$')]),
+      longitude: this.fb.control(event !== undefined ? event.longitude : '', [Validators.required, Validators.pattern('^[0-9]+(.[0-9]{0,100})?$')]),
     });
   }
 
@@ -120,6 +130,9 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
       this.subscriptions.add(this.systemUtilityService.deletePlaceById(this.id).pipe(skipWhile((item: any) => !item))
         .subscribe((response: any) => {
           this.router.navigate(['admin/place/placeList'], { queryParams: { 'force': true } });
+        },
+        error => {
+          this.errorMessage = error;
         }));
     }
   }
@@ -134,7 +147,10 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
             this.isForce = true;
             this.scrollTop();
             this.loadPlaceById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       } else {
         this.subscriptions.add(this.systemUtilityService.savePlace(this.placeForm.value).pipe(
           skipWhile((item: any) => !item))
@@ -142,7 +158,10 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
             this.isForce = true;
             this.scrollTop();
             this.loadPlaceById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       }
     } else {
       this.validateAllFormFields(this.placeForm);
@@ -161,7 +180,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   }
 
   getZipCodeList() {
-    
+
     this.systemUtilityService.loadWeatherStationList(false, '');
     this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
       .subscribe((weatherStationList: any) => {
@@ -202,6 +221,9 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemUtilityService.deleteZipCodeById(this.id, event.zipCode).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.getZipCodeList();
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 

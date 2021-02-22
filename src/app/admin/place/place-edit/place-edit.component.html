@@ -2,6 +2,9 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="error-message" *ngIf="errorMessage">
+          {{errorMessage?.error?.errorMessage}}
+        </p>
         <p class='messages'>
           <img src='assets/images/dot03.gif' class='dot'>
           <span class='messageName'>
@@ -78,6 +81,9 @@
                 <span class="error" *ngIf="f.latitude.errors.required">
                   Latitude is required.
                 </span>
+                <span class="error" *ngIf="f.latitude.errors.pattern">
+                 Number Only
+                </span>
               </div>
             </div>
           </div>
@@ -92,6 +98,9 @@
                 f.longitude.touched)">
                 <span class="error" *ngIf="f.longitude.errors.required">
                   Longitude is required.
+                </span>
+                <span class="error" *ngIf="f.longitude.errors.pattern">
+                  Number Only.
                 </span>
               </div>
             </div>

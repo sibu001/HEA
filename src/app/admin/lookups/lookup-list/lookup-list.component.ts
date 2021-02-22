@@ -66,7 +66,7 @@ export class LookupListComponent implements OnInit, OnDestroy {
   findLookup(force: boolean, filter: any): void {
     this.adminFilter.lookupFilter.formValue = this.lookupForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.systemUtilityService.loadLookupCount().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemUtilityService.loadLookupCount(filter).pipe(skipWhile((item: any) => !item))
       .subscribe((systemParameterCount: any) => {
         this.lookupData.totalElements = systemParameterCount.systemUtilityManagement.lookupCount;
         this.totalElement = systemParameterCount.systemUtilityManagement.lookupCount;

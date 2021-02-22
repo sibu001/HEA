@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { FactorRoutingModule } from './factor-routing.module';
 import { FactorListComponent } from './factor-list/factor-list.component';
@@ -26,6 +26,6 @@ import { SystemUtilityService } from 'src/app/store/system-utility-state-managem
     FactorRoutingModule
   ],
   declarations: [FactorListComponent, FactorEditComponent],
-  providers: [SystemService, SystemUtilityService]
+  providers: [SystemService, SystemUtilityService, DatePipe]
 })
 export class FactorModule { }

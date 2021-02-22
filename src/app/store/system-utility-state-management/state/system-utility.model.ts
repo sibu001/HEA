@@ -12,6 +12,7 @@ export interface SystemUtilityManagementModel {
     factorList: any;
     factor: any;
     factorCount: any;
+    recalculateFactor: any;
     lookupList: any;
     lookup: any;
     lookupCount: any;

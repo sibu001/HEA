@@ -97,8 +97,8 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="calculationType" class="form-control"
                 formControlName="calculationType">
-                <option *ngFor="let type of calculationType" [value]="type.valueName">
-                  {{ type.lookupValue }}
+                <option *ngFor="let type of calculationType" [value]="type.lookupValue">
+                  {{ type.valueName }}
                 </option>
               </select>
             </div>
@@ -121,8 +121,8 @@
               Value by Comparison Groups:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <!-- <input type="text" class="form-control" formControlName="valueByComparisonGroup"
-                id="valueByComparisonGroup"> -->
+              <input type="text" class="form-control show-value" formControlName="valueByComparisonGroup"
+                id="valueByComparisonGroup" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -143,7 +143,7 @@
               Last calculation date:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <!-- <input type="text" class="form-control" formControlName="value" id="value"> -->
+              <input type="text" class="form-control show-value" formControlName="calculationDate" id="value" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>

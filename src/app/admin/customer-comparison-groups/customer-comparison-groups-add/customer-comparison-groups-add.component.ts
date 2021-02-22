@@ -28,6 +28,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
   public yesNoData: Array<any> = TableColumnData.YES_NO_DATA;
   public lotSizeData: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
+  public errorMessage: any;
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
@@ -63,9 +64,12 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
         this.loadCustomerComparisonGroupDescription(customerComparisonGroup.id);
         this.loadCustomerComparisonGroupCustomer(customerComparisonGroup.id);
         this.setForm(customerComparisonGroup);
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
-  
+
   loadComparisonCode() {
     this.systemService.loadComparisonCodeList();
     this.subscriptions.add(this.systemService.getComparisonCodeList().pipe(skipWhile((item: any) => !item))
@@ -133,6 +137,8 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.customerComparisonGroupForm = this.formBuilder.group({
+      comparisonGroupId: [event !== undefined ? event.comparisonGroupId : null],
+      id: [event !== undefined ? event.id : null],
       comparisonCode: [event !== undefined ? event.comparisonCode : 'Cooling'],
       groupName: [event !== undefined ? event.groupName : '', Validators.required],
       orderNumber: [event !== undefined ? event.orderNumber : 0],
@@ -161,6 +167,9 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
       this.subscriptions.add(this.systemUtilityService.deleteCustomerComparisonGroupById(this.id).pipe(skipWhile((item: any) => !item))
         .subscribe((response: any) => {
           this.router.navigate(['admin/customerComparisonGroup/comparisonGroupList'], { queryParams: { 'force': true } });
+        },
+        error => {
+          this.errorMessage = error;
         }));
     }
   }
@@ -170,13 +179,17 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
   save() {
     if (this.customerComparisonGroupForm.valid) {
       if (this.id !== null && this.id !== undefined) {
+        this.customerComparisonGroupForm.value.updatedDate = null;
         this.subscriptions.add(this.systemUtilityService.updateCustomerComparisonGroup(this.id, this.customerComparisonGroupForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
             this.scrollTop();
             this.loadCustomerComparisonGroupById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       } else {
         this.subscriptions.add(this.systemUtilityService.saveCustomerComparisonGroup(this.customerComparisonGroupForm.value).pipe(
           skipWhile((item: any) => !item))
@@ -184,7 +197,10 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
             this.isForce = true;
             this.scrollTop();
             this.loadCustomerComparisonGroupById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       }
     } else {
       this.validateForm();

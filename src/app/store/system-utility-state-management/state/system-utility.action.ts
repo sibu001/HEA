@@ -236,7 +236,7 @@ export class RemoveFactorForAllCityAction {
 
 export class RecalculateFactorAction {
     static readonly type: SystemActionTypes = SystemActionTypes.RECALCULATE_FACTOR;
-    constructor(readonly id: number) {
+    constructor(readonly id: number, readonly factor: any) {
     }
 }
 
@@ -254,6 +254,8 @@ export class GetLookupListAction {
 
 export class GetLoadLookupCountAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_LOOKUP_COUNT;
+    constructor(readonly filter: any) {
+    }
 }
 
 export class GetLookupByIdAction {

@@ -8,6 +8,7 @@ import {
   Output,
   EventEmitter,
   ChangeDetectorRef,
+  AfterViewInit,
 } from '@angular/core';
 import { Page } from '../../models/page';
 import { MatTableDataSource } from '@angular/material/table';
@@ -37,7 +38,7 @@ export interface UserData {
     ]),
   ],
 })
-export class TableComponent implements OnInit, OnChanges {
+export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   displayedColumns = [];
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatSort) sort: MatSort;
@@ -61,6 +62,7 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() isShowHeader: Boolean = true;
   @Input() isInlineEdit: Boolean = false;
   @Input() selectionList: Array<any> = [];
+  @Input() sortStateData: any;
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
@@ -109,6 +111,18 @@ export class TableComponent implements OnInit, OnChanges {
       wrapper[i + 2].innerHTML = 'Next';
       wrapper[i + 3].innerHTML = 'Last';
     }
+  }
+
+  changeSort(sortState: any) {
+    if (sortState) {
+      this.sort.active = sortState.active;
+      this.sort.direction = sortState.direction;
+      this.sort.sortChange.emit(sortState);
+    }
+  }
+
+  ngAfterViewInit() {
+    // this.changeSort(this.sortStateData);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -235,11 +249,11 @@ export class TableComponent implements OnInit, OnChanges {
   }
 
   checkBoxChangeOptional(event: any, row: any) {
-     const i = this.dataSource.data.findIndex((item: any) => item.groupCode === row.groupCode);
-     if (i !== -1) {
+    const i = this.dataSource.data.findIndex((item: any) => item.groupCode === row.groupCode);
+    if (i !== -1) {
       this.dataSource.data[i].optional = event.checked;
-     }
-     this.checkBoxChangeEvent.emit(this.selection.selected);
+    }
+    this.checkBoxChangeEvent.emit(this.selection.selected);
   }
 
   refresh() {

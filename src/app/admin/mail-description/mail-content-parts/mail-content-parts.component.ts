@@ -132,10 +132,10 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
   }
 
   generate() {
-    const params = new HttpParams()
-      .set('imageUrl', this.contentForm.value.imageUrl);
+    const formData = new FormData();
+      formData.append('imageBody', this.fileObject);
 
-    this.subscriptions.add(this.mailService.generateEmbedImage(this.id, this.contentId, this.fileObject, params).pipe(
+    this.subscriptions.add(this.mailService.generateEmbedImage(this.id, this.contentId, formData, null).pipe(
       skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         if (response.mailManagement.mailEmbedImage.data) {

@@ -414,7 +414,7 @@ export class MailManagementState {
     generateEmbedImage(ctx: StateContext<MailManagementModel>, action: GenerateEmbedImageAction): Actions {
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performPostMultiPartFromData(action.fileObj,
-            AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart + '/' + action.mailContentId + '/' + AppConstant.generateEmbedImage, action.params)
+            AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart + '/' + action.mailContentId + '/' + AppConstant.generateEmbedImage, null)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
