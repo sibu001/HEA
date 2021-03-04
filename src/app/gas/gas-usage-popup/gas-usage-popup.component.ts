@@ -15,7 +15,7 @@ export class GasUsagePopupComponent implements OnInit {
   usageModelObj2: any;
   users: Users = new Users();
   usageHistoryId: number;
-  useTypes: String;
+  useTypes: string;
   constructor(
     private loginService: LoginService,
     private route: ActivatedRoute,
@@ -42,7 +42,6 @@ export class GasUsagePopupComponent implements OnInit {
       this.loginService.performPut(this.usageModelObj2, 'users/' + this.usageModelObj2.userId + '/' + this.useTypes + '/' + this.usageHistoryId).subscribe(
         data => {
           document.getElementById('loader').classList.remove('loading');
-          const response = JSON.parse(JSON.stringify(data));
           this.onModelSave.emit();
         },
         error => {
@@ -100,7 +99,6 @@ export class GasUsagePopupComponent implements OnInit {
       this.loginService.performPut(this.usageModelObj2, 'users/' + this.usageModelObj2.userId + '/usage/' + this.useTypes + '/' + this.usageHistoryId).subscribe(
         data => {
           document.getElementById('loader').classList.remove('loading');
-          const response = JSON.parse(JSON.stringify(data));
           this.onModelSave.emit();
         },
         error => {

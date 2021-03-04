@@ -67,7 +67,7 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
   changeDropDownValue(event: any) {
     const i = this.customerGroupData.findIndex((item: any) => item.groupCode === event.target.value);
     if (i !== -1) {
-      const customerGroup = this.partForm.controls.customerGroup as FormGroup;
+      const customerGroup: any = this.partForm.controls.customerGroup;
       customerGroup.controls['groupCode'].setValue(this.customerGroupData[i].groupCode);
       customerGroup.controls['groupName'].setValue(this.customerGroupData[i].groupName);
       customerGroup.controls['theme'].setValue(this.customerGroupData[i].theme);
@@ -145,9 +145,9 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.mailService.saveCustomerGroupMailPart(this.partForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            this.id = response.customerGroupMailPartId;
+            // this.id = response.customerGroupMailPartId;
             this.isForce = true;
-            this.loadCustomerGroupMailPartById();
+            // this.loadCustomerGroupMailPartById();
           }));
       }
     } else {

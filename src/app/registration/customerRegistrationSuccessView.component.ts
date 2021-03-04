@@ -1,6 +1,4 @@
-import { Component, OnInit} from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-registrationsuccessView',
@@ -8,14 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./customerRegistrationSuccessView.component.css']
 })
 export class CustomerRegistrationSuccessViewComponent implements OnInit {
-  
-  constructor() {
 
-  }
-
-
-  ngOnInit() {
-   
-    
-  }
+  constructor() { }
+  ngOnInit() { }
 }

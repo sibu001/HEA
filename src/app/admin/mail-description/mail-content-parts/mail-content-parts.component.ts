@@ -11,7 +11,6 @@ import {
 } from '@syncfusion/ej2-angular-richtexteditor';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { skipWhile } from 'rxjs/operators';
-import { HttpParams } from '@angular/common/http';
 @Component({
   selector: 'app-mail-content-parts',
   templateUrl: './mail-content-parts.component.html',
@@ -44,6 +43,7 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
   contentForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
   isForce = false;
+  errorMessage: any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly mailService: MailService,
@@ -89,6 +89,9 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
           this.router.navigate(['admin/mailDescription/mailContentParts'], { queryParams: { 'id': this.id, 'contentId': mailContentPart.data.id } });
         }
         this.setForm(mailContentPart.data);
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 
@@ -100,6 +103,9 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.mailService.deleteMailContentPartById(this.id, this.contentId).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.id } });
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 
@@ -112,6 +118,9 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
             this.isForce = true;
             this.scrollTop();
             this.loadMailContentPartById();
+          },
+          error => {
+            this.errorMessage = error;
           }));
       } else {
         this.subscriptions.add(this.mailService.saveMailContentPart(this.id, this.contentForm.value).pipe(
@@ -120,6 +129,9 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
             this.isForce = true;
             this.scrollTop();
             this.loadMailContentPartById();
+          },
+          error => {
+            this.errorMessage = error;
           }));
       }
     } else {
@@ -141,6 +153,9 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
         if (response.mailManagement.mailEmbedImage.data) {
           this.contentForm.controls['embeddedImage'].setValue(response.mailManagement.mailEmbedImage.data);
         }
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
   validateForm() {

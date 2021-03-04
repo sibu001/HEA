@@ -1,4 +1,3 @@
-import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -122,6 +121,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   findUserCustomerGroup(userId: any) {
+    this.topicGroupSelectionList = [];
     this.subscriptions.add(this.customerService.loadUserCustomerGroupList(userId).pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
         this.topicGroupList = customerGroupList.customerManagement.userCustomerGroupList.data.list;
@@ -143,6 +143,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   getRoleListByUserId() {
+    this.roleSelectionList = [];
     this.subscriptions.add(this.customerService.loadRoleListByUserId(true, this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((roleList: any) => {
         this.roleList = roleList.customerManagement.roleListByUserId;
@@ -249,7 +250,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   validateForm() {
     for (const key of Object.keys(this.staffForm.controls)) {
       if (this.staffForm.controls[key].invalid && key === 'passwordForm') {
-        const passwordForm = this.staffForm.controls.passwordForm as FormGroup;
+        const passwordForm: any = this.staffForm.controls.passwordForm;
         for (const keys of Object.keys(passwordForm.controls)) {
           if (passwordForm.controls[keys].invalid) {
             const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + keys + '"]');
@@ -266,6 +267,17 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  roleCheckBoxChangeEvent(event: any) {
+    const uniqList = this.returnUniq(event);
+    this.roleCheckBox = [];
+    this.selectedRole = [...uniqList];
+    this.roleCheckBox = uniqList;
+  }
+
+  returnUniq(data: any) {
+    return data.filter((v, i) => data.findIndex(item => item.value === v.value) === i);
+  }
+
   checkRole() {
     for (let index = 0; index < this.roleCheckBox.length; index++) {
       const element = this.roleCheckBox[index];
@@ -280,6 +292,9 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     }
     this.deleteRoleOfStaff(this.roleList);
     this.assignRoleToStaff(this.selectedRole);
+    this.roleList = [];
+    this.selectedRole = [];
+    this.roleCheckBox = [];
     this.getAllRole();
     this.getRoleListByUserId();
   }
@@ -294,6 +309,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       this.customerService.deleteRoleById(this.id, element.roleCode);
     });
   }
+
   checkTopicGroup() {
     for (let index = 0; index < this.topicGroupCheckBox.length; index++) {
       const element = this.topicGroupCheckBox[index];
@@ -308,6 +324,9 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     }
     this.deleteTopicGroupOfStaff(this.topicGroupList);
     this.assignTopicGroupToStaff(this.selectedTopicGroup);
+    this.topicGroupList = [];
+    this.selectedTopicGroup = [];
+    this.topicGroupCheckBox = [];
     this.findUserCustomerGroup(this.id);
   }
   assignTopicGroupToStaff(topicGroupList: any) {
@@ -322,22 +341,19 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  roleCheckBoxChangeEvent(event: any) {
-    this.selectedRole = [...event];
-    this.roleCheckBox = event;
-  }
-
   topicCheckBoxChangeEvent(event: any) {
     this.selectedTopicGroup = [...event];
     this.topicGroupCheckBox = event;
   }
+
   get f() { return this.staffForm.controls; }
+
   get p() {
-    const passwordForm = this.staffForm.controls.passwordForm as FormGroup;
+    const passwordForm: any = this.staffForm.controls.passwordForm;
     return passwordForm.controls;
   }
   get p1() {
-    const passwordForm = this.staffForm.controls.passwordForm as FormGroup;
+    const passwordForm: any = this.staffForm.controls.passwordForm;
     return passwordForm;
   }
   ngOnDestroy(): void {
@@ -347,5 +363,4 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   passwordValid(event) {
     this.passwordIsValid = event;
   }
-
 }

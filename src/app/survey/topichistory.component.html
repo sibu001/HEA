@@ -4,7 +4,7 @@
             *ngIf="users.surveyList!=null&&users.surveyList!=undefined">
             <div class="col-sm-9 topic_list">
                 <h3 class="select_next">
-                    <img src="assets/images/right-.png" class="back_img"
+                    <img alt="icon" src="assets/images/right-.png" class="back_img"
                         (click)="back()">&nbsp;&nbsp;Topics history</h3>
                 <p class="accurate" *ngIf="users.role!=='ADMIN'">You have
                     completed all existing Topics</p>
@@ -34,17 +34,15 @@
                             <div class="panel-heading collapsed"
                                 data-toggle="collapse" data-parent="#accordion"
                                 [attr.href]="'#collapse'+userSurveyList.surveyId">
-                                <!-- <i class="fa fa-fw fa-caret-down fa_icon"></i>
-                                <i class="fa fa-fw fa-caret-right fa_icon"></i> -->
-                                <img src="assets/images/triangledown.svg"
+                                <img alt="icon" src="assets/images/triangledown.svg"
                                     class="fa fa-fw fa-caret-down fa_icon">
-                                <img src="assets/images/triangleright.svg"
+                                <img alt="icon" src="assets/images/triangleright.svg"
                                     class="fa fa-fw fa-caret-right fa_icon">
                                 &nbsp;&nbsp;
 
                                 <a class="topic_heading" id="topic{{i}}">{{userSurveyList.surveyDescription.label}}&nbsp;&nbsp;<span *ngIf="userSurveyList.finishedDate">({{
                                     userSurveyList.finishedDate | date
-                                    : "MM/dd/y HH:mm" : 'PST' }})</span></a>
+                                    : "MM/dd/y HH:mm" }})</span></a>
                             </div>
                             <div id="collapse{{userSurveyList.surveyId}}"
                                 class="panel-collapse collapse">
@@ -65,7 +63,7 @@
             </div>
             <div class="col-sm-3" *ngIf="users.role!=='ADMIN'">
                 <p class="Energy_anaiytic">
-                    <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered
+                    <img alt="icon" src="assets/images/dot03.gif" class="dot">&nbsp;Powered
                     by Home Energy Analytics, Inc.</p>
                 <p class="feedback">Send feedback to</p>
                 <p class="link_hea">

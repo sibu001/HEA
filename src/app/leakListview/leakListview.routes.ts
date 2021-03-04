@@ -1,5 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
-import {leakListViewComponent} from "src/app/leakListview/leakListview.component";
+import { leakListViewComponent } from 'src/app/leakListview/leakListview.component';
 import { NgModule } from '@angular/core';
 
 export const leakListViewRoutes: Routes = [
@@ -8,5 +8,5 @@ export const leakListViewRoutes: Routes = [
 @NgModule({
     imports: [RouterModule.forChild(leakListViewRoutes)],
     exports: [RouterModule]
-  })
-  export class leakListViewRoutingModule { }
+})
+export class leakListViewRoutingModule { }

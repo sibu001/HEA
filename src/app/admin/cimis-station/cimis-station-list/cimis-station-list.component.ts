@@ -26,6 +26,7 @@ export class CimisStationListComponent implements OnInit, OnDestroy {
     totalElements: 0,
   };
   stationForm: FormGroup;
+  public errorMessage: any;
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: AdminFilter;
   constructor(public fb: FormBuilder,
@@ -73,7 +74,13 @@ export class CimisStationListComponent implements OnInit, OnDestroy {
           .subscribe((cimisStationList: any) => {
             this.stationData.content = cimisStationList;
             this.dataSource = [...this.stationData.content];
+          },
+          error => {
+            this.errorMessage = error;
           }));
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 

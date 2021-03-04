@@ -1,6 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from "src/app/login/login.component";
-import { forgotpasswordComponent } from "src/app/login/forgotpassword.component";
+import { LoginComponent } from 'src/app/login/login.component';
+import { forgotpasswordComponent } from 'src/app/login/forgotpassword.component';
 import { NgModule } from '@angular/core';
 
 export const LoginRoutes: Routes = [
@@ -13,5 +13,5 @@ export const LoginRoutes: Routes = [
 @NgModule({
     imports: [RouterModule.forChild(LoginRoutes)],
     exports: [RouterModule]
-  })
-  export class LoginRoutingModule { }
+})
+export class LoginRoutingModule { }

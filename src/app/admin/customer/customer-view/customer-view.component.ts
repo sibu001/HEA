@@ -46,6 +46,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   customerData: any;
   energyCoach: any;
   pgeHasPoolDisabled = false;
+  isProgramGroup = false;
   helpHide: boolean;
   placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
@@ -87,6 +88,14 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     content: [],
     totalElements: 0,
   };
+
+  emailKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_EMAIL_KEY;
+  public emailDataSource: any = [];
+  public emailData = {
+    content: [],
+    totalElements: 0,
+  };
+
   zoom = 17;
   lat = 51.673858;
   lng = 7.815982;
@@ -187,6 +196,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setForm(event: any) {
+    if (event && event.programGroup) {
+      this.isProgramGroup = true;
+    }
     this.customerForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
       customerId: [event !== undefined ? event.customerId : ''],
@@ -454,7 +466,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
-
   deleteCustomerAlert(event: any) {
     this.subscriptions.add(this.customerService.deleteAlertById(this.id, event.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
@@ -470,6 +481,11 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.eventDataSource = [...this.eventData.content];
       }));
   }
+
+  convertToMillisecond(date: any): any {
+    return date ? new Date(date).getTime() : '';
+  }
+
   addCustomerEvent(event: any) {
     if (!event) {
       event = {
@@ -515,6 +531,17 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.staffDataSource = [...this.staffData.content];
       }));
   }
+
+  loadEmailSetting(customerId: any) {
+    this.customerService.loadEmailSettingList(customerId);
+    this.subscriptions.add(this.customerService.getEmailSettingList().pipe(skipWhile((item: any) => !item))
+      .subscribe((emailSetting: any) => {
+        this.emailData.content = emailSetting;
+        this.emailData.totalElements = emailSetting.length;
+        this.emailDataSource = [...this.emailData.content];
+      }));
+  }
+
   addStaffNote(event: any) {
     if (!event) {
       event = {
@@ -551,6 +578,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.loadStaffNote(this.id);
       }));
   }
+
   loadCustomerFile(customerId: any) {
     this.customerService.loadCustomerFileList(customerId);
     this.subscriptions.add(this.customerService.getCustomerFileList().pipe(skipWhile((item: any) => !item))
@@ -642,10 +670,12 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   delete() {
-    this.subscriptions.add(this.customerService.deleteCustomerById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/customer/customerList']);
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.customerService.deleteCustomerById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/customer/customerList']);
+        }));
+    }
   }
 
   cancel() {
@@ -665,9 +695,12 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       this.p.confirmPassword.setValidators([Validators.required]);
     }
     if (this.customerForm.valid) {
-      if (this.customerForm.value.user.lastSuccessfulUtilityReadDate) {
-        this.customerForm.value.user.lastSuccessfulUtilityReadDate = this.customerData.user.lastSuccessfulUtilityReadDate;
-      }
+      this.customerForm.value.activationDate = this.convertToMillisecond(this.customerForm.value.activationDate);
+      this.customerForm.value.registrationDate = this.convertToMillisecond(this.customerForm.value.registrationDate);
+      this.customerForm.value.vacaCalculationDate = this.convertToMillisecond(this.customerForm.value.vacaCalculationDate);
+      this.customerForm.value.lastMonthlyCalc = this.convertToMillisecond(this.customerForm.value.lastMonthlyCalc);
+      this.customerForm.value.user.lastSuccessfulUtilityReadDate = this.convertToMillisecond(this.customerForm.value.user.lastSuccessfulUtilityReadDate);
+
       if (this.id !== null && this.id !== undefined) {
         if (this.customerForm.value.repeatedActivationMail) {
           const mailObj = {
@@ -699,7 +732,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     } else {
       this.validateAllFormFields(this.customerForm);
-      const user = this.customerForm.controls.user as FormGroup;
+      const user: any = this.customerForm.controls.user;
       this.validateAllFormFields(user);
     }
   }
@@ -739,11 +772,11 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
   get f() { return this.customerForm.controls; }
   get p() {
-    const passwordForm = this.customerForm.controls.passwordForm as FormGroup;
+    const passwordForm: any = this.customerForm.controls.passwordForm;
     return passwordForm.controls;
   }
   get f1() {
-    const user = this.customerForm.controls.user as FormGroup;
+    const user: any = this.customerForm.controls.user;
     return user.controls;
   }
 

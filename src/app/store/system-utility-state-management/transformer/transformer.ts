@@ -1,3 +1,5 @@
+import { DatePipe } from "@angular/common";
+
 export class SystemUtilityTransformer {
     static transformSystemParameterTableData(src: any): any {
         const dataSourceList: any = [];
@@ -49,6 +51,7 @@ export class SystemUtilityTransformer {
             let dataSourceObject: any = {};
             dataSourceObject = element;
             dataSourceObject.serialNumber = index;
+            element.logDate =  element.logDate ? new DatePipe('en-US').transform(new Date(element.logDate), 'MM/dd/yyyy HH:mm:ss') : '';
             index++;
             dataSourceList.push(dataSourceObject);
         });

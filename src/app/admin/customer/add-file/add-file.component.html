@@ -37,8 +37,7 @@
             File name:
           </div>
           <div class="control-label col-sm-8 col-xs-12">
-            <!-- <input type="file" class="form-control
-            form-control-sm" id="fileName" formControlName="fileName"> -->
+
             <input type="file" id="fileInput" style="display: none;"
               (change)="handle($event.target.files)">
             <input type="text" class="form-control
@@ -86,18 +85,20 @@
           <button type="button" class="btn btn-primary btn-padding"
             (click)="prev()" *ngIf="customerFileList.length>1">&lt;</button>
           <button type="button" class="btn btn-primary btn-padding"
-            (click)="newEvent()"  *ngIf="showNew">New</button>
+            (click)="newEvent()" *ngIf="showNew">New</button>
           <button type="button" class="btn btn-primary btn-padding"
             (click)="next()" *ngIf="customerFileList.length>1">&gt;</button>
         </div>
-        <div class="col-sm-8 col-xs-8"style="text-align: end;">
+        <div class="col-sm-8 col-xs-8" style="text-align: end;">
           <div class="row">
             <div class="col-sm-3 col-xs-12">
-              <button type="button"  *ngIf="showDownload" class="btn btn-primary btn-padding"
+              <button type="button" *ngIf="showDownload" class="btn btn-primary
+                btn-padding"
                 (click)="download()">Download</button>
             </div>
             <div class="col-sm-2 col-xs-12">
-              <button type="button"  *ngIf="showView" class="btn btn-primary btn-padding"
+              <button type="button" *ngIf="showView" class="btn btn-primary
+                btn-padding"
                 (click)="view()">View</button>
             </div>
             <div class="col-sm-2 col-xs-12">

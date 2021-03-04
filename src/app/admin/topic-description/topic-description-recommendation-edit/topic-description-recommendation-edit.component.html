@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" src="assets/images/dot03.gif" alt="dot" class="dot">
           <span class="messageName">Recommendation/Leaks</span>
         </p>
         <form [formGroup]="recommendationForm" class="form-group form-padding">
@@ -154,7 +154,7 @@
 
           <div class="paddingTop" *ngIf="f.type.value==='2'">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Recommendation List </span></p>
             <app-table [keys]="recommendationKeys" [checkbox]=true [isPaginate]="false" [isSearch]="false"
               [data]="dataSource" [totalElement]="recommendationData.totalElements"
@@ -164,7 +164,7 @@
 
           <div class="paddingTop" *ngIf="f.type.value==='3'">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Leaks List </span></p>
             <app-table [keys]="recommendationKeys" [checkbox]=true [isPaginate]="false" [isSearch]="false"
               [data]="dataSource" [totalElement]="recommendationData.totalElements"

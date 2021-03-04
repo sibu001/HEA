@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Script Debug Console</span>
         </p>
         <form [formGroup]="debugForm" class="form-group form-padding">
@@ -114,7 +114,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Result Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class='form-control form-control-sm show-value'
-                formControlName="resultType" id="resultType">
+                formControlName="resultType" id="resultType" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -124,7 +124,16 @@
               (ms):</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class='form-control form-control-sm show-value'
-                formControlName="executionTime" id="executionTime">
+                formControlName="executionTime" id="executionTime" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Context preparation time (ms):</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class='form-control form-control-sm show-value'
+                formControlName="contextPreparationTime" id="contextPreparationTime" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -146,26 +155,6 @@
                 (click)="executeDebug()">Execute</button>
             </div>
           </div>
-          <!-- <div class="row rowPadding">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
-              </button>
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                <label for='disableValueCache'>
-                  <input type="checkbox" formControlName="disableValueCache" id="disableValueCache">
-                  Disable Value Cache
-                </label>
-              </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="executeDebug()">
-                  Execute
-                </button>
-              </div>
-            </div>
-          </div> -->
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">

@@ -21,9 +21,10 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   public weatherStationIds: Array<any>;
   public comparisonCodeDropdownData: Array<any>;
   public yesNoData: Array<any> = TableColumnData.YES_NO_DATA;
+  public errorMessage: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
-    private readonly systemService:SystemService,
+    private readonly systemService: SystemService,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly location: Location,
     private readonly el: ElementRef) {
@@ -41,7 +42,10 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
     this.subscriptions.add(this.systemService.getComparisonCodeList().pipe(skipWhile((item: any) => !item))
       .subscribe((comparisonCode: any) => {
         this.comparisonCodeDropdownData = comparisonCode.data;
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   findWeatherStation(force: boolean, filter: any): void {
@@ -49,7 +53,10 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
     this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
       .subscribe((weatherStationList: any) => {
         this.weatherStationIds = weatherStationList;
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   scrollTop() {
@@ -89,7 +96,10 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
         skipWhile((item: any) => !item))
         .subscribe((response: any) => {
           this.location.back();
-        }));
+        },
+          error => {
+            this.errorMessage = error;
+          }));
     } else {
       this.validateForm();
     }
@@ -116,7 +126,7 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
       .set('water', this.customerComparisonGroupForm.value.water)
       .set('hasElecHeating', this.customerComparisonGroupForm.value.hasElecHeating)
       .set('hasEV', this.customerComparisonGroupForm.value.hasEV)
-      .set('hasLotSize', this.customerComparisonGroupForm.value.hasLotSize)
+      .set('hasLotSize', this.customerComparisonGroupForm.value.hasLotSize);
     return params;
   }
 
@@ -131,9 +141,8 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   }
 
   get f() { return this.customerComparisonGroupForm.controls; }
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
-
-
 }

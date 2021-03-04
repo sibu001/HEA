@@ -29,7 +29,7 @@ export enum SystemMeasurementActionTypes {
     PAUSE_SYSTEM_JOBS = 'Pause SystemJobs',
     RESUME_SYSTEM_JOBS = 'Resume SystemJobs',
     GET_THREAD_INFO = 'Get Thread Info',
-    GET_OPERATING_SYSTEM_INFO = 'Get Thread Info',
+    GET_OPERATING_SYSTEM_INFO = 'Get Operating System Info',
     DELETE_SYSTEM_JOBS_BY_ID = 'Delete SystemJobs By Id',
     GET_EC2_INSTANCE_LIST = 'Get All EC2Instance List',
     START_EC2_INSTANCE = 'Start EC2Instance',

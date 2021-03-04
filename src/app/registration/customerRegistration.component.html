@@ -7,25 +7,25 @@
         <div class="col-sm-8">
             <div>
                 <p *ngIf="theme=='HEA'">
-                    <img src="assets/images/healogo.png" class="dr_center-block2P4P center-block"> </p>
+                    <img alt="logo" src="assets/images/healogo.png" class="dr_center-block2P4P center-block"> </p>
                 <p *ngIf="theme=='CEC'">
-                    <img src="assets/images/acterra-logo2.gif" class="dr_center-block2P4P center-block"> </p>
+                    <img alt="logo" src="assets/images/acterra-logo2.gif" class="dr_center-block2P4P center-block"> </p>
                 <p *ngIf="theme=='P4P'">
-                    <img src="assets/images/HI_02-03.png" class="dr_center-block2P4P center-block"> </p>
+                    <img alt="logo" src="assets/images/HI_02-03.png" class="dr_center-block2P4P center-block"> </p>
                 <p *ngIf="theme=='AC'">
-                    <img src="assets/images/AC/logo_gahhe.png" class="dr_center-block2AC center-block"> </p>
+                    <img alt="logo" src="assets/images/AC/logo_gahhe.png" class="dr_center-block2AC center-block"> </p>
                 <p *ngIf="theme=='EF'">
-                    <img src="assets/images/EF/logo-ef.png" class="dr_center-block2EF center-block"> </p>
+                    <img alt="logo" src="assets/images/EF/logo-ef.png" class="dr_center-block2EF center-block"> </p>
                 <p *ngIf="theme=='HET'||theme=='TST'">
-                    <img src="assets/images/HET/CenValleyVert.png" class="dr_center-block2HET center-block"> </p>
+                    <img alt="logo" src="assets/images/HET/CenValleyVert.png" class="dr_center-block2HET center-block"> </p>
                 <p *ngIf="theme=='MV'">
-                    <img src="assets/images/MV/logo_gahhe.png" class="dr_center-block2MV center-block"> </p>
+                    <img alt="logo" src="assets/images/MV/logo_gahhe.png" class="dr_center-block2MV center-block"> </p>
                 <p *ngIf="theme=='SNV'">
-                    <img src="assets/images/SNV/logo_snv.png" class="dr_center-block2SNV center-block"> </p>
+                    <img alt="logo" src="assets/images/SNV/logo_snv.png" class="dr_center-block2SNV center-block"> </p>
                 <p *ngIf="theme=='VT'">
-                    <img src="assets/images/VT/logo_ev.gif" class="dr_center-block2VT center-block"> </p>
+                    <img alt="logo" src="assets/images/VT/logo_ev.gif" class="dr_center-block2VT center-block"> </p>
                 <p *ngIf="theme=='CL'">
-                    <img src="assets/images/CL/logo_cl.png" class="dr_center-block2CL center-block"> </p>
+                    <img alt="logo" src="assets/images/CL/logo_cl.png" class="dr_center-block2CL center-block"> </p>
 
                 <p class="smartAuditTextHI" *ngIf="theme=='P4P'">Lets get started with a Smart Audit of
                     <br> your home's energy use.</p>
@@ -72,10 +72,10 @@
                                 (keyup.enter)="login()" #inp />
                             <div class="pll">
                                 <a (click)="toggleShow()" *ngIf="show">
-                                    <img src="assets/images/eyes_img1.png" class="eye">
+                                    <img src="assets/images/eyes_img1.png" alt="eye" class="eye">
                                 </a>
                                 <a (click)="toggleShow()" *ngIf="hide">
-                                    <img src="assets/images/eyes_img2.png" class="eye">
+                                    <img alt="logo" src="assets/images/eyes_img2.png" class="eye">
                                 </a>
                             </div>
                         </div>
@@ -95,10 +95,10 @@
                                 (keyup.enter)="login()" #inp />
                             <div class="pll">
                                 <a (click)="toggleShowSoCal()" *ngIf="showSoCal">
-                                    <img src="assets/images/eyes_img1.png" class="eye">
+                                    <img alt="eye" src="assets/images/eyes_img1.png" class="eye">
                                 </a>
                                 <a (click)="toggleShowSoCal()" *ngIf="hideSoCal">
-                                    <img src="assets/images/eyes_img2.png" class="eye">
+                                    <img alt="eye2" src="assets/images/eyes_img2.png" class="eye">
                                 </a>
                             </div>
                         </div>
@@ -108,23 +108,14 @@
                         <label class="control-label col-sm-4" for="phone">phone</label>
                         <div class="col-sm-7">
                              <input type="number" class="form-control" id="phone" name="phone" [(ngModel)]="users.phone" (keyup.enter)="login()"> 
-                       <!-- <input type="text"  id="Search" value="(___) ___-____" data-mask="(___)___-____" onmouseover="this.setSelectionRange(this.value.length,this.value.length);"/> -->
                         </div>
                         <div class="col-sm-1"></div>
                     </div>
-                    <!-- <div class="form-group">
-                            <div class="col-sm-11">
-                                <p class="registarHI"> Don't have a login? <a>Register here</a></p>
-                            </div>
-                            <div class="col-sm-1">
-                            </div>
-                        </div> -->
                     <div class="form-group">
                         <label class="checkbox_text col-sm-1 col-xs-2">
                             <input type="checkbox" name="checkboxs" [(ngModel)]="checkBox">
                             <span class="checkmark"></span>
                         </label>
-                        <!-- <label class="control-label col-sm-2 col-xs-2" for="checkbox"><input type="checkbox" name="remember"></label>    -->
                         <div class="col-sm-10 col-xs-10 checkboxHI" *ngIf="theme!='HEA'">
                             I authorize Home Energy Analitics to access and use my PG&E Energy uses data solely for the purpose of creating my Smart
                             Audit and providing it to me.
@@ -175,7 +166,7 @@
                 <br>
                 <div class="row">
                     <div class="col-sm-2 col-xs-3">
-                        <img src="assets/images/PGE_Spot_full_rgb_pos_sm.jpg" class="footerImgHI" (click)="login()">
+                        <img alt="login" src="assets/images/PGE_Spot_full_rgb_pos_sm.jpg" class="footerImgHI" (click)="login()">
                     </div>
                     <div class="col-sm-10 col-xs-9" style="padding-left: 0px;">
                         <p class="footerimageHI">

@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,7 +17,7 @@ export class WeatherStationEditComponent implements OnInit, OnDestroy {
   isForce = false;
   stationForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
-  toggleSaveButton: Boolean = true;
+  toggleSaveButton = true;
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,
@@ -68,6 +67,7 @@ export class WeatherStationEditComponent implements OnInit, OnDestroy {
   save() {
     if (this.stationForm.valid) {
       if (this.id !== null && this.id !== undefined) {
+        this.id = this.stationForm.value.stationId;
         this.subscriptions.add(this.systemUtilityService.updateWeatherStation(this.id, this.stationForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {

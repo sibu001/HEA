@@ -2,8 +2,11 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="error-message" *ngIf="errorMessage">
+          {{errorMessage?.error?.errorMessage}}
+        </p>
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Mail Description</span>
         </p>
         <form [formGroup]="topicForm" class="form-group form-padding">
@@ -24,7 +27,7 @@
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
-              <img src="assets/images/icon_help.svg"
+              <img  src="assets/images/icon_help.svg" alt="help"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
                 class="media-object" id="help_btn"
@@ -49,7 +52,7 @@
                 id="mailName">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
-              <img src="assets/images/icon_help.svg"
+              <img src="assets/images/icon_help.svg" alt="help"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
                 class="media-object" id="help_btn"
@@ -72,7 +75,7 @@
                 id="mailFilter" rows="4" cols="5"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
-              <img src="assets/images/icon_help.svg"
+              <img src="assets/images/icon_help.svg" alt="help"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
                 class="media-object" id="help_btn"
@@ -106,7 +109,7 @@
               </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
-              <img src="assets/images/icon_help.svg"
+              <img src="assets/images/icon_help.svg" alt="help"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
                 class="media-object" id="help_btn"
@@ -138,7 +141,7 @@
               </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
-              <img src="assets/images/icon_help.svg"
+              <img src="assets/images/icon_help.svg" alt="help"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
                 class="media-object" id="help_btn"
@@ -167,7 +170,7 @@
                 formControlName="stopDays" id="stopDays">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
-              <img src="assets/images/icon_help.svg"
+              <img src="assets/images/icon_help.svg" alt="help"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
                 class="media-object" id="help_btn"
@@ -193,7 +196,7 @@
                 formControlName="stopNumber" id="stopNumber">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
-              <img src="assets/images/icon_help.svg"
+              <img src="assets/images/icon_help.svg" alt="help"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
                 class="media-object" id="help_btn"
@@ -229,7 +232,7 @@
               </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
-              <img src="assets/images/icon_help.svg"
+              <img src="assets/images/icon_help.svg" alt="help"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
                 class="media-object" id="help_btn"
@@ -254,7 +257,7 @@
                 id="stopDateRule"> </textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
-              <img src="assets/images/icon_help.svg"
+              <img src="assets/images/icon_help.svg" alt="help"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
                 class="media-object" id="help_btn"
@@ -433,7 +436,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Customer groups</span></p>
             <app-table [keys]="customerGroupKeys" [isPaginate]="false"
               [checkbox]=true [isHideAdd]=true
@@ -447,7 +450,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Mail Content Parts</span></p>
             <app-table [keys]="contentPartsKeys" [isPaginate]="false"
               [isSearch]="false" [data]="contentPartsDataSource"
@@ -460,7 +463,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Context variables</span></p>
             <app-table [keys]="variableKeys" [isPaginate]="false"
               [isSearch]="false" [data]="variableDataSource"

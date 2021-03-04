@@ -1,10 +1,9 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
-import { TableColumnData } from 'src/app/data/common-data';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -13,7 +12,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   templateUrl: './user-report-context-variable.component.html',
   styleUrls: ['./user-report-context-variable.component.css']
 })
-export class UserReportContextVariableComponent implements OnInit {
+export class UserReportContextVariableComponent implements OnInit, OnDestroy {
 
   id: any;
   contentForm: FormGroup;
@@ -32,8 +31,6 @@ export class UserReportContextVariableComponent implements OnInit {
   ngOnInit() {
     this.loadCalculationType();
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   loadCalculationType() {
@@ -56,9 +53,13 @@ export class UserReportContextVariableComponent implements OnInit {
     this.location.back();
   }
 
-  save(): any { }
+  save(): any {
+    console.log('save');
+  }
 
-  delete(): any { }
+  delete(): any {
+    console.log('delete');
+  }
 
   get f() { return this.contentForm.controls; }
 

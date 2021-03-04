@@ -1,11 +1,3 @@
-<!-- <div class="row">
-    <div class="col-md-4">
-        <mat-form-field>
-            <i class="fa fa-search css" aria-hidden="true">
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="search" type="search"></i>
-        </mat-form-field>
-    </div>
-</div> -->
 <div class="row">
     <div class="col-md-4" *ngIf='isSearch'>
         <div class="form-group" style="margin-top: 11px;">
@@ -73,7 +65,7 @@
                     col.type!=='input'&&
                     col.type!='alert' &&
                     !col.isDate && !col.isAction && col.type!=='checkbox'">
-                    {{row[col.key]}}
+                    {{row[col.key]}}&nbsp;
                     <button class="btn btn-primary" type="submit"
                         *ngIf="col.type==='textArea'&&row['isInlineEdit']"
                         (click)='editColumn(col,row)' style="float: right;">Edit</button>
@@ -81,7 +73,7 @@
                 <div id='3' *ngIf="col.type=='image' && col.changeable &&
                     !col.isAction" class="center">
                     <img *ngIf='row[col.key]===null' [src]='col.imagePath'
-                        (click)="imageClickEvent(col,row)">
+                        (click)="imageClickEvent(col,row)" alt="images">
                     <div *ngIf='row[col.key]!==null'
                         (click)="imageClickEvent(col,row)"> {{row[col.key]}}
                     </div>
@@ -90,11 +82,11 @@
                     !col.isAction" class="center">
                     <img id="1" *ngIf="col.imagePath!==undefined"
                         [src]='col.imagePath'
-                        (click)="imageClickEvent(col,row)" class="tableImage">
+                        (click)="imageClickEvent(col,row)" class="tableImage" alt="images">
                     <img id="2" *ngIf="row[col.key]!==undefined &&
                         col.imagePath===undefined &&
                         row[col.key]!=='addInlineInput'" [src]='row[col.key]'
-                        (click)="imageClickEvent(col,row)" class="tableImage">
+                        (click)="imageClickEvent(col,row)" class="tableImage" alt="images">
                     <button class='btn btn-primary'
                         *ngIf="row[col.key]=='addInlineInput'"
                         (click)='onSaveNewRowEvent(col,row)'>
@@ -118,7 +110,7 @@
                     </div>
                 </div>
                 <div id='8' *ngIf="col.type=='input' && !col.isAction">
-                    <div [formGroup]='row.tableForm' *ngIf="row.isInputEdit">
+                    <div *ngIf="row.isInputEdit" [formGroup]='row.tableForm' >
                         <input type="text"
                             class='form-control' (keyup)="inputChange(col,row)"
                             [formControlName]='col.key' [id]="col.key">
@@ -159,10 +151,10 @@
             <mat-cell *matCellDef="let element">
                 <img
                     src="assets/images/ico_minus.gif"
-                    (click)="deleteRow(element)">
+                    (click)="deleteRow(element)" alt="icon">
                 <img *ngIf="isFilePreview"
                     src="assets/images/ico_preview.png"
-                    (click)="filePreview(element)">
+                    (click)="filePreview(element)" alt="icon">
 
             </mat-cell>
         </ng-container>

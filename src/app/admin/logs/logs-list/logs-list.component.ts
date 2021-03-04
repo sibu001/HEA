@@ -64,7 +64,7 @@ export class LogsListComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemUtilityService.loadLogsCount(filter).pipe(skipWhile((item: any) => !item))
       .subscribe((logsCount: any) => {
         this.logsData.totalElements = logsCount.systemUtilityManagement.logCount;
-        this.totalElement = logsCount.systemUtilityManagement.logCount;;
+        this.totalElement = logsCount.systemUtilityManagement.logCount;
         this.systemUtilityService.loadLogsList(force, filter);
         this.subscriptions.add(this.systemUtilityService.getLogsList().pipe(skipWhile((item: any) => !item))
           .subscribe((logsList: any) => {

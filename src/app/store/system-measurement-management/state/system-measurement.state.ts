@@ -152,7 +152,7 @@ export class SystemMeasurementManagementState {
                     },
                         error => {
                             document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.error.errorMessage);
+                            // this.utilityService.showErrorMessage(error.error.errorMessage);
                         }));
         }
         return result;
@@ -171,7 +171,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -188,7 +188,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -203,7 +203,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -221,7 +221,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -239,7 +239,7 @@ export class SystemMeasurementManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -664,7 +664,7 @@ export class SystemMeasurementManagementState {
             result = this.loginService.performGetWithParams(AppConstant.eC2Instance, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        const res = SystemMeasurementUtilityTransformer.transformEC2InstanceTableData(response);
+                        // const res = SystemMeasurementUtilityTransformer.transformEC2InstanceTableData(response);
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             ec2InstanceList: response,

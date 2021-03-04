@@ -72,7 +72,7 @@ export class CustomerEventTypeComponent implements OnInit {
   }
 
   loadCustomerEventType() {
-    this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeList(false, '').pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeList(true, '').pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.customerEventTypeList = response.systemUtilityManagement.customerEventTypeList;
         if (this.data.isList && !this.showDelete) {
@@ -103,7 +103,7 @@ export class CustomerEventTypeComponent implements OnInit {
     this.author = event !== undefined && event.linkedPersonName ? event.linkedPersonName : this.author;
     this.customerEventTypeForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
-      customerEventTypeId: [event !== undefined && event.customerEventTypeId ? event.customerEventTypeId : '', Validators.required],
+      customerEventTypeId: [event !== undefined && event.customerEventTypeId !== undefined ? event.customerEventTypeId : '', Validators.required],
       eventCode: [event !== undefined && event.customerEventType ? event.customerEventType.eventCode : ''],
       eventDescription: [event !== undefined && event.customerEventType ? event.customerEventType.description : ''],
       eventDatetime: [event !== undefined && event.eventDatetime ? new Date(event.eventDatetime) : new Date()],

@@ -14,7 +14,6 @@ div.factoid {
   line-height: 1.4;
   font-weight: 500;
   margin-left: 15px;
-  font-weight: 500;
 }
 p.paneLabel {
   color: #bcbfbf;
@@ -125,7 +124,7 @@ p.calculation {
   border-color: #76ba19;
   padding: 6px 40px;
   font-size: 16px;
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
 }
 .btn-primary.active.focus,
 .btn-primary.active:focus,
@@ -141,7 +140,7 @@ p.calculation {
   border-color: #76ba19;
   padding: 6px 40px;
   font-size: 16px;
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
 }
 .btn.active,
 .btn:active {
@@ -222,9 +221,9 @@ span.square_feet {
   font-weight: 600;
   color: #000;
 }
-img.helpbtn {
+/* img.helpbtn {
   margin-top: -1px;
-}
+} */
 .col-sm-6.radio_button {
   font-size: 21px;
   font-weight: 600;
@@ -263,6 +262,7 @@ img.energyflow.center-block {
   color: #4550a1;
   line-height: 22px;
   font-weight: 500;
+  margin-top: 10px;
 }
 
 div.home_energyProfile {
@@ -436,7 +436,7 @@ label.control-label.col-sm-5.yourinput {
 }
 p.Privacy {
   color: #808080;
-  text-align: center;
+  /* text-align: center; */
   font-size: 14px;
   font-weight: bold;
   padding-top: 5px;
@@ -523,10 +523,7 @@ p.friend {
 .row.border_class {
   border-right: 1px solid #e1e1e1;
 }
-.carousel-inner.second {
-  border-right: 1px solid #e1e1e1;
-  padding-right: 14px;
-}
+
 h3.natural_gas {
   color: rgb(102, 102, 102);
   text-align: center;
@@ -710,10 +707,7 @@ hr.bottomLineTop {
     padding-left: 0px;
     padding-right: 0px;
   }
-  .carousel-inner.second {
-    border-right: 0px solid #e1e1e1;
-    padding-right: 14px;
-  }
+
   .col-sm-4.surveyleaks {
     margin-top: -13px;
     display: none;
@@ -784,9 +778,12 @@ hr.bottomLineTop {
   .select_nextspace {
     padding-left: 0px !important;
   }
+
   .carousel-inner.second {
-    padding-right: 0px !important;
+    border-right: 0px solid #e1e1e1;
+    padding-right: 14px;
   }
+
   .skin_topic {
     text-align: left !important;
     margin-top: 0px;
@@ -854,7 +851,6 @@ span.variable {
   text-align: center;
   background: rgb(238, 238, 238);
   width: 72%;
-  text-align: center;
   margin: auto;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -987,7 +983,6 @@ p.total_leaks {
   font-size: 14px;
   color: #75ba19;
   text-align: right;
-  padding-right: 10px;
   margin-bottom: 2px;
   padding-right: 25px;
   margin-top: 18px;
@@ -1152,7 +1147,7 @@ div.person {
   /* width: 360px; */
   height: auto;
   font-size: 14px;
-  font-family: Tahoma;
+  font-family: Tahoma, sans-serif;
   font-weight: bold;
   color: #616161;
   background-color: #efefef;
@@ -1188,18 +1183,7 @@ p.chat_cal {
 .col-sm-3.norms {
   padding-left: 0px;
 }
-/* a.more_info{
-    border-bottom: 1px solid #ccc;
-    color: dimGray;
-    cursor: pointer;
-    text-decoration: none !important;
-}
-a.more_info:hover{
-    text-decoration: none !important;
-    color: #000000;
-    border-bottom: 1px solid #000000;
-    cursor: pointer;
-} */
+
 a.more_info {
   color: #76ba19;
   cursor: pointer;
@@ -1207,7 +1191,6 @@ a.more_info {
 select.select_itemslider7 {
   font-size: 14px;
   text-align: left;
-  font-weight: bold;
   color: #000;
   background: #f0f0f0;
   font-weight: 600;
@@ -1216,7 +1199,6 @@ select.select_itemslider7 {
 select.select_itemslider73 {
   font-size: 14px;
   text-align: left;
-  font-weight: bold;
   color: #000;
   background: #f0f0f0;
   font-weight: 600;
@@ -1271,7 +1253,6 @@ img.weather {
   padding-right: 0px;
 }
 .background-color2 {
-  text-align: center;
   background: rgb(238, 238, 238);
   text-align: center;
   margin: auto;
@@ -1301,7 +1282,6 @@ div.name {
   z-index: 1;
   background-color: #fff;
   margin-top: 1px;
-  color: #000;
   right: 15px;
   width: 250px;
   color: #202020;
@@ -1637,11 +1617,7 @@ a.number_feedback:hover {
   border-bottom: 1px solid #000;
   text-decoration: none;
 }
-p.savings {
-  color: #bbbbbb;
-  font-size: 12px;
-  text-align: right;
-}
+
 p.savings {
   color: #bbbbbb;
   font-size: 12px;
@@ -1663,7 +1639,6 @@ img.icon_1:hover {
   width: 100%;
   height: 5px;
   border-radius: 0px;
-  background: #d3d3d3;
   outline: none;
   opacity: 0.7;
   transition: opacity 0.2s;
@@ -1675,22 +1650,7 @@ img.icon_1:hover {
   opacity: 1;
 }
 
-/* .slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 31px;
-    height: 14px;
-    border: 0;
-    background: url("src/assets/images/handlehorizontal.png");
-    cursor: pointer;
-}
 
-.slider::-moz-range-thumb {
-    width: 31px;
-    height: 14px;
-    border: 0;
-    background: url("src/assets/images/handlehorizontal.png");
-    cursor: pointer;
-} */
 img.help-scroll {
   margin-top: 11px;
 }
@@ -1897,9 +1857,9 @@ label.col-lg-7.col-sm-6 {
   padding-left: 0px;
 }
 .form-group {
+  margin: 15px 0 !important;
   margin-left: 0px !important;
   margin-right: 0px !important;
-  margin: 15px 0 !important;
 }
 .col-lg-3.col-md-6.col-sm-6.kwh {
   padding-left: 0px;
@@ -2055,7 +2015,7 @@ div.address > p {
   text-align: left !important;
   font-size: 21px !important;
 }
-btn.btn-primary.hslider {
+button.btn.btn-primary.hslider {
   background: #efefef;
   border: 1px solid #b0b0b0;
 }
@@ -2066,7 +2026,7 @@ button.btn.btn-primary.hslider1 {
   border-radius: 0px;
   padding: 6px 24px;
   margin-bottom: 10px;
-  font-family: "Roboto" !important;
+  font-family: "Roboto", sans-serif !important;
 }
 /* button.btn.btn-primary.hslider1:focus {
     background: #202020;
@@ -2080,7 +2040,7 @@ button.btn.btn-primary.hslider2 {
   border-radius: 0px;
   padding: 6px 24px;
   margin-bottom: 10px;
-  font-family: "Roboto" !important;
+  font-family: "Roboto", sans-serif !important;
 }
 /* button.btn.btn-primary.hslider2:focus {
     background: #202020;
@@ -2094,7 +2054,7 @@ button.btn.btn-primary.hslider3 {
   border-radius: 0px;
   padding: 6px 24px;
   margin-bottom: 10px;
-  font-family: "Roboto" !important;
+  font-family: "Roboto", sans-serif !important;
 }
 /* button.btn.btn-primary.hslider3:focus {
     background: #202020;
@@ -2108,7 +2068,7 @@ button.btn.btn-primary.hslider4 {
   border-radius: 0px;
   padding: 6px 24px;
   margin-bottom: 10px;
-  font-family: "Roboto" !important;
+  font-family: "Roboto", sans-serif !important;
 }
 /* button.btn.btn-primary.hslider4:focus {
     background: #202020;
@@ -2122,7 +2082,7 @@ button.btn.btn-primary.hslider5 {
   border-radius: 0px;
   padding: 6px 24px;
   margin-bottom: 10px;
-  font-family: "Roboto" !important;
+  font-family: "Roboto", sans-serif !important;
 }
 
 .hsliderDiv {

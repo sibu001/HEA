@@ -1,31 +1,28 @@
-import {Pipe} from '@angular/core';
-import {DomSanitizer, SafeHtml, SafeStyle, SafeScript, SafeUrl, SafeResourceUrl} from '@angular/platform-browser';
-import { PipeTransform } from "@angular/core";
+import { Pipe } from '@angular/core';
+import { DomSanitizer, SafeHtml, SafeStyle, SafeScript, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
+import { PipeTransform } from '@angular/core';
+
 @Pipe({
-	name: 'safe'
+name: 'safe'
 })
-export class SafePipe implements PipeTransform  {
+export class SafePipe implements PipeTransform {
+constructor(protected _sanitizer: DomSanitizer) {}
 
-	constructor(protected _sanitizer: DomSanitizer) {
-
-	}
-
-	public transform(value: string, type: string): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
-        type='style';
-        switch (type) {
-			case 'html':
-				return this._sanitizer.bypassSecurityTrustHtml(value);
-			case 'style':
-				return this._sanitizer.bypassSecurityTrustStyle(value);
-			case 'script':
-				return this._sanitizer.bypassSecurityTrustScript(value);
-			case 'url':
-				return this._sanitizer.bypassSecurityTrustUrl(value);
-			case 'resourceUrl':
-				return this._sanitizer.bypassSecurityTrustResourceUrl(value);
-			default:
-				throw new Error(`Unable to bypass security for invalid type: ${type}`);
-		}
-	}
-
+public transform(value: string, type: string): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
+type = 'style';
+switch (type) {
+case 'html':
+return this._sanitizer.bypassSecurityTrustHtml(value);
+case 'style':
+return this._sanitizer.bypassSecurityTrustStyle(value);
+case 'script':
+return this._sanitizer.bypassSecurityTrustScript(value);
+case 'url':
+return this._sanitizer.bypassSecurityTrustUrl(value);
+case 'resourceUrl':
+return this._sanitizer.bypassSecurityTrustResourceUrl(value);
+default:
+throw new Error(`Unable to bypass security for invalid type: ${type}`);
+}
+}
 }

@@ -81,6 +81,11 @@ export class TableColumnData {
         { key: 'size', isEdit: true, displayName: 'Size' }
     ];
 
+    static readonly CUSTOMER_EMAIL_KEY: Array<TABLECOLUMN> = [
+        { key: 'messageType', isEdit: true, displayName: 'Message Type' },
+        { key: 'enabled', isEdit: true, displayName: 'Enabled' },
+    ];
+
     static readonly ROLE_KEY: Array<TABLECOLUMN> = [
         { isEdit: true, displayName: 'Role Code', key: 'roleCode', isUnderline: true },
         { isEdit: true, displayName: 'Permanent', key: 'permanent' },
@@ -165,7 +170,7 @@ export class TableColumnData {
         { key: 'recordType', sort: 'recordType', isEdit: true, displayName: 'Record Type' },
         { key: 'comment', sort: 'comment', isEdit: true, displayName: 'Comment' },
         { key: 'entity', sort: 'entity', isEdit: true, displayName: 'Entity' },
-        { key: 'logDate', sort: 'logDate', isEdit: true, displayName: 'Log Date', isDate: true }
+        { key: 'logDate', sort: 'logDate', isEdit: true, displayName: 'Log Date'}
     ];
 
     static readonly DEGREE_DAY_KEY: Array<TABLECOLUMN> = [
@@ -235,12 +240,12 @@ export class TableColumnData {
     ];
 
     static readonly ALERT_MESSAGE_KEY: Array<TABLECOLUMN> = [
-        { key: 'id', sort: 'id', isEdit: true, displayName: 'Id', isUnderline: true },
-        { key: 'target', sort: 'target', isEdit: true, displayName: 'Target', isUnderline: true },
+        { key: 'id', sort: 'id', isEdit: true, displayName: 'Id'},
+        { key: 'target', sort: 'target', isEdit: true, displayName: 'Target' },
         { key: 'alertType', sort: 'alertType', isEdit: true, displayName: 'Alert Type' },
         { key: 'alertLevel', sort: 'alertLevel', isEdit: true, displayName: 'Alert Level' },
         { key: 'messageTemplate', sort: 'messageTemplate', isEdit: true, displayName: 'Message' },
-        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Created Date', isDate: true },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Created Date' },
         { key: 'active', isEdit: true, displayName: 'Active', type: 'image' },
     ];
 
@@ -315,7 +320,7 @@ export class TableColumnData {
         { key: 'username', sort: 'username', isEdit: true, displayName: 'Username', isUnderline: true },
         { key: 'email', sort: 'email', isEdit: true, displayName: 'E-mail' },
         { key: 'status', isEdit: true, displayName: 'Status' },
-        { key: 'name', isEdit: true, displayName: 'Name' },
+        { key: 'name', sort: 'name', isEdit: true, displayName: 'Name' },
         { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Join Date', isDate: true },
     ];
 

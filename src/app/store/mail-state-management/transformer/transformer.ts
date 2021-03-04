@@ -52,21 +52,25 @@ export class MailTransformer {
             if (i !== -1) {
                 if (element.partType === 'header') {
                     dataSourceList[i].headerId = element.customerGroupMailPartId;
+                    dataSourceList[i].header = 'Edit part';
                 } else if (element.partType === 'footer') {
                     dataSourceList[i].footerId = element.customerGroupMailPartId;
+                    dataSourceList[i].footer = 'Edit part';
                 }
             } else {
                 dataSourceObject = element;
                 dataSourceObject.groupName = element.customerGroup.groupCode + ' ' + element.customerGroup.groupName;
-                dataSourceObject.header = 'Edit part';
-                dataSourceObject.footer = 'Edit part';
                 dataSourceObject.serialNumber = index;
                 dataSourceObject.headerId = 0;
                 dataSourceObject.footerId = 0;
+                dataSourceObject.header = '';
+                dataSourceObject.footer = '';
                 if (element.partType === 'header') {
+                    dataSourceObject.header = 'Edit part';
                     dataSourceObject.headerId = element.customerGroupMailPartId;
                 } else if (element.partType === 'footer') {
-                    dataSourceObject.headerId = element.customerGroupMailPartId;
+                    dataSourceObject.footer = 'Edit part';
+                    dataSourceObject.footerId = element.customerGroupMailPartId;
                 }
                 index++;
                 dataSourceList.push(dataSourceObject);

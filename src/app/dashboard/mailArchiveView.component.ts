@@ -35,7 +35,7 @@ export class mailArchiveViewComponent implements OnInit {
   }
   urlOpen(id) {
     document.getElementById('loader').classList.add('loading');
-    if (id == 1) {
+    if (id === 1) {
       this.users.paneNumber = 1;
       this.loginService.setUser(this.users);
       this.iframeHide = true;

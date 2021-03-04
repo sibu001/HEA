@@ -17,7 +17,6 @@ img.dr_center-blockCEC {
   border-radius: 7px;
   margin-bottom: 0px;
   margin-top: -8px;
-  height: 7px;
   float: left;
 }
 .dash {
@@ -85,9 +84,6 @@ img.dr_center-blockHI {
   margin-top: 0px;
 }
 
-.dashHI {
-  margin-top: 10px;
-}
 .smartAuditTextHI {
   text-align: center;
 }

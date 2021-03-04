@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
-import { TableColumnData } from 'src/app/data/common-data';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -30,8 +29,6 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadCalculationType();
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   loadCalculationType() {
@@ -54,9 +51,13 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  save(): any { }
+  save(): any {
+    console.log('save');
+  }
 
-  delete(): any { }
+  delete(): any {
+    console.log('delete');
+  }
 
   get f() { return this.contentForm.controls; }
 

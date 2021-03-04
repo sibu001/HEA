@@ -17,8 +17,6 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   styleUrls: ['./administrative-reports-list.component.css']
 })
 export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
-
-
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.ADMIN_REPORT_KEYS;
   public dataSource: any;
@@ -36,7 +34,7 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
     private readonly router: Router,
-    private readonly systemService:SystemService,
+    private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null || this.adminFilter.administrativeFilter === undefined) {

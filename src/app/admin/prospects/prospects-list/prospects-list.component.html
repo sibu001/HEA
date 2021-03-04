@@ -70,7 +70,7 @@
           </div>
         </form>
         <p class="messages">
-          <img src='assets/images/dot03.gif' class='dot'>
+          <img src='assets/images/dot03.gif' alt="dot" class='dot'>
           <span class="messageName">Prospects (Number of Records = {{prospectsData?.totalElements}})</span></p>
         <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
           [totalElement]="prospectsData.totalElements" (changePageEvent)="search($event,false)"

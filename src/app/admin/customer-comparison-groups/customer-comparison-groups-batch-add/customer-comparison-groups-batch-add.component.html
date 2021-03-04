@@ -2,22 +2,15 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="error-message" *ngIf="errorMessage">
+          {{errorMessage?.error?.errorMessage}}
+        </p>
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img alt="dot" class="pointer" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Batch Add Customer Comparison Group</span>
         </p>
         <form [formGroup]="customerComparisonGroupForm" class="form-group
           form-padding">
-          <!-- <div class="row borderTop borderBottom rowPadding" *ngIf="id!==undefined&&id!==null">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Record Id:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="customerEventTypeId"
-                formControlName="customerEventTypeId">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div> -->
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Comparison code
@@ -26,8 +19,9 @@
               <select id="comparisonCode" class="form-control form-control-sm"
                 formControlName="comparisonCode">
                 <option value="" selected="selected"></option>
-                 <option *ngFor="let comparisonCode of
-                  comparisonCodeDropdownData" [value]='comparisonCode.lookupValue'>
+                <option *ngFor="let comparisonCode of
+                  comparisonCodeDropdownData"
+                  [value]='comparisonCode.lookupValue'>
                   {{comparisonCode.valueName}}</option>
               </select>
             </div>

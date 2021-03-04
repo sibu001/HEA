@@ -58,7 +58,6 @@ export class PasswordStrengthComponent implements OnInit, OnChanges {
     if (password) {
       const pwdStrength = this.checkStrength(password);
       pwdStrength === 40 ? this.passwordStrength.emit(true) : this.passwordStrength.emit(false);
-      const c = this.getColor(this.checkStrength(password));
       switch (pwdStrength) {
         case 10:
           this.msg = 'Poor';

@@ -47,20 +47,20 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() pageIndex: any;
   @Input() keys: any;
   @Input() id: any;
-  @Input() sideBorder: Boolean = false;
-  @Input() action: Boolean = false;
-  @Input() checkbox: Boolean = false;
-  @Input() isSearch: Boolean = false;
-  @Input() isDelete: Boolean = false;
-  @Input() isPaginate: Boolean = false;
-  @Input() isHideAdd: Boolean = false;
-  @Input() showDeleteButton: Boolean = false;
-  @Input() showCSVExportButton: Boolean = false;
-  @Input() isFilePreview: Boolean = false;
-  @Input() showAddRowButton: Boolean = false;
-  @Input() showAddInputButton: Boolean = false;
-  @Input() isShowHeader: Boolean = true;
-  @Input() isInlineEdit: Boolean = false;
+  @Input() sideBorder = false;
+  @Input() action = false;
+  @Input() checkbox = false;
+  @Input() isSearch = false;
+  @Input() isDelete = false;
+  @Input() isPaginate = false;
+  @Input() isHideAdd = false;
+  @Input() showDeleteButton = false;
+  @Input() showCSVExportButton = false;
+  @Input() isFilePreview = false;
+  @Input() showAddRowButton = false;
+  @Input() showAddInputButton = false;
+  @Input() isShowHeader = true;
+  @Input() isInlineEdit = false;
   @Input() selectionList: Array<any> = [];
   @Input() sortStateData: any;
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
@@ -82,11 +82,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() handleInLineEditEvent: EventEmitter<any> = new EventEmitter();
   @Output() handleInLineSaveEvent: EventEmitter<any> = new EventEmitter();
   expandedElement: any = [];
-  showInput: Boolean = false;
-  showRowInput: Boolean = false;
+  showInput = false;
+  showRowInput = false;
   page = new Page();
-  url: String;
-  totalLength: Number;
+  url: string;
+  totalLength: number;
   pageIndexNumber = 0;
   pageEvent: PageEvent;
   selection = new SelectionModel<any>(true, []);
@@ -340,6 +340,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     if (this.tableForm.valid) {
       this.saveRowEvent.emit(this.tableForm);
       this.toggleSaveButtonEvent.emit();
+      this.tableForm.reset();
       this.showInput = false;
     } else {
       this.validateAllFormFields(this.tableForm);

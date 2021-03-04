@@ -1,12 +1,9 @@
 <div class='container-fluid'>
   <div *ngIf='!showDataFields && !showMethod && !showTopicVariableFields'>
     <div class="row sidebar-heading-row">
-      <!-- <div class="col-xs-1 col-sm-1 sidebar-heading-div">
-        <img src='assets/images/dot03.gif' class='dot'>
-      </div> -->
       <div class="col-xs-12 col-sm-12 sidebar-heading-div sidebar-info">
         <p class='info'>
-          <img src='assets/images/dot03.gif' class='dot top-dot'>
+          <img src='assets/images/dot03.gif' alt="dot" class='dot top-dot'>
           HEA Administrator's Home Page</p>
       </div>
     </div>
@@ -21,12 +18,12 @@
   <div *ngIf="showDataFields && topicVariableField.length>0"
     [class.overflow]='topicVariableField.length>0'>
     <p class='info'>
-      <img src='assets/images/dot03.gif' class='dot'>Data field list</p>
-    <table>
+      <img src='assets/images/dot03.gif' alt="dot" class='dot'>Data field list</p>
+    <table summary="datalist">
       <thead>
         <tr>
-          <th>Field</th>
-          <th>Name</th>
+          <th id="field">Field</th>
+          <th id="name">Name</th>
         </tr>
       </thead>
       <tbody>
@@ -41,12 +38,12 @@
   <div *ngIf="showDataFields && dataField.length>0"
     [class.overflow]='dataField.length>0'>
     <p class='info'>
-      <img src='assets/images/dot03.gif' class='dot'>Data field list</p>
-    <table>
+      <img src='assets/images/dot03.gif' alt="dot" class='dot'>Data field list</p>
+    <table summary="datalist1">
       <thead>
         <tr>
-          <th>Field</th>
-          <th>Name</th>
+          <th id="field">Field</th>
+          <th id="name">Name</th>
         </tr>
       </thead>
       <tbody>
@@ -61,11 +58,11 @@
   <div *ngIf="showMethod && methodName.length>0"
     [class.overflow]='methodName.length>0' class="method">
     <p class='method-info'>
-      <img src='assets/images/dot03.gif' class='method-dot'>Method list</p>
-    <table>
+      <img src='assets/images/dot03.gif' alt="dot" class='method-dot'>Method list</p>
+    <table summary="method">
       <thead>
         <tr>
-          <th>Method name</th>
+          <th id="methodName">Method name</th>
         </tr>
       </thead>
       <tbody>

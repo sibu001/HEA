@@ -4,7 +4,7 @@
             <div class="col-sm-12 sidebar">
                 <div class="backcolor">
                     <h3 class="select_next">
-                        <img src="assets/images/right-.svg" class="back_img" (click)="back()">&nbsp;&nbsp;<span class="recommdationheadingcss">Recommendations</span></h3>
+                        <img alt="icon" src="assets/images/right-.svg" class="back_img" (click)="back()">&nbsp;&nbsp;<span class="recommdationheadingcss">Recommendations</span></h3>
                     <p class="action">Take action to plug the leaks in your home</p>
                 </div>
             </div>
@@ -59,20 +59,20 @@
                                 *ngIf="item.parentLeakId!=null">
                                 <div class="row">
                                     <div class="col-sm-1 col-xs-2 status1">
-                                        <img src="assets/images/triangledown.svg" class="fa fa-fw fa-caret-down fa_icon">
-                                        <img src="assets/images/triangleright.svg" class="fa fa-fw fa-caret-right fa_icon">
+                                        <img alt="icon" src="assets/images/triangledown.svg" class="fa fa-fw fa-caret-down fa_icon">
+                                        <img alt="icon" src="assets/images/triangleright.svg" class="fa fa-fw fa-caret-right fa_icon">
                                     </div>
                                     <div class="col-sm-1 col-xs-2 status2" *ngIf="item.status=='N'">
-                                        <img src="assets/images/status-unchecked.png" class="status-unchecked">
+                                        <img alt="icon" src="assets/images/status-unchecked.png" class="status-unchecked">
                                     </div>
                                     <div class="col-sm-1 col-xs-2 status2" *ngIf="item.status=='Y'">
-                                        <img src="assets/images/colorbox.png" class="status-unchecked">
+                                        <img alt="icon" src="assets/images/colorbox.png" class="status-unchecked">
                                     </div>
                                     <div class="col-sm-1 col-xs-2 status2" *ngIf="item.status=='L'">
-                                        <img src="assets/images/lightcheck.png" class="status-unchecked">
+                                        <img alt="icon" src="assets/images/lightcheck.png" class="status-unchecked">
                                     </div>
                                     <div class="col-sm-1 col-xs-2 status2" *ngIf="item.status=='D'">
-                                        <img src="assets/images/status-notapplicable.png" class="status-unchecked" style="margin-left: -2px;">
+                                        <img alt="icon" src="assets/images/status-notapplicable.png" class="status-unchecked" style="margin-left: -2px;">
                                     </div>
                                     <div class="col-sm-8 col-xs-8 status3">
                                         <a class="Schedule" *ngIf="item.status!='Y'">{{item.recommendation.takebackLabel}}</a>
@@ -82,17 +82,16 @@
                                         <p class="dollar_num">${{item.priceValue | number:'0.0-0'}}</p>
                                         <p class="help_img" *ngIf="item.recommendation.instruction!=null">
                                             <a (click)="questionHelp(item.recommendation.instruction)">
-                                                <img src="assets/images/icon_help.svg" class="question">
+                                                <img alt="icon" src="assets/images/icon_help.svg" class="question">
                                             </a>
                                         </p>
                                         <div class="help_img" *ngIf="item.recommendation.instruction==null">
                                             <a>
-                                                <img src="assets/images/icon_help.svg" class="question" style="visibility: hidden;">
+                                                <img alt="icon" src="assets/images/icon_help.svg" class="question" style="visibility: hidden;">
                                             </a>
                                         </div>
                                     </div>
                                 </div>
-
                                
                                 <div class="row spacingresponsive">
                                     <div class="col-xs-6">
@@ -101,7 +100,7 @@
                                     <div class="col-xs-6">
                                         <p class="help_imgsmall" *ngIf="item.recommendation.instruction!=null">
                                             <a (click)="questionHelp(item.recommendation.instruction)">
-                                                <img src="assets/images/icon_help.svg" class="question">
+                                                <img alt="icon" src="assets/images/icon_help.svg" class="question">
                                             </a>
                                         </p>
                                     </div>
@@ -137,11 +136,11 @@
                                             <div class="row">
                                                 <div class="col-lg-2 col-sm-3 col-xs-2">
                                                     <button type="button" class="btn btn-primary button leaksfire">
-                                                        <img src="assets/images/{{item.leak.takebackIcon}}" class="leaksfire">
+                                                        <img alt="icon" src="assets/images/{{item.leak.takebackIcon}}" class="leaksfire">
                                                     </button>
                                                 </div>
                                                 <div class="col-lg-10 col-sm-9 col-xs-10 high">
-                                                    <p>
+                                                    <p class="leak-label">
                                                         <a (click)="leakView(item.parentLeakId)" class="drought">{{item.leak.takebackLabel}}</a>
                                                         <span class="mo">{{item.parentSurveyRecommendation.takebackValue | number:'0.0-0'}}{{item.leak.unit}}</span>
                                                     </p>

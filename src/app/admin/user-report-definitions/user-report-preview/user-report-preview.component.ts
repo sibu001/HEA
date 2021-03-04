@@ -1,9 +1,8 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TableColumnData } from 'src/app/data/common-data';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -11,7 +10,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   templateUrl: './user-report-preview.component.html',
   styleUrls: ['./user-report-preview.component.css']
 })
-export class UserReportPreviewComponent implements OnInit {
+export class UserReportPreviewComponent implements OnInit, OnDestroy {
   id: any;
   contentForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
@@ -26,8 +25,6 @@ export class UserReportPreviewComponent implements OnInit {
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   setForm(event: any) {

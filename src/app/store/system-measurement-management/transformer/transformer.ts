@@ -23,7 +23,8 @@ export class SystemMeasurementUtilityTransformer {
             } else if (element.alertLevel === 10) {
                 dataSourceObject.alertLevel = 'Error';
             }
-            dataSourceObject.active = element.active ? 'assets/images/icon_check_green.png' : '';
+            dataSourceObject.createdDate = element.createdDate ? new DatePipe('en-US').transform(new Date(element.createdDate), 'MM/dd/yyyy, HH:mm:ss') : '';
+            dataSourceObject.active = element.active ? 'assets/images/icon_check_green.png' : null;
             dataSourceList.push(dataSourceObject);
         });
         return {
@@ -118,12 +119,12 @@ export class SystemMeasurementUtilityTransformer {
             dataSourceObject.serialNumber = index;
             dataSourceObject.prevFireTime = element.prevFireTime ? new DatePipe('en-US').transform(new Date(element.prevFireTime), 'MM/dd/yyyy h:mm:ss') : '';
             dataSourceObject.nextFireTime = element.nextFireTime ? new DatePipe('en-US').transform(new Date(element.nextFireTime), 'MM/dd/yyyy h:mm:ss') : '';
-            var totalSeconds = dataSourceObject.prevRunTime / 1000;
-            var totalMinutes = totalSeconds / 60;
-            var totalHours = totalMinutes / 60;
-            var seconds = Math.floor(totalSeconds) % 60;
-            var minutes = Math.floor(totalMinutes) % 60;
-            var hours = Math.floor(totalHours) % 60;
+            const totalSeconds = dataSourceObject.prevRunTime / 1000;
+            const totalMinutes = totalSeconds / 60;
+            const totalHours = totalMinutes / 60;
+            const seconds = Math.floor(totalSeconds) % 60;
+            const minutes = Math.floor(totalMinutes) % 60;
+            const hours = Math.floor(totalHours) % 60;
             dataSourceObject.prevRunTime = hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
             dataSourceObject.buttonList = [
                 { key: 'execute', name: 'Execute', isShow: (element.state === 0 ? true : false) },
@@ -153,10 +154,12 @@ export class SystemMeasurementUtilityTransformer {
             ];
             dataSourceObject.detailRow = true;
             // const className = [];
-            // element.threadInfo.stackTrace.forEach(elements => {
-            //     className.push(elements.className);
-            // });
-            // dataSourceObject.element = { data: className };
+            element.threadInfo.stackTrace.forEach(elements => {
+                elements.className = elements.className + '.' + elements.methodName;
+                if (elements.lineNumber > 0) {
+                    elements.className = elements.className + '(' + elements.fileName + ':' + elements.lineNumber + ')';
+                }
+            });
             dataSourceObject.element = element;
             dataSourceList.push(dataSourceObject);
         });

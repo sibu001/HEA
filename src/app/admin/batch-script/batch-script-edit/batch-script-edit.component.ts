@@ -112,7 +112,8 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
       surveyDescriptionId: [event !== undefined ? event.surveyDescriptionId : ''],
       calculation: [event !== undefined ? event.calculation : ''],
       mailAddress: [event !== undefined ? event.mailAddress : ''],
-      comments: [event !== undefined ? event.comments : '']
+      comments: [event !== undefined ? event.comments : ''],
+      resultHeader: [event !== undefined ? event.resultHeader : ''],
     });
   }
   back() {

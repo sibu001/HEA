@@ -320,6 +320,8 @@ export class GetSystemParameterListAction {
 
 export class GetSystemParameterCountAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_SYSTEM_PARAMETER_COUNT;
+    constructor(readonly filter: any) {
+    }
 }
 
 export class GetSystemParameterByIdAction {

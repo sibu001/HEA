@@ -28,7 +28,7 @@ export class KeyIndicatorListComponent implements OnInit, OnDestroy {
     keyIndicatorName: this.fb.control(''),
   });
   constructor(public router: Router,
-    public fb: FormBuilder,) { }
+    public fb: FormBuilder) { }
 
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');

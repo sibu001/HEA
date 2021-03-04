@@ -1,28 +1,22 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse, HttpHeaderResponse, HttpSentEvent, HttpProgressEvent, HttpUserEvent } from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { LoginService } from '../services/login.service';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/switchMap';
-
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { Router } from '@angular/router';
 
 
 @Injectable()
 export class AuthorizationInterceptor implements HttpInterceptor {
 
-    isRefreshingToken: boolean = false;
+    isRefreshingToken = false;
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-    constructor(private loginService: LoginService, private router: Router) {
-
-    }
+    constructor(private loginService: LoginService) {}
 
     addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
-        //  return req.clone({ setHeaders: { Authorization: 'Bearer ' + token } });
-        //return req.clone({ setHeaders: { 'Content-Type': 'application/x-www-form-urlencoded' } });
         return req;
     }
 
@@ -35,7 +29,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             if (error instanceof HttpErrorResponse) {
                 switch ((<HttpErrorResponse>error).status) {
                     case 400:
-                    //return this.handle400Error(error);
+                    // return this.handle400Error(error);
                     case 401:
                         return this.handle401Error(req, next);
                 }
@@ -53,9 +47,9 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             // comes back from the refreshToken call.
             this.tokenSubject.next(null);
             return this.loginService.getRefreshToken().subscribe(data => {
-                let response1 = JSON.stringify(data);
-                let response = JSON.parse(response1);
-                let user = this.loginService.getUser();
+                const response1 = JSON.stringify(data);
+                const response = JSON.parse(response1);
+                const user = this.loginService.getUser();
                 user.token = response.access_token;
                 user.refreshToken = response.refresh_token;
                 this.loginService.setUser(user);
@@ -63,7 +57,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
                 this.isRefreshingToken = false;
                 return next.handle(this.addToken(req, response.token));
             }, error => {
-                if (this.loginService.getUser().token != null && this.loginService.getUser().token != undefined) {
+                if (this.loginService.getUser().token != null && this.loginService.getUser().token !== undefined) {
                     return this.loginService.logout();
                 }
             });
@@ -83,5 +77,4 @@ export class AuthorizationInterceptor implements HttpInterceptor {
 
     //     return Observable.throw(error);
     // }
-
 }

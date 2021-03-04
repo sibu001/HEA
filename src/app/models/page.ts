@@ -10,5 +10,5 @@ export class Page {
         active: '',
         direction: 'asc'
     };
-    public search: String = '';
+    public search = '';
 }

@@ -1,4 +1,3 @@
-<!-- <div id="myModal" class="modal fade" role="dialog"> -->
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -9,35 +8,39 @@
       <div class="modal-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-sm" data-source="data-source" [mfData]="usageModelObj"
-            #mf="mfDataTable">
+            #mf="mfDataTable" summary="GasUsage">
+            <tr style="display: none;">
+              <th id="t1"></th>
+              <th id="t2"></th>
+            </tr>
             <tr>
-              <td> <b>Year:</b> </td>
+              <td> <strong>Year:</strong> </td>
               <td> <input type="text" class="inp" id="year" name="Year" [(ngModel)]="usageModelObj.year"></td>
             </tr>
             <tr>
-              <td> <b> Month: </b> </td>
+              <td> <strong> Month: </strong> </td>
               <td> <input type="text" class="inp" id="month" name="Month" [(ngModel)]="usageModelObj.month"></td>
             </tr>
             <tr>
-              <td> <b> Day:</b> </td>
+              <td> <strong> Day:</strong> </td>
               <td> <input type="text" class="inp" id="day" name="Day" [(ngModel)]="usageModelObj.day"></td>
             </tr>
             <tr>
-              <td> <b> Hour:</b> </td>
+              <td> <strong> Hour:</strong> </td>
               <td> <input type="text" class="inp" id="hour" name="Hour" [(ngModel)]="usageModelObj.hour"></td>
             </tr>
             <tr>
-              <td> <b> type:</b> </td>
+              <td> <strong> type:</strong> </td>
               <td> <input type="text" class="inp" id="type" name="Type" [readonly]="true"
                   [(ngModel)]="usageModelObj.type">
               </td>
             </tr>
             <tr>
-              <td> <b> Value:</b> </td>
+              <td> <strong> Value:</strong> </td>
               <td> <input type="text" class="inp" id="value" name="Value" [(ngModel)]="usageModelObj.value"></td>
             </tr>
             <tr>
-              <td> <b> Source:</b> </td>
+              <td> <strong> Source:</strong> </td>
               <td> <input type="text" class="inp" id="source" name="Source" [(ngModel)]="usageModelObj.source"></td>
             </tr>
             <tr>
@@ -58,29 +61,29 @@
                 Updated</td>
             </tr>
             <tr>
-              <td> <b> BillingDate:</b> </td>
+              <td> <strong> BillingDate:</strong> </td>
               <td> <input type="date" class="inp" id="billingDate" name="billingDate"
                   [(ngModel)]="usageModelObj.billingDateView">
               </td>
             </tr>
             <tr>
-              <td> <b> StartDate:</b> </td>
+              <td> <strong> StartDate:</strong> </td>
               <td> <input type="date" class="inp" id="startDate" name="startDate"
                   [(ngModel)]="usageModelObj.startDateView">
               </td>
             </tr>
             <tr>
-              <td> <b> EndDate:</b> </td>
+              <td> <strong> EndDate:</strong> </td>
               <td> <input type="date" class="inp" id="endDateView" name="EndDate" [(ngModel)]="usageModelObj.endDateView">
               </td>
             </tr>
             <tr>
-              <td> <b> StartDate(Original):</b> </td>
+              <td> <strong> StartDate(Original):</strong> </td>
               <td> <input type="date" class="inp" id="startDateOrig" name="startDateOrig"
                   [(ngModel)]="usageModelObj.startDateOrigView"></td>
             </tr>
             <tr>
-              <td> <b> EndDate(Original):</b> </td>
+              <td> <strong> EndDate(Original):</strong> </td>
               <td> <input type="date" class="inp" id="endDateOrigView" name="endDateOrig"
                   [(ngModel)]="usageModelObj.endDateOrigView"></td>
             </tr>
@@ -97,4 +100,3 @@
     </div>
   
   </div>
-  <!-- </div> -->

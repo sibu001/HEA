@@ -1,5 +1,5 @@
 import { Routes, RouterModule } from '@angular/router';
-import { MenuComponent } from "src/app/headers/menu.component";
+import { MenuComponent } from 'src/app/headers/menu.component';
 import { NgModule } from '@angular/core';
 
 export const HeaderRoutes: Routes = [

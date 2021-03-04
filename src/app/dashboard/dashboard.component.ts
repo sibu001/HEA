@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit {
   ) {
     this.users = this.loginService.getUser();
     this.count = 0;
-    if (this.users.outhMeResponse == undefined) {
+    if (this.users.outhMeResponse === undefined) {
       this.loginService.logout();
     }
     this.getNextSurvey();
@@ -154,9 +154,7 @@ export class DashboardComponent implements OnInit {
     document.getElementById('loader').classList.add('loading');
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/nextSurvey').subscribe(
       data => {
-        // const response = JSON.parse(JSON.parse(JSON.stringify(data))._body);
         const response = JSON.parse(JSON.stringify(data));
-        // console.log(response.data);
         if (response.data != null) {
           this.nextTopic = response.data.surveyDescription.label;
           this.topicdescription = response.data.surveyDescription.description;
@@ -226,8 +224,7 @@ export class DashboardComponent implements OnInit {
       error => {
         document.getElementById('loader').classList.remove('loading');
         console.log(JSON.parse(JSON.stringify(error)));
-      }
-    );
+      });
   }
   getLeaksAndRecommendation() {
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/recommendationsAndLeaks').subscribe(
@@ -300,41 +297,48 @@ export class DashboardComponent implements OnInit {
         const response = JSON.parse(JSON.stringify(data));
         this.trendingHomeChart = response.data;
         this.trendingHomeChartCopy = JSON.parse(JSON.stringify(this.trendingHomeChart));
-        var line1 = new Array;
-        var line2 = new Array;
-        var line3 = new Array;
-        var line4 = new Array;
-        var line5 = new Array;
-        var line6 = new Array;
+        /* tslint:disable:no-unused-variable */
+        const line1: Array<any> = new Array;
+        /* tslint:disable:no-unused-variable */
+        const line2: Array<any> = new Array;
+        /* tslint:disable:no-unused-variable */
+        const line3: Array<any> = new Array;
+        /* tslint:disable:no-unused-variable */
+        const line4: Array<any> = new Array;
+        /* tslint:disable:no-unused-variable */
+        const line5: Array<any> = new Array;
+        /* tslint:disable:no-unused-variable */
+        const line6: Array<any> = new Array;
         let i = 0;
         for (const areaSeries of response.data.chart.series) {
-          if (i == 0) {
+          if (i === 0) {
             for (const areaSeriesValue of areaSeries.seriesValues) {
               line1.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
-          } else if (i == 1) {
+          } else if (i === 1) {
             for (const areaSeriesValue of areaSeries.seriesValues) {
               line2.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
-          } else if (i == 2) {
+          } else if (i === 2) {
             for (const areaSeriesValue of areaSeries.seriesValues) {
               line3.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
-          } else if (i == 3) {
+          } else if (i === 3) {
             for (const areaSeriesValue of areaSeries.seriesValues) {
               line4.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
-          } else if (i == 4) {
+          } else if (i === 4) {
             for (const areaSeriesValue of areaSeries.seriesValues) {
               line5.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
-          } else if (i == 5) {
+          } else if (i === 5) {
             for (const areaSeriesValue of areaSeries.seriesValues) {
               line6.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
           }
           i++;
         }
+        console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
         setTimeout(function () {
           eval(response.data.chart.freeChartConfigurationJS);
         }, 100);
@@ -359,41 +363,42 @@ export class DashboardComponent implements OnInit {
     this.trendingHomeChart = undefined;
     setTimeout(function () {
       self.globalK++;
-      var line1 = new Array;
-      var line2 = new Array;
-      var line3 = new Array;
-      var line4 = new Array;
-      var line5 = new Array;
-      var line6 = new Array;
+      const line1: Array<any> = new Array;
+      const line2: Array<any> = new Array;
+      const line3: Array<any> = new Array;
+      const line4: Array<any> = new Array;
+      const line5: Array<any> = new Array;
+      const line6: Array<any> = new Array;
       let i = 0;
       for (const areaSeries of self.trendingHomeChartCopy.chart.series) {
-        if (i == 0) {
+        if (i === 0) {
           for (const areaSeriesValue of areaSeries.seriesValues) {
             line1.push([areaSeriesValue.label, areaSeriesValue.value]);
           }
-        } else if (i == 1) {
+        } else if (i === 1) {
           for (const areaSeriesValue of areaSeries.seriesValues) {
             line2.push([areaSeriesValue.label, areaSeriesValue.value]);
           }
-        } else if (i == 2) {
+        } else if (i === 2) {
           for (const areaSeriesValue of areaSeries.seriesValues) {
             line3.push([areaSeriesValue.label, areaSeriesValue.value]);
           }
-        } else if (i == 3) {
+        } else if (i === 3) {
           for (const areaSeriesValue of areaSeries.seriesValues) {
             line4.push([areaSeriesValue.label, areaSeriesValue.value]);
           }
-        } else if (i == 4) {
+        } else if (i === 4) {
           for (const areaSeriesValue of areaSeries.seriesValues) {
             line5.push([areaSeriesValue.label, areaSeriesValue.value]);
           }
-        } else if (i == 5) {
+        } else if (i === 5) {
           for (const areaSeriesValue of areaSeries.seriesValues) {
             line6.push([areaSeriesValue.label, areaSeriesValue.value]);
           }
         }
         i++;
       }
+      console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
       if (self.globalM === self.globalK) {
         self.trendingHomeChart = self.trendingHomeChartCopy;
       }

@@ -8,4 +8,3 @@ export interface MARKER {
     lat: number;
     lng: number;
   }
-  

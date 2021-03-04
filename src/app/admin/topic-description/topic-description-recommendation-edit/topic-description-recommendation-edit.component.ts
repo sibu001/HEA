@@ -63,8 +63,6 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   ngOnInit() {
     this.recommendationKeys = TableColumnData.RECOMMENDATION_EDIT_KEY;
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   setForm(event: any): any {

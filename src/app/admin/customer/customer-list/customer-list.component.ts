@@ -145,21 +145,21 @@ export class CustomerListComponent implements OnInit, OnDestroy {
             let i = 0;
             this.subscriptions.add(this.customerService.loadCustomerEventList(elements.customerId).pipe(skipWhile((item: any) => !item)).subscribe((eventList: any) => {
               eventList.customerManagement.customerEventList.forEach(element => {
-                customerValue.list[index][element.customerEventType.eventCode] = this.datePipe.transform(element.eventDatetime, 'dd/MM/yyyy') + ' ' + element.description +
+                customerValue.list[index][element.customerEventType.eventCode] = this.datePipe.transform(element.eventDatetime, 'MM/dd/yyyy') + ' ' + element.description +
                   (customerValue.list[index][element.customerEventType.eventCode] ? ' ...' : '');
                 i++;
               });
             }));
             this.subscriptions.add(this.customerService.loadStaffNoteList(elements.customerId).pipe(skipWhile((item: any) => !item)).subscribe((staffNoteList: any) => {
               staffNoteList.customerManagement.staffNoteList.forEach(element => {
-                customerValue.list[index].staffNote = this.datePipe.transform(element.noteDate, 'dd/MM/yyyy') + ' ' + element.note +
+                customerValue.list[index].staffNote = this.datePipe.transform(element.noteDate, 'MM/dd/yyyy') + ' ' + element.note +
                   (customerValue.list[index].staffNote ? ' ...' : '');
               });
             }));
 
             this.subscriptions.add(this.customerService.loadCustomerFileList(elements.customerId).pipe(skipWhile((item: any) => !item)).subscribe((customerFileList: any) => {
               customerFileList.customerManagement.customerFileList.list.forEach(element => {
-                customerValue.list[index].files = element.name + ' ' + this.datePipe.transform(element.timestamp, 'dd/MM/yyyy') + ' ' + element.description +
+                customerValue.list[index].files = element.name + ' ' + this.datePipe.transform(element.timestamp, 'MM/dd/yyyy') + ' ' + element.description +
                   (customerValue.list[index].files ? ' ...' : '');
               });
             }));
@@ -187,9 +187,21 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   }
   getFilterUrl(event: any, isSearch: boolean): any {
     this.customerView = this.searchForm.controls.customerView.value !== undefined && this.searchForm.controls.customerView.value !== null ? this.searchForm.controls.customerView.value : '-1';
-    let params;
+    let params: any;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
+    if (event && event.sort) {
+      switch (event.sort.active) {
+        case 'name':
+          event.sort.active = 'user.name';
+          break;
+        case 'joinDate':
+          event.sort.active = 'createdDate';
+          break;
+        default:
+          break;
+      }
+    }
     if ((Number(this.searchForm.controls['customerView'].value)) === null || (Number(this.searchForm.controls['customerView'].value)) === -1) {
       this.isCheckBox = true;
       params = new HttpParams()

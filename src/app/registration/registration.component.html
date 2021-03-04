@@ -1,28 +1,29 @@
 <div class="container-fluid">
   <div class="dash">
     <div class="row1">
-      <img src="assets/images/highenergyhome-banner.gif" class="dr_center-block">
-      <img src="assets/images/header_bar.png" class="dr_center-block2">
+      <img alt="logo" src="assets/images/highenergyhome-banner.gif" class="dr_center-block">
+      <img alt="logo" src="assets/images/header_bar.png" class="dr_center-block2">
     </div>
     <div class="row">
       <div class="col-sm-7">
-        <h3 class="smartaudit"><b>Smart Audit</b></h3>
+        <h3 class="smartaudit">
+          <strong>Smart Audit</strong>
+        </h3>
         <div class="mainContaint">
           <p class="innertext">Let's get started with your online energy audit.</p>
           <p class="innertext">First, we'll login to your PG&E account to gather your historical energy use data.</p>
           <p class="innertext">Next, you and our system will work together to breakdown how your household uses energy and then identify the "easy
             wins" in reclaiming unnecessary losses. The process is straightforward. We use computer algorithms to crunch
             the data. You help out by answering simple questions when the algorithm needs it.</p>
-          <img src="assets/images/intro.png" class="intro">
+          <img alt="intro" src="assets/images/intro.png" class="intro">
         </div>
       </div>
       <div class="col-sm-5">
         <div>
-          <img src="assets/images/dataguard.png" class="sideImage">
+          <img alt="guard" src="assets/images/dataguard.png" class="sideImage">
           <p class="registrationText"><a [routerLink]="['/login']" [queryParams]="{'theme':'HEA'}">Already have a login?</a></p>
         </div>
         <br>
-        <!-- <img src="assets/images/login_area.png" class="dr_center-block">  -->
         <div class="mainLogin">
           <p class="errorText">
              <span *ngIf="validEmail">{{validEmail}}</span><br *ngIf="validEmail">
@@ -70,7 +71,7 @@
             </div>
             <div class="form-group">
               <div class="col-sm-10">
-                <img src="assets/images/login.png" class="login" (click)="registration()">
+                <img alt="login" src="assets/images/login.png" class="login" (click)="registration()">
               </div>
             </div>
              <div class="form-group link">

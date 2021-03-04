@@ -23,6 +23,7 @@ import {
   GetCustomerFileListAction,
   GetCustomerListAction,
   GetCustomerViewConfigurationListAction,
+  GetEmailSettingListAction,
   GetPasswordValidationRuleAction,
   GetRoleListByUserIdAction,
   GetStaffByIdAction,
@@ -136,6 +137,10 @@ export class CustomerService {
 
   getCustomerFileById(): Observable<any> {
     return this.store.select(CustomerManagementState.getCustomerFileById);
+  }
+
+  getEmailSettingList(): Observable<any> {
+    return this.store.select(CustomerManagementState.getEmailSettingList);
   }
 
   getUserCustomerGroupsList(): Observable<any> {
@@ -292,6 +297,10 @@ export class CustomerService {
 
   deleteCustomerFileById(customerId: any, fileName: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new DeleteCustomerFileByIdAction(customerId, fileName));
+  }
+
+  loadEmailSettingList(customerId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetEmailSettingListAction(customerId));
   }
 
   sendActivationMailMessage(mailObject: any): Observable<CustomerManagementState> {

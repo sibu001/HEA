@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -14,7 +14,7 @@ import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@s
   styleUrls: ['./summary-chart-definition-edit.component.css'],
   providers: [ToolbarService, LinkService, ImageService, HtmlEditorService]
 })
-export class SummaryChartDefinitionEditComponent implements OnInit {
+export class SummaryChartDefinitionEditComponent implements OnInit, OnDestroy {
 
   id: any;
   isBlockField: false;
@@ -66,8 +66,6 @@ export class SummaryChartDefinitionEditComponent implements OnInit {
   ngOnInit() {
     this.chartKeys = TableColumnData.CHART_SERIES_FIELD_KEY;
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   setForm(event: any): any {

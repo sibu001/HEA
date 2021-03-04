@@ -75,8 +75,6 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
     this.recommendationKeys = TableColumnData.RECOMMENDATION_KEY;
     this.topicVariablesKeys = TableColumnData.TOPIC_VARIABLES_KEYS;
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   loadTopicDescription() {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Users } from "src/app/models/user";
-import { Router } from "@angular/router";
-import { LoginService } from "src/app/services/login.service";
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'recommendationInstruction',
@@ -9,13 +8,11 @@ import { LoginService } from "src/app/services/login.service";
   styleUrls: ['./recommendationInstruction.component.css']
 })
 export class RecommendationInstructionComponent implements OnInit {
-hide:boolean =false;
-users:Users=new Users();
-constructor(private loginService: LoginService, private router: Router){
-  this.users=this.loginService.getUser();
-}
+  hide = false;
+  users: Users = new Users();
+  constructor(private loginService: LoginService) {
+    this.users = this.loginService.getUser();
+  }
 
-ngOnInit() {
-
-}
+  ngOnInit() { }
 }

@@ -27,6 +27,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   isForce = false;
   customerData: any;
   userId: any;
+  linkedPersonType: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly fb: FormBuilder,
@@ -58,6 +59,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     let linkedPerson = 'Staff';
+    this.linkedPersonType = event && event.linkedPersonType ? event.linkedPersonType : null;
     if (event && event.linkedPersonType === 1) {
       linkedPerson = 'Customer';
     } else if (event && event.linkedPersonType === 2) {
@@ -72,12 +74,12 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       auditId: [this.customerData !== undefined ? this.customerData.auditId : '', Validators.required],
       customerName: [this.customerData !== undefined ? this.customerData.user.name : '', Validators.required],
       customerId: [event !== undefined ? event.customerId : ''],
-      eventDatetime: [event !== undefined ? new Date(event.eventDatetime) : ''],
-      eventCode: [event !== undefined ? event.eventCode : ''],
+      eventDatetime: [event !== undefined ? new Date(event.eventDatetime) : new Date()],
       description: [event !== undefined ? event.description : ''],
       modifyAllowed: [event !== undefined ? event.modifyAllowed : ''],
       linkedPersonType: [event !== undefined ? linkedPerson : ''],
       linkedPersonName: [event !== undefined ? event.linkedPersonName : ''],
+      linkedUserId: [event !== undefined ? event.linkedUserId : ''],
       customerEventType: this.fb.group({
         id: [event !== undefined ? event.customerEventType.id : ''],
         customerEventTypeId: [event !== undefined ? event.customerEventType.customerEventTypeId : ''],
@@ -86,7 +88,8 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
         eventName: [event !== undefined ? event.customerEventType.eventName : ''],
         onlyOne: [event !== undefined ? event.customerEventType.onlyOne : null],
         shared: [event !== undefined ? event.customerEventType.shared : null],
-      })
+      }),
+      user: [event && event.user ? event.user : null]
     });
   }
 
@@ -95,6 +98,12 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.eventTypeData = response;
+        if (this.eventTypeData.length > 0) {
+          const customerEventType: any = this.eventForm.controls.customerEventType;
+          customerEventType.controls['eventCode'].setValue(this.eventTypeData[0].eventCode);
+          customerEventType.controls['description'].setValue(this.eventTypeData[0].description);
+          this.eventForm.controls['customerEventTypeId'].setValue(this.eventTypeData[0].customerEventTypeId);
+        }
       }));
   }
 
@@ -108,6 +117,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   handleAutoComplete(event: any): any {
     this.users.searchUserList[0] = event.option.value;
     this.loginService.setUser(this.users);
+    this.customerData = event.option.value;
     this.eventForm.controls['auditId'].setValue(event.option.value.auditId);
     this.eventForm.controls['customerName'].setValue(event.option.value.user.name);
   }
@@ -124,7 +134,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   changeDropDownValue(event: any) {
     const i = this.eventTypeData.findIndex((item: any) => item.eventCode === event.target.value);
     if (i !== -1) {
-      const customerEventType = this.eventForm.controls.customerEventType as FormGroup;
+      const customerEventType: any = this.eventForm.controls.customerEventType;
       customerEventType.controls['eventCode'].setValue(this.eventTypeData[i].eventCode);
       customerEventType.controls['description'].setValue(this.eventTypeData[i].description);
       this.eventForm.controls['customerEventTypeId'].setValue(this.eventTypeData[i].customerEventTypeId);
@@ -148,7 +158,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.administrativeService.getEventHistoryById().pipe(skipWhile((item: any) => !item))
           .subscribe((eventHistory: any) => {
             if (this.isForce) {
-              this.router.navigate(['admin/eventHistory/eventHistoryEdit'], { queryParams: { 'id': eventHistory.data.id } });
+              this.router.navigate(['admin/eventHistory/eventHistoryEdit'], { queryParams: { customerEventId: this.customerEventId, customerId: this.customerId } });
             }
             this.setForm(eventHistory.data);
           }));
@@ -169,12 +179,14 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
 
   save() {
     if (this.eventForm.valid) {
+      this.eventForm.value.linkedPersonType = this.linkedPersonType;
+      this.eventForm.value.eventDatetime = this.eventForm.value.eventDatetime ? new Date(this.eventForm.value.eventDatetime).getTime() : '';
       if (this.customerEventId !== null && this.customerEventId !== undefined) {
         this.subscriptions.add(this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            this.customerEventId = response.data.id;
-            this.customerId = response.data.customerId;
+            this.customerEventId = response.administrativeManagement.eventHistory.data.id;
+            this.customerId = response.administrativeManagement.eventHistory.data.customerId;
             this.isForce = true;
             this.loadEventHistoryById();
           }));
@@ -182,8 +194,8 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.administrativeService.saveEventHistory(this.customerData.customerId, this.eventForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            this.customerEventId = response.data.id;
-            this.customerId = response.data.customerId;
+            this.customerEventId = response.administrativeManagement.eventHistory.data.id;
+            this.customerId = response.administrativeManagement.eventHistory.data.customerId;
             this.isForce = true;
             this.loadEventHistoryById();
           }));

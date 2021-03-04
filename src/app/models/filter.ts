@@ -1,4 +1,3 @@
-import { Time } from '@angular/common';
 export class Filter {
     public startDate: Date;
     public endDate: Date;

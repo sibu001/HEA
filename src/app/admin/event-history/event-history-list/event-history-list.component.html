@@ -80,9 +80,9 @@
 
           <div class="paddingTop">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img alt="dot" src='assets/images/dot03.gif' class='dot'>
               <span class="messageName">Event list (Number of Records =
-                {{totalElement}})</span></p>
+                {{totalElement | number:'1.0':'en-US'}})</span></p>
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
               [data]="dataSource"
               [totalElement]="reportData.totalElements"

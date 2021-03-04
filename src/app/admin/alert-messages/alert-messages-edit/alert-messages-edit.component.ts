@@ -48,6 +48,7 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
   }
   setForm(event: any) {
     this.alertMessagesForm = this.formBuilder.group({
+      id: [event !== undefined ? event.id : null],
       target: [event !== undefined ? event.target : 'C'],
       alertType: [event !== undefined ? event.alertType : 'L'],
       alertLevel: [event !== undefined ? event.alertLevel : '10'],

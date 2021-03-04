@@ -38,6 +38,7 @@ export enum SystemActionTypes {
     SAVE_CUSTOMER_FILE = 'Save Customer File',
     UPDATE_CUSTOMER_FILE = 'Update Customer File',
     DELETE_CUSTOMER_FILE_BY_ID = 'Delete Customer File By Id',
+    GET_EMAIL_SETTING_LIST = 'Get Email Setting List',
     SEND_ACTIVATION_MAIL_MESSAGE = 'Send Activation Mail Message',
     CLEAR_CUSTOMER_VALUE_CACHE = 'Clear Customer Value Cache',
     RECALCULATE_CUSTOMER_VARIABLE = 'Recalculate Customer Variable',
@@ -293,6 +294,12 @@ export class UpdateCustomerFileAction {
 export class DeleteCustomerFileByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_CUSTOMER_FILE_BY_ID;
     constructor(readonly customerId: any, readonly fileName: number) {
+    }
+}
+
+export class GetEmailSettingListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_EMAIL_SETTING_LIST;
+    constructor(readonly customerId: any) {
     }
 }
 

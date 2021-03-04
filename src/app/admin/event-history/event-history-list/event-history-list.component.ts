@@ -91,11 +91,19 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.eventHistoryFilter.page = event;
+    let sortFiled = '';
+    if (event && event.sort.active === 'eventCode') {
+      sortFiled = 'customerEventType.eventCode';
+    } else if (event && event.sort.active === 'eventName') {
+      sortFiled = 'customerEventType.eventName';
+    } else if (event && event.sort.active) {
+      sortFiled = event.sort.active;
+    }
     const params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('sortField', (event && event.sort.active !== undefined ? (event.sort.active === 'customerName' ? 'customer.user.name' : event.sort.active) : ''))
+      .set('sortField', (event && sortFiled !== undefined ? (sortFiled === 'customerName' ? 'customer.user.name' : sortFiled) : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('dateFrom', (this.topicForm.value.periodStart ? this.datePipe.transform(this.topicForm.value.periodStart, 'MM/dd/yyyy') : ''))
       .set('customer.auditId', (this.topicForm.value.auditId !== null ? this.topicForm.value.auditId : ''))

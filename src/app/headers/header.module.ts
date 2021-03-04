@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { MenuComponent } from "src/app/headers/menu.component";
+import { MenuComponent } from 'src/app/headers/menu.component';
 import { SafePipeModule } from 'safe-pipe';
 import { SharedModule } from '../general/share.module';
 import { HeaderRoutingModule } from './headers.routes';
@@ -15,11 +15,8 @@ import { HeaderRoutingModule } from './headers.routes';
         SafePipeModule,
         HeaderRoutingModule
     ],
-    exports: [
-     
-    ]
+    exports: []
 
 })
 export class HeaderModule {
-
 }

@@ -24,7 +24,7 @@ export class AdministrativeReportTransformer {
             dataSourceObject = element;
             dataSourceObject.eventCode = element.customerEventType.eventCode;
             dataSourceObject.eventName = element.customerEventType.eventName;
-            dataSourceObject.createdDate = element.eventDatetime ? new DatePipe('en-US').transform(element.eventDatetime, 'MMM d, y', 'PST') : '';
+            dataSourceObject.createdDate = element.eventDatetime ? new DatePipe('en-US').transform(element.eventDatetime, 'MMM d, y') : '';
             dataSourceList.push(dataSourceObject);
         });
         return dataSourceList;

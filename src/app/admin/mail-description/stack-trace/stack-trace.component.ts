@@ -1,7 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { TableColumnData } from 'src/app/data/common-data';
-import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemThreadInfoComponent } from '../../system-jobs/system-thread-info/system-thread-info.component';
 
 @Component({

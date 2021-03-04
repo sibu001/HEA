@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Users } from '../models/user';
 import { LoginService } from '../services/login.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,7 +10,7 @@ declare var $: any;
   templateUrl: './electricDailySmartMeterList.component.html',
   styleUrls: ['./gasList.component.css']
 })
-export class electricDailySmartMeterListComponent implements OnInit {
+export class electricDailySmartMeterListComponent implements OnInit, AfterViewInit {
   users: Users = new Users();
   errorMessage: string;
   useTypes: string;
@@ -36,50 +36,44 @@ export class electricDailySmartMeterListComponent implements OnInit {
     } else {
       this.users.outhMeResponse = {};
       this.users.outhMeResponse.userId = '2139';
-      // this.getUserById();
     }
     this.usageHistoryList = new Array;
-    // this.usageHistoryList = this.users.gesChargeList;
-    this.perFormGetList("smartMeterElectricDaily");
+    this.perFormGetList('smartMeterElectricDaily');
 
   }
 
-  // getUserById(): any {
-  //   this.users.outhMeResponse = {};
-  //   this.users.outhMeResponse.userId = '2139';
-  // }
   ngOnInit() { }
   ngAfterViewInit() {
     setTimeout(function () {
       $('#example').DataTable({
-        "pagingType": "full",
-        "columnDefs": [{
-          "targets": 'no-sort', // column or columns numbers
-          "orderable": false,  // set orderable for selected columns
+        'pagingType': 'full',
+        'columnDefs': [{
+          'targets': 'no-sort', // column or columns numbers
+          'orderable': false,  // set orderable for selected columns
         }],
       });
-      var table = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
+      const table = $('#example').DataTable();   // pay attention to capital D, which is mandatory to retrieve 'api' datatables' object, as @Lionel said
 
-      $("#year").on('keyup click', function () {
+      $('#year').on('keyup click', function () {
         table.columns([1]).search($(this).val()).draw();
       });
 
-      $("#month").on('keyup click', function () {
+      $('#month').on('keyup click', function () {
         table.column(2).search($(this).val()).draw();
       });
 
-      $("#day").on('keyup click', function () {
+      $('#day').on('keyup click', function () {
         table.column(3).search($(this).val()).draw();
       });
     }, 1000);
   }
 
   perFormGetList(useTypes) {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/" + useTypes).subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('users/' + this.users.outhMeResponse.userId + '/' + useTypes).subscribe(
       data => {
-        document.getElementById("loader").classList.remove('loading');
-        let response = JSON.parse(JSON.stringify(data));
+        document.getElementById('loader').classList.remove('loading');
+        const response = JSON.parse(JSON.stringify(data));
         this.users.types = useTypes;
         this.users.electricDailySmartMeterList = new Array;
         this.users.electricDailySmartMeterList = response.data;
@@ -90,14 +84,11 @@ export class electricDailySmartMeterListComponent implements OnInit {
         this.dataSource = [...this.usageHistoryData.content];
       },
       error => {
-        document.getElementById("loader").classList.remove('loading');
-        let response = JSON.parse(JSON.stringify(error));
+        document.getElementById('loader').classList.remove('loading');
+        const response = JSON.parse(JSON.stringify(error));
         console.log(error);
         this.errorMessage = response.error_description;
-
-      }
-    );
-
+      });
   }
   searchData() {
   }

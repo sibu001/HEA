@@ -38,7 +38,7 @@ export class Transformer {
                         dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB') + ' W') : '';
                     } else if (dataKey[i].pattern === '###,##0 kWh') {
                         dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB') + ' kWh') : '';
-                    } else if (dataKey[i].pattern === '#,###' || dataKey[i].pattern === '##' || dataKey[i].pattern === '##0' || dataKey[i].pattern === '###,##0') {
+                    } else if ((dataKey[i].pattern === '#,###' || dataKey[i].pattern === '##' || dataKey[i].pattern === '##0' || dataKey[i].pattern === '###,##0') && dataKey[i].valueType !== 'C') {
                         dataSourceObj[dataKey[i].definition] = (columnValue.value !== undefined && columnValue.value !== null && columnValue.value !== '') ?
                             (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB')) : '';
                     } else if (dataKey[i].pattern === '$#,##0') {
@@ -157,7 +157,7 @@ export class Transformer {
                     keyObj.key = 'staffNote';
                     element.definition = 'staffNote';
                     dataKey[i] = element;
-                } if (element.definition === 'activationDate' || element.definition === 'user.lastSuccessfulUtilityReadDate') {
+                } else if (element.definition === 'activationDate' || element.definition === 'user.lastSuccessfulUtilityReadDate' || element.definition === 'eligibleStartDate') {
                     keyObj.key = element.definition;
                     keyObj.isDate = true;
                     dataKey[i] = element;
@@ -215,15 +215,15 @@ export class Transformer {
         src.forEach(element => {
             const dataSourceObj: any = element;
             dataSourceObj.credentialType = element.credentialType.credentialName;
-            dataSourceObj.active = element.active ? 'assets/images/icon_check_orange.png' : '';
-            dataSourceObj.dataInUse = element.dataInUse ? 'assets/images/icon_check_orange.png' : '';
-            dataSourceObj.utilityInUse = element.utilityInUse ? 'assets/images/icon_check_orange.png' : '';
-            dataSourceObj.electricityInUse = element.electricityInUse ? 'assets/images/icon_check_orange.png' : '';
-            dataSourceObj.heatingInUse = element.heatingInUse ? 'assets/images/icon_check_orange.png' : '';
-            dataSourceObj.waterInUse = element.waterInUse ? 'assets/images/icon_check_orange.png' : '';
-            dataSourceObj.authorizationEndDate = element.authorizationEndDate ? new DatePipe('en-US').transform(new Date(element.authorizationEndDate), 'MM/dd/yyyy') : '';
+            dataSourceObj.active = element.active ? 'assets/images/icon_check_orange.png' : undefined;
+            dataSourceObj.dataInUse = element.dataInUse ? 'assets/images/icon_check_orange.png' : undefined;
+            dataSourceObj.utilityInUse = element.utilityInUse ? 'assets/images/icon_check_orange.png' : undefined;
+            dataSourceObj.electricityInUse = element.electricityInUse ? 'assets/images/icon_check_orange.png' : undefined;
+            dataSourceObj.heatingInUse = element.heatingInUse ? 'assets/images/icon_check_orange.png' : undefined;
+            dataSourceObj.waterInUse = element.waterInUse ? 'assets/images/icon_check_orange.png' : undefined;
+            dataSourceObj.authorizationEndDate = element.authorizationEndDate ? new DatePipe('en-US').transform(new Date(element.authorizationEndDate), 'MM/dd/yyyy') : element.authorizationStartDate ? 'Indefinitely' : '';
             dataSourceObj.authorizationStartDate = element.authorizationStartDate ? new DatePipe('en-US').transform(new Date(element.authorizationStartDate), 'MM/dd/yyyy') : '';
-            dataSourceObj.lastSuccessfulUsageDate = element.lastSuccessfulUsageDate ? new DatePipe('en-US').transform(new Date(element.lastSuccessfulUsageDate), 'MM/dd/yyyy, h:mm:ss') : '';
+            dataSourceObj.lastSuccessfulUsageDate = element.lastSuccessfulUsageDate ? new DatePipe('en-US').transform(new Date(element.lastSuccessfulUsageDate), 'MM/dd/yyyy, HH:mm:ss') : '';
             if (dataSourceObj.authorizationStatus === '1') {
                 dataSourceObj.authorizationStatus = 'Active';
             }

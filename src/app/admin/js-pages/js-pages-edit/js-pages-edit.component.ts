@@ -1,7 +1,5 @@
-import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
@@ -110,10 +108,12 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/jsPages/jsPagesList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.dynamicViewService.deleteJavaScriptPageById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/jsPages/jsPagesList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.dynamicViewService.deleteJavaScriptPageById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/jsPages/jsPagesList'], { queryParams: { 'force': true } });
+        }));
+    }
   }
 
   save() {

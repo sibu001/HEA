@@ -1,4 +1,3 @@
-import { Location } from '@angular/common';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +19,7 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   isForce = false;
   variableId: any;
+  errorMessage: any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly mailService: MailService,
@@ -52,6 +52,9 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((calculationType: any) => {
         this.calculationType = calculationType.data;
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 
@@ -71,6 +74,9 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
           this.router.navigate(['admin/mailDescription/mailContextVariables'], { queryParams: { 'id': this.id, 'variableId': contextVariable.data.id } });
         }
         this.setForm(contextVariable.data);
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 
@@ -82,6 +88,9 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.mailService.deleteContextVariableById(this.id, this.variableId).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.id } });
+      },
+      error => {
+        this.errorMessage = error;
       }));
   }
 
@@ -94,6 +103,9 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
             this.isForce = true;
             this.scrollTop();
             this.loadContextVariableById();
+          },
+          error => {
+            this.errorMessage = error;
           }));
       } else {
         this.subscriptions.add(this.mailService.saveContextVariable(this.id, this.contentForm.value).pipe(
@@ -102,6 +114,9 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
             this.isForce = true;
             this.scrollTop();
             this.loadContextVariableById();
+          },
+          error => {
+            this.errorMessage = error;
           }));
       }
     } else {

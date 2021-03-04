@@ -2,8 +2,11 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="error-message" *ngIf="errorMessage">
+          {{errorMessage?.error?.errorMessage}}
+        </p>
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Context Variable </span>
         </p>
         <form [formGroup]="contentForm" class="form-group form-padding">
@@ -50,7 +53,7 @@
             </div>
             <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
               <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 sidePadding">
-                <button type="button" class="btn btn-primary" *ngIf="id !== undefined && id !== null"
+                <button type="button" class="btn btn-primary" *ngIf="id  && variableId"
                   style="float: right" (click)="delete()">
                   Delete
                 </button>

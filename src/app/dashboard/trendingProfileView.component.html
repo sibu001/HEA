@@ -44,7 +44,7 @@
                                         *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='ghg'">GHG</span>
                                     <span class="water" [style.color]="colors.colors7"
                                         (click)="energyChange(resource.resourceType,i)"
-                                        *ngIf="(resource.unitTypes[0].useTypes.length!=0||resource.unitTypes[1].useTypes.length!=0)&&resource.resourceType=='water'">Water</span>
+                                        *ngIf="(resource.unitTypes[0].useTypes.length>0||resource.unitTypes[1].useTypes.length>0)&&resource.resourceType=='water'">Water</span>
                                 </span>
                                 <span class="Household"
                                     *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='water'">
@@ -139,7 +139,7 @@
                 <hr>
                 <div class="row">
                     <div class="col-sm-9 col-xs-7">
-                        <img src="assets/images/icon_help.svg" class="question" (click)="hideHelps=true">
+                        <img src="assets/images/icon_help.svg" alt="dot" class="question" (click)="hideHelps=true">
                         <div class="hide_background" *ngIf="hideHelps">
                             <p class="help"><a href="https://hea-docs.s3.amazonaws.com/HomeChartHelp.html"
                                     target="_new">explain chart</a></p>

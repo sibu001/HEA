@@ -1,10 +1,9 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { ElementRef, ViewChild, Renderer } from "@angular/core";
-import { Users } from "src/app/models/user";
-import { LoginService } from "src/app/services/login.service";
-import { Router } from "@angular/router";
-import { CommonModule ,NgStyle} from '@angular/common';
+import { ElementRef, ViewChild, Renderer } from '@angular/core';
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
+import { Router } from '@angular/router';
 
 declare var $: any;
 @Component({
@@ -13,49 +12,75 @@ declare var $: any;
   styleUrls: ['./leakListview.component.css']
 })
 export class leakListViewComponent implements OnInit, AfterViewInit {
-   @ViewChild('inp') inp: ElementRef;
+  @ViewChild('inp') inp: ElementRef;
   users: Users = new Users();
   constructor(private location: Location, private router: Router, private element: ElementRef, private renderer: Renderer, private loginService: LoginService) {
     this.users = this.loginService.getUser();
-    for(var i=0;i<this.users.leakList.length;i++){
-      this.users.leakList[i].flag=true;
+    for (let i = 0; i < this.users.leakList.length; i++) {
+      this.users.leakList[i].flag = true;
     }
-    console.log(this.users.leakList);
+    if (this.users.isLeakChange) {
+      this.getLeaksAndRecommendation();
+    }
   }
 
   ngOnInit() {
   }
+
   ngAfterViewInit() {
-    if(this.inp != null && this.inp != undefined){
-        this.renderer.invokeElementMethod(this.inp.nativeElement, 'focus');
-      }
+    if (this.inp != null && this.inp !== undefined) {
+      this.renderer.invokeElementMethod(this.inp.nativeElement, 'focus');
+    }
   }
+
   back() {
     this.location.back();
   }
+
+  getLeaksAndRecommendation() {
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/recommendationsAndLeaks').subscribe(
+      data => {
+        const response = JSON.parse(JSON.stringify(data));
+        this.users.leakList = response.data.leaks;
+        this.users.isLeakChange = false;
+        this.loginService.setUser(this.users);
+        for (let i = 0; i < this.users.leakList.length; i++) {
+          this.users.leakList[i].flag = true;
+        }
+        document.getElementById('loader').classList.remove('loading');
+      },
+      error => {
+        document.getElementById('loader').classList.remove('loading');
+        console.log(JSON.parse(JSON.stringify(error)));
+      }
+    );
+  }
+
   surveyRecommendationList(number) {
     this.users.recommendationNo = number;
     this.loginService.setUser(this.users);
-    this.router.navigate(["/surveyRecommendationList"]);
+    this.router.navigate(['/surveyRecommendationList']);
 
   }
-  leakHelp(id,priceValue,takebackValue,takebackLabel){
-    this.sendMailForHelp(priceValue,takebackValue,takebackLabel);
-    this.users.leakList[id].flag=false;
+  leakHelp(id, priceValue, takebackValue, takebackLabel) {
+    this.sendMailForHelp(priceValue, takebackValue, takebackLabel);
+    this.users.leakList[id].flag = false;
   }
 
-    sendMailForHelp(priceValue,takebackValue,takebackLabel) {
-      var containt="toAddress=support@hea.com&fromAddress="+this.users.outhMeResponse.user.email+"&subject=Request for Leak help, audit "+this.users.outhMeResponse.auditId+"&subjectCharset=utf-8&bodyContent=Leak:"+takebackLabel+" <br> Size:"+takebackValue+" watts and $"+priceValue+" wasted a year <br> User: "+this.users.outhMeResponse.user.name+" "+this.users.outhMeResponse.user.email+" "+this.users.outhMeResponse.phoneNumber+"&bodyCharset=utf-8&contentType=text/html";
-      this.loginService.performGetMultiPartData("sendMail.do?"+containt).subscribe(
+  sendMailForHelp(priceValue, takebackValue, takebackLabel) {
+    const content = 'toAddress=support@hea.com&fromAddress=' + this.users.outhMeResponse.user.email + '&subject=Request for Leak help, audit '
+      + this.users.outhMeResponse.auditId + '&subjectCharset=utf-8&bodyContent=Leak:' + takebackLabel + ' <br> Size:' + takebackValue + ' watts and $' +
+      priceValue + ' wasted a year <br> User: ' + this.users.outhMeResponse.user.name + ' ' + this.users.outhMeResponse.user.email + ' ' + this.users.outhMeResponse.phoneNumber + '&bodyCharset=utf-8&contentType=text/html';
+    this.loginService.performGetMultiPartData('sendMail.do?' + content).subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         console.log(response);
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       },
       errors => {
         console.log(errors);
-        let response = JSON.parse(JSON.stringify(errors))._body;
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       }
     );
   }

@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
-import { Location } from '@angular/common';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 
 @Component({

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Users } from "src/app/models/user";
-import { LoginService } from "src/app/services/login.service";
-import { ActivatedRoute } from "@angular/router";
-import { Router } from "@angular/router";
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { TableColumnData } from '../data/common-data';
 declare var $: any;
@@ -12,7 +12,7 @@ declare var $: any;
   templateUrl: './electricityUsageList.component.html',
   styleUrls: ['./gasList.component.css']
 })
-export class electricityUsageListComponent implements OnInit {
+export class electricityUsageListComponent implements OnInit, AfterViewInit {
   users: Users = new Users();
   errorMessage: string;
   useTypes: string;
@@ -35,6 +35,7 @@ export class electricityUsageListComponent implements OnInit {
     content: [],
     totalElements: 0,
   };
+  i = 0;
   keys = TableColumnData.GAS_KEYS;
   constructor(private loginService: LoginService, private route: ActivatedRoute, private router: Router) {
     this.route.queryParams.subscribe(params => {
@@ -45,18 +46,13 @@ export class electricityUsageListComponent implements OnInit {
     } else {
       this.users.outhMeResponse = {};
       this.users.outhMeResponse.userId = '2139';
-      // this.getUserById();
     }
     this.usageHistoryList = new Array;
     this.getGasList();
   }
 
-  // getUserById(): any {
-  //   this.users.outhMeResponse = {};
-  //   this.users.outhMeResponse.userId = '2139';
-  // }
   ngOnInit() {
-    if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+    if ((this.year !== undefined && this.year !== '') || (this.month !== undefined && this.month !== '')) {
       this.searchData();
     }
   }
@@ -64,31 +60,31 @@ export class electricityUsageListComponent implements OnInit {
     $(document).ready(function () {
       setTimeout(function () {
         $('#example').DataTable({
-          "responsive": true,
-          "pagingType": "full",
-          "columnDefs": [{
-            "targets": 'no-sort', // column or columns numbers
-            "orderable": false, // set orderable for selected columns
+          'responsive': true,
+          'pagingType': 'full',
+          'columnDefs': [{
+            'targets': 'no-sort', // column or columns numbers
+            'orderable': false, // set orderable for selected columns
           }],
-          "retrieve": true
+          'retrieve': true
         });
       }, 1500);
     });
   }
 
   getGasList() {
-    this.perFormGetList("electricity");
+    this.perFormGetList('electricity');
   }
-  perFormGetList1(useTypes) {
-    this.router.navigate(["/gasList/" + useTypes]);
+  perFormGetList1(useTypes: any) {
+    this.router.navigate(['/gasList/' + useTypes]);
   }
-  perFormGetList(useTypes) {
+  perFormGetList(useTypes: any) {
 
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/usage/electricity?type=" + useTypes).subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('users/' + this.users.outhMeResponse.userId + '/usage/electricity?type=' + useTypes).subscribe(
       data => {
-        document.getElementById("loader").classList.remove('loading');
-        let response = JSON.parse(JSON.stringify(data));
+        document.getElementById('loader').classList.remove('loading');
+        const response = JSON.parse(JSON.stringify(data));
         this.users.types = useTypes;
         this.users.electricityList = new Array;
         this.users.electricityList = response.data;
@@ -97,143 +93,131 @@ export class electricityUsageListComponent implements OnInit {
         this.usageHistoryList = response.data;
         this.usageHistoryData.content = response.data;
         this.dataSource = [...this.usageHistoryData.content];
-        if ((this.year != undefined && this.year != null) || (this.month != undefined && this.month != null)) {
+        if ((this.year !== undefined && this.year != null) || (this.month !== undefined && this.month !== null)) {
           this.searchData();
         }
         $(document).ready(function () {
-          $("#example").dataTable().fnDestroy();
+          $('#example').dataTable().fnDestroy();
           setTimeout(function () {
             $('#example').DataTable({
-              "responsive": true,
-              "pagingType": 'full',
-              "columnDefs": [{
-                "targets": 'no-sort', // column or columns numbers
-                "orderable": false, // set orderable for selected columns
+              'responsive': true,
+              'pagingType': 'full',
+              'columnDefs': [{
+                'targets': 'no-sort', // column or columns numbers
+                'orderable': false, // set orderable for selected columns
               }],
-              "retrieve": true
+              'retrieve': true
             });
           }, 1500);
         });
       },
       error => {
-        document.getElementById("loader").classList.remove('loading');
-        let response = JSON.parse(JSON.stringify(error));
+        document.getElementById('loader').classList.remove('loading');
+        const response = JSON.parse(JSON.stringify(error));
         console.log(error);
         this.errorMessage = response.error_description;
-
-      }
-    );
-
+      });
   }
 
-  i: number = 0;
-  increment(i) {
+  increment(i: any) {
     this.i = i;
     this.userObj = this.usageHistoryList[i];
-    var date;
-    if (this.usageHistoryList[i].startDate != null && this.usageHistoryList[i].startDate != undefined) {
+    let date;
+    const datePipe = new DatePipe('en-US');
+    if (this.usageHistoryList[i].startDate != null && this.usageHistoryList[i].startDate !== undefined) {
       date = new Date(this.usageHistoryList[i].startDate);
-      var datePipe = new DatePipe('en-US');
       this.startDateView = datePipe.transform(date, 'yyyy-MM-dd');
       this.userObj.startTime = datePipe.transform(date, 'HH:mm:ss');
       this.userObj.startDateView = this.startDateView;
-
     }
-    if (this.usageHistoryList[i].endDate != null && this.usageHistoryList[i].endDate != undefined) {
+    if (this.usageHistoryList[i].endDate != null && this.usageHistoryList[i].endDate !== undefined) {
       date = new Date(this.usageHistoryList[i].endDate);
-      var datePipe = new DatePipe('en-US');
       this.endDateView = datePipe.transform(date, 'yyyy-MM-dd');
       this.userObj.endTime = datePipe.transform(date, 'HH:mm:ss');
       this.userObj.endDateView = this.endDateView;
-
     }
-    if (this.usageHistoryList[i].startDateOrig != null && this.usageHistoryList[i].startDateOrig != undefined) {
+    if (this.usageHistoryList[i].startDateOrig != null && this.usageHistoryList[i].startDateOrig !== undefined) {
       date = new Date(this.usageHistoryList[i].startDateOrig);
-      var datePipe = new DatePipe('en-US');
       this.startDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
       this.userObj.startTimeOrig = datePipe.transform(date, 'HH:mm:ss');
       this.userObj.startDateOrigView = this.startDateOrigView;
-
     }
-    if (this.usageHistoryList[i].endDateOrig != null && this.usageHistoryList[i].endDateOrig != undefined) {
+    if (this.usageHistoryList[i].endDateOrig != null && this.usageHistoryList[i].endDateOrig !== undefined) {
       date = new Date(this.usageHistoryList[i].endDateOrig);
-      var datePipe = new DatePipe('en-US');
       this.endDateOrigView = datePipe.transform(date, 'yyyy-MM-dd');
       this.userObj.endTimeOrig = datePipe.transform(date, 'HH:mm:ss');
       this.userObj.endDateOrigView = this.endDateOrigView;
-
     }
-    if (this.usageHistoryList[i].billingDate != null && this.usageHistoryList[i].billingDate != undefined) {
+    if (this.usageHistoryList[i].billingDate != null && this.usageHistoryList[i].billingDate !== undefined) {
       date = new Date(this.usageHistoryList[i].billingDate);
-      var datePipe = new DatePipe('en-US');
       this.billingDateView = datePipe.transform(date, 'yyyy-MM-dd');
       this.userObj.billingTime = datePipe.transform(date, 'HH:mm:ss');
       this.userObj.billingDateView = this.billingDateView;
-
     }
     this.userObj.forceStore = true;
-    this.userObj2 = $.extend(true, [], this.userObj)
+    this.userObj2 = $.extend(true, [], this.userObj);
   }
   searchData() {
-    document.getElementById("loader").classList.add('loading');
-    if ((this.year != undefined && this.year != "") || (this.month != undefined && this.month != "")) {
+    document.getElementById('loader').classList.add('loading');
+    if ((this.year !== undefined && this.year !== '') || (this.month !== undefined && this.month !== '')) {
       this.usageHistoryList = new Array;
-      for (let elList of this.users.electricityList) {
+      for (const elList of this.users.electricityList) {
         this.filterCheck = true;
-        if ((this.year != undefined && this.year != "") && (this.month != undefined && this.month != "")) {
+        if ((this.year !== undefined && this.year !== '') && (this.month !== undefined && this.month !== '')) {
           this.filterCheck = false;
-          if (elList.year == this.year && elList.month == this.month) {
+          if (elList.year === this.year && elList.month === this.month) {
             this.filterCheck = true;
           }
-        } else if (this.year != undefined && this.year != "") {
+        } else if (this.year !== undefined && this.year !== '') {
           this.filterCheck = false;
-          if (elList.year == this.year) {
+          if (elList.year === this.year) {
             this.filterCheck = true;
           }
-        } else if (this.month != undefined && this.month != "") {
+        } else if (this.month !== undefined && this.month !== '') {
           this.filterCheck = false;
-          if (elList.month == this.month) {
+          if (elList.month === this.month) {
             this.filterCheck = true;
           }
-        } if (this.filterCheck) {
+        }
+        if (this.filterCheck) {
           this.usageHistoryList.push(elList);
         }
       }
-      $("#example").dataTable().fnDestroy();
+      $('#example').dataTable().fnDestroy();
       $(document).ready(function () {
-        $("#example").dataTable().fnDestroy();
+        $('#example').dataTable().fnDestroy();
         setTimeout(function () {
           $('#example').DataTable({
-            "responsive": true,
-            "pagingType": "full",
-            "columnDefs": [{
-              "targets": 'no-sort', // column or columns numbers
-              "orderable": false, // set orderable for selected columns
+            'responsive': true,
+            'pagingType': 'full',
+            'columnDefs': [{
+              'targets': 'no-sort', // column or columns numbers
+              'orderable': false, // set orderable for selected columns
             }],
-            "retrieve": true
+            'retrieve': true
           });
         }, 1500);
       });
       console.log(this.usageHistoryList);
-      document.getElementById("loader").classList.remove('loading');
+      document.getElementById('loader').classList.remove('loading');
     } else {
       this.usageHistoryList = this.users.electricityList;
-      $("#example").dataTable().fnDestroy();
+      $('#example').dataTable().fnDestroy();
       $(document).ready(function () {
-        $("#example").dataTable().fnDestroy();
+        $('#example').dataTable().fnDestroy();
         setTimeout(function () {
           $('#example').DataTable({
-            "responsive": true,
-            "pagingType": "full",
-            "columnDefs": [{
-              "targets": 'no-sort', // column or columns numbers
-              "orderable": false, // set orderable for selected columns
+            'responsive': true,
+            'pagingType': 'full',
+            'columnDefs': [{
+              'targets': 'no-sort', // column or columns numbers
+              'orderable': false, // set orderable for selected columns
             }],
-            "retrieve": true
+            'retrieve': true
           });
         }, 1500);
       });
-      document.getElementById("loader").classList.remove('loading');
+      document.getElementById('loader').classList.remove('loading');
     }
   }
 }

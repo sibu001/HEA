@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Trending Part</span>
         </p>
         <form [formGroup]="paneForm" class="form-group form-padding">
@@ -47,7 +47,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Trending Charts</span></p>
             <app-table [keys]="chartKeys" [isPaginate]="true" [isSearch]="false" [data]="chartDataSource"
               [totalElement]="chartData.totalElements" (addEvent)='addCharts()' (goToEditEvent)='goToEditCharts()'>

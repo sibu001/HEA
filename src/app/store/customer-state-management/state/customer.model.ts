@@ -17,6 +17,7 @@ export interface CustomerManagementModel {
     staffNote: any;
     customerFileList: any;
     customerFile: any;
+    emailSettingList: any;
     sendActivationMail: any;
     clearCustomerValueCache: any;
     recalculateCustomerVariable: any;

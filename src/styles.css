@@ -26,6 +26,7 @@
     padding-top: 35vh;
     background: rgba(0, 0, 0, 0.36);
     visibility: hidden; */
+  background: rgba(0, 0, 0, 0.36);
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-position: center;
@@ -36,14 +37,14 @@
   right: 0;
   bottom: 0;
   margin: auto;
-  background: rgba(0, 0, 0, 0.36);
+
   visibility: hidden;
   z-index: 10000;
   padding-top: 35vh;
 }
 
 img {
-  font-family: "Roboto" !important;
+  font-family: "Roboto", sans-serif !important;
 }
 
 .trendingProfileChart > :nth-child(1) > :nth-child(2) > center > :nth-child(2) {
@@ -211,9 +212,6 @@ div.factoid > div > p {
     margin-left: 0px !important;
   }
   #chartRepeatingLoad {
-    width: 100% !important;
-  }
-  #chartDailyVariableLoad {
     width: 100% !important;
   }
   #chartMovAvg {
@@ -506,14 +504,10 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
   .trendingProfileChart > :nth-child(2) {
     width: 285px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 4em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
     width: 45% !important;
-  }
-  div#trendingProfileChartTrends > :nth-child(2) {
     margin-left: 0px !important;
   }
   .trendingProfileChart
@@ -541,8 +535,6 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
   .trendingProfileChart > :nth-child(2) {
     width: 322px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 4em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -572,10 +564,8 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
     height: 100% !important;
   }
   .trendingProfileChart > :nth-child(2) {
-    width: 345px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 4em !important;
+    width: 345px !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
     margin-left: 0px !important;
@@ -605,8 +595,6 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
   .trendingProfileChart > :nth-child(2) {
     width: 375px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 4em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -637,8 +625,6 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
   .trendingProfileChart > :nth-child(2) {
     width: 460px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 4em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -668,15 +654,13 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
     width: 450px !important;
     height: auto !important;
   }
-  /*trendingPrfile chart div  */
+  /*trendingProfile chart div  */
   .trendingProfileChart > div {
     width: 485px !important;
     height: 100% !important;
   }
   .trendingProfileChart > :nth-child(2) {
     width: 485px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 4em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -713,8 +697,6 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
   .trendingProfileChart > :nth-child(2) {
     width: 460px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 4em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -751,8 +733,6 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
   .trendingProfileChart > :nth-child(2) {
     width: 585px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 6em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -789,8 +769,6 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
   .trendingProfileChart > :nth-child(2) {
     width: 660px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 6em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -818,8 +796,6 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
   .trendingProfileChart > :nth-child(2) {
     width: 685px !important;
-  }
-  .trendingProfileChart > :nth-child(2) {
     margin-top: 6em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -939,7 +915,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   position: fixed;
   background-color: white;
   font-size: 15px !important;
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   line-height: 15px;
   opacity: 1;
   z-index: 999995;

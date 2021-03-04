@@ -29,6 +29,6 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     ]),
   ],
   declarations: [WaterComponent, WaterChargeComponent, WaterSmartMeterComponent],
-  providers:[UsageHistoryService]
+  providers: [UsageHistoryService]
 })
 export class WaterUsageHistoryModule { }

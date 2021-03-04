@@ -24,7 +24,7 @@
             </div>
           </div>
           <div class="row borderBottom rowPadding"
-            *ngIf="customerGroupCode!=='RYPL'&&customerGroupCode!=='RS'">
+            *ngIf="isProgramGroup">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Program:
             </div>
@@ -264,12 +264,12 @@
                   Cooling and Heating Model Selection
                 </p>
               </strong>
-              <i>
+              <em>
                 <span>
                   Note: if model changed, admin email will be sent after
                   recalculations completed
                 </span>
-              </i>
+              </em>
             </div>
           </div>
           <div class="row borderBottom rowPadding" *ngIf="id!=undefined">
@@ -312,7 +312,7 @@
               <img src="assets/images/icon_help.svg"
                 style="float: right; margin-top:
                 0%;margin-left: 5px;"
-                class="media-object" id="help_btn1"
+                class="media-object" id="help_btn1" alt="help"
                 (click)="helpHide=!helpHide">
             </div>
             <div class="row" id="helpiconcontainresponsive"
@@ -351,10 +351,10 @@
               </div>
               <div style="padding-left: inherit">
                 <span>
-                  <i>
+                  <em>
                     Note: admin email will be sent when Rescrape, Update or
                     Recalculate functions are completed.
-                  </i>
+                  </em>
                 </span>
               </div>
             </div>
@@ -559,12 +559,11 @@
             </div>
           </div>
         </form>
-
         <!-- Utility Credentials -->
         <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
-              <img src="assets/images/dot03.gif" class="dot pointer"><strong>Utility
+              <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Utility
                 Credentials</strong>
             </p>
           </div>
@@ -586,7 +585,7 @@
         <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
-              <img src="assets/images/dot03.gif" class="dot pointer">
+              <img src="assets/images/dot03.gif" alt="dot" class="dot pointer">
               <strong>
                 Alerts
               </strong>
@@ -609,7 +608,7 @@
         <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
-              <img src="assets/images/dot03.gif" class="dot
+              <img src="assets/images/dot03.gif" alt="dot" class="dot
                 pointer"><strong>Customer Events</strong>
             </p>
           </div>
@@ -631,7 +630,7 @@
         <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
-              <img src="assets/images/dot03.gif" class="dot pointer"><strong>Staff
+              <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Staff
                 Notes</strong>
             </p>
           </div>
@@ -651,7 +650,7 @@
         <div class="row marginTop">
           <div class="col-sm-12">
             <p class="Messages">
-              <img src="assets/images/dot03.gif" class="dot pointer"><strong>Customer
+              <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Customer
                 Files (Note: Changes in Sandbox
                 also affect Production version)</strong>
             </p>
@@ -669,6 +668,22 @@
               (handleInLineEditEvent)='handleInLineEditEvent($event)'
               (handleInLineSaveEvent)='handleInLineSaveEvent($event)'>
             </app-table>
+          </div>
+        </div>
+        <!-- Email Settings -->
+        <div class="row marginTop">
+          <div class="col-sm-12">
+            <p class="Messages">
+              <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Email Settings</strong>
+            </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <app-table [keys]="emailKeys" [data]="emailDataSource"
+            [isDelete]=false [isHideAdd]=true
+            [totalElement]="staffData.totalElements">
+          </app-table>
           </div>
         </div>
         <div class="row" *ngIf="fileObject!=undefined">

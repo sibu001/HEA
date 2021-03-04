@@ -59,7 +59,7 @@
           </div>
         </form>
         <p class="messages">
-          <img src='assets/images/dot03.gif' class='dot'>
+          <img src='assets/images/dot03.gif' alt="dot" class='dot'>
           <span class="messageName">Factors (Number of Records = {{totalElement| number:'1.0':'en-US'}})</span></p>
         <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [pageIndex]="pageIndex"
           [totalElement]="factorData.totalElements" (changePageEvent)="search($event,false)"

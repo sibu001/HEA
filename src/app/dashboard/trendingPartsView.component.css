@@ -4,7 +4,7 @@ section.space-top{
 .backcolor{
     background-color: #fbfbfb;
     padding: 19px 19px 6px 19px;
-    font-family: 'Montserrat';
+    font-family: 'Montserrat', sans-serif;
     margin-bottom: 26px;
 }
 .select_next{

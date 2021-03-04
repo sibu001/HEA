@@ -28,6 +28,7 @@ import {
     GetCustomerFileListAction,
     GetCustomerListAction,
     GetCustomerViewConfigurationListAction,
+    GetEmailSettingListAction,
     GetPasswordValidationRuleAction,
     GetRoleListByUserIdAction,
     GetStaffByIdAction,
@@ -84,6 +85,7 @@ import { CustomerManagementModel } from './customer.model';
         alert: undefined,
         staffNoteList: undefined,
         staffNote: undefined,
+        emailSettingList: undefined,
         customerFileList: undefined,
         customerFile: undefined,
         clearCustomerValueCache: undefined,
@@ -195,6 +197,11 @@ export class CustomerManagementState {
     @Selector()
     static getCustomerFileById(state: CustomerManagementModel): any {
         return state.customerFile;
+    }
+
+    @Selector()
+    static getEmailSettingList(state: CustomerManagementModel): any {
+        return state.emailSettingList;
     }
 
     @Selector()
@@ -576,7 +583,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Deleted Successfully');
+                    //  this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -680,7 +687,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Deleted Successfully');
+                    //  this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -767,7 +774,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Deleted Successfully');
+                    //  this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -854,7 +861,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Deleted Successfully');
+                    //  this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -941,7 +948,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Deleted Successfully');
+                    //  this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -986,6 +993,24 @@ export class CustomerManagementState {
                         this.utilityService.showErrorMessage(error.message);
                     }));
     }
+
+    @Action(GetEmailSettingListAction)
+    getAllEmailSettingList(ctx: StateContext<CustomerManagementModel>, action: GetEmailSettingListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.emailSetting)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        emailSettingList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
 
     @Action(SendActivationMailMessageAction)
     sendActivationMailMessage(ctx: StateContext<CustomerManagementModel>, action: SendActivationMailMessageAction): Actions {
@@ -1098,7 +1123,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Deleted Successfully');
+                    //  this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1165,7 +1190,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                   //  this.utilityService.showSuccessMessage('Deleted Successfully');
+                    //  this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

@@ -447,7 +447,7 @@ export class SystemUtilityManagementState {
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        const res = SystemUtilityTransformer.transformTableData(response, action.filter)
+                        const res = SystemUtilityTransformer.transformTableData(response, action.filter);
                         ctx.patchState({
                             customerComparisonGroupList: res,
                         });
@@ -1000,7 +1000,7 @@ export class SystemUtilityManagementState {
     @Action(GetSystemParameterCountAction)
     getSystemParameterCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetSystemParameterCountAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.systemParameter + '/count')
+        return this.loginService.performGetWithParams(AppConstant.systemParameter + '/count', action.filter)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

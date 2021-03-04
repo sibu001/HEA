@@ -66,8 +66,6 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.chartKeys = TableColumnData.CHART_SERIES_FIELD_KEY;
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   setForm(event: any): any {

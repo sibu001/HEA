@@ -4,7 +4,6 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
-import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -35,8 +34,6 @@ export class TrendingChartDefinitionEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   setForm(event: any) {

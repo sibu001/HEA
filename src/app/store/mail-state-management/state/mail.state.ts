@@ -147,7 +147,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.errorMessage);
+                        // this.utilityService.showErrorMessage(error.errorMessage);
                     }));
 
     }
@@ -165,7 +165,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -180,7 +180,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -198,7 +198,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -216,7 +216,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -232,7 +232,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -250,8 +250,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
-                        ctx.dispatch(new CustomerError(error));
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -268,7 +267,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -283,7 +282,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -301,7 +300,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -319,7 +318,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -337,8 +336,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
-                        ctx.dispatch(new CustomerError(error));
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -355,7 +353,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -370,7 +368,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -388,7 +386,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -406,7 +404,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -424,7 +422,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        // this.utilityService.showErrorMessage(error.message);
                     }));
     }
 
@@ -438,7 +436,7 @@ export class MailManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                         this.utilityService.showErrorMessage(error.message);
                     }));
     }
 

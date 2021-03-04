@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer, OnDestroy } from '@angular/core';
-import { LoginService } from "src/app/services/login.service";
-import { Users } from "src/app/models/user";
+import { LoginService } from 'src/app/services/login.service';
+import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
 import { SystemService } from '../store/system-state-management/service/system.service';
 import { skipWhile } from 'rxjs/operators';
@@ -38,28 +38,29 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
   }
-  edit(number) {
-    var surveyCode, surveyId, paneCode
-    if (number == 1) {
+
+  edit(number: any) {
+    let surveyCode, surveyId, paneCode;
+    if (number === 1) {
       surveyCode = this.users.surveyList[1].surveyDescription.surveyCode;
       surveyId = this.users.surveyList[1].surveyId;
       paneCode = this.users.surveyList[1].panes[1].paneCode;
-    } else if (number == 3) {
+    } else if (number === 3) {
       surveyCode = this.users.surveyList[1].surveyDescription.surveyCode;
       surveyId = this.users.surveyList[1].surveyId;
       paneCode = this.users.surveyList[1].panes[2].paneCode;
-    } else if (number == 2) {
-      surveyCode = "Water";
+    } else if (number === 2) {
+      surveyCode = 'Water';
       surveyId = this.users.surveyList[8].surveyId;
-      paneCode = "w_Intro";
+      paneCode = 'w_Intro';
     }
-    document.getElementById("loader").classList.add('loading');
-    var object = {};
-    this.subscriptions.add(this.loginService.performPostMultiPartData(object, "customers/" + this.users.outhMeResponse.customerId + "/surveys/" + surveyCode + "/" + surveyId + "/panes/" + paneCode).subscribe(
+    document.getElementById('loader').classList.add('loading');
+    const object = {};
+    this.subscriptions.add(this.loginService.performPostMultiPartData(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         console.log(response);
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
         if (response.errorCode == null && response.errorMessage == null) {
           this.users.currentPaneNumber = response.data;
           this.loginService.setUser(this.users);
@@ -68,42 +69,42 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       },
       errors => {
         console.log(errors);
-        let response = JSON.parse(JSON.stringify(errors))._body;
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       }
     ));
   }
+
   getCustomerCredentials() {
-    document.getElementById("loader").classList.add('loading');
-    this.subscriptions.add(this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/credentials").subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.subscriptions.add(this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/credentials').subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         this.customerCredentialsList = response;
         console.log(response);
-        document.getElementById("loader").classList.remove('loading');
-
+        document.getElementById('loader').classList.remove('loading');
       },
       error => {
         console.log(JSON.parse(JSON.stringify(error)));
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       }
     ));
   }
+
   postCustomerData() {
-    document.getElementById("loader").classList.add('loading');
-    this.subscriptions.add(this.loginService.performPostMultiPartDataPost(this.users.outhMeResponse, "customers/current/" + this.users.outhMeResponse.userId).subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.subscriptions.add(this.loginService.performPostMultiPartDataPost(this.users.outhMeResponse, 'customers/current/' + this.users.outhMeResponse.userId).subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         console.log(response);
-        document.getElementById("loader").classList.remove('loading');
-
+        document.getElementById('loader').classList.remove('loading');
       },
       error => {
         console.log(JSON.parse(JSON.stringify(error)));
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       }
     ));
   }
+
   loadCustomerViewConfiguration() {
     this.systemService.loadViewConfigurationList(true);
     this.subscriptions.add(this.systemService.getViewConfigurationList().pipe(skipWhile((item: any) => !item))
@@ -116,7 +117,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   cancel() {
-    if (this.users.role == 'USERS') {
+    if (this.users.role === 'USERS') {
       this.router.navigate(['dashboard']);
     } else {
       this.router.navigate(['admin/customer']);
@@ -127,4 +128,3 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }
-

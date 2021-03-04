@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { GoogleMapData } from 'src/app/data/google-map.data';
 import { DIALOGDATA, MARKER } from 'src/app/interface/google-map.interface';
 

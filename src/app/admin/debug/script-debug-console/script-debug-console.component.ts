@@ -22,7 +22,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
 
   id: any;
-  isTrue: Boolean = true;
+  isTrue = true;
   debugForm: FormGroup;
   customerList: any = [];
   customerData: any;
@@ -142,6 +142,7 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
       disableValueCache: [false],
       executionTime: [''],
       resultType: [''],
+      contextPreparationTime: ['']
     });
   }
 

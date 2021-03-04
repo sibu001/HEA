@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
@@ -79,8 +78,6 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
 

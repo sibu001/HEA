@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Trending Chart Definition</span>
         </p>
         <form [formGroup]="chartForm" class="form-group form-padding">
@@ -214,7 +214,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
-            <img class="pointer" src="assets/images/dot03.gif" class="dot">
+            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
             <span class="messageName">Title</span>
           </p>
           <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
@@ -289,7 +289,7 @@
           </div>
 
           <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
-            <img class="pointer" src="assets/images/dot03.gif" class="dot">
+            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
             <span class="messageName">Legend</span>
           </p>
           <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
@@ -358,7 +358,7 @@
           </div>
 
           <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
-            <img class="pointer" src="assets/images/dot03.gif" class="dot">
+            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
             <span class="messageName">Range</span>
           </p>
           <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
@@ -505,7 +505,7 @@
           </div>
 
           <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
-            <img class="pointer" src="assets/images/dot03.gif" class="dot">
+            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
             <span class="messageName">Domain</span>
           </p>
 
@@ -703,7 +703,7 @@
           </div>
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Chart Series</span></p>
             <app-table [keys]="chartKeys" [isSearch]="false" [isDelete]=true
               [data]="chartDataSource"

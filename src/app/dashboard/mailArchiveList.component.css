@@ -11,41 +11,18 @@ p.accurate {
   margin-top: 20px;
 }
 
-i.fa {
-  cursor: pointer;
-}
-
-.fa-caret-right:before {
-  content: "\f0da";
-  color: #fb783b;
-  font-size: 40px;
-}
-.fa-caret-down:before {
-  content: "\f0d7";
-  color: #fb783b;
-  font-size: 40px;
-}
 .col-sm-9.topic_list {
   padding-left: 40px;
   border-right: 1px solid #d8d8d8;
 }
 
-i.fa.fa-fw.fa-caret-right.fa_icon {
-  float: left;
-  margin-top: -10px;
-}
-i.fa.fa-fw.fa-caret-down.fa_icon {
-  float: left;
-  margin-top: -10px;
-}
 .a_history {
   color: #4550a1;
   font-weight: 600;
   cursor: pointer;
 }
-p.Energy_anaiytic {
+p.energy analytics {
   color: #000000;
-  padding: 0;
   font-weight: bold;
   font-size: 14px;
   margin: 2em 0 0 0;
@@ -53,7 +30,6 @@ p.Energy_anaiytic {
 }
 p.feedback {
   color: #000000;
-  padding: 0;
   font-weight: bold;
   font-size: 14px;
   margin: 2em 0 0 0;
@@ -61,7 +37,6 @@ p.feedback {
 }
 a.info_hea {
   color: #990;
-  padding: 0;
   font-weight: bold;
   font-size: 14px;
   padding: 0 0 0 23px;
@@ -69,10 +44,6 @@ a.info_hea {
 }
 
 @media only screen and (min-width: 320px) and (max-width: 767px) {
-  .col-sm-9.topic_list {
-    padding-left: 0px !important;
-  }
-
   p.accurate {
     padding-left: 0px !important;
   }
@@ -84,6 +55,7 @@ a.info_hea {
     margin-top: 0em !important;
     height: 100% !important;
   }
+
   .form-horizontal .control-label {
     padding-top: 3px;
     margin-bottom: 0;
@@ -95,26 +67,14 @@ a.info_hea {
     position: unset !important;
   }
 }
+
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
   #sub {
     width: 96%;
   }
 }
 
-.fa-caret-right:before {
-  content: "\f0da";
-  color: #76ba19;
-  font-size: 40px;
-}
-.fa-caret-down:before {
-  content: "\f0d7";
-  color: #76ba19;
-  font-size: 40px;
-}
-img.back_img {
-  cursor: pointer;
-}
-ul.leaks {
+.leaks {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -131,9 +91,6 @@ span.start {
   font-weight: 600;
   font-size: 13px;
   text-align: right;
-}
-.row.top {
-  margin-top: 8px;
 }
 .btn-primary {
   color: #fff;
@@ -248,13 +205,6 @@ div.adminFeedback {
   margin-bottom: 0;
   text-align: right;
 }
-th.th-sm.sorting {
-  cursor: pointer;
-}
-i.fa.fa-sort.float-right {
-  color: #76ba19;
-  font-size: 20px;
-}
 
 .rightColumn {
   background-color: #fbfbfb;
@@ -264,7 +214,6 @@ i.fa.fa-sort.float-right {
   position: absolute;
   right: 0;
 }
-
 
 ::ng-deep .mail-archive-table .mat-column-wasOpened {
   flex: none;

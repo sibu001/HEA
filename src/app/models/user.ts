@@ -25,6 +25,7 @@ export class Users {
     public myReportsData: any;
     public refreshToken: string;
     public instructionHtml: string;
+    public isLeakChange: boolean;
     public recommendationList: any[] = [];
     public leakList: any[] = [];
     public customerMailList: any[] = [];

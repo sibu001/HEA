@@ -23,16 +23,6 @@ section.space-top {
     cursor: pointer;
   }
   
-  .fa-caret-right:before {
-    content: "\f0da";
-    color: #fb783b;
-    font-size: 40px;
-  }
-  .fa-caret-down:before {
-    content: "\f0d7";
-    color: #fb783b;
-    font-size: 40px;
-  }
   .col-sm-9.topic_list {
     padding-left: 40px;
     border-right: 1px solid #d8d8d8;
@@ -67,7 +57,6 @@ section.space-top {
   }
   p.Energy_anaiytic {
     color: #000000;
-    padding: 0;
     font-weight: bold;
     font-size: 14px;
     margin: 2em 0 0 0;
@@ -75,7 +64,6 @@ section.space-top {
   }
   p.feedback {
     color: #000000;
-    padding: 0;
     font-weight: bold;
     font-size: 14px;
     margin: 2em 0 0 0;
@@ -83,7 +71,6 @@ section.space-top {
   }
   a.info_hea {
     color: #990;
-    padding: 0;
     font-weight: bold;
     font-size: 14px;
     padding: 0 0 0 23px;

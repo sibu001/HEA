@@ -32,6 +32,7 @@ import { UsageHistoryManagementState } from '../store/usage-history-state-manage
     ElectricityUsageListComponent,
     ElectricityUsagePopupComponent
   ],
+  entryComponents: [ElectricityUsagePopupComponent],
   providers: [UsageHistoryService]
 })
 export class ElectricityModule { }

@@ -6,17 +6,17 @@ span.leaks {
   color: #75ba18;
   font-weight: 600;
 }
+
 span.dollar {
   font-weight: 600;
 }
+
 div.back.color {
   background-color: #fbfbfb;
-  /* padding: 28px; */
 }
+
 div.back-color-silver {
   background-color: #fbfbfb;
-  /* margin-top: -10px;
-    margin-bottom: 7px; */
 }
 p.views_leaks {
   text-align: center;
@@ -28,6 +28,7 @@ p.views_leaks {
   background-color: #4550a1;
   border-color: #4550a1;
 }
+
 .btn-primary.active.focus,
 .btn-primary.active:focus,
 .btn-primary.active:hover,
@@ -61,10 +62,11 @@ p.views_leaks {
   border: 1px solid transparent;
   border-radius: 4px;
 }
-.row.number {
+.row .number {
   text-align: center;
-  margin-top: 1.5em;
+  margin: 0 auto;
 }
+
 p.resume_topic {
   text-align: center;
   /* margin-top: 2em; */
@@ -279,7 +281,7 @@ a.view {
   color: #6c650d;
   cursor: pointer;
 }
-i.fa.fa-close.shift {
+em.fa.fa-close.shift {
   float: right;
 }
 p {
@@ -401,7 +403,7 @@ p.last {
 .row.view_trend {
   margin-top: 25px;
 }
-i.fa.fa-question {
+me.fa.fa-question {
   font-size: 24px;
   color: #374276;
   border: 1px solid #374276;
@@ -504,10 +506,7 @@ ul.li.a.anchorTag {
   padding: 8px;
   float: left;
 }
-/* li a {
-    display: block;
-    padding: 8px;
-} */
+
 ul.li.a.leaksimg {
   display: block;
   padding: 8px;
@@ -530,9 +529,7 @@ a.Schedule {
   font-size: 15px;
   cursor: pointer;
 }
-.row.number {
-  margin: 0 auto;
-}
+
 .containercss p {
   float: left;
   margin-left: 14px;

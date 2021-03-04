@@ -16,6 +16,7 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   cimisStationForm: FormGroup;
   id: any;
   isForce = false;
+  public errorMessage: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemMeasurementService: SystemMeasurementService,
@@ -26,7 +27,6 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
       this.id = params['id'];
     });
   }
-
 
   ngOnInit() {
     this.setForm(undefined);
@@ -59,14 +59,20 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
           this.router.navigate(['admin/cimisStation/cimisStationEdit'], { queryParams: { 'id': cimisStation.id } });
         }
         this.setForm(cimisStation);
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   delete() {
     this.subscriptions.add(this.systemMeasurementService.deleteCimisStationById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/cimisStation/cimisStationList'], { queryParams: { 'force': true } });
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   save() {
@@ -77,14 +83,20 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
           .subscribe((response: any) => {
             this.isForce = true;
             this.loadCimisStationById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       } else {
         this.subscriptions.add(this.systemMeasurementService.saveCimisStation(this.cimisStationForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
             this.loadCimisStationById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       }
     } else {
       this.validateForm();

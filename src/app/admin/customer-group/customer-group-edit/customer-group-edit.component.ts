@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -11,7 +11,6 @@ import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/
 import { HttpParams } from '@angular/common/http';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
-import { TableComponent } from 'src/app/common/table/table.component';
 
 @Component({
   selector: 'app-customer-group-edit',

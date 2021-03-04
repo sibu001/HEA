@@ -86,6 +86,7 @@ export class LoginService {
         if (this.getUser != null) {
             const httpOptions = {
                 headers: new HttpHeaders({
+                    'Content-Type': 'multipart/form-data',
                 }), withCredentials: true,
                 params: params,
             };

@@ -65,16 +65,16 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
   findSystemParameter(force: boolean, filter: any): void {
     this.adminFilter.systemParameterFilter.formValue = this.systemParameterForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.systemUtilityService.loadSystemParameterCount().pipe(skipWhile((item: any) => !item))
-    .subscribe((systemParameterCount: any) => {
-      this.systemParameterData.totalElements = systemParameterCount.systemUtilityManagement.systemParameterCount;
-      this.totalElement = systemParameterCount.systemUtilityManagement.systemParameterCount;
-    }));
-    this.systemUtilityService.loadSystemParameterList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getSystemParameterList().pipe(skipWhile((item: any) => !item))
-      .subscribe((systemParameterList: any) => {
-        this.systemParameterData.content = systemParameterList;
-        this.dataSource = [...this.systemParameterData.content];
+    this.subscriptions.add(this.systemUtilityService.loadSystemParameterCount(filter).pipe(skipWhile((item: any) => !item))
+      .subscribe((systemParameterCount: any) => {
+        this.systemParameterData.totalElements = systemParameterCount.systemUtilityManagement.systemParameterCount;
+        this.totalElement = systemParameterCount.systemUtilityManagement.systemParameterCount;
+        this.systemUtilityService.loadSystemParameterList(force, filter);
+        this.subscriptions.add(this.systemUtilityService.getSystemParameterList().pipe(skipWhile((item: any) => !item))
+          .subscribe((systemParameterList: any) => {
+            this.systemParameterData.content = systemParameterList;
+            this.dataSource = [...this.systemParameterData.content];
+          }));
       }));
   }
 

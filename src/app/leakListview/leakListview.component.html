@@ -4,7 +4,7 @@
             <div class="col-sm-12 sidebar">
                 <div class="backcolor">
                     <h3 class="select_next">
-                        <img src="assets/images/right-.svg" class="back_img" (click)="back()">&nbsp;&nbsp;<span
+                        <img alt="icon" src="assets/images/right-.svg" class="back_img" (click)="back()">&nbsp;&nbsp;<span
                             class="recommdationheadingcss">My Leaks</span></h3>
                     <p class="Unnecessary">Unnecessary leaks in my home</p>
                 </div>
@@ -17,7 +17,7 @@
                 <div class="row">
                     <div class="col-lg-1 col-sm-1 col-xs-3 leaks_img">
                         <button type="button" class="btn btn-primary button leaksdiscovery">
-                            <img src="assets/images/{{leak.recommendation.takebackIcon}}" class="leaksdiscovery"
+                            <img alt="icon" src="assets/images/{{leak.recommendation.takebackIcon}}" class="leaksdiscovery"
                                 style="width: 48px;">
                             <p class="mo">{{leak.count}} {{leak.unit}}</p>
                         </button>
@@ -80,24 +80,22 @@
                             <div class="row" style="margin-bottom: 15px;"
                                 *ngFor="let recommendationsList of leak.recommendations">
                                 <div class="col-sm-1 col-xs-2 status-img" *ngIf="recommendationsList.status=='N'">
-                                    <img src="assets/images/status-unchecked.png" class="status-unchecked" align-right>
+                                    <img alt="icon" src="assets/images/status-unchecked.png" class="status-unchecked" align-right>
                                 </div>
                                 <div class="col-sm-1 col-xs-2 status-img" *ngIf="recommendationsList.status=='Y'">
-                                    <img src="assets/images/colorbox.png" class="status-unchecked" align-right>
+                                    <img alt="icon" src="assets/images/colorbox.png" class="status-unchecked" align-right>
                                 </div>
                                 <div class="col-sm-1 col-xs-2 status-img" *ngIf="recommendationsList.status=='L'">
-                                    <img src="assets/images/lightcheck.png" class="status-unchecked">
+                                    <img alt="icon" src="assets/images/lightcheck.png" class="status-unchecked">
                                 </div>
                                 <div class="col-sm-1 col-xs-2 status-img" *ngIf="recommendationsList.status=='D'">
-                                    <img src="assets/images/status-notapplicable.png" class="status-unchecked"
+                                    <img alt="icon" src="assets/images/status-notapplicable.png" class="status-unchecked"
                                         align-right>
                                 </div>
                                 <div class="col-sm-10 col-xs-10 sch"
                                     (click)="surveyRecommendationList(recommendationsList.recommendation.recommendationId)">
                                     <a class="Schedule">{{recommendationsList.recommendation.takebackLabel}}</a>
                                 </div>
-                                <!-- <br>
-                                <br> -->
                             </div>
                         </div>
                         <br>
@@ -112,7 +110,7 @@
                         <p class="help">
                             <a (click)="leakHelp(i,leak.priceValue,leak.takebackValue,leak.recommendation.takebackLabel)"
                                 class="letter">
-                                <img src="assets/images/letter.png">&nbsp;
+                                <img alt="icon" src="assets/images/letter.png">&nbsp;
                                 <span class="leak-help">help with this leak</span>
                             </a>
                         </p>

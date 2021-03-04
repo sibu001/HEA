@@ -1,7 +1,28 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { DeleteKeyIndicatorByIdAction, DeleteKeyIndicatorCustomerGroupByIdAction, DeleteKeyIndicatorVariableByIdAction, DeleteTrendingPartsByIdAction, GetKeyIndicatorByIdAction, GetKeyIndicatorCustomerGroupByIdAction, GetKeyIndicatorCustomerGroupListAction, GetKeyIndicatorListAction, GetKeyIndicatorVariableByIdAction, GetKeyIndicatorVariableListAction, GetTrendingPartsByIdAction, GetTrendingPartsListAction, SaveKeyIndicatorAction, SaveKeyIndicatorCustomerGroupAction, SaveKeyIndicatorVariableAction, SaveTrendingPartsAction, UpdateKeyIndicatorAction, UpdateKeyIndicatorCustomerGroupAction, UpdateKeyIndicatorVariableAction, UpdateTrendingPartsAction } from '../state/trending-definition.action';
+import {
+  DeleteKeyIndicatorByIdAction,
+  DeleteKeyIndicatorCustomerGroupByIdAction,
+  DeleteKeyIndicatorVariableByIdAction,
+  DeleteTrendingPartsByIdAction,
+  GetKeyIndicatorByIdAction,
+  GetKeyIndicatorCustomerGroupByIdAction,
+  GetKeyIndicatorCustomerGroupListAction,
+  GetKeyIndicatorListAction,
+  GetKeyIndicatorVariableByIdAction,
+  GetKeyIndicatorVariableListAction,
+  GetTrendingPartsByIdAction,
+  GetTrendingPartsListAction,
+  SaveKeyIndicatorAction,
+  SaveKeyIndicatorCustomerGroupAction,
+  SaveKeyIndicatorVariableAction,
+  SaveTrendingPartsAction,
+  UpdateKeyIndicatorAction,
+  UpdateKeyIndicatorCustomerGroupAction,
+  UpdateKeyIndicatorVariableAction,
+  UpdateTrendingPartsAction
+} from '../state/trending-definition.action';
 import { TrendingDefinitionState } from '../state/trending-definition.state';
 
 @Injectable({

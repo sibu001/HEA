@@ -21,6 +21,10 @@ import { MailService } from 'src/app/store/mail-state-management/service/mail.se
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
+import { AutoCompleteModule } from 'primeng/primeng';
+import { MatAutocompleteModule } from '@angular/material';
+import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { AdministrativeManagementState } from 'src/app/store/administrative-state-management/state/administrative.state';
 
 @NgModule({
   imports: [
@@ -28,12 +32,15 @@ import { TopicManagementState } from 'src/app/store/topic-state-management/state
     CommonHEAModule,
     ReactiveFormsModule,
     FormsModule,
+    MatAutocompleteModule,
+    AutoCompleteModule,
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
       SystemUtilityManagementState,
       MailManagementState,
-      TopicManagementState
+      TopicManagementState,
+      AdministrativeManagementState
     ]),
     MailDescriptionRoutingModule,
     RichTextEditorModule,
@@ -46,7 +53,7 @@ import { TopicManagementState } from 'src/app/store/topic-state-management/state
     MailDescriptionPreviewComponent,
     StackTraceComponent
   ],
-  providers: [SystemService, MailService, CustomerService, TopicService],
+  providers: [SystemService, MailService, CustomerService, TopicService, AdministrativeService],
   entryComponents: [StackTraceComponent]
 })
 export class MailDescriptionModule { }

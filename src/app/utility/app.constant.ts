@@ -90,4 +90,5 @@ export class AppConstant {
     public static waterCharge = '';
     public static waterSmartMeterList = '';
     public static waterSmartMeter = '';
+    public static emailSetting = '';
 }

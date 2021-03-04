@@ -47,9 +47,11 @@ export class HeadersComponent implements OnInit {
       this.users.currentPaneNumber !== undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile')) {
       if (document.getElementById('_home')) {
         document.getElementById('_home').classList.add('header_menu_none');
-      } if (document.getElementById('all_topic')) {
+      }
+      if (document.getElementById('all_topic')) {
         document.getElementById('all_topic').classList.add('header_menu_none');
-      } if (document.getElementById('menu_option')) {
+      }
+      if (document.getElementById('menu_option')) {
         document.getElementById('menu_option').classList.add('header_menu_none');
       }
       this.headerResponsiveMenu();
@@ -106,14 +108,10 @@ export class HeadersComponent implements OnInit {
           this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile' : true)) {
         this.router.navigate(['/accountDetail']);
       }
-      if (this.users.role == 'ADMIN') {
+      if (this.users.role === 'ADMIN') {
         this.router.navigate(['/accountDetail']);
       }
-    } else if (numbers === 4) {
-      if (this.users.surveyLength > 3) {
-        this.router.navigate(['/topicshistory']);
-      }
-    } else if (numbers === 5) {
+    } else if (numbers === 4 || numbers === 5) {
       if (this.users.surveyLength > 3) {
         this.router.navigate(['/topicshistory']);
       }

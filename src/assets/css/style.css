@@ -5,7 +5,7 @@ body {
     height: 100%; 
     letter-spacing: 0.3px;
     color: #000;
-    font-family: 'Roboto'!important;
+    font-family: "Roboto", sans-serif !important;
 }
 .center{
        
@@ -76,9 +76,9 @@ img.info_img {
     content: "\F111";
     color:#616161;
 }
-collapsible-body {
+/* collapsible-body {
     box-shadow: none !important;
-}
+} */
 /* -----------------------navbar-------------------------------------- */
 .navbar-toggle * {
 	-ms-transition: all 0.4s ease;
@@ -95,12 +95,15 @@ collapsible-body {
 	padding: 0px;
 	border-radius: 0px;
 	border: none;
+    float: right;
+    margin-top: 18px!important;
 }
+
 .navbar-toggle span {
 	width: 20px;
 	height: 2px;
 	margin-bottom: 3px;
-	background-color: #999;
+    background-color: #75ba18!important;
 	display: block;
 }
 
@@ -112,22 +115,26 @@ collapsible-body {
 	-webkit-transform: none;
 	transform: none;
 	width: 20px;
+    background-color: #000!important;
 }
-.navbar-toggle {
-  float: right;
-  margin-top: 15px;
+
+.navbar-collapse {
+    padding-right: 15px;
+    padding-left: 15px;
+    overflow-x: visible;
+    -webkit-overflow-scrolling: touch;
+    border-top: 0px!important;
+    box-shadow: 0px!important;
 }
+
+
 .navbar-default .navbar-toggle {
     border: #fff!important;
 }
-.navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
-    background-color: #ddd;
-}
+
 .navbar-default .navbar-toggle:focus, .navbar-default .navbar-toggle:hover {
     background: none!important;
-    /* position: absolute; */
 }
-
 
 .navbar-toggle span.bar2 {
     -ms-transform: rotate(-360deg) scale(0);
@@ -142,12 +149,12 @@ collapsible-body {
     -webkit-transform: rotate(45deg);
     -moz-transform: rotate(45deg);
     -o-transform: rotate(45deg);
-    transform: rotate(45deg);
+    /* transform: rotate(45deg); */
     -ms-transform-origin: 1px 3px;
     -webkit-transform-origin: 1px 3px;
     -moz-transform-origin: 1px 3px;
     -o-transform-origin: 1px 3px;
-    transform-origin: 1px 3px;
+    /* transform-origin: 1px 3px; */
     width: 12px;
     transform: translate3d(0px,5px,0) rotate(45deg);
     transform-origin: left top;
@@ -155,17 +162,15 @@ collapsible-body {
 .navbar-toggle span.bar3 {
     -ms-transform: rotate(-45deg);
     -webkit-transform: rotate(-45deg);
-    transform: rotate(-45deg);
+    /* transform: rotate(-45deg); */
     -ms-transform-origin: 9px 2px;
     -webkit-transform-origin: 9px 2px;
-    transform-origin: 9px 2px;
+    /* transform-origin: 9px 2px; */
     width: 12px;
     transform: translate3d(0px,-5px,0) rotate(-45deg);
     transform-origin: left bottom;
 }
-.navbar-toggle {
-    margin-top: 18px!important;
-}
+
 .navbar-default {
     background-color: #fff!important;
     border-color: #fff!important;
@@ -248,28 +253,7 @@ p.rt {
 p.menu{
     display: none;
 }
-.navbar-collapse {
-    padding-right: 15px;
-    padding-left: 15px;
-    overflow-x: visible;
-    -webkit-overflow-scrolling: touch;
-    border-top: 0px!important;
-    box-shadow: 0px!important;
-}
-.navbar-toggle.collapsed span.bar1, .navbar-toggle.collapsed span.bar2, .navbar-toggle.collapsed span.bar3, .navbar-toggle.collapsed span.bar4 {
-    -ms-transform: none;
-    -webkit-transform: none;
-    transform: none;
-    width: 20px;
-    background-color: #000!important;
-}
-.navbar-toggle span {
-    width: 20px;
-    height: 2px;
-    margin-bottom: 3px;
-    background-color: #75ba18!important;
-    display: block;
-}
+
 
 hr.header-hr {
     margin-top: 0px;

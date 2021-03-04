@@ -25,6 +25,15 @@
     </div>
   </div>
   <form [formGroup]='alertMessagesForm'>
+    <div class="row rowPadding borderBottom" *ngIf="id">
+      <div class="control-label col-sm-4 col-xs-12">
+        Id:
+      </div>
+      <div class="control-label col-sm-8 col-xs-12">
+        <input type="text" class="show-value"
+            formControlName="id" id="id" disabled/>
+      </div>
+    </div>
     <div class="row rowPadding borderBottom">
       <div class="control-label col-sm-4 col-xs-12">
         Target:

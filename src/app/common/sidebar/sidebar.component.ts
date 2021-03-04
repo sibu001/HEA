@@ -11,9 +11,9 @@ import { environment } from 'src/environments/environment';
 })
 export class SidebarComponent implements OnInit {
 
-  @Input() showMethod: Boolean = false;
-  @Input() showTopicVariableFields: Boolean = false;
-  @Input() showDataFields: Boolean = false;
+  @Input() showMethod = false;
+  @Input() showTopicVariableFields = false;
+  @Input() showDataFields = false;
   apiURL = environment.webBaseUrl;
   methodName = [];
   dataField = [];

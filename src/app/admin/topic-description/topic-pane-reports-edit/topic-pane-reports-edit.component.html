@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Pane Report</span>
         </p>
         <form [formGroup]="reportForm" class="form-group form-padding">
@@ -23,7 +23,7 @@
           </div>
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Report Parameters</span></p>
             <app-table [keys]="parameterKeys" [isPaginate]="false" [isDelete]='true' [isSearch]="false" [isHideAdd]=true
               [showAddRowButton]=true [data]="parameterDataSource" [totalElement]="parameterData.totalElements"

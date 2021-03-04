@@ -325,8 +325,8 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetSystemParameterListAction(force, filter));
   }
 
-  loadSystemParameterCount(): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetSystemParameterCountAction());
+  loadSystemParameterCount(filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetSystemParameterCountAction(filter));
   }
 
   loadSystemParameterById(id: number): Observable<SystemUtilityManagementState> {

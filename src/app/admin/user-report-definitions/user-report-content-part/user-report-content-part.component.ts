@@ -1,7 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { ToolbarService, LinkService, ImageService, HtmlEditorService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Subscription } from 'rxjs';
@@ -47,8 +46,6 @@ export class UserReportContentPartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   setForm(event: any) {

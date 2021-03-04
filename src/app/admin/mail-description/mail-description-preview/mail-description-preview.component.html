@@ -2,8 +2,11 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="error-message" *ngIf="errorMessage">
+          {{errorMessage?.error?.errorMessage}}
+        </p>
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Mail Preview </span>
         </p>
         <form [formGroup]="contentForm" class="form-group form-padding">
@@ -11,21 +14,47 @@
           <div class="row borderBottom borderTop rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Customer:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <div class='row borderBottom borderTop rowPadding'>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                  Audit Id:
+              <div class="row rowPadding borderBottom" style="margin-left: 0px;
+                margin-right: 0px;">
+                <div class='col-sm-4 col-md-4 col-lg-4 col-xs-12'>
+                  AuditId:
                 </div>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                  <input type="text" formControlName='auditId' id='auditId' class="form-control">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  <input type="text" class='form-control form-control-sm'
+                    formControlName="auditId" id="auditId">
+                  <div *ngIf="f.auditId.invalid && (f.auditId.dirty ||
+                    f.auditId.touched)">
+                    <span class="error" *ngIf="f.auditId.errors.required">
+                      Audit Id is required.
+                    </span>
+                  </div>
                 </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
               </div>
-              <div class='row borderBottom rowPadding'>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+              <div class="row rowPadding" style="margin-left: 0px; margin-right:
+                0px;" s>
+                <div class='col-sm-4 col-md-4 col-lg-4 col-xs-12'>
                   Customer Name:
                 </div>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                  <input type="text" formControlName='customerName' id='customerName' class="form-control">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  <input type="text" matInput class='form-control form-control-sm'
+                    (input)="search($event.target.value)"
+                    formControlName="customerName"
+                    [matAutocomplete]="auto">
+                  <mat-autocomplete #auto="matAutocomplete"
+                    (optionSelected)=handleAutoComplete($event)>
+                    <mat-option *ngFor="let option of customerList"
+                      [value]="option">{{
+                      option.user.name }}</mat-option>
+                  </mat-autocomplete>
+                  <div *ngIf="f.customerName.invalid && (f.customerName.dirty ||
+                    f.customerName.touched)">
+                    <span class="error" *ngIf="f.customerName.errors.required">
+                      Customer Name is required.
+                    </span>
+                  </div>
                 </div>
+                <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
               </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -43,7 +72,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Execution Time (ms):</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">2</div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
@@ -69,7 +98,7 @@
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <iframe id="ifrmMailContent" class="form-control" scrolling="no" style="height: 1500px; width: 100%;"
+              <iframe id="ifrmMailContent" title="Mail Preview" class="form-control" style="height: 1500px; width: 100%; overflow:hidden;"
                 height="">
               </iframe>
             </div>

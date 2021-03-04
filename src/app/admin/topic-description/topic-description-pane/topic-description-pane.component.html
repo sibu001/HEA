@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Pane</span>
         </p>
         <form [formGroup]="paneForm" class="form-group form-padding">
@@ -172,7 +172,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Data Blocks</span></p>
             <app-table [keys]="dataBlockKeys" [isPaginate]="false"  [isSearch]="false"
               [data]="dataBlockDataSource" [totalElement]="dataBlockData.totalElements" (addEvent)='addDataBlock()'
@@ -182,7 +182,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Data Fields</span></p>
             <app-table [keys]="dataFieldKeys" [isPaginate]="true"  [isSearch]="false"
               [data]="dataFieldDataSource" [totalElement]="dataFieldData.totalElements" (addEvent)='addDataField()'
@@ -192,7 +192,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Charts</span></p>
             <app-table [keys]="chartKeys" [isPaginate]="true"  [isSearch]="false"
               [data]="chartDataSource" [totalElement]="chartData.totalElements" (addEvent)='addCharts()'
@@ -202,7 +202,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Reports</span></p>
             <app-table [keys]="reportKeys" [isPaginate]="true"  [isSearch]="false"
               [data]="reportsDataSource" [totalElement]="reportData.totalElements" (addEvent)='addReports()'

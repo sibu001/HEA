@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Users } from "src/app/models/user";
-import { LoginService } from "src/app/services/login.service";
-import { ActivatedRoute } from "@angular/router";
-import { Router } from "@angular/router";
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
+import { ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { TableColumnData } from '../data/common-data';
 declare var $: any;
 
@@ -11,7 +11,7 @@ declare var $: any;
   templateUrl: './gasSmartMeter.component.html',
   styleUrls: ['./gasList.component.css']
 })
-export class gasSmartMeterComponent implements OnInit {
+export class gasSmartMeterComponent implements OnInit, AfterViewInit {
   users: Users = new Users();
   errorMessage: string;
   useTypes: string;
@@ -38,41 +38,35 @@ export class gasSmartMeterComponent implements OnInit {
     } else {
       this.users.outhMeResponse = {};
       this.users.outhMeResponse.userId = '2139';
-      // this.getUserById();
     }
-    this.perFormGetList("smartMeterGas");
+    this.perFormGetList('smartMeterGas');
   }
 
-  // getUserById(): any {
-  //   this.users.outhMeResponse = {};
-  //   this.users.outhMeResponse.userId = '2139';
-  // }
-  ngOnInit() {
+  ngOnInit() {}
 
-  }
   ngAfterViewInit() {
     setTimeout(function () {
       $('#example').DataTable({
-        "pagingType": "full",
-        "columnDefs": [{
-          "targets": [0, 3, 4, 5], // column or columns numbers
-          "orderable": false,  // set orderable for selected columns
+        'pagingType': 'full',
+        'columnDefs': [{
+          'targets': [0, 3, 4, 5], // column or columns numbers
+          'orderable': false,  // set orderable for selected columns
         }],
       });
-      var table = $('#example').DataTable();   //pay attention to capital D, which is mandatory to retrieve "api" datatables' object, as @Lionel said
+      const table = $('#example').DataTable();   // pay attention to capital D, which is mandatory to retrieve 'api' datatables' object, as @Lionel said
 
-      $("#year").on('keyup click', function () {
+      $('#year').on('keyup click', function () {
         table.columns([1]).search($(this).val()).draw();
       });
 
-      $("#month").on('keyup click', function () {
+      $('#month').on('keyup click', function () {
         table.column(2).search($(this).val()).draw();
       });
-      $("#day").on('keyup click', function () {
+      $('#day').on('keyup click', function () {
         table.column(3).search($(this).val()).draw();
       });
 
-      $("#hour").on('keyup click', function () {
+      $('#hour').on('keyup click', function () {
         table.column(4).search($(this).val()).draw();
       });
 
@@ -80,11 +74,11 @@ export class gasSmartMeterComponent implements OnInit {
   }
 
   perFormGetList(useTypes) {
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("users/" + this.users.outhMeResponse.userId + "/" + useTypes).subscribe(
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('users/' + this.users.outhMeResponse.userId + '/' + useTypes).subscribe(
       data => {
-        document.getElementById("loader").classList.remove('loading');
-        let response = JSON.parse(JSON.stringify(data));
+        document.getElementById('loader').classList.remove('loading');
+        const response = JSON.parse(JSON.stringify(data));
         this.users.types = useTypes;
         this.users.gasSmartMeterList = new Array;
         this.users.gasSmartMeterList = response.data;
@@ -95,8 +89,8 @@ export class gasSmartMeterComponent implements OnInit {
         this.dataSource = [...this.usageHistoryData.content];
       },
       error => {
-        document.getElementById("loader").classList.remove('loading');
-        let response = JSON.parse(JSON.stringify(error));
+        document.getElementById('loader').classList.remove('loading');
+        const response = JSON.parse(JSON.stringify(error));
         console.log(error);
         this.errorMessage = response.error_description;
 
@@ -106,7 +100,7 @@ export class gasSmartMeterComponent implements OnInit {
   }
   searchData() {
 
-    //   document.getElementById("loader").classList.add('loading');
+    //   document.getElementById('loader').classList.add('loading');
     //   this.usageHistoryList = new Array;
 
     //   console.log(this.users.usesList);
@@ -134,6 +128,6 @@ export class gasSmartMeterComponent implements OnInit {
     //     });
     //   });
     //   console.log(this.usageHistoryList);
-    //   document.getElementById("loader").classList.remove('loading');
+    //   document.getElementById('loader').classList.remove('loading');
   }
 }

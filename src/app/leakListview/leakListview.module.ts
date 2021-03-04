@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
-import {leakListViewComponent} from "src/app/leakListview/leakListview.component";
+import {leakListViewComponent} from 'src/app/leakListview/leakListview.component';
 import { SharedModule } from '../general/share.module';
 import { leakListViewRoutingModule } from './leakListview.routes';
-;
+
 @NgModule({
     declarations: [
         leakListViewComponent
@@ -17,6 +17,4 @@ import { leakListViewRoutingModule } from './leakListview.routes';
     ]
 
 })
-export class leakListViewModule {
-
-}
+export class leakListViewModule {}

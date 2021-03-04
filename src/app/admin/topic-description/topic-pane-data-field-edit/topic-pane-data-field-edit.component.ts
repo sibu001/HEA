@@ -54,8 +54,6 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   setForm(event: any): any {

@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Chart Series Definition</span>
         </p>
         <form [formGroup]="chartForm" class="form-group form-padding">
@@ -78,7 +78,7 @@
         
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Chart Data Sets</span></p>
             <app-table [keys]="keys" [isSearch]="false" [isDelete]=true [data]="dataSource"
               [totalElement]="data.totalElements" [isHideAdd]=true [showAddRowButton]=true (saveRowEvent)='saveRow()'

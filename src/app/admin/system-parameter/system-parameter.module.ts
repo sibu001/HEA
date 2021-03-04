@@ -6,7 +6,7 @@ import { SystemParameterListComponent } from './system-parameter-list/system-par
 import { SystemParameterEditComponent } from './system-parameter-edit/system-parameter-edit.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonHEAModule } from 'src/app/common/common.module';
-import { NgxsModule, Store } from '@ngxs/store';
+import { NgxsModule } from '@ngxs/store';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';

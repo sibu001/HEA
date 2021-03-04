@@ -67,7 +67,7 @@ section.space-top {
     border-radius: 4px;
   }
   
-  @media (max: 420) {
+  @media (max-width: 420) {
     .custom-file-input::-webkit-file-upload-button {
       visibility: hidden;
     }

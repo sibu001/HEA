@@ -48,23 +48,7 @@ i.fa {
 .panel-info {
   border-color: #fff;
 }
-.panel {
-  margin-bottom: 20px;
-  background-color: #fff;
-  border: 0px solid #fff !important;
-  border-radius: 0px;
-  box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
-}
-.fa-caret-right:before {
-  content: "\f0da";
-  color: #fb783b;
-  font-size: 40px;
-}
-.fa-caret-down:before {
-  content: "\f0d7";
-  color: #fb783b;
-  font-size: 40px;
-}
+
 .col-sm-9.topic_list {
   padding-left: 40px;
   border-right: 1px solid #d8d8d8;
@@ -108,9 +92,7 @@ ul.leaks {
   cursor: pointer;
   padding-bottom: 20px;
 }
-ul.leaks li {
-  padding-bottom: 20px;
-}
+
 .a_history {
   color: #4550a1;
   font-weight: 600;
@@ -118,7 +100,6 @@ ul.leaks li {
 }
 p.Energy_anaiytic {
   color: #000000;
-  padding: 0;
   font-weight: bold;
   font-size: 14px;
   margin: 2em 0 0 0;
@@ -126,7 +107,6 @@ p.Energy_anaiytic {
 }
 p.feedback {
   color: #000000;
-  padding: 0;
   font-weight: bold;
   font-size: 14px;
   margin: 2em 0 0 0;
@@ -134,7 +114,6 @@ p.feedback {
 }
 a.info_hea {
   color: #990;
-  padding: 0;
   font-weight: bold;
   font-size: 14px;
   padding: 0 0 0 23px;
@@ -162,7 +141,12 @@ ul.leaks li {
 }
 .panel {
   margin-bottom: 12px;
+  background-color: #fff;
+  border: 0px solid #fff !important;
+  border-radius: 0px;
+  box-shadow: 0 0px 0px rgba(0, 0, 0, 0) !important;
 }
+
 .panel-group .panel-heading + .panel-collapse > .list-group,
 .panel-group .panel-heading + .panel-collapse > .panel-body {
   border-top: 0px solid #fff;

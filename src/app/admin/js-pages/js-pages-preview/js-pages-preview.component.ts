@@ -1,12 +1,10 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
-import { TableColumnData } from 'src/app/data/common-data';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
-import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -14,7 +12,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   templateUrl: './js-pages-preview.component.html',
   styleUrls: ['./js-pages-preview.component.css']
 })
-export class JsPagesPreviewComponent implements OnInit {
+export class JsPagesPreviewComponent implements OnInit, OnDestroy {
   id: any;
   jsPreviewForm: FormGroup;
   url: any;

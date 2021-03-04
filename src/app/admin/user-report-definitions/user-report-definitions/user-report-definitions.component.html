@@ -25,7 +25,7 @@
 
           <div class="paddingTop">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">User Report List (Number of Records = {{totalElement}})</span></p>
             <app-table [keys]="keys" [isPaginate]="true" (goToEditEvent)='goToEditUserReports()'
               (addEvent)='addUserReports()' [isSearch]="false" [data]="dataSource"

@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Topic description</span>
         </p>
         <form [formGroup]="topicForm" class="form-group form-padding">
@@ -218,7 +218,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Group</span></p>
             <app-table [keys]="keys" [isPaginate]="false" [checkbox]=true
               [isHideAdd]=true [isSearch]="false"
@@ -228,7 +228,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Panes </span></p>
             <app-table [keys]="topicPaneKeys" [isPaginate]="true"
               [isSearch]="true" [data]="dataSource"
@@ -240,7 +240,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Recommendations, Leaks,Unique </span></p>
             <app-table [keys]="recommendationKeys" [isPaginate]="true"
               [isSearch]="false" [data]="dataSource"
@@ -252,7 +252,7 @@
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
-              <img src='assets/images/dot03.gif' class='dot'>
+              <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Variables </span></p>
             <app-table [keys]="topicVariablesKeys" [isPaginate]="true"
               [isSearch]="true" [data]="dataSource"

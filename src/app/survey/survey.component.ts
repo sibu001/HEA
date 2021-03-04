@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, Renderer, HostListener } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, Renderer, HostListener, OnInit } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
@@ -8,7 +8,7 @@ declare var $: any;
   templateUrl: './survey.component.html',
   styleUrls: ['./survey.component.css']
 })
-export class SurveyComponent implements AfterViewInit {
+export class SurveyComponent implements OnInit, AfterViewInit {
   @ViewChild('inp1') inp1: ElementRef;
   @ViewChild('panel') public panel: ElementRef;
   inputErrorMessage: string;
@@ -24,7 +24,6 @@ export class SurveyComponent implements AfterViewInit {
   paneCharts: any;
   currentPaneAnswers: any[] = [];
   totalPanes: any[] = [];
-  // border: string;
   selectDate: Date;
   users: Users = new Users();
   globalM = 0;
@@ -69,7 +68,6 @@ export class SurveyComponent implements AfterViewInit {
   }
   ngOnInit() {
     this.users = this.loginService.getUser();
-    const fc = $.fullCalendar;
     const self = this;
     setTimeout(function () {
       self.chartDataConfiguration();
@@ -85,7 +83,7 @@ export class SurveyComponent implements AfterViewInit {
     }
 
   }
-  hover(value, fields) {
+  hover(value: any, fields: any) {
     for (const answer of this.users.currentPaneNumber.currentPaneAnswers) {
       if (answer.dataField.inputType == 'hslider') {
         $('#' + fields + ' .hslider' + answer.value).removeClass('active');
@@ -102,16 +100,15 @@ export class SurveyComponent implements AfterViewInit {
   }
   chartDataConfiguration() {
     this.paneCharts = JSON.parse(JSON.stringify(this.users.currentPaneNumber.paneCharts));
-    let line1;
-    let line2;
-    let line3;
-    let line4;
-    let line5;
-    let line6;
-    let line7;
+    let line1: Array<any>;
+    let line2: Array<any>;
+    let line3: Array<any>;
+    let line4: Array<any>;
+    let line5: Array<any>;
+    let line6: Array<any>;
+    let line7: Array<any>;
     if (this.users.currentPaneNumber.paneCharts.length > 0) {
       const panechart = this.users.currentPaneNumber.paneCharts;
-      const j = 0;
       for (const paneCharts of panechart) {
         line1 = new Array;
         line2 = new Array;
@@ -151,12 +148,17 @@ export class SurveyComponent implements AfterViewInit {
             }
           }
         }
+        console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6 + '' + line7);
+        /* tslint:disable:no-unused-variable */
+        // tslint:disable-next-line: prefer-const
         let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot;
+        // tslint:disable-next-line: no-eval
         eval(paneCharts.chart.freeChartConfigurationJS);
         if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
           const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
           const news = scriptTag.replace('<script>', '');
           $('#content').bind(
+            // tslint:disable-next-line: no-eval
             eval(news)
           );
         }
@@ -164,6 +166,7 @@ export class SurveyComponent implements AfterViewInit {
           const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
           const news = scriptTag.replace('<script type="text/javascript" language="javascript">', '');
           $('#content').bind(
+            // tslint:disable-next-line: no-eval
             eval(news)
           );
         }
@@ -171,21 +174,22 @@ export class SurveyComponent implements AfterViewInit {
     }
     if (this.users.currentPaneNumber.currentPane.htmPageText != null) {
       if (this.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
-        const scriptTag = this.users.currentPaneNumber.currentPane.htmPageText.substring(this.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'), this.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
+        const scriptTag = this.users.currentPaneNumber.currentPane.htmPageText.substring(this.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
+          this.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
         const news = scriptTag.replace('<script type="text/javascript">', '');
+        // tslint:disable-next-line: no-eval
         eval(news);
       }
     }
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(event: any) {
     const self = this;
     self.globalM++;
     this.users.currentPaneNumber.paneCharts = undefined;
     setTimeout(function () {
       self.globalK++;
-      console.log(self.globalK);
       if (self.paneCharts.length > 0) {
         const panechart = self.paneCharts;
         const j = 0;
@@ -239,8 +243,10 @@ export class SurveyComponent implements AfterViewInit {
                   }
                 }
               }
+              // tslint:disable-next-line: prefer-const
               let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot;
-              console.log(self.users.currentPaneNumber.paneCharts);
+              console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
+              // tslint:disable-next-line: no-eval
               eval(paneCharts.chart.freeChartConfigurationJS);
               self.globalM = 0;
               self.globalK = 0;
@@ -248,6 +254,7 @@ export class SurveyComponent implements AfterViewInit {
                 const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
                 const news = scriptTag.replace('<script>', '');
                 $('#content').bind(
+                  // tslint:disable-next-line: no-eval
                   eval(news)
                 );
               }
@@ -255,6 +262,7 @@ export class SurveyComponent implements AfterViewInit {
                 const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
                 const news = scriptTag.replace('<script type="text/javascript" language="javascript">', '');
                 $('#content').bind(
+                  // tslint:disable-next-line: no-eval
                   eval(news)
                 );
               }
@@ -264,8 +272,10 @@ export class SurveyComponent implements AfterViewInit {
       }
       if (self.users.currentPaneNumber.currentPane.htmPageText != null) {
         if (self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
-          const scriptTag = self.users.currentPaneNumber.currentPane.htmPageText.substring(self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'), self.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
+          const scriptTag = self.users.currentPaneNumber.currentPane.htmPageText.substring(self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
+            self.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
           const news = scriptTag.replace('<script type="text/javascript">', '');
+          // tslint:disable-next-line: no-eval
           eval(news);
         }
       }
@@ -277,7 +287,7 @@ export class SurveyComponent implements AfterViewInit {
       this.totalPanes.push(i);
     }
   }
-  next(id, paneNumber) {
+  next(id: any, paneNumber: any) {
     this.qusHide = false;
     this.chartHelpHide = false;
     this.users.allSurveyCheck = true;
@@ -294,7 +304,7 @@ export class SurveyComponent implements AfterViewInit {
       document.getElementById('loader').classList.add('loading');
     }
   }
-  prev(id, paneNumber) {
+  prev(id: any, paneNumber: any) {
     this.users.allSurveyCheck = true;
     this.chartHelpHide = false;
     this.loginService.setUser(this.users);
@@ -306,7 +316,7 @@ export class SurveyComponent implements AfterViewInit {
     document.getElementById('loader').classList.add('loading');
   }
 
-  surveyRecommendationList(number) {
+  surveyRecommendationList(number: any) {
     this.users.recommendationNo = number;
     this.loginService.setUser(this.users);
     this.router.navigate(['/surveyRecommendationList']);
@@ -314,48 +324,47 @@ export class SurveyComponent implements AfterViewInit {
   postSurveyAnswerData(currentPaneAnswers: any, currentPaneBlocks: any, id: any, value: any, event?: any) {
     if ((id == 'change' && value) || id == 'next' || id == 'prev') {
       document.getElementById('loader').classList.add('loading');
-      let data;
+      let dataObj;
       if (id == 'next') {
-        if (currentPaneAnswers.length >= 1 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.lastPage && (currentPaneAnswers[0].value == 'false' || currentPaneAnswers[0].value == 'N' || currentPaneAnswers[0].value == 'No' || currentPaneAnswers[0].value == '0')) {
-          data = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks, 'nextPane': true, 'skipAnswers': false };
+        if (currentPaneAnswers.length >= 1 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.lastPage && (currentPaneAnswers[0].value == 'false'
+          || currentPaneAnswers[0].value == 'N' || currentPaneAnswers[0].value == 'No' || currentPaneAnswers[0].value == '0')) {
+          dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks, 'nextPane': true, 'skipAnswers': false };
         } else {
-          data = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks, 'nextPane': true };
+          dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks, 'nextPane': true };
         }
       } else {
-        data = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks };
+        dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks };
       }
-      this.loginService.performPostMultiPartDataPost(data, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' + this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answers').subscribe(
-        data => {
-          const response = JSON.parse(JSON.stringify(data));
-          //  console.log(response);
-          if (response.data.errors != null) {
-            // this.users.currentPaneNumber.errors = response.data.errors;
-            this.users.currentPaneNumber = response.data;
-            this.loginService.setUser(this.users);
-            this.colors = 'red';
-            this.scrollTop();
-            document.getElementById('loader').classList.remove('loading');
-          } else {
-            if (id == 'next') {
-              this.nextPaneWithAnswer(response.data);
-              document.getElementById('loader').classList.remove('loading');
-              //  this.nextPane(response.data);
-            } else if (id == 'prev') {
-              this.previousPane(response.data);
-            } else if (id == 'change') {
+      this.loginService.performPostMultiPartDataPost(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
+        this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answers').subscribe(
+          data => {
+            const response = JSON.parse(JSON.stringify(data));
+            if (response.data.errors != null) {
               this.users.currentPaneNumber = response.data;
               this.loginService.setUser(this.users);
+              this.colors = 'red';
+              this.scrollTop();
               document.getElementById('loader').classList.remove('loading');
+            } else {
+              if (id == 'next') {
+                this.nextPaneWithAnswer(response.data);
+                document.getElementById('loader').classList.remove('loading');
+              } else if (id == 'prev') {
+                this.previousPane(response.data);
+              } else if (id == 'change') {
+                this.users.currentPaneNumber = response.data;
+                this.loginService.setUser(this.users);
+                document.getElementById('loader').classList.remove('loading');
+              }
             }
+          },
+          errors => {
+            console.log(errors);
+            this.scrollTop();
+            this.inputErrorMessage = errors.error.errorMessage;
+            document.getElementById('loader').classList.remove('loading');
           }
-        },
-        errors => {
-          console.log(errors);
-          this.scrollTop();
-          this.inputErrorMessage = errors.error.errorMessage;
-          document.getElementById('loader').classList.remove('loading');
-        }
-      );
+        );
     } else if (this.users.currentPaneNumber.currentPane.paneCode === 'prf_welcome') {
       if (event !== 'Y') {
         this.disableButton = true;
@@ -365,7 +374,7 @@ export class SurveyComponent implements AfterViewInit {
     }
   }
 
-  nextPaneWithAnswer(data) {
+  nextPaneWithAnswer(data: any) {
     this.getSessionPendingMessage();
     const currentPaneCode = this.users.currentPaneNumber.currentPane.paneCode;
     this.users.currentPaneNumber = data;
@@ -404,9 +413,9 @@ export class SurveyComponent implements AfterViewInit {
             document.getElementById('menu_option2').classList.remove('header_menu_none');
           }
         }
-        const self = this;
+        const self1 = this;
         setTimeout(function () {
-          self.chartDataConfiguration();
+          self1.chartDataConfiguration();
         }, 500);
 
         this.helpHides();
@@ -429,7 +438,7 @@ export class SurveyComponent implements AfterViewInit {
 
   }
 
-  nextPane(currentPaneNumber) {
+  nextPane(currentPaneNumber: any) {
     const object = {};
     this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/nextPane').subscribe(
       data => {
@@ -468,9 +477,9 @@ export class SurveyComponent implements AfterViewInit {
               document.getElementById('menu_option2').classList.remove('header_menu_none');
             }
           }
-          const self = this;
+          const self1 = this;
           setTimeout(function () {
-            self.chartDataConfiguration();
+            self1.chartDataConfiguration();
           }, 500);
 
           this.helpHides();
@@ -498,7 +507,7 @@ export class SurveyComponent implements AfterViewInit {
       }
     );
   }
-  previousPane(currentPaneNumber) {
+  previousPane(currentPaneNumber: any) {
     const object = {};
     this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/previousPane').subscribe(
       data => {
@@ -567,7 +576,7 @@ export class SurveyComponent implements AfterViewInit {
     );
   }
 
-  getSurveyLeak(surveyId) {
+  getSurveyLeak(surveyId: any) {
     document.getElementById('loader').classList.add('loading');
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyId + '/leaks').subscribe(
       data => {
@@ -578,24 +587,23 @@ export class SurveyComponent implements AfterViewInit {
       },
       errors => {
         console.log(errors);
-        const response = JSON.parse(JSON.stringify(errors))._body;
         document.getElementById('loader').classList.remove('loading');
       }
     );
   }
-  change(value) {
+  change(value: any) {
     if (value == 'true') {
-      return value = 'false';
+      return 'false';
     } else if (value == 'false') {
-      return value = 'true';
+      return 'true';
     } else if (value == '1') {
-      return value = '0';
+      return '0';
     } else if (value == '0') {
-      return value = '1';
+      return '1';
     } else if (value == 'Y') {
-      return value = 'N';
+      return 'N';
     } else if (value == 'N') {
-      return value = 'Y';
+      return 'Y';
     }
   }
   getAllSurvey() {
@@ -642,12 +650,10 @@ export class SurveyComponent implements AfterViewInit {
   getSessionPendingMessage() {
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/sessionPendingMessage').subscribe(
       data => {
-        const response = JSON.parse(JSON.stringify(data));
         document.getElementById('loader').classList.remove('loading');
       },
       errors => {
         console.log(errors);
-        const response = JSON.parse(JSON.stringify(errors))._body;
         document.getElementById('loader').classList.remove('loading');
       }
     );
@@ -684,12 +690,12 @@ export class SurveyComponent implements AfterViewInit {
         },
         errors => {
           console.log(errors);
-          const response = JSON.parse(JSON.stringify(errors))._body;
           document.getElementById('loader').classList.remove('loading');
         }
       );
     }
   }
+
   scrollTop() {
     window.scroll(0, 0);
   }
@@ -721,7 +727,7 @@ export class SurveyComponent implements AfterViewInit {
     // this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
     //   'change', true);
   }
-  deleteDataBlockRow(index) {
+  deleteDataBlockRow(index: any) {
     console.log(this.users.currentPaneNumber.currentPaneBlocks);
     this.users.currentPaneNumber.currentPaneBlocks.forEach(element => {
       if (element.blockCount >= element.dataBlock.minRows) {

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, Output, EventEmitter, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { ActivatedRoute, Router } from '@angular/router';
 import { GasUsagePopupComponent } from 'src/app/gas/gas-usage-popup/gas-usage-popup.component';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
@@ -16,17 +15,12 @@ export class ElectricityUsagePopupComponent implements OnInit {
   usageModelObj2: any;
   users: Users = new Users();
   usageHistoryId: number;
-  useTypes: String;
+  useTypes: string;
   constructor(
     private loginService: LoginService,
-    private route: ActivatedRoute,
-    private router: Router,
     public dialogRef: MatDialogRef<GasUsagePopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
-
-
-  }
+  ) {}
 
   ngOnInit() {
   }
@@ -40,7 +34,6 @@ export class ElectricityUsagePopupComponent implements OnInit {
       this.loginService.performPut(this.usageModelObj2, 'users/' + this.usageModelObj2.userId + '/' + this.useTypes + '/' + this.usageHistoryId).subscribe(
         data => {
           document.getElementById('loader').classList.remove('loading');
-          const response = JSON.parse(JSON.stringify(data));
           this.onModelSave.emit();
         },
         error => {
@@ -98,7 +91,6 @@ export class ElectricityUsagePopupComponent implements OnInit {
       this.loginService.performPut(this.usageModelObj2, 'users/' + this.usageModelObj2.userId + '/usage/' + this.useTypes + '/' + this.usageHistoryId).subscribe(
         data => {
           document.getElementById('loader').classList.remove('loading');
-          const response = JSON.parse(JSON.stringify(data));
           this.onModelSave.emit();
         },
         error => {

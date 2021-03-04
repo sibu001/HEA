@@ -2,8 +2,11 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="error-message" *ngIf="errorMessage">
+          {{errorMessage?.error?.errorMessage}}
+        </p>
         <p class="messages">
-          <img class="pointer" src="assets/images/dot03.gif" class="dot">
+          <img alt="dot" class="pointer" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Batch Add Customer Comparison Group</span>
         </p>
         <form [formGroup]="customerComparisonGroupForm" class="form-group
@@ -13,9 +16,11 @@
               Comparison code
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="comparisonCode" class="form-control form-control-sm" formControlName="comparisonCode">
+              <select id="comparisonCode" class="form-control form-control-sm"
+                formControlName="comparisonCode">
                 <option *ngFor="let comparisonCode of
-                  comparisonCodeDropdownData" [value]='comparisonCode.lookupValue'>
+                  comparisonCodeDropdownData"
+                  [value]='comparisonCode.lookupValue'>
                   {{comparisonCode.valueName}}</option>
               </select>
             </div>
@@ -26,7 +31,8 @@
               Order:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="orderNumber" formControlName="orderNumber">
+              <input type="text" class="form-control form-control-sm"
+                id="orderNumber" formControlName="orderNumber">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -35,10 +41,12 @@
               Weather Station
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="weatherStation" class='form-control form-control-sm' name="weatherStation"
+              <select id="weatherStation" class='form-control form-control-sm'
+                name="weatherStation"
                 formControlName="weatherStation">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let stationId of weatherStationIds" [value]="stationId.stationId">{{stationId.stationName}}</option>
+                <option *ngFor="let stationId of weatherStationIds"
+                  [value]="stationId.stationId">{{stationId.stationName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -47,14 +55,15 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
               <button type="button" class="btn btn-primary" (click)="back()">Back</button></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-              <button type="button" class="btn btn-primary" style="float:right;" (click)="delete()">
+              <button type="button" class="btn btn-primary" style="float:right;"
+                (click)="delete()">
                 Delete</button>
             </div>
           </div>
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar ></app-sidebar>
+        <app-sidebar></app-sidebar>
       </div>
     </div>
   </div>

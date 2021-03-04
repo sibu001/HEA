@@ -27,7 +27,7 @@ export class LookupEditComponent implements OnInit, OnDestroy {
   lookupValueDataSource: any = [];
   lookupValueKey: Array<TABLECOLUMN> = TableColumnData.LOOKUP_VALUE_KEYS;
   private readonly subscriptions: Subscription = new Subscription();
-  toggleSaveButton: Boolean = true;
+  toggleSaveButton = true;
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute,

@@ -17,6 +17,7 @@
                                 </div>
                                 <div class="col-sm-4 col-xs-2">
                                     <img src="assets/images/icon_help.svg"
+                                        alt="help"
                                         style="float: right; margin-top:
                                         0%;margin-left: 5px;"
                                         class="media-object" id="help_btn1"
@@ -82,6 +83,7 @@
                                 </div>
                                 <div class="col-sm-4 col-xs-2">
                                     <img src="assets/images/icon_help.svg"
+                                        alt="help"
                                         style="float:right; margin-top:
                                         0%;margin-left: 5px;"
                                         class="media-object" id="help_btn1"
@@ -151,6 +153,7 @@
                                 </div>
                                 <div class="col-sm-4 col-xs-2">
                                     <img src="assets/images/icon_help.svg"
+                                        alt="help"
                                         style="float:right; margin-top:
                                         0%;margin-left: 5px;"
                                         class="media-object" id="help_btn1"
@@ -209,7 +212,6 @@
                                 *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0"
                                 class="a_edit" (click)="edit(1)">Edit</a></p>
                         <hr>
-                        <!-- <p>{{users.outhMeResponse.lotSize}}<a *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0" class="a_edit" (click)="edit(2)">Edit</a></p> -->
                         <p>{{users.outhMeResponse.lotSize}}</p>
                         <hr>
                         <p>{{users.outhMeResponse.yearBuilt}}<a
@@ -221,19 +223,21 @@
                 <br>
                 <div class="row" *ngIf="users.role=='USERS'">
                     <div class="col-sm-12 col-xs-12">
-                        <p class="utility"><img _ngcontent-c2=""
-                                class="dot"
-                                src="assets/images/dot03.gif">&nbsp;Utility
-                            Credentials</p>
+                        <p class="utility">
+                            <img alt="help" class="dot"
+                                src="assets/images/dot03.gif">
+                            &nbsp;Utility
+                            Credentials
+                        </p>
                         <div class="table-responsive">
-                            <table class="table">
+                            <table class="table" summary="utility">
                                 <thead>
                                     <tr style="background: #000; color:
                                         #fff;">
-                                        <th>Credential Type</th>
-                                        <th>Active</th>
-                                        <th>Login</th>
-                                        <th>Last Usage</th>
+                                        <th id="credential_type">Credential Type</th>
+                                        <th id="credential_active">Active</th>
+                                        <th id="credential_login">Login</th>
+                                        <th id="credential_usage">Last Usage</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -241,9 +245,10 @@
                                         customerCredentialsList">
                                         <td>{{credentialsList.credentialTypeCode}}</td>
                                         <td><span
-                                                *ngIf="credentialsList.active"><img
-                                                    class="dot"
-                                                    src="assets/images/icon_check_orange.png"></span></td>
+                                                *ngIf="credentialsList.active">
+                                                <img class="dot" src="assets/images/icon_check_orange.png" alt="dot">
+                                            </span>
+                                        </td>
                                         <td>{{credentialsList.login}}</td>
                                         <td>{{credentialsList.lastSuccessfulUsageDate|
                                             date : "MM/dd/yyyy
@@ -259,11 +264,12 @@
                         <p class="utility">Connect your account with:</p>
                     </div>
                     <div class="col-sm-1 col-xs-1">
-                        <img src="assets/images/facebook.png">
+                        <img src="assets/images/facebook.png" alt="facebook">
                     </div>
-                    <div class="col-sm-3 col-xs-4 button-responsive" style="text-align:
+                    <div class="col-sm-3 col-xs-4 button-responsive"
+                        style="text-align:
                         end;">
-                        <img src="assets/images/google2.jpg">
+                        <img src="assets/images/google2.jpg" alt="google">
                     </div>
                 </div>
                 <div class="row row-top-margin">
@@ -280,7 +286,7 @@
             </div>
             <div class="col-sm-3 rightColumn" *ngIf="users.role=='USERS'">
                 <p class="Energy_anaiytic">
-                    <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered
+                    <img src="assets/images/dot03.gif" alt="dot" class="dot">&nbsp;Powered
                     by Home Energy Analytics, Inc.</p>
                 <p class="feedback">Send feedback to</p>
                 <p class="link_hea">
@@ -392,7 +398,6 @@
         color: #76ba19;
         font-weight: 600;
         cursor: pointer;
-        /* margin-left: 20px; */
         float: right;
     }
 
@@ -438,7 +443,7 @@
         border-color: #76ba19;
         padding: 6px 25px;
         font-size: 14px;
-        font-family: 'Montserrat';
+        font-family: 'Montserrat', sans-serif;
     }
 
     @media only screen and (min-width: 320px) and (max-width: 767px) {
@@ -468,7 +473,7 @@
         right: 0;
     }
     .row-top-margin{
-        margin-top: 15px;;
+        margin-top: 15px;
     }
     @media only screen and (min-width: 200px) and (max-width: 485px) {
     .button-responsive{

@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { Users } from "src/app/models/user";
-import { LoginService } from "src/app/services/login.service";
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
 declare var $: any;
 @Component({
   selector: 'trendingPartsView',
@@ -20,189 +20,197 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
   partResourceType: string;
   partLookupValue: string;
   partUnitType: string;
-  trendingParts: any;
-
+  trendingParts: any = {
+    activeResource: 'electricity',
+    unitType: 'cost',
+    useTypes: 'all'
+  };
   constructor(private location: Location, private loginService: LoginService) {
     this.users = this.loginService.getUser();
     this.getTrendingPartResource();
-    this.colors.colors1 = "#000";
-    this.colors.colors2 = "#76ba19";
-    this.colors.colors3 = "#76ba19";
-    this.colors.colors6 = "#76ba19";
-    this.colors.colors7 = "#76ba19";
   }
+
   ngOnInit() {
   }
+
   ngAfterViewInit() {
   }
+
   back() {
     this.location.back();
   }
-  changesLookupValue(value) {
-    this.users.lookupValue = value;
-    this.loginService.setUser(this.users);
-    this.getTrendingPart(this.users.trendingPartResource[this.users.resourceType].resourceType, this.users.trendingPartResource[this.users.resourceType].unitTypes[this.users.unitType].unitType, this.users.lookupValue)
-  }
-  changeUnitType(number) {
-    if (number == 0) {
-      this.trendingParts.unitTypecolor1 = "#000";
-      this.trendingParts.unitTypecolor2 = "#76ba19";
-    } else if (number == 1) {
-      this.trendingParts.unitTypecolor1 = "#76ba19";
-      this.trendingParts.unitTypecolor2 = "#000";
-    }
-    this.users.unitType = number;
-    this.changeResource(this.typeName, this.typeNumber);
-  }
-  changeResource(resourceType, number) {
-    this.typeName = resourceType;
-    this.typeNumber = number;
-    if (resourceType == "electricity") {
-      this.colors.colors1 = "#000"
-      this.colors.colors2 = "#76ba19";
-      this.colors.colors3 = "#76ba19";
-      this.colors.colors6 = "#76ba19";
-      this.colors.colors7 = "#76ba19";
-      this.trendingParts.color = this.colors;
-    } else if (resourceType == "hhe") {
-      this.colors.colors2 = "#000"
-      this.colors.colors1 = "#76ba19";
-      this.colors.colors3 = "#76ba19";
-      this.colors.colors6 = "#76ba19";
-      this.colors.colors7 = "#76ba19";
-      this.trendingParts.color = this.colors;
-    } else if (resourceType == "naturalGas") {
-      this.colors.colors3 = "#000";
-      this.colors.colors2 = "#76ba19";
-      this.colors.colors1 = "#76ba19";
-      this.colors.colors6 = "#76ba19";
-      this.colors.colors7 = "#76ba19";
-      this.trendingParts.color = this.colors;
-    } else if (resourceType == "ghg") {
-      this.colors.colors6 = "#000";
-      this.colors.colors1 = "#76ba19";
-      this.colors.colors3 = "#76ba19";
-      this.colors.colors2 = "#76ba19";
-      this.colors.colors7 = "#76ba19";
-      this.trendingParts.color = this.colors;
-    } else if (resourceType == "water") {
-      this.colors.colors7 = "#000";
-      this.colors.colors2 = "#76ba19";
-      this.colors.colors1 = "#76ba19";
-      this.colors.colors6 = "#76ba19";
-      this.colors.colors3 = "#76ba19";
-      this.trendingParts.color = this.colors;
-    }
-    this.users.resourceType = number;
-    this.loginService.setUser(this.users);
-    this.useType = this.users.trendingPartResource[this.users.resourceType].unitTypes[this.users.unitType].useTypes;
-    this.unitType = this.users.trendingPartResource[this.users.resourceType].unitTypes;
-    this.partResourceType = this.users.trendingPartResource[number].resourceType;
-    this.partUnitType = this.users.trendingPartResource[this.users.resourceType].unitTypes[this.users.unitType].unitType;
-    this.partLookupValue = this.users.trendingPartResource[this.users.resourceType].unitTypes[this.users.unitType].useTypes[0].lookupValue;
-    this.getTrendingPart(this.partResourceType, this.partUnitType, this.partLookupValue);
 
-    // set data to localstorage
-    this.trendingParts.partResourceType = this.partResourceType;
-    this.trendingParts.partUnitType = this.partUnitType;
-    this.trendingParts.partLookupValue = this.partLookupValue;
-    this.trendingParts.useType = this.useType;
-    this.trendingParts.unitType = this.unitType;
-    this.trendingParts.typeName = this.typeName;
-    this.trendingParts.typeNumber = this.typeNumber;
-    localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
-    this.getTrendingPart(this.partResourceType, this.partUnitType, this.partLookupValue);
+  changesLookupValue(value: any) {
+    this.getTrendingPart(this.trendingParts.activeResource, this.trendingParts.unitType, value);
   }
+
+  changeUnitType(number: any, useTypes: any) {
+    this.trendingParts.unitType = useTypes;
+    this.unitType.forEach(elements => {
+      if (elements.unitType === useTypes) {
+        this.useType = elements.useTypes;
+        elements.unitTypeColor = '#000';
+      } else {
+        elements.unitTypeColor = '#76ba19';
+      }
+    });
+    this.users.unitType = number;
+    this.changeResource(this.trendingParts.activeResource, true);
+  }
+
+  changeResource(resourceType: any, isActive?: boolean) {
+    if (!isActive) {
+      return;
+    }
+    this.trendingParts.activeResource = resourceType;
+    this.users.trendingPartResource.forEach(element => {
+      if (this.trendingParts.activeResource === element.resourceType) {
+        this.unitType = element.unitTypes;
+        element.color = '#000';
+        this.unitType.forEach(elements => {
+          if (elements.unitType === this.trendingParts.unitType) {
+            this.useType = elements.useTypes;
+            elements.unitTypeColor = '#000';
+          } else {
+            elements.unitTypeColor = '#76ba19';
+          }
+        });
+      } else {
+        if (element.usedCost && element.usedUse) {
+          element.color = '#76ba19';
+        } else {
+          element.color = '';
+        }
+      }
+    });
+    this.calculateUseType();
+    this.loginService.setUser(this.users);
+    this.getTrendingPart(this.trendingParts.activeResource, this.trendingParts.unitType, this.trendingParts.useTypes);
+  }
+
   getTrendingPartResource() {
+    this.trendingParts = JSON.parse(localStorage.getItem('trendingParts')) ? JSON.parse(localStorage.getItem('trendingParts')) : this.trendingParts;
     this.useType = new Array;
     this.unitType = new Array;
-    document.getElementById("loader").classList.add('loading');
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/trendingParts/resources").subscribe(
+    const resourceType = this.trendingParts.activeResource;
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingParts/resources').subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
-        let arrayObject = response.data;
+        const response = JSON.parse(JSON.stringify(data));
+        const arrayObject = response.data;
         this.users.trendingPartResource = arrayObject.sort(function (a, b) {
           return b.unitTypes[0].used - a.unitTypes[0].used || b.unitTypes[1].used - a.unitTypes[1].used;
-        })
-        // this.users.trendingPartResource = response.data;
-        this.trendingParts = JSON.parse(localStorage.getItem('trendingParts'));
-        if (this.trendingParts != null && this.trendingParts != undefined) {
-          this.partResourceType = this.trendingParts.partResourceType;
-          this.partUnitType = this.trendingParts.partUnitType;
-          this.partLookupValue = this.trendingParts.partLookupValue;
-          this.useType = this.trendingParts.useType;
-          this.unitType = this.trendingParts.unitType;
-          this.typeName = this.trendingParts.typeName;
-          this.typeNumber = this.trendingParts.typeNumber;
-          this.colors = this.trendingParts.color;
-        }
-        else {
-          this.typeNumber = this.users.resourceType;
-          this.typeName = response.data[this.users.resourceType].resourceType;
-          this.useType = response.data[this.users.resourceType].unitTypes[this.users.unitType].useTypes;
-          this.unitType = response.data[this.users.resourceType].unitTypes;
-          this.partResourceType = this.typeName;
-          this.partUnitType = response.data[this.users.resourceType].unitTypes[this.users.unitType].unitType;
-          this.partLookupValue = response.data[this.users.resourceType].unitTypes[this.users.unitType].useTypes[0].lookupValue;
-
-          if (this.partResourceType == "naturalgas") {
-            this.colors.colors3 = "#000";
-            this.colors.colors1 = "#76ba19";
-          } else if (this.partResourceType == "hhe") {
-            this.colors.colors2 = "#000";
-            this.colors.colors1 = "#76ba19";
-          } else if (this.partResourceType == "ghg") {
-            this.colors.colors6 = "#000";
-            this.colors.colors1 = "#76ba19";
-          } else if (this.partResourceType == "water") {
-            this.colors.colors7 = "#000";
-            this.colors.colors1 = "#76ba19";
+        });
+        this.users.trendingPartResource.forEach(element => {
+          for (let index = 0; index < element.unitTypes.length; index++) {
+            if (element.unitTypes[index].unitType === 'cost') {
+              element.usedCost = element.unitTypes[index].used;
+              element.useTypesCost = element.unitTypes[index].useTypes.length;
+              element.unitTypes[index].unitTypeColor = '#76ba19';
+            } else if (element.unitTypes[index].unitType === 'use') {
+              element.usedUse = element.unitTypes[index].used;
+              element.useTypesUse = element.unitTypes[index].useTypes.length;
+              element.unitTypes[index].unitTypeColor = '#76ba19';
+            }
           }
-
-          // setting data to localstorage 
-          this.trendingParts = {};
-          this.trendingParts.partResourceType = this.partResourceType;
-          this.trendingParts.partUnitType = this.partUnitType;
-          this.trendingParts.partLookupValue = this.partLookupValue;
-          this.trendingParts.useType = this.useType;
-          this.trendingParts.unitType = this.unitType;
-          this.trendingParts.typeName = this.typeName;
-          this.trendingParts.typeNumber = this.typeNumber;
-          this.trendingParts.unitTypecolor1 = "#000";
-          this.trendingParts.unitTypecolor2 = "#76ba19";
-          this.trendingParts.color = this.colors;
-          localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
+          element.isActive = true;
+          if (resourceType === element.resourceType) {
+            this.unitType = element.unitTypes;
+            element.color = '#000';
+          } else {
+            if (!this.unitType) {
+              this.trendingParts.activeResource = element.resourceType;
+              this.unitType = element.unitTypes;
+            }
+            if (element.usedCost && element.usedUse) {
+              element.color = '#76ba19';
+            } else {
+              element.isActive = false;
+              element.color = '';
+            }
+          }
+          switch (element.resourceType) {
+            case 'electricity':
+              element.resourceTypeLabel = 'Electricity Only';
+              break;
+            case 'hhe':
+              element.resourceTypeLabel = 'Household Energy';
+              break;
+            case 'naturalGas':
+              element.resourceTypeLabel = 'Natural Gas Only';
+              break;
+            case 'ghg':
+              element.resourceTypeLabel = 'GHG';
+              break;
+            case 'water':
+              element.resourceTypeLabel = 'Water';
+              break;
+            default:
+              break;
+          }
+        });
+        const i = this.unitType.findIndex((item: any) => item.unitType === this.trendingParts.unitType);
+        if (i !== -1) {
+          this.useType = this.unitType[i].useTypes;
+          this.unitType[i].unitTypeColor = '#000';
+        } else if (this.useType.length > 0) {
+          this.trendingParts.unitType = this.unitType[0].unitType;
+          this.useType = this.unitType[0].useTypes;
+          this.unitType[0].unitTypeColor = '#000';
         }
-        document.getElementById("loader").classList.remove('loading');
-        this.getTrendingPart(this.partResourceType, this.partUnitType, this.partLookupValue);
+        this.calculateUnitType();
+        this.calculateUseType();
+        document.getElementById('loader').classList.remove('loading');
+        this.getTrendingPart(this.trendingParts.activeResource, this.trendingParts.unitType, this.trendingParts.useTypes);
       },
       errors => {
         console.log(errors);
-        let response = JSON.parse(JSON.stringify(errors))._body;
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       }
     );
   }
-  getTrendingPart(resourcesUse, unitType, useType) {
-    document.getElementById("loader").classList.add('loading');
-    var param = "resourceUse=" + resourcesUse + "&unitType=" + unitType + "&useType=" + useType;
-    this.loginService.performGetMultiPartData("customers/" + this.users.outhMeResponse.customerId + "/trendingParts?" + param).subscribe(
+
+  calculateUnitType() {
+    const i = this.unitType.findIndex((item: any) => item.unitType === this.trendingParts.unitType);
+    if (i !== -1) {
+      this.useType = this.unitType[i].useTypes;
+      this.unitType[i].unitTypeColor = '#000';
+    } else if (this.useType.length > 0) {
+      this.trendingParts.unitType = this.unitType[0].unitType;
+      this.useType = this.unitType[0].useTypes;
+      this.unitType[0].unitTypeColor = '#000';
+    }
+  }
+
+  calculateUseType() {
+    const i = this.useType.findIndex((item: any) => item.lookupValue === this.trendingParts.useTypes);
+    if (i === -1 && this.useType.length > 0) {
+      this.trendingParts.useTypes = this.useType[0].lookupValue;
+    }
+  }
+  getTrendingPart(resourcesUse: any, unitType: any, useType: any) {
+    document.getElementById('loader').classList.add('loading');
+    this.trendingParts.activeResource = resourcesUse;
+    this.trendingParts.unitType = unitType;
+    this.trendingParts.useTypes = this.partLookupValue = useType;
+    localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
+    const param = 'resourceUse=' + resourcesUse + '&unitType=' + unitType + '&useType=' + useType;
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingParts?' + param).subscribe(
       data => {
-        let response = JSON.parse(JSON.stringify(data));
+        const response = JSON.parse(JSON.stringify(data));
         this.trendingData = response.data;
-        for (let data of response.data) {
+        for (const newData of response.data) {
           setTimeout(function () {
-            var F = new Function(data.trendingCharts[0].chart.freeChartConfigurationJS);
+            const F = new Function(newData.trendingCharts[0].chart.freeChartConfigurationJS);
             return (F());
             // eval(response.data[0].trendingCharts[0].chart.freeChartConfigurationJS);
           }, 1000);
         }
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       },
       errors => {
         console.log(errors);
-        let response = JSON.parse(JSON.stringify(errors))._body;
-        document.getElementById("loader").classList.remove('loading');
+        document.getElementById('loader').classList.remove('loading');
       }
     );
     this.trendingParts.partLookupValue = useType;

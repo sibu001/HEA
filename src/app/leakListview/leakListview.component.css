@@ -233,7 +233,7 @@ hr {
 }
 img.back_img {
   cursor: pointer;
-  font-family: "Montserrat";
+  font-family: "Montserrat", sans-serif;
 }
 span.problem {
   font-weight: 600;

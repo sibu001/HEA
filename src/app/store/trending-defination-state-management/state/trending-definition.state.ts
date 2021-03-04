@@ -4,7 +4,28 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
-import { DeleteKeyIndicatorByIdAction, DeleteKeyIndicatorCustomerGroupByIdAction, DeleteKeyIndicatorVariableByIdAction, DeleteTrendingPartsByIdAction, GetKeyIndicatorByIdAction, GetKeyIndicatorCustomerGroupByIdAction, GetKeyIndicatorCustomerGroupListAction, GetKeyIndicatorListAction, GetKeyIndicatorVariableByIdAction, GetKeyIndicatorVariableListAction, GetTrendingPartsByIdAction, GetTrendingPartsListAction, SaveKeyIndicatorAction, SaveKeyIndicatorCustomerGroupAction, SaveKeyIndicatorVariableAction, SaveTrendingPartsAction, UpdateKeyIndicatorAction, UpdateKeyIndicatorCustomerGroupAction, UpdateKeyIndicatorVariableAction, UpdateTrendingPartsAction } from './trending-definition.action';
+import {
+    DeleteKeyIndicatorByIdAction,
+    DeleteKeyIndicatorCustomerGroupByIdAction,
+    DeleteKeyIndicatorVariableByIdAction,
+    DeleteTrendingPartsByIdAction,
+    GetKeyIndicatorByIdAction,
+    GetKeyIndicatorCustomerGroupByIdAction,
+    GetKeyIndicatorCustomerGroupListAction,
+    GetKeyIndicatorListAction,
+    GetKeyIndicatorVariableByIdAction,
+    GetKeyIndicatorVariableListAction,
+    GetTrendingPartsByIdAction,
+    GetTrendingPartsListAction,
+    SaveKeyIndicatorAction,
+    SaveKeyIndicatorCustomerGroupAction,
+    SaveKeyIndicatorVariableAction,
+    SaveTrendingPartsAction,
+    UpdateKeyIndicatorAction,
+    UpdateKeyIndicatorCustomerGroupAction,
+    UpdateKeyIndicatorVariableAction,
+    UpdateTrendingPartsAction
+} from './trending-definition.action';
 
 import { TrendingDefinitionModel } from './trending-definition.model';
 

@@ -4,7 +4,6 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
-import { TableColumnData } from 'src/app/data/common-data';
 import { UtilityService } from 'src/app/services/utility.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
@@ -109,8 +108,8 @@ export class FactorEditComponent implements OnInit, OnDestroy {
 
   goToDebug() {
     this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: {} });
-
   }
+
   recalculate() {
     if (this.id) {
       this.factorForm.value.calculationDate = this.factorForm.value.calculationDate ? new Date(this.factorForm.value.calculationDate).getTime() : null;

@@ -55,6 +55,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   public customerGroupSelectionList: any = [];
   public mailConfigurationList: any[];
   private readonly subscriptions: Subscription = new Subscription();
+  errorMessage: any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly mailService: MailService,
@@ -95,7 +96,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemService.getMailPeriod().pipe(skipWhile((item: any) => !item))
       .subscribe((mailPeriodList: any) => {
         this.periodData = mailPeriodList.data;
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   loadContentTypeList(): any {
@@ -103,7 +107,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemService.getContentType().pipe(skipWhile((item: any) => !item))
       .subscribe((contentTypeList: any) => {
         this.contentTypeList = contentTypeList.data;
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   loadMailConfigurationList() {
@@ -111,7 +118,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.mailService.getMailConfigurationList().pipe(skipWhile((item: any) => !item))
       .subscribe((mailConfigurationList: any) => {
         this.mailConfigurationList = mailConfigurationList.data;
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   setForm(event: any) {
@@ -178,7 +188,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
         }
         this.maxProcessedStack = mailDescription.data ? mailDescription.data.maxProcessedStack : null;
         this.setForm(mailDescription.data);
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   back() {
@@ -186,10 +199,15 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.subscriptions.add(this.mailService.deleteMailDescriptionById(this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['admin/mailDescription/mailDescriptionList'], { queryParams: { 'force': true } });
-      }));
+    if (confirm('Are you sure you want to delete?')) {
+      this.subscriptions.add(this.mailService.deleteMailDescriptionById(this.id).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+          this.router.navigate(['admin/mailDescription/mailDescriptionList'], { queryParams: { 'force': true } });
+        },
+          error => {
+            this.errorMessage = error;
+          }));
+    }
   }
 
   save() {
@@ -201,7 +219,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
           .subscribe((response: any) => {
             this.isForce = true;
             this.loadMailDescriptionById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       } else {
         this.topicForm.value.totalProcessedTime = '';
         this.topicForm.value.maxProcessedTime = '';
@@ -211,8 +232,12 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.id = response.data.id;
             this.loadMailDescriptionById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       }
     } else {
       this.validateAllFormFields(this.topicForm);
@@ -228,7 +253,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
           this.customerGroupSelectionList.push(element.customerGroup.groupCode);
         });
         this.loadCustomerGroup(false, '');
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   loadCustomerGroup(force: boolean, filter: any) {
@@ -243,7 +271,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
           }
         });
         this.customerGroupDataSource = [...this.customerGroupData.content];
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   checkCustomerGroup() {
@@ -281,7 +312,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
   deleteCustomerGroupOfMailDescription(deleteList: any) {
     deleteList.forEach(element => {
       this.mailService.deleteCustomerGroupByMailDescriptionId(this.id, element.customerGroupId);
-    });
+    },
+      error => {
+        this.errorMessage = error;
+      });
   }
 
   customerGroupCheckBoxChangeEvent(event: any) {
@@ -294,7 +328,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.mailService.getMailContentPartList().pipe(skipWhile((item: any) => !item))
       .subscribe((mailContentPartList: any) => {
         this.contentPartsDataSource = mailContentPartList.data;
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   addContentParts(): any {
@@ -310,7 +347,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.mailService.getContextVariableList().pipe(skipWhile((item: any) => !item))
       .subscribe((contextVariableList: any) => {
         this.variableDataSource = contextVariableList.data;
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   addVariable(): any {

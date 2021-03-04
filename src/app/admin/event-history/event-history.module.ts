@@ -37,6 +37,6 @@ import { LoginService } from 'src/app/services/login.service';
     ]),
   ],
   declarations: [EventHistoryListComponent, EventHistoryEditComponent],
-  providers: [CustomerService, SystemUtilityService, AdministrativeService, DatePipe,LoginService]
+  providers: [CustomerService, SystemUtilityService, AdministrativeService, DatePipe, LoginService]
 })
 export class EventHistoryModule { }

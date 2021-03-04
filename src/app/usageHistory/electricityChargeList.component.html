@@ -7,11 +7,13 @@
                     <div class="col-sm-6">
                         <form class="form-horizontal">
                             <div class="form-group">
-                                <label class="control-label col-lg-2 col-sm-3" for="email">
+                                <label class="control-label col-lg-2 col-sm-3"
+                                    for="email">
                                     <span class="start">Audit Id:</span>
                                 </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="auditId" name="auditId"
+                                    <input type="text" class="form-control"
+                                        id="auditId" name="auditId"
                                         [(ngModel)]="auditId" />
                                 </div>
                             </div>
@@ -20,11 +22,13 @@
                     <div class="col-sm-6">
                         <form class="form-horizontal">
                             <div class="form-group">
-                                <label class="control-label col-lg-2 col-sm-3" for="code">
+                                <label class="control-label col-lg-2 col-sm-3"
+                                    for="code">
                                     <span class="start">Customer Name:</span>
                                 </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="customerName" name="customerName"
+                                    <input type="text" class="form-control"
+                                        id="customerName" name="customerName"
                                         [(ngModel)]="customerName" />
                                 </div>
                             </div>
@@ -35,11 +39,14 @@
                     <div class="col-sm-6">
                         <form class="form-horizontal">
                             <div class="form-group">
-                                <label class="control-label col-lg-2 col-sm-3" for="email">
-                                        <span class="start">Year:</span>
-                                    </label>
+                                <label class="control-label col-lg-2 col-sm-3"
+                                    for="email">
+                                    <span class="start">Year:</span>
+                                </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="year" name="Year" [(ngModel)]="year">
+                                    <input type="text" class="form-control"
+                                        id="year" name="Year"
+                                        [(ngModel)]="year">
                                 </div>
                             </div>
                         </form>
@@ -47,11 +54,14 @@
                     <div class="col-sm-6">
                         <form class="form-horizontal">
                             <div class="form-group">
-                                <label class="control-label col-lg-2 col-sm-3" for="code">
-                                        <span class="start">Month:</span>
-                                    </label>
+                                <label class="control-label col-lg-2 col-sm-3"
+                                    for="code">
+                                    <span class="start">Month:</span>
+                                </label>
                                 <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control" id="month" name="Month" [(ngModel)]="month">
+                                    <input type="text" class="form-control"
+                                        id="month" name="Month"
+                                        [(ngModel)]="month">
                                 </div>
                             </div>
                         </form>
@@ -59,71 +69,105 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12" style="text-align:right;">
-                        <button type="button" class="btn btn-primary" (click)="searchData()">Show</button>
+                        <button type="button" class="btn btn-primary"
+                            (click)="searchData()">Show</button>
                     </div>
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col-sm-12">
                         <p class="Messages">
-                            <img src="assets/images/dot03.gif" class="dot">&nbsp;Values</p>
-                            <app-table [keys]="keys" [checkbox]=true [isPaginate]="true" [isHideAdd]=true [isSearch]="false"
-                            [data]="dataSource" [totalElement]="usageHistoryData.totalElements"
+                            <img alt="dot" src="assets/images/dot03.gif"
+                                class="dot">&nbsp;Values</p>
+                        <app-table [keys]="keys" [checkbox]=true
+                            [isPaginate]="true" [isHideAdd]=true
+                            [isSearch]="false"
+                            [data]="dataSource"
+                            [totalElement]="usageHistoryData.totalElements"
                             (changePageEvent)="getGasList()">
                         </app-table>
-                     </div>
+                    </div>
                 </div>
             </div>
             <div *ngIf='isAdminView' class="col-md-3 .col-lg-3 col-sm-12">
                 <app-sidebar></app-sidebar>
             </div>
-            <div *ngIf='!isAdminView' class="col-lg-3 col-md-3 col-sm-4 rightColumn">
+            <div *ngIf='!isAdminView' class="col-lg-3 col-md-3 col-sm-4
+                rightColumn">
                 <div class="feedback">
                     <p class="Energy_anaiytic">
-                        <img src="assets/images/dot03.gif" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
+                        <img alt="dot" src="assets/images/dot03.gif"
+                            class="dot">&nbsp;Powered by Home Energy Analytics,
+                        Inc.</p>
                     <p class="feedback">Send feedback to</p>
                     <p class="link_hea">
-                        <a href = "mailto:info@hea.com" class="info_hea">info@hea.com</a>
+                        <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
                     </p>
                     <hr>
                     <ul class="leaks">
                         <li>
-                            <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
+                            <a class="a_history"
+                                [routerLink]="['/topicshistory']">Topics history</a>
                         </li>
                         <li>
-                            <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
+                            <a class="a_history"
+                                [routerLink]="['/customerEventList']">Events
+                                history</a>
                         </li>
                         <li>
-                            <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
+                            <a class="a_history"
+                                [routerLink]="['/MailArchiveList']">Mail archive</a>
                         </li>
                         <li>
-                            <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
+                            <a class="a_history"
+                                [routerLink]="['/surveyRecommendationList']">Recommendations</a>
                         </li>
                         <li>
                             <div class="dropdown">
-                                <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
-                            </a>
-                               <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasList']">Gas</a>
+                                <a class="dropdown-toggle" id="menu1"
+                                    data-toggle="dropdown">Usage history
+                                </a>
+                                <ul class="dropdown-menu" role="menu"
+                                    aria-labelledby="menu1">
+                                    <li role="presentation"
+                                        style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/gasList']">Gas</a>
                                     </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasChargeList']">Gas charge</a>
+                                    <li role="presentation"
+                                        style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/gasChargeList']">Gas
+                                            charge</a>
                                     </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"  [routerLink]="['/electricityList']">Electricity</a>
+                                    <li role="presentation"
+                                        style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricityList']">Electricity</a>
                                     </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricityChargeList']">Electricity charge</a>
+                                    <li role="presentation"
+                                        style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricityChargeList']">Electricity
+                                            charge</a>
                                     </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricitySmartMeterList']">Electric smart meter</a>
+                                    <li role="presentation"
+                                        style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricitySmartMeterList']">Electric
+                                            smart meter</a>
                                     </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/electricDailySmartMeterList']">Electric Daily smart meter</a>
+                                    <li role="presentation"
+                                        style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/electricDailySmartMeterList']">Electric
+                                            Daily smart meter</a>
                                     </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas smart meter</a>
+                                    <li role="presentation"
+                                        style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1"
+                                            [routerLink]="['/gasSmartMeter']">Gas
+                                            smart meter</a>
                                     </li>
                                 </ul>
                             </div>
@@ -136,7 +180,8 @@
 </section>
 <div id="myModal" class="modal fade" role="dialog">
     <ng-container *ngIf="userObj != undefined && userObj != null">
-        <app-usage-history-detail [usageModelObj]="userObj2" (onModelSave)="getGasList()"></app-usage-history-detail>
+        <app-usage-history-detail [usageModelObj]="userObj2"
+            (onModelSave)="getGasList()"></app-usage-history-detail>
     </ng-container>
-    
+
 </div>

@@ -37,8 +37,6 @@ export class SummaryChartDefinitionSeriesComponent implements OnInit, OnDestroy 
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   setForm(event: any): any {

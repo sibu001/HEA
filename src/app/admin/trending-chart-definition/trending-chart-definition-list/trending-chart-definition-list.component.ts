@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
@@ -12,7 +12,7 @@ import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 export class TrendingChartDefinitionListComponent implements OnInit {
 
   id: any;
-  public keys: Array<TABLECOLUMN>= TableColumnData.TRENDING_PART_KEYS;
+  public keys: Array<TABLECOLUMN> = TableColumnData.TRENDING_PART_KEYS;
   public dataSource: any;
   public totalElement = 0;
   public data = {

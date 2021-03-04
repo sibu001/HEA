@@ -33,8 +33,6 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
   ngOnInit() {
     this.loadCalculationTypeList();
     this.setForm(undefined);
-    if (this.id !== undefined) {
-    }
   }
 
   loadCalculationTypeList(): any {

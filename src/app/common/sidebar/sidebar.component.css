@@ -6,7 +6,6 @@ li {
 
 p.info {
   color: #000000;
-  padding: 0;
   font-weight: bold;
   font-size: 14px;
   padding: 0 0 0 10px;
@@ -15,7 +14,6 @@ p.info {
 
 p.method-info {
   color: #000000;
-  padding: 0;
   font-weight: bold;
   font-size: 14px;
   padding: 0 0 0 0px;
@@ -88,7 +86,6 @@ th {
 }
 p.feedback {
   color: #000000;
-  padding: 0;
   font-size: 14px;
   margin: 0.5em 0 0 0;
   padding: 0 0 0 10px;
