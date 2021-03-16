@@ -15,6 +15,7 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
   id: any;
   eventForm: FormGroup;
   isForce = false;
+  errorMessage: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
@@ -45,7 +46,10 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
           this.router.navigate(['admin/customerEvent/customerEventTypeEdit'], { queryParams: { 'id': customerEventType.id } });
         }
         this.setForm(customerEventType);
-      }));
+      },
+        error => {
+          this.errorMessage = error;
+        }));
   }
 
   setForm(event: any) {
@@ -81,7 +85,10 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
             this.isForce = true;
             this.scrollTop();
             this.loadCredentialTypeById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       } else {
         this.subscriptions.add(this.systemUtilityService.saveCustomerEventType(this.eventForm.value).pipe(
           skipWhile((item: any) => !item))
@@ -89,21 +96,26 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
             this.isForce = true;
             this.scrollTop();
             this.loadCredentialTypeById();
-          }));
+          },
+            error => {
+              this.errorMessage = error;
+            }));
       }
     } else {
       this.validateAllFormFields(this.eventForm);
+      this.validateForm();
     }
   }
-  // validateForm() {
-  //   for (const key of Object.keys(this.eventForm.controls)) {
-  //     if (this.eventForm.controls[key].invalid) {
-  //       const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
-  //       invalidControl.focus();
-  //       break;
-  //     }
-  //   }
-  // }
+
+  validateForm() {
+    for (const key of Object.keys(this.eventForm.controls)) {
+      if (this.eventForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
 
   validateAllFormFields(formGroup: FormGroup) {
     Object.keys(formGroup.controls).forEach(field => {
@@ -115,9 +127,10 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   get f() { return this.eventForm.controls; }
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
-
 }

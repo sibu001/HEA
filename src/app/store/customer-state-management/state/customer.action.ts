@@ -55,6 +55,12 @@ export enum SystemActionTypes {
     GET_USER_CUSTOMER_GROUP_BY_ID = 'Get User Customer Group By Id',
     SAVE_USER_CUSTOMER_GROUP = 'Save User Customer Group',
     DELETE_USER_CUSTOMER_GROUP = 'Delete User Customer Group',
+    GET_OPT_OUT_LIST = 'Get Opt Out List',
+    GET_OPT_OUT_BY_ID = 'Get Opt Out By Id',
+    SAVE_OPT_OUT = 'Save Opt Out',
+    DELETE_OPT_OUT = 'Delete Opt Out',
+    GET_ELECTRICITY_RATE_PLAN = 'Get Electricity Rate Plan',
+    GET_HEATING_RATE_PLAN = 'Get Heating Rate Plan',
     CUSTOMER_ERROR = 'Customer Error'
 }
 export class GetCustomerListAction {
@@ -394,5 +400,41 @@ export class SaveUserCustomerGroupAction {
 export class DeleteUserCustomerGroupByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_USER_CUSTOMER_GROUP;
     constructor(readonly userId: any, readonly customerGroupId: any) {
+    }
+}
+
+export class GetOptOutListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_OPT_OUT_LIST;
+    constructor(readonly customerId: any) {
+    }
+}
+
+export class GetOptOutByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_OPT_OUT_BY_ID;
+    constructor(readonly customerId: any, readonly mailDescriptionId: number) {
+    }
+}
+
+export class SaveOptOutAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_OPT_OUT;
+    constructor(readonly customerId: any, readonly mailDescriptionId: any) {
+    }
+}
+
+export class DeleteOptOutByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_OPT_OUT;
+    constructor(readonly customerId: any, readonly mailDescriptionId: any) {
+    }
+}
+
+export class GetElectricityRatePlanAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_ELECTRICITY_RATE_PLAN;
+    constructor(readonly customerId: any) {
+    }
+}
+
+export class GetHeatingRatePlanAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_HEATING_RATE_PLAN;
+    constructor(readonly customerId: any) {
     }
 }

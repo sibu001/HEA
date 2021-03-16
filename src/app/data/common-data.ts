@@ -82,8 +82,13 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_EMAIL_KEY: Array<TABLECOLUMN> = [
-        { key: 'messageType', isEdit: true, displayName: 'Message Type' },
-        { key: 'enabled', isEdit: true, displayName: 'Enabled' },
+        { key: 'mailName', displayName: 'Message Type' },
+        { key: 'active', displayName: 'Enabled', type: 'checkbox' },
+    ];
+
+    static readonly OPT_OUT_KEY: Array<TABLECOLUMN> = [
+        { key: 'mailDescriptionId', displayName: '#' },
+        { key: 'mailName', displayName: 'Message name'},
     ];
 
     static readonly ROLE_KEY: Array<TABLECOLUMN> = [
@@ -170,7 +175,7 @@ export class TableColumnData {
         { key: 'recordType', sort: 'recordType', isEdit: true, displayName: 'Record Type' },
         { key: 'comment', sort: 'comment', isEdit: true, displayName: 'Comment' },
         { key: 'entity', sort: 'entity', isEdit: true, displayName: 'Entity' },
-        { key: 'logDate', sort: 'logDate', isEdit: true, displayName: 'Log Date'}
+        { key: 'logDate', sort: 'logDate', isEdit: true, displayName: 'Log Date' }
     ];
 
     static readonly DEGREE_DAY_KEY: Array<TABLECOLUMN> = [
@@ -214,7 +219,7 @@ export class TableColumnData {
     // Job name	Last fire time	Last Runtime	Next fire time	State
     static readonly SYSTEM_JOBS_KEY: Array<TABLECOLUMN> = [
         { key: 'serialNumber', isEdit: true, displayName: '#' },
-        { key: 'name', isEdit: true, displayName: 'Job name' },
+        { key: 'viewName', isEdit: true, displayName: 'Job name' },
         { key: 'prevFireTime', isEdit: true, displayName: 'Last fire time' },
         { key: 'prevRunTime', isEdit: true, displayName: 'Last Runtime', },
         { key: 'nextFireTime', isEdit: true, displayName: 'Next fire time' },
@@ -240,7 +245,7 @@ export class TableColumnData {
     ];
 
     static readonly ALERT_MESSAGE_KEY: Array<TABLECOLUMN> = [
-        { key: 'id', sort: 'id', isEdit: true, displayName: 'Id'},
+        { key: 'id', sort: 'id', isEdit: true, displayName: 'Id' },
         { key: 'target', sort: 'target', isEdit: true, displayName: 'Target' },
         { key: 'alertType', sort: 'alertType', isEdit: true, displayName: 'Alert Type' },
         { key: 'alertLevel', sort: 'alertLevel', isEdit: true, displayName: 'Alert Level' },

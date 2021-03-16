@@ -2,7 +2,9 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { UtilityService } from '../services/utility.service';
+import { ShowInfoComponent } from './show-info/show-info.component';
+import { MatDialog } from '@angular/material';
 declare var $: any;
 @Component({
   selector: 'app-headers',
@@ -18,7 +20,10 @@ export class HeadersComponent implements OnInit {
   iframeUrl: string;
   isResponsive = false;
   users: Users = new Users();
-  constructor(private loginService: LoginService, private router: Router, private location: Location) {
+  dialogRef: any;
+  constructor(private loginService: LoginService,
+    private router: Router,
+    private readonly dialog: MatDialog) {
     this.users = this.loginService.getUser();
     if (this.users.role === 'USERS') {
       this.iframeUrl = 'https://heasmartaudit.typeform.com/to/C3KCyo?auditId=' +
@@ -27,7 +32,7 @@ export class HeadersComponent implements OnInit {
     this.screenWidth = window.screen.width;
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     /* for demonstration purposes only */
     $('.navbar-toggle').click(function () {
       if ($(this).hasClass('collapsed')) {
@@ -43,10 +48,12 @@ export class HeadersComponent implements OnInit {
       });
     });
 
-    if (this.users.role === 'USERS' && this.users.surveyLength <= 3 || (this.users.currentPaneNumber !== null &&
-      this.users.currentPaneNumber !== undefined && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile')) {
+    if (this.users.role === 'USERS' && this.users.surveyLength <= 3 || (this.users.currentPaneNumber && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile')) {
       if (document.getElementById('_home')) {
         document.getElementById('_home').classList.add('header_menu_none');
+      }
+      if (document.getElementById('_account')) {
+        document.getElementById('_account').classList.add('header_menu_none');
       }
       if (document.getElementById('all_topic')) {
         document.getElementById('all_topic').classList.add('header_menu_none');
@@ -58,25 +65,29 @@ export class HeadersComponent implements OnInit {
     }
     this.hideResponsiveMenu();
   }
-  hideResponsiveMenu() {
+  hideResponsiveMenu(): void {
     if (this.isResponsive) {
       let surveyCode;
       if (this.users.currentPaneNumber !== undefined) {
         surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
       }
-      if (this.users.surveyLength <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false)) {
+      if (this.users.surveyLength <= 3 || (this.users.currentPaneNumber ? surveyCode === 'Profile' : false)) {
         setTimeout(() => {
           this.headerResponsiveMenu();
         }, 300);
       }
     }
   }
-  headerResponsiveMenu() {
+
+  headerResponsiveMenu(): void {
     if (document.getElementById('_home1')) {
       document.getElementById('_home1').classList.add('header_menu_none');
     }
     if (document.getElementById('all_topic1')) {
       document.getElementById('all_topic1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('_account1')) {
+      document.getElementById('_account1').classList.add('header_menu_none');
     }
     if (document.getElementById('menu_option1')) {
       document.getElementById('menu_option1').classList.add('header_menu_none');
@@ -84,15 +95,44 @@ export class HeadersComponent implements OnInit {
     if (document.getElementById('menu_option2')) {
       document.getElementById('menu_option2').classList.add('header_menu_none');
     }
-
   }
-  hide(numbers) {
+
+  hide(routeNumber: any): void {
     this.isResponsive = false;
     this.users = this.loginService.getUser();
-    if (numbers === 1) {
+    if (routeNumber === 1) {
       this.isResponsive = true;
       this.hideResponsiveMenu();
-    } else if (numbers === 2) {
+      return;
+    }
+    if (this.users.isSurvey) {
+      if (confirm('Changes you made may not be saved.')) {
+        this.openInfo();
+        this.goToOtherPage(routeNumber);
+      } else {
+        this.openInfo();
+      }
+    } else {
+      this.goToOtherPage(routeNumber);
+    }
+  }
+  openInfo(): void {
+    this.dialogRef = this.dialog.open(ShowInfoComponent, {
+      data: { message: 'Don\'t stop! The next few pages will help us and you figure out how to save on your energy bill!' },
+      disableClose: true,
+      backdropClass: 'background-blur',
+      position: {
+        top: '80px',
+      }
+    });
+  }
+  goToOtherPage(routeNumber: any): void {
+    if (this.dialogRef) {
+      this.dialogRef.close();
+    }
+    this.users.isSurvey = false;
+    this.loginService.setUser(this.users);
+    if (routeNumber === 2) {
       if (this.users.role === 'ADMIN') {
         this.router.navigate(['admin/customer']);
       } else {
@@ -102,56 +142,55 @@ export class HeadersComponent implements OnInit {
           this.router.navigate(['/dashboard']);
         }
       }
-    } else if (numbers === 3) {
+    } else if (routeNumber === 3) {
       if (this.users.surveyLength > 3 &&
-        (this.users.currentPaneNumber !== undefined ?
-          this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile' : true)) {
+        (this.users.currentPaneNumber ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile' : true)) {
         this.router.navigate(['/accountDetail']);
       }
       if (this.users.role === 'ADMIN') {
         this.router.navigate(['/accountDetail']);
       }
-    } else if (numbers === 4 || numbers === 5) {
+    } else if (routeNumber === 4 || routeNumber === 5) {
       if (this.users.surveyLength > 3) {
         this.router.navigate(['/topicshistory']);
       }
-    } else if (numbers === 6) {
+    } else if (routeNumber === 6) {
       if (this.users.surveyLength > 3) {
         this.router.navigate(['/customerEventList']);
       }
-    } else if (numbers === 7) {
+    } else if (routeNumber === 7) {
       this.router.navigate(['/MailArchiveList']);
-    } else if (numbers === 8) {
+    } else if (routeNumber === 8) {
       this.router.navigate(['/surveyRecommendationList']);
-    } else if (numbers === 9) {
+    } else if (routeNumber === 9) {
       window.open(window.location.origin + '/hea-web/trendingHome.do', '_self');
     }
   }
-  logouts() {
+  logouts(): void {
     this.loginService.logout();
   }
-  back() {
+  back(): void {
     this.isResponsive = false;
   }
-  openFeedBackPage() {
+  openFeedBackPage(): void {
     document.getElementById('feedback1').classList.add('feedbackDivCss');
     document.getElementById('feedback2').classList.add('feedbackiframeCss');
     document.getElementById('feedback3').classList.add('feedBackDiv1');
   }
-  closeFeedBackPage() {
+  closeFeedBackPage(): void {
     document.getElementById('feedback1').classList.remove('feedbackDivCss');
     document.getElementById('feedback2').classList.remove('feedbackiframeCss');
     document.getElementById('feedback3').classList.remove('feedBackDiv1');
   }
 
   @HostListener('window:resize', ['$event'])
-  onResize(event) {
+  onResize(event: any): void {
     if (window.innerWidth >= 767) {
       this.isResponsive = false;
     }
   }
 
-  openCustomerChat() {
+  openCustomerChat(): void {
     window.open(window.location.origin + '/hea-web/chatMain.do', '_blank');
   }
 }

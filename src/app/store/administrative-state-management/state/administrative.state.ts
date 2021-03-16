@@ -331,7 +331,8 @@ export class AdministrativeManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        const blob = new Blob([error.text], {type: 'application/pdf'});
+                        const blob = new Blob([error.error.text], { type: 'application/pdf' });
+                        console.log(blob);
                         const downloadUrl = URL.createObjectURL(blob);
                         const a = document.createElement('a');
                         a.href = downloadUrl;

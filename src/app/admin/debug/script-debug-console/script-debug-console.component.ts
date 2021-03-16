@@ -22,6 +22,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
 
   id: any;
+  key: any;
   isTrue = true;
   debugForm: FormGroup;
   customerList: any = [];
@@ -58,6 +59,10 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     }
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.key = params['key'];
+      if (this.key && this.key === 'factor') {
+        this.isTrue = false;
+      }
     });
   }
 
@@ -127,11 +132,11 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.debugForm = this.formBuilder.group({
-      auditId: [this.customerData !== undefined ? this.customerData.auditId : '', Validators.required],
-      customerName: [this.customerData !== undefined ? this.customerData.user.name : '', Validators.required],
+      auditId: [this.customerData !== undefined ? this.customerData.auditId : ''],
+      customerName: [this.customerData !== undefined ? this.customerData.user.name : ''],
       userId: [this.customerData !== undefined ? this.customerData.user.id : ''],
       surveyDescriptionId: [event !== undefined ? event.surveyDescriptionId : ''],
-      scriptType: [event !== undefined ? event.calculationType : ''],
+      scriptType: [event !== undefined ? event.calculationType : 'spel'],
       script: [event !== undefined ? event.calculation : ''],
       batchScriptId: [event !== undefined ? event.batchScriptId : ''],
       paidServiceId: [''],
@@ -144,6 +149,12 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
       resultType: [''],
       contextPreparationTime: ['']
     });
+    if (this.isTrue) {
+      this.debugForm.controls.auditId.setValidators([Validators.required]);
+      this.debugForm.controls.auditId.setValidators([Validators.required]);
+      this.debugForm.controls.auditId.setValidators([Validators.required]);
+      this.debugForm.updateValueAndValidity();
+    }
   }
 
   changeTheme(event: any): any {

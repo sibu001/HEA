@@ -217,7 +217,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   sortData(event?: Sort) {
     this.page.sort = event;
     this.changePageEvent.emit(this.page);
-    // this.changeDetectorRefs.detectChanges();
   }
 
   onClickMenuItem(item: any, row: any) {

@@ -187,7 +187,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   }
   getFilterUrl(event: any, isSearch: boolean): any {
     this.customerView = this.searchForm.controls.customerView.value !== undefined && this.searchForm.controls.customerView.value !== null ? this.searchForm.controls.customerView.value : '-1';
-    let params: any;
+    let params: HttpParams;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     if (event && event.sort) {
@@ -234,7 +234,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
           (event.pageIndex * event.pageSize) + '' : '0'))
         .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-        .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+        // .set('sqlOrder', 'true')
+        // .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
         .set('auditId', (this.searchForm.controls['auditId'].value !== null ? this.searchForm.controls['auditId'].value : ''))
         .set('customerGroupId', (this.searchForm.controls['customerGroup'].value !== null ? this.searchForm.controls['customerGroup'].value : ''))
         .set('customerName', (this.searchForm.controls['customerName'].value !== null ? this.searchForm.controls['customerName'].value : ''))
@@ -248,6 +249,14 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
         .set('coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
         .set('credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
+      if (event && event.sort.active !== undefined) {
+        const index = this.keys.findIndex((item: any) => (item.definition === event.sort.active && item.attributeType === 'V'));
+        if (index !== -1) {
+          params = params.append('sqlOrder', 'true');
+        } else {
+          params = params.append('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'));
+        }
+      }
     }
 
     return params;

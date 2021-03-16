@@ -4,7 +4,12 @@
             <div class="col-sm-9">
                 <div class="row">
                     <div class="col-sm-12">
-                        <input #inp1 id="myInput" type="text" class="inputhide">
+                        <p class="error-message" *ngIf="errorMessage">
+                            {{errorMessage?.error?.errorMessage}}
+                            <span *ngIf="!errorMessage.error.errorMessage">
+                              {{errorMessage?.error}}
+                            </span>
+                          </p>
                         <p class="Account">Account Settings</p>
                         <form class="form-horizontal" action="/action_page.php">
                             <div class="form-group">

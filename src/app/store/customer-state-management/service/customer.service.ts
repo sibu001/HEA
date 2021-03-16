@@ -8,6 +8,7 @@ import {
   DeleteCustomerByIdAction,
   DeleteCustomerEventByIdAction,
   DeleteCustomerFileByIdAction,
+  DeleteOptOutByIdAction,
   DeleteStaffByIdAction,
   DeleteStaffNoteByIdAction,
   DeleteUserCustomerGroupByIdAction,
@@ -23,7 +24,11 @@ import {
   GetCustomerFileListAction,
   GetCustomerListAction,
   GetCustomerViewConfigurationListAction,
+  GetElectricityRatePlanAction,
   GetEmailSettingListAction,
+  GetHeatingRatePlanAction,
+  GetOptOutByIdAction,
+  GetOptOutListAction,
   GetPasswordValidationRuleAction,
   GetRoleListByUserIdAction,
   GetStaffByIdAction,
@@ -42,6 +47,7 @@ import {
   SaveCustomerEventAction,
   SaveCustomerFileAction,
   SaveCustomerUsingFileAction,
+  SaveOptOutAction,
   SaveStaffAction,
   SaveStaffNoteAction,
   SaveUserCustomerGroupAction,
@@ -145,6 +151,22 @@ export class CustomerService {
 
   getUserCustomerGroupsList(): Observable<any> {
     return this.store.select(CustomerManagementState.getUserCustomerGroupList);
+  }
+
+  getOptOutList(): Observable<any> {
+    return this.store.select(CustomerManagementState.getOptOutList);
+  }
+
+  getOptOutById(): Observable<any> {
+    return this.store.select(CustomerManagementState.getOptOut);
+  }
+
+  getElectricityRatePlan(): Observable<any> {
+    return this.store.select(CustomerManagementState.getElectricityRatePlan);
+  }
+
+  getHeatingRatePlan(): Observable<any> {
+    return this.store.select(CustomerManagementState.getHeatingRatePlan);
   }
 
   loadCustomerList(force: boolean, filter: any, viewType: number): Observable<CustomerManagementState> {
@@ -373,5 +395,29 @@ export class CustomerService {
 
   deleteUserCustomerGroup(userId: any, customerGroupId: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new DeleteUserCustomerGroupByIdAction(userId, customerGroupId));
+  }
+
+  loadOptOutList(customerId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetOptOutListAction(customerId));
+  }
+
+  loadOptOutById(customerId: any, mailDescriptionId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetOptOutByIdAction(customerId, mailDescriptionId));
+  }
+
+  saveOptOut(customerId: any, mailDescriptionId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new SaveOptOutAction(customerId, mailDescriptionId));
+  }
+
+  deleteOptOut(customerId: any, mailDescriptionId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new DeleteOptOutByIdAction(customerId, mailDescriptionId));
+  }
+
+  loadElectricityRatePlan(customerId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetElectricityRatePlanAction(customerId));
+  }
+
+  loadHeatingRatePlan(customerId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetHeatingRatePlanAction(customerId));
   }
 }

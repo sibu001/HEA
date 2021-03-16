@@ -107,7 +107,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   }
 
   goToDebug() {
-    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: {} });
+    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { key: 'factor' } });
   }
 
   recalculate() {

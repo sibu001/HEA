@@ -41,12 +41,27 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
       }
     }
-    if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'Profile') {
+    this.progressShow();
+  }
+  ngOnInit() {
+    this.users = this.loginService.getUser();
+    this.users.isSurvey = true;
+    this.loginService.setUser(this.users);
+    const self = this;
+    setTimeout(function () {
+      self.chartDataConfiguration();
+    }, 100);
+  }
+  ngAfterViewInit() {
+    if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile') {
       if (document.getElementById('_home')) {
         document.getElementById('_home').classList.add('header_menu_none');
       }
       if (document.getElementById('all_topic')) {
         document.getElementById('all_topic').classList.add('header_menu_none');
+      }
+      if (document.getElementById('_account')) {
+        document.getElementById('_account').classList.add('header_menu_none');
       }
       if (document.getElementById('menu_option')) {
         document.getElementById('menu_option').classList.add('header_menu_none');
@@ -64,19 +79,9 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         document.getElementById('menu_option2').classList.add('header_menu_none');
       }
     }
-    this.progressShow();
-  }
-  ngOnInit() {
-    this.users = this.loginService.getUser();
-    const self = this;
-    setTimeout(function () {
-      self.chartDataConfiguration();
-    }, 100);
-  }
-  ngAfterViewInit() {
     this.scrollTop();
     this.hsSliderValue();
-    if (this.users.currentPaneNumber.paneCode == 'fdb_Intro') {
+    if (this.users.currentPaneNumber.paneCode === 'fdb_Intro') {
       setTimeout(function () {
         document.getElementById('fdbRecommendations').classList.add('table-responsive');
       }, 100);
@@ -388,23 +393,29 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
           }
         }
-        if (this.users.surveyLength == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'LeaksIntro') {
+        if (this.users.surveyLength === 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'LeaksIntro') {
           this.getAllSurvey();
-        } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != 'Profile') {
+        } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile') {
           if (document.getElementById('_home')) {
-            document.getElementById('_home').classList.add('header_menu_none');
+            document.getElementById('_home').classList.remove('header_menu_none');
           }
           if (document.getElementById('all_topic')) {
-            document.getElementById('all_topic').classList.add('header_menu_none');
+            document.getElementById('all_topic').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('_account')) {
+            document.getElementById('_account').classList.remove('header_menu_none');
           }
           if (document.getElementById('menu_option')) {
-            document.getElementById('menu_option').classList.add('header_menu_none');
+            document.getElementById('menu_option').classList.remove('header_menu_none');
           }
           if (document.getElementById('_home1')) {
             document.getElementById('_home1').classList.remove('header_menu_none');
           }
           if (document.getElementById('all_topic1')) {
             document.getElementById('all_topic1').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('_account1')) {
+            document.getElementById('_account1').classList.remove('header_menu_none');
           }
           if (document.getElementById('menu_option1')) {
             document.getElementById('menu_option1').classList.remove('header_menu_none');
@@ -452,23 +463,29 @@ export class SurveyComponent implements OnInit, AfterViewInit {
               this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
             }
           }
-          if (this.users.surveyLength == 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'LeaksIntro') {
+          if (this.users.surveyLength === 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'LeaksIntro') {
             this.getAllSurvey();
-          } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode != 'Profile') {
+          } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile') {
             if (document.getElementById('_home')) {
-              document.getElementById('_home').classList.add('header_menu_none');
+              document.getElementById('_home').classList.remove('header_menu_none');
             }
             if (document.getElementById('all_topic')) {
-              document.getElementById('all_topic').classList.add('header_menu_none');
+              document.getElementById('all_topic').classList.remove('header_menu_none');
+            }
+            if (document.getElementById('_account')) {
+              document.getElementById('_account').classList.remove('header_menu_none');
             }
             if (document.getElementById('menu_option')) {
-              document.getElementById('menu_option').classList.add('header_menu_none');
+              document.getElementById('menu_option').classList.remove('header_menu_none');
             }
             if (document.getElementById('_home1')) {
               document.getElementById('_home1').classList.remove('header_menu_none');
             }
             if (document.getElementById('all_topic1')) {
               document.getElementById('all_topic1').classList.remove('header_menu_none');
+            }
+            if (document.getElementById('_account1')) {
+              document.getElementById('_account1').classList.remove('header_menu_none');
             }
             if (document.getElementById('menu_option1')) {
               document.getElementById('menu_option1').classList.remove('header_menu_none');
@@ -524,12 +541,15 @@ export class SurveyComponent implements OnInit, AfterViewInit {
                 this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
               }
             }
-            if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'Profile') {
+            if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile') {
               if (document.getElementById('_home')) {
                 document.getElementById('_home').classList.add('header_menu_none');
               }
               if (document.getElementById('all_topic')) {
                 document.getElementById('all_topic').classList.add('header_menu_none');
+              }
+              if (document.getElementById('_account')) {
+                document.getElementById('_account').classList.add('header_menu_none');
               }
               if (document.getElementById('menu_option')) {
                 document.getElementById('menu_option').classList.add('header_menu_none');
@@ -539,6 +559,9 @@ export class SurveyComponent implements OnInit, AfterViewInit {
               }
               if (document.getElementById('all_topic1')) {
                 document.getElementById('all_topic1').classList.add('header_menu_none');
+              }
+              if (document.getElementById('_account1')) {
+                document.getElementById('_account1').classList.add('header_menu_none');
               }
               if (document.getElementById('menu_option1')) {
                 document.getElementById('menu_option1').classList.add('header_menu_none');
@@ -613,24 +636,29 @@ export class SurveyComponent implements OnInit, AfterViewInit {
       data => {
         const response = JSON.parse(JSON.stringify(data));
         document.getElementById('loader').classList.remove('loading');
-        const surveylength = Object.keys(response.data).length;
-        this.users.surveyLength = surveylength;
+        this.users.surveyLength = Object.keys(response.data).length;
         this.users.surveyList = response.data;
         this.loginService.setUser(this.users);
         if (document.getElementById('_home')) {
-          document.getElementById('_home').classList.add('header_menu_none');
+          document.getElementById('_home').classList.remove('header_menu_none');
         }
         if (document.getElementById('all_topic')) {
-          document.getElementById('all_topic').classList.add('header_menu_none');
+          document.getElementById('all_topic').classList.remove('header_menu_none');
         }
         if (document.getElementById('menu_option')) {
-          document.getElementById('menu_option').classList.add('header_menu_none');
+          document.getElementById('menu_option').classList.remove('header_menu_none');
+        }
+        if (document.getElementById('_account')) {
+          document.getElementById('_account').classList.remove('header_menu_none');
         }
         if (document.getElementById('_home1')) {
           document.getElementById('_home1').classList.remove('header_menu_none');
         }
         if (document.getElementById('all_topic1')) {
           document.getElementById('all_topic1').classList.remove('header_menu_none');
+        }
+        if (document.getElementById('_account1')) {
+          document.getElementById('_account1').classList.remove('header_menu_none');
         }
         if (document.getElementById('menu_option1')) {
           document.getElementById('menu_option1').classList.remove('header_menu_none');
@@ -701,7 +729,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
   }
 
   hsSliderValue() {
-    if (this.users.currentPaneNumber.paneCode === 'fdb_Questions') {
+    if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Questions') {
       for (const answer of this.users.currentPaneNumber.currentPaneAnswers) {
         if (answer.dataField.inputType === 'hslider') {
           $('#' + answer.field + ' .hslider' + answer.value).addClass('active');

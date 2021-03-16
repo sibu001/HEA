@@ -26,6 +26,7 @@ export class Users {
     public refreshToken: string;
     public instructionHtml: string;
     public isLeakChange: boolean;
+    public isSurvey: boolean;
     public recommendationList: any[] = [];
     public leakList: any[] = [];
     public customerMailList: any[] = [];

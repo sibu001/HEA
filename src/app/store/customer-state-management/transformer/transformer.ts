@@ -286,4 +286,28 @@ export class Transformer {
         return dataSource;
     }
 
+    static transformEmailSettingTableData(src: any): any {
+        const dataSource: any = {
+            list: []
+        };
+        src.forEach(element => {
+            const dataSourceObj: any = element;
+            dataSourceObj.mailName = element.mailDescription.mailName;
+            dataSourceObj.active = element.mailDescription.active;
+            dataSource.list.push(dataSourceObj);
+        });
+        return dataSource;
+    }
+
+    static transformOptTableData(src: any): any {
+        const dataSource: any = {
+            list: []
+        };
+        src.forEach(element => {
+            const dataSourceObj: any = element;
+            dataSourceObj.mailName = element.mailDescription.mailName;
+            dataSource.list.push(dataSourceObj);
+        });
+        return dataSource;
+    }
 }

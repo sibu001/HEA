@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
@@ -20,13 +20,14 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   customerCredentialsList: any[] = [];
   users: Users = new Users();
   viewConfigurationList: any;
+  public errorMessage: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private loginService: LoginService,
-    private renderer: Renderer,
     private router: Router,
     private readonly systemService: SystemService) {
     this.users = this.loginService.getUser();
+
     if (this.users.role === 'USERS') {
       this.getCustomerCredentials();
     } else {
@@ -36,7 +37,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
+    this.scrollTop();
   }
 
   edit(number: any) {
@@ -92,14 +93,16 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   postCustomerData() {
     document.getElementById('loader').classList.add('loading');
-    this.subscriptions.add(this.loginService.performPostMultiPartDataPost(this.users.outhMeResponse, 'customers/current/' + this.users.outhMeResponse.userId).subscribe(
+    this.subscriptions.add(this.loginService.performPut(this.users.outhMeResponse, 'customers/' + this.users.outhMeResponse.userId).subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
-        console.log(response);
+        this.scrollTop();
         document.getElementById('loader').classList.remove('loading');
       },
       error => {
         console.log(JSON.parse(JSON.stringify(error)));
+        this.errorMessage = error;
+        this.scrollTop();
         document.getElementById('loader').classList.remove('loading');
       }
     ));
@@ -122,6 +125,10 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['admin/customer']);
     }
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   ngOnDestroy(): void {

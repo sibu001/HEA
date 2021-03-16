@@ -77,7 +77,7 @@ export class CredentialTypeEditComponent implements OnInit, OnDestroy {
   save() {
     if (this.credentialTypeForm.valid) {
       if (this.id !== null && this.id !== undefined) {
-        this.subscriptions.add(this.systemService.updateCredentialType(this.id, this.credentialTypeForm.value).pipe(
+        this.subscriptions.add(this.systemService.updateCredentialType(this.credentialTypeForm.value.credentialType, this.credentialTypeForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;

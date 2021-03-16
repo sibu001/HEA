@@ -15,6 +15,7 @@ export class TopicHistoryComponent implements OnInit {
 
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
+    this.users.isSurvey = false;
     if (this.users.allSurveyCheck) {
       this.users.surveyList = new Array;
       this.getAllSurvey();

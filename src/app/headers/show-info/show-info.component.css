@@ -1,0 +1,20 @@
+.background-blur {
+  background-color: #f7f5f5f2;
+}
+::ng-deep .mat-dialog-container {
+  box-shadow: none;
+  background-color: #e8c772;
+  color: #ffff;
+  border-radius: 10px;
+}
+
+.info-close-button {
+    float: right;
+    height: 20px;
+    border: none;
+    border-radius: 3px;
+    background: none;
+}
+button:focus{
+    outline: none!important;
+}

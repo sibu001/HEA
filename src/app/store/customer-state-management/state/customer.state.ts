@@ -13,6 +13,7 @@ import {
     DeleteCustomerByIdAction,
     DeleteCustomerEventByIdAction,
     DeleteCustomerFileByIdAction,
+    DeleteOptOutByIdAction,
     DeleteStaffByIdAction,
     DeleteStaffNoteByIdAction,
     DeleteUserCustomerGroupByIdAction,
@@ -28,7 +29,11 @@ import {
     GetCustomerFileListAction,
     GetCustomerListAction,
     GetCustomerViewConfigurationListAction,
+    GetElectricityRatePlanAction,
     GetEmailSettingListAction,
+    GetHeatingRatePlanAction,
+    GetOptOutByIdAction,
+    GetOptOutListAction,
     GetPasswordValidationRuleAction,
     GetRoleListByUserIdAction,
     GetStaffByIdAction,
@@ -47,6 +52,7 @@ import {
     SaveCustomerEventAction,
     SaveCustomerFileAction,
     SaveCustomerUsingFileAction,
+    SaveOptOutAction,
     SaveStaffAction,
     SaveStaffNoteAction,
     SaveUserCustomerGroupAction,
@@ -100,6 +106,10 @@ import { CustomerManagementModel } from './customer.model';
         roleListByUserId: undefined,
         userCustomerGroupList: undefined,
         userCustomerGroup: undefined,
+        optOutList: undefined,
+        optOut: undefined,
+        electricityRatePlan: undefined,
+        heatingRatePlan: undefined,
         error: undefined
     }
 })
@@ -227,6 +237,26 @@ export class CustomerManagementState {
     @Selector()
     static getUserCustomerGroupList(state: CustomerManagementModel): any {
         return state.userCustomerGroupList;
+    }
+
+    @Selector()
+    static getOptOutList(state: CustomerManagementModel): any {
+        return state.optOutList;
+    }
+
+    @Selector()
+    static getOptOut(state: CustomerManagementModel): any {
+        return state.optOut;
+    }
+
+    @Selector()
+    static getElectricityRatePlan(state: CustomerManagementModel): any {
+        return state.electricityRatePlan;
+    }
+
+    @Selector()
+    static getHeatingRatePlan(state: CustomerManagementModel): any {
+        return state.heatingRatePlan;
     }
 
     @Action(GetCustomerListAction)
@@ -997,10 +1027,11 @@ export class CustomerManagementState {
     @Action(GetEmailSettingListAction)
     getAllEmailSettingList(ctx: StateContext<CustomerManagementModel>, action: GetEmailSettingListAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.emailSetting)
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.emailSetting + '?optional=true')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    const res = Transformer.transformEmailSettingTableData(response);
                     ctx.patchState({
                         emailSettingList: response,
                     });
@@ -1208,6 +1239,108 @@ export class CustomerManagementState {
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         userCustomerGroup: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetOptOutListAction)
+    getAllOptOutList(ctx: StateContext<CustomerManagementModel>, action: GetOptOutListAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.optOuts)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    const res = Transformer.transformOptTableData(response);
+                    ctx.patchState({
+                        optOutList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetOptOutByIdAction)
+    getOptOutById(ctx: StateContext<CustomerManagementModel>, action: GetOptOutByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.optOuts + '/' + action.mailDescriptionId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        optOut: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(DeleteOptOutByIdAction)
+    deleteOptOut(ctx: StateContext<CustomerManagementModel>, action: DeleteOptOutByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.optOuts + '/' + action.mailDescriptionId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    //  this.utilityService.showSuccessMessage('Deleted Successfully');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(SaveOptOutAction)
+    saveOptOut(ctx: StateContext<CustomerManagementModel>, action: SaveOptOutAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.customer + '/' + action.customerId + '/' + AppConstant.optOuts + '/' + action.mailDescriptionId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        optOut: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetElectricityRatePlanAction)
+    getElectricityRatePlan(ctx: StateContext<CustomerManagementModel>, action: GetElectricityRatePlanAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.electricityRatePlan )
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        electricityRatePlan: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetHeatingRatePlanAction)
+    getHeatingRatePlan(ctx: StateContext<CustomerManagementModel>, action: GetHeatingRatePlanAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.heatingRatePlan )
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        heatingRatePlan: response,
                     });
                 },
                     error => {

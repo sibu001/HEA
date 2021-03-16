@@ -117,8 +117,8 @@ export class SystemMeasurementUtilityTransformer {
             let dataSourceObject: any = {};
             dataSourceObject = element;
             dataSourceObject.serialNumber = index;
-            dataSourceObject.prevFireTime = element.prevFireTime ? new DatePipe('en-US').transform(new Date(element.prevFireTime), 'MM/dd/yyyy h:mm:ss') : '';
-            dataSourceObject.nextFireTime = element.nextFireTime ? new DatePipe('en-US').transform(new Date(element.nextFireTime), 'MM/dd/yyyy h:mm:ss') : '';
+            dataSourceObject.prevFireTime = element.prevFireTime ? new DatePipe('en-US').transform(element.prevFireTime, 'MM/dd/yyyy HH:mm:ss') : '';
+            dataSourceObject.nextFireTime = element.nextFireTime ? new DatePipe('en-US').transform(element.nextFireTime, 'MM/dd/yyyy HH:mm:ss') : '';
             const totalSeconds = dataSourceObject.prevRunTime / 1000;
             const totalMinutes = totalSeconds / 60;
             const totalHours = totalMinutes / 60;

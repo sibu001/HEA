@@ -90,5 +90,8 @@ export class AppConstant {
     public static waterCharge = '';
     public static waterSmartMeterList = '';
     public static waterSmartMeter = '';
-    public static emailSetting = '';
+    public static emailSetting = 'mailDescriptionGroups';
+    public static optOuts = 'opt-outs';
+    public static electricityRatePlan = 'electricityRatePlan';
+    public static heatingRatePlan = 'heatingRatePlan';
 }

@@ -30,5 +30,9 @@ export interface CustomerManagementModel {
     roleListByUserId: any;
     userCustomerGroupList: any;
     userCustomerGroup: any;
+    optOutList: any;
+    optOut: any;
+    electricityRatePlan: any;
+    heatingRatePlan: any;
     error: Error;
 }

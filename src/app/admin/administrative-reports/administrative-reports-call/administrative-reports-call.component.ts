@@ -66,11 +66,15 @@ export class AdministrativeReportsCallComponent implements OnInit, OnDestroy {
   setForm(event: any): any {
     this.reportForm = this.formBuilder.group({
       format: [event && event.format ? event.format : 'pdf', Validators.required],
+      reportId: [this.id],
     });
     this.reportParameter.forEach(element => {
       this.reportForm.addControl(element.parameterName, this.control(element.defaultValue));
       this.reportForm.addControl('reportId', this.control(element.reportId));
     });
+    if (this.reportParameter.length <= 0) {
+      this.reportForm.addControl('reportId', this.id);
+    }
   }
 
   control(defaultValue: string): AbstractControl {
@@ -89,19 +93,13 @@ export class AdministrativeReportsCallComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.administrativeService.callAdministrativeReport(this.id, formData).pipe(skipWhile((item: any) => !item))
       .subscribe((reportParams: any) => {
         console.log(reportParams);
-        const blob = new Blob([reportParams.administrativeManagement.callAdministrativeReport]);
-        const downloadURL = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadURL;
-        if (reportParams.administrativeManagement.callAdministrativeReport.type === 'application/pdf') {
-          link.download = 'document' + '.pdf';
-        } else if (reportParams.administrativeManagement.callAdministrativeReport.type === 'image/jpeg') {
-          link.download = 'document' + '.jpg';
-        }
-        link.target = '_blank';
-        link.click();
+         const file = new Blob([reportParams.administrativeManagement.callAdministrativeReport], {type: 'application/pdf'});
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
       }, error => {
-        console.log(error);
+        const file = new Blob([error.error.text], {type: 'application/pdf'});
+        const fileURL = URL.createObjectURL(file);
+        window.open(fileURL);
       }));
   }
   get f() { return this.reportForm.controls; }

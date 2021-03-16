@@ -3,7 +3,7 @@ import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Valida
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, map, skipWhile } from 'rxjs/operators';
 import { GoogleMapComponent } from 'src/app/common/google-map/google-map.component';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
@@ -47,6 +47,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   energyCoach: any;
   pgeHasPoolDisabled = false;
   isProgramGroup = false;
+  isOptOut = false;
+  electricityRatePlan: any;
+  heatingRatePlan: any;
   helpHide: boolean;
   placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
@@ -96,6 +99,13 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     totalElements: 0,
   };
 
+  optOutKeys: Array<TABLECOLUMN> = TableColumnData.OPT_OUT_KEY;
+  public optOutDataSource: any = [];
+  public optOutData = {
+    content: [],
+    totalElements: 0,
+  };
+
   zoom = 17;
   lat = 51.673858;
   lng = 7.815982;
@@ -137,6 +147,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       this.loadCustomerEvent(this.id);
       this.loadStaffNote(this.id);
       this.loadCustomerFile(this.id);
+      this.loadEmailSetting(this.id);
+      this.getElectricityPlanRate(this.id);
+      this.getHeatingPlanRate(this.id);
       this.customerService.loadCustomerById(this.id);
       this.loadCustomerById();
     }
@@ -146,8 +159,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     window.scroll(0, 0);
   }
 
-  findPlace(force: boolean, filter: string): any {
-    this.systemUtilityService.loadPlaceList(force, filter);
+  findPlace(force: boolean, filters: string): any {
+    this.systemUtilityService.loadPlaceList(force, filters);
     this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
       .subscribe((placeList: any) => {
         this.placeCode = placeList;
@@ -159,6 +172,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.customerData = customer;
         if (this.isForce) {
           this.router.navigate(['admin/customer/customerEdit'], { queryParams: { 'id': customer.customerId } });
+        }
+        if (customer.optOutMail) {
+          this.isOptOut = true;
+          this.loadOptOut(this.id);
         }
         this.customerGroupCode = customer.customerGroup.groupCode;
         if (customer.coachUser) {
@@ -534,11 +551,53 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   loadEmailSetting(customerId: any) {
     this.customerService.loadEmailSettingList(customerId);
-    this.subscriptions.add(this.customerService.getEmailSettingList().pipe(skipWhile((item: any) => !item))
-      .subscribe((emailSetting: any) => {
-        this.emailData.content = emailSetting;
-        this.emailData.totalElements = emailSetting.length;
-        this.emailDataSource = [...this.emailData.content];
+    this.subscriptions.add(
+      this.customerService.getEmailSettingList()
+        .pipe(
+          skipWhile((item: any) => !item),
+          map((item) => item.filter((item2) => item2.mailDescription.active))
+        )
+        .subscribe((emailSetting: any) => {
+          this.emailData.content = emailSetting;
+          this.emailData.totalElements = emailSetting.length;
+          this.emailDataSource = [...this.emailData.content];
+        }));
+  }
+
+  loadOptOut(customerId: any) {
+    this.customerService.loadOptOutList(customerId);
+    this.subscriptions.add(this.customerService.getOptOutList().
+      pipe(
+        skipWhile((item: any) => !item),
+        map((item) => item.filter((item2) => item2.mailDescription.active))
+      )
+      .subscribe((optOutList: any) => {
+        this.optOutData.content = optOutList;
+        this.optOutData.totalElements = optOutList.length;
+        this.optOutDataSource = [...this.optOutData.content];
+      }));
+  }
+
+  deleteOptOut(event: any) {
+    this.subscriptions.add(this.customerService.deleteOptOut(this.id, event.mailDescriptionId)
+      .subscribe((response: any) => {
+        this.loadOptOut(this.id);
+      }));
+  }
+
+  getElectricityPlanRate(customerId) {
+    this.customerService.loadElectricityRatePlan(customerId);
+    this.subscriptions.add(this.customerService.getElectricityRatePlan().pipe(skipWhile((item: any) => !item))
+      .subscribe((electricityRatePlan: any) => {
+        this.electricityRatePlan = electricityRatePlan;
+      }));
+  }
+
+  getHeatingPlanRate(customerId) {
+    this.customerService.loadHeatingRatePlan(customerId);
+    this.subscriptions.add(this.customerService.getHeatingRatePlan().pipe(skipWhile((item: any) => !item))
+      .subscribe((heatingRatePlan: any) => {
+        this.heatingRatePlan = heatingRatePlan;
       }));
   }
 
