@@ -86,6 +86,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         document.getElementById('fdbRecommendations').classList.add('table-responsive');
       }, 100);
     }
+    const self = this;
+    setTimeout(function () {
+      self.evaluateJavaScript(self.users.currentPaneNumber);
+    }, 1000);
 
   }
   hover(value: any, fields: any) {
@@ -513,6 +517,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             document.getElementById('fdbRecommendations').classList.add('table-responsive');
           }, 100);
         }
+        this.evaluateJavaScript(response.data);
         this.scrollTop();
         document.getElementById('loader').classList.remove('loading');
       },
@@ -577,6 +582,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             this.scrollTop();
             this.helpHides();
             this.progressShow();
+            this.evaluateJavaScript(response.data);
           }
         } else {
           this.router.navigate(['/topicshistory']);
@@ -614,7 +620,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
       }
     );
   }
-  change(value: any) {
+  change(value: any): any {
     if (value == 'true') {
       return 'false';
     } else if (value == 'false') {
@@ -627,6 +633,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
       return 'N';
     } else if (value == 'N') {
       return 'Y';
+    } else if (!value) {
+      return true;
     }
   }
   getAllSurvey() {
@@ -744,16 +752,16 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     this.users.currentPaneNumber.currentPaneBlocks.forEach(element => {
       if (element.blockCount <= element.dataBlock.maxRows) {
         const surveyBlock = JSON.parse(JSON.stringify(element.surveyAnswerBlocks[0]));
-        surveyBlock.surveyAnswers.forEach(e => {
-          e.value = null;
-        });
+        // surveyBlock.surveyAnswers.forEach(e => {
+        //   e.value = null;
+        // });
         element.blockCount = element.blockCount + 1;
         element.currentBlockCount = element.currentBlockCount + 1;
         element.surveyAnswerBlocks.push(surveyBlock);
       }
     });
-    // this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
-    //   'change', true);
+    this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
+      'change', true);
   }
   deleteDataBlockRow(index: any) {
     console.log(this.users.currentPaneNumber.currentPaneBlocks);
@@ -764,9 +772,23 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         element.currentBlockCount = element.currentBlockCount - 1;
       }
     });
-    // this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
-    //   'change', true);
+    this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
+      'change', true);
   }
+
+  evaluateJavaScript(value: any) {
+    if (value.currentPane.paneCode === 'prf_ElectricVehicle') {
+      const myDiv = document.getElementById('EVEstimation');
+      myDiv.innerHTML = '';
+      const values = this.substringBetween(value.currentPane.htmFooter, '<![CDATA[', '// ]]>');
+      eval(values);
+    }
+  }
+  substringBetween(s, a, b) {
+    const p = s.indexOf(a) + a.length;
+    return s.substring(p, s.indexOf(b, p));
+  }
+
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.code === 'ArrowRight') {

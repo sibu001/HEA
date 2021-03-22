@@ -94,4 +94,6 @@ export class AppConstant {
     public static optOuts = 'opt-outs';
     public static electricityRatePlan = 'electricityRatePlan';
     public static heatingRatePlan = 'heatingRatePlan';
+    public static homeProfileInfo = 'Don\' leave yet! The analysis of your home\'s information is in the next section! Click thru to see what we\'ve discovered.';
+    public static homeEnergyProfileInfo = 'Don\'t stop! The next few pages will help us and you figure out how to save on your energy bill!';
 }

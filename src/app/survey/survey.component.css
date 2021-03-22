@@ -179,7 +179,7 @@ p.calculation {
   border: 1px solid #b0b0b0;
 }
 p.topic_title {
-  color: #666!important;
+  color: #666 !important;
   font-size: 14px;
   margin-top: 10px;
   font-weight: 600;
@@ -1650,7 +1650,6 @@ img.icon_1:hover {
   opacity: 1;
 }
 
-
 img.help-scroll {
   margin-top: 11px;
 }
@@ -2191,4 +2190,40 @@ button.btn.btn-info {
 }
 .row.checkBox {
   margin-bottom: 10px;
+}
+
+/* p-calendar.table_calendar span input {
+  width: 80%;
+} */
+
+/* .table_calendar ::ng-deep p-calendar .ng-tns-c2-0 .ui-inputtext .ui-widget .ui-state-default .ui-corner-all .ng-star-inserted {
+  width: 140px;
+} */
+@media (min-width: 200px) and (max-width: 1270px) {
+  .table_input_responsive{
+    margin-left: 16px;
+  }
+}
+
+.htmltooltip{
+  position: relative;
+  display: inline-block;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  background-color: #f9f9f9;
+  color: #000;
+  width: 180px;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  font-size: medium;
+  font-weight: 300;
+  z-index: 1;
+}
+
+.htmltooltip:hover .tooltiptext {
+  visibility: visible;
 }

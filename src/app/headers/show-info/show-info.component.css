@@ -9,12 +9,15 @@
 }
 
 .info-close-button {
-    float: right;
-    height: 20px;
-    border: none;
-    border-radius: 3px;
-    background: none;
+  float: right;
+  height: 20px;
+  border: none;
+  border-radius: 3px;
+  background: none;
 }
-button:focus{
-    outline: none!important;
+button:focus {
+  outline: none !important;
+}
+.info-message {
+  text-align: center;
 }

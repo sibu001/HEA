@@ -320,7 +320,7 @@ export class AdministrativeManagementState {
     @Action(CallAdministrativeReportAction)
     callAdministrativeReport(ctx: StateContext<AdministrativeManagementModel>, action: CallAdministrativeReportAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPostMultiPartFromData(action.parameters, AppConstant.callAdministrativeReport)
+        return this.loginService.performPostForBlob(action.parameters, AppConstant.callAdministrativeReport)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -331,15 +331,9 @@ export class AdministrativeManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        const blob = new Blob([error.error.text], { type: 'application/pdf' });
-                        console.log(blob);
-                        const downloadUrl = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.href = downloadUrl;
-                        a.download = 'file.pdf';
-                        document.body.appendChild(a);
-                        a.click();
-                        this.utilityService.showErrorMessage(error.message);
+                        const file = new Blob([error.error.text], { type: 'application/pdf' });
+                        const fileURL = URL.createObjectURL(file);
+                        window.open(fileURL);
                     }));
     }
 

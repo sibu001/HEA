@@ -2,9 +2,9 @@ import { Component, HostListener, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
-import { UtilityService } from '../services/utility.service';
 import { ShowInfoComponent } from './show-info/show-info.component';
 import { MatDialog } from '@angular/material';
+import { AppConstant } from '../utility/app.constant';
 declare var $: any;
 @Component({
   selector: 'app-headers',
@@ -105,20 +105,21 @@ export class HeadersComponent implements OnInit {
       this.hideResponsiveMenu();
       return;
     }
-    if (this.users.isSurvey) {
+    if (this.users.isSurvey && (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'HomeProfile' || this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'HouseholdEnergy')) {
+      const messages = this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'HomeProfile' ? AppConstant.homeProfileInfo : AppConstant.homeEnergyProfileInfo;
       if (confirm('Changes you made may not be saved.')) {
-        this.openInfo();
+        this.openInfo(messages);
         this.goToOtherPage(routeNumber);
       } else {
-        this.openInfo();
+        this.openInfo(messages);
       }
     } else {
       this.goToOtherPage(routeNumber);
     }
   }
-  openInfo(): void {
+  openInfo(message: string): void {
     this.dialogRef = this.dialog.open(ShowInfoComponent, {
-      data: { message: 'Don\'t stop! The next few pages will help us and you figure out how to save on your energy bill!' },
+      data: { message: message },
       disableClose: true,
       backdropClass: 'background-blur',
       position: {

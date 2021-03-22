@@ -102,6 +102,20 @@ export class LoginService {
         }
     }
 
+    getOptionForBlob(params?: any) {
+        if (this.getUser != null) {
+            const httpOptions = {
+                headers: new HttpHeaders({
+                    'Authorization': 'Bearer ' + this.users.token,
+                }),
+                params: params,
+                responseType: 'blob' as 'json'
+            };
+            return httpOptions;
+        }
+    }
+
+
     getFormattedUrl(endpoint: any): any {
         return environment.webBaseUrl + endpoint;
     }
@@ -129,6 +143,10 @@ export class LoginService {
     performPostMultiPartFromData(object, endpoint, params?: any) {
         const url = this.getFormattedUrl(endpoint);
         return this.http.post(url, object, this.getMultipartOption(params));
+    }
+    performPostForBlob(object: any, endpoint: any, params?: any) {
+        const url = this.getFormattedUrl(endpoint);
+        return this.http.post(url, object, this.getOptionForBlob(params));
     }
     performPut(object: any, endpoint: any): any {
         const url = this.getFormattedUrl(endpoint);

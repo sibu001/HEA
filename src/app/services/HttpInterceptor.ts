@@ -14,7 +14,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     isRefreshingToken = false;
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-    constructor(private loginService: LoginService) {}
+    constructor(private loginService: LoginService) { }
 
     addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
         return req;
@@ -32,12 +32,17 @@ export class AuthorizationInterceptor implements HttpInterceptor {
                     // return this.handle400Error(error);
                     case 401:
                         return this.handle401Error(req, next);
+                    case 302:
+                        return this.handle302Error();
                 }
             } else {
                 return throwError(error);
             }
         });
 
+    }
+    handle302Error() {
+        this.loginService.logout();
     }
 
     handle401Error(req: HttpRequest<any>, next: HttpHandler) {
