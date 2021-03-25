@@ -23,6 +23,41 @@ export class LoginService {
         }
         return (AppUtility.isEmptyObject(this.users) || AppUtility.isEmptyString(this.users.theme)) ? new Users() : users;
     }
+
+    public updateUser(): void {
+        const users: Users = JSON.parse(localStorage.getItem('users'));
+        users.paneNumber = 0;
+        users.surveyLength = 0;
+        users.leakFocusId = 1;
+        users.recommendationNo = 0;
+        users.treadingLoadsValue = '';
+        users.trendId = 1;
+        users.profileId = 1;
+        users.myReportsData = null;
+        users.recommendationList = [];
+        users.leakList = [];
+        users.customerMailList = [];
+        users.surveyList = [];
+        users.trendingPartResource = [];
+        users.trendingProfileResource = [];
+        users.surveyCode = [];
+        users.usesList = [];
+        users.currentPaneNumber = null;
+        users.unitType = 0;
+        users.resourceType = 0;
+        users.lookupValue = null;
+        users.trendingProfileData = null;
+        users.mailContent = null;
+        users.mailDetail = null;
+        users.recommendationStatusChange = false;
+        users.types = null;
+        users.customerEventDetail = {};
+        users.addEvent = false;
+        users.allSurveyCheck = true;
+        users.leakFocusId = 1;
+        this.setUser(users);
+    }
+
     public isLoggedIn(): boolean {
         this.users = this.getUser();
         if (this.users.token !== undefined && this.users.token !== null) {

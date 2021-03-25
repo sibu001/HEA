@@ -555,3 +555,7 @@ a.Schedule {
     margin-top: 35px;
   }
 }
+
+::ng-deep #trendingHomeTrendsChartsEmpty {
+  margin: 0px !important;
+}

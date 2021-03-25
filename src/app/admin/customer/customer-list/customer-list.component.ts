@@ -65,6 +65,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe) {
     const tableValue = Transformer.transformCustomerTableKey(-1, '');
     this.keys = tableValue.key;
+    this.loginService.updateUser();
     this.users = this.loginService.getUser();
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null) {

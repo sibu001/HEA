@@ -2227,3 +2227,7 @@ button.btn.btn-info {
 .htmltooltip:hover .tooltiptext {
   visibility: visible;
 }
+
+::ng-deep .accurate .red{
+  color: red!important;
+}

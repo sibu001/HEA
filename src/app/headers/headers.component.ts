@@ -105,7 +105,7 @@ export class HeadersComponent implements OnInit {
       this.hideResponsiveMenu();
       return;
     }
-    if (this.users.isSurvey && (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'HomeProfile' || this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'HouseholdEnergy')) {
+    if (this.users.isSurvey && this.users.role === 'USERS' && (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'HomeProfile' || this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'HouseholdEnergy')) {
       const messages = this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'HomeProfile' ? AppConstant.homeProfileInfo : AppConstant.homeEnergyProfileInfo;
       if (confirm('Changes you made may not be saved.')) {
         this.openInfo(messages);

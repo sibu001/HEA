@@ -181,9 +181,7 @@
                     <div class="view trend space">
                         <ng-container *ngFor="let chartData of
                             trendingParts[0].trendingCharts">
-                            <div
-                                *ngIf="chartData.chart.freeChartConfigurationJS!=null"
-                                [innerHTML]="chartData.chart.freeChartDiv |
+                            <div [innerHTML]="chartData.chart.freeChartDiv |
                                 safeHtml"></div>
                         </ng-container>
                     </div>

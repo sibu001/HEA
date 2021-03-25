@@ -353,6 +353,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
               this.loginService.setUser(this.users);
               this.colors = 'red';
               this.scrollTop();
+              const self = this;
+              setTimeout(function () {
+                self.evaluateJavaScript(self.users.currentPaneNumber);
+              }, 1000);
               document.getElementById('loader').classList.remove('loading');
             } else {
               if (id == 'next') {
@@ -432,7 +436,9 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         setTimeout(function () {
           self1.chartDataConfiguration();
         }, 500);
-
+        setTimeout(function () {
+          self1.evaluateJavaScript(self1.users.currentPaneNumber);
+        }, 1000);
         this.helpHides();
         this.progressShow();
       }
