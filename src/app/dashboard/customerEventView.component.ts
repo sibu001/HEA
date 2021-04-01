@@ -1,4 +1,4 @@
-import { Component, OnInit, Renderer, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
@@ -21,7 +21,7 @@ export class customerEventViewComponent implements OnInit {
   users: Users = new Users();
   filter: Filter = new Filter();
   modifyAllow = true;
-  constructor(private loginService: LoginService, private renderer: Renderer, private router: Router, private location: Location) {
+  constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
     this.perFormGetEventType();
     if (!this.users.addEvent) {
@@ -36,9 +36,11 @@ export class customerEventViewComponent implements OnInit {
 
   ngOnInit() {
     this.filter = JSON.parse(localStorage.getItem('filter'));
-    this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
+    this.scrollTop();
   }
-
+  scrollTop() {
+    window.scroll(0, 0);
+  }
   perFormGetEventType() {
     document.getElementById('loader').classList.add('loading');
     this.loginService.performGetMultiPartData('customerEventTypes').subscribe(
@@ -49,7 +51,7 @@ export class customerEventViewComponent implements OnInit {
         this.users.customerEventList = this.customerEventList;
         if (!this.users.addEvent) {
           this.modifyAllow = this.customerEventDetails.modifyAllowed;
-          this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime));
+          this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime, 10));
         } else {
           this.customerEventDetails.modifyAllowed = true;
           this.customerEventDetails.customerEventType = this.customerEventList[0];
@@ -105,7 +107,7 @@ export class customerEventViewComponent implements OnInit {
         const response = JSON.parse(JSON.stringify(data));
         this.users.addEvent = false;
         this.customerEventDetails = response.data;
-        this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime));
+        this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime, 10));
       },
       error => {
         document.getElementById('loader').classList.remove('loading');

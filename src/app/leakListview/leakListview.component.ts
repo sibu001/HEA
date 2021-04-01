@@ -14,7 +14,7 @@ declare var $: any;
 export class leakListViewComponent implements OnInit, AfterViewInit {
   @ViewChild('inp') inp: ElementRef;
   users: Users = new Users();
-  constructor(private location: Location, private router: Router, private element: ElementRef, private renderer: Renderer, private loginService: LoginService) {
+  constructor(private location: Location, private router: Router, private loginService: LoginService) {
     this.users = this.loginService.getUser();
     for (let i = 0; i < this.users.leakList.length; i++) {
       this.users.leakList[i].flag = true;
@@ -28,9 +28,11 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if (this.inp != null && this.inp !== undefined) {
-      this.renderer.invokeElementMethod(this.inp.nativeElement, 'focus');
-    }
+    this.scrollTop();
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   back() {

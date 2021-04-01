@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, Renderer, HostListener, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
@@ -28,7 +28,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
   users: Users = new Users();
   globalM = 0;
   globalK = 0;
-  constructor(private loginService: LoginService, private router: Router, private renderer: Renderer) {
+  constructor(private loginService: LoginService, private router: Router) {
     this.users = this.loginService.getUser();
 
     if (this.users.currentPaneNumber.currentPane == null || this.users.currentPaneNumber.currentPane == undefined) {
@@ -94,7 +94,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
   }
   hover(value: any, fields: any) {
     for (const answer of this.users.currentPaneNumber.currentPaneAnswers) {
-      if (answer.dataField.inputType == 'hslider') {
+      if (answer.dataField.inputType === 'hslider') {
         $('#' + fields + ' .hslider' + answer.value).removeClass('active');
         $(this).toggleClass('active');
       }
@@ -302,8 +302,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     this.users.allSurveyCheck = true;
     this.loginService.setUser(this.users);
     this.inputErrorMessage = undefined;
-    if (this.users.currentPaneNumber.currentPane.paneCode == 'fdb_Thanks') {
-      this.router.navigate(['/topicshistory']);
+    if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
+      this.gotToTopicHistory();
     } else {
       if (this.users.currentPaneNumber.currentPaneAnswers.length > 0 || this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
         this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
@@ -330,13 +330,21 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     this.loginService.setUser(this.users);
     this.router.navigate(['/surveyRecommendationList']);
   }
+
+  gotToTopicHistory() {
+    if (this.users.isDashboard) {
+      this.router.navigate(['/dashboard']);
+    } else {
+      this.router.navigate(['/topicshistory']);
+    }
+  }
   postSurveyAnswerData(currentPaneAnswers: any, currentPaneBlocks: any, id: any, value: any, event?: any) {
-    if ((id == 'change' && value) || id == 'next' || id == 'prev') {
+    if ((id === 'change' && value) || id === 'next' || id === 'prev') {
       document.getElementById('loader').classList.add('loading');
       let dataObj;
-      if (id == 'next') {
+      if (id === 'next') {
         if (currentPaneAnswers.length >= 1 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.lastPage && (currentPaneAnswers[0].value == 'false'
-          || currentPaneAnswers[0].value == 'N' || currentPaneAnswers[0].value == 'No' || currentPaneAnswers[0].value == '0')) {
+          || currentPaneAnswers[0].value === 'N' || currentPaneAnswers[0].value === 'No' || currentPaneAnswers[0].value === '0')) {
           dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks, 'nextPane': true, 'skipAnswers': false };
         } else {
           dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks, 'nextPane': true };
@@ -359,12 +367,12 @@ export class SurveyComponent implements OnInit, AfterViewInit {
               }, 1000);
               document.getElementById('loader').classList.remove('loading');
             } else {
-              if (id == 'next') {
+              if (id === 'next') {
                 this.nextPaneWithAnswer(response.data);
                 document.getElementById('loader').classList.remove('loading');
-              } else if (id == 'prev') {
+              } else if (id === 'prev') {
                 this.previousPane(response.data);
-              } else if (id == 'change') {
+              } else if (id === 'change') {
                 this.users.currentPaneNumber = response.data;
                 this.loginService.setUser(this.users);
                 document.getElementById('loader').classList.remove('loading');
@@ -393,8 +401,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     this.users.currentPaneNumber = data;
     this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPane != null) {
-      if (currentPaneCode == this.users.currentPaneNumber.currentPane.paneCode) {
-        this.router.navigate(['/topicshistory']);
+      if (currentPaneCode === this.users.currentPaneNumber.currentPane.paneCode) {
+        this.gotToTopicHistory();
       } else {
         if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
           if (this.users.currentPaneNumber.firstPage) {
@@ -403,7 +411,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         }
         if (this.users.surveyLength === 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'LeaksIntro') {
           this.getAllSurvey();
-        } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile') {
+        } else if (this.users.surveyLength >= 2 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile') {
           if (document.getElementById('_home')) {
             document.getElementById('_home').classList.remove('header_menu_none');
           }
@@ -449,7 +457,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     setTimeout(function () {
       self.hsSliderValue();
     }, 500);
-    if (this.users.currentPaneNumber.paneCode == 'fdb_Intro') {
+    if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Intro') {
       setTimeout(function () {
         document.getElementById('fdbRecommendations').classList.add('table-responsive');
       }, 100);
@@ -473,7 +481,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
               this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
             }
           }
-          if (this.users.surveyLength === 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'LeaksIntro') {
+          if (this.users.surveyLength === 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'LeaksIntro') {
             this.getAllSurvey();
           } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile') {
             if (document.getElementById('_home')) {
@@ -512,13 +520,14 @@ export class SurveyComponent implements OnInit, AfterViewInit {
           this.helpHides();
           this.progressShow();
         } else {
-          this.router.navigate(['/topicshistory']);
+          // this.router.navigate(['/topicshistory']);
+          this.gotToTopicHistory();
         }
         const self = this;
         setTimeout(function () {
           self.hsSliderValue();
         }, 500);
-        if (this.users.currentPaneNumber.paneCode == 'fdb_Intro') {
+        if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Intro') {
           setTimeout(function () {
             document.getElementById('fdbRecommendations').classList.add('table-responsive');
           }, 100);
@@ -540,10 +549,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/previousPane').subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
-        console.log(response);
         if (response.data.currentPane != null) {
-          if (response.data.currentPane.paneCode == this.users.currentPaneNumber.currentPane.paneCode) {
-            this.router.navigate(['/topicshistory']);
+          if (response.data.currentPane.paneCode === this.users.currentPaneNumber.currentPane.paneCode) {
+            // this.router.navigate(['/topicshistory']);
+            this.gotToTopicHistory();
           } else {
             this.users.currentPaneNumber = response.data;
             this.loginService.setUser(this.users);
@@ -583,6 +592,9 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             }
             const self = this;
             setTimeout(function () {
+              self.hsSliderValue();
+            }, 500);
+            setTimeout(function () {
               self.chartDataConfiguration();
             }, 500);
             this.scrollTop();
@@ -591,10 +603,11 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             this.evaluateJavaScript(response.data);
           }
         } else {
-          this.router.navigate(['/topicshistory']);
+          // this.router.navigate(['/topicshistory']);
+          this.gotToTopicHistory();
         }
         this.scrollTop();
-        if (this.users.currentPaneNumber.currentPane.paneCode == 'fdb_Intro') {
+        if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Intro') {
           setTimeout(function () {
             document.getElementById('fdbRecommendations').classList.add('table-responsive');
           }, 100);
@@ -627,24 +640,23 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     );
   }
   change(value: any): any {
-    if (value == 'true') {
+    if (value === 'true') {
       return 'false';
-    } else if (value == 'false') {
+    } else if (value === 'false') {
       return 'true';
-    } else if (value == '1') {
+    } else if (value === '1') {
       return '0';
-    } else if (value == '0') {
+    } else if (value === '0') {
       return '1';
-    } else if (value == 'Y') {
+    } else if (value === 'Y') {
       return 'N';
-    } else if (value == 'N') {
+    } else if (value === 'N') {
       return 'Y';
     } else if (!value) {
-      return true;
+      return 'true';
     }
   }
   getAllSurvey() {
-    //  this.router.navigate(["/topicshistory"]);
     this.users.surveyCode = new Array;
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys').subscribe(
       data => {
@@ -753,17 +765,37 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     }
   }
 
-  addDataBlockRow() {
+  addDataBlockRow(position: any) {
     console.log(this.users.currentPaneNumber.currentPaneBlocks);
     this.users.currentPaneNumber.currentPaneBlocks.forEach(element => {
       if (element.blockCount <= element.dataBlock.maxRows) {
-        const surveyBlock = JSON.parse(JSON.stringify(element.surveyAnswerBlocks[0]));
-        // surveyBlock.surveyAnswers.forEach(e => {
-        //   e.value = null;
-        // });
+        const surveyBlock = JSON.parse(JSON.stringify(element.surveyAnswerBlocks[element.surveyAnswerBlocks.length - 1]));
+        surveyBlock.surveyAnswers.forEach(e => {
+          e.calculationDate = null;
+          e.createdBy = null;
+          e.createdDate = null;
+          e.id = null;
+          e.surveyAnswerBlockId = null;
+          e.surveyAnswerId = null;
+          e.updatedBy = null;
+          e.updatedDate = null;
+        });
+
+        surveyBlock.createdBy = null;
+        surveyBlock.createdDate = null;
+        surveyBlock.id = null;
+        surveyBlock.surveyAnswerBlockId = null;
+        surveyBlock.updatedBy = null;
+        surveyBlock.updatedDate = null;
         element.blockCount = element.blockCount + 1;
         element.currentBlockCount = element.currentBlockCount + 1;
-        element.surveyAnswerBlocks.push(surveyBlock);
+        if (position === 'last') {
+          surveyBlock.orderNumber = surveyBlock.orderNumber + 1;
+          element.surveyAnswerBlocks.push(surveyBlock);
+        } else {
+          surveyBlock.orderNumber = 1;
+          element.surveyAnswerBlocks.splice(0, 0, surveyBlock);
+        }
       }
     });
     this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,

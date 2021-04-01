@@ -247,13 +247,7 @@ ul.standby {
 ul.standby li {
   padding-bottom: 0px;
 }
-.inputhide {
-  width: 0px;
-  height: 0px;
-  padding: 0px 0px;
-  color: #fff !important;
-  border-width: 0px !important;
-}
+
 span.helpMessage {
   color: rgb(47%, 59%, 60%);
 }

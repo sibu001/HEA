@@ -2200,12 +2200,12 @@ button.btn.btn-info {
   width: 140px;
 } */
 @media (min-width: 200px) and (max-width: 1270px) {
-  .table_input_responsive{
+  .table_input_responsive {
     margin-left: 16px;
   }
 }
 
-.htmltooltip{
+.htmltooltip {
   position: relative;
   display: inline-block;
 }
@@ -2228,6 +2228,15 @@ button.btn.btn-info {
   visibility: visible;
 }
 
-::ng-deep .accurate .red{
-  color: red!important;
+::ng-deep .accurate .red {
+  color: red !important;
+}
+
+
+::ng-deep .prime-date-picker .ui-inputtext{
+  width: 140px;
+  height: 40px;
+  font-weight: 500;
+  font-size: 24px;
+  color: #000;
 }

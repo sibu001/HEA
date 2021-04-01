@@ -9,7 +9,7 @@ import { Users } from 'src/app/models/user';
 })
 export class UsageHistoryDetailComponent implements OnInit {
   @Input() usageModelObj: any;
-  @Output() onModelSave = new EventEmitter();
+  @Output() onModelSave: EventEmitter<any> = new EventEmitter();
   usageModelObj2: any;
   users: Users = new Users();
   usageHistoryId: number;

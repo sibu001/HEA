@@ -58,5 +58,5 @@ export class Users {
     public userEventList: any[] = [];
     public customerEventList: any[] = [];
     public searchUserList: any[] = [];
-
+    public isDashboard: boolean;
 }

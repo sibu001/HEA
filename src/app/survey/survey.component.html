@@ -152,19 +152,22 @@
                                     <img alt="icon"
                                       src="assets/images/icon_help.svg"
                                       class="help-img">
-                                      <span class="tooltiptext">{{dataFieldValue.helpText}}</span>
+                                    <span class="tooltiptext">{{dataFieldValue.helpText}}</span>
                                   </span>
                                 </th>
                               </ng-container>
                               <th id="pane_arrow" scope="col">
-                                <p style="margin-bottom:0px; padding: 20px;">
+                                <p style="margin-bottom:0px; padding:
+                                  20px;text-align: center;">
                                   <img alt="icon"
                                     src="assets/images/ico_add.gif"
-                                    (click)="addDataBlockRow()">
+                                    (click)="addDataBlockRow('first')">
                                 </p>
                               </th>
-                              <th id="pane_arrow_down" scope="col">
-                                <p style="margin-bottom:0px;"
+                              <th id="pane_arrow_down" scope="col"
+                                *ngIf="hideBlockArrow">
+                                <p style="margin-bottom:0px; text-align:
+                                  center;"
                                   *ngIf="hideBlockArrow">
                                   <img alt="icon"
                                     src="assets/images/arrow-up-green.png"
@@ -180,16 +183,16 @@
                               <ng-container *ngFor="let surveyAnswerValue of
                                 surveyAnswer.surveyAnswers; index as j">
                                 <td
-                                  *ngIf="surveyAnswerValue.dataField.userDisplay"
-                                  style="width: 50%;">
+                                  *ngIf="surveyAnswerValue.dataField.userDisplay">
                                   <div
                                     *ngIf="surveyAnswerValue.dataField.dataType=='datetime'&&surveyAnswerValue.dataField.inputType=='date'"
-                                    class="form-group">
+                                    class="form-group" style="width: 160px;">
                                     <p-calendar
                                       [(ngModel)]="surveyAnswerValue.value"
                                       dataType="string"
                                       [showIcon]="true" dateFormat="mm/dd/yy"
-                                      [ngClass]="surveyAnswerValue.field"></p-calendar>
+                                      [ngClass]="surveyAnswerValue.field"
+                                      class="prime-date-picker"></p-calendar>
                                   </div>
                                   <span
                                     *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='select'">{{surveyAnswerValue.value}}</span>
@@ -200,7 +203,8 @@
                                       class="form-control
                                       table_input_responsive"
                                       [ngClass]="surveyAnswerValue.field"
-                                      id="input_gallons" (change)="evaluateJavaScript(users.currentPaneNumber)"
+                                      id="input_gallons"
+                                      (change)="evaluateJavaScript(users.currentPaneNumber)"
                                       [(ngModel)]="surveyAnswerValue.value">
                                   </div>
 
@@ -217,7 +221,7 @@
                                   <div class="form-group" style="height:34px;"
                                     *ngIf="surveyAnswerValue.dataField.inputType=='select'">
                                     <select name="pool/spa"
-                                      class="form-control"
+                                      class="form-control" style="width:auto;"
                                       [(ngModel)]="surveyAnswerValue.value"
                                       [ngClass]="surveyAnswerValue.field"
                                       (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',surveyAnswerValue.dataField.onChangeRefresh,'')">
@@ -229,7 +233,7 @@
                                   </div>
                                 </td>
                               </ng-container>
-                              <td style="width: 50%;text-align: center;">
+                              <td style="text-align: center;">
                                 <img alt="icon" style="margin-top: 38%;"
                                   src="assets/images/ico_minus.gif"
                                   (click)="deleteDataBlockRow(i)">
@@ -247,14 +251,22 @@
                                 </td> -->
                             </tr>
                             <tr>
-                              <td *ngFor="let surveyAnswer of
+                              <td></td>
+                              <!-- <td></td> -->
+                              <ng-container *ngFor="let surveyAnswer of
                                 currentPaneBlock?.surveyAnswerBlocks[0]?.surveyAnswers;index
-                                as i" style="text-align: center;">
-                                <img alt="icon"
+                                as i">
+                                <td *ngIf="surveyAnswer.dataField.userDisplay"
+                                  style="text-align: center;">
+                                </td>
+                                <td
                                   *ngIf="i==currentPaneBlock?.surveyAnswerBlocks[0]?.surveyAnswers?.length-1"
-                                  src="assets/images/ico_add.gif"
-                                  (click)="addDataBlockRow()">
-                              </td>
+                                  style="text-align: center;">
+                                  <img alt="icon"
+                                    src="assets/images/ico_add.gif"
+                                    (click)="addDataBlockRow('last')">
+                                </td>
+                              </ng-container>
                               <!-- <td>
                                   <img alt="icon"
                                     src="assets/images/arrow-down-green.png"

@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit {
   recommendationList: any[] = [];
   leakList: any[] = [];
   nextTopic: string;
-  topicdescription: string;
+  topicDescription: string;
   surveyCode: string;
   surveyId: number;
   trendingHomeChart: any;
@@ -157,7 +157,7 @@ export class DashboardComponent implements OnInit {
         const response = JSON.parse(JSON.stringify(data));
         if (response.data != null) {
           this.nextTopic = response.data.surveyDescription.label;
-          this.topicdescription = response.data.surveyDescription.description;
+          this.topicDescription = response.data.surveyDescription.description;
           this.surveyCode = response.data.surveyDescription.surveyCode;
           this.surveyId = response.data.surveyId;
         }
@@ -279,6 +279,7 @@ export class DashboardComponent implements OnInit {
         const response = JSON.parse(JSON.stringify(data));
         this.users.paneNumber = 0;
         this.users.currentPaneNumber = response.data;
+        this.users.isDashboard = true;
         this.loginService.setUser(this.users);
         this.router.navigate(['/surveyView']);
         document.getElementById('loader').classList.remove('loading');

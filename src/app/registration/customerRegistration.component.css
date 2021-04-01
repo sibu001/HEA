@@ -353,10 +353,4 @@ img.dr_center-block2HET.center-block {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
 }
-.inputhide {
-  width: 0px;
-  height: 0px;
-  padding: 0px 0px;
-  color: #fff !important;
-  border-width: 0px !important;
-}
+

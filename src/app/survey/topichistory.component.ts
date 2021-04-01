@@ -46,6 +46,7 @@ export class TopicHistoryComponent implements OnInit {
         if (response.errorCode == null && response.errorMessage == null) {
           this.users.currentPaneNumber = response.data;
           this.users.paneNumber = index;
+          this.users.isDashboard = false;
           this.loginService.setUser(this.users);
           this.router.navigate(['surveyView']);
         }

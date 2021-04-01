@@ -85,7 +85,11 @@ export class LoginComponent implements OnInit {
         (error) => {
           const response = JSON.parse(JSON.stringify(error));
           console.log(response);
-          this.errorMessage = 'Invalid Credentials';
+          if (response.error.error_description) {
+            this.errorMessage = response.error.error_description;
+          } else {
+            this.errorMessage = 'Invalid Credentials';
+          }
           document.getElementById('loader').classList.remove('loading');
         }
       );
@@ -238,6 +242,7 @@ export class LoginComponent implements OnInit {
             } else {
               this.users.currentPaneNumber = response.data;
               this.users.allSurveyCheck = true;
+              this.users.isDashboard = true;
               this.loginService.setUser(this.users);
               this.router.navigate(['surveyView']);
             }

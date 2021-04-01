@@ -1,4 +1,4 @@
-import { Component, OnInit, ContentChild, ViewChild, ElementRef, Renderer } from '@angular/core';
+import { Component, OnInit, ContentChild, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
@@ -20,12 +20,12 @@ export class CustomerRegistrationComponent implements OnInit {
   theme: string;
   @ContentChild('showhideinput') input;
   @ViewChild('inp1') inp1: ElementRef;
-  constructor(private router: Router, private route: ActivatedRoute, private renderer: Renderer, private loginService: LoginService) {
+  constructor(private router: Router, private route: ActivatedRoute, private loginService: LoginService) {
     this.users = this.loginService.getUser();
   }
 
   ngOnInit() {
-    this.renderer.invokeElementMethod(this.inp1.nativeElement, 'focus');
+    this.scrollTop();
     this.route.queryParams.subscribe(params => {
       this.theme = params['theme'] || null;
     });
@@ -33,6 +33,10 @@ export class CustomerRegistrationComponent implements OnInit {
       this.theme = 'HEA';
     }
     this.users.theme = this.theme;
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   login() {

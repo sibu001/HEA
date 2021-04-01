@@ -23,9 +23,6 @@
                         </button>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-xs-9 leaksdata" #first>
-                        <ng-container *ngIf="users.leakFocusId == leak.recommendationId">
-                            <input #inp id="myInput" type="text" class="inputhide" readonly = "readonly" data-disable-touch-keyboard>
-                        </ng-container>
                         <p class="leaks_text" style="margin-top: -21px;">{{leak.recommendation.takebackLabel}}</p>
                         <div class="row progressbar">
                             <div class="col-lg-5 col-sm-5">

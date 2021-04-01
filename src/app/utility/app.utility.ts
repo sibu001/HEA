@@ -20,9 +20,9 @@ export class AppUtility {
             dayValue = Number(parseFloat(tmpValue).toFixed(0)) + ' days ';
             millisecond = (millisecond % 86400000);
         }
-        let seconds: any = parseInt((millisecond / 1000) % 60 + '');
-        let minutes: any = parseInt(((millisecond / (1000 * 60)) % 60) + '');
-        let hours: any = parseInt((millisecond / (1000 * 60 * 60)) % 24 + '');
+        let seconds: any = parseInt((millisecond / 1000) % 60 + '', 10);
+        let minutes: any = parseInt(((millisecond / (1000 * 60)) % 60) + '', 10);
+        let hours: any = parseInt((millisecond / (1000 * 60 * 60)) % 24 + '', 10);
         let timeValue = '';
 
         // if (withHour) {
