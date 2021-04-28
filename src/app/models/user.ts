@@ -27,6 +27,7 @@ export class Users {
     public instructionHtml: string;
     public isLeakChange: boolean;
     public isSurvey: boolean;
+    public isFirstTime: boolean;
     public recommendationList: any[] = [];
     public leakList: any[] = [];
     public customerMailList: any[] = [];

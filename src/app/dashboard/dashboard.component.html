@@ -37,9 +37,9 @@
                                         <button type="button" class="btn
                                             btn-primary button leaksdiscovery"
                                             (click)="leakView(leaks.recommendationId)">
-                                            <img src="assets/images/{{leaks.recommendation.takebackIcon}}"
-                                            alt="dot" class="leak_img">
-
+                                            <img
+                                                src="assets/images/{{leaks.recommendation.takebackIcon}}"
+                                                alt="dot" class="leak_img">
                                         </button>
                                         <span class="leak_count">{{leaks.repeat}}</span>
                                     </p>
@@ -57,17 +57,20 @@
                                     {{recommendationLength}}
                                     recommendations</a>
                             </span>
-                       </p>
+                        </p>
                         <ng-container *ngFor="let item of recommendationList |
                             sortgrid:'-priceValue';index as i">
                             <div class="row responsiveRecomendation" *ngIf="i<3">
                                 <div class="col-sm-1 col-xs-2 status-img">
                                     <span *ngIf="item.status=='N'">
-                                        <img  src="assets/images/status-unchecked.png" alt="status"
+                                        <img
+                                            src="assets/images/status-unchecked.png"
+                                            alt="status"
                                             class="status-unchecked">
                                     </span>
                                     <span *ngIf="item.status=='L'">
-                                        <img src="assets/images/lightcheck.png" alt="status"
+                                        <img src="assets/images/lightcheck.png"
+                                            alt="status"
                                             class="status-unchecked">
                                     </span>
                                 </div>
@@ -83,7 +86,7 @@
                     <div class="nextTopic">
                         <br>
                         <p class="resume_topic">Resume Next Topic
-                             </p>
+                        </p>
                         <h4 class="title_topic">
                             <a class="anchorTag"
                                 (click)="surveyView(surveyCode,surveyId)">{{nextTopic}}</a>
@@ -98,7 +101,8 @@
                     <div class="Reports_responsive"
                         *ngIf="myReportsList!=null&&myReportsList!=undefined">
                         <p class="Reports">My Reports</p>
-                        <div class="row showInfo infoMargin" *ngIf="users.role==='ADMIN'">
+                        <div class="row showInfo infoMargin"
+                            *ngIf="users.role==='ADMIN'">
                             <div class="col-sm-4">Audit Id:</div>
                             <div class="col-sm-8">
                                 <input type="text"
@@ -156,11 +160,13 @@
                         <p *ngIf="i<3">
                             <span hidden>{{ calculateFunction() }}</span>
                             <span *ngIf="item.status=='N'">
-                                <img src="assets/images/status-unchecked.png" alt="status"
+                                <img src="assets/images/status-unchecked.png"
+                                    alt="status"
                                     class="status-unchecked">
                             </span>
                             <span *ngIf="item.status=='L'">
-                                <img src="assets/images/lightcheck.png" alt="status"
+                                <img src="assets/images/lightcheck.png"
+                                    alt="status"
                                     class="status-unchecked">
                             </span>
                             &nbsp;
@@ -210,7 +216,7 @@
                 <div class="row">
                     <div class="col-sm-12" *ngIf="trendingHomeChart!=undefined">
                         <div [innerHTML]="trendingHomeChart.chart.freeChartDiv |
-                            safeHtml" class="chartDiv" id="resizable2" ></div>
+                            safeHtml" class="chartDiv" id="resizable2"></div>
                     </div>
                 </div>
 
@@ -251,3 +257,111 @@
         </div>
     </div>
 </section>
+<div class="dashboard_info" id="dashboard_info">
+    <div class="row">
+        <div class="col-sm-9"></div>
+        <div class="col-sm-3 row">
+            <div class="col-sm-3">
+                <img src="assets/images/arrow-up.svg" alt="dot"
+                    class="arrow-up">
+            </div>
+            <div class="col-sm-9">
+                <p class="arrow-text">Return to next survey topic or change
+                    account
+                    setting or logout</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">
+            <div class="col-sm-3">
+                <img src="assets/images/arrow-up.svg" alt="dot"
+                    class="arrow-up">
+            </div>
+            <div class="col-sm-9">
+                <p class="arrow-text">Leaks are areas where you may have waste</p>
+            </div>
+        </div>
+        <div class="col-sm-3" style="text-align: center;">
+            <p class="welcome-message">Hello! Welcome to your</p>
+            <p class="welcome-message">Smart Audit home page!</p>
+            <button type="button" style="background: no-repeat; border: 1px solid #ffffff;" class="btn
+            btn-primary button" (click)="continue()">Continue
+        </button>
+        </div>
+        <div class="col-sm-3 row">
+            <div class="col-sm-3">
+                <img src="assets/images/arrow-up.svg" alt="dot"
+                    class="arrow-up">
+            </div>
+            <div class="col-sm-9">
+                <p class="arrow-text">List of message we've send to you</p>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+    <div class="row" style="margin-top: 45px;">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3 row">
+            <div class="col-sm-3">
+                <img src="assets/images/arrow-up.svg" alt="dot"
+                    class="arrow-up">
+            </div>
+            <div class="col-sm-9">
+                <p class="arrow-text">Each topic you complete helps us refine
+                    our Recommendations</p>
+            </div>
+        </div>
+        <div class="col-sm-3 row">
+            <div class="col-sm-3">
+                <img src="assets/images/arrow-up.svg" alt="dot"
+                    class="arrow-up">
+            </div>
+            <div class="col-sm-9">
+                <p class="arrow-text">Simple steps to reduce waste, customize to
+                    your home</p>
+            </div>
+        </div>
+        <div class="col-sm-5"></div>
+    </div>
+    <div class="row" style="margin-top: 20px;">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3 row">
+            <div class="col-sm-3">
+                <img src="assets/images/arrow-up.svg" alt="dot"
+                    class="arrow-up">
+            </div>
+            <div class="col-sm-9">
+                <p class="arrow-text">Reports specific to your account and your
+                    home; try each one</p>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="col-sm-3">
+                <img src="assets/images/arrow-up.svg" alt="dot"
+                    class="arrow-up">
+            </div>
+            <div class="col-sm-9">
+                <p class="arrow-text">Highlights of your key trends</p>
+            </div>
+        </div>
+        <div class="col-sm-5"></div>
+    </div>
+    <div class="row" style="margin-top: 60px;">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-3 row">
+            <div class="col-sm-3">
+                <img src="assets/images/arrow-up.svg" alt="dot"
+                    class="arrow-up">
+            </div>
+            <div class="col-sm-9">
+                <p class="arrow-text">High level overview of your most recent 12
+                    months</p>
+            </div>
+        </div>
+        <div class="col-sm-5"></div>
+    </div>
+</div>

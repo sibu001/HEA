@@ -243,6 +243,7 @@ export class LoginComponent implements OnInit {
               this.users.currentPaneNumber = response.data;
               this.users.allSurveyCheck = true;
               this.users.isDashboard = true;
+              this.users.isFirstTime = true;
               this.loginService.setUser(this.users);
               this.router.navigate(['surveyView']);
             }

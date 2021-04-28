@@ -53,31 +53,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     }, 100);
   }
   ngAfterViewInit() {
-    if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile') {
-      if (document.getElementById('_home')) {
-        document.getElementById('_home').classList.add('header_menu_none');
-      }
-      if (document.getElementById('all_topic')) {
-        document.getElementById('all_topic').classList.add('header_menu_none');
-      }
-      if (document.getElementById('_account')) {
-        document.getElementById('_account').classList.add('header_menu_none');
-      }
-      if (document.getElementById('menu_option')) {
-        document.getElementById('menu_option').classList.add('header_menu_none');
-      }
-      if (document.getElementById('_home1')) {
-        document.getElementById('_home1').classList.add('header_menu_none');
-      }
-      if (document.getElementById('all_topic1')) {
-        document.getElementById('all_topic1').classList.add('header_menu_none');
-      }
-      if (document.getElementById('menu_option1')) {
-        document.getElementById('menu_option1').classList.add('header_menu_none');
-      }
-      if (document.getElementById('menu_option2')) {
-        document.getElementById('menu_option2').classList.add('header_menu_none');
-      }
+    if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile' || this.users.currentPaneNumber.currentPane.paneCode === 'prf_onHold') {
+      this.hideMenu();
     }
     this.scrollTop();
     this.hsSliderValue();
@@ -91,6 +68,33 @@ export class SurveyComponent implements OnInit, AfterViewInit {
       self.evaluateJavaScript(self.users.currentPaneNumber);
     }, 1000);
 
+  }
+
+  hideMenu() {
+    if (document.getElementById('_home')) {
+      document.getElementById('_home').classList.add('header_menu_none');
+    }
+    if (document.getElementById('all_topic')) {
+      document.getElementById('all_topic').classList.add('header_menu_none');
+    }
+    if (document.getElementById('_account')) {
+      document.getElementById('_account').classList.add('header_menu_none');
+    }
+    if (document.getElementById('menu_option')) {
+      document.getElementById('menu_option').classList.add('header_menu_none');
+    }
+    if (document.getElementById('_home1')) {
+      document.getElementById('_home1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('all_topic1')) {
+      document.getElementById('all_topic1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('menu_option1')) {
+      document.getElementById('menu_option1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('menu_option2')) {
+      document.getElementById('menu_option2').classList.add('header_menu_none');
+    }
   }
   hover(value: any, fields: any) {
     for (const answer of this.users.currentPaneNumber.currentPaneAnswers) {
@@ -160,7 +164,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6 + '' + line7);
         /* tslint:disable:no-unused-variable */
         // tslint:disable-next-line: prefer-const
-        let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot;
+        let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
+        if (this.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
+          seriesData = [line1, line2];
+        }
         // tslint:disable-next-line: no-eval
         eval(paneCharts.chart.freeChartConfigurationJS);
         if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
@@ -253,9 +260,12 @@ export class SurveyComponent implements OnInit, AfterViewInit {
                 }
               }
               // tslint:disable-next-line: prefer-const
-              let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot;
+              let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
               console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
               // tslint:disable-next-line: no-eval
+              if (this.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
+                seriesData = [line1, line2];
+              }
               eval(paneCharts.chart.freeChartConfigurationJS);
               self.globalM = 0;
               self.globalK = 0;
@@ -440,7 +450,15 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             document.getElementById('menu_option2').classList.remove('header_menu_none');
           }
         }
+        if (this.users.currentPaneNumber.currentPane.paneCode === 'prf_onHold') {
+          this.hideMenu();
+        }
         const self1 = this;
+        if (this.users.currentPaneNumber.currentPane.paneCode === 'hhe_noGasStop') {
+          setTimeout(function () {
+            self1.router.navigate(['/topicshistory']);
+          }, 3000);
+        }
         setTimeout(function () {
           self1.chartDataConfiguration();
         }, 500);
@@ -623,6 +641,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
       }
     );
   }
+
 
   getSurveyLeak(surveyId: any) {
     document.getElementById('loader').classList.add('loading');

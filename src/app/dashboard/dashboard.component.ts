@@ -64,7 +64,6 @@ export class DashboardComponent implements OnInit {
       }
       this.leakCalculation();
     }
-
   }
 
   ngOnInit() {
@@ -77,6 +76,10 @@ export class DashboardComponent implements OnInit {
       }
     });
     this.scrollTop();
+    if (this.users.isFirstTime) {
+      this.users.isFirstTime = false;
+      document.getElementById('dashboard_info').classList.add('show-info');
+    }
   }
   hideMsg() {
     this.hideMsgs = false;
@@ -444,6 +447,10 @@ export class DashboardComponent implements OnInit {
   questionHelp() {
     window.open('https://hea-docs.s3.amazonaws.com/HomeChartHelp.html');
     return;
+  }
+
+  continue(): void {
+    document.getElementById('dashboard_info').classList.remove('show-info');
   }
 
   scrollTop() {
