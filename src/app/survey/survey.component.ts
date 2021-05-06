@@ -367,6 +367,9 @@ export class SurveyComponent implements OnInit, AfterViewInit {
           data => {
             const response = JSON.parse(JSON.stringify(data));
             if (response.data.errors != null) {
+              if (response.data.currentPane.paneCode === 'pv_EditPVConfigs') {
+                response.data.currentPaneBlocks = this.users.currentPaneNumber.currentPaneBlocks;
+              }
               this.users.currentPaneNumber = response.data;
               this.loginService.setUser(this.users);
               this.colors = 'red';
@@ -798,6 +801,9 @@ export class SurveyComponent implements OnInit, AfterViewInit {
           e.surveyAnswerId = null;
           e.updatedBy = null;
           e.updatedDate = null;
+          if (!(e.field === 'pv_InstallGroupOrientation' || e.field === 'pv_installGroupShading')) {
+            e.value = null;
+          }
         });
 
         surveyBlock.createdBy = null;
@@ -817,8 +823,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         }
       }
     });
-    this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
-      'change', true);
+    // this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
+    //   'change', true);
   }
   deleteDataBlockRow(index: any) {
     console.log(this.users.currentPaneNumber.currentPaneBlocks);

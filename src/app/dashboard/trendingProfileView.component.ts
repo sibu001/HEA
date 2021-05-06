@@ -23,6 +23,7 @@ export class TrendingProfileViewComponent implements OnInit {
   profileResourceType: string;
   trendingProfileData: any;
   trendingProfile: any;
+  errorMessage: any;
   users: Users = new Users();
   constructor(private loginService: LoginService, private router: Router) {
     this.users = this.loginService.getUser();
@@ -180,6 +181,7 @@ export class TrendingProfileViewComponent implements OnInit {
       },
       errors => {
         console.log(errors);
+        this.errorMessage = errors.error.errorMessage;
         document.getElementById('loader').classList.remove('loading');
       }
     );
@@ -239,6 +241,7 @@ export class TrendingProfileViewComponent implements OnInit {
       },
       errors => {
         console.log(errors);
+        this.errorMessage = errors.error.errorMessage;
         document.getElementById('loader').classList.remove('loading');
       }
     );

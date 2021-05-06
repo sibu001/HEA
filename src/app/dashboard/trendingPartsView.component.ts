@@ -20,6 +20,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
   partResourceType: string;
   partLookupValue: string;
   partUnitType: string;
+  errorMessage: any;
   trendingParts: any = {
     activeResource: 'electricity',
     unitType: 'cost',
@@ -165,6 +166,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
       },
       errors => {
         console.log(errors);
+        this.errorMessage = errors.error.errorMessage;
         document.getElementById('loader').classList.remove('loading');
       }
     );
@@ -210,6 +212,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
       },
       errors => {
         console.log(errors);
+        this.errorMessage = errors.error.errorMessage;
         document.getElementById('loader').classList.remove('loading');
       }
     );
