@@ -20,7 +20,7 @@
                 </div>
                 <div class="row responsive">
                     <div class="col-sm-8">
-                        <p class="error-message">
+                        <p class="error-message" *ngIf="errorMessage">
                             {{errorMessage}}
                         </p>
                         <ul class="saving" style="font-size: 15px;">
@@ -78,6 +78,11 @@
                     </div>
                 </div>
                 <div class="row small">
+                    <div class="col-sm-12" *ngIf="errorMessage">
+                        <p class="error-message">
+                            {{errorMessage}}
+                        </p>  
+                    </div>
                     <div class="col-xs-4">
                         <p class="trendsmall">Trends for</p>
                         <ng-container *ngFor="let resource of users.trendingProfileResource;index as i">

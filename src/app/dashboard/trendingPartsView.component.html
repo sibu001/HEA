@@ -59,6 +59,11 @@
                     </div>
                 </div>
                 <div class="row small">
+                    <div class="col-sm-12" *ngIf="errorMessage">
+                        <p class="error-message">
+                            {{errorMessage}}
+                        </p>  
+                    </div>
                     <div class="col-xs-6">
                         <p class="trendsmall">Trends for</p>
                         <ng-container *ngFor="let resource of
