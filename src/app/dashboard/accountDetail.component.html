@@ -7,11 +7,11 @@
                         <p class="error-message" *ngIf="errorMessage">
                             {{errorMessage?.error?.errorMessage}}
                             <span *ngIf="!errorMessage.error.errorMessage">
-                              {{errorMessage?.error}}
+                                {{errorMessage?.error}}
                             </span>
-                          </p>
+                        </p>
                         <p class="Account">Account Settings</p>
-                        <form class="form-horizontal" action="/action_page.php">
+                        <form class="form-horizontal">
                             <div class="form-group">
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="Username">Username:</label>
@@ -154,7 +154,12 @@
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="address">Address:</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <p class="accountcss">{{users.outhMeResponse.pgeAddress}}</p>
+                                    <p class="accountcss">{{users.outhMeResponse.street1}}
+                                    </p>
+                                    <p class="accountcss">
+                                        {{users.outhMeResponse.city}},{{users.outhMeResponse.state}},
+                                        {{users.outhMeResponse.postalCode}}
+                                    </p>
                                 </div>
                                 <div class="col-sm-4 col-xs-2">
                                     <img src="assets/images/icon_help.svg"
@@ -181,48 +186,79 @@
                 </div>
                 <hr>
                 <div class="row" *ngIf="users.role=='USERS'">
-                    <div class="col-sm-6 col-xs-4">
-                        <h3 class="Account">Home Profile</h3>
-                        <hr>
-                        <p>Sqft</p>
-                        <hr>
-                        <p>Lot size (sqft)</p>
-                        <hr>
-                        <p>Year built</p>
-                        <hr>
-                    </div>
-                    <div class="col-sm-3 col-xs-4">
-                        <h3 class="Account">Data from Zillow</h3>
-                        <hr>
-                        <p
-                            *ngIf="users.outhMeResponse.zillowConstructionSQFT!=null&&users.outhMeResponse.zillowConstructionSQFT!=undefined">{{users.outhMeResponse.zillowConstructionSQFT}}</p>
-                        <p
-                            *ngIf="users.outhMeResponse.zillowConstructionSQFT==null||users.outhMeResponse.zillowConstructionSQFT==undefined">-</p>
-                        <hr>
-                        <p
-                            *ngIf="users.outhMeResponse.zillowLotSize!=null&&users.outhMeResponse.zillowLotSize!=undefined">{{users.outhMeResponse.zillowLotSize}}</p>
-                        <p
-                            *ngIf="users.outhMeResponse.zillowLotSize==null||users.outhMeResponse.zillowLotSize==undefined">-</p>
-                        <hr>
-                        <p
-                            *ngIf="users.outhMeResponse.zillowYearBuilt!=null&&users.outhMeResponse.zillowYearBuilt!=undefined">{{users.outhMeResponse.zillowYearBuilt}}</p>
-                        <p
-                            *ngIf="users.outhMeResponse.zillowYearBuilt==null||users.outhMeResponse.zillowYearBuilt==undefined">-</p>
-                        <hr>
-                    </div>
-                    <div class="col-sm-3 col-xs-4">
-                        <h3 class="Account">User entered data</h3>
-                        <hr>
-                        <p>{{users.outhMeResponse.constructionSQFT}}<a
-                                *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0"
-                                class="a_edit" (click)="edit(1)">Edit</a></p>
-                        <hr>
-                        <p>{{users.outhMeResponse.lotSize}}</p>
-                        <hr>
-                        <p>{{users.outhMeResponse.yearBuilt}}<a
-                                *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0"
-                                class="a_edit" (click)="edit(3)">Edit</a></p>
-                        <hr>
+                    <div
+                        class="col-sm-12 table-responsive">
+                        <table class="table" summary="details">
+                            <tr>
+                                <th><h3 class="Account">Home Profile</h3></th>
+                                <th
+                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    <h3 class="Account">Data
+                                        from Zillow</h3></th>
+                                <th
+                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    <h3 class="Account">User
+                                        entered data</h3></th>
+                                <th
+                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode!='TST'">
+                                </th>
+                            </tr>
+                            <tr>
+                                <td><p>Sqft</p></td>
+                                <td
+                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    <p
+                                        *ngIf="users.outhMeResponse.zillowConstructionSQFT!=null&&users.outhMeResponse.zillowConstructionSQFT!=undefined">{{users.outhMeResponse.zillowConstructionSQFT}}</p>
+                                    <p
+                                        *ngIf="users.outhMeResponse.zillowConstructionSQFT==null||users.outhMeResponse.zillowConstructionSQFT==undefined">-</p>
+                                </td>
+                                <td>
+                                    <p>{{users.outhMeResponse.constructionSQFT}}
+                                        <a
+                                            *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0"
+                                            class="a_edit" (click)="edit(1)">Edit</a>
+                                    </p>
+
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td><p>Lot size (sqft)</p></td>
+                                <td
+                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    <p
+                                        *ngIf="users.outhMeResponse.zillowLotSize!=null&&users.outhMeResponse.zillowLotSize!=undefined">{{users.outhMeResponse.zillowLotSize}}</p>
+                                    <p
+                                        *ngIf="users.outhMeResponse.zillowLotSize==null||users.outhMeResponse.zillowLotSize==undefined">-</p>
+                                </td>
+                                <td>
+                                    <p>{{users.outhMeResponse.lotSize}}
+                                        <a
+                                            *ngIf="users.outhMeResponse.zillowLotSize!=null&&users.outhMeResponse.zillowLotSize>0"
+                                            class="a_edit" (click)="edit(2)">Edit</a>
+                                    </p>
+                                </td>
+
+
+                            </tr>
+
+                            <tr>
+                                <td><p>Year built</p></td>
+                                <td
+                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    <p
+                                        *ngIf="users.outhMeResponse.zillowYearBuilt!=null&&users.outhMeResponse.zillowYearBuilt!=undefined">{{users.outhMeResponse.zillowYearBuilt}}</p>
+                                    <p
+                                        *ngIf="users.outhMeResponse.zillowYearBuilt==null||users.outhMeResponse.zillowYearBuilt==undefined">-</p>
+                                </td>
+                                <td> <p>{{users.outhMeResponse.yearBuilt}}<a
+                                            *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0"
+                                            class="a_edit" (click)="edit(3)">Edit</a>
+                                    </p>
+                                </td>
+
+                            </tr>
+                        </table>
                     </div>
                 </div>
                 <br>
@@ -251,13 +287,15 @@
                                         <td>{{credentialsList.credentialTypeCode}}</td>
                                         <td><span
                                                 *ngIf="credentialsList.active">
-                                                <img class="dot" src="assets/images/icon_check_orange.png" alt="dot">
+                                                <img class="dot"
+                                                    src="assets/images/icon_check_orange.png"
+                                                    alt="dot">
                                             </span>
                                         </td>
                                         <td>{{credentialsList.login}}</td>
                                         <td>{{credentialsList.lastSuccessfulUsageDate|
                                             date : "MM/dd/yyyy
-                                            hh:mm:ss" : 'PST'}}</td>
+                                            HH:mm:ss" : 'PST'}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -272,7 +310,7 @@
                         <img src="assets/images/facebook.png" alt="facebook">
                     </div> -->
                     <div class="col-sm-4 col-xs-5 button-responsive">
-                         <img src="assets/images/facebook.png" alt="facebook">
+                        <img src="assets/images/facebook.png" alt="facebook">
                         <img src="assets/images/google2.jpg" alt="google">
                     </div>
                 </div>

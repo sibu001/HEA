@@ -2,7 +2,11 @@ section.space-top {
   margin-top: 4.2em;
   margin-bottom: 1em;
 }
-
+@media (min-width: 767px) and (max-width: 1092px) {
+  section.space-top {
+    margin-top: 7.3em;
+  }
+}
 p.accurate {
   color: #4550a1;
   font-size: 17px;
@@ -21,7 +25,7 @@ p.accurate {
   font-weight: 600;
   cursor: pointer;
 }
-p.energy analytics {
+p.energy_analytics {
   color: #000000;
   font-weight: bold;
   font-size: 14px;

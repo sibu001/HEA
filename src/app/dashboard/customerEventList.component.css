@@ -2,6 +2,11 @@ section.space-top {
   margin-top: 4.2em;
   margin-bottom: 1em;
 }
+@media (min-width: 767px) and (max-width: 1092px) {
+  section.space-top {
+    margin-top: 7.3em;
+  }
+}
 .select_next {
   font-size: 21px;
   font-weight: 600;

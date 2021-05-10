@@ -20,7 +20,7 @@
                 </div>
                 <div class="row responsive">
                     <div class="col-sm-8">
-                        <p class="error-message">
+                        <p class="error-message" *ngIf="errorMessage">
                             {{errorMessage}}
                         </p>
                         <ul class="saving" style="font-size: 15px;">
