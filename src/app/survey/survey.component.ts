@@ -788,55 +788,53 @@ export class SurveyComponent implements OnInit, AfterViewInit {
   }
 
   addDataBlockRow(position: any) {
-    console.log(this.users.currentPaneNumber.currentPaneBlocks);
-    this.users.currentPaneNumber.currentPaneBlocks.forEach(element => {
-      if (element.blockCount <= element.dataBlock.maxRows) {
-        const surveyBlock = JSON.parse(JSON.stringify(element.surveyAnswerBlocks[element.surveyAnswerBlocks.length - 1]));
-        surveyBlock.surveyAnswers.forEach(e => {
-          e.calculationDate = null;
-          e.createdBy = null;
-          e.createdDate = null;
-          e.id = null;
-          e.surveyAnswerBlockId = null;
-          e.surveyAnswerId = null;
-          e.updatedBy = null;
-          e.updatedDate = null;
-          if (!(e.field === 'pv_InstallGroupOrientation' || e.field === 'pv_installGroupShading')) {
-            e.value = null;
-          }
-        });
-
-        surveyBlock.createdBy = null;
-        surveyBlock.createdDate = null;
-        surveyBlock.id = null;
-        surveyBlock.surveyAnswerBlockId = null;
-        surveyBlock.updatedBy = null;
-        surveyBlock.updatedDate = null;
-        element.blockCount = element.blockCount + 1;
-        element.currentBlockCount = element.currentBlockCount + 1;
-        if (position === 'last') {
-          surveyBlock.orderNumber = surveyBlock.orderNumber + 1;
-          element.surveyAnswerBlocks.push(surveyBlock);
-        } else {
-          surveyBlock.orderNumber = 1;
-          element.surveyAnswerBlocks.splice(0, 0, surveyBlock);
-        }
-      }
-    });
-    // this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
-    //   'change', true);
+    if (this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
+      const setAsFirst = position === 'last' ? false : true;
+      this.saveSurveyAnswerBlock(this.users.currentPaneNumber.currentPaneBlocks[0].dataBlock.dataBlockId, setAsFirst);
+    }
   }
   deleteDataBlockRow(index: any) {
-    console.log(this.users.currentPaneNumber.currentPaneBlocks);
-    this.users.currentPaneNumber.currentPaneBlocks.forEach(element => {
-      if (element.blockCount >= element.dataBlock.minRows) {
-        element.surveyAnswerBlocks.splice(index, 1);
-        element.blockCount = element.blockCount - 1;
-        element.currentBlockCount = element.currentBlockCount - 1;
-      }
-    });
-    this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks,
-      'change', true);
+    if (this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
+      this.deleteSurveyAnswerBlock(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[index].surveyAnswerBlockId);
+    }
+  }
+
+  saveSurveyAnswerBlock(dataBlockId: any, setAsFirst: boolean): void {
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performPostMultiPartDataPost('', 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
+      this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answerBlocks?dataBlockId=' + dataBlockId + '&setAsFirst=' + setAsFirst).subscribe(
+        data => {
+          const response = JSON.parse(JSON.stringify(data));
+          this.users.currentPaneNumber = response.data;
+          this.loginService.setUser(this.users);
+          document.getElementById('loader').classList.remove('loading');
+        },
+        errors => {
+          console.log(errors);
+          this.scrollTop();
+          this.inputErrorMessage = errors.error.errorMessage;
+          document.getElementById('loader').classList.remove('loading');
+        }
+      );
+  }
+
+  deleteSurveyAnswerBlock(surveyAnswerBlockId: any): void {
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performDelete( 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
+      this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answerBlocks/' + surveyAnswerBlockId).subscribe(
+        data => {
+          const response = JSON.parse(JSON.stringify(data));
+          this.users.currentPaneNumber = response.data;
+          this.loginService.setUser(this.users);
+          document.getElementById('loader').classList.remove('loading');
+        },
+        errors => {
+          console.log(errors);
+          this.scrollTop();
+          this.inputErrorMessage = errors.error.errorMessage;
+          document.getElementById('loader').classList.remove('loading');
+        }
+      );
   }
 
   evaluateJavaScript(value: any) {

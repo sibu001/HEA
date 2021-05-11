@@ -110,6 +110,7 @@ p.menuresponsive {
   background-color: #fbfbfb;
   border: 0px solid rgba(0, 0, 0, 0.15);
   box-shadow: 0 0px 0px rgba(0, 0, 0, 0.175);
+  position: inherit;
 }
 .dropdown-menu > li > a:focus,
 .dropdown-menu > li > a:hover {
