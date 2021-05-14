@@ -263,7 +263,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
               let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
               console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
               // tslint:disable-next-line: no-eval
-              if (this.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
+              if (self.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
                 seriesData = [line1, line2];
               }
               eval(paneCharts.chart.freeChartConfigurationJS);

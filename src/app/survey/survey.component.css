@@ -1421,7 +1421,9 @@ p.pane_help {
   font-size: 16px;
   font-weight: 400;
   padding-top: 0px;
-  padding-bottom: 7px;
+  /* padding-bottom: 7px; */
+  padding-bottom: 0px;
+  margin: 0px;
 }
 p.accurate_space {
   color: #202020;
@@ -1846,6 +1848,9 @@ span.inputfieldcss {
   height: 40px;
   padding: 3px 12px 3px 12px;
 }
+.dropdown-form-control{
+  padding: 3px 25px 3px 12px!important;
+}
 .media:first-child {
   margin-top: 6px;
 }
@@ -2232,11 +2237,66 @@ button.btn.btn-info {
   color: red !important;
 }
 
-
-::ng-deep .prime-date-picker .ui-inputtext{
-  width: 140px;
+::ng-deep .prime-date-picker .ui-inputtext {
+  width: 142px;
   height: 40px;
   font-weight: 500;
   font-size: 24px;
   color: #000;
+}
+
+.html_right_bottom {
+  padding: 0px 20px 0px 20px;
+}
+
+::ng-deep .input_type_date .ui-inputtext {
+  width: 177px;
+  height: 40px;
+  font-weight: 500;
+  font-size: 24px;
+  color: #000;
+}
+
+.dropdown_responsive{
+  width: auto;
+}
+
+@media (min-width: 300px) and (max-width: 500px) {
+  .dropdown_responsive{
+    width: -webkit-fill-available;
+  }  
+}
+
+@media (min-width: 300px) and (max-width: 370px) {
+  div#content {
+    margin-right: 0px;
+  }
+  ::ng-deep #chartSeasonalPie > table{
+    right: -13px!important;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1600px) {
+  ::ng-deep #chartSeasonalPie > table{
+    right: calc(95% - 75%)!important;
+  }
+
+  ::ng-deep #idlePie > table{
+    right: calc(95% - 75%)!important;
+  }
+  
+}
+
+@media (min-width: 1601px)and (max-width: 2500px) {
+  ::ng-deep #chartSeasonalPie > table{
+    right: calc(95% - 70%)!important;
+  }
+  ::ng-deep #idlePie > table{
+    right: calc(95% - 70%)!important;
+  }
+}
+
+
+#chartSeasonalPie{
+  width: 50%!important;
 }

@@ -12,7 +12,7 @@
         </div>
         <br>
         <!-------------------- First ------------------------------------>
-        <div class="row" *ngFor="let leak of users.leakList;index as i">
+        <div class="row leak_div" *ngFor="let leak of users.leakList;index as i">
             <div class="col-lg-10 col-sm-10 border_bottom">
                 <div class="row">
                     <div class="col-lg-1 col-sm-1 col-xs-3 leaks_img">
@@ -113,7 +113,7 @@
                         </p>
                     </div>
                     <div class="col-lg-6"></div>
-                    <div class="col-lg-6">
+                    <div class="col-lg-6" style="margin: 6px 0px 6px 0px;">
                         <span *ngIf="!leak.flag" class="helpMessage">A request has been sent to our audit support team,
                             and you will be contacted via email to discuss
                             this leak.</span>

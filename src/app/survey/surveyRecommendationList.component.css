@@ -6,6 +6,9 @@ section.space-top {
   section.space-top {
     margin-top: 6em;
   }
+  p.est {
+    margin-right: 0% !important;
+  }
 }
 .backcolor {
   background-color: #fbfbfb;
@@ -168,21 +171,21 @@ ul.leaks li {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
   }
-  p.dollar_num {
+  /* p.dollar_num {
     display: none;
-  }
-  p.dollar_numsamll {
+  } */
+  p.dollar_num_small {
     display: block !important;
     color: #202020;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 22px;
     margin-top: 5px;
     margin-left: 73px;
   }
   .help_img {
     text-align: right;
-    margin-right: 41px;
-    display: none;
+    /* margin-right: 41px; */
+    /* display: none; */
   }
   .help_imgsmall {
     display: block !important;
@@ -231,7 +234,7 @@ ul.leaks li {
   border-bottom: 2px solid #fff;
 }
 
-p.dollar_numsamll {
+p.dollar_num_small {
   display: none;
 }
 span.menu1 {
@@ -297,7 +300,9 @@ p.est {
   font-weight: bold;
   font-size: 16px;
   text-align: right;
+  margin-right: 8%;
 }
+
 .col-sm-1.space {
   width: 5.333333% !important;
 }
@@ -388,9 +393,9 @@ a.Schedule1 {
 p.dollar_num {
   color: #202020;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 22px;
   text-align: right;
-  margin-right: -47px;
+  /* margin-right: -47px; */
 }
 div.Recommendation_text {
   margin-top: 0px;
@@ -492,7 +497,7 @@ img.question {
 
 .help_img {
   text-align: right;
-  margin-right: -46px;
+  /* margin-right: -46px; */
 }
 .help_imgsmall {
   display: none;

@@ -58,27 +58,27 @@
                             <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#accordion" [attr.href]="'#collapse'+item.recommendationId"
                                 *ngIf="item.parentLeakId!=null">
                                 <div class="row">
-                                    <div class="col-sm-1 col-xs-2 status1">
+                                    <div class="col-sm-1 col-xs-2 col-lg-1 status1">
                                         <img alt="icon" src="assets/images/triangledown.svg" class="fa fa-fw fa-caret-down fa_icon">
                                         <img alt="icon" src="assets/images/triangleright.svg" class="fa fa-fw fa-caret-right fa_icon">
                                     </div>
-                                    <div class="col-sm-1 col-xs-2 status2" *ngIf="item.status=='N'">
+                                    <div class="col-sm-1 col-xs-2 col-lg-1 status2" *ngIf="item.status=='N'">
                                         <img alt="icon" src="assets/images/status-unchecked.png" class="status-unchecked">
                                     </div>
-                                    <div class="col-sm-1 col-xs-2 status2" *ngIf="item.status=='Y'">
+                                    <div class="col-sm-1 col-xs-2 col-lg-1 status2" *ngIf="item.status=='Y'">
                                         <img alt="icon" src="assets/images/colorbox.png" class="status-unchecked">
                                     </div>
-                                    <div class="col-sm-1 col-xs-2 status2" *ngIf="item.status=='L'">
+                                    <div class="col-sm-1 col-xs-2 col-lg-1 status2" *ngIf="item.status=='L'">
                                         <img alt="icon" src="assets/images/lightcheck.png" class="status-unchecked">
                                     </div>
-                                    <div class="col-sm-1 col-xs-2 status2" *ngIf="item.status=='D'">
+                                    <div class="col-sm-1 col-xs-2 col-lg-1 status2" *ngIf="item.status=='D'">
                                         <img alt="icon" src="assets/images/status-notapplicable.png" class="status-unchecked" style="margin-left: -2px;">
                                     </div>
-                                    <div class="col-sm-8 col-xs-8 status3">
+                                    <div class="col-sm-8 col-xs-5 col-lg-8 status3">
                                         <a class="Schedule" *ngIf="item.status!='Y'">{{item.recommendation.takebackLabel}}</a>
                                         <a class="Schedule1" *ngIf="item.status=='Y'">{{item.recommendation.takebackLabel}}</a>
                                     </div>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-2 col-xs-3 col-lg-2">
                                         <p class="dollar_num">${{item.priceValue | number:'0.0-0'}}</p>
                                         <p class="help_img" *ngIf="item.recommendation.instruction!=null">
                                             <a (click)="questionHelp(item.recommendation.instruction)">
@@ -93,9 +93,9 @@
                                     </div>
                                 </div>
                                
-                                <div class="row spacingresponsive">
+                                <!-- <div class="row spacingresponsive">
                                     <div class="col-xs-6">
-                                        <p class="dollar_numsamll">${{item.priceValue | number:'0.0-0'}}</p>
+                                        <p class="dollar_num_small">${{item.priceValue | number:'0.0-0'}}</p>
                                     </div>
                                     <div class="col-xs-6">
                                         <p class="help_imgsmall" *ngIf="item.recommendation.instruction!=null">
@@ -104,7 +104,7 @@
                                             </a>
                                         </p>
                                     </div>
-                                </div>
+                                </div> -->
                                 
                             </div>
                             <div id="collapse{{item.recommendationId}}" class="panel-collapse collapse" *ngIf="item.parentLeakId!=null">

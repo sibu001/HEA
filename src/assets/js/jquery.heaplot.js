@@ -913,7 +913,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				rendererOptions: { tickRenderer: $.jqplot.CanvasAxisTickRenderer },
 				tickOptions: {
 					formatString: '%s',
-					fontSize: '10pt',
+					fontSize: '12pt',
 					fontFamily: 'Tahoma',
 					fontWeight: 'normal',
 					textColor: '#373737',

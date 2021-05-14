@@ -86,19 +86,22 @@
                     <ng-container *ngFor="let charts of
                       users.currentPaneNumber.paneCharts">
                       <!-- help icon -->
-                      <div class="row"
+                      <div
                         *ngIf="charts.chart.helpText!=null&&charts.chart.helpText!=undefined&&charts.chart.helpText.length>1">
                         <div class="row">
-                          <div class="col-lg-11 col-md-11 col-sm-11"></div>
-                          <div class="col-lg-1 col-md-1 col-sm-1">
-                            <div class="responsiveHelpIcon">
+                          <div class="col-lg-12 col-md-12 col-sm-12">
+                          <!-- <div class="col-lg-1 col-md-1 col-sm-1">
+                            <div class="responsiveHelpIcon"
+                              style="margin-left:40px"> -->
+                              <p class="pane_help">
                               <span>
                                 <img alt="icon"
                                   src="assets/images/icon_help.svg"
                                   class="help-img"
                                   (click)="chartHelpHide=!chartHelpHide">
                               </span>
-                            </div>
+                              </p>
+                            <!-- </div> -->
                           </div>
                         </div>
                         <div class="row" *ngIf="chartHelpHide">
@@ -221,7 +224,8 @@
                                   <div class="form-group" style="height:34px;"
                                     *ngIf="surveyAnswerValue.dataField.inputType=='select'">
                                     <select name="pool/spa"
-                                      class="form-control" style="width:auto;"
+                                      class="form-control dropdown-form-control"
+                                      style="width:auto;"
                                       [(ngModel)]="surveyAnswerValue.value"
                                       [ngClass]="surveyAnswerValue.field"
                                       (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',surveyAnswerValue.dataField.onChangeRefresh,'')">
@@ -233,7 +237,8 @@
                                   </div>
                                 </td>
                               </ng-container>
-                              <td style="text-align: center;" *ngIf="currentPaneBlock?.surveyAnswerBlocks?.length>1">
+                              <td style="text-align: center;"
+                                *ngIf="currentPaneBlock?.surveyAnswerBlocks?.length>1">
                                 <img alt="icon" style="margin-top: 38%;"
                                   src="assets/images/ico_minus.gif"
                                   (click)="deleteDataBlockRow(i)">
@@ -422,13 +427,16 @@
                                 <div class="col-lg-4 col-md-4 col-sm-6
                                   col-xs-8">
                                   <form>
-                                    <div class="form-group" *ngIf="answersList.dataField.inputType=='text'">
+                                    <div class="form-group"
+                                      *ngIf="answersList.dataField.inputType=='text'">
                                       <input type="text" class="form-control"
                                         id="YourName" name="name"
                                         [(ngModel)]="answersList.value">
                                     </div>
-                                    <div class="form-group"*ngIf="answersList.dataField.inputType=='password'">
-                                      <input type="password" class="form-control"
+                                    <div class="form-group"
+                                      *ngIf="answersList.dataField.inputType=='password'">
+                                      <input type="password"
+                                        class="form-control"
                                         id="YourName" name="name"
                                         [(ngModel)]="answersList.value">
                                     </div>
@@ -798,7 +806,8 @@
                                 col-xs-12">
                                 <form class="form-tag">
                                   <div class="form-group" style="height: 34px;">
-                                    <select name="pool/spa" class="form-control"
+                                    <select name="pool/spa" class="form-control
+                                      dropdown-form-control dropdown_responsive"
                                       [(ngModel)]="answersList.value"
                                       (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh,'')">
                                       <option *ngFor="let optionList of
@@ -945,7 +954,7 @@
                             <div class="col-lg-5 col-sm-8 col-xs-12">
                               <p-calendar [(ngModel)]="answersList.value"
                                 dataType="string" [showIcon]="true"
-                                dateFormat="mm/dd/yy"></p-calendar>
+                                dateFormat="mm/dd/yy" class="input_type_date"></p-calendar>
                             </div>
                           </div>
                         </div>
@@ -1081,7 +1090,8 @@
             safeHtml" class="energy_analytic"
             style="margin-top: 17px;"></div>
         </div>
-        <div *ngIf="users.currentPaneNumber.currentPane.htmRightBottom!=null">
+        <div *ngIf="users.currentPaneNumber.currentPane.htmRightBottom!=null"
+          class="html_right_bottom">
           <div [innerHTML]="users.currentPaneNumber.currentPane.htmRightBottom |
             safeHtml" class="energy_analytic">
           </div>

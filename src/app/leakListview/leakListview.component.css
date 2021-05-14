@@ -258,4 +258,9 @@ span.helpMessage {
 .col-sm-12.sidebar {
   padding-left: 0px;
   padding-right: 0px;
+  margin-bottom: 20px;
+}
+
+.leak_div{
+  margin-bottom: 10px;;
 }
