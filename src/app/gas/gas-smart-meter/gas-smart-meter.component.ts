@@ -21,6 +21,7 @@ export class GasSmartMeterComponent implements OnInit {
   users: Users = new Users();
   gasForm: FormGroup;
   dataSource: any;
+  public pageIndex: any;
   usageHistoryData = {
     content: [],
     totalElements: 0,
@@ -65,12 +66,16 @@ export class GasSmartMeterComponent implements OnInit {
     this.subscriptions.add(this.usageHistoryService.getGasSmartMeterList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
+        this.usageHistoryData.totalElements = this.adminFilter.gasSmartMeterFilter.totalElement + gasList.data.length + 1;
+        this.adminFilter.gasSmartMeterFilter.totalElement = this.adminFilter.gasSmartMeterFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.gasSmartMeterFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?

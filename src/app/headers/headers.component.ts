@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ declare var $: any;
   templateUrl: './headers.component.html',
   styleUrls: ['./headers.component.css']
 })
-export class HeadersComponent implements OnInit {
+export class HeadersComponent implements OnInit,AfterViewInit {
   hides = true;
   hideLogo = true;
   float: string;
@@ -30,6 +30,13 @@ export class HeadersComponent implements OnInit {
         this.users.outhMeResponse.auditId + '&amp;typeform-embed=popup-drawer';
     }
     this.screenWidth = window.screen.width;
+  }
+  ngAfterViewInit(): void {
+    if (this.users.theme === 'P4P') {
+      if (document.getElementById('main-bar-menu')) {
+        document.getElementById('main-bar-menu').classList.add('main-bar-menu-margin');
+      }
+    }
   }
 
   ngOnInit(): void {

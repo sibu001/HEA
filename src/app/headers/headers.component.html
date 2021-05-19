@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-sm-5">
                 <div class="navbar-header">
-                    <div class="navbar-toggle collapsed" data-toggle="collapse"
+                    <div class="navbar-toggle collapsed" id="main-bar-menu" data-toggle="collapse"
                         data-target="#main-menu"
                         (click)="hide(1)" [style.float]="float">
                         <span class="bar1"></span>
@@ -206,17 +206,16 @@
                                 history</a>
                         </li>
                         <li>
-                            <a class="history_a"
+                            <a class="history_a" (click)="hide(6)"
                                 [routerLink]="['/customerEventList']">Events
                                 history</a>
                         </li>
                         <li>
-                            <a class="history_a"
+                            <a class="history_a" (click)="hide(7)"
                                 [routerLink]="['/MailArchiveList']">Mail archive</a>
                         </li>
                         <li>
-                            <a class="history_a"
-                                [routerLink]="['/surveyRecommendationList']">Recommendations</a>
+                            <a class="history_a" (click)="hide(8)">Recommendations</a>
                         </li>
                     </div>
                     <li id="menu_option2" *ngIf="users?.role!=='ADMIN'">

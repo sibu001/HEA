@@ -224,3 +224,6 @@ p.menuresponsive {
   -webkit-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
 }
+.main-bar-menu-margin{
+  margin-top: 18px!important;
+}

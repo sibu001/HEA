@@ -68,7 +68,7 @@
             </p>
             <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true
               (goToEditEvent)='showPopUp()' [isSearch]="false"
-              [data]="dataSource"
+              [data]="dataSource" [pageIndex]="pageIndex"
               [totalElement]="usageHistoryData.totalElements"
               (changePageEvent)="search($event,false)">
             </app-table>

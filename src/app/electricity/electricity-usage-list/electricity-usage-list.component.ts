@@ -18,7 +18,7 @@ import { ElectricityUsagePopupComponent } from '../electricity-usage-popup/elect
 })
 export class ElectricityUsageListComponent implements OnInit {
   users: Users = new Users();
-
+  public pageIndex: any;
   electricityForm: FormGroup;
   dataSource: any;
   usageHistoryData = {
@@ -33,7 +33,7 @@ export class ElectricityUsageListComponent implements OnInit {
   ) {
     this.users = this.loginService.getUser();
     this.adminFilter = JSON.parse(localStorage.getItem('electricityFilter'));
-    if (this.adminFilter === undefined || this.adminFilter === null) {
+    if (this.adminFilter === undefined || this.adminFilter === null || !this.adminFilter.electricityFilter) {
       this.adminFilter = new AdminFilter();
     }
   }
@@ -63,12 +63,16 @@ export class ElectricityUsageListComponent implements OnInit {
     this.subscriptions.add(this.usageHistoryService.getElectricityList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
+        this.usageHistoryData.totalElements = this.adminFilter.electricityFilter.totalElement + gasList.data.length + 1;
+        this.adminFilter.electricityFilter.totalElement = this.adminFilter.electricityFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.electricityFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('type', 'electricity')
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
@@ -89,6 +93,7 @@ export class ElectricityUsageListComponent implements OnInit {
   get f() { return this.electricityForm.controls; }
 
   showPopUp(): any {
+    if (this.users.role !== 'USERS') {
     const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
       width: '70vw',
       height: '70vh',
@@ -97,5 +102,6 @@ export class ElectricityUsageListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed' + result);
     });
+  }
   }
 }

@@ -96,7 +96,7 @@ img.info_img {
 	border-radius: 0px;
 	border: none;
     float: right;
-    margin-top: 18px!important;
+    margin-top: 28px!important;
 }
 
 .navbar-toggle span {
@@ -244,7 +244,7 @@ hr.header-hr{
         float: right!important;
         margin-right: 0!important;
         /* margin-top: 14px!important; */
-        margin-top: 23px!important;
+        margin-top: 33px!important;
     }
 }
 p.rt {

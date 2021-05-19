@@ -804,6 +804,10 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
+.dashboard_trend_chart > div > :nth-child(2){
+  width:40%!important
+}
+
 @media only screen and (min-width: 769px) and (max-width: 815px) {
   .chartDiv > div > :nth-child(2) {
     float: unset !important;

@@ -21,6 +21,7 @@ export class ElectricityChargeListComponent implements OnInit {
   users: Users = new Users();
   electricityForm: FormGroup;
   dataSource: any;
+  public pageIndex: any;
   usageHistoryData = {
     content: [],
     totalElements: 0,
@@ -63,12 +64,16 @@ export class ElectricityChargeListComponent implements OnInit {
     this.subscriptions.add(this.usageHistoryService.getElectricityChargeList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
+        this.usageHistoryData.totalElements = this.adminFilter.electricityChargeFilter.totalElement + gasList.data.length + 1;
+        this.adminFilter.electricityChargeFilter.totalElement = this.adminFilter.electricityChargeFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.electricityChargeFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('type', 'electricityCharge')
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
@@ -89,13 +94,15 @@ export class ElectricityChargeListComponent implements OnInit {
   get f() { return this.electricityForm.controls; }
 
   showPopUp(): any {
-    const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
-      width: '70vw',
-      height: '70vh',
-      data: {}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed' + result);
-    });
+    if (this.users.role !== 'USERS') {
+      const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
+        width: '70vw',
+        height: '70vh',
+        data: {}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed' + result);
+      });
+    }
   }
 }

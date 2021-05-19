@@ -65,35 +65,42 @@ export class AdminFilter {
     };
     public gasFilter: any = {
         page: null,
-        formValue: null
+        formValue: null,
+        totalElement: 0,
     };
     public gasChargeFilter: any = {
         page: null,
-        formValue: null
+        formValue: null,
+        totalElement: 0,
     };
     public gasSmartMeterFilter: any = {
         page: null,
-        formValue: null
+        formValue: null,
+        totalElement: 0,
     };
     public electricityFilter: any = {
         page: null,
-        formValue: null
+        formValue: null,
+        totalElement: 0,
     };
     public electricityChargeFilter: any = {
         page: null,
-        formValue: null
+        formValue: null,
+        totalElement: 0,
     };
     public electricitySmartMeterFilter: any = {
         page: null,
-        formValue: null
+        formValue: null,
+        totalElement: 0,
     };
     public electricityDailySmartMeterFilter: any = {
         page: null,
-        formValue: null
+        formValue: null,
+        totalElement: 0,
     };
     public customerComparisonGroup: any = {
         page: null,
-        formValue: null
+        formValue: null,
     };
     public topicDescriptionFilter: any = {
         page: null,

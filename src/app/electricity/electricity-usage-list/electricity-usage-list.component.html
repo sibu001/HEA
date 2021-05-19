@@ -66,7 +66,7 @@
             <p class="Messages">
               <img src="assets/images/dot03.gif" alt="dot" class="dot">&nbsp;Values</p>
             <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true
-              [isSearch]="false"
+              [isSearch]="false" [pageIndex]="pageIndex"
               (goToEditEvent)='showPopUp()' [data]="dataSource"
               [totalElement]="usageHistoryData.totalElements"
               (changePageEvent)="search($event,false)">

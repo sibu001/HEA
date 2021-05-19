@@ -184,12 +184,13 @@
                 </p>
                 <!-- trend chart -->
                 <div class="row view_trend" *ngIf="trendingParts.length>0">
-                    <div class="view trend space">
-                        <ng-container *ngFor="let chartData of
-                            trendingParts[0].trendingCharts">
-                            <div [innerHTML]="chartData.chart.freeChartDiv |
-                                safeHtml"></div>
-                        </ng-container>
+                    <div class="col-sm-12">
+                        <!-- <ng-container *ngFor="let chartData of
+                            trendingParts[0].trendingCharts"> -->
+                            <div *ngFor="let chartData of
+                            trendingParts[0].trendingCharts" [innerHTML]="chartData.chart.freeChartDiv |
+                                safeHtml" class="dashboard_trend_chart"></div>
+                        <!-- </ng-container> -->
                     </div>
                 </div>
                 <hr class="hr_space">
@@ -199,7 +200,7 @@
                         <p class="trendProfile">
                             <a class="anchorTag"
                                 [routerLink]="['/trendingProfileView']">View
-                                profile details</a>
+                                profile details {{showEventType}}</a>
                             <img src="assets/images/icon_help.svg" alt="help"
                                 class="question" (click)="questionHelp()">
                         </p>

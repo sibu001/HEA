@@ -21,6 +21,7 @@ declare var $: any;
 export class GasListComponent implements OnInit {
   users: Users = new Users();
   gasForm: FormGroup;
+  public pageIndex: any;
   dataSource: any;
   usageHistoryData = {
     content: [],
@@ -51,6 +52,7 @@ export class GasListComponent implements OnInit {
     this.gasForm = this.fb.group({
       year: [event !== undefined && event !== null ? event.year : ''],
       month: [event !== undefined && event !== null ? event.month : ''],
+      totalElement: [event !== undefined && event !== null ? event.totalElement : '0'],
     });
     if (this.users.role === 'ADMIN') {
       this.gasForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
@@ -65,12 +67,16 @@ export class GasListComponent implements OnInit {
     this.subscriptions.add(this.usageHistoryService.getGasList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
+        this.usageHistoryData.totalElements = this.adminFilter.gasFilter.totalElement + gasList.data.length + 1;
+        this.adminFilter.gasFilter.totalElement = this.adminFilter.gasFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.gasFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
@@ -90,14 +96,16 @@ export class GasListComponent implements OnInit {
   get f() { return this.gasForm.controls; }
 
   showPopUp(): any {
-    const dialogRef = this.dialog.open(GasUsagePopupComponent, {
-      width: '70vw',
-      height: '70vh',
-      data: {}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed' + result);
-    });
+    if (this.users.role !== 'USERS') {
+      const dialogRef = this.dialog.open(GasUsagePopupComponent, {
+        width: '70vw',
+        height: '70vh',
+        data: {}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed' + result);
+      });
+    }
   }
 
 }

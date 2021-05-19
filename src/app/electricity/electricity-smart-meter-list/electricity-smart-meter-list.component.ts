@@ -18,6 +18,7 @@ declare var $: any;
 })
 export class ElectricitySmartMeterListComponent implements OnInit {
   users: Users = new Users();
+  public pageIndex: any;
   electricitySmartMeterForm: FormGroup;
   dataSource: any;
   usageHistoryData = {
@@ -64,12 +65,16 @@ export class ElectricitySmartMeterListComponent implements OnInit {
     this.subscriptions.add(this.usageHistoryService.getElectricitySmartMeterList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
+        this.usageHistoryData.totalElements = this.adminFilter.electricitySmartMeterFilter.totalElement + gasList.data.length + 1;
+        this.adminFilter.electricitySmartMeterFilter.totalElement = this.adminFilter.electricitySmartMeterFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
       }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.electricitySmartMeterFilter.page = event;
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
@@ -91,13 +96,15 @@ export class ElectricitySmartMeterListComponent implements OnInit {
   get f() { return this.electricitySmartMeterForm.controls; }
 
   showPopUp(): any {
-    const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
-      width: '70vw',
-      height: '70vh',
-      data: {}
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed' + result);
-    });
+    if (this.users.role !== 'USERS') {
+      const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
+        width: '70vw',
+        height: '70vh',
+        data: {}
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed' + result);
+      });
+    }
   }
 }
