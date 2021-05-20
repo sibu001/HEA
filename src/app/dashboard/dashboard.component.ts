@@ -36,7 +36,6 @@ export class DashboardComponent implements OnInit {
   users: Users = new Users();
   globalM = 0;
   globalK = 0;
-  showEventType: any;
   constructor(private router: Router,
     private loginService: LoginService
   ) {
@@ -68,6 +67,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+
     /* for demonstration purposes only */
     $('.navbar-toggle').click(function () {
       if ($(this).hasClass('collapsed')) {
@@ -363,68 +363,72 @@ export class DashboardComponent implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    console.log(event.type);
-    this.showEventType = event.type;
-    if (event.type === 'resize') {
-      const self = this;
-      self.globalM++;
-      this.trendingHomeChart = undefined;
-      setTimeout(function () {
-        self.globalK++;
-        const line1: Array<any> = new Array;
-        const line2: Array<any> = new Array;
-        const line3: Array<any> = new Array;
-        const line4: Array<any> = new Array;
-        const line5: Array<any> = new Array;
-        const line6: Array<any> = new Array;
-        let i = 0;
-        for (const areaSeries of self.trendingHomeChartCopy.chart.series) {
-          if (i === 0) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line1.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 1) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line2.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 2) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line3.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 3) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line4.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 4) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line5.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 5) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line6.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          }
-          i++;
-        }
-        console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
-        if (self.globalM === self.globalK) {
-          self.trendingHomeChart = self.trendingHomeChartCopy;
-        }
+    console.log(navigator.userAgent);
+    const ua = navigator.userAgent;
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
+      console.log('Mobile');
+    } else {
+      if (event.type === 'resize') {
+        const self = this;
+        self.globalM++;
+        this.trendingHomeChart = undefined;
         setTimeout(function () {
+          self.globalK++;
+          const line1: Array<any> = new Array;
+          const line2: Array<any> = new Array;
+          const line3: Array<any> = new Array;
+          const line4: Array<any> = new Array;
+          const line5: Array<any> = new Array;
+          const line6: Array<any> = new Array;
+          let i = 0;
+          for (const areaSeries of self.trendingHomeChartCopy.chart.series) {
+            if (i === 0) {
+              for (const areaSeriesValue of areaSeries.seriesValues) {
+                line1.push([areaSeriesValue.label, areaSeriesValue.value]);
+              }
+            } else if (i === 1) {
+              for (const areaSeriesValue of areaSeries.seriesValues) {
+                line2.push([areaSeriesValue.label, areaSeriesValue.value]);
+              }
+            } else if (i === 2) {
+              for (const areaSeriesValue of areaSeries.seriesValues) {
+                line3.push([areaSeriesValue.label, areaSeriesValue.value]);
+              }
+            } else if (i === 3) {
+              for (const areaSeriesValue of areaSeries.seriesValues) {
+                line4.push([areaSeriesValue.label, areaSeriesValue.value]);
+              }
+            } else if (i === 4) {
+              for (const areaSeriesValue of areaSeries.seriesValues) {
+                line5.push([areaSeriesValue.label, areaSeriesValue.value]);
+              }
+            } else if (i === 5) {
+              for (const areaSeriesValue of areaSeries.seriesValues) {
+                line6.push([areaSeriesValue.label, areaSeriesValue.value]);
+              }
+            }
+            i++;
+          }
+          console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
           if (self.globalM === self.globalK) {
-            eval(self.trendingHomeChartCopy.chart.freeChartConfigurationJS);
-            self.globalM = 0;
-            self.globalK = 0;
+            self.trendingHomeChart = self.trendingHomeChartCopy;
           }
-        }, 100);
-        if (self.users.recommendationList != null && self.users.recommendationList.length > 0 && !self.users.recommendationStatusChange) {
-          document.getElementById('loader').classList.remove('loading');
-        }
-        setTimeout(function () {
-          $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
-        }, 100);
-        i++;
-      }, 1000);
+          setTimeout(function () {
+            if (self.globalM === self.globalK) {
+              eval(self.trendingHomeChartCopy.chart.freeChartConfigurationJS);
+              self.globalM = 0;
+              self.globalK = 0;
+            }
+          }, 100);
+          if (self.users.recommendationList != null && self.users.recommendationList.length > 0 && !self.users.recommendationStatusChange) {
+            document.getElementById('loader').classList.remove('loading');
+          }
+          setTimeout(function () {
+            $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
+          }, 100);
+          i++;
+        }, 1000);
+      }
     }
   }
   getTrendingProfileChart() {

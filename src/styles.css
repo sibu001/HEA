@@ -476,7 +476,7 @@ div#trendingProfileChartTrends > :nth-child(2) > :nth-child(1) > :nth-child(1) {
   }
   .view.trend.space > :nth-child(3) > :nth-child(1) {
     margin-left: 25px;
-    margin-top:15px;
+    margin-top: 15px;
   }
 }
 
@@ -489,17 +489,16 @@ div#trendingProfileChartTrends > :nth-child(2) > :nth-child(1) > :nth-child(1) {
 @media only screen and (min-width: 768px) and (max-width: 480px) {
   .view.trend.space > :nth-child(3) > :nth-child(1) {
     margin-left: 20px;
-    margin-top:15px;
+    margin-top: 15px;
   }
 }
 
 @media only screen and (min-width: 481px) and (max-width: 649px) {
   .view.trend.space > :nth-child(3) > :nth-child(1) {
     margin-left: 30px;
-    margin-top:15px;
+    margin-top: 15px;
   }
 }
-
 
 @media only screen and (min-width: 1224px) {
   .trendingProfileChart > :nth-child(1) {
@@ -804,8 +803,14 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-.dashboard_trend_chart > div > :nth-child(2){
-  width:40%!important
+.dashboard_trend_chart > div > :nth-child(2) {
+  width: 40% !important;
+}
+
+@media only screen and (min-width: 300px) and (max-width: 340px) {
+  .dashboard_trend_chart > div {
+    width: 300px!important;
+  }
 }
 
 @media only screen and (min-width: 769px) and (max-width: 815px) {

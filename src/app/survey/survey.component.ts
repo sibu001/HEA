@@ -201,6 +201,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
+    const ua = navigator.userAgent;
+    if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
+      console.log('Mobile');
+    } else {
     const self = this;
     self.globalM++;
     this.users.currentPaneNumber.paneCharts = undefined;
@@ -299,6 +303,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         }
       }
     }, 1500);
+  }
   }
   progressShow() {
     this.totalPanes = new Array;
