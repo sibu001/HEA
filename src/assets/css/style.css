@@ -186,6 +186,13 @@ img.dashboard_img {
     width: 280px;
     margin-bottom: 9px;
 }
+
+img.dashboard_img_hi_logo {
+    margin-top: 20px;
+    display: block;
+    width: 280px;
+    margin-bottom: 10px;
+}
 li.account {
     display: none!important;
 }
@@ -206,6 +213,13 @@ li.account {
 
 img.dashboard_img {
     margin-top: 7px;
+    display: block;
+    width: 235px;
+    margin-bottom: 5px;
+}
+
+img.dashboard_img_hi_logo {
+    margin-top: 10px;
     display: block;
     width: 235px;
     margin-bottom: 5px;
@@ -244,7 +258,7 @@ hr.header-hr{
         float: right!important;
         margin-right: 0!important;
         /* margin-top: 14px!important; */
-        margin-top: 19px!important;
+        margin-top: 33px!important;
     }
 }
 p.rt {
