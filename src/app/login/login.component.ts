@@ -51,16 +51,6 @@ export class LoginComponent implements OnInit {
     ) {
       this.errorMessage = 'please enter valid password';
     } else {
-      // const body =
-      //   'username=' +
-      //   this.users.username +
-      //   '&password=' +
-      //   this.users.password +
-      //   '&client_id=' +
-      //   this.users.username +
-      //   '&client_secret=' +
-      //   this.users.password +
-      //   '&grant_type=password&scope=read';
       const params = new HttpParams()
         .set('username', this.users.username)
         .set('password', this.users.password)
@@ -69,7 +59,7 @@ export class LoginComponent implements OnInit {
         .set('grant_type', 'password')
         .set('scope', 'read');
       document.getElementById('loader').classList.add('loading');
-      this.loginService.performOauthToken('oauth/token', '', params).subscribe(
+      this.loginService.performOauthToken('oauth/token', params.toString()).subscribe(
         (data) => {
           const response = JSON.parse(JSON.stringify(data));
           if (response.status === 401) {
