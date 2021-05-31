@@ -1,7 +1,7 @@
 section.space-top {
-  margin-top: 5em;
+  margin-top: 4.8em;
 }
-@media (min-width: 767px) and (max-width: 1092px) {
+@media (min-width: 768px) and (max-width: 1000px) {
   section.space-top {
     margin-top: 8em;
   }
@@ -338,7 +338,7 @@ h3.survey.TH {
   text-align: center;
 }
 .electronics_item {
-  font-size: 23px;
+  font-size: 19px;
   color: #373737;
   font-weight: 400;
   margin-top: 0px;
@@ -2207,7 +2207,7 @@ button.btn.btn-info {
 } */
 @media (min-width: 200px) and (max-width: 1270px) {
   .table_input_responsive {
-    margin-left: 16px;
+    /* margin-left: 16px; */
   }
 }
 

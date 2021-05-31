@@ -18,8 +18,8 @@
     *ngIf="!isResponsive">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-5">
-                <div class="navbar-header">
+            <div class="col-sm-5 col-xs-12 col-md-4">
+                <div class="navbar-header" id="nav-bar-logo-header">
                     <div class="navbar-toggle collapsed" id="main-bar-menu" data-toggle="collapse"
                         data-target="#main-menu"
                         (click)="hide(1)" [style.float]="float">
@@ -78,7 +78,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-7 col-xs-12 responsive">
+            <div class="col-sm-7 col-xs-12 col-md-8 responsive" id="menu-name">
                 <div class="collapse navbar-collapse" id="main-menu">
                     <ul class="nav navbar-nav navbar-right header">
                         <li class="adminButton" *ngIf="users?.role!=='USERS'">
@@ -88,6 +88,7 @@
                         <li>
                             <a><span class="username">Hi
                                     {{users?.name}}</span></a>
+                            
                         </li>
                         <li>
                             <a (click)="hide(2)" class="main-menu" id="_home">

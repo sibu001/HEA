@@ -11,7 +11,7 @@ declare var $: any;
   templateUrl: './headers.component.html',
   styleUrls: ['./headers.component.css']
 })
-export class HeadersComponent implements OnInit,AfterViewInit {
+export class HeadersComponent implements OnInit, AfterViewInit {
   hides = true;
   hideLogo = true;
   float: string;
@@ -37,6 +37,7 @@ export class HeadersComponent implements OnInit,AfterViewInit {
         document.getElementById('main-bar-menu').classList.add('main-bar-menu-margin');
       }
     }
+    this.changeLogoPosition();
   }
 
   ngOnInit(): void {
@@ -196,8 +197,22 @@ export class HeadersComponent implements OnInit,AfterViewInit {
     if (window.innerWidth >= 767) {
       this.isResponsive = false;
     }
+    this.changeLogoPosition();
+
   }
 
+  changeLogoPosition() {
+    if (document.getElementById('menu-name')) {
+      const elements = document.getElementById('menu-name');
+      if (elements.clientHeight && elements.clientHeight >= 95) {
+        if (document.getElementById('nav-bar-logo-header')) {
+          document.getElementById('nav-bar-logo-header').classList.add('log-image-responsive');
+        }
+      } else {
+        document.getElementById('nav-bar-logo-header').classList.remove('log-image-responsive');
+      }
+    }
+  }
   openCustomerChat(): void {
     window.open(window.location.origin + '/hea-web/chatMain.do', '_blank');
   }

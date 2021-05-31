@@ -66,6 +66,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     const self = this;
     setTimeout(function () {
       self.evaluateJavaScript(self.users.currentPaneNumber);
+      // self.addClass();
     }, 1000);
 
   }
@@ -854,6 +855,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     const p = s.indexOf(a) + a.length;
     return s.substring(p, s.indexOf(b, p));
   }
+
+  // addClass(){
+  //   document.getElementById('htm-right-top').getElementsByTagName('p')[0].getElementsByTagName('img')[0].classList.add('solar-pv-right_image');
+  // }
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {

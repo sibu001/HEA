@@ -34,7 +34,7 @@ img.icon_size {
   }
   ul.nav.navbar-nav.navbar-right.header {
     background-color: #fbfbfb;
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
   }
   span.menu {
     border-right: 0px solid #fff !important;
@@ -182,7 +182,7 @@ p.menuresponsive {
   border-color: #f3905c;
   padding: 4px 12px;
   font-size: 12px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 .responsive-btn {
   font-size: 12px !important;
@@ -193,7 +193,7 @@ p.menuresponsive {
   margin-right: 4px;
 }
 
-.customer-chat-button{
+.customer-chat-button {
   right: 0px;
   bottom: 0px;
   padding: 8px 14px 8px 14px;
@@ -202,7 +202,7 @@ p.menuresponsive {
   color: white !important;
   display: block;
   position: fixed;
-  background-color: #578ea9!important;
+  background-color: #578ea9 !important;
   font-size: 15px !important;
   font-family: Arial, sans-serif;
   line-height: 15px;
@@ -224,6 +224,11 @@ p.menuresponsive {
   -webkit-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
 }
-.main-bar-menu-margin{
-  margin-top: 18px!important;
+.main-bar-menu-margin {
+  margin-top: 18px !important;
+}
+
+.log-image-responsive {
+  position: fixed;
+  top: 21px;
 }

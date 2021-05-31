@@ -2,7 +2,7 @@ section.space-top {
   margin-top: 4.2em;
   margin-bottom: 1em;
 }
-@media (min-width: 767px) and (max-width: 1092px) {
+@media (min-width: 768px) and (max-width: 1000px) {
   section.space-top {
     margin-top: 7.3em;
   }

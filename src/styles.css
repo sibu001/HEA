@@ -1256,3 +1256,85 @@ table.jqplot-table-legend {
 .error-message {
   color: red;
 }
+
+@media (min-width: 992px) and (max-width: 1058px) {
+ 
+  div.energy_analytic > p > img {
+    width:220px!important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 792px) {
+ 
+  div.energy_analytic > p > img {
+    width:220px!important;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1200px) {
+ #chart1b{
+   width:600px!important
+ }
+ #chart1b > :nth-child(1){
+  width:600px!important
+}
+}
+
+@media (min-width: 880px) and (max-width: 991px) {
+  #chart1b{
+    width:520px!important
+  }
+  #chart1b > :nth-child(1){
+   width:520px!important
+ }
+ }
+ @media (min-width: 768px) and (max-width: 879px) {
+  #chart1b{
+    width:450px!important
+  }
+  #chart1b > :nth-child(1){
+   width:450px!important
+ }
+ }
+
+ @media (min-width: 650px) and (max-width: 725px) {
+  #chart1b{
+    width:600px!important
+  }
+  #chart1b > :nth-child(1){
+   width:600px!important
+ }
+ }
+
+ @media (min-width: 550px) and (max-width: 649px) {
+  #chart1b{
+    width:500px!important
+  }
+  #chart1b > :nth-child(1){
+   width:500px!important
+ }
+ }
+
+ @media (min-width: 420px) and (max-width: 549px) {
+  #chart1b{
+    width:400px!important
+  }
+  #chart1b > :nth-child(1){
+   width:400px!important
+ }
+ }
+
+ @media (min-width: 300px) and (max-width: 419px) {
+  #chart1b{
+    width:300px!important
+  }
+  #chart1b > :nth-child(1){
+   width:300px!important
+ }
+ }
+
+ @media (min-width: 100px) and (max-width: 350px) {
+  #chart1b > table{
+   bottom:-30px!important
+ }
+ }
