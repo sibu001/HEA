@@ -34,5 +34,6 @@ export interface CustomerManagementModel {
     optOut: any;
     electricityRatePlan: any;
     heatingRatePlan: any;
+    weatherStation: any;
     error: Error;
 }

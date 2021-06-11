@@ -61,6 +61,7 @@ export enum SystemActionTypes {
     DELETE_OPT_OUT = 'Delete Opt Out',
     GET_ELECTRICITY_RATE_PLAN = 'Get Electricity Rate Plan',
     GET_HEATING_RATE_PLAN = 'Get Heating Rate Plan',
+    GET_WEATHER_STATION_BY_CUSTOMER_ID = 'Get Weather Station by ',
     CUSTOMER_ERROR = 'Customer Error'
 }
 export class GetCustomerListAction {
@@ -435,6 +436,12 @@ export class GetElectricityRatePlanAction {
 
 export class GetHeatingRatePlanAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_HEATING_RATE_PLAN;
+    constructor(readonly customerId: any) {
+    }
+}
+
+export class GetWeatherStationByCustomerIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_WEATHER_STATION_BY_CUSTOMER_ID;
     constructor(readonly customerId: any) {
     }
 }

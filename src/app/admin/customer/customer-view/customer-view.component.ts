@@ -50,6 +50,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   isOptOut = false;
   electricityRatePlan: any;
   heatingRatePlan: any;
+  weatherStation: any;
   helpHide: boolean;
   placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
@@ -142,6 +143,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadCustomerGroup();
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.loadWeatherStationId(this.id);
       this.loadUtilityCredential(this.id);
       this.loadCustomerAlert(this.id);
       this.loadCustomerEvent(this.id);
@@ -185,6 +187,14 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
           this.scrollTop();
         }
         this.setForm(customer);
+      }));
+  }
+  loadWeatherStationId(customerId: any): void {
+    this.customerService.loadWeatherStationByCustomerId(customerId);
+    this.subscriptions.add(this.customerService.getWeatherStationByCustomerId().pipe(skipWhile((item: any) => !item))
+      .subscribe((weatherStation: any) => {
+        console.log(weatherStation);
+        this.weatherStation = weatherStation.data.stationId;
       }));
   }
   loadCustomerGroup() {
@@ -338,6 +348,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         { validator: MustMatch('password', 'confirmPassword') }),
       activationMail: [false],
       repeatedActivationMail: [false],
+      stationId: [this.weatherStation]
     });
   }
 

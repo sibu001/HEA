@@ -34,6 +34,7 @@ export class AppConstant {
     public static systemParameter = 'systemParameters';
     public static logs = 'logs';
     public static weatherStation = 'weatherStations';
+    public static weatherStationByCustomerId = 'weatherStation';
     public static degreeDays = 'degreeDays';
     public static cimisStation = 'cimisStations';
     public static cimisMeasurement = 'cimisMeasurements';

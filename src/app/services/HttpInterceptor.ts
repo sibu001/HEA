@@ -46,32 +46,31 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     }
 
     handle401Error(req: HttpRequest<any>, next: HttpHandler) {
-        if (!this.isRefreshingToken) {
-            this.isRefreshingToken = true;
-            // Reset here so that the following requests wait until the token
-            // comes back from the refreshToken call.
-            this.tokenSubject.next(null);
-            return this.loginService.getRefreshToken().subscribe(data => {
-                const response1 = JSON.stringify(data);
-                const response = JSON.parse(response1);
-                const user = this.loginService.getUser();
-                user.token = response.access_token;
-                user.refreshToken = response.refresh_token;
-                this.loginService.setUser(user);
-                this.tokenSubject.next(response.token);
-                this.isRefreshingToken = false;
-                return next.handle(this.addToken(req, response.token));
-            }, error => {
-                if (this.loginService.getUser().token != null && this.loginService.getUser().token !== undefined) {
-                    return this.loginService.logout();
-                }
-            });
-        } else {
-            return this.tokenSubject.filter(token => token != null).take(1)
-                .switchMap(token => {
-                    return next.handle(this.addToken(req, token));
-                });
-        }
+        return this.loginService.logout();
+        // if (!this.isRefreshingToken) {
+        //     this.isRefreshingToken = true;
+        //     this.tokenSubject.next(null);
+        //     return this.loginService.getRefreshToken().subscribe(data => {
+        //         const response1 = JSON.stringify(data);
+        //         const response = JSON.parse(response1);
+        //         const user = this.loginService.getUser();
+        //         user.token = response.access_token;
+        //         user.refreshToken = response.refresh_token;
+        //         this.loginService.setUser(user);
+        //         this.tokenSubject.next(response.token);
+        //         this.isRefreshingToken = false;
+        //         return next.handle(this.addToken(req, response.token));
+        //     }, error => {
+        //         if (this.loginService.getUser().token != null && this.loginService.getUser().token !== undefined) {
+        //             return this.loginService.logout();
+        //         }
+        //     });
+        // } else {
+        //     return this.tokenSubject.filter(token => token != null).take(1)
+        //         .switchMap(token => {
+        //             return next.handle(this.addToken(req, token));
+        //         });
+        // }
     }
 
     // handle400Error(error) {

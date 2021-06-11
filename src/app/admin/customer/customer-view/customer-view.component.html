@@ -277,8 +277,8 @@
               Electricity Model:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="elHeatingModel"
-                formControlName="elHeatingModel">
+              <select class="form-control form-control-sm" id="elCoolingModel"
+                formControlName="elCoolingModel">
                 <option *ngFor="let group of electricModelList"
                   [value]="group.key">
                   {{group.value}}</option>
@@ -298,7 +298,7 @@
               </select>
             </div>
           </div>
-          <div class="row borderBottom rowPadding" formGroupName="place"
+          <div class="row borderBottom rowPadding"
             *ngIf="id!=undefined">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Weather Station:

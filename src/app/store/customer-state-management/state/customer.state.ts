@@ -45,6 +45,7 @@ import {
     GetUtilityCredentialByIdAction,
     GetUtilityCredentialListAction,
     GetValidateNewPasswordAction,
+    GetWeatherStationByCustomerIdAction,
     RecalculateCustomerVariableAction,
     RescrapeCustomerUsageAction,
     SaveAlertAction,
@@ -110,6 +111,7 @@ import { CustomerManagementModel } from './customer.model';
         optOut: undefined,
         electricityRatePlan: undefined,
         heatingRatePlan: undefined,
+        weatherStation: undefined,
         error: undefined
     }
 })
@@ -257,6 +259,11 @@ export class CustomerManagementState {
     @Selector()
     static getHeatingRatePlan(state: CustomerManagementModel): any {
         return state.heatingRatePlan;
+    }
+
+    @Selector()
+    static getWeatherStationByCustomerId(state: CustomerManagementModel): any {
+        return state.weatherStation;
     }
 
     @Action(GetCustomerListAction)
@@ -1341,6 +1348,23 @@ export class CustomerManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
                         heatingRatePlan: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetWeatherStationByCustomerIdAction)
+    getWeatherStationByCustomerId(ctx: StateContext<CustomerManagementModel>, action: GetWeatherStationByCustomerIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.weatherStationByCustomerId )
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        weatherStation: response,
                     });
                 },
                     error => {

@@ -40,6 +40,7 @@ import {
   GetUtilityCredentialByIdAction,
   GetUtilityCredentialListAction,
   GetValidateNewPasswordAction,
+  GetWeatherStationByCustomerIdAction,
   RecalculateCustomerVariableAction,
   RescrapeCustomerUsageAction,
   SaveAlertAction,
@@ -167,6 +168,10 @@ export class CustomerService {
 
   getHeatingRatePlan(): Observable<any> {
     return this.store.select(CustomerManagementState.getHeatingRatePlan);
+  }
+
+  getWeatherStationByCustomerId(): Observable<any> {
+    return this.store.select(CustomerManagementState.getWeatherStationByCustomerId);
   }
 
   loadCustomerList(force: boolean, filter: any, viewType: number): Observable<CustomerManagementState> {
@@ -419,5 +424,9 @@ export class CustomerService {
 
   loadHeatingRatePlan(customerId: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetHeatingRatePlanAction(customerId));
+  }
+
+  loadWeatherStationByCustomerId(customerId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetWeatherStationByCustomerIdAction(customerId));
   }
 }
