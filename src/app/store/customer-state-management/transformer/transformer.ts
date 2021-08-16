@@ -228,7 +228,7 @@ export class Transformer {
                 dataSourceObj.authorizationStatus = 'Active';
             }else  if (dataSourceObj.authorizationStatus === '0') {
                 dataSourceObj.authorizationStatus = 'Revoked';
-            }else  if (dataSourceObj.authorizationStatus === '3') {
+            }else  if (dataSourceObj.authorizationStatus === '2') {
                 dataSourceObj.authorizationStatus = 'Denied';
             }
             dataSource.push(dataSourceObj);
