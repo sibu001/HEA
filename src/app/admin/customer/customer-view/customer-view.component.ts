@@ -291,7 +291,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       elCoolingModel: [event !== undefined ? event.elCoolingModel : null],
       elHeatingModel: [event !== undefined ? event.elHeatingModel : ''],
       modelChangedBy: [event !== undefined ? event.modelChangedBy : ''],
-      eligibleStartDate: [event !== undefined ? event.eligibleStartDate : ''],
+      eligibleStartDate: [event !== undefined ? (this.datePipe.transform(event.eligibleStartDate, 'MM/dd/yyyy h:mm:ss')) : null],
       latitude: [event !== undefined ? event.latitude : ''],
       longitude: [event !== undefined ? event.longitude : ''],
       maxAlertLevel: [event !== undefined ? event.maxAlertLevel : ''],

@@ -226,6 +226,10 @@ export class Transformer {
             dataSourceObj.lastSuccessfulUsageDate = element.lastSuccessfulUsageDate ? new DatePipe('en-US').transform(new Date(element.lastSuccessfulUsageDate), 'MM/dd/yyyy, HH:mm:ss') : '';
             if (dataSourceObj.authorizationStatus === '1') {
                 dataSourceObj.authorizationStatus = 'Active';
+            }else  if (dataSourceObj.authorizationStatus === '0') {
+                dataSourceObj.authorizationStatus = 'Revoked';
+            }else  if (dataSourceObj.authorizationStatus === '3') {
+                dataSourceObj.authorizationStatus = 'Denied';
             }
             dataSource.push(dataSourceObj);
         });
