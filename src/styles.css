@@ -809,7 +809,14 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
 
 @media only screen and (min-width: 300px) and (max-width: 340px) {
   .dashboard_trend_chart > div {
+    margin-top: 18px;
     width: 300px!important;
+  }
+}
+
+@media only screen and (min-width: 341px) and (max-width: 669px) {
+  .dashboard_trend_chart > div {
+    margin-top: 18px;
   }
 }
 
