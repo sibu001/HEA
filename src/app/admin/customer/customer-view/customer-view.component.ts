@@ -854,4 +854,11 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 
+  reorderCustomerBills() {
+    if (this.customerData != null && this.customerData.userId != null) {
+      this.subscriptions.add(this.customerService.reorderCustomerBills(this.customerData.userId).pipe(skipWhile((item: any) => !item))
+        .subscribe((response: any) => {
+        }));
+    }
+  }
 }

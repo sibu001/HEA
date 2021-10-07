@@ -1345,3 +1345,9 @@ table.jqplot-table-legend {
    bottom:-30px!important
  }
  }
+
+ @media only screen and (max-width: 767px) {
+  .btnMarginBottom {
+    margin-bottom: 5px;
+  }
+}

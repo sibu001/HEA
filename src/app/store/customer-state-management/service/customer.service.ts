@@ -42,6 +42,7 @@ import {
   GetValidateNewPasswordAction,
   GetWeatherStationByCustomerIdAction,
   RecalculateCustomerVariableAction,
+  ReorderCustomerBillAction,
   RescrapeCustomerUsageAction,
   SaveAlertAction,
   SaveCustomerAction,
@@ -428,5 +429,9 @@ export class CustomerService {
 
   loadWeatherStationByCustomerId(customerId: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetWeatherStationByCustomerIdAction(customerId));
+  }
+
+  reorderCustomerBills(userId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new ReorderCustomerBillAction(userId));
   }
 }

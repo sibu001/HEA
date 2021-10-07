@@ -47,6 +47,7 @@ import {
     GetValidateNewPasswordAction,
     GetWeatherStationByCustomerIdAction,
     RecalculateCustomerVariableAction,
+    ReorderCustomerBillAction,
     RescrapeCustomerUsageAction,
     SaveAlertAction,
     SaveCustomerAction,
@@ -97,6 +98,7 @@ import { CustomerManagementModel } from './customer.model';
         customerFile: undefined,
         clearCustomerValueCache: undefined,
         recalculateCustomerVariable: undefined,
+        reorderCustomerBill: undefined,
         rescrapeCustomerUsage: undefined,
         sendActivationMail: undefined,
         validateCustomerData: undefined,
@@ -1370,6 +1372,25 @@ export class CustomerManagementState {
                     error => {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(ReorderCustomerBillAction)
+    reorderCustomerBills(ctx: StateContext<CustomerManagementModel>, action: ReorderCustomerBillAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost('', AppConstant.users + '/' + action.userId + '/' + AppConstant.fixUsageHistoryData)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Reorder Successfully');
+                    ctx.patchState({
+                        reorderCustomerBill: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
                     }));
     }
 

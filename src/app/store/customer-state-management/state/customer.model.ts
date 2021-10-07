@@ -21,6 +21,7 @@ export interface CustomerManagementModel {
     sendActivationMail: any;
     clearCustomerValueCache: any;
     recalculateCustomerVariable: any;
+    reorderCustomerBill: any,
     rescrapeCustomerUsage: any;
     validateCustomerData: any;
     passwordValidationRule: any;
