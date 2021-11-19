@@ -41,10 +41,10 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
 
   getLeaksAndRecommendation() {
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/recommendationsAndLeaks').subscribe(
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/' + this.users.currentPaneNumber.survey.surveyId + '/leaks').subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
-        this.users.leakList = response.data.leaks;
+        this.users.leakList = response.data;
         this.users.isLeakChange = false;
         this.loginService.setUser(this.users);
         for (let i = 0; i < this.users.leakList.length; i++) {
