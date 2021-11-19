@@ -333,11 +333,11 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     this.users.allSurveyCheck = true;
     this.chartHelpHide = false;
     this.loginService.setUser(this.users);
-    if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
-      this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
-    } else {
+    // if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
+    //   this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
+    // } else {
       this.previousPane(this.users.currentPaneNumber);
-    }
+    // }
     document.getElementById('loader').classList.add('loading');
   }
 
