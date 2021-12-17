@@ -7,6 +7,7 @@ import { SharedModule } from '../general/share.module';
 import { SurveyRoutingModule } from './survey.routes';
 import { CommonHEAModule } from '../common/common.module';
 import { PipeModule } from '../pipes/pipe/pipe.module';
+import {SliderModule} from 'primeng/slider';
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { PipeModule } from '../pipes/pipe/pipe.module';
         SharedModule,
         SurveyRoutingModule,
         CommonHEAModule,
-        PipeModule
+        PipeModule,
+        SliderModule
     ],
     providers: [],
 
