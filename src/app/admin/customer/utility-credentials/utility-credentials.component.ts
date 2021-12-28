@@ -16,6 +16,9 @@ export class UtilityCredentialsComponent implements OnInit {
   utilityCredentialForm: FormGroup;
   credentialTypeList: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
+  private electricityInUse :boolean;
+  private heatingInUse :boolean;
+  private removeOldBills :boolean;
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
@@ -34,6 +37,8 @@ export class UtilityCredentialsComponent implements OnInit {
       this.subscriptions.add(this.customerService.getUtilityCredentialById().pipe(skipWhile((item: any) => !item))
         .subscribe((response: any) => {
           this.setForm(response);
+          this.electricityInUse = response.electricityInUse;
+          this.heatingInUse = response.heatingInUse;
         }));
     }
 
@@ -121,6 +126,25 @@ export class UtilityCredentialsComponent implements OnInit {
         break;
       }
     }
+  }
+
+  async rescrapeBills(smartMeter:string)
+  {
+    let smartMeterId;
+     if(smartMeter == "Electric")
+     {
+      smartMeterId = this.data.row.electricityMeterId;
+     }
+     if(smartMeter == "Gas")
+     {
+      smartMeterId = this.data.row.heatingMeterId;
+     }
+    const params = new HttpParams()
+    .set('removeOldBills', '' + this.removeOldBills);
+  this.subscriptions.add(this.customerService.rescrapeCustomerBills(this.data.customerId, this.data.row.id, smartMeterId, params).pipe(skipWhile((item: any) => !item))
+    .subscribe((response: any) => {
+      this.dialogRef.close(true);
+    }));
   }
 }
 

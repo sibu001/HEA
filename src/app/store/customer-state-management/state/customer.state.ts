@@ -49,6 +49,7 @@ import {
     RecalculateCustomerVariableAction,
     ReorderCustomerBillAction,
     RescrapeCustomerUsageAction,
+    RescrapeCustomerBillsAction,
     SaveAlertAction,
     SaveCustomerAction,
     SaveCustomerEventAction,
@@ -447,6 +448,25 @@ export class CustomerManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showSuccessMessage('Rescrape  Successfully');
+                    ctx.patchState({
+                        rescrapeCustomerUsage: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                        ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
+    @Action(RescrapeCustomerBillsAction)
+    rescrapeCustomerBills(ctx: StateContext<CustomerManagementModel>, action: RescrapeCustomerBillsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostWithParam('', AppConstant.customer + '/' + action.customerId + '/' + AppConstant.credentials + '/' + action.credentialId + '/' + AppConstant.meters + '/' + action.smartMeterId + '/' + AppConstant.rescrapeCustomerBills, action.params)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showSuccessMessage('Bills Rescrape  Successfully');
                     ctx.patchState({
                         rescrapeCustomerUsage: response,
                     });

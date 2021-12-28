@@ -44,6 +44,7 @@ import {
   RecalculateCustomerVariableAction,
   ReorderCustomerBillAction,
   RescrapeCustomerUsageAction,
+  RescrapeCustomerBillsAction,
   SaveAlertAction,
   SaveCustomerAction,
   SaveCustomerEventAction,
@@ -433,5 +434,9 @@ export class CustomerService {
 
   reorderCustomerBills(userId: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new ReorderCustomerBillAction(userId));
+  }
+
+  rescrapeCustomerBills(customerId: any, credentialId: any, smartMeterId: any, params: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new RescrapeCustomerBillsAction(customerId, credentialId,smartMeterId, params));
   }
 }

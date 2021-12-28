@@ -43,6 +43,7 @@ export enum SystemActionTypes {
     CLEAR_CUSTOMER_VALUE_CACHE = 'Clear Customer Value Cache',
     RECALCULATE_CUSTOMER_VARIABLE = 'Recalculate Customer Variable',
     RESCRAPE_CUSTOMER_USAGE = 'Rescrape Customer Usage',
+    RESCRAPE_CUSTOMER_BILLS = 'Rescrape Customer Bills',
     VALIDATE_UTILITY_CREDENTIAL_DATA = 'Validate Utility Credential Data',
     GET_PASSWORD_VALIDATION_RULE = 'Get Password Validation Rule',
     GET_VALIDATE_NEW_PASSWORD = 'Get Validate New Password',
@@ -332,6 +333,12 @@ export class RecalculateCustomerVariableAction {
 export class RescrapeCustomerUsageAction {
     static readonly type: SystemActionTypes = SystemActionTypes.RESCRAPE_CUSTOMER_USAGE;
     constructor(readonly customerId: any, readonly credentialId: any, readonly params: any) {
+    }
+}
+
+export class RescrapeCustomerBillsAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.RESCRAPE_CUSTOMER_BILLS;
+    constructor(readonly customerId: any, readonly credentialId: any,readonly smartMeterId: any, readonly params: any) {
     }
 }
 
