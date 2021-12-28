@@ -228,6 +228,7 @@
                                       style="width:auto;"
                                       [(ngModel)]="surveyAnswerValue.value"
                                       [ngClass]="surveyAnswerValue.field"
+                                      [id]="surveyAnswerValue.dataFieldId"
                                       (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',surveyAnswerValue.dataField.onChangeRefresh,'')">
                                       <option *ngFor="let optionList of
                                         surveyAnswerValue.dataField.fieldValues"
@@ -821,6 +822,8 @@
                                     <select name="pool/spa" class="form-control
                                       dropdown-form-control dropdown_responsive"
                                       [(ngModel)]="answersList.value"
+                                      [ngClass]="answersList.dataField.field"
+                                      [id]="answersList.dataField.dataFieldId"
                                       (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh,'')">
                                       <option *ngFor="let optionList of
                                         answersList.dataField.fieldValues"

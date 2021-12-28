@@ -51,7 +51,8 @@
               "src/assets/jqplot/jqplot.logAxisRenderer.js",
               "src/assets/jqplot/jqplot.enhancedLegendRenderer.js",
               "src/assets/jqplot/jqplot.dateAxisRenderer.js",
-              "node_modules/qtip2/dist/jquery.qtip.min.js"
+              "node_modules/qtip2/dist/jquery.qtip.min.js",
+              "src/assets/js/scripts.js"
             ]
           },
           "configurations": {

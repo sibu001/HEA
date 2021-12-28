@@ -1351,3 +1351,15 @@ table.jqplot-table-legend {
     margin-bottom: 5px;
   }
 }
+
+/* ============ my css ============================ */
+@media (min-width: 320px) and (max-width: 767px) {
+  #chartElectrificationChart canvas.jqplot-base-canvas{
+    position: unset!important;
+    left: 0!important;
+    top:  0!important;
+    width:  0px !important;
+    height:  0px !important;
+  }
+
+}
