@@ -11,13 +11,16 @@
          SSH_KEY: "/codebuild/xpdev/GIT/Key"
          SSH_HOST: "/codebuild/xpdev/GIT/Host"
     phases:
+      install:
+        runtime-versions:
+          nodejs: 10
       pre_build:
         commands:
           - GIT_TAG="${GIT_TAG:-origin/master}"
           - DRY_RUN="${DRY_RUN:-false}"
           # Prepare access to xp-dev repositories through SSH
           - mkdir -p ~/.ssh/
-          - ( echo "-----BEGIN RSA PRIVATE KEY-----" && echo "$SSH_KEY" | base64 -d | base64 -w 64 && echo "-----END RSA PRIVATE KEY-----" ) > ~/.ssh/id_rsa
+          - ( echo "-----BEGIN OPENSSH PRIVATE KEY-----" && echo "$SSH_KEY" | base64 -d | base64 -w 64 && echo "-----END OPENSSH PRIVATE KEY-----" ) > ~/.ssh/id_rsa
           - chmod 500 ~/.ssh/id_rsa
           - echo "$SSH_HOST" > ~/.ssh/known_hosts
           - chmod 544 ~/.ssh/known_hosts
