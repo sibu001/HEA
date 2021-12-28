@@ -16,9 +16,9 @@ export class UtilityCredentialsComponent implements OnInit {
   utilityCredentialForm: FormGroup;
   credentialTypeList: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
-  private electricityInUse :boolean;
-  private heatingInUse :boolean;
-  private removeOldBills :boolean;
+  public electricityInUse :boolean;
+  public heatingInUse :boolean;
+  public removeOldBills :boolean;
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
