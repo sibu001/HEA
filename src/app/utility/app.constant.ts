@@ -17,6 +17,7 @@ export class AppConstant {
     public static recalculateVariables = 'recalculateVariables';
     public static credentials = 'credentials';
     public static rescrapeCustomerUsage = 'rescrapeCustomerUsage';
+    public static rescrapeCustomerBills = 'rescrapeCustomerBills';
     public static validateUtilityData = 'validateUtilityData';
     public static passwordValidationRule = 'users/password/rules';
     public static validateNewPassword = 'users/validate/password';
@@ -98,4 +99,5 @@ export class AppConstant {
     public static homeProfileInfo = 'Don\' leave yet! The analysis of your home\'s information is in the next section! Click thru to see what we\'ve discovered.';
     public static homeEnergyProfileInfo = 'Don\'t stop! The next few pages will help us and you figure out how to save on your energy bill!';
     public static fixUsageHistoryData = 'fixUsageHistoryData';
+    public static meters = 'meters';
 }
