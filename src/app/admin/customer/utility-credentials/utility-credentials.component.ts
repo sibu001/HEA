@@ -143,8 +143,9 @@ export class UtilityCredentialsComponent implements OnInit {
     .set('removeOldBills', '' + this.removeOldBills);
   this.subscriptions.add(this.customerService.rescrapeCustomerBills(this.data.customerId, this.data.row.id, smartMeterId, params).pipe(skipWhile((item: any) => !item))
     .subscribe((response: any) => {
-      this.dialogRef.close(true);
+      
     }));
+    this.dialogRef.close(true);
   }
 }
 
