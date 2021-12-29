@@ -139,10 +139,14 @@
                     </div>
                     <div class="col-sm-6">
                         <p class="socialImageCL">
+                            <!-- <button class="login-Btn"> -->
                             <img alt="facebook" src="assets/images/fb.png" class="fblogin"
-                                (click)="login()">
-                            <img alt="google" src="assets/images/google.png"
-                                class="googlelogin" (click)="login()">
+                                (click)="fbLogin()">
+                            <!-- </button> -->
+                                <!-- <button class="login-Btn" #loginRef> -->
+                                    <img #loginRef alt="google" src="assets/images/google.png"
+                                class="googlelogin">
+                            <!-- </button> -->
                         </p>
                     </div>
                 </div>

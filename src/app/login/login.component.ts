@@ -1,14 +1,16 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, ContentChild } from '@angular/core';
+import { Component, OnInit, ContentChild, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
+declare var FB: any;
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+ @ViewChild('loginRef') loginElement: ElementRef;
   users: Users = new Users();
   errorMessage: string;
   show = true;
@@ -16,6 +18,7 @@ export class LoginComponent implements OnInit {
   theme: string;
   code: string;
   buildForSandbox = true;
+  auth2:any;
   @ContentChild('showhideinput') input;
   constructor(
     private router: Router,
@@ -40,6 +43,8 @@ export class LoginComponent implements OnInit {
     if (this.users.token) {
       this.router.navigate(['/dashboard']);
     }
+    this.fbConnect();
+    this.googleInitialize();
   }
 
   login() {
@@ -266,4 +271,72 @@ export class LoginComponent implements OnInit {
     this.show = !this.show;
     this.hide = !this.hide;
   }
+
+  fbConnect()
+  {
+    (window as any).fbAsyncInit = function() {
+      FB.init({
+        appId      : '262747394093816',
+        cookie     : true,
+        xfbml      : true,
+        version    : 'v2.11'
+      });
+      FB.AppEvents.logPageView();
+    };
+  
+    (function(d, s, id){
+       var js, fjs = d.getElementsByTagName(s)[0];
+       if (d.getElementById(id)) {return;}
+       js = d.createElement(s); js.id = id;
+       js.src = "https://connect.facebook.net/en_US/sdk.js";
+       fjs.parentNode.insertBefore(js, fjs);
+     }(document, 'script', 'facebook-jssdk'));
+  }
+
+  fbLogin(){
+    FB.login((response)=>
+        {
+          console.log('submitLogin',response);
+          if (response.authResponse)
+          {
+            console.log('User login sucess');
+          }
+           else
+           {
+           console.log('User login failed');
+         }
+      });
+
+  }
+
+  googleInitialize() {
+    window['googleSDKLoaded'] = () => {
+      window['gapi'].load('auth2', () => {
+        this.auth2 = window['gapi'].auth2.init({
+          client_id: '892224712114-tbrc2tf2nnd6vjocqhv0tvan3jnvebqb.apps.googleusercontent.com',
+          cookie_policy: 'single_host_origin',
+          scope: 'profile email'
+        });
+        this.prepareLogin();
+      });
+    }
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'google-jssdk'));
+  }
+
+  prepareLogin() {
+    this.auth2.attachClickHandler(this.loginElement.nativeElement, {},
+      (googleUser) => {
+        let profile = googleUser.getBasicProfile();
+        alert('Name: ' + profile.getName() + '     Email:' + profile.getEmail());
+      }, (error) => {
+        alert(JSON.stringify(error, undefined, 2));
+      });
+  }
+
 }

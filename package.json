@@ -28,6 +28,8 @@
     "@ngxs/store": "^3.5.0-dev.master-3935622",
     "@syncfusion/ej2-angular-richtexteditor": "^17.3.29",
     "@syncfusion/ej2-popups": "^17.3.29",
+    "@types/gapi": "0.0.41",
+    "@types/gapi.auth2": "0.0.55",
     "angular-6-datatable": "^0.8.0",
     "angular-font-awesome": "^3.1.2",
     "bootstrap": "^3.3.7",
