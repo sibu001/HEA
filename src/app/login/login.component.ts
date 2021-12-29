@@ -276,7 +276,7 @@ export class LoginComponent implements OnInit {
   {
     (window as any).fbAsyncInit = function() {
       FB.init({
-        appId      : '262747394093816',
+        appId      : '424517809415902',
         cookie     : true,
         xfbml      : true,
         version    : 'v2.11'
@@ -313,7 +313,7 @@ export class LoginComponent implements OnInit {
     window['googleSDKLoaded'] = () => {
       window['gapi'].load('auth2', () => {
         this.auth2 = window['gapi'].auth2.init({
-          client_id: '892224712114-tbrc2tf2nnd6vjocqhv0tvan3jnvebqb.apps.googleusercontent.com',
+          client_id: '499784972442-j774nkhbl1thrsv9rrp97okhhssrep36.apps.googleusercontent.com',
           cookie_policy: 'single_host_origin',
           scope: 'profile email'
         });
