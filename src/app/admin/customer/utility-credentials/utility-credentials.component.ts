@@ -18,7 +18,7 @@ export class UtilityCredentialsComponent implements OnInit {
   private readonly subscriptions: Subscription = new Subscription();
   public electricityInUse :boolean;
   public heatingInUse :boolean;
-  public removeOldBills :boolean;
+  public removeOldBills :boolean = false;
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
