@@ -79,22 +79,22 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row rowPadding">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+          <div class="row rowPadding btn-wrapper">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 back-row">
               <button type="button" class="btn btn-primary" (click)="back()">
                 Back
               </button>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 action-row">
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;"
                 *ngIf="id === undefined || id === null"></div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;"
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6"
                 *ngIf="id !== undefined && id !== null">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
                   Delete
                 </button>
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" style="display: inline-table;">
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
                   Save
                 </button>

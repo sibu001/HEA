@@ -43,3 +43,8 @@ select {
   padding-right: 30px;
   background-position-x: 98%;
 }
+@media only screen and (max-width: 575px) {
+  .action-row {
+    margin-top: 5px;
+  } 
+}
