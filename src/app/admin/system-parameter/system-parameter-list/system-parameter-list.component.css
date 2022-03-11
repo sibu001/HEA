@@ -46,3 +46,12 @@ section.space-top {
     background-position-x: 98%;
   }
   
+  .content{
+    padding-left: 40px;
+  }
+
+  @media (max-width: 992px){
+    .content{
+      padding-left: 15px;
+    }
+  }

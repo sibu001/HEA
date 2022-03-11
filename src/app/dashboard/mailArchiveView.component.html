@@ -47,8 +47,8 @@
                             <div class="row">
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-10">
-                                    <div style="overflow-x:auto;">
-                                        <div [innerHTML]="users.mailContent | safeHtml"></div>
+                                    <div class="email-overflow" style="overflow-x: auto;">
+                                        <div [innerHTML]="users.mailContent | safeHtml" style="word-break: break-word;"></div>
                                     </div>
                                 </div>
                                 <div class="col-sm-1"></div>

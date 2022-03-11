@@ -27,3 +27,17 @@ p.messages {
 .paddingTop {
   padding-top: 3%;
 }
+
+.mb-button{
+  margin-bottom: 5px;
+}
+
+.label-m{
+  /* margin: inherit; */
+}
+
+/* @media only screen and (min-width: 768px){
+  .label-m{
+    margin: 8px 0px;
+  }
+} */

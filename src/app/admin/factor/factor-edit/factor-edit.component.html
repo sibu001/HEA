@@ -10,9 +10,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Factor code</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="FactorCode" formControlName="factorCode">
-                <div *ngIf="f.factorCode.invalid && (f.factorCode.dirty ||
+              <input type="text" class="form-control form-control-sm" id="FactorCode" formControlName="factorCode">
+              <div *ngIf="f.factorCode.invalid && (f.factorCode.dirty ||
                 f.factorCode.touched)">
                 <span class="error" *ngIf="f.factorCode.errors.required">
                   Factor Code is required.
@@ -38,8 +37,7 @@
               Comparison Code:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="comparisonCode" formControlName="comparisonCode"
-                class="form-control">
+              <select id="comparisonCode" formControlName="comparisonCode" class="form-control">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let comparisonCode of
                   comparisonCodeDropdownData" [value]='comparisonCode.lookupValue'>
@@ -51,42 +49,35 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Year:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="year"
-                id="year">
+              <input type="text" class="form-control" formControlName="year" id="year">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Value:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control"
-                formControlName="factorValue"
-                id="factorValue">
+              <input type="text" class="form-control" formControlName="factorValue" id="factorValue">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Dimension:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control"
-                formControlName="dimension" id="dimension">
+              <input type="text" class="form-control" formControlName="dimension" id="dimension">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Name:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control"
-                formControlName="factorName"
-                id="name">
+              <input type="text" class="form-control" formControlName="factorName" id="name">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Source Url:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control"
-                formControlName="sourceUrl" id="sourceUrl">
+              <input type="text" class="form-control" formControlName="sourceUrl" id="sourceUrl">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -95,8 +86,7 @@
               Calculation type:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="calculationType" class="form-control"
-                formControlName="calculationType">
+              <select id="calculationType" class="form-control" formControlName="calculationType">
                 <option *ngFor="let type of calculationType" [value]="type.lookupValue">
                   {{ type.valueName }}
                 </option>
@@ -109,8 +99,7 @@
               Calculation Rule:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" style="display: inline;"
-                formControlName="calculationRule"
+              <textarea class="form-control" style="display: inline;" formControlName="calculationRule"
                 id="calculationRule"></textarea>
               <span class="debug" (click)="goToDebug()">Debug</span>
             </div>
@@ -131,8 +120,7 @@
               Calculation Period:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="calculationPeriod" class="form-control"
-                formControlName="calculationPeriod">
+              <select id="calculationPeriod" class="form-control" formControlName="calculationPeriod">
                 <option *ngFor='let period of periodData' [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
             </div>
@@ -160,33 +148,26 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0">Comments:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="comments"
-                id="comments"></textarea>
+              <textarea class="form-control" formControlName="comments" id="comments"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row rowPadding paddingTop">
-            <div class="col-sm-5 col-md-5 col-lg-5 col-xs-3
-              display-inline-button-big">
-              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+            <div class="col-sm-5 col-md-5 col-lg-5 col-xs-3">
+              <button type="button" class="btn btn-primary button-m" (click)="back()">Back</button>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3
-              display-inline-button-big" style="text-align: end;">
-              <button type="button" class="btn btn-primary"
-                (click)="recalculate()">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-9" style="text-align: end;">
+              <button type="button" class="btn btn-primary button-m" (click)="recalculate()">
                 Recalculate
               </button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3
-              display-inline-button-big" [ngClass]="{'display-responsive-big2':
-              id!==undefined&&id!==null}" style="text-align: end;">
-              <button type="button" class="btn btn-primary" (click)="delete()"
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3" style="text-align: left;">
+              <button type="button" class="btn btn-primary button-m" (click)="delete()"
                 *ngIf="id!==undefined&&id!==null">Delete</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3 align-right"
-              [ngClass]="{'display-responsive-big': id!==undefined&&id!==null}">
-              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-9 align-right">
+              <button type="button" class="btn btn-primary button-m" (click)="save()">Save</button>
             </div>
           </div>
           <div class="row">

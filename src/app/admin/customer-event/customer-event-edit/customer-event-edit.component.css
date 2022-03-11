@@ -29,3 +29,7 @@ p.messages {
   padding: 4px 23px;
   border-radius: 3px;
 }
+
+.mb-button{
+  margin-bottom: 5px;
+}

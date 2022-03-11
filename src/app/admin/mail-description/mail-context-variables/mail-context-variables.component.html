@@ -45,20 +45,16 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
-              </button>
+          <div class="row rowPadding ">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4">
+              <button type="button" class="btn btn-primary" (click)="back()" >Back</button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 sidePadding">
-                <button type="button" class="btn btn-primary" *ngIf="id  && variableId"
-                  style="float: right" (click)="delete()">
-                  Delete
-                </button>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-8">
+              <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 sidePadding" *ngIf="false">
+                <button type="button" class="btn btn-primary"
+                  style="float: right" (click)="delete()"> Delete</button>
               </div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
+              <div class="col-xs-12 col-md-6 col-lg-6 sidePadding" [ngClass]="{'col-sm-6 col-md-6 col-lg-6': false,'col-sm-12 col-md-12 col-lg-12': true  }">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
                   Save
                 </button>

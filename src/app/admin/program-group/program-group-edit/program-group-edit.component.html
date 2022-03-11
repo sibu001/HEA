@@ -14,8 +14,7 @@
               Program code
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="programCode" formControlName="programCode">
+              <input type="text" class="form-control form-control-sm" id="programCode" formControlName="programCode">
               <div *ngIf="f.programCode.invalid && (f.programCode.dirty ||
                 f.programCode.touched)">
                 <span class="error" *ngIf="f.programCode.errors.required">
@@ -30,8 +29,7 @@
               Program Name:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="programName" formControlName="programName">
+              <input type="text" class="form-control form-control-sm" id="programName" formControlName="programName">
               <div *ngIf="f.programName.invalid && (f.programName.dirty ||
                 f.programName.touched)">
                 <span class="error" *ngIf="f.programName.errors.required">
@@ -47,11 +45,10 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="inCustomerEventTypeId" class="form-control
-                form-control-sm" name="inCustomerEventTypeId"
-                formControlName="inCustomerEventTypeId">
+                form-control-sm" name="inCustomerEventTypeId" formControlName="inCustomerEventTypeId">
                 <option value=""></option>
-                <option *ngFor="let eventType of customerEventTypeList"
-                  [value]="eventType.customerEventTypeId" selected="selected">
+                <option *ngFor="let eventType of customerEventTypeList" [value]="eventType.customerEventTypeId"
+                  selected="selected">
                   {{eventType.eventName}}</option>
               </select>
             </div>
@@ -62,31 +59,32 @@
               Leave Event Type
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="outCustomerEventTypeId"
+              <select class="form-control form-control-sm" id="outCustomerEventTypeId"
                 formControlName="outCustomerEventTypeId">
                 <option value=""></option>
-                <option *ngFor="let eventType of customerEventTypeList"
-                  [value]="eventType.customerEventTypeId" selected="selected">
+                <option *ngFor="let eventType of customerEventTypeList" [value]="eventType.customerEventTypeId"
+                  selected="selected">
                   {{eventType.eventName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row rowPadding paddingTop">
-            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-3
-              display-inline-button">
-              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6" style="text-align:
-              end;">
-              <button type="button" class="btn btn-primary" (click)="delete()"
-                *ngIf="id!==undefined&&id!==null">Delete</button>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
-              [ngClass]="{'display-responsive': id!==undefined&&id!==null}">
-              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+          <div class="row paddingTop">
+            <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
+              <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
+            </div> 
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10" style="text-align: end;" *ngIf="id!==undefined&&id!==null">
+                  <button type="button" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
+                </div>
+                <div
+                  [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id != undefined , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id == undefined}"
+                  style="text-align: end; overflow: auto;" >
+                  <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
+                </div>
+              </div>
             </div>
           </div>
         </form>

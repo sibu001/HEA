@@ -9,25 +9,22 @@
         </p>
         <form [formGroup]="customerGroupForm" class="form-group
           form-padding">
-          <div class="row borderTop borderBottom rowPadding"
-            *ngIf="id!==undefined&&id!==null">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+          <div class="row borderTop borderBottom rowPadding" *ngIf="id!==undefined&&id!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-6" style="margin: 8px 0px;">
               Record Id:
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm show-value"
-                id="customerGroupId"
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+              <input type="text" class="form-control form-control-sm show-value" id="customerGroupId"
                 formControlName="customerGroupId" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Group code
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="groupCode" formControlName="groupCode">
+              <input type="text" class="form-control form-control-sm" id="groupCode" formControlName="groupCode">
               <div *ngIf="f.groupCode.invalid && (f.groupCode.dirty ||
                 f.groupCode.touched)">
                 <span class="error" *ngIf="f.groupCode.errors.required">
@@ -38,12 +35,11 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Group Name:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="groupName" formControlName="groupName">
+              <input type="text" class="form-control form-control-sm" id="groupName" formControlName="groupName">
               <div *ngIf="f.groupName.invalid && (f.groupName.dirty ||
                 f.groupName.touched)">
                 <span class="error" *ngIf="f.groupName.errors.required">
@@ -54,36 +50,33 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Context path:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="contextPath" formControlName="contextPath">
+              <input type="text" class="form-control form-control-sm" id="contextPath" formControlName="contextPath">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Theme:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="theme"
-                formControlName="theme">
+              <select class="form-control form-control-sm" id="theme" formControlName="theme">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let themeObject of themeList"
-                  [value]="themeObject.itemValue">{{themeObject.itemLabel}}</option>
+                <option *ngFor="let themeObject of themeList" [value]="themeObject.itemValue">{{themeObject.itemLabel}}
+                </option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Registration URL:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="registrationUrl"
+              <input type="text" class="form-control form-control-sm" id="registrationUrl"
                 formControlName="registrationUrl">
               <div *ngIf="f.registrationUrl.invalid && (f.registrationUrl.dirty
                 ||
@@ -96,12 +89,11 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Base directory:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="baseDirectory"
+              <input type="text" class="form-control form-control-sm" id="baseDirectory"
                 formControlName="baseDirectory">
               <div *ngIf="f.baseDirectory.invalid && (f.baseDirectory.dirty ||
                 f.baseDirectory.touched)">
@@ -113,12 +105,11 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Audit ID pattern:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="auditIdPattern"
+              <input type="text" class="form-control form-control-sm" id="auditIdPattern"
                 formControlName="auditIdPattern">
               <div *ngIf="f.auditIdPattern.invalid && (f.auditIdPattern.dirty ||
                 f.auditIdPattern.touched)">
@@ -130,27 +121,25 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Scraping Utility:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="scrapingUtility"
-                formControlName="scrapingUtility">
+              <select class="form-control form-control-sm" id="scrapingUtility" formControlName="scrapingUtility">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let scrapingUtilityObject of
-                  scrapingUtilityList"
-                  [value]="scrapingUtilityObject.lookupValue">{{scrapingUtilityObject.valueName}}</option>
+                  scrapingUtilityList" [value]="scrapingUtilityObject.lookupValue">{{scrapingUtilityObject.valueName}}
+                </option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Scraping Period:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="scrapingPeriod"
-                formControlName="scrapingPeriod">
+              <select class="form-control form-control-sm" id="scrapingPeriod" formControlName="scrapingPeriod">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let scrapingPeriodObject of scrapingPeriodList"
                   [value]="scrapingPeriodObject.lookupValue">{{scrapingPeriodObject.valueName}}</option>
@@ -163,149 +152,139 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="mail" id="showEventHistory"
-                formControlName="showEventHistory">
+              <input type="checkbox" name="mail" id="showEventHistory" formControlName="showEventHistory">
               <label class="checkbox">Show Event History</label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Activation mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="mailDescriptionId" formControlName="mailDescriptionId">
+              <select class="form-control form-control-sm" id="mailDescriptionId" formControlName="mailDescriptionId">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
-                  mailDescriptionList"
-                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
+                  mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
+                  {{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Repeated Activation mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="repeatedMailDescriptionId"
+              <select class="form-control form-control-sm" id="repeatedMailDescriptionId"
                 formControlName="repeatedMailDescriptionId">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
-                  mailDescriptionList"
-                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
+                  mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
+                  {{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Spam Test Filter mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="spamTestMailDescriptionId"
+              <select class="form-control form-control-sm" id="spamTestMailDescriptionId"
                 formControlName="spamTestMailDescriptionId">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
-                  mailDescriptionList"
-                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
+                  mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
+                  {{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               "Forgot Password" mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="forgotPwdMailDescriptionId"
+              <select class="form-control form-control-sm" id="forgotPwdMailDescriptionId"
                 formControlName="forgotPwdMailDescriptionId">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
-                  mailDescriptionList"
-                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
+                  mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
+                  {{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               New Recommendation mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="newRecommendationMailDescriptionId"
+              <select class="form-control form-control-sm" id="newRecommendationMailDescriptionId"
                 formControlName="newRecommendationMailDescriptionId">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
-                  mailDescriptionList"
-                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
+                  mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
+                  {{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Mail Changed mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="mailChangedMailDescriptionId"
+              <select class="form-control form-control-sm" id="mailChangedMailDescriptionId"
                 formControlName="mailChangedMailDescriptionId">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
-                  mailDescriptionList"
-                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
+                  mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
+                  {{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Registration Warning mail:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="registrationErrorMailDescriptionId"
+              <select class="form-control form-control-sm" id="registrationErrorMailDescriptionId"
                 formControlName="registrationErrorMailDescriptionId">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
-                  mailDescriptionList"
-                  [value]="mailDescriptionObject.mailDescriptionId">{{mailDescriptionObject.mailName}}</option>
+                  mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
+                  {{mailDescriptionObject.mailName}}</option>
               </select>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12 "></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Customer Registration JS Page (optional):
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="customerRegistrationViewId"
+              <select class="form-control form-control-sm" id="customerRegistrationViewId"
                 formControlName="customerRegistrationViewId">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let jsPageObject of jsPageList"
-                  [value]="jsPageObject.jsPageId">{{jsPageObject.name}}</option>
+                <option *ngFor="let jsPageObject of jsPageList" [value]="jsPageObject.jsPageId">{{jsPageObject.name}}
+                </option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Customer Registration Success JS Page (optional):
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="customerRegistrationSuccessViewId"
+              <select class="form-control form-control-sm" id="customerRegistrationSuccessViewId"
                 formControlName="customerRegistrationSuccessViewId">
                 <option value="" selected="selected"></option>
-                <option *ngFor="let jsPageObject of jsPageList"
-                  [value]="jsPageObject.jsPageId">{{jsPageObject.name}}</option>
+                <option *ngFor="let jsPageObject of jsPageList" [value]="jsPageObject.jsPageId">{{jsPageObject.name}}
+                </option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -316,8 +295,7 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="immediateLogin" id="immediateLogin"
-                formControlName="immediateLogin">
+              <input type="checkbox" name="immediateLogin" id="immediateLogin" formControlName="immediateLogin">
               <label class="checkbox">Immediate Login after registration</label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -327,8 +305,7 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="allowBilling" id="allowBilling"
-                formControlName="allowBilling">
+              <input type="checkbox" name="allowBilling" id="allowBilling" formControlName="allowBilling">
               <label class="checkbox">Allow Billing</label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -338,21 +315,18 @@
 
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" name="archived" id="archived"
-                formControlName="archived">
+              <input type="checkbox" name="archived" id="archived" formControlName="archived">
               <label class="checkbox">Archived</label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 label-m">
               Registration success rule:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                id="dataCheckAlg"
-                formControlName="dataCheckAlg">
+              <select class="form-control form-control-sm" id="dataCheckAlg" formControlName="dataCheckAlg">
                 <option value="0">Smart Audit</option>
                 <option value="1">Dr Power</option>
               </select>
@@ -379,9 +353,8 @@
 
           <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="placeKey" [data]="placeDataSource"
-                [isHideAdd]=true [isDelete]=false
-                [totalElement]="placeData.totalElements" [checkbox]=true  id='place'
+              <app-table [keys]="placeKey" [data]="placeDataSource" [isHideAdd]=true [isDelete]=false
+                [totalElement]="placeData.totalElements" [checkbox]=true id='place'
                 [selectionList]='placeSelectionListData' (checkBoxChangeEvent)="placeCheckBoxChangeEvent($event)">
               </app-table>
             </div>
@@ -400,26 +373,28 @@
 
           <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <app-table [keys]="programGroupKey"
-                [data]="programGroupDataSource" [isHideAdd]=true
-                [isDelete]=false
-                [totalElement]="programGroupData.totalElements" [checkbox]=true
-                id='programCode'
+              <app-table [keys]="programGroupKey" [data]="programGroupDataSource" [isHideAdd]=true [isDelete]=false
+                [totalElement]="programGroupData.totalElements" [checkbox]=true id='programCode'
                 [selectionList]='programSelectionList' (checkBoxChangeEvent)="programGroupCheckBoxChangeEvent($event)">
               </app-table>
             </div>
           </div>
           <div class="row rowPadding paddingTop">
-            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-3 display-inline-button">
-              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+            <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
+              <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6" style="text-align: end;">
-              <button type="button" class="btn btn-primary" (click)="delete()"
-                *ngIf="id!==undefined&&id!==null">Delete</button>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10 " style="text-align: end;" *ngIf="id!==undefined&&id!==null">
+                  <button type="button" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
+                </div>
+                <div [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id != undefined 
+                , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id == undefined}"  style="text-align:right; overflow:auto;">
+                  <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
+                </div>
+              </div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3" [ngClass]="{'display-responsive': id!==undefined&&id!==null}">
-              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
-            </div>
+
           </div>
         </form>
       </div>

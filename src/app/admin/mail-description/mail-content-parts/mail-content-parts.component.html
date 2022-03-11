@@ -82,7 +82,7 @@
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Generated embedded image:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12"  style="margin-bottom: 5px;">
               <input type="text" class='form-control form-control-sm' formControlName="embeddedImage"
                 id="embeddedImage">
             </div>
@@ -94,19 +94,19 @@
           </div>
 
           <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-6">
               <button type="button" class="btn btn-primary" (click)="back()">
                 Back
               </button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 sidePadding">
+            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-6 row rowPadding sidePadding">
+              <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10 sidePadding">
                 <button type="button" class="btn btn-primary" *ngIf="id !== undefined && id !== null"
                   style="float: right" (click)="delete()">
                   Delete
                 </button>
               </div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
+              <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 sidePadding">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
                   Save
                 </button>

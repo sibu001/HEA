@@ -23,3 +23,7 @@ p.messages {
 .paddingTop {
   padding-top: 3%;
 }
+
+.mb-button {
+  margin-bottom: 5px;
+}

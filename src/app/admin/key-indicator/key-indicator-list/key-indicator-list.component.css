@@ -58,3 +58,13 @@ section.space-top {
     }
   }
   
+  .content{
+    text-align: left;
+    padding-top: 35px;
+  }
+
+  @media (min-width: 992px){
+    .content{
+      padding-left: 40px;
+    }
+  }

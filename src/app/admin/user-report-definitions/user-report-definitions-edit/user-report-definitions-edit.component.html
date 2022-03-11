@@ -86,27 +86,25 @@
             </app-table>
           </div>
 
-          <div class="row rowPadding paddingTop">
-            <div class="col-sm-5 col-md-5 col-lg-5 col-xs-3
+          <div class="row rowPadding paddingTop ">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6 
               display-inline-button-big">
-              <button type="button" class="btn btn-primary" (click)="back()">Back</button>
+              <button type="button" class="btn btn-primary mb-5" (click)="back()">Back</button>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3
-              display-inline-button-big" [ngClass]="{'display-responsive-big3':
-              id!==undefined&&id!==null}" style="text-align: end;">
-              <button type="button" class="btn btn-primary"
-                (click)="Preview()" *ngIf="id!==undefined&&id!==null">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 
+              display-inline-button-big" style="text-align:end;" *ngIf="id !== undefined && id !== null">
+              <button type="button" class="btn btn-primary mb-5"
+                (click)="Preview()" >
                 Preview
               </button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3
-              display-inline-button-big" [ngClass]="{'display-responsive-big2':
-              id!==undefined&&id!==null}" style="text-align: end;">
-              <button type="button" class="btn btn-primary" (click)="delete()"  *ngIf="id!==undefined&&id!==null">Delete</button>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 
+              display-inline-button-big" style="text-align: left;" *ngIf="id !== undefined && id !== null">
+              <button type="button" class="btn btn-primary mb-5" (click)="delete()"  >Delete</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
-              [ngClass]="{'display-responsive-big': id!==undefined&&id!==null}">
-              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+            <div class=""
+              [ngClass]="{'col-sm-6 col-md-6 col-xs-6 col-lg-6': id === undefined || id === null , 'col-sm-2 col-md-2 col-lg-2' :id !== undefined && id !== null}" style="text-align: end;">
+              <button type="button" class="btn btn-primary mb-5" (click)="save()">Save</button>
             </div>
           </div>
         </form>

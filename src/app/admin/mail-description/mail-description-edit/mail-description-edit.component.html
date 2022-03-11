@@ -9,10 +9,12 @@
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Mail Description</span>
         </p>
-        <form [formGroup]="topicForm" class="form-group form-padding">
+        <form [formGroup]="topicForm" class="form-group">
+
+        <div class="field-p">
           <div class="row borderBottom rowPadding" *ngIf="id">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Id:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-1">Id:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               {{id}}
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -434,6 +436,8 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
+        </div>
+
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
@@ -474,43 +478,37 @@
             </app-table>
           </div>
 
-          <div class="row rowPadding paddingTop margin-around-button">
-            <div class="col-sm-6 col-md-2 col-lg-2 col-xs-12 display-inline-button-big mt-5
-            ">
-              <button type="button" class="btn btn-primary btn-block" (click)="back()">Back</button>
+          <div class="row rowPadding paddingTop margin-around-button" style="margin-top: 10px">
+            <div class="col-sm-2 col-md-3 col-lg-3 col-xs-6 display-inline-button-big mt-5">
+              <button type="button" class="btn btn-primary " (click)="back()">Back</button>
             </div>
-            <div class="col-sm-6 col-md-2 col-lg-2 col-xs-12
-              display-inline-button-big mt-5
-              " [ngClass]="{'display-responsive-big3':
-              id!==undefined&&id!==null}" style="text-align: end;">
-              <button type="button" class="btn btn-primary btn-block"
-                (click)="Preview()" *ngIf="id!==undefined&&id!==null">
-                Preview
+            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6 display-inline-button-big mt-5 lg-b" 
+              [ngClass]="{'display-responsive-big3': id!==undefined&&id!==null}" style="text-align: end;" *ngIf="id!==undefined&&id!==null">
+              <button type="button" class="btn btn-primary "
+                (click)="Preview()" >
+                review
               </button>
             </div>
-            <div class="col-sm-6 col-md-3 col-lg-3 col-xs-12 mt-5
-            "
-              [ngClass]="{'display-responsive-big3':
-              id!==undefined&&id!==null}" style="text-align: end;" *ngIf="id !==
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-6 mt-5 lg-b"
+              [ngClass]="{'display-responsive-big3':id!==undefined&&id!==null}" style="text-align: left;" *ngIf="id !==
               undefined && id !== null">
-              <button class="btn btn-primary btn-block" (click)='callMailSender()'>
+              <button class="btn btn-primary " (click)='callMailSender()'>
                 Call Mail Sender
               </button>
             </div>
-            <div class="col-sm-6 col-md-2 col-lg-2 col-xs-12
-              display-inline-button-big mt-5
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 
+              display-inline-button-big mt-5 lg-b
               " [ngClass]="{'display-responsive-big2':
-              id!==undefined&&id!==null}" style="text-align: end;">
-              <button type="button" class="btn btn-primary btn-block" (click)="delete()"
-                *ngIf="id!==undefined&&id!==null">Delete</button>
+              id!==undefined&&id!==null}" style="text-align: end;" *ngIf="id!==undefined&&id!==null">
+              <button type="button" class="btn btn-primary " (click)="delete()" style="float:right"
+               >Delete</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2" *ngIf="!id">
-            </div>
-            <div class="col-sm-6 col-md-2 col-lg-2 col-xs-12 mt-5
-            "
-              [ngClass]="{'display-responsive-big': id!==undefined&&id!==null}"
+            <!-- <div class="col-sm-2 col-md-2 col-lg-2" *ngIf="!id">
+            </div> -->
+            <div class="mt-5 lg-b" 
+            [ngClass]="{'col-xs-12 col-sm-2 col-md-2 col-lg-2': id!==undefined&&id!==null , 'col-xs-6 col-sm-10 col-lg-9 col-md-9' :  id===undefined || id===null, 'col-xs-12': id!==undefined&&id!==null}"
               style="text-align: end;">
-              <button type="button" class="btn btn-primary btn-block" (click)="save()">Save</button>
+              <button type="button" class="btn btn-primary " (click)="save()">Save</button>
             </div>
           </div>
         </form>

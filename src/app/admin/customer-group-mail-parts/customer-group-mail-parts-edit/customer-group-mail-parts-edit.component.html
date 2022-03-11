@@ -10,8 +10,10 @@
           <div class="row borderBottom rowPadding" formGroupName="customerGroup">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Customer Group:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control" formControlName="groupCode" id="customerGroup" (change)="changeDropDownValue($event)">
-                <option *ngFor='let customer of customerGroupData' [value]="customer.groupCode">{{customer.groupName}}</option>
+              <select class="form-control" formControlName="groupCode" id="customerGroup"
+                (change)="changeDropDownValue($event)">
+                <option *ngFor='let customer of customerGroupData' [value]="customer.groupCode">{{customer.groupName}}
+                </option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -37,15 +39,15 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm' formControlName="contentTemplate"
-                id="contentTemplate" rows="10" cols="10"> </textarea>
-              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value' [toolbarSettings]='tools' formControlName='contentTemplate'
-                id='contentTemplate'>
+              <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm'
+                formControlName="contentTemplate" id="contentTemplate" rows="10" cols="10"> </textarea>
+              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value' [toolbarSettings]='tools'
+                formControlName='contentTemplate' id='contentTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
 
-          <div class="row rowPadding">
+          <!-- <div class="row rowPadding">
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-3
               display-inline-button">
               <button type="button" class="btn btn-primary" (click)="back()">Back</button>
@@ -59,7 +61,28 @@
               [ngClass]="{'display-responsive': id!==undefined&&id!==null}">
               <button type="button" class="btn btn-primary" (click)="save()">Save</button>
             </div>
+          </div> -->
+
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
+              <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
+            </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10 " style="text-align: end;"
+                  *ngIf="id!==undefined&&id!==null">
+                  <button type="button" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
+                </div>
+                <div [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id != undefined 
+                , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id == undefined}"
+                  style="text-align:right; overflow:auto;">
+                  <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
+                </div>
+              </div>
+            </div>
+
           </div>
+
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">

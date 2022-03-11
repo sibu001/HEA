@@ -41,14 +41,14 @@ function scaleCanvas(rootElement) {
 			var oldWidth = canvas.width;
 			var oldHeight = canvas.height;
 			
-		    canvas.width = oldWidth * ratio;
-		    canvas.height = oldHeight * ratio;
+			canvas.width = oldWidth * ratio;
+			canvas.height = oldHeight * ratio;
 		    
-		    canvas.style.width = oldWidth + 'px';
-		    canvas.style.height = oldHeight + 'px';
+			canvas.style.width = oldWidth + 'px';
+			canvas.style.height = oldHeight + 'px';
 		    
-		    context.scale(ratio, ratio);
-		    */
+			context.scale(ratio, ratio);
+			*/
 		});
 	}
 }
@@ -94,40 +94,40 @@ function findTickIntervalBase(max, min, numTicks) {
 
 (function ($) {
 	$.heaplot =
+	{
+		colors:
 		{
-			colors:
-			{
-				undefined: '#E3E4E5',
-				baseLoads: '#4B9C96',
-				recurringLoads: '#FFE178',
-				variableLoads: '#0873A2',
-				summerAC: '#2CBFD5',
-				winterSpaceHeating: '#F57D7D'
-			}
-		};
+			undefined: '#E3E4E5',
+			baseLoads: '#4B9C96',
+			recurringLoads: '#FFE178',
+			variableLoads: '#0873A2',
+			summerAC: '#2CBFD5',
+			winterSpaceHeating: '#F57D7D'
+		}
+	};
 
-/**
-		        undefined: '#E3E4E5',
-				baseLoads: '#A799EB',
-				recurringLoads: '#FDE586',
-				variableLoads: '#ADBF88',
-				summerAC: '#BFD9FA',
-				winterSpaceHeating: '#E69292'
-   */
-    /**
-     * Adds a "doubleValue" function to the jQuery object,
-     * which can be used to convert an input field containing
-     * a formatted number (e.g. with thousand separators) to its
-     * arithmetic value. If the input field is empty, the value
-     * is assumed to be 0 (rather than undefined/NaN).
-     */
+	/**
+					undefined: '#E3E4E5',
+					baseLoads: '#A799EB',
+					recurringLoads: '#FDE586',
+					variableLoads: '#ADBF88',
+					summerAC: '#BFD9FA',
+					winterSpaceHeating: '#E69292'
+	   */
+	/**
+	 * Adds a "doubleValue" function to the jQuery object,
+	 * which can be used to convert an input field containing
+	 * a formatted number (e.g. with thousand separators) to its
+	 * arithmetic value. If the input field is empty, the value
+	 * is assumed to be 0 (rather than undefined/NaN).
+	 */
 	$.fn.extend({
 		doubleValue: function () {
 			var v;
-			if(this.length>=1){
-			 v = parseFloat(this.val().replace(/[^0-9$.]/g, ''));
-			}else{
-				v=NaN;
+			if (this.length >= 1) {
+				v = parseFloat(this.val().replace(/[^0-9$.]/g, ''));
+			} else {
+				v = NaN;
 			}
 			return isNaN(v) ? 0 : v;
 		}
@@ -167,14 +167,14 @@ function findTickIntervalBase(max, min, numTicks) {
 		// 	top = tbody.top - bbox.top,
 		// 	width = tbody.width - (left - tbody.left)+100,
 		// 	height = tbody.height;
-		 var $firstHelpIcon = $('table.surveyAnswers input:first').closest('td').find('img');
-        var bbox = $('#scrollhardscape').get(0).getBoundingClientRect();
-       // var icon = $firstHelpIcon.get(0).getBoundingClientRect();
-        var tbody = $('table.surveyAnswers tbody').get(0).getBoundingClientRect();
-        var left = 300 + 150 - bbox.left + 40,
-            top = tbody.top - bbox.top,
-            width = tbody.width - (left - tbody.left)-500,
-            height = tbody.height-50;
+		var $firstHelpIcon = $('table.surveyAnswers input:first').closest('td').find('img');
+		var bbox = $('#scrollhardscape').get(0).getBoundingClientRect();
+		// var icon = $firstHelpIcon.get(0).getBoundingClientRect();
+		var tbody = $('table.surveyAnswers tbody').get(0).getBoundingClientRect();
+		var left = 300 + 150 - bbox.left + 40,
+			top = tbody.top - bbox.top,
+			width = tbody.width - (left - tbody.left) - 500,
+			height = tbody.height - 50;
 
 		$('table.surveyAnswers thead').append(
 			$('<div></div>')
@@ -485,16 +485,16 @@ function findTickIntervalBase(max, min, numTicks) {
 			seriesColors[pos] = '#332623';
 			if (options.series != null) {
 				options.series[pos] = {
-						 label:" ",
-						 showLabel: false,
-						 disableStack:true,
-				         fill:false,
-				         lineWidth:3,
-				         color:'#332623',
-				         shadow:true,
-				         shadowAngle:60, 
-						 shadowAlpha:0.1,
-						 };
+					label: " ",
+					showLabel: false,
+					disableStack: true,
+					fill: false,
+					lineWidth: 3,
+					color: '#332623',
+					shadow: true,
+					shadowAngle: 60,
+					shadowAlpha: 0.1,
+				};
 			}
 		}
 
@@ -601,7 +601,7 @@ function findTickIntervalBase(max, min, numTicks) {
 						nd();
 					}
 				}
-				);
+			);
 			$('#resizable2').bind('resizestop', function (event, ui) {
 				$('#' + chartSeasonalStackDiv).height($('#resizable2').height() * 0.96);
 				$('#' + chartSeasonalStackDiv).width($('#resizable2').width() * 0.96);
@@ -656,7 +656,7 @@ function findTickIntervalBase(max, min, numTicks) {
 						nd();
 					}
 				}
-				);
+			);
 		}
 
 		// Show the norming bar if either n1 or n2 specified
@@ -853,7 +853,7 @@ function findTickIntervalBase(max, min, numTicks) {
 						nd();
 					}
 				}
-				);
+			);
 		}
 
 		//scaleCanvas($('#' + chartSeasonalStackDiv));
@@ -952,36 +952,36 @@ function findTickIntervalBase(max, min, numTicks) {
 			[[data.norm, 1]],
 			[[data.you, 1], [data.you, 2]]
 		], {
-				grid: {
-					drawGridlines: false,
-					background: "#E3E4E5",
-					borderWidth: 0,
-					shadow: false
+			grid: {
+				drawGridlines: false,
+				background: "#E3E4E5",
+				borderWidth: 0,
+				shadow: false
+			},
+			cursor: {
+				show: false,
+				zoom: false
+			},
+			seriesDefaults: {
+				fill: false,
+				shadow: false
+			},
+			series: [
+				{
+					showMarker: true,
+					showLine: false,
+					markerOptions: { style: 'filledDiamond', color: '#ffffff', size: 15 }
 				},
-				cursor: {
-					show: false,
-					zoom: false
-				},
-				seriesDefaults: {
-					fill: false,
-					shadow: false
-				},
-				series: [
-					{
-						showMarker: true,
-						showLine: false,
-						markerOptions: { style: 'filledDiamond', color: '#ffffff', size: 15 }
-					},
-					{
-						showMarker: false,
-						showLine: true,
-						color: '#373737',
-						lineWidth: 3,
-						xaxis: (options.showYou ? 'x2axis' : undefined)
-					}
-				],
-				axes: axes
-			});
+				{
+					showMarker: false,
+					showLine: true,
+					color: '#373737',
+					lineWidth: 3,
+					xaxis: (options.showYou ? 'x2axis' : undefined)
+				}
+			],
+			axes: axes
+		});
 
 		scaleCanvas($('#' + divName));
 		$('#resizableNorms').bind('resizestop', function (event, ui) {
@@ -1110,7 +1110,7 @@ function findTickIntervalBase(max, min, numTicks) {
 
 		var dataUnit = data.unit;
 
-			$('#resizableMonthly').bind('resizestop', function (event, ui) {
+		$('#resizableMonthly').bind('resizestop', function (event, ui) {
 			$('#' + divName).height($('#resizableMonthly').height() * 0.96);
 			$('#' + divName).width($('#resizableMonthly').width() * 0.96);
 			$.replot({ resetAxes: true });
@@ -1128,7 +1128,7 @@ function findTickIntervalBase(max, min, numTicks) {
 					nd();
 				}
 			}
-			);
+		);
 
 		scaleCanvas($('#' + divName));
 	};
@@ -1254,7 +1254,11 @@ function findTickIntervalBase(max, min, numTicks) {
 			}
 		});
 
-			$('#resizableHourly').bind('resizestop', function (event, ui) {
+		$(window).resize(function () {
+			plot1.replot({ resetAxes: true });
+		});
+		
+		$('#resizableHourly').bind('resizestop', function (event, ui) {
 			$('#' + divName).height($('#resizableHourly').height() * 0.96);
 			$('#' + divName).width($('#resizableHourly').width() * 0.96);
 			$.replot({ resetAxes: true });
@@ -1272,7 +1276,7 @@ function findTickIntervalBase(max, min, numTicks) {
 					nd();
 				}
 			}
-			);
+		);
 
 		scaleCanvas($('#' + divName));
 	};

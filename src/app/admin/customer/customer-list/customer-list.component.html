@@ -1,9 +1,7 @@
 <section class="space-top">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:
-                left;padding-left: 40px;
-                padding-top: 5px;'>
+            <div class="col-sm-12 col-md-9 col-lg-9 content" style='text-align:left; padding-top: 5px;'>
                 <p class="accurate">
                     Search Options (use "%" as wildcard in searches)</p>
                 <hr class="hr_space">
@@ -91,7 +89,7 @@
                                 <option value=""></option>
                                 <option *ngFor="let statusObj of
                                 statusData" [value]="statusObj.id">
-                                {{statusObj.value}}</option>
+                                    {{statusObj.value}}</option>
                             </select>
                         </div>
                     </div>
@@ -134,7 +132,8 @@
                             <select class="form-control form-control-sm" formControlName="energyCoach">
                                 <option value=""></option>
                                 <option value="-1">Unassigned</option>
-                                <option *ngFor="let coachUser of coachUserList | sortBy : 'name' " [value]="coachUser.userId">
+                                <option *ngFor="let coachUser of coachUserList | sortBy : 'name' "
+                                    [value]="coachUser.userId">
                                     {{coachUser.name}}</option>
                             </select>
                         </div>
@@ -156,7 +155,8 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <p class="Messages">
-                            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">Customers (Number of Records
+                            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">Customers (Number
+                            of Records
                             =
                             {{this.CustomerData.totalElements | number:'1.0':'en-US'}})
                         </p>
@@ -164,11 +164,12 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
-                        <app-table [keys]="keys" [isPaginate]="true" [checkbox]="isCheckBox" [isSearch]="false" [showCSVExportButton]='showCSVExportButton'
-                            [data]="dataSource" [totalElement]="CustomerData.totalElements" [pageIndex]="pageIndex"
+                        <app-table [keys]="keys" [isPaginate]="true" [checkbox]="isCheckBox" [isSearch]="false"
+                            [showCSVExportButton]='showCSVExportButton' [data]="dataSource"
+                            [totalElement]="CustomerData.totalElements" [pageIndex]="pageIndex"
                             (changePageEvent)="findCustomer($event,false)" (goToEditEvent)="goToEditCustomer($event)"
-                            (imageEvent)='onImageClickEvent($event)' (checkBoxChangeEvent)="checkBoxChangeEvent($event)" (addEvent)='addNewCustomer()' (handleLinkEvent)="handleLink($event)"
-                            class="customerTable">
+                            (imageEvent)='onImageClickEvent($event)' (checkBoxChangeEvent)="checkBoxChangeEvent($event)"
+                            (addEvent)='addNewCustomer()' (handleLinkEvent)="handleLink($event)" class="customerTable">
                         </app-table>
 
                     </div>
@@ -184,7 +185,8 @@
                         </div>
                         <div class='col-sm-3 col-xs-7'>
                             <input type="file" class="custom-file-input" style='font-size: smaller;' name="customerFile"
-                                id="customerFile" formControlName='customerFile' (change)="handleFileInput($event.target.files)">
+                                id="customerFile" formControlName='customerFile'
+                                (change)="handleFileInput($event.target.files)">
                         </div>
                         <div class='col-sm-2 col-xs-3 responsive-desktop' style='text-align: right;'>
                             <button type="submit" class="btn

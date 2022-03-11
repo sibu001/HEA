@@ -119,3 +119,18 @@ p.help-text {
   white-space: break-spaces;
   word-break: break-all;
 }
+
+.field-p{
+  padding-left: 20px;
+  padding-right: 20px
+  ;
+}
+
+.lg-b{
+
+}
+@media (min-width: 1025){
+  .lg-b{
+    text-align: end !important;
+  }
+}

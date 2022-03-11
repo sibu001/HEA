@@ -29,3 +29,15 @@ border-radius: 3px;
 text-align: right;
 margin-top: 15px;
 }
+
+.content{
+    text-align: left;
+    padding-left: 40px;
+    padding-top: 35px;
+}
+
+@media (max-width: 992px){
+    .content{
+      padding-left: 15px;
+    }
+  }

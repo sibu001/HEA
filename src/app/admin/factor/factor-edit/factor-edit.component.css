@@ -48,3 +48,12 @@ select {
 .align-right{
   text-align: right;
 }
+
+.button-m{
+  margin-bottom: 5px;
+}
+/* @media (min-width :600px) and (max-width :767px){
+  .button-m{
+   
+  }
+} */

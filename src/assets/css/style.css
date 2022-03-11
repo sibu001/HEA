@@ -353,3 +353,8 @@ div#dtBasicExample2_paginate {
     font-size: 16px;
     cursor: pointer;
 }
+
+.mb-button{
+    margin-bottom: 5px !important;
+}
+  

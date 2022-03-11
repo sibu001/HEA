@@ -107,6 +107,7 @@ export class CustomerAlertTypeEditComponent implements OnInit, OnDestroy {
     } else {
       this.validateForm();
     }
+    this.back(); 
   }
   validateForm() {
     for (const key of Object.keys(this.customerAlertTypeForm.controls)) {

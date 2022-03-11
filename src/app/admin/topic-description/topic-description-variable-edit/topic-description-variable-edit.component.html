@@ -72,30 +72,32 @@
           </div>
 
           <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
-              <button type="button" class="btn btn-primary" (click)="back()">
+            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6 sidePadding">
+              <button type="button" class="btn btn-primary" (click)="back()" style="float :left;">
                 Back
               </button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
-              </div>
-              <div class="col-sm-8 col-md-8 col-lg-8 col-xs-8 sidePadding" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="recalculate()">
-                  Recalculate
-                </button>
-              </div>
-              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2 sidePadding" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="col-sm-2 col-md-2 col-lg-1 col-xs-2 sidePadding">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
+            <!-- <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding"> -->
+              <div class="col-sm-6 col-md-8 col-lg-8 col-xs-0" *ngIf="id === undefined || id === null; else elseBlock"></div>
+              <ng-template #elseBlock>
+                <div class="col-sm-3 col-md-4 col-lg-4 col-xs-6 sidePadding">
+                  <button type="button" class="btn btn-primary" style="float: right" (click)="recalculate()" style="float :right;">
+                    Recalculate
+                  </button>
+                </div>
+                <div class="col-sm-3 col-md-4 col-lg-4 col-xs-6 sidePadding">
+                  <button type="button" class="btn btn-primary" style="float: right" (click)="delete()" style="float :left;">
+                    Delete
+                  </button>
+                </div>
+
+              </ng-template>
+              <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6 sidePadding">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="save()" style="float :right;">
                   Save
                 </button>
               </div>
-            </div>
+            <!-- </div> -->
           </div>
         </form>
       </div>

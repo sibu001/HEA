@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +17,7 @@ import { StackTraceComponent } from '../stack-trace/stack-trace.component';
   templateUrl: './mail-description-edit.component.html',
   styleUrls: ['./mail-description-edit.component.css']
 })
-export class MailDescriptionEditComponent implements OnInit, OnDestroy {
+export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterViewChecked{
 
   id: any;
   helpHide: boolean;
@@ -67,6 +67,10 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
+  }
+
+  ngAfterViewChecked(): void {
+    
   }
 
   ngOnInit() {

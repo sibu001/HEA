@@ -1234,7 +1234,7 @@ table.jqplot-table-legend {
 
 .admin-content {
   text-align: left;
-  padding-left: 40px !important;
+  padding: 40px !important;
   padding-top: 35px;
 }
 
@@ -1362,4 +1362,43 @@ table.jqplot-table-legend {
     height:  0px !important;
   }
 
+}
+
+.w100{
+  width: 100%;
+}
+
+.mx-auto{
+  margin : auto
+}
+
+.mlr-0{
+  margin-left: 0px !important; 
+  margin-right: 0px !important;
+}
+
+@media (max-width: 992px){
+  .admin-content{
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+}
+
+.form-p{
+  margin : 0px 30px;
+}
+
+.mb-5{
+  margin-bottom: 5px !important;
+}
+
+.content{
+  text-align: left;
+  padding-top: 35px;
+}
+
+@media (min-width: 992px){
+  .content{
+    padding-left: 40px !important;
+  }
 }

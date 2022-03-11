@@ -173,9 +173,10 @@
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
-              <span class="messageName">Data Blocks</span></p>
-            <app-table [keys]="dataBlockKeys" [isPaginate]="false"  [isSearch]="false"
-              [data]="dataBlockDataSource" [totalElement]="dataBlockData.totalElements" (addEvent)='addDataBlock()'
+              <span class="messageName">Data Blocks</span>
+            </p>
+            <app-table [keys]="dataBlockKeys" [isPaginate]="false" [isSearch]="false" [data]="dataBlockDataSource"
+              [totalElement]="dataBlockData.totalElements" (addEvent)='addDataBlock()'
               (goToEditEvent)='goToEditDataBlock()'>
             </app-table>
           </div>
@@ -183,9 +184,10 @@
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
-              <span class="messageName">Data Fields</span></p>
-            <app-table [keys]="dataFieldKeys" [isPaginate]="true"  [isSearch]="false"
-              [data]="dataFieldDataSource" [totalElement]="dataFieldData.totalElements" (addEvent)='addDataField()'
+              <span class="messageName">Data Fields</span>
+            </p>
+            <app-table [keys]="dataFieldKeys" [isPaginate]="true" [isSearch]="false" [data]="dataFieldDataSource"
+              [totalElement]="dataFieldData.totalElements" (addEvent)='addDataField()'
               (goToEditEvent)='goToEditDataField()'>
             </app-table>
           </div>
@@ -193,48 +195,54 @@
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
-              <span class="messageName">Charts</span></p>
-            <app-table [keys]="chartKeys" [isPaginate]="true"  [isSearch]="false"
-              [data]="chartDataSource" [totalElement]="chartData.totalElements" (addEvent)='addCharts()'
-              (goToEditEvent)='goToEditCharts()'>
+              <span class="messageName">Charts</span>
+            </p>
+            <app-table [keys]="chartKeys" [isPaginate]="true" [isSearch]="false" [data]="chartDataSource"
+              [totalElement]="chartData.totalElements" (addEvent)='addCharts()' (goToEditEvent)='goToEditCharts()'>
             </app-table>
           </div>
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
-              <span class="messageName">Reports</span></p>
-            <app-table [keys]="reportKeys" [isPaginate]="true"  [isSearch]="false"
-              [data]="reportsDataSource" [totalElement]="reportData.totalElements" (addEvent)='addReports()'
-              (goToEditEvent)='goToEditReports()'>
+              <span class="messageName">Reports</span>
+            </p>
+            <app-table [keys]="reportKeys" [isPaginate]="true" [isSearch]="false" [data]="reportsDataSource"
+              [totalElement]="reportData.totalElements" (addEvent)='addReports()' (goToEditEvent)='goToEditReports()'>
             </app-table>
           </div>
 
           <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
-              <button type="button" class="btn btn-primary" (click)="back()">
+            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6 sidePadding">
+              <button type="button" class="btn btn-primary" (click)="back()" style='float: left;'>
                 Back
               </button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-sm-8 col-md-8 col-lg-8 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
-              </div>
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4 sidePadding" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" (click)="copy()">
+
+            <!-- <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding"> -->
+            <div class="col-sm-6 col-md-8 col-lg-8 col-xs-0" *ngIf="id === undefined || id === null; else elseBlock">
+            </div>
+            <ng-template #elseBlock>
+              <div class="col-sm-3 col-md-4 col-lg-4 col-xs-6 sidePadding">
+                <button type="button" class="btn btn-primary" (click)="copy()" style='float: right;'>
                   Copy
                 </button>
               </div>
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4 sidePadding" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
+              <div class="col-sm-3 col-md-4 col-lg-4 col-xs-6 sidePadding">
+                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()"
+                  style='float: left;'>
                   Delete
                 </button>
               </div>
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4 sidePadding">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
-                  Save
-                </button>
-              </div>
+            </ng-template>
+
+
+            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6 sidePadding">
+              <button type="button" class="btn btn-primary" style="float: right" (click)="save()" style='float: right;'>
+                Save
+              </button>
             </div>
+            <!-- </div> -->
           </div>
         </form>
       </div>

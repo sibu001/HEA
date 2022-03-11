@@ -191,3 +191,9 @@ input[type="file"] {
     width: 90px;
   }
 }
+
+@media  (max-width: 992px){
+  .content{
+    padding-left: 15px;
+  }
+}

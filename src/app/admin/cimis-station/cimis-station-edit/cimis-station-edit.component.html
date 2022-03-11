@@ -9,8 +9,7 @@
           </span>
         </p>
         <p class="messages">
-          <img class="pointer" alt="dot" src="assets/images/dot03.gif"
-            class="dot">
+          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">CIMIS Station</span>
         </p>
         <form [formGroup]="cimisStationForm" class="form-group form-padding">
@@ -19,9 +18,7 @@
               Station Number:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="stationNbr"
-                formControlName="stationNbr" />
+              <input type="text" class="form-control form-control-sm" id="stationNbr" formControlName="stationNbr" />
               <div *ngIf="f.stationNbr.invalid && (f.stationNbr.dirty ||
                 f.stationNbr.touched)">
                 <span class="error" *ngIf="f.stationNbr.errors.required">
@@ -36,8 +33,7 @@
               Station Name:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="groupCode" formControlName="name" />
+              <input type="text" class="form-control form-control-sm" id="groupCode" formControlName="name" />
               <div *ngIf="f.name.invalid && (f.name.dirty || f.name.touched)">
                 <span class="error" *ngIf="f.name.errors.required">
                   Station Name is required.
@@ -51,8 +47,7 @@
               County:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="county" formControlName="county" />
+              <input type="text" class="form-control form-control-sm" id="county" formControlName="county" />
               <div *ngIf="f.county.invalid && (f.county.dirty ||
                 f.county.touched)">
                 <span class="error" *ngIf="f.county.errors.required">
@@ -67,8 +62,7 @@
               City:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="city"
-                formControlName="city" />
+              <input type="text" class="form-control form-control-sm" id="city" formControlName="city" />
               <div *ngIf="f.city.invalid && (f.city.dirty || f.city.touched)">
                 <span class="error" *ngIf="f.city.errors.required">
                   City is required.
@@ -82,8 +76,7 @@
               Regional Office:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="regionalOffice"
+              <input type="text" class="form-control form-control-sm" id="regionalOffice"
                 formControlName="regionalOffice" />
               <div *ngIf="f.regionalOffice.invalid && (f.regionalOffice.dirty ||
                 f.regionalOffice.touched)">
@@ -99,8 +92,7 @@
               Elevation:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="elevation" formControlName="elevation" />
+              <input type="text" class="form-control form-control-sm" id="elevation" formControlName="elevation" />
               <div *ngIf="f.elevation.invalid && (f.elevation.dirty
                 ||f.elevation.touched)">
                 <span class="error" *ngIf="f.elevation.errors.required">
@@ -115,8 +107,7 @@
               Ground Cover:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="groundCover" formControlName="groundCover" />
+              <input type="text" class="form-control form-control-sm" id="groundCover" formControlName="groundCover" />
               <div *ngIf="f.groundCover.invalid && (f.groundCover.dirty
                 ||f.groundCover.touched)">
                 <span class="error" *ngIf="f.groundCover.errors.required">
@@ -131,8 +122,7 @@
               Latitude:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="latitude" formControlName="latitude" />
+              <input type="text" class="form-control form-control-sm" id="latitude" formControlName="latitude" />
               <div *ngIf="f.latitude.invalid && (f.latitude.dirty ||
                 f.latitude.touched)">
                 <span class="error" *ngIf="f.latitude.errors.required">
@@ -147,8 +137,7 @@
               Longitude:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="longitude" formControlName="longitude" />
+              <input type="text" class="form-control form-control-sm" id="longitude" formControlName="longitude" />
               <div *ngIf="f.longitude.invalid && (f.longitude.dirty ||
                 f.longitude.touched)">
                 <span class="error" *ngIf="f.longitude.errors.required">
@@ -172,8 +161,7 @@
               ETo station:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" id="EToStation"
-                formControlName="isEtoStation" />
+              <input type="checkbox" id="EToStation" formControlName="isEtoStation" />
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -182,14 +170,13 @@
               Zip codes:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control textarea_scroll" rows="3"
-                id="zipCodes" name="zipCodes"
+              <textarea class="form-control textarea_scroll" rows="3" id="zipCodes" name="zipCodes"
                 formControlName="zipCodes"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row rowPadding paddingTop">
+          <!-- <div class="row rowPadding paddingTop">
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-3
               display-inline-button">
               <button type="button" class="btn btn-primary" (click)="back()">Back</button>
@@ -203,6 +190,26 @@
               [ngClass]="{'display-responsive': id!==undefined&&id!==null}">
               <button type="button" class="btn btn-primary" (click)="save()">Save</button>
             </div>
+          </div> -->
+
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
+              <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
+            </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10 " style="text-align: end;"
+                  *ngIf="id!==undefined&&id!==null">
+                  <button type="button" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
+                </div>
+                <div [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id !== undefined && id !== null
+                , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id === undefined || id === null}"
+                  style="text-align:right; overflow:auto;">
+                  <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
+                </div>
+              </div>
+            </div>
+
           </div>
         </form>
       </div>

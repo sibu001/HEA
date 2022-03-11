@@ -10,7 +10,7 @@ declare var FB: any;
   styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
- @ViewChild('loginRef') loginElement: ElementRef;
+  @ViewChild('loginRef') loginElement: ElementRef;
   users: Users = new Users();
   errorMessage: string;
   show = true;
@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
   theme: string;
   code: string;
   buildForSandbox = true;
-  auth2:any;
+  auth2: any;
   @ContentChild('showhideinput') input;
   constructor(
     private router: Router,
@@ -32,7 +32,16 @@ export class LoginComponent implements OnInit {
       this.theme = 'MBL';
     }
     this.users.theme = this.theme;
-    this.loginService.setUser(this.users);
+    if (this.loginService.getUser().token != null) {
+
+      if (this.loginService.getUser().role == "ADMIN")
+        this.router.navigate(['/admin/customer']);
+      else
+        this.router.navigate(['/dashboard']);
+
+    } else {
+      this.loginService.setUser(this.users);
+    }
 
     if (window.location.origin === 'https://www.hea.com' || window.location.origin === 'http://www.hea.com') {
       this.buildForSandbox = false;
@@ -41,7 +50,10 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.users = this.loginService.getUser();
     if (this.users.token) {
-      this.router.navigate(['/dashboard']);
+      if (this.loginService.getUser().role == "ADMIN")
+        this.router.navigate(['/admin/customer']);
+      else
+        this.router.navigate(['/dashboard']);
     }
     this.fbConnect();
     this.googleInitialize();
@@ -272,40 +284,36 @@ export class LoginComponent implements OnInit {
     this.hide = !this.hide;
   }
 
-  fbConnect()
-  {
-    (window as any).fbAsyncInit = function() {
+  fbConnect() {
+    (window as any).fbAsyncInit = function () {
       FB.init({
-        appId      : '424517809415902',
-        cookie     : true,
-        xfbml      : true,
-        version    : 'v2.11'
+        appId: '424517809415902',
+        cookie: true,
+        xfbml: true,
+        version: 'v2.11'
       });
       FB.AppEvents.logPageView();
     };
-  
-    (function(d, s, id){
-       var js, fjs = d.getElementsByTagName(s)[0];
-       if (d.getElementById(id)) {return;}
-       js = d.createElement(s); js.id = id;
-       js.src = "https://connect.facebook.net/en_US/sdk.js";
-       fjs.parentNode.insertBefore(js, fjs);
-     }(document, 'script', 'facebook-jssdk'));
+
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) { return; }
+      js = d.createElement(s); js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   }
 
-  fbLogin(){
-    FB.login((response)=>
-        {
-          console.log('submitLogin',response);
-          if (response.authResponse)
-          {
-            console.log('User login sucess');
-          }
-           else
-           {
-           console.log('User login failed');
-         }
-      });
+  fbLogin() {
+    FB.login((response) => {
+      console.log('submitLogin', response);
+      if (response.authResponse) {
+        console.log('User login sucess');
+      }
+      else {
+        console.log('User login failed');
+      }
+    });
 
   }
 
@@ -320,9 +328,9 @@ export class LoginComponent implements OnInit {
         this.prepareLogin();
       });
     }
-    (function(d, s, id){
+    (function (d, s, id) {
       var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) {return;}
+      if (d.getElementById(id)) { return; }
       js = d.createElement(s); js.id = id;
       js.src = "https://apis.google.com/js/platform.js?onload=googleSDKLoaded";
       fjs.parentNode.insertBefore(js, fjs);

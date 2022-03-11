@@ -1,4 +1,4 @@
-@media only screen and (max-width: 1026px) {
+@media only screen and (max-width: 1023px) {
   .table-wrapper .table {
     min-width: 870px;
   }
@@ -258,9 +258,11 @@ mat-header-cell:last-of-type {
 .fixed-add-button {
   position: inherit;
 }
-@media (min-width: 200px) and (max-width: 767px) {
+@media (min-width: 200px) and (max-width: 992px) {  
   .fixed-add-button {
     position: absolute;
+    margin: 10px 0px;
+    left : 0px;
   }
 }
 
@@ -296,4 +298,32 @@ tr.example-element-row:not(.example-expanded-row):active {
 
 .mat-column-expandedDetail{
   display: block;
+}
+
+.p-inherit{
+  position: inherit;
+}
+
+.p-absolute{
+  position: absolute;
+}
+
+.mb-60{
+  margin-bottom: 60px;
+}
+
+.z1{
+  z-index: 1;
+}
+
+.mt-5{
+  margin-top: 5px;
+}
+
+.z2{
+  z-index: 2;
+}
+
+.z3{
+  z-index: 3;
 }

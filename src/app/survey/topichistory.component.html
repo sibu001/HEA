@@ -2,13 +2,13 @@
     <div class="container-fluid">
         <div class="row"
             *ngIf="users.surveyList!=null&&users.surveyList!=undefined">
-            <div class="col-sm-9 topic_list">
+            <div class="col-sm-9 topic_list ">
                 <h3 class="select_next">
                     <img alt="icon" src="assets/images/right-.png" class="back_img"
                         (click)="back()">&nbsp;&nbsp;Topics history</h3>
                 <p class="accurate" *ngIf="users.role!=='ADMIN'">You have
                     completed all existing Topics</p>
-                <div class="row" *ngIf="users.role==='ADMIN'">
+                <div class="row m-auto" *ngIf="users.role==='ADMIN'">
                     <div class="col-sm-1"></div>
                     <div class="col-sm-2">Audit Id:</div>
                     <div class="col-sm-3">

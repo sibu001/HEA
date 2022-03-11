@@ -229,3 +229,7 @@ select {
   /* width: 100%; */
   background-position-x: 98%;
 }
+
+.m-auto{
+  margin-left : auto;
+}

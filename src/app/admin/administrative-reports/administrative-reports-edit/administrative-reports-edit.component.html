@@ -10,26 +10,22 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Name:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="reportName" id="reportName">
+              <input type="text" class="form-control form-control-sm" formControlName="reportName" id="reportName">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="reportLabel" id="reportLabel">
+              <input type="text" class="form-control form-control-sm" formControlName="reportLabel" id="reportLabel">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="reportType" class="form-control form-control-sm"
-                formControlName="reportType">
-                <option *ngFor='let report of reportTypeList'
-                  [value]="report.lookupValue">{{report.valueName}}</option>
+              <select id="reportType" class="form-control form-control-sm" formControlName="reportType">
+                <option *ngFor='let report of reportTypeList' [value]="report.lookupValue">{{report.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -40,13 +36,10 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Select Report for
               upload (jrxml type)</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea *ngIf="f.reportType.value==='sql'" cols='30' rows='10'
-                class="form-control form-control-sm"
+              <textarea *ngIf="f.reportType.value==='sql'" cols='30' rows='10' class="form-control form-control-sm"
                 id="report" formControlName="report"></textarea>
-              <input *ngIf="f.reportType.value==='jrxml'" type="file"
-                class="custom-file-input"
-                style='font-size: smaller;' name="reportFile" id="reportFile"
-                formControlName='reportFile'>
+              <input *ngIf="f.reportType.value==='jrxml'" type="file" class="custom-file-input"
+                style='font-size: smaller;' name="reportFile" id="reportFile" formControlName='reportFile'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -55,36 +48,52 @@
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
-              <span class="messageName">Report parameters</span></p>
-            <app-table [keys]="dataFieldKeys" [isPaginate]="false"
-              [isHideAdd]='true' class='administrative-table'
-              [isSearch]="false" [data]="dataFieldDataSource"
-              [totalElement]="dataFieldData.totalElements"
-              (addNewRowEvent)="addNewRow()"
-              (saveNewRowEvent)="addNewParameter($event)"
-              (inputChangeEvent)="prepareChangeParameter($event)"
-              [isInlineEdit]="true"
-              (imageEvent)="deleteParameter($event)"
-              [showAddInputButton]='showAddButton'
+              <span class="messageName">Report parameters</span>
+            </p>
+            <app-table [keys]="dataFieldKeys" [isPaginate]="false" [isHideAdd]='true' class='administrative-table'
+              [isSearch]="false" [data]="dataFieldDataSource" [totalElement]="dataFieldData.totalElements"
+              (addNewRowEvent)="addNewRow()" (saveNewRowEvent)="addNewParameter($event)"
+              (inputChangeEvent)="prepareChangeParameter($event)" [isInlineEdit]="true"
+              (imageEvent)="deleteParameter($event)" [showAddInputButton]='showAddButton'
               (saveRowEvent)='addParameter($event)'>
             </app-table>
           </div>
 
-          <div class="row rowPadding paddingTop">
-            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-3
+          <!-- <div class="row rowPadding paddingTop">
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-4
               display-inline-button">
               <button type="button" class="btn btn-primary" (click)="back()">Back</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6" style="text-align:
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4" style="text-align:
               end;">
               <button type="button" class="btn btn-primary" (click)="delete()"
                 *ngIf="id!==undefined&&id!==null">Delete</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3"
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4"
               style="text-align:end;"
               [ngClass]="{'display-responsive': id!==undefined&&id!==null}">
               <button type="button" class="btn btn-primary" (click)="save()">Save</button>
             </div>
+          </div> -->
+
+          <div class="row rowPadding paddingTop">
+            <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
+              <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
+            </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10 " style="text-align: end;"
+                  *ngIf="id!==undefined&&id!==null">
+                  <button type="button" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
+                </div>
+                <div [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id != undefined 
+                , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id == undefined}"
+                  style="text-align:right; overflow:auto;">
+                  <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
+                </div>
+              </div>
+            </div>
+
           </div>
         </form>
       </div>
