@@ -156,7 +156,10 @@ export class DynamicViewManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                        if (error.error.errorMessage == "org.hibernate.exception.ConstraintViolationException: could not execute statement")
+                            this.utilityService.showErrorMessage("Duplicate entry '" + action.javaScriptPage.code + "' for key 'CODE'");
+                        else 
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 

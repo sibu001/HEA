@@ -52,7 +52,7 @@ export class AppConstant {
     public static callAdministrativeReport = 'report.do';
     public static customerGroupMailPart = 'customerGroupMailParts';
     public static topic = '';
-    public static prospects = '';
+    public static prospects = 'registrations.do';
     public static contextVariable = 'mailVariables';
     public static mailContentPart = 'mailContents';
     public static generateEmbedImage = 'generateEmbedImage';

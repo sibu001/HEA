@@ -97,18 +97,14 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
       }
     }
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'true')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('disableTotalSize', 'false')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('sortOrders[0].propertyName', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('source', sortOrder + '')
-      .set('sortOrders[0].asc', sortOrder + '')
-      .set('sortOrders[0].asc', sortOrder + '')
-      .set('sortOrders[0].asc', sortOrder + '')
-      .set('sortOrders[0].asc', sortOrder + '')
-      .set('sortOrders[0].asc', sortOrder + '')
-      .set('sortOrders[0].asc', sortOrder + '');
+      .set('sortOrders[0].propertyName', (event && event.sort.active != '' && event.sort.active !== undefined ? event.sort.active : 'createdDate'))
+      // .set('source', sortOrder + '')
+      .set('sortOrders[0].desc', sortOrder + '');
+      console.log(params);
     this.findProspects(true, params);
   }
   ngOnDestroy(): void {

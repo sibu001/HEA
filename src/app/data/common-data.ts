@@ -375,7 +375,7 @@ export class TableColumnData {
 
     static readonly PROSPECTS_KEY: Array<TABLECOLUMN> = [
         { key: 'registrationId', sort: 'registrationId', isEdit: true, displayName: 'ID' },
-        { key: 'program', sort: 'program', isEdit: true, displayName: 'Program' },
+        { key: 'source', sort: 'program', isEdit: true, displayName: 'Program' },
         { key: 'name', sort: 'name', isEdit: true, displayName: 'Name' },
         { key: 'field6', sort: 'field6', isEdit: true, displayName: 'Page' },
         { key: 'email', sort: 'email', isEdit: true, displayName: 'Email' },

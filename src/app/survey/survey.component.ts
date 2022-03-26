@@ -318,6 +318,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     this.users.allSurveyCheck = true;
     this.loginService.setUser(this.users);
     this.inputErrorMessage = undefined;
+
+    for ( const answers of this.users.currentPaneNumber.currentPaneAnswers )
+          answers.value = answers.value + "";
+
     if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
       this.gotToTopicHistory();
     } else {
