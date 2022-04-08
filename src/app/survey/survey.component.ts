@@ -1,3 +1,4 @@
+import { UtilityService } from './../services/utility.service';
 import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
@@ -28,7 +29,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
   users: Users = new Users();
   globalM = 0;
   globalK = 0;
-  constructor(private loginService: LoginService, private router: Router) {
+  constructor(private loginService: LoginService, private router: Router, private utilityService: UtilityService) {
     this.users = this.loginService.getUser();
 
     if (this.users.currentPaneNumber.currentPane == null || this.users.currentPaneNumber.currentPane == undefined) {
@@ -206,105 +207,105 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
       console.log('Mobile');
     } else {
-    const self = this;
-    self.globalM++;
-    this.users.currentPaneNumber.paneCharts = undefined;
-    setTimeout(function () {
-      self.globalK++;
-      if (self.paneCharts.length > 0) {
-        const panechart = self.paneCharts;
-        const j = 0;
-        console.log(self.globalM === self.globalK);
-        if (self.globalM === self.globalK) {
-          self.users.currentPaneNumber.paneCharts = self.paneCharts;
-          setTimeout(function () {
-            let line1;
-            let line2;
-            let line3;
-            let line4;
-            let line5;
-            let line6;
-            let line7;
-            for (const paneCharts of panechart) {
-              line1 = new Array;
-              line2 = new Array;
-              line3 = new Array;
-              line4 = new Array;
-              line5 = new Array;
-              line6 = new Array;
-              line7 = new Array;
-              for (const areaSeries of paneCharts.chart.series) {
-                if (areaSeries.chartSeries.field == 'line1') {
-                  for (const areaSeriesValue of areaSeries.seriesValues) {
-                    line1.push([areaSeriesValue.label, areaSeriesValue.value]);
-                  }
-                } else if (areaSeries.chartSeries.field == 'line2') {
-                  for (const areaSeriesValue of areaSeries.seriesValues) {
-                    line2.push([areaSeriesValue.label, areaSeriesValue.value]);
-                  }
-                } else if (areaSeries.chartSeries.field == 'line3') {
-                  for (const areaSeriesValue of areaSeries.seriesValues) {
-                    line3.push([areaSeriesValue.label, areaSeriesValue.value]);
-                  }
-                } else if (areaSeries.chartSeries.field == 'line4') {
-                  for (const areaSeriesValue of areaSeries.seriesValues) {
-                    line4.push([areaSeriesValue.label, areaSeriesValue.value]);
-                  }
-                } else if (areaSeries.chartSeries.field == 'line5') {
-                  for (const areaSeriesValue of areaSeries.seriesValues) {
-                    line5.push([areaSeriesValue.label, areaSeriesValue.value]);
-                  }
-                } else if (areaSeries.chartSeries.field == 'line6') {
-                  for (const areaSeriesValue of areaSeries.seriesValues) {
-                    line6.push([areaSeriesValue.label, areaSeriesValue.value]);
-                  }
-                } else if (areaSeries.chartSeries.field == 'line7') {
-                  for (const areaSeriesValue of areaSeries.seriesValues) {
-                    line7.push([areaSeriesValue.label, areaSeriesValue.value]);
+      const self = this;
+      self.globalM++;
+      this.users.currentPaneNumber.paneCharts = undefined;
+      setTimeout(function () {
+        self.globalK++;
+        if (self.paneCharts.length > 0) {
+          const panechart = self.paneCharts;
+          const j = 0;
+          console.log(self.globalM === self.globalK);
+          if (self.globalM === self.globalK) {
+            self.users.currentPaneNumber.paneCharts = self.paneCharts;
+            setTimeout(function () {
+              let line1;
+              let line2;
+              let line3;
+              let line4;
+              let line5;
+              let line6;
+              let line7;
+              for (const paneCharts of panechart) {
+                line1 = new Array;
+                line2 = new Array;
+                line3 = new Array;
+                line4 = new Array;
+                line5 = new Array;
+                line6 = new Array;
+                line7 = new Array;
+                for (const areaSeries of paneCharts.chart.series) {
+                  if (areaSeries.chartSeries.field == 'line1') {
+                    for (const areaSeriesValue of areaSeries.seriesValues) {
+                      line1.push([areaSeriesValue.label, areaSeriesValue.value]);
+                    }
+                  } else if (areaSeries.chartSeries.field == 'line2') {
+                    for (const areaSeriesValue of areaSeries.seriesValues) {
+                      line2.push([areaSeriesValue.label, areaSeriesValue.value]);
+                    }
+                  } else if (areaSeries.chartSeries.field == 'line3') {
+                    for (const areaSeriesValue of areaSeries.seriesValues) {
+                      line3.push([areaSeriesValue.label, areaSeriesValue.value]);
+                    }
+                  } else if (areaSeries.chartSeries.field == 'line4') {
+                    for (const areaSeriesValue of areaSeries.seriesValues) {
+                      line4.push([areaSeriesValue.label, areaSeriesValue.value]);
+                    }
+                  } else if (areaSeries.chartSeries.field == 'line5') {
+                    for (const areaSeriesValue of areaSeries.seriesValues) {
+                      line5.push([areaSeriesValue.label, areaSeriesValue.value]);
+                    }
+                  } else if (areaSeries.chartSeries.field == 'line6') {
+                    for (const areaSeriesValue of areaSeries.seriesValues) {
+                      line6.push([areaSeriesValue.label, areaSeriesValue.value]);
+                    }
+                  } else if (areaSeries.chartSeries.field == 'line7') {
+                    for (const areaSeriesValue of areaSeries.seriesValues) {
+                      line7.push([areaSeriesValue.label, areaSeriesValue.value]);
+                    }
                   }
                 }
+                // tslint:disable-next-line: prefer-const
+                let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
+                console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
+                // tslint:disable-next-line: no-eval
+                if (self.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
+                  seriesData = [line1, line2];
+                }
+                eval(paneCharts.chart.freeChartConfigurationJS);
+                self.globalM = 0;
+                self.globalK = 0;
+                if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
+                  const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
+                  const news = scriptTag.replace('<script>', '');
+                  $('#content').bind(
+                    // tslint:disable-next-line: no-eval
+                    eval(news)
+                  );
+                }
+                if (paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">') != -1) {
+                  const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
+                  const news = scriptTag.replace('<script type="text/javascript" language="javascript">', '');
+                  $('#content').bind(
+                    // tslint:disable-next-line: no-eval
+                    eval(news)
+                  );
+                }
               }
-              // tslint:disable-next-line: prefer-const
-              let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
-              console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
-              // tslint:disable-next-line: no-eval
-              if (self.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
-                seriesData = [line1, line2];
-              }
-              eval(paneCharts.chart.freeChartConfigurationJS);
-              self.globalM = 0;
-              self.globalK = 0;
-              if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
-                const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
-                const news = scriptTag.replace('<script>', '');
-                $('#content').bind(
-                  // tslint:disable-next-line: no-eval
-                  eval(news)
-                );
-              }
-              if (paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">') != -1) {
-                const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
-                const news = scriptTag.replace('<script type="text/javascript" language="javascript">', '');
-                $('#content').bind(
-                  // tslint:disable-next-line: no-eval
-                  eval(news)
-                );
-              }
-            }
-          }, 200);
+            }, 200);
+          }
         }
-      }
-      if (self.users.currentPaneNumber.currentPane.htmPageText != null) {
-        if (self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
-          const scriptTag = self.users.currentPaneNumber.currentPane.htmPageText.substring(self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
-            self.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
-          const news = scriptTag.replace('<script type="text/javascript">', '');
-          // tslint:disable-next-line: no-eval
-          eval(news);
+        if (self.users.currentPaneNumber.currentPane.htmPageText != null) {
+          if (self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
+            const scriptTag = self.users.currentPaneNumber.currentPane.htmPageText.substring(self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
+              self.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
+            const news = scriptTag.replace('<script type="text/javascript">', '');
+            // tslint:disable-next-line: no-eval
+            eval(news);
+          }
         }
-      }
-    }, 1500);
-  }
+      }, 1500);
+    }
   }
   progressShow() {
     this.totalPanes = new Array;
@@ -313,14 +314,15 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     }
   }
   next(id: any, paneNumber: any) {
+    // this.utilityService.showErrorMessage("hello from amogh");
     this.qusHide = false;
     this.chartHelpHide = false;
     this.users.allSurveyCheck = true;
     this.loginService.setUser(this.users);
     this.inputErrorMessage = undefined;
 
-    for ( const answers of this.users.currentPaneNumber.currentPaneAnswers )
-          answers.value = answers.value + "";
+    for (const answers of this.users.currentPaneNumber.currentPaneAnswers)
+      answers.value = answers.value + "";
 
     if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
       this.gotToTopicHistory();
@@ -340,7 +342,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     // if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
     //   this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
     // } else {
-      this.previousPane(this.users.currentPaneNumber);
+    this.previousPane(this.users.currentPaneNumber);
     // }
     document.getElementById('loader').classList.add('loading');
   }
@@ -372,6 +374,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
       } else {
         dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks };
       }
+
       this.loginService.performPostMultiPartDataPost(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
         this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answers').subscribe(
           data => {
@@ -425,7 +428,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPane != null) {
       if (currentPaneCode === this.users.currentPaneNumber.currentPane.paneCode) {
-        this.gotToTopicHistory();
+        this.utilityService.showErrorMessage("Request Failed Please Retry.");
+        // this.gotToTopicHistory();
       } else {
         if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
           if (this.users.currentPaneNumber.firstPage) {
@@ -507,6 +511,14 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         this.users.currentPaneNumber = response.data;
         this.loginService.setUser(this.users);
         if (this.users.currentPaneNumber.currentPane != null) {
+
+          if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
+            this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
+              if (element.value === "undefined" || element.value === undefined)
+                element.value = "false";
+            });
+          }
+
           if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
             if (this.users.currentPaneNumber.firstPage) {
               this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
@@ -582,8 +594,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         const response = JSON.parse(JSON.stringify(data));
         if (response.data.currentPane != null) {
           if (response.data.currentPane.paneCode === this.users.currentPaneNumber.currentPane.paneCode) {
-            // this.router.navigate(['/topicshistory']);
-            this.gotToTopicHistory();
+            this.utilityService.showErrorMessage("Request Failed Please Retry.");
+            // this.gotToTopicHistory();
           } else {
             this.users.currentPaneNumber = response.data;
             this.loginService.setUser(this.users);
@@ -830,7 +842,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
 
   deleteSurveyAnswerBlock(surveyAnswerBlockId: any): void {
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performDelete( 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
+    this.loginService.performDelete('customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
       this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answerBlocks/' + surveyAnswerBlockId).subscribe(
         data => {
           const response = JSON.parse(JSON.stringify(data));

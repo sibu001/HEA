@@ -29,8 +29,9 @@ export class ProspectsEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.data.id !== undefined) {
-      this.administrativeService.loadProspectsById(this.id);
+    if (this.data !== undefined && this.data.id !== undefined) {
+        this.id = this.data.id;
+      this.administrativeService.loadProspectsById(this.data.id);
       this.loadProspectsById();
     }
   }

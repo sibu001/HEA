@@ -95,7 +95,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   tableValueFormArray = new FormArray([]);
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   constructor(
-    private changeDetectorRefs: ChangeDetectorRef,
+    private changeDetectorRefs: ChangeDetectorRef,  
     private formBuilder: FormBuilder
   ) { }
   ngOnInit() {
@@ -153,7 +153,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
       this.displayedColumns = this.keys.map((col) => col.key);
       if (this.checkbox) {
         this.displayedColumns.unshift('select');
-      }
+      }                                                        5
       if (this.isDelete) {
         this.displayedColumns.push('delete');
       }
@@ -260,7 +260,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   goToEdit(event: any, col: any): any {
-    if (col.isEdit) {
+    if (col.isEdit ) {
       event.col = col;
       this.goToEditEvent.emit(event);
     }

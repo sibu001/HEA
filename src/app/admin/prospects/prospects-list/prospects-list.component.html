@@ -73,7 +73,7 @@
           <span class="messageName">Prospects (Number of Records = {{prospectsData?.totalElements}})</span></p>
         <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
           [totalElement]="prospectsData.totalElements" (changePageEvent)="search($event,false)"
-          (addEvent)='addProspects($event)'>
+          (addEvent)='addProspects($event)' (goToEditEvent)="addProspects($event)">
         </app-table>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">

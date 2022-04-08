@@ -53,20 +53,20 @@
                         {{row[col.key]|date:'mediumDate' : 'PST'}}</div>
                     <div id='1' *ngIf="col.type==='alert' && !col.isAction">
                         <div class="redAlert" *ngIf="row[col.key]===10">
-                            <p id="alertCircle">&nbsp;</p>
+                            <p id="alertCircle"></p>
                         </div>
                         <div class="yellowAlert" *ngIf="row[col.key]===5">
-                            <p class="alertCircle">&nbsp;</p>
+                            <p class="alertCircle"></p>
                         </div>
                         <div class="greenAlert" *ngIf="row[col.key]===0">
-                            <p class="alertCircle">&nbsp;</p>
+                            <p class="alertCircle"></p>
                         </div>
                     </div>
                     <div id='2' (click)='goToEdit(row,col);' *ngIf="col.type!='image' &&col.type!='buttons' &&
                         col.type!=='input'&&
                         col.type!='alert' &&
-                        !col.isDate && !col.isAction && col.type!=='checkbox'">
-                        {{row[col.key]}}&nbsp;
+                        !col.isDate && !col.isAction && col.type!=='checkbox'" class="div-wh-100">
+                        {{row[col.key]}}
                         <button class="btn btn-primary" type="submit"
                             *ngIf="col.type==='textArea'&&row['isInlineEdit']"
                             (click)='editColumn(col,row)' style="float: right;">Edit</button>
@@ -80,14 +80,16 @@
                         </div>
                     </div>
                     <div id='4' *ngIf="col.type=='image' && !col.changeable &&
-                        !col.isAction" class="center">
-                        <img id="1" *ngIf="col.imagePath!==undefined"
-                            [src]='col.imagePath'
-                            (click)="imageClickEvent(col,row)" class="tableImage" alt="images">
-                        <img id="2" *ngIf="row[col.key]!==undefined &&
-                            col.imagePath===undefined &&
-                            row[col.key]!=='addInlineInput'" [src]='row[col.key]'
-                            (click)="imageClickEvent(col,row)" class="tableImage" alt="images">
+                        !col.isAction" class="center div-wh-100">
+                        <div class="div-wh-100" (click)="imageClickEvent(col,row)" style="margin-left: 25%">
+                            <img id="1" *ngIf="col.imagePath!==undefined"
+                                [src]='col.imagePath'
+                                 class="tableImage" alt="images" >
+                            <img id="2" *ngIf="row[col.key]!==undefined &&
+                                col.imagePath===undefined &&
+                                row[col.key]!=='addInlineInput'" [src]='row[col.key]'
+                                 class="tableImage" alt="images">
+                        </div>
                         <button class='btn btn-primary'
                             *ngIf="row[col.key]=='addInlineInput'"
                             (click)='onSaveNewRowEvent(col,row)'>
@@ -186,7 +188,7 @@
         </mat-table>
         <div *ngIf='(dataSource===undefined || dataSource===null) && !showInput '
             class="row">
-            <div class='col-sm-12 col-xs-12 p-absolute z2' style='text-align: center;'>
+            <div class='col-sm-12 col-xs-12 z2 p-absolute' style='text-align: center;'>
                 <h5>No records found.</h5>
             </div>
         </div>

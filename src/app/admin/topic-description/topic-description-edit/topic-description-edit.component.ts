@@ -74,22 +74,32 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
     this.topicPaneKeys = TableColumnData.TOPIC_PANE_KEY;
     this.recommendationKeys = TableColumnData.RECOMMENDATION_KEY;
     this.topicVariablesKeys = TableColumnData.TOPIC_VARIABLES_KEYS;
-    this.setForm(undefined);
+
+    if(this.id === undefined || this.id === null)
+      this.setForm(undefined);
   }
 
   loadTopicDescription() {
-    this.topicService.loadTopicDescriptionList(true, '');
-    this.subscriptions.add(this.topicService.getTopicDescriptionList().pipe(skipWhile((item: any) => !item))
-      .subscribe((topicDescriptionList: any) => {
-        this.nextTopic = topicDescriptionList;
-      }));
+    // this.topicService.loadTopicDescriptionList(true, '');
+    // this.subscriptions.add(this.topicService.getTopicDescriptionList().pipe(skipWhile((item: any) => !item))
+    //   .subscribe((topicDescriptionList: any) => {
+    //     this.nextTopic = topicDescriptionList;
+    //   }));
+
+    this.topicService.loadTopicDescriptionById(this.id);
+    this.subscriptions.add(this.topicService.getTopicDescriptionById().pipe(skipWhile((item: any) => !item))
+    .subscribe((topicDescription: any) => {
+      this.nextTopic = topicDescription;            
+      console.log(  this.nextTopic);   
+      this.setForm(this.nextTopic);
+    }));
   }
 
 
   setForm(event: any) {
     this.topicForm = this.formBuilder.group({
-      topicCode: [event !== undefined ? event.topicCode : '', Validators.required],
-      displayLabel: [event !== undefined ? event.displayLabel : '', Validators.required],
+      topicCode: [event !== undefined ? event.surveyCode : '', Validators.required],
+      displayLabel: [event !== undefined ? event.reportLabel : '', Validators.required],
       reportLabel: [event !== undefined ? event.reportLabel : '', Validators.required],
       description: [event !== undefined ? event.description : ''],
       firstPaneOrSection: [event !== undefined ? event.firstPaneOrSection : ''],
