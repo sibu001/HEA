@@ -11,6 +11,9 @@ import { NgxsModule } from '@ngxs/store';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { UtilityService } from 'src/app/services/utility.service';
 
 @NgModule({
   imports: [
@@ -27,6 +30,6 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     ]),
   ],
   declarations: [TopicListComponent],
-  providers: [AdministrativeService]
+  providers: [AdministrativeService, SystemService , SystemUtilityService, UtilityService]
 })
 export class TopicListModule { }

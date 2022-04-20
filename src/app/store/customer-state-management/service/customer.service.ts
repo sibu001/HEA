@@ -65,7 +65,8 @@ import {
   UpdateStaffAction,
   UpdateStaffNoteAction,
   UpdateUtilityCredentialAction,
-  ValidateUtilityCredentialDataAction
+  ValidateUtilityCredentialDataAction,
+  OpenUtilityCredentialsAction
 } from '../state/customer.action';
 import { CustomerManagementState } from '../state/customer.state';
 
@@ -106,6 +107,10 @@ export class CustomerService {
 
   getUtilityCredentialDataSourceList(): Observable<any> {
     return this.store.select(CustomerManagementState.getUtilityCredentialDataSourceList);
+  }
+
+  getOpenedUtiliyCredentials(): Observable<any> {
+    return this.store.select(CustomerManagementState.getOpenedUtiliyCredentials)
   }
 
   getUtilityCredentialById(): Observable<any> {
@@ -230,6 +235,10 @@ export class CustomerService {
 
   loadUtilityCredentialById(customerId: any, id: number): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetUtilityCredentialByIdAction(customerId, id));
+  }
+
+  openUtilityCredentials(customerId : any, subscriptionId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new OpenUtilityCredentialsAction(customerId, subscriptionId));
   }
 
   saveUtilityCredential(customerId: any, utilityCredential: any): Observable<CustomerManagementState> {

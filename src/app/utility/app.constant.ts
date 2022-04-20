@@ -51,7 +51,7 @@ export class AppConstant {
     public static administrativeReport = 'adminReports';
     public static callAdministrativeReport = 'report.do';
     public static customerGroupMailPart = 'customerGroupMailParts';
-    public static topic = '';
+    public static topic = 'surveys';
     public static prospects = 'registrations.do';
     public static contextVariable = 'mailVariables';
     public static mailContentPart = 'mailContents';

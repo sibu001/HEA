@@ -12,15 +12,13 @@
               <span class="filterLabel">label:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='label'
-                id='label'>
+              <input type="text" class="form-control" formControlName='label' id='label'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">User:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName="user"
-                id="user">
+              <input type="text" class="form-control" formControlName="user" id="user">
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>
@@ -31,22 +29,25 @@
               <span class="filterLabel">Customer Group:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control"
-                formControlName='customerGroup' id='customerGroup'>
+              <select class="form-control form-control-sm" formControlName="customerGroup" id="customerGroup">
+                 <option value="" selected=""></option> 
+                <option *ngFor="let customerGroup of customerGroupList" [value]="customerGroup.id">{{ customerGroup.groupName }}</option>
+              </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Customer Place:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control"
-                formControlName='customerPlace' id='customerPlace'>
+              <select class="form-control" formControlName="customerPlace" id="customerPlace">
+                <option value="" selected=""></option>
+                <option *ngFor="let place of customerPlaces" [value]="place.id" >{{place.placeName}}</option>
+              </select>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary"
-                (click)="search(undefined,false)">Show</button>
+              <button type="submit" class="btn btn-primary" (click)="search(undefined,false)">Show</button>
             </div>
           </div>
 
@@ -54,29 +55,26 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic list (Number of Records =
-                {{totalElement}})</span></p>
-            <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true
-              [isSearch]="false" [data]="dataSource"
-              [totalElement]="topicData.totalElements"
-              (changePageEvent)="search($event,false)">
+                {{totalElement}})</span>
+            </p>
+            <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false" [data]="dataSource"
+              [totalElement]="topicData.totalElements" (changePageEvent)="search($event,false)" (goToEditEvent)="showSurveys($event)">
             </app-table>
           </div>
           <div class="row rowPadding">
             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-6 display-button-table">
-              <input type="button" class="btn btn-primary"
-                [value]="filter?'Enable Filter':'Disable Filter'"
-                (click)="disableFilter()">
+              <input type="button" class="btn btn-primary" (click)="enableDisableFilter()" [value]="!filter?'Enable Filter':'Disable Filter'"
+                >
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-6 display-button-table">
-              <input type="button" class="btn btn-primary" style="float: right"
-                [value]="cache?'Enable Value Cache':'Disable Value Cache'"
-                (click)="disableValueCache()">
+              <input type="button" class="btn btn-primary" style="float: right" 
+                [value]="!cache?'Enable Value Cache':'Disable Value Cache'" (click)="enableDisableCacheValue()">
             </div>
           </div>
         </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar ></app-sidebar>
+        <app-sidebar></app-sidebar>
       </div>
     </div>
   </div>

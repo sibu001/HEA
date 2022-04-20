@@ -314,7 +314,6 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     }
   }
   next(id: any, paneNumber: any) {
-    // this.utilityService.showErrorMessage("hello from amogh");
     this.qusHide = false;
     this.chartHelpHide = false;
     this.users.allSurveyCheck = true;
@@ -514,7 +513,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
 
           if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
             this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
-              if (element.value === "undefined" || element.value === undefined)
+              if (element.value === "undefined" || element.value === undefined || element.value === "null" || element.value === null)
                 element.value = "false";
             });
           }

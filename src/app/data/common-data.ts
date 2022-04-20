@@ -341,12 +341,12 @@ export class TableColumnData {
     ];
 
     static readonly TOPIC_KEYS: Array<TABLECOLUMN> = [
-        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
-        { key: 'user', isEdit: true, displayName: 'User' },
-        { key: 'group', isEdit: true, displayName: 'Group' },
-        { key: 'startDate', sort: 'startDate', isEdit: true, displayName: 'Start Date' },
-        { key: 'modifiedDate', sort: 'modifiedDate', isEdit: true, displayName: 'Modified Date' },
-        { key: 'completedDate', sort: 'completedDate', isEdit: true, displayName: 'Completed Date' },
+        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true , isSurvey :true  },
+        { key: 'user', isEdit: true, displayName: 'User'  , isSurvey :true },
+        { key: 'group', isEdit: true, displayName: 'Group' , isSurvey :true  },
+        { key: 'startDate', sort: 'startDate', isEdit: true, displayName: 'Start Date', isDate: true , isSurvey :true },
+        { key: 'modifiedDate', sort: 'modifiedDate', isEdit: true, displayName: 'Modified Date' , isDate: true  , isSurvey :true},
+        { key: 'completedDate', sort: 'completedDate', isEdit: true, displayName: 'Completed Date', isDate: true , isSurvey :true},
     ];
 
     static readonly ADMIN_REPORT_KEYS: Array<TABLECOLUMN> = [

@@ -70,7 +70,8 @@ import {
     UpdateStaffAction,
     UpdateStaffNoteAction,
     UpdateUtilityCredentialAction,
-    ValidateUtilityCredentialDataAction
+    ValidateUtilityCredentialDataAction,
+    OpenUtilityCredentialsAction
 } from './customer.action';
 import { CustomerManagementModel } from './customer.model';
 
@@ -115,7 +116,8 @@ import { CustomerManagementModel } from './customer.model';
         electricityRatePlan: undefined,
         heatingRatePlan: undefined,
         weatherStation: undefined,
-        error: undefined
+        error: undefined,
+        openedUtilityCredential : undefined,
     }
 })
 
@@ -167,6 +169,11 @@ export class CustomerManagementState {
     @Selector()
     static getUtilityCredentialById(state: CustomerManagementModel): any {
         return state.utilityCredential;
+    }
+
+    @Selector()
+    static getOpenedUtiliyCredentials(state: CustomerManagementModel) : any{
+        return state.openedUtilityCredential;
     }
 
     @Selector()
@@ -615,6 +622,23 @@ export class CustomerManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
                         ctx.dispatch(new CustomerError(error));
+                    }));
+    }
+
+    @Action(OpenUtilityCredentialsAction)
+    getOpnedUtilityCredentialById(ctx: StateContext<CustomerManagementModel>, action: OpenUtilityCredentialsAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet("customers/smd/" +action.customerId + "/" + action.subscriptionId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        openedUtilityCredential: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
                     }));
     }
 

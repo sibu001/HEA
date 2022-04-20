@@ -35,4 +35,19 @@ export class AppUtility {
 
         return dayValue + timeValue;
     }
+
+    static getDateFromMilllis(millisecond: any) {
+        const date = new Date(millisecond)
+        var d = AppUtility.getFormated(date.getMonth())
+        +'/'+ AppUtility.getFormated(date.getDate())
+        +'/'+AppUtility.getFormated(date.getFullYear())
+        +' '+AppUtility.getFormated(date.getHours()) + 
+        ':' + AppUtility.getFormated(date.getMinutes()) + 
+        ':' + AppUtility.getFormated(date.getSeconds());
+        return d;
+      }
+
+    private static getFormated(num){
+        return num < 10 ? '0' + num : num;
+    }
 }

@@ -60,6 +60,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   uiVersionList: Array<any> = TableColumnData.UI_VERSION;
   credentialsKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_CREDENTIAL_KEY;
   public credentialsDataSource: any;
+  public openedUtilityCredential : any;
+
   public credentialsData = {
     content: [],
     totalElements: 0,
@@ -422,16 +424,28 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       }));
   }
   editUtility(event: any) {
+    console.log("this is " + JSON.stringify(event));
     const obj = {
       row: event
     };
     this.openUtilityCredential(obj);
   }
+
+//   openUtilityCredential2(customerId: any, subscriptionId : any ) {
+//     this.customerService.openUtilityCredentials(customerId, subscriptionId);
+//     this.subscriptions.add(this.customerService.getOpenedUtiliyCredentials()
+//     .subscribe( (data) =>{
+//       console.log(data);
+//         this.openedUtilityCredential = data;
+//     }));
+//  }
+
   openUtilityCredential(event: any) {
     if (!event) {
       event = {
         customerId: this.id,
-        activationMail: this.customerForm.value.activationMail
+        activationMail: this.customerForm.value.activationMail,
+       
       };
     } else {
       event.customerId = this.id;
@@ -706,6 +720,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   changeDropDownValue(event: any, type: any) {
+    console.log(event);
     let i = -1;
     switch (type) {
       case 'coachUser':

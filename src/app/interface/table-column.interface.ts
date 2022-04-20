@@ -14,4 +14,5 @@ export interface TABLECOLUMN {
     isDate?: boolean;
     isInlineEdit?: boolean;
     isId?: boolean;
+    isSurvey?: boolean;
 }

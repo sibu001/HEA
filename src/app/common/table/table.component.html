@@ -50,7 +50,7 @@
                     *matCellDef="let
                     row" style="display: grid;">
                     <div *ngIf="col.type!='image' && col.isDate && !col.isAction">
-                        {{row[col.key]|date:'mediumDate' : 'PST'}}</div>
+                        {{ (col.isSurvey ? row.createdDate : row[col.key])|date:'mediumDate' : 'PST'}}</div>
                     <div id='1' *ngIf="col.type==='alert' && !col.isAction">
                         <div class="redAlert" *ngIf="row[col.key]===10">
                             <p id="alertCircle"></p>
@@ -65,7 +65,7 @@
                     <div id='2' (click)='goToEdit(row,col);' *ngIf="col.type!='image' &&col.type!='buttons' &&
                         col.type!=='input'&&
                         col.type!='alert' &&
-                        !col.isDate && !col.isAction && col.type!=='checkbox'" class="div-wh-100">
+                        !col.isDate && !col.isAction && col.type!=='checkbox' && !col.isSurvey" class="div-wh-100">
                         {{row[col.key]}}
                         <button class="btn btn-primary" type="submit"
                             *ngIf="col.type==='textArea'&&row['isInlineEdit']"
@@ -146,6 +146,18 @@
                             color="primary"
                             [checked]="row[col.key]" class="tableCheckBox">
                         </mat-checkbox>
+                    </div>
+                    <div id="11" (click)='goToEdit(row,col);' *ngIf="col.isSurvey">
+                            <ng-container #username *ngIf="col.key == 'user'">
+                                    {{row.user.name}}
+                            </ng-container>
+                            <ng-container #label *ngIf="col.key == 'label'">
+                                    {{row.surveyDescription.label}}
+                            </ng-container>
+                            <ng-container #group *ngIf="col.key == 'group'">
+                                    {{row.customer.customerGroup.groupName}}
+                            </ng-container>
+                                                        
                     </div>
                 </mat-cell>
             </ng-container>
