@@ -768,11 +768,16 @@
                                   justify-content: flex-start;
                                   flex-wrap:wrap;">
 
-                                    <p-slider [(ngModel)]="answersList.value" [style]="{'width':'25em'}" [min]="answersList.dataField.fieldValues[0].rangeStart" 
-                                    [max]="answersList.dataField.fieldValues[0].rangeEnd"></p-slider>
+                                    <mat-slider [(ngModel)]="answersList.value" 
+                                    style="  width : 25em;" [step]="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
+                                    [max]="answersList.dataField.fieldValues[0].rangeEnd"  (onChange)="handleChange($event)"></mat-slider>
 
                                     <div>
-                                      <input type="text" pInputText  [(ngModel)]="answersList.value" style="width:5em"/>
+                                      <input type="number" pInputText 
+                                      [min]="answersList.dataField.fieldValues[0].rangeStart" 
+                                      [max]="answersList.dataField.fieldValues[0].rangeEnd"
+                                      [(ngModel)]="answersList.value"  
+                                      style="width:5em" [id]="answersList.id" (change)="setValueInLimit($event)" >
                                       <span>{{answersList.dataField.unit}}</span>
                                     </div>
                                   </div>

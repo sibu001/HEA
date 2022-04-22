@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Pipe } from '@angular/core';
 import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
@@ -36,7 +36,7 @@ import {
     CallAdministrativeReportAction,
     GetEventHistoryCountAction,
     UploadEventHistoryFileAction,
-    GetCustomerListAction
+    GetCustomerListAction,
 } from './administrative.action';
 import { AdministrativeManagementModel } from './administrative.model';
 
@@ -376,6 +376,37 @@ export class AdministrativeManagementState {
                         this.utilityService.showErrorMessage(error.message);
                     }));
     }
+    // @Action(EnableDisableTopicListFilter)
+    // disableTopicListFilter(state:any,action : EnableDisableTopicListFilter) : Actions {
+    //     document.getElementById('loader').classList.add('loading');
+    //     return this.loginService.performPost( {},AppConstant.topic + (action.isEnabled ? '/enableFilter' : '/disableFilter')).
+    //     pipe(
+    //         tap((response : any) => {
+    //             document.getElementById('loader').classList.remove('loading');
+    //             this.utilityService.showSuccessMessage('successfully ' +  (action.isEnabled ? 'enable' : 'disable')+ ' the filter');
+    //         },
+    //         error =>{
+    //             document.getElementById('loader').classList.remove('loading');
+    //             this.utilityService.showErrorMessage("Requset Failed to change filter.");
+    //         })
+    //     ); 
+    // }
+
+    // @Action(EnableDisableCacheValue)
+    // enableDisableCacheValue(status : any, action: EnableDisableCacheValue) : Actions{
+    //     document.getElementById('loader').classList.add('loading');
+    //     return this.loginService.performPost( {},AppConstant.topic + (action.isEnabled ? '/enableValueCache' : '/disableValueCache')).
+    //     pipe(
+    //         tap((response : any) => {
+    //             document.getElementById('loader').classList.remove('loading');
+    //             this.utilityService.showSuccessMessage('successfully ' +(action.isEnabled ? 'enable' : 'disable') + ' the cache value' ); 
+    //         },
+    //         error =>{
+    //             document.getElementById('loader').classList.remove('loading');
+    //             this.utilityService.showErrorMessage("Requset Failed to change Cache value.");
+    //         })
+    //     ); 
+    // }
 
     @Action(DeleteTopicByIdAction)
     deleteTopicById(ctx: StateContext<AdministrativeManagementModel>, action: DeleteTopicByIdAction): Actions {
@@ -453,7 +484,7 @@ export class AdministrativeManagementState {
     @Action(GetProspectsByIdAction)
     getProspectsById(ctx: StateContext<AdministrativeManagementModel>, action: GetProspectsByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.prospects + '/' + action.id)
+        return this.loginService.performGet("registrations" + '/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

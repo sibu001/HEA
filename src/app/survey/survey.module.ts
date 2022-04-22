@@ -8,6 +8,7 @@ import { SurveyRoutingModule } from './survey.routes';
 import { CommonHEAModule } from '../common/common.module';
 import { PipeModule } from '../pipes/pipe/pipe.module';
 import {SliderModule} from 'primeng/slider';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import {SliderModule} from 'primeng/slider';
         SurveyRoutingModule,
         CommonHEAModule,
         PipeModule,
-        SliderModule
+        SliderModule,
+        MatSliderModule
     ],
     providers: [],
 

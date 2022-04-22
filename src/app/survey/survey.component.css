@@ -2305,7 +2305,25 @@ button.btn.btn-info {
   }
 }
 
-
 #chartSeasonalPie{
   width: 50%!important;
+}
+
+::ng-deep .mat-accent .mat-slider-thumb  {
+  background-color: #4651a2 !important;
+}
+
+::ng-deep .mat-slider-track-fill {
+  border: 4px solid #4651a2;
+}
+
+
+#inputSlider, input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+#inputSlider, input[type=number] {
+  -moz-appearance: textfield;
 }

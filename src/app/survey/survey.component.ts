@@ -3,6 +3,7 @@ import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit }
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
+
 declare var $: any;
 @Component({
   selector: 'app-survey',
@@ -122,6 +123,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     let line5: Array<any>;
     let line6: Array<any>;
     let line7: Array<any>;
+    let pie : Array<any>;
     if (this.users.currentPaneNumber.paneCharts.length > 0) {
       const panechart = this.users.currentPaneNumber.paneCharts;
       for (const paneCharts of panechart) {
@@ -132,6 +134,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         line5 = new Array;
         line6 = new Array;
         line7 = new Array;
+        pie = new Array;
         for (const areaSeries of paneCharts.chart.series) {
           if (areaSeries.chartSeries.field == 'line1') {
             for (const areaSeriesValue of areaSeries.seriesValues) {
@@ -161,6 +164,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             for (const areaSeriesValue of areaSeries.seriesValues) {
               line7.push([areaSeriesValue.label, areaSeriesValue.value]);
             }
+          }else if (areaSeries.chartSeries.field == 'pie') {
+            for (const areaSeriesValue of areaSeries.seriesValues) {
+              pie.push([areaSeriesValue.label, areaSeriesValue.value]);
+            }
           }
         }
         console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6 + '' + line7);
@@ -171,6 +178,28 @@ export class SurveyComponent implements OnInit, AfterViewInit {
           seriesData = [line1, line2];
         }
         // tslint:disable-next-line: no-eval
+
+        if(this.users.currentPaneNumber.currentPane.paneCode === "hhe_VariableGasLoadsCost"){
+
+        if(paneCharts.chart.freeChartConfigurationJS.indexOf("var n1") == -1){
+        paneCharts.chart.freeChartConfigurationJS = "var " + paneCharts.chart.freeChartConfigurationJS;
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("n2", " var n2");
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("normingValue", " var normingValue");
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("norm1", " var norm1");
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("norm2", " var norm2");
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("you", " var you");
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("stackplot", " var stackplot");
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("plotThreeNorms1", " var plotThreeNorms1");
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("plotThreeNorms2", " var plotThreeNorms2");
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("lineIndex", " var lineIndex");
+        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("pie", " var pie");
+
+        this.users.currentPaneNumber.paneCharts[0].chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS
+        this.loginService.setUser(this.users);
+        }
+      }
+
+        // this.evaluateJQuery(paneCharts);
         eval(paneCharts.chart.freeChartConfigurationJS);
         if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
           const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
@@ -201,6 +230,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     }
   }
 
+  evaluateJQuery(paneCharts){
+    eval(paneCharts.chart.freeChartConfigurationJS);
+  }
+
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     const ua = navigator.userAgent;
@@ -226,6 +259,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
               let line5;
               let line6;
               let line7;
+              let pie;
               for (const paneCharts of panechart) {
                 line1 = new Array;
                 line2 = new Array;
@@ -234,6 +268,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
                 line5 = new Array;
                 line6 = new Array;
                 line7 = new Array;
+                pie = new Array;
                 for (const areaSeries of paneCharts.chart.series) {
                   if (areaSeries.chartSeries.field == 'line1') {
                     for (const areaSeriesValue of areaSeries.seriesValues) {
@@ -262,6 +297,10 @@ export class SurveyComponent implements OnInit, AfterViewInit {
                   } else if (areaSeries.chartSeries.field == 'line7') {
                     for (const areaSeriesValue of areaSeries.seriesValues) {
                       line7.push([areaSeriesValue.label, areaSeriesValue.value]);
+                    }
+                  }else if (areaSeries.chartSeries.field == 'pie') {
+                    for (const areaSeriesValue of areaSeries.seriesValues) {
+                      pie.push([areaSeriesValue.label, areaSeriesValue.value]);
                     }
                   }
                 }
@@ -299,7 +338,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
           if (self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
             const scriptTag = self.users.currentPaneNumber.currentPane.htmPageText.substring(self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
               self.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
-            const news = scriptTag.replace('<script type="text/javascript">', '');
+            const news = scriptTag.replace('<scripsetValueInModel type="text/javascript">', '');
             // tslint:disable-next-line: no-eval
             eval(news);
           }
@@ -884,4 +923,30 @@ export class SurveyComponent implements OnInit, AfterViewInit {
       this.prev('prev', this.users.paneNumber);
     }
   }
+
+  setValueInLimit(event){
+    var minVal = parseInt(event.target.attributes.min.value);
+    var maxVal = parseInt(event.target.attributes.max.value);
+    var id = parseInt(event.target.id);
+    var value = event.target.value == "" ||  event.target.value == "e" ? 0 : parseInt(event.target.value);
+
+    if( value > maxVal )
+      this.setValueInModel(id, maxVal);
+    
+    else if (value < minVal) {
+      this.setValueInModel(id, minVal);  
+   }
+  }
+
+  setValueInModel(id, value){
+    let list = this.users.currentPaneNumber.currentPaneAnswers;
+    for (let data of list){
+        if(data.id == id)
+          data.value = value;
+    }
+
+    this.loginService.setUser(this.users);
+
+  }
+  
 }
