@@ -240,6 +240,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
       console.log('Mobile');
     } else {
+      this.users = this.loginService.getUser();
       const self = this;
       self.globalM++;
       this.users.currentPaneNumber.paneCharts = undefined;
