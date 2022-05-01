@@ -5,6 +5,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { CustomerError } from '../../customer-state-management/state/customer.action';
+import { SystemUtilityTransformer } from '../../system-utility-state-management/transformer/transformer';
 import { AdministrativeReportTransformer } from '../transformer/transformer';
 import {
     GetAdministrativeReportListAction,
@@ -37,6 +38,7 @@ import {
     GetEventHistoryCountAction,
     UploadEventHistoryFileAction,
     GetCustomerListAction,
+    DeleteProspectsListAction,
 } from './administrative.action';
 import { AdministrativeManagementModel } from './administrative.model';
 
@@ -467,6 +469,11 @@ export class AdministrativeManagementState {
             result = this.loginService.performGetWithParams(AppConstant.prospects, action.filter)
                 .pipe(
                     tap((response: any) => {
+                        response.list = SystemUtilityTransformer.transformCustomerEventTypeTableData(response.list);
+                        response.list.forEach( (element) => { 
+                        element.customer !== undefined && element.customer !== null ? element.customer.auditId !== undefined ? element.auditId =  element.customer.auditId : '' : ''
+                        element.coachUserName =  element.coachUser !== undefined && element.coachUser !== null ? element.coachUser.name : '';
+                    });
                         document.getElementById('loader').classList.remove('loading');
                         // const dataSource = Transformer.transformProspectsTableData(response, action.viewType);
                         ctx.patchState({
@@ -479,6 +486,20 @@ export class AdministrativeManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(DeleteProspectsListAction)
+    deleteProspectsListIdAction(ctx: StateContext<AdministrativeManagementModel>, action: DeleteProspectsListAction) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.prospects + '?registrationIds=' + action.ids)
+        .pipe(
+            tap((response: any) => {
+                document.getElementById('loader').classList.remove('loading');
+            },  
+            error => {
+                document.getElementById('loader').classList.remove('loading');
+                this.utilityService.showErrorMessage(error.message);
+            }));
     }
 
     @Action(GetProspectsByIdAction)
@@ -501,7 +522,7 @@ export class AdministrativeManagementState {
     @Action(DeleteProspectsByIdAction)
     deleteProspectsById(ctx: StateContext<AdministrativeManagementModel>, action: DeleteProspectsByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.prospects + '/' + action.id)
+        return this.loginService.performDelete(AppConstant.prospectsEdit + '/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -534,7 +555,7 @@ export class AdministrativeManagementState {
     @Action(UpdateProspectsAction)
     updateProspects(ctx: StateContext<AdministrativeManagementModel>, action: UpdateProspectsAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.prospects, AppConstant.prospects + '/' + action.id)
+        return this.loginService.performPost(action.prospects, AppConstant.prospectsEdit + '/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

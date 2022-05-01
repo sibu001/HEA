@@ -12,7 +12,7 @@ import { CommonHEAModule } from 'src/app/common/common.module';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
-import { MAT_DIALOG_DATA } from '@angular/material';
+import { MAT_DIALOG_DATA, MatCheckboxModule } from '@angular/material';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 
 @NgModule({
@@ -21,6 +21,7 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
     ProspectsRoutingModule,
     CommonHEAModule,
     ReactiveFormsModule,
+    MatCheckboxModule,
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,

@@ -6,7 +6,8 @@ export enum TopicActionTypes {
     DELETE_TOPIC_DESCRIPTION_BY_ID = 'Delete Topic Description By Id',
     GET_CONTEXT_METHOD_LIST = 'Get context Method List',
     SCRIPT_DEBUG = 'Debug Script',
-    GET_PAID_SERVICE = 'Get Paid Service List'
+    GET_PAID_SERVICE = 'Get Paid Service List',
+    LOAD_TOPIC_DESCRIPTION_PANE_BY_ID = 'Load Topic Description Pane By Id'
 }
 export class GetTopicDescriptionListAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_LIST;
@@ -25,6 +26,11 @@ export class SaveTopicDescriptionAction {
     constructor(readonly topicDescription: any) {
     }
 }
+
+// export class LoadTopicDescriptionPaneByIdAction{
+//     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_TOPIC_DESCRIPTION_PANE_BY_ID;
+//     constructor(readonly id: number) {}
+// }
 
 export class UpdateTopicDescriptionAction {
     static readonly type: TopicActionTypes = TopicActionTypes.UPDATE_TOPIC_DESCRIPTION;

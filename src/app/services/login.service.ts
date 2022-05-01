@@ -183,6 +183,13 @@ export class LoginService {
         const url = this.getFormattedUrl(endpoint);
         return this.http.post(url, object, this.getOptionForBlob(params));
     }
+
+    performGetForBlob(endpoint: any, params?: any){
+        const url = this.getFormattedUrl(endpoint);
+        return this.http.get(url, 
+            {params: params, observe: 'response', responseType: 'blob'});
+    }
+
     performPut(object: any, endpoint: any): any {
         const url = this.getFormattedUrl(endpoint);
         return this.http.put(url, object, this.getOptionsMultiPart());

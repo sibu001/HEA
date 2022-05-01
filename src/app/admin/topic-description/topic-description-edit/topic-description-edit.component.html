@@ -218,14 +218,17 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
         </div>
-
+          
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Group</span></p>
             <app-table [keys]="keys" [isPaginate]="false" [checkbox]=true
               [isHideAdd]=true [isSearch]="false"
-              [data]="dataSource" [totalElement]="topicTableData.totalElements">
+              [data]="customerGroupList" [totalElement]="topicTableData.totalElements" 
+              [selectionList]='selectionCustomerGroupList' id = "groupCode"
+              (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)"
+              >
             </app-table>
           </div>
 
@@ -234,10 +237,10 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Panes </span></p>
             <app-table [keys]="topicPaneKeys" [isPaginate]="true"
-              [isSearch]="true" [data]="dataSource"
+              [isSearch]="true" [data]="topicPaneDataSource"
               [totalElement]="topicTableData.totalElements"
               (addEvent)='addTopicPanes()'
-              (goToEditEvent)='goToEditTopicPanes()'>
+              (goToEditEvent)='goToEditTopicPanes($event)'>
             </app-table>
           </div>
 

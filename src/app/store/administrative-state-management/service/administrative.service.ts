@@ -7,6 +7,7 @@ import {
   DeleteAdministrativeReportParamsByIdAction,
   DeleteEventHistoryByIdAction,
   DeleteProspectsByIdAction,
+  DeleteProspectsListAction,
   DeleteTopicByIdAction,
   GetAdministrativeReportByIdAction,
   GetAdministrativeReportCountAction,
@@ -153,6 +154,10 @@ export class AdministrativeService {
 
   loadProspectsList(force: boolean, filter: any): Observable<AdministrativeManagementState> {
     return this.store.dispatch(new GetProspectsListAction(force, filter));
+  }
+
+  deleteProspectListByIds(ids : any){
+    return this.store.dispatch(new DeleteProspectsListAction(ids));
   }
 
   loadProspectsById(id: number): Observable<AdministrativeManagementState> {

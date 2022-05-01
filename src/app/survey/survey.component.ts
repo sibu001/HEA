@@ -30,6 +30,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
   users: Users = new Users();
   globalM = 0;
   globalK = 0;
+  private slidermap = new Map();
+
   constructor(private loginService: LoginService, private router: Router, private utilityService: UtilityService) {
     this.users = this.loginService.getUser();
 
@@ -115,7 +117,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     }
   }
   chartDataConfiguration() {
-    this.paneCharts = JSON.parse(JSON.stringify(this.users.currentPaneNumber.paneCharts));
+    this.paneCharts = this.users.currentPaneNumber.paneCharts;
     let line1: Array<any>;
     let line2: Array<any>;
     let line3: Array<any>;
@@ -180,7 +182,6 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         // tslint:disable-next-line: no-eval
 
         if(this.users.currentPaneNumber.currentPane.paneCode === "hhe_VariableGasLoadsCost"){
-
         if(paneCharts.chart.freeChartConfigurationJS.indexOf("var n1") == -1){
         paneCharts.chart.freeChartConfigurationJS = "var " + paneCharts.chart.freeChartConfigurationJS;
         paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("n2", " var n2");
@@ -194,12 +195,13 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("lineIndex", " var lineIndex");
         paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("pie", " var pie");
 
-        this.users.currentPaneNumber.paneCharts[0].chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS
+        // this.paneCharts = this.users.currentPaneNumber.paneCharts;
+        // this.users.currentPaneNumber.paneCharts[0].chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS
         this.loginService.setUser(this.users);
+        // this.users = this.loginService.getUser();
         }
       }
 
-        // this.evaluateJQuery(paneCharts);
         eval(paneCharts.chart.freeChartConfigurationJS);
         if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
           const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
@@ -230,9 +232,6 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     }
   }
 
-  evaluateJQuery(paneCharts){
-    eval(paneCharts.chart.freeChartConfigurationJS);
-  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -249,7 +248,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         if (self.paneCharts.length > 0) {
           const panechart = self.paneCharts;
           const j = 0;
-          console.log(self.globalM === self.globalK);
+          // console.log(self.globalM === self.globalK);
           if (self.globalM === self.globalK) {
             self.users.currentPaneNumber.paneCharts = self.paneCharts;
             setTimeout(function () {
@@ -506,6 +505,15 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             document.getElementById('menu_option2').classList.remove('header_menu_none');
           }
         }
+
+        if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
+          this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
+            if (element.dataType == "boolean" && (element.value === "undefined" || element.value === undefined || element.value === "null" || element.value === null))
+              element.value = "false";
+          });
+          this.loginService.setUser(this.users);
+        }
+
         if (this.users.currentPaneNumber.currentPane.paneCode === 'prf_onHold') {
           this.hideMenu();
         }
@@ -846,6 +854,12 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         }
       }
     }
+
+    let answersList =  this.users.currentPaneNumber.currentPaneAnswers;
+    answersList.forEach((data) => {
+      if(data.dataField.inputType == 'hslider')
+          this.slidermap.set(data.id + "", data.value == null || data.value == '' ? 0 : data.value)
+    })
   }
 
   addDataBlockRow(position: any) {
@@ -911,10 +925,6 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     return s.substring(p, s.indexOf(b, p));
   }
 
-  // addClass(){
-  //   document.getElementById('htm-right-top').getElementsByTagName('p')[0].getElementsByTagName('img')[0].classList.add('solar-pv-right_image');
-  // }
-
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.code === 'ArrowRight') {
@@ -934,7 +944,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     if( value > maxVal )
       this.setValueInModel(id, maxVal);
     
-    else if (value < minVal) {
+    else if (value <= minVal) {
       this.setValueInModel(id, minVal);  
    }
   }
@@ -950,4 +960,17 @@ export class SurveyComponent implements OnInit, AfterViewInit {
 
   }
   
+  handleChange(event){
+    let id = event.source._elementRef.nativeElement.id;
+    let oldValue = this.slidermap.get(id);
+    
+    if(event.value > oldValue){
+      this.setValueInModel(id, 1 + parseInt(oldValue));
+      this.slidermap.set(id, 1 + parseInt(oldValue));
+    }else if (event.value < oldValue){
+      this.setValueInModel(id,parseInt(oldValue) - 1);
+      this.slidermap.set(id,parseInt(oldValue) - 1);
+    }
+  }
+
 }

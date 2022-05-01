@@ -25,6 +25,7 @@ import { TopicManagementModel } from './topic.model';
         contextMethodList: undefined,
         scriptDebug: undefined,
         paidServiceList: undefined,
+        topicDesctiptionPane : undefined,
     }
 })
 

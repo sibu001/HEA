@@ -44,6 +44,8 @@ export class ProspectsEditComponent implements OnInit, OnDestroy {
       field6: [event !== undefined ? event.field6 : ''],
       zip: [event !== undefined ? event.zip : ''],
       email: [event !== undefined ? event.email : ''],
+      emailValidated: [event !== undefined ? event.emailValidated : ''],  
+      referral: [event !== undefined ? event.referral : ''],
       remoteInfo: [event !== undefined ? event.remoteInfo : ''],
       createdDate: [event !== undefined ? event.createdDate : ''],
       field7: [event !== undefined ? event.field7 : ''],
@@ -93,6 +95,7 @@ export class ProspectsEditComponent implements OnInit, OnDestroy {
             this.loadProspectsById();
           }));
       }
+      this.dialogRef.close(true);
     } else {
       this.validateForm();
     }

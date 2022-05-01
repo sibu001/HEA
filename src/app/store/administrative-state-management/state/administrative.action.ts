@@ -28,7 +28,8 @@ export enum AdministrativeActionTypes {
     UPDATE_EVENT_HISTORY = 'Update EventHistory',
     UPLOAD_EVENT_HISTORY_FILE = 'Upload Event History File',
     DELETE_EVENT_HISTORY_BY_ID = 'Delete EventHistory By Id',
-    GET_CUSTOMER_LIST = 'Get Customer List'
+    GET_CUSTOMER_LIST = 'Get Customer List',
+    DELETE_PROSPECT_LIST_ACTION = 'Delete Prospects List Action'
 }
 export class GetAdministrativeReportListAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_ADMINISTRATIVE_REPORT_LIST;
@@ -138,6 +139,11 @@ export class GetProspectsListAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_PROSPECTS_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
     }
+}
+
+export class DeleteProspectsListAction{
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.DELETE_PROSPECT_LIST_ACTION;
+    constructor(readonly ids : any) {}
 }
 
 export class GetProspectsByIdAction {

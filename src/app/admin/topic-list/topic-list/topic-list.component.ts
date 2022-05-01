@@ -183,8 +183,8 @@ export class TopicListComponent implements OnInit, OnDestroy {
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('label', (this.topicForm.value.label !== null ? this.topicForm.value.label : ''))
       .set('CustomerName', (this.topicForm.value.CustomerName !== null ? this.topicForm.value.user : ''))
-      .set('customerGroupIds', (this.topicForm.value.customerGroup !== null ? this.topicForm.value.customerGroup : ''))
-      .set('customerPlace', (this.topicForm.value.customerPlace !== null ? this.topicForm.value.customerPlace : ''));
+      .set('customer.customerGroupId', (this.topicForm.value.customerGroup !== null ? this.topicForm.value.customerGroup : ''))
+      .set('customer.placeCode', (this.topicForm.value.customerPlace !== null ? this.topicForm.value.customerPlace : ''));
 
     this.findTopic(true, params);
   }

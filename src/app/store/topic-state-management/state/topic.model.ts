@@ -4,4 +4,5 @@ export interface TopicManagementModel {
     contextMethodList: any;
     scriptDebug: any;
     paidServiceList: any;
+    topicDesctiptionPane : any;
 }

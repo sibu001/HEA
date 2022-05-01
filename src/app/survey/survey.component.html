@@ -770,7 +770,7 @@
 
                                     <mat-slider [(ngModel)]="answersList.value" 
                                     style="  width : 25em;" [step]="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
-                                    [max]="answersList.dataField.fieldValues[0].rangeEnd"  (onChange)="handleChange($event)"></mat-slider>
+                                    [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id" (change)="handleChange($event)"></mat-slider>
 
                                     <div>
                                       <input type="number" pInputText 

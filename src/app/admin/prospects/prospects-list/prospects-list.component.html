@@ -51,10 +51,28 @@
               <span class="filterLabel">Page:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='field6'>
+              <input type="text" class="form-control" formControlName='page'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <span class="filterLabel">Subscription ID:</span>
+              <span class="filterLabel">Zip:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='zip'>
+            </div>
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Audit Id:</span>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='auditId'>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Subscription Id:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
               <input type="text" class="form-control" formControlName='subscriptionId'>
@@ -71,10 +89,18 @@
         <p class="messages">
           <img src='assets/images/dot03.gif' alt="dot" class='dot'>
           <span class="messageName">Prospects (Number of Records = {{prospectsData?.totalElements}})</span></p>
-        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-          [totalElement]="prospectsData.totalElements" (changePageEvent)="search($event,false)"
-          (addEvent)='addProspects($event)' (goToEditEvent)="addProspects($event)">
+        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [checkbox]=true
+          [totalElement]="prospectsData.totalElements" (changePageEvent)="search($event,false)" [isHideAdd]="true"
+          (goToEditEvent)="addProspects($event)" (checkBoxChangeEvent)="getAllSelectedProspects($event)">
         </app-table>
+        <div class="row row-padding">
+            <div class="col-lg-9 text-right">
+              <button class="btn btn-primary" (click)="downlodCSV()"> Download CSV</button>
+            </div>
+            <div class="col-lg-3 text-right">
+              <button class="btn btn-primary" (click)="deleteProspectsById()"> Remove selected</button>
+            </div>
+        </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar ></app-sidebar>

@@ -211,7 +211,7 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_GROUP_KEY: Array<TABLECOLUMN> = [
-        { key: 'optional', displayName: 'Optional', type: 'checkbox' },
+        // { key: 'optional', displayName: 'Optional', type: 'checkbox' },
         { key: 'groupCode', isEdit: true, displayName: 'Group Code' },
         { key: 'groupName', isEdit: true, displayName: 'Group Name' },
     ];
@@ -264,7 +264,7 @@ export class TableColumnData {
     ];
 
     static readonly TOPIC_PANE_KEY: Array<TABLECOLUMN> = [
-        { key: 'paneCode', isEdit: true, displayName: 'Pane Code' },
+        { key: 'paneCode', isEdit: true, displayName: 'Pane Code' ,isUnderline: true },
         { key: 'label', isEdit: true, displayName: 'Label' },
         { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
         { key: 'section', isEdit: true, displayName: 'Section' },
@@ -379,9 +379,10 @@ export class TableColumnData {
         { key: 'name', sort: 'name', isEdit: true, displayName: 'Name' },
         { key: 'field6', sort: 'field6', isEdit: true, displayName: 'Page' },
         { key: 'email', sort: 'email', isEdit: true, displayName: 'Email' },
-        { key: 'coachUserId', sort: 'coachUserId', isEdit: true, displayName: 'CoachID' },
+        { key: 'coachUserName', sort: 'coachUserId', isEdit: true, displayName: 'CoachID' },
         { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Date', isDate: true },
-        { key: 'optOutMail', sort: 'optOutMail', isEdit: true, displayName: 'Opt Out Mail', isDate: true }
+        { key: 'auditId' , sort: 'auditId', isEdit: true, displayName: 'AuditId'},
+        { key: 'optOutMail', sort: 'optOutMail', isEdit: true, displayName: 'Output'}
     ];
 
     static readonly MAIL_DESC_KEYS: Array<TABLECOLUMN> = [

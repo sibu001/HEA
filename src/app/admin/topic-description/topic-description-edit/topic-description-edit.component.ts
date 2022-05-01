@@ -14,6 +14,10 @@ import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { skipWhile } from 'rxjs/operators';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { templateJitUrl } from '@angular/compiler';
+import { LoginService } from 'src/app/services/login.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 
 
 @Component({
@@ -56,45 +60,86 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
       }]
   };
   topicData = TableColumnData.TOPIC_DESCRIPTION_SELECT_DATA;
-  nextTopic: any;
+  nextTopicCode = [];
+
+  public customerGroupList : any;
+  public selectionCustomerGroupList : any;
+  public topicPaneDataSource : any;
+
   constructor(private readonly formBuilder: FormBuilder,
     private readonly topicService: TopicService,
     private readonly activateRoute: ActivatedRoute,
     private readonly location: Location,
-    private readonly router: Router) {
+    private readonly router: Router,
+    private readonly systemService: SystemService,
+    private readonly loginService: LoginService) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
+
+
   }
 
-
   ngOnInit() {
-    this.loadTopicDescription();
     this.keys = TableColumnData.CUSTOMER_GROUP_KEY;
     this.topicPaneKeys = TableColumnData.TOPIC_PANE_KEY;
     this.recommendationKeys = TableColumnData.RECOMMENDATION_KEY;
     this.topicVariablesKeys = TableColumnData.TOPIC_VARIABLES_KEYS;
-
-    if(this.id === undefined || this.id === null)
+    
+    this.loadcustomerGroups();
       this.setForm(undefined);
+
+      if(this.id){
+        this.loadTopicDescription();
+        this.loadCustomerGroupById();
+        this.loadTopicPanesById();
+      }
   }
 
-  loadTopicDescription() {
-    // this.topicService.loadTopicDescriptionList(true, '');
-    // this.subscriptions.add(this.topicService.getTopicDescriptionList().pipe(skipWhile((item: any) => !item))
-    //   .subscribe((topicDescriptionList: any) => {
-    //     this.nextTopic = topicDescriptionList;
-    //   }));
-
+  private loadTopicDescription() {
     this.topicService.loadTopicDescriptionById(this.id);
     this.subscriptions.add(this.topicService.getTopicDescriptionById().pipe(skipWhile((item: any) => !item))
     .subscribe((topicDescription: any) => {
-      this.nextTopic = topicDescription;            
-      console.log(  this.nextTopic);   
-      this.setForm(this.nextTopic);
+      this.nextTopicCode = topicDescription;            
+      this.setForm(this.nextTopicCode);
     }));
   }
 
+  private loadcustomerGroups() {
+    this.systemService.loadCustomerGroupList(false, '');
+    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
+      .subscribe((customerGroupList: any) => {
+        this.customerGroupList = customerGroupList;
+      }));
+  }
+
+   loadCustomerGroupById(){
+     
+    this.selectionCustomerGroupList = [];
+    this.subscriptions.add(
+      this.loginService.performGet(AppConstant.topicDescription + '/' + this.id + '/surveyDescriptionGroups')
+     .subscribe((groupList : any) => {
+        let testList = [];
+        groupList.forEach((item: any) =>{
+          testList.push(item.customerGroup.groupCode);
+      })
+      this.selectionCustomerGroupList = testList;
+      },(error : any)  => {
+        console.log("some error has occurred.");
+      }));
+   }
+
+
+   loadTopicPanesById(){
+     this.topicPaneDataSource = [];
+     this.subscriptions.add(
+      this.loginService.performGet(AppConstant.topicDescription + '/' + this.id + '/panes')
+      .subscribe((dataList : any) => {
+      this.topicPaneDataSource = dataList;
+      },(error : any)  => {
+        console.log("some error has occurred.");
+      }));
+   }
 
   setForm(event: any) {
     this.topicForm = this.formBuilder.group({
@@ -122,6 +167,12 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
       isRerunTopic: [event !== undefined ? event.isRerunTopic : ''],
     });
   }
+
+  topicCheckBoxChangeEvent(event: any) {
+    this.selectionCustomerGroupList = [...event];
+    // this.topicGroupCheckBox = event;
+  }
+
   back() {
     this.location.back();
   }
@@ -146,6 +197,7 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
   }
 
   goToEditTopicPanes(event: any): any {
+    console.log(event);
     this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'], { queryParams: { id: event } });
   }
 

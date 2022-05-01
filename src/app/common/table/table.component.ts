@@ -127,6 +127,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] && changes['data'].currentValue) {
+      this.selection.clear();
       this.data = changes['data'].currentValue;
       this.totalLength = this.totalElement;
       if (this.pageIndex !== undefined && this.pageIndex !== null) {
@@ -134,30 +135,32 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
       }
       this.showRowInput = false;
       this.dataSource = new MatTableDataSource(this.data);
-      if (this.selectionList.length > 0) {
-        this.selectionList.forEach(e => {
-          this.dataSource.data.every((row) => {
-            if (e === row[this.id]) {
-              this.selection.select(row);
-              this.checkBoxChange();
-              return false;
-            } else {
-              return true;
-            }
-          });
-        });
-      }
     }
     if (changes['keys'] && changes['keys'].currentValue) {
       this.keys = changes['keys'].currentValue;
       this.displayedColumns = this.keys.map((col) => col.key);
       if (this.checkbox) {
         this.displayedColumns.unshift('select');
-      }                                                        5
+      }                                                        
       if (this.isDelete) {
         this.displayedColumns.push('delete');
       }
     }
+
+    if(this.selection && this.selectionList.length > 0) {
+      this.selectionList.forEach(e => {
+        this.dataSource.data.every((row) => {
+          if (e === row[this.id]) {
+            this.selection.select(row);
+            this.checkBoxChange();
+            return false;
+          } else {
+            return true;
+          }
+        });
+      });
+    }
+
     this.setForm();
     if (this.isInlineEdit) {
       this.setExistingDataForm();
@@ -233,6 +236,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.data.forEach((row) => this.selection.select(row));
+  }
+
+  removeDeletedItemFromTheSelection(){
+    let selectedList = this.selection.selected;
+
   }
 
   checkboxLabel(row?: any): string {

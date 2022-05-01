@@ -36,6 +36,15 @@ export class SystemUtilityTransformer {
             } else {
                 dataSourceObject.onlyOne = '';
             }
+
+            if (element.optOutMail) {
+                dataSourceObject.optOutMail = '*';
+                dataSourceObject.optOutMailValue = element.optOutMail;
+            } else {
+                dataSourceObject.optOutMail = '';
+            }
+
+
             dataSourceList.push(dataSourceObject);
         });
         return dataSourceList;

@@ -53,6 +53,7 @@ export class AppConstant {
     public static customerGroupMailPart = 'customerGroupMailParts';
     public static topic = 'surveys';
     public static prospects = 'registrations.do';
+    public static prospectsEdit = 'registrations';
     public static contextVariable = 'mailVariables';
     public static mailContentPart = 'mailContents';
     public static generateEmbedImage = 'generateEmbedImage';

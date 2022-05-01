@@ -120,6 +120,10 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
   }
 
+  loadPaneById(){
+        
+  }
+
   addDataBlock() {
     this.router.navigate(['admin/topicDescription/topicPaneDataBlockEdit']);
   }

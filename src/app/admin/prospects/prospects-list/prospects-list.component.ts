@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
@@ -24,6 +25,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   public coachIdList: any = [];
   public dataSource: any;
   public totalElement = 0;
+  public selectedProspectListIds : any;
   public prospectsData = {
     content: [],
     totalElements: 0,
@@ -35,7 +37,8 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private readonly administrativeService: AdministrativeService,
     private readonly systemService: SystemService,
-    private readonly activateRoute: ActivatedRoute) {
+    private readonly activateRoute: ActivatedRoute,
+    private readonly loginService: LoginService) {
     this.activateRoute.queryParams.subscribe(params => {
       this.force = params['force'];
     });
@@ -66,9 +69,11 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
       source: [event !== undefined && event !== null ? event.source : ''],
       email: [event !== undefined && event !== null ? event.email : ''],
       name: [event !== undefined && event !== null ? event.name : ''],
-      field6: [event !== undefined && event !== null ? event.field6 : ''],
+      page: [event !== undefined && event !== null ? event.page : ''],
       coachUserId: [event !== undefined && event !== null ? event.coachUserId : ''],
       subscriptionId: [event !== undefined && event !== null ? event.subscriptionId : ''],
+      auditId: [event !== undefined && event !== null ? event.auditId : ''],
+      zip: [event !== undefined && event !== null ? event.zip : ''],
     });
   }
 
@@ -78,7 +83,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
       .subscribe((prospectsList: any) => {
         this.prospectsData.content = prospectsList.list;
         this.prospectsData.totalElements = prospectsList.totalSize;
-        this.dataSource = [...this.prospectsData.content];
+        this.dataSource = this.prospectsData.content;
       }));
   }
 
@@ -87,8 +92,53 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemService.getCoachUserList().pipe(skipWhile((item: any) => !item))
       .subscribe((coachUserList: any) => {
         this.coachIdList = coachUserList.list;
+        this.coachIdList.splice(0,0,{ name : "Unassigned", "userId" : -1})
       }));
   }
+
+  getAllSelectedProspects(event){
+    this.selectedProspectListIds = "";
+    event.forEach((item: any) =>{
+        this.selectedProspectListIds = this.selectedProspectListIds + item.id + ','
+    })
+    this.selectedProspectListIds = this.selectedProspectListIds.substring(0,this.selectedProspectListIds.length-1);
+  }
+
+  deleteProspectsById(){
+      if(this.selectedProspectListIds === undefined)
+          this.selectedProspectListIds = '';
+
+      this.subscriptions.add(
+        this.administrativeService.deleteProspectListByIds(this.selectedProspectListIds).pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          response =>{
+            this.selectedProspectListIds = undefined;
+            this.search(undefined,true);
+          }
+        )
+      )
+  }
+
+  downlodCSV(){
+
+    let param =  this.createParamsForRequest(undefined,true,true);
+    param =  param.delete('pageSize');
+    param =  param.append('pageSize','');
+    this.subscriptions.add(
+      this.loginService.performGetForBlob('registrations/csv',param)
+        .subscribe(
+          ((response: any) =>{
+            let fileName = response.headers.get('Content-Disposition').split(';')[1].split('=')[1]; 
+            let blob: Blob = response.body as Blob;
+            let a = document.createElement('a');
+            a.download = fileName;
+            a.href = window.URL.createObjectURL(blob);
+            a.click();
+              
+          }))
+    ); 
+  }
+
   search(event: any, isSearch: boolean): void {
     let sortOrder = true;
     if (event && event.sort.direction !== undefined) {
@@ -96,17 +146,28 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
         sortOrder = false;
       }
     }
-    const params = new HttpParams()
-      .set('disableTotalSize', 'false')
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-        (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('sortOrders[0].propertyName', (event && event.sort.active != '' && event.sort.active !== undefined ? event.sort.active : 'createdDate'))
-      // .set('source', sortOrder + '')
-      .set('sortOrders[0].desc', sortOrder + '');
-      console.log(params);
+    const params = this.createParamsForRequest(event, isSearch,sortOrder);
     this.findProspects(true, params);
   }
+
+  createParamsForRequest(event, isSearch , sortOrder){
+    return new HttpParams()
+    .set('disableTotalSize', 'false')
+    .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+    .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      (event.pageIndex * event.pageSize) + '' : '0'))
+    .set('sortOrders[0].propertyName', (event && event.sort.active != '' && event.sort.active !== undefined ? event.sort.active : 'createdDate'))
+    .set('sortOrders[0].desc', sortOrder + '')
+    .set('field6Like', this.prospectsForm.value.page !== undefined ?  this.prospectsForm.value.page : '')
+    .set('source', this.prospectsForm.value && this.prospectsForm.value.source !== undefined ? this.prospectsForm.value.source : '')
+    .set('emailLike', this.prospectsForm.value && this.prospectsForm.value.email !== undefined ? this.prospectsForm.value.email : '')
+    .set('auditId', this.prospectsForm.value && this.prospectsForm.value.auditId !== undefined ? this.prospectsForm.value.auditId : '')
+    .set('namePart1', this.prospectsForm.value && this.prospectsForm.value.name !== undefined ? this.prospectsForm.value.name : '')
+    .set('zip', this.prospectsForm.value && this.prospectsForm.value.zip !== undefined ? this.prospectsForm.value.zip : '' )
+    .set('coachUserId' , this.prospectsForm.value && this.prospectsForm.value.coachUserId !== undefined ? this.prospectsForm.value.coachUserId : '')
+    .set('subscriptionId', this.prospectsForm.value && this.prospectsForm.value.subscriptionId !== undefined ? this.prospectsForm.value.subscriptionId : '')
+  }
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }

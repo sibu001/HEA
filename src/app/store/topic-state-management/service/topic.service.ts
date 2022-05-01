@@ -9,7 +9,8 @@ import {
   DeleteTopicDescriptionByIdAction,
   GetContextMethodListAction,
   ScriptDebugAction,
-  GetPaidServiceListAction
+  GetPaidServiceListAction,
+  // LoadTopicDescriptionPaneByIdAction
 } from '../state/topic.action';
 import { TopicManagementState } from '../state/topic.state';
 
@@ -47,6 +48,10 @@ export class TopicService {
   loadTopicDescriptionById(id: number): Observable<TopicManagementState> {
     return this.store.dispatch(new GetTopicDescriptionByIdAction(id));
   }
+
+  // loadTopicDescriptionPaneById(id : number): Observable<TopicManagementState> {
+  //   return this.store.dispatch(new LoadTopicDescriptionPaneByIdAction(id))
+  // }
 
   saveTopicDescription(customer: any): Observable<TopicManagementState> {
     return this.store.dispatch(new SaveTopicDescriptionAction(customer));
