@@ -65,6 +65,7 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
   public customerGroupList : any;
   public selectionCustomerGroupList : any;
   public topicPaneDataSource : any;
+  public topicDescriptionData : any;
 
   constructor(private readonly formBuilder: FormBuilder,
     private readonly topicService: TopicService,
@@ -100,8 +101,8 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
     this.topicService.loadTopicDescriptionById(this.id);
     this.subscriptions.add(this.topicService.getTopicDescriptionById().pipe(skipWhile((item: any) => !item))
     .subscribe((topicDescription: any) => {
-      this.nextTopicCode = topicDescription;            
-      this.setForm(this.nextTopicCode);
+      this.topicDescriptionData = topicDescription;            
+      this.setForm(this.topicDescriptionData);
     }));
   }
 
