@@ -31,7 +31,6 @@ export class ProspectsEditComponent implements OnInit, OnDestroy {
     this.setForm(undefined);
     if (this.data !== undefined && this.data.id !== undefined) {
         this.id = this.data.id;
-      this.administrativeService.loadProspectsById(this.data.id);
       this.loadProspectsById();
     }
   }
@@ -64,6 +63,7 @@ export class ProspectsEditComponent implements OnInit, OnDestroy {
   }
 
   loadProspectsById() {
+    this.administrativeService.loadProspectsById(this.data.id);
     this.subscriptions.add(this.administrativeService.getProspectsById().pipe(skipWhile((item: any) => !item))
       .subscribe((prospects: any) => {
         this.setForm(prospects);

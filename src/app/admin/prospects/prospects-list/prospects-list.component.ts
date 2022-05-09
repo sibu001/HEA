@@ -26,9 +26,11 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   public dataSource: any;
   public totalElement = 0;
   public selectedProspectListIds : any;
+  // public pageIndex : any;
   public prospectsData = {
     content: [],
     totalElements: 0,
+    pageIndex: 0
   };
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
@@ -83,6 +85,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
       .subscribe((prospectsList: any) => {
         this.prospectsData.content = prospectsList.list;
         this.prospectsData.totalElements = prospectsList.totalSize;
+        this.prospectsData.pageIndex = prospectsList.startOfCurrentPage/prospectsList.size ;
         this.dataSource = this.prospectsData.content;
       }));
   }
@@ -140,6 +143,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any, isSearch: boolean): void {
+    
     let sortOrder = true;
     if (event && event.sort.direction !== undefined) {
       if (event.sort.direction === 'desc') {
