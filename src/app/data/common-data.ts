@@ -381,8 +381,8 @@ export class TableColumnData {
         { key: 'email', sort: 'email', isEdit: true, displayName: 'Email' },
         { key: 'coachUserName', sort: 'coachUserId', isEdit: true, displayName: 'CoachID' },
         { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Date', isDate: true },
-        { key: 'auditId' , sort: 'auditId', isEdit: true, displayName: 'AuditId'},
-        { key: 'optOutMail', sort: 'optOutMail', isEdit: true, displayName: 'Output'}
+        { key: 'auditId' , sort: 'auditId', isEdit: true, displayName: 'Audit ID'},
+        { key: 'optOutMail', sort: 'optOutMail', isEdit: true, displayName: 'OptOut	'}
     ];
 
     static readonly MAIL_DESC_KEYS: Array<TABLECOLUMN> = [
@@ -474,7 +474,7 @@ export class TableColumnData {
         { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
-        { key: 'billingDate', isEdit: true, displayName: 'Billing Date' },
+        { key: 'billingDate', isEdit: true, displayName: 'Billing Date', isDate: true },
         { key: 'value', isEdit: true, displayName: 'Value' },
     ];
 
