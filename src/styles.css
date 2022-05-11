@@ -1402,3 +1402,9 @@ table.jqplot-table-legend {
     padding-left: 40px !important;
   }
 }
+
+.filterLabel {
+  color: #000;
+  font-weight: 600;
+  font-size: 13px;
+}

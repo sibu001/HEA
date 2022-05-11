@@ -43,6 +43,9 @@ export enum UsageHistoryActionTypes {
     GET_WATER_SMART_METER_BY_ID = 'Get Water Smart Meter By Id',
     UPDATE_WATER_SMART_METER = 'Update Water Smart Meter',
     DELETE_WATER_SMART_METER_BY_ID = 'Delete Water Smart Meter By Id',
+    LOAD_USAGE_HISTORY_DATA_BY_TYPE_AND_ID = 'Load Usage History Data By Type And Id',
+    DELETE_SELECTED_USAGE_HISTORY = 'Delete Selected Usage History',
+    UPDATE_USAGE_SERVICE_HISTORY_ID = 'Update Selected Usage History'
 }
 export class GetShareMyDataListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_SHARE_MY_DATA_LIST;
@@ -232,7 +235,7 @@ export class DeleteElectricityDailySmartMeterByIdAction {
 
 export class GetWaterListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_WATER_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly userId: string, readonly filter: any) {
     }
 }
 
@@ -298,4 +301,19 @@ export class DeleteWaterSmartMeterByIdAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.DELETE_WATER_SMART_METER_BY_ID;
     constructor(readonly id: number) {
     }
+}
+
+export class LoadUsageHistoryDataByTypeAndId{
+    static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.LOAD_USAGE_HISTORY_DATA_BY_TYPE_AND_ID;
+    constructor(readonly userId : string, readonly type : string, readonly usageHistoryId: number) {}
+}
+
+export class DeleteSelectedUsageHistory{
+    static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.DELETE_SELECTED_USAGE_HISTORY;
+    constructor(readonly userId : string, readonly type : string, readonly usageHistoryId: number) {}
+}
+
+export class UpdateUsageServiceByUsageServiceId{
+    static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.UPDATE_USAGE_SERVICE_HISTORY_ID;
+    constructor(readonly body : any, readonly usgaeHistoryId : string, readonly type : string , readonly userId : String){}
 }

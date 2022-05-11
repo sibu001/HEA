@@ -115,4 +115,9 @@ export class AdminFilter {
         page: null,
         formValue: null
     };
+    
+    public waterFilter: any = {
+        page: null,
+        formValue: null
+    };
 }

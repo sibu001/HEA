@@ -1,3 +1,4 @@
+import { MatAutocompleteModule, MatInputModule, MatOptionModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ElectricityRoutingModule } from './electricity-routing.module';
@@ -12,6 +13,8 @@ import { SharedModule } from '../general/share.module';
 import { UsageHistoryService } from '../store/usage-history-state-management/service/usage-history.service';
 import { NgxsModule } from '@ngxs/store';
 import { UsageHistoryManagementState } from '../store/usage-history-state-management/state/usage-history.state';
+import { LoginService } from '../services/login.service';
+import { UtilityService } from '../services/utility.service';
 
 @NgModule({
   imports: [
@@ -21,6 +24,9 @@ import { UsageHistoryManagementState } from '../store/usage-history-state-manage
     FormsModule,
     ElectricityRoutingModule,
     SharedModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    MatInputModule,
     NgxsModule.forRoot([
       UsageHistoryManagementState
     ]),
@@ -33,6 +39,6 @@ import { UsageHistoryManagementState } from '../store/usage-history-state-manage
     ElectricityUsagePopupComponent
   ],
   entryComponents: [ElectricityUsagePopupComponent],
-  providers: [UsageHistoryService]
+  providers: [UsageHistoryService,LoginService,UtilityService]
 })
 export class ElectricityModule { }

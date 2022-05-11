@@ -1,11 +1,9 @@
-<div class="modal-dialog">
-  <div class="modal-content">
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="closeDialogBox()">&times;</button>
     </div>
     <div class="modal-body">
       <div class="table-responsive">
-        <table class="table table-striped table-bordered table-sm" data-source="data-source" [mfData]="usageModelObj"
+        <table class="table table-striped table-bordered table-sm" data-source="data-source" [mfData]="dataObject"
           #mf="mfDataTable" summary="electricityUsage">
           <tr style="display: none;">
             <th id="t1"></th>
@@ -34,11 +32,27 @@
             </td>
           </tr>
           <tr>
-            <td> <strong> Value:</strong> </td>
+            <td> <strong> Total:</strong> </td>
             <td> <input type="text" class="inp" id="value" name="Value" [(ngModel)]="usageModelObj.value"></td>
           </tr>
           <tr>
-            <td> <strong> Source:</strong> </td>
+            <td> <strong> Utiltiy:</strong> </td>
+            <td> <input type="text" class="inp" id="value" name="Value" [(ngModel)]="usageModelObj.utility"></td>
+          </tr>
+          <tr>
+            <td> <strong> NEM:</strong> </td>
+            <td> <input type="text" class="inp" id="value" name="Value" [(ngModel)]="usageModelObj.utilityOrig"></td>
+          </tr>
+          <tr>
+            <td> <strong> 3rd Party Gen:</strong> </td>
+            <td> <input type="text" class="inp" id="source" name="Source" [(ngModel)]="usageModelObj.utilGen"></td>
+          </tr>
+          <tr>
+            <td> <strong>Solar:</strong> </td>
+            <td> <input type="text" class="inp" id="source" name="Source" [(ngModel)]="usageModelObj.pv"></td>
+          </tr>
+          <tr>
+            <td> <strong>Source:</strong> </td>
             <td> <input type="text" class="inp" id="source" name="Source" [(ngModel)]="usageModelObj.source"></td>
           </tr>
           <tr>
@@ -61,29 +75,29 @@
           <tr>
             <td> <strong> BillingDate:</strong> </td>
             <td> <input type="date" class="inp" id="billingDate" name="billingDate"
-                [(ngModel)]="usageModelObj.billingDateView">
+                [(ngModel)]="usageModelObj.billingDate">
             </td>
           </tr>
           <tr>
             <td> <strong> StartDate:</strong> </td>
             <td> <input type="date" class="inp" id="startDate" name="startDate"
-                [(ngModel)]="usageModelObj.startDateView">
+                [(ngModel)]="usageModelObj.startDate">
             </td>
           </tr>
           <tr>
             <td> <strong> EndDate:</strong> </td>
-            <td> <input type="date" class="inp" id="endDateView" name="EndDate" [(ngModel)]="usageModelObj.endDateView">
+            <td> <input type="date" class="inp" id="endDateView" name="EndDate" [(ngModel)]="usageModelObj.endDate">
             </td>
           </tr>
           <tr>
             <td> <strong> StartDate(Original):</strong> </td>
             <td> <input type="date" class="inp" id="startDateOrig" name="startDateOrig"
-                [(ngModel)]="usageModelObj.startDateOrigView"></td>
+                [(ngModel)]="usageModelObj.startDateOrig"></td>
           </tr>
           <tr>
             <td> <strong> EndDate(Original):</strong> </td>
-            <td> <input type="date" class="inp" id="endDateOrigView" name="endDateOrig"
-                [(ngModel)]="usageModelObj.endDateOrigView"></td>
+            <td> <input type="date" class="inp" id="endDateOrig" name="endDateOrig"
+                [(ngModel)]="usageModelObj.endDateOrig"></td>
           </tr>
           <tr>
             <td></td>
@@ -93,7 +107,12 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="save()">Save</button>
+      <div class="row">
+        <div class="col-md-8">
+          <button type="button" class="btn btn-default" data-dismiss="modal" (click)="save()">Save</button>
+        </div>
+        <div class="col-md-4">
+          <button type="button" class="btn btn-default" data-dismiss="modal" (click)="deleteGasDetails()">Delete</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>

@@ -1,3 +1,4 @@
+// import { LoadTopicDescriptionPaneByIdAction } from './../../topic-state-management/state/topic.action';
 import { Injectable } from '@angular/core';
 import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
@@ -49,7 +50,10 @@ import {
     GetWaterSmartMeterListAction,
     GetWaterSmartMeterByIdAction,
     UpdateWaterSmartMeterAction,
-    DeleteWaterSmartMeterByIdAction
+    DeleteWaterSmartMeterByIdAction,
+    LoadUsageHistoryDataByTypeAndId,
+    DeleteSelectedUsageHistory,
+    UpdateUsageServiceByUsageServiceId
 } from './usage-history.action';
 import { UsageHistoryManagementModel } from './usage-history.model';
 
@@ -78,7 +82,7 @@ import { UsageHistoryManagementModel } from './usage-history.model';
         waterCharge: undefined,
         waterSmartMeterList: undefined,
         waterSmartMeter: undefined,
-    },
+        },
 })
 @Injectable()
 export class UsageHistoryManagementState {
@@ -111,6 +115,13 @@ export class UsageHistoryManagementState {
         return state.gasSmartMeterList;
     }
 
+    // return the selected gas 
+    @Selector()
+    static getSelectedGas(state : UsageHistoryManagementModel): any {
+        console.log(state.gas)
+        return state.gas;
+    }
+
     // electricity selector
     @Selector()
     static getElectricityList(state: UsageHistoryManagementModel): any {
@@ -138,7 +149,8 @@ export class UsageHistoryManagementState {
     // water charge selector
     @Selector()
     static getWaterChargeList(state: UsageHistoryManagementModel): any {
-        return state.waterChargeList;
+        return 
+        ;
     }
 
     // water selector
@@ -266,7 +278,9 @@ export class UsageHistoryManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.gasList, action.filter)
+            result =
+            this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.gasList,action.filter) 
+            // this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.gasList, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
@@ -553,7 +567,7 @@ export class UsageHistoryManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.electricity, action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.electricityList,action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
@@ -1043,7 +1057,7 @@ export class UsageHistoryManagementState {
         if (force) {
             document.getElementById('loader').classList.add('loading');
             result = this.loginService
-                .performGet(AppConstant.waterList + action.filter)
+                .performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.waterList, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
@@ -1233,5 +1247,63 @@ export class UsageHistoryManagementState {
             );
     }
 
+    @Action(LoadUsageHistoryDataByTypeAndId)
+    loadTopicDescriptionPaneByIdAction(ctx : StateContext<UsageHistoryManagementModel>, action: LoadUsageHistoryDataByTypeAndId) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.users + '/' +  action.userId + '/' + AppConstant.usage + '/' + action.type + '/' + action.usageHistoryId)
+        .pipe(
+            tap(
+                (response: any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    if(action.type == AppConstant.gas){
+                        ctx.patchState({
+                            gas : response.data
+                        })
+                    } else if( action.type == AppConstant.electricity){
+                        ctx.patchState({
+                            electricity : response.data
+                        })
+                    }
+                },
+                (error) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.error.errorMessage) 
+                }
+            )            
+        )
+   }
 
+   @Action(DeleteSelectedUsageHistory)
+   deleteSelectedUsageHistory(ctx: StateContext<UsageHistoryManagementModel>, action: DeleteSelectedUsageHistory) : Actions{
+    document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.users + '/' +  action.userId + '/' + AppConstant.usage + '/' + action.type + '/' + action.usageHistoryId)
+        .pipe(
+            tap(
+                (response: any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                },
+                (error) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.error.errorMessage) 
+                }
+            )
+        )
+   }
+
+   @Action(UpdateUsageServiceByUsageServiceId)
+   updateUsageServiceByUsageServiceId(ctx: StateContext<UsageHistoryManagementModel>, action: UpdateUsageServiceByUsageServiceId) : Actions {
+   document.getElementById('loader').classList.add('loading');
+    return this.loginService.performPut(action.body, AppConstant.users + '/' +  action.userId + '/' + AppConstant.usage + '/' + action.type + '/' + action.usgaeHistoryId)
+    .pipe(
+        tap(
+            (response: any) =>{
+                document.getElementById('loader').classList.remove('loading');
+            },
+            (error) => {
+                document.getElementById('loader').classList.remove('loading');
+                this.utilityService.showErrorMessage(error.error.errorMessage) 
+            }
+        )
+    )
+    }
 }

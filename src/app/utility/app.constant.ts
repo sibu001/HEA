@@ -1,12 +1,14 @@
 export class AppConstant {
     public static findCustomer = 'findCustomerList.do';
     public static customer = 'customers';
+    public static findCustomers = 'findCustomers.do'
     public static viewConfigurations = 'viewConfigurations';
     public static customerGroups = 'customerGroups';
     public static programGroups = 'programGroups';
     public static customerAlertTypes = 'customerAlertTypes';
     public static credentialTypes = 'credentialTypes';
     public static users = 'users';
+    public static usage = 'usage';
     public static roles = 'roles';
     public static places = 'places';
     public static zipCode = 'zipcodes';
@@ -70,15 +72,15 @@ export class AppConstant {
     public static keyIndicatorVariables = '';
     public static keyIndicatorCustomerGroups = '';
     public static trendingParts = '';
-    public static shareMyDataList = '';
+    public static shareMyDataList = 'shareMyDataCustomerList.do';
     public static shareMyData = '';
     public static gasList = 'gas';
-    public static gas = '';
+    public static gas = 'gas';
     public static gasChargeList = '';
     public static gasCharge = '';
     public static gasSmartMeterList = '';
     public static smartMeterGas = 'smartMeterGas';
-    public static electricityList = '';
+    public static electricityList = 'electricity';
     public static electricity = 'electricity';
     public static smartMeterElectric = 'smartMeterElectric';
     public static smartMeterElectricDaily = 'smartMeterElectricDaily';
@@ -87,8 +89,8 @@ export class AppConstant {
     public static electricitySmartMeterList = '';
     public static electricitySmartMeter = '';
     public static electricityDailySmartMeterList = '';
-    public static waterList = '';
-    public static water = '';
+    public static waterList = 'water';
+    public static water = 'water';
     public static waterChargeList = '';
     public static waterCharge = '';
     public static waterSmartMeterList = '';

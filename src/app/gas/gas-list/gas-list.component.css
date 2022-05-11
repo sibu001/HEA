@@ -19,6 +19,12 @@ hr.hr_space {
   margin-bottom: 20px;
 }
 
+.heading {
+  font-size: 21px;
+  color: #000;
+  font-weight: 600;
+}
+
 i.fa {
   cursor: pointer;
 }

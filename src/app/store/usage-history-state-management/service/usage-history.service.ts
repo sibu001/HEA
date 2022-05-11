@@ -1,3 +1,4 @@
+import { DeleteSelectedUsageHistory, UpdateUsageServiceByUsageServiceId } from './../state/usage-history.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -46,7 +47,8 @@ import {
   GetElectricityDailySmartMeterListAction,
   GetWaterChargeListAction,
   GetWaterSmartMeterListAction,
-  GetWaterListAction
+  GetWaterListAction,
+  LoadUsageHistoryDataByTypeAndId
 } from '../state/usage-history.action';
 @Injectable({
   providedIn: 'root'
@@ -69,6 +71,10 @@ export class UsageHistoryService {
 
   getGasSmartMeterList(): Observable<any> {
     return this.store.select(UsageHistoryManagementState.getGasSmartMeterList);
+  }
+
+  getSelectedGas() : Observable<any> {
+    return this.store.selectOnce(UsageHistoryManagementState.getSelectedGas)
   }
 
   getElectricityList(): Observable<any> {
@@ -227,8 +233,8 @@ export class UsageHistoryService {
     return this.store.dispatch(new DeleteElectricityDailySmartMeterByIdAction(id));
   }
 
-  loadWaterList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
-    return this.store.dispatch(new GetWaterListAction(force, filter));
+  loadWaterList(force: boolean, userId : string ,filter: any): Observable<UsageHistoryManagementState> {
+    return this.store.dispatch(new GetWaterListAction(force , userId, filter));
   }
 
   GetWaterByIdAction(id: number): Observable<UsageHistoryManagementState> {
@@ -273,5 +279,18 @@ export class UsageHistoryService {
 
   DeleteWaterSmartMeterByIdAction(id: any): Observable<UsageHistoryManagementState> {
     return this.store.dispatch(new DeleteWaterSmartMeterByIdAction(id));
+  }
+
+  loadUsageHistoryDataByTypeAndId(userId,type,usageHistoryId){
+    return this.store.dispatch(new LoadUsageHistoryDataByTypeAndId(userId,type,usageHistoryId));
+  }
+
+  DeleteSelectedUsageHistory(userId,type,usageHistoryId){
+    // this.store.dispatch(new LoadUsageHistoryDataByTypeAndId(userId,type,usageHistoryId));
+    return this.store.dispatch(new DeleteSelectedUsageHistory(userId,type,usageHistoryId))
+  }
+
+  upadatesageServiceByUsageHistoryId(body,usageServiceId,type,userId){
+    return this.store.dispatch(new UpdateUsageServiceByUsageServiceId(body,usageServiceId,type,userId));
   }
 }

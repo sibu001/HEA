@@ -9,6 +9,8 @@ import {
   EventEmitter,
   ChangeDetectorRef,
   AfterViewInit,
+  ElementRef,
+  AfterViewChecked,
 } from '@angular/core';
 import { Page } from '../../models/page';
 import { MatTableDataSource } from '@angular/material/table';
@@ -38,7 +40,7 @@ export interface UserData {
     ]),
   ],
 })
-export class TableComponent implements OnInit, OnChanges, AfterViewInit {
+export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterViewChecked{
   displayedColumns = [];
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatSort) sort: MatSort;
@@ -63,6 +65,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Input() isInlineEdit = false;
   @Input() selectionList: Array<any> = [];
   @Input() sortStateData: any;
+  @Input() disableLastButton = false;
+  @Input() disableNextButton = false;
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
@@ -81,6 +85,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   @Output() handleLinkEvent: EventEmitter<any> = new EventEmitter();
   @Output() handleInLineEditEvent: EventEmitter<any> = new EventEmitter();
   @Output() handleInLineSaveEvent: EventEmitter<any> = new EventEmitter();
+
+  @ViewChild('paginator') paginator : ElementRef;
   expandedElement: any = [];
   showInput = false;
   showRowInput = false;
@@ -95,9 +101,16 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
   tableValueFormArray = new FormArray([]);
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   constructor(
+    private ElByClassName: ElementRef,
     private changeDetectorRefs: ChangeDetectorRef,  
     private formBuilder: FormBuilder
   ) { }
+ 
+
+  ngAfterViewChecked(): void {
+
+  }
+
   ngOnInit() {
     this.changeDetectorRefs.detectChanges();
     const list = document.getElementsByClassName('mat-paginator-range-label');
@@ -159,11 +172,27 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit {
           }
         });
       });
+      
     }
 
     this.setForm();
     if (this.isInlineEdit) {
       this.setExistingDataForm();
+    }
+
+    if(this.disableLastButton){
+      var btnElement = (<HTMLFieldSetElement>this.ElByClassName.nativeElement).querySelector(
+        '.mat-paginator-navigation-last'
+        );
+        if(btnElement != null)
+          btnElement.remove();
+    }
+    if(this.disableNextButton){
+        var btnElement = (<HTMLFieldSetElement>this.ElByClassName.nativeElement).querySelector(
+          '.mat-paginator-navigation-next'
+          );
+          if(btnElement != null)
+            btnElement.setAttribute('disabled','true');
     }
   }
 

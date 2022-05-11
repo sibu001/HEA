@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -35,7 +36,7 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');
-    this.findShareMyData(this.force, '');
+    this.findShareMyData(this.force, this.createRequestParameters(undefined));
   }
 
   findShareMyData(force: boolean, filter: any): any {
@@ -49,14 +50,34 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
 
   search(event: any): void {
     const filter = '?filter.startRow=0&formAction='
-      + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
-      + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
-      + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC')
-      + '&filter.auditId=' + this.myDataForm.value.auditId
-      + '&filter.customerName=' + this.myDataForm.value.customerName
-      + '&filter.subscriptionId=' + this.myDataForm.value.subscriptionId
-      + '&filter.customerAccount=' + this.myDataForm.value.customerAccount;
+      // + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
+      // + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
+      // + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC')
+      + '&auditId=' + this.myDataForm.value.auditId
+      + '&name=' + this.myDataForm.value.customerName
+      + '&subscriptionId=' + this.myDataForm.value.subscriptionId
+      + '&customerAccount=' + this.myDataForm.value.customerAccount;
+      + '&useGbaUsagePointTable' + ( event !== undefined && event.useGbaUsagePointTable !== undefined ? event.useGbaUsagePointTable : true)
+      + '&loadFromFiles' + ( event !== undefined && event.loadFromFiles !== undefined ? event.loadFromFiles : false)
     this.findShareMyData(true, filter);
+  }
+
+  createRequestParameters(event){
+    return '?auditId=' + this.myDataForm.value.auditId
+    + '&name=' + this.myDataForm.value.customerName
+    + '&subscriptionId=' + this.myDataForm.value.subscriptionId
+    + '&customerAccount=' + this.myDataForm.value.customerAccount
+    + '&useGbaUsagePointTable=' + ( event !== undefined && event.useGbaUsagePointTable !== undefined ? event.useGbaUsagePointTable : true)
+    + '&loadFromFiles=' + ( event !== undefined && event.loadFromFiles !== undefined ? event.loadFromFiles : false)
+    + '&clearData=' + (event !== undefined && event.clearData !== undefined ? event.clearData : true);
+    // return new HttpParams()
+    // .set('auditId',this.myDataForm.value.auditId !== undefined ? this.myDataForm.value.auditId : '')
+    // .set('clearData','')
+    // .set('customerAccount',this.myDataForm.value.auditId !== undefined ? this.myDataForm.value.auditId : '')
+    // .set('loadFromFiles','')
+    // .set('name',this.myDataForm.value.auditId !== undefined ? this.myDataForm.value.auditId : '')
+    // .set('subscriptionId',this.myDataForm.value.auditId !== undefined ? this.myDataForm.value.auditId : '')
+    // .set('useGbaUsagePointTable','')
   }
 
   goToEditShareMyData(event: any): any { }

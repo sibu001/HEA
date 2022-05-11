@@ -13,6 +13,7 @@ import { NgxsModule } from '@ngxs/store';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { MatAutocompleteModule, MatInputModule, MatOptionModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -20,6 +21,9 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     CommonHEAModule,
     ReactiveFormsModule,
     FormsModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    MatInputModule,
     WaterUsageHistoryRoutingModule,
     NgxsModule.forRoot([
       SystemManagementState,

@@ -1,3 +1,4 @@
+import { MatAutocompleteModule, MatOptionModule, MatInputModule } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -12,7 +13,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxsModule } from '@ngxs/store';
 import { UsageHistoryManagementState } from '../store/usage-history-state-management/state/usage-history.state';
 import { UsageHistoryService } from '../store/usage-history-state-management/service/usage-history.service';
-
+import { AdministrativeService } from '../store/administrative-state-management/service/administrative.service';
+import { LoginService } from '../services/login.service';
 @NgModule({
   imports: [
     CommonModule,
@@ -21,6 +23,9 @@ import { UsageHistoryService } from '../store/usage-history-state-management/ser
     FormsModule,
     GasRoutingModule,
     SharedModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    MatInputModule,
     NgxsModule.forRoot([
       UsageHistoryManagementState
     ]),
@@ -31,6 +36,7 @@ import { UsageHistoryService } from '../store/usage-history-state-management/ser
     GasSmartMeterComponent,
     GasUsagePopupComponent
   ],
-  providers: [UsageHistoryService]
+  providers: [UsageHistoryService,AdministrativeService,LoginService],
+  entryComponents: [GasUsagePopupComponent]
 })
 export class GasModule { }

@@ -8,6 +8,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
+import { UtilityService } from 'src/app/services/utility.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
 import { ElectricityUsagePopupComponent } from '../electricity-usage-popup/electricity-usage-popup.component';
 
@@ -23,13 +24,16 @@ export class ElectricityUsageListComponent implements OnInit {
   dataSource: any;
   usageHistoryData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
-  keys = TableColumnData.GAS_KEYS;
+
+  dataListForSuggestions = undefined;
+  keys = TableColumnData.ELECTRICITY_KEYS;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private utilityService: UtilityService
   ) {
     this.users = this.loginService.getUser();
     this.adminFilter = JSON.parse(localStorage.getItem('electricityFilter'));
@@ -56,16 +60,25 @@ export class ElectricityUsageListComponent implements OnInit {
     }
   }
 
-  findGasList(force: boolean, filter: any): void {
+  getEletricityList(force: boolean,userId : String, filter: any): void {
     this.adminFilter.electricityFilter.formValue = this.electricityForm.value;
     localStorage.setItem('electricityFilter', JSON.stringify(this.adminFilter));
-    this.usageHistoryService.loadElectricityList(force, this.users.outhMeResponse.user.id, filter);
+    this.usageHistoryService.loadElectricityList(force,userId, filter);
     this.subscriptions.add(this.usageHistoryService.getElectricityList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
-        this.usageHistoryData.content = gasList.data;
-        this.usageHistoryData.totalElements = this.adminFilter.electricityFilter.totalElement + gasList.data.length + 1;
-        this.adminFilter.electricityFilter.totalElement = this.adminFilter.electricityFilter.totalElement + gasList.data.length + 1;
-        this.dataSource = [...this.usageHistoryData.content];
+        
+        // if(gasList.data.length == 0){
+        //   this.utilityService.showErrorMessage("NO more data left.");
+        //   if(this.adminFilter.electricityFilter.page){
+        //     this.adminFilter.electricityFilter.page.pageIndex = this.adminFilter.electricityFilter.page.pageIndex -1;
+        //     this.pageIndex = this.adminFilter.electricityFilter.page.pageIndex;
+        //   }
+        // }else{
+          this.usageHistoryData.content = [...gasList.data];
+          // this.usageHistoryData.totalElements = this.adminFilter.electricityFilter.totalElement + gasList.data.length;
+          // this.adminFilter.electricityFilter.totalElement = this.adminFilter.electricityFilter.totalElement + gasList.data.length;
+          this.dataSource = [...this.usageHistoryData.content];
+        // }
       }));
   }
 
@@ -87,21 +100,93 @@ export class ElectricityUsageListComponent implements OnInit {
       params.set('auditId', this.electricityForm.value.auditId !== null ? this.electricityForm.value.auditId : '');
       params.set('customerName', this.electricityForm.value.customerName !== null ? this.electricityForm.value.customerName : '');
     }
-    this.findGasList(true, params);
+    this.filterForElectricityList(true, params);
+  }
+
+  findCustomerByAuditIdOrCustomerName(calledBy){
+    let filters =  this.filterForCustomer();
+    
+    if(filters.get('auditId').length < 5 && filters.get('customerName').length < 5)
+      return null;
+    
+    if(calledBy == 'auditId'){
+      filters = filters.delete('customerName');
+    }else{
+      filters = filters.delete('auditId');
+    }
+    this.findCustomer(filters);
+  }
+
+  findCustomer(filters, calledFor ?: string){
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do',filters)
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          this.dataListForSuggestions = response;
+        }, error =>{
+           console.log(error);
+        }
+      )
+    );
+  }
+
+  filterForElectricityList(force: boolean, filter: any){
+    this.adminFilter.gasFilter.formValue = this.electricityForm.value;
+    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    let userId = null;
+    if(this.users.role == 'ADMIN'){
+      if(this.electricityForm.value.auditId !== '')
+        this.findSelectedCustomer(force, filter);
+    } else {
+      userId = this.users.outhMeResponse.user.userId;
+      this.getEletricityList(force, userId, filter);
+    }
+  }
+
+  filterForCustomer(){
+    return new HttpParams()
+      .set('auditId',this.electricityForm.value.auditId !== undefined ? this.electricityForm.value.auditId : '')
+      .set('customerName',this.electricityForm.value.customerName !== undefined ? this.electricityForm.value.customerName :'')
+      .set('useLike','true')
+  }
+
+  findSelectedCustomer(force,filter){
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          var userId = response[0].userId;
+          this.getEletricityList(force, userId, filter);
+        }, error =>{
+           console.log(error);
+        }
+      )
+    );
   }
 
   get f() { return this.electricityForm.controls; }
 
-  showPopUp(): any {
+  showPopUp(event : any): any {
     if (this.users.role !== 'USERS') {
     const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
       width: '70vw',
       height: '70vh',
-      data: {}
+      data: {event}
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed' + result);
-    });
+      this.search(undefined,true);  
+      });
   }
+  }
+
+  selectedSuggestion(event : any, select : string){
+    if(select == 'auditId')
+      this.electricityForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
+    else {
+      this.electricityForm.get('auditId').setValue(event.option.value);
+      this.electricityForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
+    }
   }
 }

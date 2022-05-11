@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-9 col-md-9 col-sm-8">
         <p class="accurate">Electricity</p>
-        <form [formGroup]='electricityForm' class="form-horizontal">
+        <!-- <form  [formGroup]='electricityForm' class="form-horizontal">
           <div *ngIf="users.role!=='USERS'" class="row">
             <div class="col-sm-6">
               <div class="form-group">
@@ -59,6 +59,63 @@
                 (click)="search(undefined,true)">Show</button>
             </div>
           </div>
+        </form> -->
+        
+        <form [formGroup]='electricityForm'>
+          <div *ngIf="users.role!=='USERS'" > 
+            <div class="row rowPadding borderBottom">
+              <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+                <span class="filterLabel">Audit Id:</span>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                <input type="text" class="form-control" matInput 
+             formControlName='auditId' [matAutocomplete]="auditId"
+                (keyup)="findCustomerByAuditIdOrCustomerName('auditId')" >
+                <mat-autocomplete #auditId="matAutocomplete" (optionSelected)="selectedSuggestion($event,'auditId')" >
+                  <mat-option *ngFor="let data of dataListForSuggestions" value="{{data.auditId}}">
+                    {{data.user.name}}
+                  </mat-option>
+                </mat-autocomplete>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+                <span class="filterLabel">Customer Name:</span>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                <input type="text" class="form-control" formControlName='customerName' [matAutocomplete]='customerName'
+                (keyup)="findCustomerByAuditIdOrCustomerName('customerName')">
+                <mat-autocomplete #customerName="matAutocomplete" (optionSelected)="selectedSuggestion($event,'customerName')" >
+                  <mat-option *ngFor="let data of dataListForSuggestions" value="{{data.auditId}}">
+                    {{data.user.name}}
+                  </mat-option>
+                </mat-autocomplete>
+
+              </div>
+              <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+            </div>
+            <div class="row rowPadding borderBottom">
+              <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+                <span class="filterLabel">Year:</span>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                <input type="number" class="form-control" formControlName='year' id='year'>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+                <span class="filterLabel">Month:</span>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                <input type="number" class="form-control" formControlName='month' id='month'>
+              </div>
+              <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+            </div>
+          </div>
+          <div class="row rowpadding">
+            <div class="col-sm-12" style="text-align: right">
+              <button type="submit" class="btn btn-primary"
+                (click)="search(undefined,true)">Show</button>
+            </div>
+          </div>
         </form>
         <hr>
         <div class="row">
@@ -66,8 +123,8 @@
             <p class="Messages">
               <img src="assets/images/dot03.gif" alt="dot" class="dot">&nbsp;Values</p>
             <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true
-              [isSearch]="false" [pageIndex]="pageIndex"
-              (goToEditEvent)='showPopUp()' [data]="dataSource"
+              [isSearch]="false" [pageIndex]="pageIndex" [disableLastButton]=true
+              (goToEditEvent)='showPopUp($event)' [data]="dataSource"
               [totalElement]="usageHistoryData.totalElements"
               (changePageEvent)="search($event,false)">
             </app-table>

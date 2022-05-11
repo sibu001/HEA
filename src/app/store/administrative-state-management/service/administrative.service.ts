@@ -156,7 +156,7 @@ export class AdministrativeService {
     return this.store.dispatch(new GetProspectsListAction(force, filter));
   }
 
-  deleteProspectListByIds(ids : any){
+  deleteProspectListByIds(ids: any) {
     return this.store.dispatch(new DeleteProspectsListAction(ids));
   }
 
