@@ -1,7 +1,8 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-9 col-md-9 col-sm-8">
+      <div class="col-lg-9 col-md-9 col-sm-8"><br><br>
+        <h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
         <p class="accurate">Electricity Smart Meter</p>
         <form class="form-horizontal" [formGroup]='electricitySmartMeterForm'>
           <div *ngIf="users.role!=='USERS'">
@@ -40,13 +41,13 @@
               <span class="filterLabel">Year:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='year' id='year'>
+              <input type="number" class="form-control" formControlName='year' id='year'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Month:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='month' id='month'>
+              <input type="number" class="form-control" formControlName='month' id='month'>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>
@@ -57,13 +58,13 @@
               <span class="filterLabel">Day:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='day' id='year'>
+              <input type="number" class="form-control" formControlName='day' id='year'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Hour:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='hour' id='month'>
+              <input type="number" class="form-control" formControlName='hour' id='month'>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>.
@@ -81,7 +82,7 @@
               <img src="assets/images/dot03.gif" alt="dot" class="dot">&nbsp;Values</p>
             <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true
               [isSearch]="false"
-              [data]="dataSource" [pageIndex]="pageIndex"
+              [data]="dataSource" [pageIndex]="pageIndex" [disableLastButton]=true
               [totalElement]="usageHistoryData.totalElements"
               (changePageEvent)="search($event,false)">
             </app-table>

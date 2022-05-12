@@ -121,3 +121,9 @@ export class AdminFilter {
         formValue: null
     };
 }
+
+export class ElectricityDailySmartMeterFilter {
+    page: null
+    formValue: null
+    totalElement: 0
+}

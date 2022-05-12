@@ -475,7 +475,7 @@ export class TableColumnData {
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
         { key: 'billingDate', isEdit: true, displayName: 'Billing Date', isDate: true },
-        { key: 'value', isEdit: true, displayName: 'Value' },
+        { key: 'value', isEdit: true, displayName: 'Total' },
     ];
 
     static readonly ELECTRICITY_KEYS: Array<TABLECOLUMN> = [
@@ -484,9 +484,9 @@ export class TableColumnData {
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
         { key: 'billingDate', isEdit: true, displayName: 'Billing Date', isDate: true },
         { key: 'value', isEdit: true, displayName: 'Total' },
-        { key: 'utility', isEdit: true, displayName: 'Utitility' },
-        { key: 'utilityOrig', isEdit: true, displayName: 'NEM' },
-        { key: 'pv', isEdit: true, displayName: 'Solar' },
+        // { key: 'utility', isEdit: true, displayName: 'Utitility' },
+        // { key: 'utilityOrig', isEdit: true   , displayName: 'NEM' },
+        // { key: 'pv', isEdit: true, displayName: 'Solar' },
     ];
 
     static readonly SMART_METER_KEYS: Array<TABLECOLUMN> = [
@@ -501,7 +501,7 @@ export class TableColumnData {
         { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
         { key: 'day', sort: 'day', isEdit: true, displayName: 'Day' },
-        { key: 'value', isEdit: true, displayName: 'Value' },
+        { key: 'value', isEdit: true, displayName: 'Total' },
     ];
 
     static readonly SHARE_MY_DATA_KEYS: Array<TABLECOLUMN> = [

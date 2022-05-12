@@ -94,6 +94,8 @@ export class GasUsagePopupComponent implements OnInit {
     var requestObject = { ...this.dataObject,...formobject};
     console.log(formobject);
     if(this.gasForm.valid) {
+      let value = JSON.stringify(requestObject);
+      console.log(value);
       this.subscriptions.add(
         this.usageHistoryService.upadatesageServiceByUsageHistoryId(requestObject,this.dataObject.usageHistoryId,'gas',this.dataObject.userId)
         .pipe(skipWhile((item: any) => !item))

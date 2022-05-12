@@ -15,7 +15,7 @@ import {
 import { Page } from '../../models/page';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
-import { PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
@@ -87,6 +87,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Output() handleInLineSaveEvent: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('paginator') paginator : ElementRef;
+  @ViewChild('paginator') matPaginator : MatPaginator;
   expandedElement: any = [];
   showInput = false;
   showRowInput = false;
@@ -193,6 +194,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
           );
           if(btnElement != null)
             btnElement.setAttribute('disabled','true');
+
+            this.matPaginator.pageIndex = this.pageIndex
+
     }
   }
 

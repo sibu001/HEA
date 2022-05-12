@@ -31,15 +31,11 @@ export class WaterComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0,
   };
+  selectedCustomer = null;
   public force = false;
   private readonly subscriptions: Subscription = new Subscription();
   waterForm: FormGroup;
-  // = this.fb.group({
-  //   auditId: this.fb.control(['']),
-  //   customerName: this.fb.control(['']),
-  //   year: this.fb.control(['']),
-  //   month: this.fb.control([''])
-  // });
+
   constructor(public router: Router, public fb: FormBuilder,
      public usageHistoryService: UsageHistoryService,
      private loginService: LoginService
@@ -109,13 +105,27 @@ export class WaterComponent implements OnInit, OnDestroy {
   }
 
   findSelectedCustomer(force,filter){
+    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response) =>{
+          if(response.length != 0){
           var userId = response[0].userId;
+          this.selectedCustomer = response[0] ;
           this.getWaterList(force, userId, filter);
+          }else{
+            if(this.selectedCustomer != null){
+              this.getWaterList(force, this.selectedCustomer.userId, filter);
+              this.waterForm.value.auditId = this.selectedCustomer.auditId;
+              this.waterForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm( this.waterForm.value);
+              this.adminFilter.electricityFilter = this.waterForm.value;
+              localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+
+            }
+          }
         }, error =>{
            console.log(error);
         } 
@@ -153,8 +163,9 @@ export class WaterComponent implements OnInit, OnDestroy {
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      // .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
-      .set('year', (this.waterForm.value.year !== null ? this.waterForm.value.year : ''))
+        .set('sortOrders[0].propertyName', (event && event.sort.active !== undefined ? event.sort.active : 'year'))
+        .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
+        .set('year', (this.waterForm.value.year !== null ? this.waterForm.value.year : ''))
       .set('month', (this.waterForm.value.month !== null ? this.waterForm.value.month : ''));
     if (this.users.role === 'ADMIN') {
      params =  params.set('auditId', this.waterForm.value.auditId !== null ? this.waterForm.value.auditId : '')

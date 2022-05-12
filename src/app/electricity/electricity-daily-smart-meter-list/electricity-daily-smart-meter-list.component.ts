@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { AdminFilter } from 'src/app/models/filter-object';
+import { AdminFilter, ElectricityDailySmartMeterFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
@@ -22,9 +22,10 @@ export class ElectricityDailySmartMeterListComponent implements OnInit {
   public pageIndex: any;
   electricityDailySmartMeterForm: FormGroup;
   dataSource: any;
+  public dataListForSuggestions : any;
   usageHistoryData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
   keys = TableColumnData.SMART_METER_DAILY_KEYS;
   constructor(private loginService: LoginService,
@@ -35,15 +36,20 @@ export class ElectricityDailySmartMeterListComponent implements OnInit {
     this.users = this.loginService.getUser();
     this.adminFilter = JSON.parse(localStorage.getItem('electricityDailySmartMeterFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null) {
-      this.adminFilter = new AdminFilter();
+      this.adminFilter = new ElectricityDailySmartMeterFilter();
     }
   }
   private readonly subscriptions: Subscription = new Subscription();
-  public adminFilter: AdminFilter;
+  public adminFilter: ElectricityDailySmartMeterFilter;
 
   ngOnInit() {
-    this.setUpForm(this.adminFilter.electricityDailySmartMeterFilter.formValue);
-    this.search(this.adminFilter.electricityDailySmartMeterFilter.page, false);
+    this.setUpForm(this.adminFilter.formValue);
+    this.search(this.adminFilter.page, false);
+    window.scroll(0, 0);
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   setUpForm(event: any) {
@@ -57,37 +63,115 @@ export class ElectricityDailySmartMeterListComponent implements OnInit {
       this.electricityDailySmartMeterForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
     }
   }
+  filterForCustomer(){
+    return new HttpParams()
+      .set('auditId',this.electricityDailySmartMeterForm.value.auditId !== undefined ? this.electricityDailySmartMeterForm.value.auditId : '')
+      .set('customerName',this.electricityDailySmartMeterForm.value.customerName !== undefined ? this.electricityDailySmartMeterForm.value.customerName :'')
+      .set('useLike','true')
+  }
 
+  findCustomerByAuditIdOrCustomerName(calledBy){
+    let filters =  this.filterForCustomer();
+    
+    if(filters.get('auditId').length < 5 && filters.get('customerName').length < 5)
+      return null;
+    
+    if(calledBy == 'auditId'){
+      filters = filters.delete('customerName');
+    }else{
+      filters = filters.delete('auditId');
+    }
+    this.findCustomer(filters);
+  }
+
+  findCustomer(filters, calledFor ?: string){
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do',filters)
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          this.dataListForSuggestions = response;
+        }, error =>{
+           console.log(error);
+        }
+      )
+    );
+  }
+
+  findSelectedCustomer(force,filter){
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          var userId = response[0].userId;
+          this.getElectricityDailySmartMeterList(force, userId, filter);
+        }, error =>{
+           console.log(error);
+        }
+      )
+    );
+  }
+
+  // findGasList(force: boolean, filter: any): void {
+  //   this.adminFilter.electricityDailySmartMeterFilter.formValue = this.electricityDailySmartMeterForm.value;
+  //   localStorage.setItem('electricityDailySmartMeterFilter', JSON.stringify(this.adminFilter));
+  //   this.usageHistoryService.loadElectricityDailySmartMeterList(force, this.users.outhMeResponse.user.id, filter);
+  //   this.subscriptions.add(this.usageHistoryService.getElectricityDailySmartMeterList().pipe(skipWhile((item: any) => !item))
+  //     .subscribe((gasList: any) => {
+  //       this.usageHistoryData.content = gasList.data;
+  //       this.usageHistoryData.totalElements = this.adminFilter.electricityDailySmartMeterFilter.totalElement + gasList.data.length + 1;
+  //       this.adminFilter.electricityDailySmartMeterFilter.totalElement = this.adminFilter.electricityDailySmartMeterFilter.totalElement + gasList.data.length + 1;
+  //       this.dataSource = [...this.usageHistoryData.content];
+  //     }));
+  // }
   findGasList(force: boolean, filter: any): void {
-    this.adminFilter.electricityDailySmartMeterFilter.formValue = this.electricityDailySmartMeterForm.value;
+    this.adminFilter.formValue = this.electricityDailySmartMeterForm.value;
     localStorage.setItem('electricityDailySmartMeterFilter', JSON.stringify(this.adminFilter));
-    this.usageHistoryService.loadElectricityDailySmartMeterList(force, this.users.outhMeResponse.user.id, filter);
+    let userId = null;
+    if(this.users.role == 'ADMIN'){
+      if(this.electricityDailySmartMeterForm.value.auditId !== '')
+        this.findSelectedCustomer(force, filter);
+    } else {
+      userId = this.users.outhMeResponse.user.userId;
+      this.getElectricityDailySmartMeterList(force, userId, filter);
+    }
+  }
+  getElectricityDailySmartMeterList(force, userId, filter){
+    this.usageHistoryService.loadElectricityDailySmartMeterList(force, userId, filter);
     this.subscriptions.add(this.usageHistoryService.getElectricityDailySmartMeterList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
-        this.usageHistoryData.totalElements = this.adminFilter.electricityDailySmartMeterFilter.totalElement + gasList.data.length + 1;
-        this.adminFilter.electricityDailySmartMeterFilter.totalElement = this.adminFilter.electricityDailySmartMeterFilter.totalElement + gasList.data.length + 1;
-        this.dataSource = [...this.usageHistoryData.content];
+        this.dataSource = this.usageHistoryData.content;
+    //  if (gasList.data.length < 10){
+    //       if(this.adminFilter.gasFilter.page){
+    //         this.adminFilter.gasFilter.page.pageIndex = this.adminFilter.gasFilter.page.pageIndex -1;
+    //         this.pageIndex = this.adminFilter.gasFilter.page.pageIndex;
+    //       }
+    //       this.disableNextButton = true;
+    //  }else{
+        // this.disableNextButton = false;
+        // }
       }));
   }
 
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.electricityDailySmartMeterFilter.page = event;
+    this.adminFilter.page = event;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
-    const params = new HttpParams()
+    let params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      .set('sortOrders[0].propertyName', (event && event.sort.active !== undefined ? event.sort.active : 'year'))
+      .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
       .set('year', (this.electricityDailySmartMeterForm.value.year !== null ? this.electricityDailySmartMeterForm.value.year : ''))
       .set('day', (this.electricityDailySmartMeterForm.value.day !== null ? this.electricityDailySmartMeterForm.value.day : ''))
       .set('month', (this.electricityDailySmartMeterForm.value.month !== null ? this.electricityDailySmartMeterForm.value.month : ''));
     if (this.users.role === 'ADMIN') {
-      params.set('auditId', this.electricityDailySmartMeterForm.value.auditId !== null ? this.electricityDailySmartMeterForm.value.auditId : '');
-      params.set('customerName', this.electricityDailySmartMeterForm.value.customerName !== null ? this.electricityDailySmartMeterForm.value.customerName : '');
+      params = params.set('auditId', this.electricityDailySmartMeterForm.value.auditId !== null ? this.electricityDailySmartMeterForm.value.auditId : '')
+      .set('customerName', this.electricityDailySmartMeterForm.value.customerName !== null ? this.electricityDailySmartMeterForm.value.customerName : '');
     }
     this.findGasList(true, params);
   }
@@ -104,6 +188,14 @@ export class ElectricityDailySmartMeterListComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed' + result);
       });
+    }
+  }
+  selectedSuggestion(event : any, select : string){
+    if(select == 'auditId')
+      this.electricityDailySmartMeterForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
+    else {
+      this.electricityDailySmartMeterForm.get('auditId').setValue(event.option.value);
+      this.electricityDailySmartMeterForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
     }
   }
 }

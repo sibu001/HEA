@@ -759,7 +759,7 @@ export class UsageHistoryManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/' + AppConstant.smartMeterElectric, action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/' + AppConstant.smartMeterElectric,action.filter)
                 .pipe(
                     tap(
                         (response: any) => {

@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -17,7 +17,7 @@ import { ElectricityUsagePopupComponent } from '../electricity-usage-popup/elect
   templateUrl: './electricity-usage-list.component.html',
   styleUrls: ['./electricity-usage-list.component.css']
 })
-export class ElectricityUsageListComponent implements OnInit {
+export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   users: Users = new Users();
   public pageIndex: any;
   electricityForm: FormGroup;
@@ -26,6 +26,8 @@ export class ElectricityUsageListComponent implements OnInit {
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
   };
+
+  selectedCustomer = null;
 
   dataListForSuggestions = undefined;
   keys = TableColumnData.ELECTRICITY_KEYS;
@@ -41,6 +43,10 @@ export class ElectricityUsageListComponent implements OnInit {
       this.adminFilter = new AdminFilter();
     }
   }
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
+  }
+
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: AdminFilter;
 
@@ -91,9 +97,9 @@ export class ElectricityUsageListComponent implements OnInit {
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      // .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+      .set('sortOrders[0].propertyName', (event && event.sort.active !== undefined ? event.sort.active : 'year'))
+      .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
       .set('year', (this.electricityForm.value.year !== null ? this.electricityForm.value.year : ''))
       .set('month', (this.electricityForm.value.month !== null ? this.electricityForm.value.month : ''));
     if (this.users.role === 'ADMIN') {
@@ -152,16 +158,30 @@ export class ElectricityUsageListComponent implements OnInit {
   }
 
   findSelectedCustomer(force,filter){
+    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response) =>{
+          if(response.length != 0){
           var userId = response[0].userId;
+          this.selectedCustomer = response[0] ;
           this.getEletricityList(force, userId, filter);
+          }else{
+            if(this.selectedCustomer != null){
+              this.getEletricityList(force, this.selectedCustomer.userId, filter);
+              this.electricityForm.value.auditId = this.selectedCustomer.auditId;
+              this.electricityForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm( this.electricityForm.value);
+              this.adminFilter.electricityFilter = this.electricityForm.value;
+              localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+
+            }
+          }
         }, error =>{
            console.log(error);
-        }
+        } 
       )
     );
   }

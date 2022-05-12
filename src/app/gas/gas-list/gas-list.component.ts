@@ -111,23 +111,37 @@ export class GasListComponent implements OnInit {
 
 
   findSelectedCustomer(force,filter){
+    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response) =>{
+          if(response.length != 0){
           var userId = response[0].userId;
+          this.selectedCustomer = response[0] ;
           this.getGasList(force, userId, filter);
+          }else{
+            if(this.selectedCustomer != null){
+              this.getGasList(force, this.selectedCustomer.userId, filter);
+              this.gasForm.value.auditId = this.selectedCustomer.auditId;
+              this.gasForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm( this.gasForm.value);
+              this.adminFilter.gasFilter = this.gasForm.value;
+              localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+
+            }
+          }
         }, error =>{
            console.log(error);
-        }
+        } 
       )
     );
   }
 
   findGasList(force: boolean, filter: any): void {
     this.adminFilter.gasFilter.formValue = this.gasForm.value;
-    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    // localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
       if(this.gasForm.value.auditId !== '')
@@ -140,31 +154,21 @@ export class GasListComponent implements OnInit {
 
   getGasList(force, userId, filter){
     this.usageHistoryService.loadGasList(force, userId, filter);
-    this.subscriptions.add(this.usageHistoryService.getGasList().pipe(skipWhile((item: any) => !item))
-      .subscribe((gasList: any) => {
-        this.usageHistoryData.content = gasList.data;
+    this.subscriptions.add(
+      this.usageHistoryService.getGasList().pipe(skipWhile((item: any) => !item))
+    .subscribe((gasList: any) => {
 
-    //  if (gasList.data.length < 10){
-    //       if(this.adminFilter.gasFilter.page){
-    //         this.adminFilter.gasFilter.page.pageIndex = this.adminFilter.gasFilter.page.pageIndex -1;
-    //         this.pageIndex = this.adminFilter.gasFilter.page.pageIndex;
-    //       }
-    //       this.disableNextButton = true;
-    //  }else{
-        this.dataSource = this.usageHistoryData.content;
-        // this.disableNextButton = false;
-        // }
-      }));
+    // if(gasList.data.length <10){
+    //   this.disableNextButton = true;
+    //   this.pageIndex = this.adminFilter.gasFilter.page.pageIndex-1;
+    // } else {
+      this.usageHistoryData.content = gasList.data;
+      this.dataSource = this.usageHistoryData.content;
+      this.disableNextButton = false;
+    // }  
+      })
+      );
   }
-
-   getDataForNextIteration(force, userId, filter){ 
-        this.usageHistoryService.loadGasList(force, userId, filter);
-        this.usageHistoryService.getGasList().pipe(skipWhile((item: any) => !item))
-          .toPromise().then((gasList: any) => {
-            return gasList.data;
-          });
-  }
-
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.gasFilter.page = event;
@@ -174,8 +178,9 @@ export class GasListComponent implements OnInit {
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
-      .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
+        .set('sortOrders[0].propertyName', ((event && event.sort &&  event.sort.active !== undefined ) && (event.sort.active = '') ? event.sort.active : 'year'))
+        .set('sortOrders[0].asc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
+        .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
       .set('month', (this.gasForm.value.month !== null ? this.gasForm.value.month : ''));
     if (this.users.role === 'ADMIN') {
      params =  params.set('auditId', this.gasForm.value.auditId !== null ? this.gasForm.value.auditId : '')
