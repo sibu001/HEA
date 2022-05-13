@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { AdminFilter } from 'src/app/models/filter-object';
+import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
@@ -43,19 +43,19 @@ export class GasListComponent implements OnInit {
   ) {
     this.dataListForSuggestions = [];
     this.users = this.loginService.getUser();
-    this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
-    if (this.adminFilter === undefined || this.adminFilter === null  || this.adminFilter.gasFilter === undefined ) {
-      this.adminFilter = new AdminFilter();
+    this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null ) {
+      this.adminFilter = new UsageHistoryFilter();
     }
   }
   private readonly subscriptions: Subscription = new Subscription();
-  public adminFilter: AdminFilter;
+  public adminFilter: UsageHistoryFilter;
   public dataListForSuggestions : any;
 
   ngOnInit() {
     this.scrollTop();
-    this.setUpForm(this.adminFilter.gasFilter.formValue);
-    this.search(this.adminFilter.gasFilter.page, false);
+    this.setUpForm(this.adminFilter.formValue);
+    this.search(this.adminFilter.page, false);
   }
   
   scrollTop() {
@@ -111,7 +111,7 @@ export class GasListComponent implements OnInit {
 
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
       .pipe(skipWhile((item: any) => !item))
@@ -127,8 +127,8 @@ export class GasListComponent implements OnInit {
               this.gasForm.value.auditId = this.selectedCustomer.auditId;
               this.gasForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.gasForm.value);
-              this.adminFilter.gasFilter = this.gasForm.value;
-              localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+              this.adminFilter.formValue = this.gasForm.value;
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
 
             }
           }
@@ -140,8 +140,7 @@ export class GasListComponent implements OnInit {
   }
 
   findGasList(force: boolean, filter: any): void {
-    this.adminFilter.gasFilter.formValue = this.gasForm.value;
-    // localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    this.adminFilter.formValue = this.gasForm.value;
     let userId = null;
     if(this.users.role == 'ADMIN'){
       if(this.gasForm.value.auditId !== '')
@@ -154,8 +153,7 @@ export class GasListComponent implements OnInit {
 
   getGasList(force, userId, filter){
     this.usageHistoryService.loadGasList(force, userId, filter);
-    this.subscriptions.add(
-      this.usageHistoryService.getGasList().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.usageHistoryService.getGasList().pipe(skipWhile((item: any) => !item))
     .subscribe((gasList: any) => {
 
     // if(gasList.data.length <10){
@@ -171,10 +169,11 @@ export class GasListComponent implements OnInit {
   }
 
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.gasFilter.page = event;
+    this.adminFilter.page = event;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
+      .set('type','gas')
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))

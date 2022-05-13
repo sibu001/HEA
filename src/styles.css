@@ -81,6 +81,14 @@ div.energy_analytic > p {
   font-size: 16px;
 }
 
+p.accurate {
+  color: #4550a1;
+  font-size: 21px;
+  font-weight: 600;
+  text-align: justify;
+  margin-top: 20px;
+}
+
 div.energy_analytic > span {
   font-size: 16px;
 }

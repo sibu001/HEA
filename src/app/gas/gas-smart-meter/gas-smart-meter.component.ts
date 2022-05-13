@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { AdminFilter } from 'src/app/models/filter-object';
+import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
@@ -24,8 +24,10 @@ export class GasSmartMeterComponent implements OnInit {
   public pageIndex: any;
   usageHistoryData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
+  dataListForSuggestions = [];
+  selectedCustomer = null;
   keys = TableColumnData.SMART_METER_KEYS;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
@@ -33,17 +35,17 @@ export class GasSmartMeterComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.users = this.loginService.getUser();
-    this.adminFilter = JSON.parse(localStorage.getItem('gasSmartMeterFilter'));
-    if (this.adminFilter === undefined || this.adminFilter === null) {
-      this.adminFilter = new AdminFilter();
+    this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null ) {
+      this.adminFilter = new UsageHistoryFilter();
     }
   }
   private readonly subscriptions: Subscription = new Subscription();
-  public adminFilter: AdminFilter;
+  public adminFilter: UsageHistoryFilter;
 
   ngOnInit() {
-    this.setUpForm(this.adminFilter.gasSmartMeterFilter.formValue);
-    this.search(this.adminFilter.gasSmartMeterFilter.page, false);
+    this.setUpForm(this.adminFilter.formValue);
+    this.search(this.adminFilter.page, false);
   }
 
   setUpForm(event: any) {
@@ -59,21 +61,63 @@ export class GasSmartMeterComponent implements OnInit {
     }
   }
 
-  findGasList(force: boolean, filter: any): void {
-    this.adminFilter.gasSmartMeterFilter.formValue = this.gasForm.value;
-    localStorage.setItem('gasSmartMeterFilter', JSON.stringify(this.adminFilter));
-    this.usageHistoryService.loadGasSmartMeterList(force, this.users.outhMeResponse.user.id, filter);
+  getGasList(force: boolean, userId  : string, filter: any): void {
+    this.adminFilter.formValue = this.gasForm.value;
+    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    this.usageHistoryService. loadGasSmartMeterList(force, userId, filter);
     this.subscriptions.add(this.usageHistoryService.getGasSmartMeterList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
-        this.usageHistoryData.totalElements = this.adminFilter.gasSmartMeterFilter.totalElement + gasList.data.length + 1;
-        this.adminFilter.gasSmartMeterFilter.totalElement = this.adminFilter.gasSmartMeterFilter.totalElement + gasList.data.length + 1;
+        // this.usageHistoryData.totalElements = this.adminFilter.electricitySmartMeterFilter.totalElement + gasList.data.length + 1;
+        // this.adminFilter.electricitySmartMeterFilter.totalElement = this.adminFilter.electricitySmartMeterFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
       }));
+
   }
 
+  findGasList(force: boolean, filter: any): void {
+    this.adminFilter.formValue = this.gasForm.value;
+    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    let userId = null;
+    if(this.users.role == 'ADMIN'){
+      if(this.gasForm.value.auditId !== '')
+        this.findSelectedCustomer(force, filter);
+    } else {
+      userId = this.users.outhMeResponse.user.userId;
+      this.getGasList(force, userId, filter);
+    }
+  }
+
+  findSelectedCustomer(force,filter){
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          if(response.length != 0){
+          var userId = response[0].userId;
+          this.selectedCustomer = response[0] ;
+          this.getGasList(force, userId, filter);
+          }else{
+            if(this.selectedCustomer != null){
+              this.getGasList(force, this.selectedCustomer.userId, filter);
+              this.gasForm.value.auditId = this.selectedCustomer.auditId;
+              this.gasForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm( this.gasForm.value);
+              this.adminFilter = this.gasForm.value;
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+
+            }
+          }
+        }, error =>{
+           console.log(error);
+        } 
+      )
+    );
+  }
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.gasSmartMeterFilter.page = event;
+    this.adminFilter.page = event;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
@@ -81,8 +125,8 @@ export class GasSmartMeterComponent implements OnInit {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
+      .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
       .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
       .set('day', (this.gasForm.value.day !== null ? this.gasForm.value.day : ''))
       .set('hour', (this.gasForm.value.hour !== null ? this.gasForm.value.hour : ''))
@@ -105,5 +149,47 @@ export class GasSmartMeterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed' + result);
     });
+  }
+  filterForCustomer(){
+    return new HttpParams()
+      .set('auditId',this.gasForm.value.auditId !== undefined ? this.gasForm.value.auditId : '')
+      .set('customerName',this.gasForm.value.customerName !== undefined ? this.gasForm.value.customerName :'')
+      .set('useLike','true')
+  }
+  findCustomerByAuditIdOrCustomerName(calledBy){
+    let filters =  this.filterForCustomer();
+    
+    if(filters.get('auditId').length < 5 && filters.get('customerName').length < 5)
+      return null;
+    
+    if(calledBy == 'auditId'){
+      filters = filters.delete('customerName');
+    }else{
+      filters = filters.delete('auditId');
+    }
+    this.findCustomer(filters,calledBy);
+  }
+
+  findCustomer(filters, calledFor ?: string){
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do',filters)
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          this.dataListForSuggestions = response;
+        }, error =>{
+           console.log(error);
+        }
+      )
+    );
+  }
+
+  selectedSuggestion(event : any, select : string){
+    if(select == 'auditId')
+      this.gasForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
+    else {
+      this.gasForm.get('auditId').setValue(event.option.value);
+      this.gasForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
+    }
   }
 }

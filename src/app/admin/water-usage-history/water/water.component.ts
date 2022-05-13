@@ -10,7 +10,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { Users } from 'src/app/models/user';
-import { AdminFilter } from 'src/app/models/filter-object';
+import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 
 @Component({
   selector: 'app-water',
@@ -25,7 +25,7 @@ export class WaterComponent implements OnInit, OnDestroy {
   users: Users = new Users();
   public totalElement = 0;
   dataListForSuggestions = [];
-  adminFilter = undefined;
+  adminFilter : UsageHistoryFilter;
   pageIndex : any;
   public data = {
     content: [],
@@ -41,17 +41,17 @@ export class WaterComponent implements OnInit, OnDestroy {
      private loginService: LoginService
      ){
       this.users = this.loginService.getUser();
-      this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
-      if (this.adminFilter === undefined || this.adminFilter === null  || this.adminFilter.waterFilter === undefined ) {
-        this.adminFilter = new AdminFilter();
+      this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
+      if (this.adminFilter === undefined || this.adminFilter === null ) {
+        this.adminFilter = new UsageHistoryFilter();
       }
       }
 
   ngOnInit() {
-    this.scrollTop();
     // document.getElementById('loader').classList.remove('loading');
-    this.setUpForm(this.adminFilter.waterFilter.formValue);
-    this.search(this.adminFilter.waterFilter.page,false);
+    this.setUpForm(this.adminFilter.formValue);
+    this.search(this.adminFilter.page,false);
+    this.scrollTop();
   }
 
   scrollTop() {
@@ -105,7 +105,7 @@ export class WaterComponent implements OnInit, OnDestroy {
   }
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
       .pipe(skipWhile((item: any) => !item))
@@ -121,21 +121,21 @@ export class WaterComponent implements OnInit, OnDestroy {
               this.waterForm.value.auditId = this.selectedCustomer.auditId;
               this.waterForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.waterForm.value);
-              this.adminFilter.electricityFilter = this.waterForm.value;
-              localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+              this.adminFilter.formValue = this.waterForm.value;
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
 
             }
           }
         }, error =>{
-           console.log(error);
+           console.log(error);  
         } 
       )
     );
   }
 
   findWaterList(force: boolean, filter: any): void {
-    this.adminFilter.waterFilter.formValue = this.waterForm.value;
-    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    this.adminFilter.formValue = this.waterForm.value;
+    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
       if(this.waterForm.value.auditId !== '')
@@ -156,14 +156,15 @@ export class WaterComponent implements OnInit, OnDestroy {
   }
 
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.waterFilter.page = event;
+    this.adminFilter.page = event;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
+      .set('type','water  ')
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-        .set('sortOrders[0].propertyName', (event && event.sort.active !== undefined ? event.sort.active : 'year'))
+        .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
         .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
         .set('year', (this.waterForm.value.year !== null ? this.waterForm.value.year : ''))
       .set('month', (this.waterForm.value.month !== null ? this.waterForm.value.month : ''));

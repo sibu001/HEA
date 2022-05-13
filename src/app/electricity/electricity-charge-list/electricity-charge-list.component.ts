@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { AdminFilter } from 'src/app/models/filter-object';
+import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
@@ -24,26 +24,32 @@ export class ElectricityChargeListComponent implements OnInit {
   public pageIndex: any;
   usageHistoryData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
-  keys = TableColumnData.GAS_KEYS; 4;
+  keys = TableColumnData.ELECTRICITY_CHARGE_KEYS;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
     public dialog: MatDialog
   ) {
     this.users = this.loginService.getUser();
-    this.adminFilter = JSON.parse(localStorage.getItem('electricityChargeFilter'));
-    if (this.adminFilter === undefined || this.adminFilter === null) {
-      this.adminFilter = new AdminFilter();
+    this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null ) {
+      this.adminFilter = new UsageHistoryFilter();
     }
   }
   private readonly subscriptions: Subscription = new Subscription();
-  public adminFilter: AdminFilter;
-
+  public adminFilter: UsageHistoryFilter;
+  dataListForSuggestions = [];
+  selectedCustomer = null;
   ngOnInit() {
-    this.setUpForm(this.adminFilter.electricityChargeFilter.formValue);
-    this.search(this.adminFilter.electricityChargeFilter.page, false);
+    this.setUpForm(this.adminFilter.formValue);
+    this.search(this.adminFilter.page, false);
+    this.scrollTop();
+  }
+
+  scrollTop() {
+    window.scrollTo(0, 0)
   }
 
   setUpForm(event: any) {
@@ -56,22 +62,23 @@ export class ElectricityChargeListComponent implements OnInit {
       this.electricityForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
     }
   }
+  
 
-  findGasList(force: boolean, filter: any): void {
-    this.adminFilter.electricityChargeFilter.formValue = this.electricityForm.value;
-    localStorage.setItem('electricityChargeFilter', JSON.stringify(this.adminFilter));
-    this.usageHistoryService.loadElectricityChargeList(force, this.users.outhMeResponse.user.id, filter);
-    this.subscriptions.add(this.usageHistoryService.getElectricityChargeList().pipe(skipWhile((item: any) => !item))
+  getEletricityList(force: boolean, userId : string,filter: any): void {
+    this.adminFilter.formValue = this.electricityForm.value;
+    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    this.usageHistoryService.loadElectricityList(force,userId, filter);
+    this.subscriptions.add(this.usageHistoryService.getElectricityList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
-        this.usageHistoryData.totalElements = this.adminFilter.electricityChargeFilter.totalElement + gasList.data.length + 1;
-        this.adminFilter.electricityChargeFilter.totalElement = this.adminFilter.electricityChargeFilter.totalElement + gasList.data.length + 1;
+        // this.usageHistoryData.totalElements = this.adminFilter.totalElement + gasList.data.length + 1;
+        // this.adminFilter.totalElement = this.adminFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
       }));
   }
 
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.electricityChargeFilter.page = event;
+    this.adminFilter.page = event;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
@@ -79,19 +86,97 @@ export class ElectricityChargeListComponent implements OnInit {
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      // .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
+      .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
+      .set('sortOrders[0].asc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
       .set('year', (this.electricityForm.value.year !== null ? this.electricityForm.value.year : ''))
       .set('month', (this.electricityForm.value.month !== null ? this.electricityForm.value.month : ''));
     if (this.users.role === 'ADMIN') {
       params.set('auditId', this.electricityForm.value.auditId !== null ? this.electricityForm.value.auditId : '');
       params.set('customerName', this.electricityForm.value.customerName !== null ? this.electricityForm.value.customerName : '');
     }
-    this.findGasList(true, params);
+    this.filterForElectricityList(true, params);
   }
 
   get f() { return this.electricityForm.controls; }
+
+  filterForCustomer(){
+    return new HttpParams()
+      .set('auditId',this.electricityForm.value.auditId !== undefined ? this.electricityForm.value.auditId : '')
+      .set('customerName',this.electricityForm.value.customerName !== undefined ? this.electricityForm.value.customerName :'')
+      .set('useLike','true')
+  }
+
+
+  findCustomerByAuditIdOrCustomerName(calledBy){
+    let filters =  this.filterForCustomer();
+    
+    if(filters.get('auditId').length < 5 && filters.get('customerName').length < 5)
+      return null;
+    
+    if(calledBy == 'auditId'){
+      filters = filters.delete('customerName');
+    }else{
+      filters = filters.delete('auditId');
+    }
+    this.findCustomer(filters);
+  }
+
+  findCustomer(filters, calledFor ?: string){
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do',filters)
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          this.dataListForSuggestions = response;
+        }, error =>{
+           console.log(error);
+        }
+      )
+    );
+  }
+
+  filterForElectricityList(force: boolean, filter: any){
+    this.adminFilter.formValue = this.electricityForm.value;
+    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    let userId = null;
+    if(this.users.role == 'ADMIN'){
+      if(this.electricityForm.value.auditId !== '')
+        this.findSelectedCustomer(force, filter);
+    } else {
+      userId = this.users.outhMeResponse.user.userId;
+      this.getEletricityList(force, userId,filter);
+    }
+  }
+
+  findSelectedCustomer(force,filter){
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          if(response.length != 0){
+          var userId = response[0].userId;
+          this.selectedCustomer = response[0] ;
+          this.getEletricityList(force, userId, filter);
+          }else{
+            if(this.selectedCustomer != null){
+              this.getEletricityList(force, this.selectedCustomer.userId, filter);
+              this.electricityForm.value.auditId = this.selectedCustomer.auditId;
+              this.electricityForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm( this.electricityForm.value);
+              this.adminFilter.formValue = this.electricityForm.value;
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+
+            }
+          }
+        }, error =>{
+           console.log(error);
+        } 
+      )
+    );
+  }
 
   showPopUp(): any {
     if (this.users.role !== 'USERS') {

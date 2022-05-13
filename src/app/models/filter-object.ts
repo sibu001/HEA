@@ -127,3 +127,9 @@ export class ElectricityDailySmartMeterFilter {
     formValue: null
     totalElement: 0
 }
+
+export class UsageHistoryFilter {
+    page: null
+    formValue: null
+    totalElement: 0
+}

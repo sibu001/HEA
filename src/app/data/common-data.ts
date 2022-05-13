@@ -478,6 +478,15 @@ export class TableColumnData {
         { key: 'value', isEdit: true, displayName: 'Total' },
     ];
 
+    static readonly ELECTRICITY_CHARGE_KEYS: Array<TABLECOLUMN> = [
+        { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
+        { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
+        { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
+        { key: 'billingDate', isEdit: true, displayName: 'Billing Date', isDate: true },
+        { key: 'value', isEdit: true, displayName: 'Total' },
+        { key: 'utilGen', isEdit: true, displayName: '3rd Party Gen' },
+    ];
+
     static readonly ELECTRICITY_KEYS: Array<TABLECOLUMN> = [
         { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
@@ -494,7 +503,7 @@ export class TableColumnData {
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
         { key: 'day', sort: 'day', isEdit: true, displayName: 'Day' },
         { key: 'hour', sort: 'hour', isEdit: true, displayName: 'Hour' },
-        { key: 'value', isEdit: true, displayName: 'Value' },
+        { key: 'value', isEdit: true, displayName: 'Total' },
     ];
 
     static readonly SMART_METER_DAILY_KEYS: Array<TABLECOLUMN> = [

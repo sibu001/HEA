@@ -2,23 +2,34 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9 content" >
-        <p class="heading">
-          Water Charge
-        </p>
-        <form [formGroup]='myDataForm'>
-          <div class="row rowPadding borderBottom">
+        <br><br><h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
+        <p class="accurate">Water Charge</p>
+        <form [formGroup]='waterForm'>
+          <div *ngIf="users.role!=='USERS'" class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Audit Id:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='auditId' id='auditId'>
+              <input type="text" class="form-control" formControlName='auditId' matInput
+              (keyup)="findCustomerByAuditIdOrCustomerName('auditId')" [matAutocomplete]="auditId">
+              <mat-autocomplete #auditId="matAutocomplete" (optionSelected)="selectedSuggestion($event,'auditId')" >
+                <mat-option *ngFor="let data of dataListForSuggestions" value="{{data.auditId}}">
+                  {{data.user.name}}
+                </mat-option>
+              </mat-autocomplete>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Customer Name:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='customerName' id='customerName'>
+              <input type="text" class="form-control" formControlName='customerName' [matAutocomplete]='customerName'
+              (keyup)="findCustomerByAuditIdOrCustomerName('customerName')">
+              <mat-autocomplete #customerName="matAutocomplete" (optionSelected)="selectedSuggestion($event,'customerName')" >
+                <mat-option *ngFor="let data of dataListForSuggestions" value="{{data.auditId}}">
+                  {{data.user.name}}
+                </mat-option>
+              </mat-autocomplete>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>
@@ -38,14 +49,15 @@
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>
-          <div class="row rowPadding">
+          <div class="row rowPadding">  
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary" (click)="findWater($event)">Show</button>
+              <button type="submit" class="btn btn-primary" (click)="search(undefined,true)">Show</button>
             </div>
           </div>
           <div class="paddingTop">
             <app-table [keys]="keys" [isSearch]="false" [isPaginate]=true [data]="dataSource" [isHideAdd]=true
-              [totalElement]="data.totalElements" (goToEditEvent)='goToEditWater($event)'>
+              [totalElement]="data.totalElements"  [disableLastButton]=true (changePageEvent)='search($event,true)'
+              (goToEditEvent)='goToEditWater()'>
             </app-table>
           </div>
         </form>

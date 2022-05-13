@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { AdminFilter } from 'src/app/models/filter-object';
+import { UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
@@ -23,8 +23,10 @@ export class GasChargeComponent implements OnInit {
   public pageIndex: any;
   usageHistoryData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
+  selectedCustomer = null;
+  dataListForSuggestions = null;
   keys = TableColumnData.GAS_KEYS;
   constructor(private loginService: LoginService,
     private router: Router,
@@ -32,17 +34,22 @@ export class GasChargeComponent implements OnInit {
     private readonly fb: FormBuilder,
     public dialog: MatDialog) {
     this.users = this.loginService.getUser();
-    this.adminFilter = JSON.parse(localStorage.getItem('gasChargeFilter'));
-    if (this.adminFilter === undefined || this.adminFilter === null || this.adminFilter.gasChargeFilter === null) {
-      this.adminFilter = new AdminFilter();
+    this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null ) {
+      this.adminFilter = new UsageHistoryFilter();
     }
   }
   private readonly subscriptions: Subscription = new Subscription();
-  public adminFilter: AdminFilter;
+  public adminFilter: UsageHistoryFilter;
 
   ngOnInit() {
-    this.setUpForm(this.adminFilter.gasChargeFilter.formValue);
-    this.search(this.adminFilter.gasChargeFilter.page, false);
+    this.setUpForm(this.adminFilter.formValue);
+    this.search(this.adminFilter.page, false);
+    this.scrollTop();
+  }
+  
+  scrollTop(){
+    window.scrollTo(0, 0);
   }
 
   setUpForm(event: any) {
@@ -57,20 +64,32 @@ export class GasChargeComponent implements OnInit {
   }
 
   findGasList(force: boolean, filter: any): void {
-    this.adminFilter.gasChargeFilter.formValue = this.gasForm.value;
-    localStorage.setItem('gasChargeFilter', JSON.stringify(this.adminFilter));
-    this.usageHistoryService.loadGasChargeList(force, this.users.outhMeResponse.user.id, filter);
-    this.subscriptions.add(this.usageHistoryService.getGasChargeList().pipe(skipWhile((item: any) => !item))
+    this.adminFilter.formValue = this.gasForm.value;
+    let userId = null;
+    if(this.users.role == 'ADMIN'){
+      if(this.gasForm.value.auditId !== '')
+        this.findSelectedCustomer(force, filter);
+    } else {
+      userId = this.users.outhMeResponse.user.userId;
+      this.getGasList(force, userId, filter);
+    }
+  }
+
+  getGasList(force: boolean,userId: string, filter: any): void {
+    this.adminFilter.formValue = this.gasForm.value;
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    this.usageHistoryService.loadGasList(force, userId, filter);
+    this.subscriptions.add(this.usageHistoryService.getGasList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
-        this.usageHistoryData.totalElements = this.adminFilter.gasChargeFilter.totalElement + gasList.data.length + 1;
-        this.adminFilter.gasChargeFilter.totalElement = this.adminFilter.gasChargeFilter.totalElement + gasList.data.length + 1;
+        // this.usageHistoryData.totalElements = this.adminFilter.totalElement + gasList.data.length + 1;
+        // this.adminFilter.totalElement = this.adminFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
       }));
   }
 
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.gasChargeFilter.page = event;
+    this.adminFilter.page = event;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
@@ -79,9 +98,9 @@ export class GasChargeComponent implements OnInit {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
-      .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
+      .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
+      .set('sortOrders[0].asc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
+    .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
       .set('month', (this.gasForm.value.month !== null ? this.gasForm.value.month : ''));
     if (this.users.role === 'ADMIN') {
       params.set('auditId', this.gasForm.value.auditId !== null ? this.gasForm.value.auditId : '');
@@ -105,5 +124,77 @@ export class GasChargeComponent implements OnInit {
     }
   }
 
+  filterForCustomer(){
+    return new HttpParams()
+      .set('auditId',this.gasForm.value.auditId !== undefined ? this.gasForm.value.auditId : '')
+      .set('customerName',this.gasForm.value.customerName !== undefined ? this.gasForm.value.customerName :'')
+      .set('useLike','true')
+  }
+
+  findSelectedCustomer(force,filter){
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          if(response.length != 0){
+          var userId = response[0].userId;
+          this.selectedCustomer = response[0] ;
+          this.getGasList(force, userId, filter);
+          }else{
+            if(this.selectedCustomer != null){
+              this.getGasList(force, this.selectedCustomer.userId, filter);
+              this.gasForm.value.auditId = this.selectedCustomer.auditId;
+              this.gasForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm( this.gasForm.value);
+              this.adminFilter.formValue = this.gasForm.value;
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+
+            }
+          }
+        }, error =>{
+           console.log(error);
+        } 
+      )
+    );
+  }
+
+  findCustomer(filters, calledFor ?: string){
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do',filters)
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          this.dataListForSuggestions = response;
+        }, error =>{
+           console.log(error);
+        }
+      )
+    );
+  }
+
+  findCustomerByAuditIdOrCustomerName(calledBy){
+    let filters =  this.filterForCustomer();
+    
+    if(filters.get('auditId').length < 5 && filters.get('customerName').length < 5)
+      return null;
+    
+    if(calledBy == 'auditId'){
+      filters = filters.delete('customerName');
+    }else{
+      filters = filters.delete('auditId');
+    }
+    this.findCustomer(filters);
+  }
+
+  selectedSuggestion(event : any, select : string){
+    if(select == 'auditId')
+      this.gasForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
+    else {
+      this.gasForm.get('auditId').setValue(event.option.value);
+      this.gasForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
+    }
+  }
 
 }

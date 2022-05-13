@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { AdminFilter } from 'src/app/models/filter-object';
+import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
@@ -38,9 +38,9 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
     private utilityService: UtilityService
   ) {
     this.users = this.loginService.getUser();
-    this.adminFilter = JSON.parse(localStorage.getItem('electricityFilter'));
-    if (this.adminFilter === undefined || this.adminFilter === null || !this.adminFilter.electricityFilter) {
-      this.adminFilter = new AdminFilter();
+    this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null ) {
+      this.adminFilter = new UsageHistoryFilter();
     }
   }
   ngOnDestroy(): void {
@@ -48,11 +48,16 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   }
 
   private readonly subscriptions: Subscription = new Subscription();
-  public adminFilter: AdminFilter;
+  public adminFilter: UsageHistoryFilter;
 
   ngOnInit() {
-    this.setUpForm(this.adminFilter.electricityFilter.formValue);
-    this.search(this.adminFilter.electricityFilter.page, false);
+    this.setUpForm(this.adminFilter.formValue);
+    this.search(this.adminFilter.page, false);
+    this.scrollTop();
+  }
+
+  scrollTop() {
+    window.scrollTo(0, 0);
   }
 
   setUpForm(event: any) {
@@ -67,8 +72,8 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   }
 
   getEletricityList(force: boolean,userId : String, filter: any): void {
-    this.adminFilter.electricityFilter.formValue = this.electricityForm.value;
-    localStorage.setItem('electricityFilter', JSON.stringify(this.adminFilter));
+    this.adminFilter.formValue = this.electricityForm.value;
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.usageHistoryService.loadElectricityList(force,userId, filter);
     this.subscriptions.add(this.usageHistoryService.getElectricityList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
@@ -89,7 +94,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   }
 
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.electricityFilter.page = event;
+    this.adminFilter.page = event;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
@@ -98,7 +103,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       // .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortOrders[0].propertyName', (event && event.sort.active !== undefined ? event.sort.active : 'year'))
+      .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
       .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
       .set('year', (this.electricityForm.value.year !== null ? this.electricityForm.value.year : ''))
       .set('month', (this.electricityForm.value.month !== null ? this.electricityForm.value.month : ''));
@@ -138,8 +143,8 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   }
 
   filterForElectricityList(force: boolean, filter: any){
-    this.adminFilter.gasFilter.formValue = this.electricityForm.value;
-    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    this.adminFilter.formValue = this.electricityForm.value;
+    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
       if(this.electricityForm.value.auditId !== '')
@@ -158,7 +163,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   }
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
       .pipe(skipWhile((item: any) => !item))
@@ -174,8 +179,8 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
               this.electricityForm.value.auditId = this.selectedCustomer.auditId;
               this.electricityForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.electricityForm.value);
-              this.adminFilter.electricityFilter = this.electricityForm.value;
-              localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+              this.adminFilter.formValue = this.electricityForm.value;
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
 
             }
           }

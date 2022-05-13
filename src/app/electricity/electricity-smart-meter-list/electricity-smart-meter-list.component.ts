@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { AdminFilter } from 'src/app/models/filter-object';
+import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
@@ -34,17 +34,17 @@ export class ElectricitySmartMeterListComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.users = this.loginService.getUser();
-    this.adminFilter = JSON.parse(localStorage.getItem('electricitySmartMeterFilter'));
+    this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null ) {
-      this.adminFilter = new AdminFilter();
+      this.adminFilter = new UsageHistoryFilter();
     }
   }
   private readonly subscriptions: Subscription = new Subscription();
-  public adminFilter: AdminFilter;
+  public adminFilter: UsageHistoryFilter;
 
   ngOnInit() {
-    this.setUpForm(this.adminFilter.electricitySmartMeterFilter.formValue);
-    this.search(this.adminFilter.electricitySmartMeterFilter.page, false);
+    this.setUpForm(this.adminFilter.formValue);
+    this.search(this.adminFilter.page, false);
     this.scrollTop();
   }
    scrollTop() {
@@ -65,8 +65,8 @@ export class ElectricitySmartMeterListComponent implements OnInit {
   }
 
   getSmartElectricityList(force: boolean, userId  : string, filter: any): void {
-    this.adminFilter.electricitySmartMeterFilter.formValue = this.electricitySmartMeterForm.value;
-    localStorage.setItem('electricitySmartMeterFilter', JSON.stringify(this.adminFilter));
+    this.adminFilter.formValue = this.electricitySmartMeterForm.value;
+    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.usageHistoryService.loadElectricitySmartMeterList(force, userId, filter);
     this.subscriptions.add(this.usageHistoryService.getElectricitySmartMeterList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
@@ -79,7 +79,7 @@ export class ElectricitySmartMeterListComponent implements OnInit {
   }
 
   findSmartElectricityList(force: boolean, filter: any): void {
-    this.adminFilter.electricitySmartMeterFilter.formValue = this.electricitySmartMeterForm.value;
+    this.adminFilter.formValue = this.electricitySmartMeterForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
@@ -92,7 +92,7 @@ export class ElectricitySmartMeterListComponent implements OnInit {
   }
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
       .pipe(skipWhile((item: any) => !item))
@@ -108,8 +108,8 @@ export class ElectricitySmartMeterListComponent implements OnInit {
               this.electricitySmartMeterForm.value.auditId = this.selectedCustomer.auditId;
               this.electricitySmartMeterForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.electricitySmartMeterForm.value);
-              this.adminFilter.electricitySmartMeterFilter = this.electricitySmartMeterForm.value;
-              localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+              this.adminFilter.formValue = this.electricitySmartMeterForm.value;
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
 
             }
           }
@@ -120,16 +120,17 @@ export class ElectricitySmartMeterListComponent implements OnInit {
     );
   }
 
+
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.electricitySmartMeterFilter.page = event;
+    this.adminFilter.page = event;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('sortOrders[0].propertyName', (event && event.sort.active !== undefined ? event.sort.active : 'year'))
-      .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
+        .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
+        .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
       .set('year', (this.electricitySmartMeterForm.value.year !== null ? this.electricitySmartMeterForm.value.year : ''))
       .set('hour', (this.electricitySmartMeterForm.value.hour !== null ? this.electricitySmartMeterForm.value.hour : ''))
       .set('day', (this.electricitySmartMeterForm.value.day !== null ? this.electricitySmartMeterForm.value.day : ''))

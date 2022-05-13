@@ -1,8 +1,8 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-9 col-md-9 col-sm-8"><br><br>
-        <h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
+      <div class="col-lg-9 col-md-9 col-sm-8">
+        <br><br><h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
         <p class="accurate">Electricity Smart Meter</p>
         <form class="form-horizontal" [formGroup]='electricitySmartMeterForm'>
           <div *ngIf="users.role!=='USERS'">
