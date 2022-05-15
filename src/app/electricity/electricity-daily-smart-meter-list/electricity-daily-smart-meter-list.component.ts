@@ -1,14 +1,16 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
-import { AdminFilter, ElectricityDailySmartMeterFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
+import {  UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { ElectricityUsagePopupComponent } from '../electricity-usage-popup/electricity-usage-popup.component';
 declare var $: any;
 
@@ -17,7 +19,7 @@ declare var $: any;
   templateUrl: './electricity-daily-smart-meter-list.component.html',
   styleUrls: ['./electricity-daily-smart-meter-list.component.css']
 })
-export class ElectricityDailySmartMeterListComponent implements OnInit {
+export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestroy{
   users: Users = new Users();
   public pageIndex: any;
   electricityDailySmartMeterForm: FormGroup;
@@ -39,7 +41,14 @@ export class ElectricityDailySmartMeterListComponent implements OnInit {
     if (this.adminFilter === undefined || this.adminFilter === null ) {
       this.adminFilter = new UsageHistoryFilter();
     }
+
+    if(this.adminFilter.recentUsageHistory != AppConstant.electricityDailySmartMeterList){
+      this.adminFilter.recentUsageHistory = AppConstant.electricityDailySmartMeterList;
+      this.adminFilter.page = undefined;
+    }
   }
+
+
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: UsageHistoryFilter;
 
@@ -100,27 +109,27 @@ export class ElectricityDailySmartMeterListComponent implements OnInit {
   }
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    const params = this.filterForCustomer();
     this.subscriptions.add(
-      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      this.loginService.performGetWithParams('findCustomers.do',params)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response) =>{
           if(response.length != 0){
           var userId = response[0].userId;
-          this.selectedCustomer = response[0] ;
-          this.getElectricityDailySmartMeterList(force, userId, filter);
+          this.selectedCustomer = response[0];
+          this.getElectricityDailySmartMeterList(force, userId, filter);  
           }else{
             if(this.selectedCustomer != null){
               this.getElectricityDailySmartMeterList(force, this.selectedCustomer.userId, filter);
-              this.electricityDailySmartMeterForm.value.auditId = this.selectedCustomer.auditId;
-              this.electricityDailySmartMeterForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.electricityDailySmartMeterForm.value);
               this.adminFilter.formValue = this.electricityDailySmartMeterForm.value;
-              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-
             }
           }
+          this.electricityDailySmartMeterForm.value.auditId = this.selectedCustomer.auditId;
+          this.electricityDailySmartMeterForm.value.customerName = this.selectedCustomer.user.name;
+          this.setUpForm(this.electricityDailySmartMeterForm.value);
+          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
         }, error =>{
            console.log(error);
         } 
@@ -128,24 +137,14 @@ export class ElectricityDailySmartMeterListComponent implements OnInit {
     );
   }
 
-  // findGasList(force: boolean, filter: any): void {
-  //   this.adminFilter.electricityDailySmartMeterFilter.formValue = this.electricityDailySmartMeterForm.value;
-  //   localStorage.setItem('electricityDailySmartMeterFilter', JSON.stringify(this.adminFilter));
-  //   this.usageHistoryService.loadElectricityDailySmartMeterList(force, this.users.outhMeResponse.user.id, filter);
-  //   this.subscriptions.add(this.usageHistoryService.getElectricityDailySmartMeterList().pipe(skipWhile((item: any) => !item))
-  //     .subscribe((gasList: any) => {
-  //       this.usageHistoryData.content = gasList.data;
-  //       this.usageHistoryData.totalElements = this.adminFilter.electricityDailySmartMeterFilter.totalElement + gasList.data.length + 1;
-  //       this.adminFilter.electricityDailySmartMeterFilter.totalElement = this.adminFilter.electricityDailySmartMeterFilter.totalElement + gasList.data.length + 1;
-  //       this.dataSource = [...this.usageHistoryData.content];
-  //     }));
-  // }
+
+
   findGasList(force: boolean, filter: any): void {
     this.adminFilter.formValue = this.electricityDailySmartMeterForm.value;
     // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
-      if(this.electricityDailySmartMeterForm.value.auditId !== '')
+      if(this.electricityDailySmartMeterForm.value.auditId != '' || this.electricityDailySmartMeterForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
       userId = this.users.outhMeResponse.user.userId;
@@ -212,5 +211,9 @@ export class ElectricityDailySmartMeterListComponent implements OnInit {
       this.electricityDailySmartMeterForm.get('auditId').setValue(event.option.value);
       this.electricityDailySmartMeterForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
     }
+  }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }

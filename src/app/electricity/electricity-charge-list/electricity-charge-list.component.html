@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-8">
-              <br><br><h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
+              <h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
                 <p class="accurate">Electricity Charge</p>
                 <form [formGroup]='electricityForm'>
                     <div *ngIf="users.role!=='USERS'" > 
@@ -54,7 +54,7 @@
                       </div>
                     </div>
                     <div class="row rowpadding">
-                      <div class="col-sm-12" style="text-align: right">
+                      <div class="col-sm-12" style="text-align: right; margin-top: 10px;">
                         <button type="submit" class="btn btn-primary"
                           (click)="search(undefined,true)">Show</button>
                       </div>
@@ -65,12 +65,12 @@
                     <div class="col-sm-12">
                         <p class="Messages">
                             <img src="assets/images/dot03.gif" alt="dot" class="dot">&nbsp;Values</p>
-                        <app-table [keys]="keys" [checkbox]=true
+                        <app-table [keys]="keys"
                             [isPaginate]="true" [isHideAdd]=true
                             [isSearch]="false"  [disableLastButton]=true
                             [data]="dataSource" [pageIndex]="pageIndex"
                             [totalElement]="usageHistoryData.totalElements"
-                            (goToEditEvent)='showPopUp()'
+                            (goToEditEvent)='showPopUp($event)'
                             (changePageEvent)="search($event,false)">
                         </app-table>
                     </div>

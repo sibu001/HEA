@@ -15,4 +15,5 @@ export interface TABLECOLUMN {
     isInlineEdit?: boolean;
     isId?: boolean;
     isSurvey?: boolean;
+    isDolar ?: boolean;
 }

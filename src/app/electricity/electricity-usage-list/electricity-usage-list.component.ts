@@ -10,6 +10,7 @@ import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { ElectricityUsagePopupComponent } from '../electricity-usage-popup/electricity-usage-popup.component';
 
 @Component({
@@ -41,6 +42,11 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
     this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null ) {
       this.adminFilter = new UsageHistoryFilter();
+    }
+
+    if(this.adminFilter.recentUsageHistory != AppConstant.electricityList){
+      this.adminFilter.recentUsageHistory = AppConstant.electricityList;
+      this.adminFilter.page = undefined;
     }
   }
   ngOnDestroy(): void {
@@ -147,7 +153,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
     // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
-      if(this.electricityForm.value.auditId !== '')
+      if(this.electricityForm.value.auditId != '' || this.electricityForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
       userId = this.users.outhMeResponse.user.userId;
@@ -163,34 +169,33 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   }
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    const params = this.filterForCustomer();
     this.subscriptions.add(
-      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      this.loginService.performGetWithParams('findCustomers.do',params)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response) =>{
           if(response.length != 0){
           var userId = response[0].userId;
-          this.selectedCustomer = response[0] ;
-          this.getEletricityList(force, userId, filter);
+          this.selectedCustomer = response[0];
+          this.getEletricityList(force, userId, filter);  
           }else{
             if(this.selectedCustomer != null){
               this.getEletricityList(force, this.selectedCustomer.userId, filter);
-              this.electricityForm.value.auditId = this.selectedCustomer.auditId;
-              this.electricityForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.electricityForm.value);
               this.adminFilter.formValue = this.electricityForm.value;
-              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-
             }
           }
+          this.electricityForm.value.auditId = this.selectedCustomer.auditId;
+          this.electricityForm.value.customerName = this.selectedCustomer.user.name;
+          this.setUpForm(this.electricityForm.value);
+          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
         }, error =>{
            console.log(error);
         } 
       )
     );
   }
-
   get f() { return this.electricityForm.controls; }
 
   showPopUp(event : any): any {
@@ -201,7 +206,9 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
       data: {event}
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.search(undefined,true);  
+         if(result){
+          this.search(this.electricityForm.value,true);
+         }
       });
   }
   }

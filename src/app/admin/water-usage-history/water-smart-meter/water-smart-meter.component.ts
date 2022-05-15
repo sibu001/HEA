@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { UsageHistoryFilter } from 'src/app/models/filter-object';
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
+import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 
 @Component({
   selector: 'app-water-smart-meter',
@@ -15,25 +23,176 @@ export class WaterSmartMeterComponent implements OnInit {
   public keys: Array<TABLECOLUMN> = TableColumnData.SMART_METER_KEYS;
   public dataSource: any;
   public totalElement = 0;
+  users: Users = new Users();
+  dataListForSuggestions = [];
+  adminFilter : UsageHistoryFilter;
+  pageIndex : any;
   public data = {
     content: [],
     totalElements: 0,
   };
-  myDataForm: FormGroup = this.fb.group({
-    auditId: this.fb.control(['']),
-    customerName: this.fb.control(['']),
-    year: this.fb.control(['']),
-    month: this.fb.control([''])
-  });
-  constructor(public router: Router, public fb: FormBuilder) { }
+  selectedCustomer = null;
+  private readonly subscriptions: Subscription = new Subscription();
+  waterSmartMeterForm: FormGroup;
+  // waterSmartMeterForm: FormGroup = this.fb.group({
+  //   auditId: this.fb.control(['']),
+  //   customerName: this.fb.control(['']),
+  //   year: this.fb.control(['']),
+  //   month: this.fb.control([''])
+  // });
+  // constructor(public router: Router, public fb: FormBuilder) { }
+  constructor(public router: Router, public fb: FormBuilder,
+    public usageHistoryService: UsageHistoryService,
+    private loginService: LoginService
+    ){
+     this.users = this.loginService.getUser();
+     this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
+     if (this.adminFilter === undefined || this.adminFilter === null ) {
+       this.adminFilter = new UsageHistoryFilter();
+     }
+     }
 
-  ngOnInit() {
-    document.getElementById('loader').classList.remove('loading');
-    this.findWater();
+     ngOnInit() {
+      // document.getElementById('loader').classList.remove('loading');
+      this.setUpForm(this.adminFilter.formValue);
+      this.search(this.adminFilter.page,false);
+      this.scrollTop();
+    }
+  
+    scrollTop() {
+      window.scroll(0, 0);
+    }
+    setUpForm(event: any) {
+      this.waterSmartMeterForm = this.fb.group({
+        year: [event !== undefined && event !== null ? event.year : ''],
+        month: [event !== undefined && event !== null ? event.month : ''],
+      });
+      if (this.users.role === 'ADMIN') {
+        this.waterSmartMeterForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
+        this.waterSmartMeterForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
+      }
+    }
+
+    findCustomerByAuditIdOrCustomerName(calledBy){
+      let filters =  this.filterForCustomer();
+      
+      if(filters.get('auditId').length < 5 && filters.get('customerName').length < 5)
+        return null;
+      
+      if(calledBy == 'auditId'){
+        filters = filters.delete('customerName');
+      }else{
+        filters = filters.delete('auditId');
+      }
+      this.findCustomer(filters);
+    }
+  
+    filterForCustomer(){
+      return new HttpParams()
+        .set('auditId',this.waterSmartMeterForm.value.auditId !== undefined ? this.waterSmartMeterForm.value.auditId : '')
+        .set('customerName',this.waterSmartMeterForm.value.customerName !== undefined ? this.waterSmartMeterForm.value.customerName :'')
+        .set('useLike','true')
+    }
+  
+    findCustomer(filters, calledFor ?: string){
+      this.subscriptions.add(
+        this.loginService.performGetWithParams('findCustomers.do',filters)
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          (response) =>{
+            this.dataListForSuggestions = response;
+          }, error =>{
+             console.log(error);
+          }
+        )
+      );
+    }
+
+  findSelectedCustomer(force,filter){
+    const params = this.filterForCustomer();
+    this.subscriptions.add(
+      this.loginService.performGetWithParams('findCustomers.do',params)
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        (response) =>{
+          if(response.length != 0){
+          var userId = response[0].userId;
+          this.selectedCustomer = response[0];
+          this.getWaterSmartMeter(force, userId, filter);  
+          }else{
+            if(this.selectedCustomer != null){
+              this.getWaterSmartMeter(force, this.selectedCustomer.userId, filter);
+              this.setUpForm( this.waterSmartMeterForm.value);
+              this.adminFilter.formValue = this.waterSmartMeterForm.value;
+            }
+          }
+          this.waterSmartMeterForm.value.auditId = this.selectedCustomer.auditId;
+          this.waterSmartMeterForm.value.customerName = this.selectedCustomer.user.name;
+          this.setUpForm(this.waterSmartMeterForm.value);
+          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+        }, error =>{
+           console.log(error);
+        } 
+      )
+    );
   }
 
-  findWater(event?: any): any { }
+    findWater(force: boolean, filter: any): void {
+      this.adminFilter.formValue = this.waterSmartMeterForm.value;
+      // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+      let userId = null;
+      if(this.users.role == 'ADMIN'){
+        if(this.waterSmartMeterForm.value.auditId !== '')
+          this.findSelectedCustomer(force, filter);
+      } else {
+        userId = this.users.outhMeResponse.user.userId;
+        this.getWaterSmartMeter(force, userId, filter);
+      }
+    }
+  
+    getWaterSmartMeter(force: boolean,userId : string, filter: any): any {
+      this.usageHistoryService.loadWaterSmartMeterList(force , userId, filter);
+      this.subscriptions.add(this.usageHistoryService.getWaterSmartMeterList().pipe(skipWhile((item: any) => !item))
+        .subscribe((waterList: any) => {
+          this.data.content = waterList.data;
+          this.dataSource = [...this.data.content];
+        }));
+    }
+
+    search(event: any, isSearch: boolean): void {
+      this.adminFilter.page = event;
+      this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+        Number(event.pageIndex) + '' : 0);
+      let params = new HttpParams()
+        .set('type','smartMeterWater')
+        .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+        .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+          (event.pageIndex * event.pageSize) + '' : '0'))
+          .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
+          .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
+          .set('year', (this.waterSmartMeterForm.value.year !== null ? this.waterSmartMeterForm.value.year : ''))
+        .set('month', (this.waterSmartMeterForm.value.month !== null ? this.waterSmartMeterForm.value.month : ''));
+      if (this.users.role === 'ADMIN') {
+       params =  params.set('auditId', this.waterSmartMeterForm.value.auditId !== null ? this.waterSmartMeterForm.value.auditId : '')
+        .set('customerName', this.waterSmartMeterForm.value.customerName !== null ? this.waterSmartMeterForm.value.customerName : '');
+      }
+      this.findWater(isSearch,params);
+    }
+
+  // findWater(event?: any): any { }
 
   goToEditWater(event: any): any { }
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+
+  selectedSuggestion(event : any, select : string){
+    if(select == 'auditId')
+      this.waterSmartMeterForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
+    else {
+      this.waterSmartMeterForm.get('auditId').setValue(event.option.value);
+      this.waterSmartMeterForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
+    }
+  }
 
 }

@@ -286,6 +286,8 @@ export class UsageHistoryManagementState {
                         (response: any) => {
                             const res = UsageHistoryTransformer.transformGasList(response);
                             document.getElementById('loader').classList.remove('loading');
+                            let test =  ctx.getState().gasList;
+                            console.log(test);
                             ctx.patchState({
                                 gasList: res,
                             });
@@ -376,7 +378,7 @@ export class UsageHistoryManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.gasList, action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.gasList,action.filter)
                 .pipe(
                     tap(
                         (response: any) => {
@@ -1159,7 +1161,7 @@ export class UsageHistoryManagementState {
         if (force) {
             document.getElementById('loader').classList.add('loading');
             result = this.loginService
-                .performGet(AppConstant.waterSmartMeterList + action.filter)
+                .performGetWithParams(AppConstant.users + '/' + action.userId + '/' + AppConstant.waterSmartMeterList, action.filter)
                 .pipe(
                     tap(
                         (response: any) => {

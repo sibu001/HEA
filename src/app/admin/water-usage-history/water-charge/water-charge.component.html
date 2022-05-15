@@ -1,8 +1,8 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-sm-12 col-md-9 col-lg-9 content" >
-        <br><br><h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
+      <div class="col-sm-12 col-md-9" >
+        <h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
         <p class="accurate">Water Charge</p>
         <form [formGroup]='waterForm'>
           <div *ngIf="users.role!=='USERS'" class="row rowPadding borderBottom">

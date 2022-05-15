@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-9 col-md-9 col-sm-8">
-        <br><br><h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
+      <h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
         <p class="accurate">Electricity Smart Meter</p>
         <form class="form-horizontal" [formGroup]='electricitySmartMeterForm'>
           <div *ngIf="users.role!=='USERS'">
@@ -69,7 +69,7 @@
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>.
           <div class="row">
-            <div class="col-sm-12" style="text-align:right;">
+            <div class="col-sm-12" style="text-align:right; margin-top: 10px;">
               <button type="submit" class="btn btn-primary"
                 (click)="search(undefined,true)">Show</button>
             </div>

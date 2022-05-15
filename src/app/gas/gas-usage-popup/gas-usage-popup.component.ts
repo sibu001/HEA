@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,13 +7,15 @@ import { skipWhile } from 'rxjs/operators';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
   selector: 'app-gas-usage-popup',
   templateUrl: './gas-usage-popup.component.html',
   styleUrls: ['./gas-usage-popup.component.css']
 })
-export class GasUsagePopupComponent implements OnInit {
+export class GasUsagePopupComponent implements OnInit ,OnDestroy {
   usageModelObj = [];
   @Output() onModelSave = new EventEmitter<any>();
   private readonly subscriptions: Subscription = new Subscription();
@@ -24,6 +26,7 @@ export class GasUsagePopupComponent implements OnInit {
   useTypes: string;
   userData : any;
   gasForm : any;
+  refresh = false;
   constructor(
     private readonly formBuilder: FormBuilder,
     private loginService: LoginService,
@@ -62,10 +65,9 @@ export class GasUsagePopupComponent implements OnInit {
       day : [event !== undefined ? event.day : ''],
       hour : [event !== undefined ? event.hour : ''],
       type : [event !== undefined ? event.type : ''],
-      total : [event !== undefined ? event.total : ''],
       source : [event !== undefined ? event.source : ''],
       split : [event !== undefined ? event.split : false],
-      merged : [event !== undefined ? event.merged : false],
+      merge : [event !== undefined ? event.merge : false],
       monthUpdated : [event !== undefined ? event.monthUpdated: false],
       billingDate : [event !== undefined ? new Date(event.billingDate).toISOString().substring(0,10) : ''],
       startDate : [event !== undefined ? new Date(event.startDate).toISOString().substring(0,10) : ''],
@@ -77,31 +79,33 @@ export class GasUsagePopupComponent implements OnInit {
   }
 
   onNoClick() {
-    this.dialogRef.close(false);
+    this.dialogRef.close(this.refresh);
   }
 
   convetObjectForRequest(object){
-    object.billingDate = new Date(object.billingDate).getTime();
-    object.startDate = new Date(object.startDate).getTime();
-    object.endDate = new Date(object.endDate).getTime();
-    object.startDateOrig = new Date(object.startDateOrig).getTime();
-    object.endDateOrig = new Date(object.endDateOrig).getTime();
+    object.billingDate = new Date(object.billingDate).toISOString();
+    object.startDate = new Date(object.startDate).toISOString();
+    object.endDate = new Date(object.endDate).toISOString();
+    object.startDateOrig = new Date(object.startDateOrig).toISOString();
+    object.endDateOrig = new Date(object.endDateOrig).toISOString();
     return object;
   }
 
   save() {  
     var formobject =  this.convetObjectForRequest(this.gasForm.value);
     var requestObject = { ...this.dataObject,...formobject};
+    requestObject.forceStore =  requestObject.forceStore == null ? true : false;
     console.log(formobject);
     if(this.gasForm.valid) {
       let value = JSON.stringify(requestObject);
       console.log(value);
       this.subscriptions.add(
-        this.usageHistoryService.upadatesageServiceByUsageHistoryId(requestObject,this.dataObject.usageHistoryId,'gas',this.dataObject.userId)
+        this.usageHistoryService.upadatesageServiceByUsageHistoryId(requestObject,this.dataObject.usageHistoryId,AppConstant.gas,this.dataObject.userId)
         .pipe(skipWhile((item: any) => !item))
         .subscribe(
           (response: any) => {
-            this.setUpGasFrom(response.usageHistoryManagement.gas);
+            // this.setUpGasFrom(response.usageHistoryManagement.gas);
+            this.refresh = true;
             this.onNoClick();
           }
         )
@@ -186,14 +190,18 @@ export class GasUsagePopupComponent implements OnInit {
 
   deleteGasDetails(){
     this.subscriptions.add(
-      this.usageHistoryService.DeleteSelectedUsageHistory(this.dataObject.userId,'gas',this.dataObject.usageHistoryId)
+      this.usageHistoryService.DeleteSelectedUsageHistory(this.dataObject.userId,AppConstant.gas,this.dataObject.usageHistoryId)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response : any) =>{
-          console.log(response);
+          this.refresh = true;
           this.onNoClick();
         }
       )
     )
+  }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }

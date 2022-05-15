@@ -1416,3 +1416,7 @@ table.jqplot-table-legend {
   font-weight: 600;
   font-size: 13px;
 }
+section.space-top {
+  margin-top: 5em !important;
+  margin-bottom: 1em;
+}

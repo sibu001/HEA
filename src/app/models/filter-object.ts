@@ -122,14 +122,9 @@ export class AdminFilter {
     };
 }
 
-export class ElectricityDailySmartMeterFilter {
-    page: null
-    formValue: null
-    totalElement: 0
-}
-
 export class UsageHistoryFilter {
-    page: null
-    formValue: null
-    totalElement: 0
+    page : null
+    formValue ?: null
+    totalElement : number
+    recentUsageHistory : string
 }

@@ -1,10 +1,11 @@
+import { UtilityService } from './../../services/utility.service';
 import { HttpParams } from '@angular/common/http';
-import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
@@ -12,6 +13,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { GasUsagePopupComponent } from '../gas-usage-popup/gas-usage-popup.component';
 declare var $: any;
 
@@ -20,14 +22,15 @@ declare var $: any;
   templateUrl: './gas-list.component.html',
   styleUrls: ['./gas-list.component.css']
 })
-export class GasListComponent implements OnInit {
+export class GasListComponent implements OnInit ,OnDestroy{
   users: Users = new Users();
   gasForm: FormGroup;
   public pageIndex: any;
-  dataSource: any;
+  dataSource = [];
   selectedCustomer : any;
-  totalElements = Number.MAX_SAFE_INTEGER;
+  totalElements = 0;
   disableNextButton = false;
+  currentIndex : number;
   usageHistoryData = {
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
@@ -40,6 +43,7 @@ export class GasListComponent implements OnInit {
     private readonly fb: FormBuilder,
     public dialog: MatDialog,
     public readonly administrativeService : AdministrativeService,
+    public readonly UtilityService : UtilityService
   ) {
     this.dataListForSuggestions = [];
     this.users = this.loginService.getUser();
@@ -47,15 +51,20 @@ export class GasListComponent implements OnInit {
     if (this.adminFilter === undefined || this.adminFilter === null ) {
       this.adminFilter = new UsageHistoryFilter();
     }
+
+    if(this.adminFilter.recentUsageHistory != AppConstant.gas){
+      this.adminFilter.recentUsageHistory = AppConstant.gas;
+      this.adminFilter.page = undefined;
+    }
   }
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: UsageHistoryFilter;
   public dataListForSuggestions : any;
 
   ngOnInit() {
-    this.scrollTop();
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
+    this.scrollTop();
   }
   
   scrollTop() {
@@ -111,27 +120,27 @@ export class GasListComponent implements OnInit {
 
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    const params = this.filterForCustomer();
     this.subscriptions.add(
-      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      this.loginService.performGetWithParams('findCustomers.do',params)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response) =>{
           if(response.length != 0){
           var userId = response[0].userId;
-          this.selectedCustomer = response[0] ;
-          this.getGasList(force, userId, filter);
+          this.selectedCustomer = response[0];
+          this.getGasList(force, userId, filter);  
           }else{
             if(this.selectedCustomer != null){
               this.getGasList(force, this.selectedCustomer.userId, filter);
-              this.gasForm.value.auditId = this.selectedCustomer.auditId;
-              this.gasForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.gasForm.value);
               this.adminFilter.formValue = this.gasForm.value;
-              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-
             }
           }
+          this.gasForm.value.auditId = this.selectedCustomer.auditId;
+          this.gasForm.value.customerName = this.selectedCustomer.user.name;
+          this.setUpForm(this.gasForm.value);
+          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
         }, error =>{
            console.log(error);
         } 
@@ -143,7 +152,7 @@ export class GasListComponent implements OnInit {
     this.adminFilter.formValue = this.gasForm.value;
     let userId = null;
     if(this.users.role == 'ADMIN'){
-      if(this.gasForm.value.auditId !== '')
+      if(this.gasForm.value.auditId != '' || this.gasForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
       userId = this.users.outhMeResponse.user.userId;
@@ -151,25 +160,37 @@ export class GasListComponent implements OnInit {
     }
   }
 
+  filterF(result) : boolean{
+     if(this.dataSource.length == 0 || (result.length > 0 && this.dataSource[0].usageHistoryId != result[0].usageHistoryId))
+        return true;
+      return false;  
+  }
+
   getGasList(force, userId, filter){
     this.usageHistoryService.loadGasList(force, userId, filter);
-    this.subscriptions.add(this.usageHistoryService.getGasList().pipe(skipWhile((item: any) => !item))
-    .subscribe((gasList: any) => {
-
-    // if(gasList.data.length <10){
-    //   this.disableNextButton = true;
-    //   this.pageIndex = this.adminFilter.gasFilter.page.pageIndex-1;
-    // } else {
-      this.usageHistoryData.content = gasList.data;
-      this.dataSource = this.usageHistoryData.content;
-      this.disableNextButton = false;
-    // }  
-      })
-      );
+    this.subscriptions.add(this.usageHistoryService.getGasList().pipe(
+      skipWhile((item: any) => !item)
+      ).subscribe((gasList: any) => {
+        // if (this.filterF(gasList.data)){
+        //   if(gasList.data.length == 10){
+            this.totalElements = this.usageHistoryData.totalElements;
+            this.usageHistoryData.content = gasList.data;
+            this.dataSource = [...this.usageHistoryData.content];
+            // this.pageIndex = this.currentIndex;
+            // this.disableNextButton = false;
+        //   } else {
+        //     this.disableNextButton = true;
+        //     this.pageIndex = this.currentIndex -1;
+        //     this.UtilityService.showErrorMessage("no next page available"); 
+        //   }
+        // }
+   }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.page = event;
+    if(event)
+      this.currentIndex = event.pageIndex;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
@@ -199,8 +220,8 @@ export class GasListComponent implements OnInit {
         disableClose: false
       });
       dialogRef.afterClosed().subscribe(result => {
-        if(!result)
-          this.search(undefined,true);
+        if(result)
+          this.search(this.gasForm.value,true);
       });
     }
   }
@@ -212,5 +233,9 @@ export class GasListComponent implements OnInit {
       this.gasForm.get('auditId').setValue(event.option.value);
       this.gasForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
     }
+  }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }

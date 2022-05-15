@@ -11,6 +11,7 @@ import { UsageHistoryService } from 'src/app/store/usage-history-state-managemen
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { Users } from 'src/app/models/user';
 import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
+import { AppConstant } from 'src/app/utility/app.constant';
 
 @Component({
   selector: 'app-water',
@@ -45,7 +46,12 @@ export class WaterComponent implements OnInit, OnDestroy {
       if (this.adminFilter === undefined || this.adminFilter === null ) {
         this.adminFilter = new UsageHistoryFilter();
       }
+
+      if(this.adminFilter.recentUsageHistory != AppConstant.waterList){
+        this.adminFilter.recentUsageHistory = AppConstant.waterList;
+        this.adminFilter.page = undefined;
       }
+    }
 
   ngOnInit() {
     // document.getElementById('loader').classList.remove('loading');
@@ -105,29 +111,29 @@ export class WaterComponent implements OnInit, OnDestroy {
   }
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    const params = this.filterForCustomer();
     this.subscriptions.add(
-      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      this.loginService.performGetWithParams('findCustomers.do',params)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response) =>{
           if(response.length != 0){
           var userId = response[0].userId;
-          this.selectedCustomer = response[0] ;
-          this.getWaterList(force, userId, filter);
+          this.selectedCustomer = response[0];
+          this.getWaterList(force, userId, filter);  
           }else{
             if(this.selectedCustomer != null){
               this.getWaterList(force, this.selectedCustomer.userId, filter);
-              this.waterForm.value.auditId = this.selectedCustomer.auditId;
-              this.waterForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.waterForm.value);
               this.adminFilter.formValue = this.waterForm.value;
-              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-
             }
           }
+          this.waterForm.value.auditId = this.selectedCustomer.auditId;
+          this.waterForm.value.customerName = this.selectedCustomer.user.name;
+          this.setUpForm(this.waterForm.value);
+          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
         }, error =>{
-           console.log(error);  
+           console.log(error);
         } 
       )
     );
@@ -138,7 +144,7 @@ export class WaterComponent implements OnInit, OnDestroy {
     // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
-      if(this.waterForm.value.auditId !== '')
+      if(this.waterForm.value.auditId != '' || this.waterForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
       userId = this.users.outhMeResponse.user.userId;

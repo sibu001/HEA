@@ -66,7 +66,12 @@
                         col.type!=='input'&&
                         col.type!='alert' &&
                         !col.isDate && !col.isAction && col.type!=='checkbox' && !col.isSurvey" class="div-wh-100">
-                        {{row[col.key]}}
+                        <div *ngIf="col.isDolar">
+                             ${{row[col.key]}}
+                        </div>
+                        <div *ngIf="!col.isDolar">
+                            {{row[col.key]}}
+                        </div>
                         <button class="btn btn-primary" type="submit"
                             *ngIf="col.type==='textArea'&&row['isInlineEdit']"
                             (click)='editColumn(col,row)' style="float: right;">Edit</button>

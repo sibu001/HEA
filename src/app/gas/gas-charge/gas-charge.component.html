@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-9 col-md-9 col-sm-8">
-        <br><br><h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
+        <h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
         <p class="accurate">Gas Charge</p>
         <form [formGroup]='gasForm' class="form-horizontal">
           <div *ngIf="users.role!=='USERS'" > 
@@ -56,7 +56,7 @@
           </div>
           <div class="row rowpadding">
             <div class="col-sm-12" style="text-align: right">
-              <button type="submit" class="btn btn-primary"
+              <button type="submit" class="btn btn-primary" style="margin-top: 10px;"
                 (click)="search(undefined,true)">Show</button>
             </div>
           </div>
@@ -67,8 +67,8 @@
             <p class="Messages">
               <img src="assets/images/dot03.gif" alt="dot" class="dot">&nbsp;Values</p>
             <app-table [keys]="keys" [isPaginate]="true" [disableLastButton]=true
-              [isHideAdd]=true [isSearch]="false" 
-              (goToEditEvent)='showPopUp()' [data]="dataSource" [pageIndex]="pageIndex"
+              [isHideAdd]=true [isSearch]="false" [disableNextButton]="disableNextButton"
+              (goToEditEvent)='showPopUp($event)' [data]="dataSource" [pageIndex]="pageIndex"
               [totalElement]="usageHistoryData.totalElements"
               (changePageEvent)="search($event,false)">
             </app-table>

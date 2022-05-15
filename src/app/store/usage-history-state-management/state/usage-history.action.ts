@@ -282,7 +282,7 @@ export class DeleteWaterChargeByIdAction {
 
 export class GetWaterSmartMeterListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_WATER_SMART_METER_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly userId: string, readonly filter: any) {
     }
 }
 

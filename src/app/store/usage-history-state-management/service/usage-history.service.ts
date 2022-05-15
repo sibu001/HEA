@@ -265,8 +265,8 @@ export class UsageHistoryService {
     return this.store.dispatch(new DeleteWaterChargeByIdAction(id));
   }
 
-  loadWaterSmartMeterList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
-    return this.store.dispatch(new GetWaterSmartMeterListAction(force, filter));
+  loadWaterSmartMeterList(force: boolean, userId : string, filter: any): Observable<UsageHistoryManagementState> {
+    return this.store.dispatch(new GetWaterSmartMeterListAction(force, userId, filter));
   }
 
   GetWaterSmartMeterByIdAction(id: number): Observable<UsageHistoryManagementState> {

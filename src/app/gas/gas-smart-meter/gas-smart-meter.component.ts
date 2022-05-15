@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -9,6 +9,8 @@ import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { GasUsagePopupComponent } from '../gas-usage-popup/gas-usage-popup.component';
 declare var $: any;
 
@@ -17,7 +19,7 @@ declare var $: any;
   templateUrl: './gas-smart-meter.component.html',
   styleUrls: ['./gas-smart-meter.component.css']
 })
-export class GasSmartMeterComponent implements OnInit {
+export class GasSmartMeterComponent implements OnInit , OnDestroy{
   users: Users = new Users();
   gasForm: FormGroup;
   dataSource: any;
@@ -39,6 +41,11 @@ export class GasSmartMeterComponent implements OnInit {
     if (this.adminFilter === undefined || this.adminFilter === null ) {
       this.adminFilter = new UsageHistoryFilter();
     }
+
+    if(this.adminFilter.recentUsageHistory != AppConstant.gasSmartMeterList){
+      this.adminFilter.recentUsageHistory = AppConstant.gasSmartMeterList;
+      this.adminFilter.page = undefined;
+    }
   }
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: UsageHistoryFilter;
@@ -46,6 +53,11 @@ export class GasSmartMeterComponent implements OnInit {
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
+    this.scrollTop();
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   setUpForm(event: any) {
@@ -80,7 +92,7 @@ export class GasSmartMeterComponent implements OnInit {
     // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
-      if(this.gasForm.value.auditId !== '')
+      if(this.gasForm.value.auditId != '' || this.gasForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
       userId = this.users.outhMeResponse.user.userId;
@@ -89,33 +101,34 @@ export class GasSmartMeterComponent implements OnInit {
   }
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    const params = this.filterForCustomer();
     this.subscriptions.add(
-      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      this.loginService.performGetWithParams('findCustomers.do',params)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response) =>{
           if(response.length != 0){
           var userId = response[0].userId;
-          this.selectedCustomer = response[0] ;
-          this.getGasList(force, userId, filter);
+          this.selectedCustomer = response[0];
+          this.getGasList(force, userId, filter);  
           }else{
             if(this.selectedCustomer != null){
               this.getGasList(force, this.selectedCustomer.userId, filter);
-              this.gasForm.value.auditId = this.selectedCustomer.auditId;
-              this.gasForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.gasForm.value);
-              this.adminFilter = this.gasForm.value;
-              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-
+              this.adminFilter.formValue = this.gasForm.value;
             }
           }
+          this.gasForm.value.auditId = this.selectedCustomer.auditId;
+          this.gasForm.value.customerName = this.selectedCustomer.user.name;
+          this.setUpForm(this.gasForm.value);
+          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
         }, error =>{
            console.log(error);
         } 
       )
     );
   }
+  
   search(event: any, isSearch: boolean): void {
     this.adminFilter.page = event;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
@@ -191,5 +204,9 @@ export class GasSmartMeterComponent implements OnInit {
       this.gasForm.get('auditId').setValue(event.option.value);
       this.gasForm.get('customerName').setValue(event.option._element.nativeElement.outerText)
     }
+  }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }

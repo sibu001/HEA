@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
@@ -10,13 +10,15 @@ import { UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { GasUsagePopupComponent } from '../gas-usage-popup/gas-usage-popup.component';
 @Component({
   selector: 'app-gas-charge',
   templateUrl: './gas-charge.component.html',
   styleUrls: ['./gas-charge.component.css']
 })
-export class GasChargeComponent implements OnInit {
+export class GasChargeComponent implements OnInit ,OnDestroy {
   users: Users = new Users();
   gasForm: FormGroup;
   dataSource: any;
@@ -27,7 +29,8 @@ export class GasChargeComponent implements OnInit {
   };
   selectedCustomer = null;
   dataListForSuggestions = null;
-  keys = TableColumnData.GAS_KEYS;
+  disableNextButton = false;
+  keys = TableColumnData.GAS_CHARGE_KEYS;
   constructor(private loginService: LoginService,
     private router: Router,
     private readonly usageHistoryService: UsageHistoryService,
@@ -38,6 +41,12 @@ export class GasChargeComponent implements OnInit {
     if (this.adminFilter === undefined || this.adminFilter === null ) {
       this.adminFilter = new UsageHistoryFilter();
     }
+
+    if(this.adminFilter.recentUsageHistory != AppConstant.gasCharge){
+      this.adminFilter.recentUsageHistory = AppConstant.gasCharge;
+      this.adminFilter.page = undefined;
+    }
+    
   }
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: UsageHistoryFilter;
@@ -67,7 +76,7 @@ export class GasChargeComponent implements OnInit {
     this.adminFilter.formValue = this.gasForm.value;
     let userId = null;
     if(this.users.role == 'ADMIN'){
-      if(this.gasForm.value.auditId !== '')
+      if(this.gasForm.value.auditId != '' || this.gasForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
       userId = this.users.outhMeResponse.user.userId;
@@ -76,16 +85,17 @@ export class GasChargeComponent implements OnInit {
   }
 
   getGasList(force: boolean,userId: string, filter: any): void {
+    let firstCall = true;
     this.adminFilter.formValue = this.gasForm.value;
     localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-    this.usageHistoryService.loadGasList(force, userId, filter);
-    this.subscriptions.add(this.usageHistoryService.getGasList().pipe(skipWhile((item: any) => !item))
+    this.usageHistoryService.loadGasChargeList(force, userId, filter);
+    // this.subscriptions.add(
+      this.usageHistoryService.getGasChargeList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
-        this.usageHistoryData.content = gasList.data;
-        // this.usageHistoryData.totalElements = this.adminFilter.totalElement + gasList.data.length + 1;
-        // this.adminFilter.totalElement = this.adminFilter.totalElement + gasList.data.length + 1;
-        this.dataSource = [...this.usageHistoryData.content];
-      }));
+            this.usageHistoryData.content = gasList.data;
+            this.dataSource = [...this.usageHistoryData.content]
+      })
+      // );
   }
 
   search(event: any, isSearch: boolean): void {
@@ -111,15 +121,17 @@ export class GasChargeComponent implements OnInit {
 
   get f() { return this.gasForm.controls; }
 
-  showPopUp(): any {
+  showPopUp(event : any): any {
     if (this.users.role !== 'USERS') {
       const dialogRef = this.dialog.open(GasUsagePopupComponent, {
         width: '70vw',
         height: '70vh',
-        data: {}
+        data: {event}
       });
       dialogRef.afterClosed().subscribe(result => {
-        console.log('The dialog was closed' + result);
+        if(result) {
+          this.search(this.adminFilter.page, false);
+        }
       });
     }
   }
@@ -132,27 +144,27 @@ export class GasChargeComponent implements OnInit {
   }
 
   findSelectedCustomer(force,filter){
-    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    const params = this.filterForCustomer();
     this.subscriptions.add(
-      this.loginService.performGetWithParams('findCustomers.do', this.filterForCustomer())
+      this.loginService.performGetWithParams('findCustomers.do',params)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
         (response) =>{
           if(response.length != 0){
           var userId = response[0].userId;
-          this.selectedCustomer = response[0] ;
-          this.getGasList(force, userId, filter);
+          this.selectedCustomer = response[0];
+          this.getGasList(force, userId, filter);  
           }else{
             if(this.selectedCustomer != null){
               this.getGasList(force, this.selectedCustomer.userId, filter);
-              this.gasForm.value.auditId = this.selectedCustomer.auditId;
-              this.gasForm.value.customerName = this.selectedCustomer.user.name;
               this.setUpForm( this.gasForm.value);
               this.adminFilter.formValue = this.gasForm.value;
-              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-
             }
           }
+          this.gasForm.value.auditId = this.selectedCustomer.auditId;
+          this.gasForm.value.customerName = this.selectedCustomer.user.name;
+          this.setUpForm(this.gasForm.value);
+          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
         }, error =>{
            console.log(error);
         } 
@@ -197,4 +209,7 @@ export class GasChargeComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
 }

@@ -478,13 +478,22 @@ export class TableColumnData {
         { key: 'value', isEdit: true, displayName: 'Total' },
     ];
 
+    static readonly GAS_CHARGE_KEYS: Array<TABLECOLUMN> = [
+        { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
+        { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
+        { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
+        { key: 'billingDate', isEdit: true, displayName: 'Billing Date', isDate: true },
+        { key: 'value', isEdit: true, displayName: 'Total', isDolar : true },
+    ];
+
+
     static readonly ELECTRICITY_CHARGE_KEYS: Array<TABLECOLUMN> = [
         { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
         { key: 'billingDate', isEdit: true, displayName: 'Billing Date', isDate: true },
-        { key: 'value', isEdit: true, displayName: 'Total' },
-        { key: 'utilGen', isEdit: true, displayName: '3rd Party Gen' },
+        { key: 'value', isEdit: true, displayName: 'Total', isDolar :true },
+        { key: 'utilGen', isEdit: true, displayName: '3rd Party Gen', isDolar :true  },
     ];
 
     static readonly ELECTRICITY_KEYS: Array<TABLECOLUMN> = [
