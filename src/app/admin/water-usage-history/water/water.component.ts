@@ -30,7 +30,7 @@ export class WaterComponent implements OnInit, OnDestroy {
   pageIndex : any;
   public data = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
   selectedCustomer = null;
   public force = false;

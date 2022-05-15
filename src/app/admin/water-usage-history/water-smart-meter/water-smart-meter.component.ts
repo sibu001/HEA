@@ -154,6 +154,7 @@ export class WaterSmartMeterComponent implements OnInit {
       this.usageHistoryService.loadWaterSmartMeterList(force , userId, filter);
       this.subscriptions.add(this.usageHistoryService.getWaterSmartMeterList().pipe(skipWhile((item: any) => !item))
         .subscribe((waterList: any) => {
+          this.data.totalElements = Number.MAX_SAFE_INTEGER;
           this.data.content = waterList.data;
           this.dataSource = [...this.data.content];
         }));
