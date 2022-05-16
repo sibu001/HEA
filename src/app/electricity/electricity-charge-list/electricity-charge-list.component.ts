@@ -28,6 +28,8 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
   };
+  currentIndex = 0;
+  disableNextButton = false;
   keys = TableColumnData.ELECTRICITY_CHARGE_KEYS;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
@@ -53,6 +55,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
+    this.getDataFromStore();
     this.scrollTop();
   }
 
@@ -75,17 +78,32 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   getEletricityList(force: boolean, userId : string,filter: any): void {
     this.adminFilter.formValue = this.electricityForm.value;
     this.usageHistoryService.loadElectricityList(force,userId, filter);
+  }
+
+  getDataFromStore(){
     this.subscriptions.add(this.usageHistoryService.getElectricityList().pipe(skipWhile((item: any) => !item))
-      .subscribe((gasList: any) => {
+    .subscribe(
+    (gasList: any) => {
+      if(gasList.data.length == 10){
         this.usageHistoryData.content = gasList.data;
-        // this.usageHistoryData.totalElements = this.adminFilter.totalElement + gasList.data.length + 1;
-        // this.adminFilter.totalElement = this.adminFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
-      }));
+        this.pageIndex = this.currentIndex;
+        this.disableNextButton = false;
+      } else {
+        this.disableNextButton = true;
+        this.pageIndex = this.currentIndex -1;
+        if(gasList.data.length > 0){
+          this.usageHistoryData.content = gasList.data;
+          this.dataSource = [...this.usageHistoryData.content];
+        }
+    }}));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.page = event;
+    if(event)
+      this.currentIndex = event.pageIndex;
+
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()

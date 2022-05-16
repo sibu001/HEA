@@ -31,6 +31,8 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
     totalElements: Number.MAX_SAFE_INTEGER,
   };
   keys = TableColumnData.SMART_METER_DAILY_KEYS;
+  disableNextButton = false;
+  currentIndex = 0;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -55,6 +57,7 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
+    this.getDataFromStore();
     window.scroll(0, 0);
   }
 
@@ -141,7 +144,6 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
 
   findGasList(force: boolean, filter: any): void {
     this.adminFilter.formValue = this.electricityDailySmartMeterForm.value;
-    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
       if(this.electricityDailySmartMeterForm.value.auditId != '' || this.electricityDailySmartMeterForm.value.customerName != '' || this.selectedCustomer != null )
@@ -153,20 +155,25 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
   }
   getElectricityDailySmartMeterList(force, userId, filter){
     this.usageHistoryService.loadElectricityDailySmartMeterList(force, userId, filter);
+  }
+
+  getDataFromStore(){
     this.subscriptions.add(this.usageHistoryService.getElectricityDailySmartMeterList().pipe(skipWhile((item: any) => !item))
-      .subscribe((gasList: any) => {
+    .subscribe(
+    (gasList: any) => {
+      if(gasList.data.length == 10){
         this.usageHistoryData.content = gasList.data;
-        this.dataSource = this.usageHistoryData.content;
-    //  if (gasList.data.length < 10){
-    //       if(this.adminFilter.gasFilter.page){
-    //         this.adminFilter.gasFilter.page.pageIndex = this.adminFilter.gasFilter.page.pageIndex -1;
-    //         this.pageIndex = this.adminFilter.gasFilter.page.pageIndex;
-    //       }
-    //       this.disableNextButton = true;
-    //  }else{
-        // this.disableNextButton = false;
-        // }
-      }));
+        this.dataSource = [...this.usageHistoryData.content];
+        this.pageIndex = this.currentIndex;
+        this.disableNextButton = false;
+      } else {
+        this.disableNextButton = true;
+        this.pageIndex = this.currentIndex -1;
+        if(gasList.data.length > 0){
+          this.usageHistoryData.content = gasList.data;
+          this.dataSource = [...this.usageHistoryData.content];
+        }
+    }}));
   }
 
   search(event: any, isSearch: boolean): void {

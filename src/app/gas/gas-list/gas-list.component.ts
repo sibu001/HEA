@@ -64,6 +64,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
+    this.getDataFromStore();
     this.scrollTop();
   }
   
@@ -160,30 +161,33 @@ export class GasListComponent implements OnInit ,OnDestroy{
     }
   }
 
-  filterF(result) : boolean{
-     if(this.dataSource.length == 0 || (result.length > 0 && this.dataSource[0].usageHistoryId != result[0].usageHistoryId))
-        return true;
-      return false;  
-  }
-
   getGasList(force, userId, filter){
     this.usageHistoryService.loadGasList(force, userId, filter);
-    this.subscriptions.add(this.usageHistoryService.getGasList().pipe(
-      skipWhile((item: any) => !item)
+  }
+
+  getDataFromStore(){
+    this.subscriptions.add(
+    this.usageHistoryService.getGasList().pipe(
+      skipWhile((item: any) => !item),
       ).subscribe((gasList: any) => {
-        // if (this.filterF(gasList.data)){
-        //   if(gasList.data.length == 10){
+          if(gasList.data.length == 10){
             this.totalElements = this.usageHistoryData.totalElements;
             this.usageHistoryData.content = gasList.data;
             this.dataSource = [...this.usageHistoryData.content];
-            // this.pageIndex = this.currentIndex;
-            // this.disableNextButton = false;
-        //   } else {
-        //     this.disableNextButton = true;
-        //     this.pageIndex = this.currentIndex -1;
-        //     this.UtilityService.showErrorMessage("no next page available"); 
-        //   }
-        // }
+            this.pageIndex = this.currentIndex;
+            this.disableNextButton = false;
+          } else {
+            this.disableNextButton = true;
+            this.pageIndex = this.currentIndex -1;
+            if(gasList.data.length > 0){
+              this.usageHistoryData.content = gasList.data;
+              this.dataSource = [...this.usageHistoryData.content];
+            }
+            // if(this.currentIndex == 0)
+            //   this.UtilityService.showErrorMessage("no data available");
+            // else
+            //   this.UtilityService.showErrorMessage("no next page available"); 
+              }
    }));
   }
 
@@ -191,6 +195,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
     this.adminFilter.page = event;
     if(event)
       this.currentIndex = event.pageIndex;
+
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()

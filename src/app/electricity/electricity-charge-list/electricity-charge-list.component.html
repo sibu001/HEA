@@ -68,6 +68,7 @@
                         <app-table [keys]="keys"
                             [isPaginate]="true" [isHideAdd]=true
                             [isSearch]="false"  [disableLastButton]=true
+                            [disableNextButton]="disableNextButton"
                             [data]="dataSource" [pageIndex]="pageIndex"
                             [totalElement]="usageHistoryData.totalElements"
                             (goToEditEvent)='showPopUp($event)'

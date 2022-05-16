@@ -56,7 +56,7 @@
           </div>
           <div class="paddingTop">
             <app-table [keys]="keys" [isSearch]="false" [isPaginate]=true [data]="dataSource" [isHideAdd]=true
-              [totalElement]="data.totalElements"  [disableLastButton]=true (changePageEvent)='search($event,true)'
+              [totalElement]="data.totalElements"  [disableLastButton]=true [disableNextButton]=disableNextButton (changePageEvent)='search($event,true)'
               (goToEditEvent)='goToEditWater()'>
             </app-table>
           </div>

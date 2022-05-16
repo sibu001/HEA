@@ -29,7 +29,8 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   };
 
   selectedCustomer = null;
-
+  disableNextButton = false
+  currentIndex = 0
   dataListForSuggestions = undefined;
   keys = TableColumnData.ELECTRICITY_KEYS;
   constructor(private loginService: LoginService,
@@ -59,6 +60,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
+    this.getDataFromStore();
     this.scrollTop();
   }
 
@@ -81,26 +83,32 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
     this.adminFilter.formValue = this.electricityForm.value;
     localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.usageHistoryService.loadElectricityList(force,userId, filter);
+  }
+
+  getDataFromStore(){
     this.subscriptions.add(this.usageHistoryService.getElectricityList().pipe(skipWhile((item: any) => !item))
-      .subscribe((gasList: any) => {
-        
-        // if(gasList.data.length == 0){
-        //   this.utilityService.showErrorMessage("NO more data left.");
-        //   if(this.adminFilter.electricityFilter.page){
-        //     this.adminFilter.electricityFilter.page.pageIndex = this.adminFilter.electricityFilter.page.pageIndex -1;
-        //     this.pageIndex = this.adminFilter.electricityFilter.page.pageIndex;
-        //   }
-        // }else{
-          this.usageHistoryData.content = [...gasList.data];
-          // this.usageHistoryData.totalElements = this.adminFilter.electricityFilter.totalElement + gasList.data.length;
-          // this.adminFilter.electricityFilter.totalElement = this.adminFilter.electricityFilter.totalElement + gasList.data.length;
+    .subscribe(
+      (gasList: any) => {
+        if(gasList.data.length == 10){
+          this.usageHistoryData.content = gasList.data;
           this.dataSource = [...this.usageHistoryData.content];
-        // }
-      }));
+          this.pageIndex = this.currentIndex;
+          this.disableNextButton = false;
+        } else {
+          this.disableNextButton = true;
+          this.pageIndex = this.currentIndex -1;
+          if(gasList.data.length > 0){
+            this.usageHistoryData.content = gasList.data;
+            this.dataSource = [...this.usageHistoryData.content];
+          }
+      }}));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.page = event;
+    if(event)
+      this.currentIndex = event.pageIndex;
+
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
@@ -150,7 +158,6 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
 
   filterForElectricityList(force: boolean, filter: any){
     this.adminFilter.formValue = this.electricityForm.value;
-    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.users.role == 'ADMIN'){
       if(this.electricityForm.value.auditId != '' || this.electricityForm.value.customerName != '' || this.selectedCustomer != null )

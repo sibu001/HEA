@@ -33,6 +33,8 @@ export class WaterComponent implements OnInit, OnDestroy {
     totalElements: Number.MAX_SAFE_INTEGER,
   };
   selectedCustomer = null;
+  disableNextButton = false
+  currentIndex = 0
   public force = false;
   private readonly subscriptions: Subscription = new Subscription();
   waterForm: FormGroup;
@@ -54,9 +56,9 @@ export class WaterComponent implements OnInit, OnDestroy {
     }
 
   ngOnInit() {
-    // document.getElementById('loader').classList.remove('loading');
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page,false);
+    this.getDataFromStore();
     this.scrollTop();
   }
 
@@ -154,15 +156,36 @@ export class WaterComponent implements OnInit, OnDestroy {
 
   getWaterList(force: boolean,userId : string, filter: any): any {
     this.usageHistoryService.loadWaterList(force , userId, filter);
+  }
+
+  getDataFromStore(){
     this.subscriptions.add(this.usageHistoryService.getWaterList().pipe(skipWhile((item: any) => !item))
-      .subscribe((waterList: any) => {
+    .subscribe( (waterList: any) => {
+      if(waterList.data.length == 10){
         this.data.content = waterList.data;
-        this.dataSource = [...this.data.content];
-      }));
+        this.dataSource = [...this.data.content];  
+        this.pageIndex = this.currentIndex;
+        this.disableNextButton = false;
+      } else {
+        this.disableNextButton = true;
+        this.pageIndex = this.currentIndex -1;
+        if(waterList.data.length > 0){
+          this.data.content = waterList.data;
+          this.dataSource = [...this.data.content];  
+        }
+      //  if(this.currentIndex == 0)
+      //   this.UtilityService.showErrorMessage("no data available");
+      //  else
+      //  this.UtilityService.showErrorMessage("no next page available"); 
+      }
+    }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.page = event;
+    if(event)
+      this.currentIndex = event.pageIndex;
+
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()

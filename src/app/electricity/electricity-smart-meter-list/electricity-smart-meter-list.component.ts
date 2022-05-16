@@ -27,6 +27,8 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
   };
+  disableNextButton  = false
+  currentIndex = 0;
   dataListForSuggestions = [];
   selectedCustomer = null;
   keys = TableColumnData.SMART_METER_KEYS;
@@ -54,6 +56,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
+    this.getDataFromStore();
     this.scrollTop();
   }
    scrollTop() {
@@ -75,15 +78,31 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
 
   getSmartElectricityList(force: boolean, userId  : string, filter: any): void {
     this.adminFilter.formValue = this.electricitySmartMeterForm.value;
-    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.usageHistoryService.loadElectricitySmartMeterList(force, userId, filter);
     this.subscriptions.add(this.usageHistoryService.getElectricitySmartMeterList().pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
         this.usageHistoryData.content = gasList.data;
-        // this.usageHistoryData.totalElements = this.adminFilter.electricitySmartMeterFilter.totalElement + gasList.data.length + 1;
-        // this.adminFilter.electricitySmartMeterFilter.totalElement = this.adminFilter.electricitySmartMeterFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
       }));
+
+  }
+
+  getDataFromStore(){
+    this.subscriptions.add(this.usageHistoryService.getElectricitySmartMeterList().pipe(skipWhile((item: any) => !item))
+    .subscribe(  (gasList: any) => {
+      if(gasList.data.length == 10){
+        this.usageHistoryData.content = gasList.data;
+        this.dataSource = [...this.usageHistoryData.content];
+        this.pageIndex = this.currentIndex;
+        this.disableNextButton = false;
+      } else {
+        this.disableNextButton = true;
+        this.pageIndex = this.currentIndex -1;
+        if(gasList.data.length > 0){
+          this.usageHistoryData.content = gasList.data;
+          this.dataSource = [...this.usageHistoryData.content];
+        }
+    }}));
 
   }
 
@@ -131,6 +150,9 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.page = event;
+    if(event)
+      this.currentIndex = event.pageIndex;
+
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()

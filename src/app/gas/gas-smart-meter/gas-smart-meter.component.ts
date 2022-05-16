@@ -31,6 +31,8 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
   dataListForSuggestions = [];
   selectedCustomer = null;
   keys = TableColumnData.SMART_METER_KEYS;
+  currentIndex = 0;
+  disableNextButton = false;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -53,6 +55,7 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
+    this.getDataFromStore();
     this.scrollTop();
   }
 
@@ -75,15 +78,29 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
 
   getGasList(force: boolean, userId  : string, filter: any): void {
     this.adminFilter.formValue = this.gasForm.value;
-    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.usageHistoryService. loadGasSmartMeterList(force, userId, filter);
+  }
+
+  getDataFromStore(){
     this.subscriptions.add(this.usageHistoryService.getGasSmartMeterList().pipe(skipWhile((item: any) => !item))
-      .subscribe((gasList: any) => {
+    .subscribe((gasList: any) => {
+      if(gasList.data.length == 10){
         this.usageHistoryData.content = gasList.data;
-        // this.usageHistoryData.totalElements = this.adminFilter.electricitySmartMeterFilter.totalElement + gasList.data.length + 1;
-        // this.adminFilter.electricitySmartMeterFilter.totalElement = this.adminFilter.electricitySmartMeterFilter.totalElement + gasList.data.length + 1;
         this.dataSource = [...this.usageHistoryData.content];
-      }));
+        this.pageIndex = this.currentIndex;
+        this.disableNextButton = false;
+      } else {
+        this.disableNextButton = true;
+        this.pageIndex = this.currentIndex -1;
+        if(gasList.data.length > 0){
+          this.usageHistoryData.content = gasList.data;
+          this.dataSource = [...this.usageHistoryData.content];
+        }
+        // if(this.currentIndex == 0)
+        //   this.UtilityService.showErrorMessage("no data available");
+        // else
+        //   this.UtilityService.showErrorMessage("no next page available"); 
+    }}));
 
   }
 
@@ -131,6 +148,9 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
   
   search(event: any, isSearch: boolean): void {
     this.adminFilter.page = event;
+    if(event)
+      this.currentIndex = event.pageIndex;
+
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()

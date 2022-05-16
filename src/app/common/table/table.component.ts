@@ -188,7 +188,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
   disableLastButtonF(){
     if(this.disableLastButton){
-      var btnElement = (<HTMLFieldSetElement>this.ElByClassName.nativeElement).querySelector(
+      var btnElement = (<HTMLButtonElement>this.ElByClassName.nativeElement).querySelector(
         '.mat-paginator-navigation-last'
         );
         if(btnElement != null)
@@ -197,16 +197,16 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   }
 
   disableNextButtonF(){
-      // var btnElement = (<HTMLFieldSetElement>this.ElByClassName.nativeElement).querySelector(
-      //   '.mat-paginator-navigation-next'
-      //   );
-      //   if(btnElement != null){
-      //     if(this.disableNextButton){
-      //       btnElement.setAttribute('disabled', 'true');
-      //     } else {
-      //       btnElement.setAttribute('disabled', 'false');
-      //     }
-      //   }
+      var btnElement = (<HTMLFieldSetElement>this.ElByClassName.nativeElement).querySelector(
+        '.mat-paginator-navigation-next'
+        );
+        if(btnElement != null){
+          if(this.disableNextButton){
+            btnElement.setAttribute('disabled', 'true');
+          } else {
+            btnElement.removeAttribute('disabled');
+          }
+        }
         if(this.disableNextButton){
           this.matPaginator.pageIndex = this.pageIndex;
         }

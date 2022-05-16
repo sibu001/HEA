@@ -1,3 +1,4 @@
+import { UtilityService } from './../../../services/utility.service';
 import { Component, OnInit } from '@angular/core';
 import { HttpParams } from '@angular/common/http';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -27,6 +28,8 @@ export class WaterSmartMeterComponent implements OnInit {
   dataListForSuggestions = [];
   adminFilter : UsageHistoryFilter;
   pageIndex : any;
+  currentIndex = 0;
+  disableNextButton = false;
   public data = {
     content: [],
     totalElements: 0,
@@ -34,16 +37,10 @@ export class WaterSmartMeterComponent implements OnInit {
   selectedCustomer = null;
   private readonly subscriptions: Subscription = new Subscription();
   waterSmartMeterForm: FormGroup;
-  // waterSmartMeterForm: FormGroup = this.fb.group({
-  //   auditId: this.fb.control(['']),
-  //   customerName: this.fb.control(['']),
-  //   year: this.fb.control(['']),
-  //   month: this.fb.control([''])
-  // });
-  // constructor(public router: Router, public fb: FormBuilder) { }
   constructor(public router: Router, public fb: FormBuilder,
     public usageHistoryService: UsageHistoryService,
-    private loginService: LoginService
+    private loginService: LoginService, 
+    private UtilityService : UtilityService
     ){
      this.users = this.loginService.getUser();
      this.adminFilter = JSON.parse(localStorage.getItem('usageHistoryFilter'));
@@ -56,6 +53,7 @@ export class WaterSmartMeterComponent implements OnInit {
       // document.getElementById('loader').classList.remove('loading');
       this.setUpForm(this.adminFilter.formValue);
       this.search(this.adminFilter.page,false);
+      this.getDataFromStore();
       this.scrollTop();
     }
   
@@ -152,16 +150,40 @@ export class WaterSmartMeterComponent implements OnInit {
   
     getWaterSmartMeter(force: boolean,userId : string, filter: any): any {
       this.usageHistoryService.loadWaterSmartMeterList(force , userId, filter);
-      this.subscriptions.add(this.usageHistoryService.getWaterSmartMeterList().pipe(skipWhile((item: any) => !item))
-        .subscribe((waterList: any) => {
+    }
+
+    getDataFromStore(){
+      this.subscriptions.add(this.usageHistoryService.getWaterSmartMeterList()
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+      (waterList: any) => {
+        if(waterList.data.length == 10){
           this.data.totalElements = Number.MAX_SAFE_INTEGER;
           this.data.content = waterList.data;
           this.dataSource = [...this.data.content];
-        }));
+          this.pageIndex = this.currentIndex;
+          this.disableNextButton = false;
+        } else {
+          this.disableNextButton = true;
+          this.pageIndex = this.currentIndex -1;
+          if(waterList.data.length > 0){
+            this.data.content = waterList.data;
+            this.dataSource = [...this.data.content];  
+          }
+          // if(this.currentIndex == 0)
+          //   this.UtilityService.showErrorMessage("no data available");
+          // else
+          //   this.UtilityService.showErrorMessage("no next page available"); 
+          }}));
+
+
     }
 
     search(event: any, isSearch: boolean): void {
       this.adminFilter.page = event;
+      if(event)
+      this.currentIndex = event.pageIndex;
+
       this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         Number(event.pageIndex) + '' : 0);
       let params = new HttpParams()

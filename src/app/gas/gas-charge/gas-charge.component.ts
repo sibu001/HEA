@@ -31,6 +31,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   dataListForSuggestions = null;
   disableNextButton = false;
   keys = TableColumnData.GAS_CHARGE_KEYS;
+  currentIndex = 0;
   constructor(private loginService: LoginService,
     private router: Router,
     private readonly usageHistoryService: UsageHistoryService,
@@ -54,6 +55,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
+    this.getDataFromStore();
     this.scrollTop();
   }
   
@@ -85,22 +87,41 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   }
 
   getGasList(force: boolean,userId: string, filter: any): void {
-    let firstCall = true;
     this.adminFilter.formValue = this.gasForm.value;
     localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     this.usageHistoryService.loadGasChargeList(force, userId, filter);
-    // this.subscriptions.add(
-      this.usageHistoryService.getGasChargeList().pipe(skipWhile((item: any) => !item))
+  }
+
+  getDataFromStore(){
+    this.subscriptions.add(
+      this.usageHistoryService.getGasChargeList()
+      .pipe(skipWhile((item: any) => !item))
       .subscribe((gasList: any) => {
+        if(gasList.data.length == 10){
+          this.usageHistoryData.content = gasList.data;
+          this.dataSource = [...this.usageHistoryData.content];
+          this.pageIndex = this.currentIndex;
+          this.disableNextButton = false;
+        } else {
+          this.disableNextButton = true;
+          this.pageIndex = this.currentIndex -1;
+          if(gasList.data.length > 0){
             this.usageHistoryData.content = gasList.data;
-            this.dataSource = [...this.usageHistoryData.content]
-      })
-      // );
+            this.dataSource = [...this.usageHistoryData.content];
+          }
+          // if(this.currentIndex == 0)
+          //   this.UtilityService.showErrorMessage("no data available");
+          // else
+          //   this.UtilityService.showErrorMessage("no next page available"); 
+     }}))
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.page = event;
-    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+    if(event)
+      this.currentIndex = event.pageIndex;
+    
+      this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('type', 'gasCharge')
