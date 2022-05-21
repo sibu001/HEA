@@ -11,4 +11,16 @@ export class UsageHistoryTransformer {
         });
         return { data: dataSourceList };
     }
+
+    static usgaeGasTransformGasList(src: any): any {
+        const dataSourceList: any = [];
+        src.data.forEach(element => {
+            let dataSourceObject: any = {};
+            element.value = element.value.toFixed(4);
+            dataSourceObject = element;
+            dataSourceObject.billingPeriod = new DatePipe('en-US').transform(new Date(element.startDate), 'MMM d, y') + ' - ' + new DatePipe('en-US').transform(new Date(element.endDate), 'MMM d, y');
+            dataSourceList.push(dataSourceObject);
+        });
+        return { data: dataSourceList };
+    }
 }

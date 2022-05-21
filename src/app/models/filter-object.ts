@@ -123,8 +123,8 @@ export class AdminFilter {
 }
 
 export class UsageHistoryFilter {
-    page : null
-    formValue ?: null
+    page : any
+    formValue ?: any
     totalElement : number
     recentUsageHistory : string
 }

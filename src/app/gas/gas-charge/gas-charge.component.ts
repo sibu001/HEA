@@ -32,6 +32,8 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   disableNextButton = false;
   keys = TableColumnData.GAS_CHARGE_KEYS;
   currentIndex = 0;
+  totalElements : any;
+  newFilterSearch = false;
   constructor(private loginService: LoginService,
     private router: Router,
     private readonly usageHistoryService: UsageHistoryService,
@@ -44,6 +46,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
     }
 
     if(this.adminFilter.recentUsageHistory != AppConstant.gasCharge){
+      this.sessionUtility(this.adminFilter.formValue);
       this.adminFilter.recentUsageHistory = AppConstant.gasCharge;
       this.adminFilter.page = undefined;
     }
@@ -56,7 +59,13 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
     this.getDataFromStore();
+    this.newFilterSearch = true;
     this.scrollTop();
+  }
+
+  sessionUtility(event){
+    if(event)
+      this.adminFilter.formValue = { "auditId" : event.auditId , "customerName" : event.customerName };
   }
   
   scrollTop(){
@@ -99,28 +108,36 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
       .subscribe((gasList: any) => {
         if(gasList.data.length == 10){
           this.usageHistoryData.content = gasList.data;
+          this.totalElements = this.usageHistoryData.totalElements;
           this.dataSource = [...this.usageHistoryData.content];
           this.pageIndex = this.currentIndex;
           this.disableNextButton = false;
         } else {
           this.disableNextButton = true;
-          this.pageIndex = this.currentIndex -1;
           if(gasList.data.length > 0){
             this.usageHistoryData.content = gasList.data;
             this.dataSource = [...this.usageHistoryData.content];
-          }
-          // if(this.currentIndex == 0)
-          //   this.UtilityService.showErrorMessage("no data available");
-          // else
-          //   this.UtilityService.showErrorMessage("no next page available"); 
-     }}))
+          } else {
+            if(this.newFilterSearch)
+              this.dataSource = [...gasList.data];
+            this.pageIndex = this.currentIndex -1;
+          }}
+        this.newFilterSearch = false;
+        }))
   }
 
-  search(event: any, isSearch: boolean): void {
+  search(event: any, isSearch: boolean, forced ?: boolean): void {
     this.adminFilter.page = event;
     if(event)
       this.currentIndex = event.pageIndex;
-    
+   
+      if(forced){
+          this.currentIndex = 0;
+          this.adminFilter.page = undefined;
+          event = undefined;
+          this.newFilterSearch = true;
+        }
+
       this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
@@ -165,6 +182,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   }
 
   findSelectedCustomer(force,filter){
+    document.getElementById('loader').classList.add('loading');
     const params = this.filterForCustomer();
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do',params)
@@ -186,6 +204,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
           this.gasForm.value.customerName = this.selectedCustomer.user.name;
           this.setUpForm(this.gasForm.value);
           localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+          document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
         } 

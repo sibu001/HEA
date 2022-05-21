@@ -51,12 +51,13 @@
           </div>
           <div class="row rowPadding">  
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary" (click)="search(undefined,true)">Show</button>
+              <button type="submit" class="btn btn-primary" (click)="search(undefined,true,true)">Show</button>
             </div>
           </div>
           <div class="paddingTop">
             <app-table [keys]="keys" [isSearch]="false" [isPaginate]=true [data]="dataSource" [isHideAdd]=true
-              [totalElement]="data.totalElements"  [disableLastButton]=true (changePageEvent)='search($event,true)'
+              [totalElement]="totalElements"  [disableLastButton]=true [disableNextButton]="disableNextButton"
+              (changePageEvent)='search($event,true)'
               (goToEditEvent)='goToEditWater()'>
             </app-table>
           </div>

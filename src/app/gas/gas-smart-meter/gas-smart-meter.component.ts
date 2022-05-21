@@ -28,11 +28,13 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
   };
+  totalElements: any ;
   dataListForSuggestions = [];
   selectedCustomer = null;
   keys = TableColumnData.SMART_METER_KEYS;
   currentIndex = 0;
   disableNextButton = false;
+  newFilterSearch = false;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -45,6 +47,7 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
     }
 
     if(this.adminFilter.recentUsageHistory != AppConstant.gasSmartMeterList){
+      this.sessionUtility(this.adminFilter.formValue);
       this.adminFilter.recentUsageHistory = AppConstant.gasSmartMeterList;
       this.adminFilter.page = undefined;
     }
@@ -56,7 +59,13 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
     this.getDataFromStore();
+    this.newFilterSearch = true;
     this.scrollTop();
+  }
+
+  sessionUtility(event){
+    if(event)
+      this.adminFilter.formValue = { "auditId" : event.auditId , "customerName" : event.customerName };
   }
 
   scrollTop() {
@@ -78,31 +87,58 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
 
   getGasList(force: boolean, userId  : string, filter: any): void {
     this.adminFilter.formValue = this.gasForm.value;
-    this.usageHistoryService. loadGasSmartMeterList(force, userId, filter);
+    this.usageHistoryService.loadGasSmartMeterList(force, userId, filter);
   }
+
+  // getDataFromStore(){
+  //   this.subscriptions.add(
+  //   this.usageHistoryService.getGasSmartMeterList().pipe(
+  //   skipWhile((item: any) => !item))
+  //   .subscribe((gasList: any) => {
+  //     if(gasList.data.length == 10){
+  //       this.usageHistoryData.content = gasList.data;
+  //       this.dataSource = [...this.usageHistoryData.content];
+  //       this.pageIndex = this.currentIndex;
+  //       this.disableNextButton = false;
+  //     } else {
+  //       this.disableNextButton = true;
+  //       if(gasList.data.length > 0){
+  //         this.usageHistoryData.content = gasList.data;
+  //         this.dataSource = [...this.usageHistoryData.content];
+  //       } else {
+  //       if(this.newFilterSearch)
+  //           this.dataSource = [...gasList.data]; 
+  //       this.pageIndex = this.currentIndex -1;
+  //     }}  
+  //     this.newFilterSearch = false;
+  //     }));
+
+  // }
 
   getDataFromStore(){
-    this.subscriptions.add(this.usageHistoryService.getGasSmartMeterList().pipe(skipWhile((item: any) => !item))
-    .subscribe((gasList: any) => {
-      if(gasList.data.length == 10){
-        this.usageHistoryData.content = gasList.data;
-        this.dataSource = [...this.usageHistoryData.content];
-        this.pageIndex = this.currentIndex;
-        this.disableNextButton = false;
-      } else {
-        this.disableNextButton = true;
-        this.pageIndex = this.currentIndex -1;
-        if(gasList.data.length > 0){
-          this.usageHistoryData.content = gasList.data;
-          this.dataSource = [...this.usageHistoryData.content];
-        }
-        // if(this.currentIndex == 0)
-        //   this.UtilityService.showErrorMessage("no data available");
-        // else
-        //   this.UtilityService.showErrorMessage("no next page available"); 
-    }}));
-
-  }
+    this.subscriptions.add(
+    this.usageHistoryService.getGasSmartMeterList().pipe(
+      skipWhile((item: any) => !item),
+      ).subscribe((gasList: any) => {
+          if(gasList.data.length == 10){
+            this.totalElements = this.usageHistoryData.totalElements;
+            this.usageHistoryData.content = gasList.data;
+            this.dataSource = [...this.usageHistoryData.content];
+            this.pageIndex = this.currentIndex;
+            this.disableNextButton = false;
+          } else {
+            this.disableNextButton = true;
+            if(gasList.data.length > 0){
+              this.usageHistoryData.content = gasList.data;
+              this.dataSource = [...this.usageHistoryData.content];
+            } else {
+            if(this.newFilterSearch)
+                this.dataSource = [...gasList.data]; 
+            this.pageIndex = this.currentIndex -1;
+          }}  
+          this.newFilterSearch = false;
+        }));
+  } 
 
   findGasList(force: boolean, filter: any): void {
     this.adminFilter.formValue = this.gasForm.value;
@@ -118,6 +154,7 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
   }
 
   findSelectedCustomer(force,filter){
+    document.getElementById('loader').classList.add('loading');
     const params = this.filterForCustomer();
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do',params)
@@ -139,6 +176,7 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
           this.gasForm.value.customerName = this.selectedCustomer.user.name;
           this.setUpForm(this.gasForm.value);
           localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+        // document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
         } 
@@ -146,11 +184,19 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
     );
   }
   
-  search(event: any, isSearch: boolean): void {
+  search(event: any, isSearch: boolean, forced ?: boolean ): void {
+
     this.adminFilter.page = event;
     if(event)
       this.currentIndex = event.pageIndex;
 
+        if(forced){
+          this.currentIndex = 0;
+          this.adminFilter.page = undefined;
+          event = undefined;
+          this.newFilterSearch = true;
+        }  
+    
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()

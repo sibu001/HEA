@@ -109,7 +109,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
  
 
   ngAfterViewChecked(): void {
-
+    if(this.disableNextButton){
+      if(this.pageIndex < 0) this.matPaginator.pageIndex = 0;
+       else this.matPaginator.pageIndex = this.pageIndex;
+    }
   }
 
   ngOnInit() {
@@ -206,9 +209,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
           } else {
             btnElement.removeAttribute('disabled');
           }
-        }
-        if(this.disableNextButton){
-          this.matPaginator.pageIndex = this.pageIndex;
         }
   }
 

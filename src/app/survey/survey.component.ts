@@ -1,8 +1,10 @@
 import { UtilityService } from './../services/utility.service';
-import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit, OnDestroy } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { SubscriptionUtil } from '../utility/subscription-utility';
 
 declare var $: any;
 @Component({
@@ -10,7 +12,7 @@ declare var $: any;
   templateUrl: './survey.component.html',
   styleUrls: ['./survey.component.css']
 })
-export class SurveyComponent implements OnInit, AfterViewInit {
+export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('inp1') inp1: ElementRef;
   @ViewChild('panel') public panel: ElementRef;
   inputErrorMessage: string;
@@ -30,8 +32,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
   users: Users = new Users();
   globalM = 0;
   globalK = 0;
+  subscriptons : Subscription = new Subscription();
   private slidermap = new Map();
-
   constructor(private loginService: LoginService, private router: Router, private utilityService: UtilityService) {
     this.users = this.loginService.getUser();
 
@@ -47,6 +49,11 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     }
     this.progressShow();
   }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptons);
+  }
+
   ngOnInit() {
     this.users = this.loginService.getUser();
     this.users.isSurvey = true;
@@ -413,7 +420,9 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks };
       }
 
-      this.loginService.performPostMultiPartDataPost(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
+
+      this.subscriptons.add(
+        this.loginService.performPostMultiPartDataPost(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
         this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answers').subscribe(
           data => {
             const response = JSON.parse(JSON.stringify(data));
@@ -433,7 +442,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             } else {
               if (id === 'next') {
                 this.nextPaneWithAnswer(response.data);
-                document.getElementById('loader').classList.remove('loading');
+                
               } else if (id === 'prev') {
                 this.previousPane(response.data);
               } else if (id === 'change') {
@@ -449,7 +458,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
             this.inputErrorMessage = errors.error.errorMessage;
             document.getElementById('loader').classList.remove('loading');
           }
-        );
+        ));
     } else if (this.users.currentPaneNumber.currentPane.paneCode === 'prf_welcome') {
       if (event !== 'Y') {
         this.disableButton = true;
@@ -457,7 +466,7 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         this.disableButton = false;
       }
     }
-  }
+  } 
 
   nextPaneWithAnswer(data: any) {
     this.getSessionPendingMessage();
@@ -469,7 +478,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         this.utilityService.showErrorMessage("Request Failed Please Retry.");
         // this.gotToTopicHistory();
       } else {
-        if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
+        if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks &&
+          (this.users.surveyLength !== 3 || !this.users.currentPaneNumber.firstPage || this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'LeaksIntro')) {
           if (this.users.currentPaneNumber.firstPage) {
             this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
           }
@@ -551,185 +561,190 @@ export class SurveyComponent implements OnInit, AfterViewInit {
 
   nextPane(currentPaneNumber: any) {
     const object = {};
-    this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/nextPane').subscribe(
-      data => {
-        const response = JSON.parse(JSON.stringify(data));
-        this.getSessionPendingMessage();
-        this.users.currentPaneNumber = response.data;
-        this.loginService.setUser(this.users);
-        if (this.users.currentPaneNumber.currentPane != null) {
-
-          if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
-            this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
-              if (element.value === "undefined" || element.value === undefined || element.value === "null" || element.value === null)
-                element.value = "false";
-            });
-          }
-
-          if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
-            if (this.users.currentPaneNumber.firstPage) {
-              this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
+    this.subscriptons.add(
+      this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/nextPane').subscribe(
+        data => {
+          const response = JSON.parse(JSON.stringify(data));
+          this.getSessionPendingMessage();
+          this.users.currentPaneNumber = response.data;
+          this.loginService.setUser(this.users);
+          if (this.users.currentPaneNumber.currentPane != null) {
+  
+            if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
+              this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
+                if (element.value === "undefined" || element.value === undefined || element.value === "null" || element.value === null)
+                  element.value = "false";
+              });
             }
-          }
-          if (this.users.surveyLength === 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'LeaksIntro') {
-            this.getAllSurvey();
-          } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile') {
-            if (document.getElementById('_home')) {
-              document.getElementById('_home').classList.remove('header_menu_none');
-            }
-            if (document.getElementById('all_topic')) {
-              document.getElementById('all_topic').classList.remove('header_menu_none');
-            }
-            if (document.getElementById('_account')) {
-              document.getElementById('_account').classList.remove('header_menu_none');
-            }
-            if (document.getElementById('menu_option')) {
-              document.getElementById('menu_option').classList.remove('header_menu_none');
-            }
-            if (document.getElementById('_home1')) {
-              document.getElementById('_home1').classList.remove('header_menu_none');
-            }
-            if (document.getElementById('all_topic1')) {
-              document.getElementById('all_topic1').classList.remove('header_menu_none');
-            }
-            if (document.getElementById('_account1')) {
-              document.getElementById('_account1').classList.remove('header_menu_none');
-            }
-            if (document.getElementById('menu_option1')) {
-              document.getElementById('menu_option1').classList.remove('header_menu_none');
-            }
-            if (document.getElementById('menu_option2')) {
-              document.getElementById('menu_option2').classList.remove('header_menu_none');
-            }
-          }
-          const self1 = this;
-          setTimeout(function () {
-            self1.chartDataConfiguration();
-          }, 500);
-
-          this.helpHides();
-          this.progressShow();
-        } else {
-          // this.router.navigate(['/topicshistory']);
-          this.gotToTopicHistory();
-        }
-        const self = this;
-        setTimeout(function () {
-          self.hsSliderValue();
-        }, 500);
-        if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Intro') {
-          setTimeout(function () {
-            document.getElementById('fdbRecommendations').classList.add('table-responsive');
-          }, 100);
-        }
-        this.evaluateJavaScript(response.data);
-        this.scrollTop();
-        document.getElementById('loader').classList.remove('loading');
-      },
-      errors => {
-        console.log(errors);
-        this.scrollTop();
-        this.inputErrorMessage = errors.error.errorMessage;
-        document.getElementById('loader').classList.remove('loading');
-      }
-    );
-  }
-  previousPane(currentPaneNumber: any) {
-    const object = {};
-    this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/previousPane').subscribe(
-      data => {
-        const response = JSON.parse(JSON.stringify(data));
-        if (response.data.currentPane != null) {
-          if (response.data.currentPane.paneCode === this.users.currentPaneNumber.currentPane.paneCode) {
-            this.utilityService.showErrorMessage("Request Failed Please Retry.");
-            // this.gotToTopicHistory();
-          } else {
-            this.users.currentPaneNumber = response.data;
-            this.loginService.setUser(this.users);
-            if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
-              if (this.users.currentPaneNumber.last) {
+  
+            if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks &&
+             ( this.users.surveyLength !== 3 || !this.users.currentPaneNumber.firstPage || this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'LeaksIntro')) {
+              if (this.users.currentPaneNumber.firstPage) {
                 this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
               }
             }
-            if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile') {
+            if (this.users.surveyLength === 3 && this.users.currentPaneNumber.firstPage && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'LeaksIntro') {
+              this.getAllSurvey();
+            } else if (this.users.surveyLength > 3 && this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile') {
               if (document.getElementById('_home')) {
-                document.getElementById('_home').classList.add('header_menu_none');
+                document.getElementById('_home').classList.remove('header_menu_none');
               }
               if (document.getElementById('all_topic')) {
-                document.getElementById('all_topic').classList.add('header_menu_none');
+                document.getElementById('all_topic').classList.remove('header_menu_none');
               }
               if (document.getElementById('_account')) {
-                document.getElementById('_account').classList.add('header_menu_none');
+                document.getElementById('_account').classList.remove('header_menu_none');
               }
               if (document.getElementById('menu_option')) {
-                document.getElementById('menu_option').classList.add('header_menu_none');
+                document.getElementById('menu_option').classList.remove('header_menu_none');
               }
               if (document.getElementById('_home1')) {
-                document.getElementById('_home1').classList.add('header_menu_none');
+                document.getElementById('_home1').classList.remove('header_menu_none');
               }
               if (document.getElementById('all_topic1')) {
-                document.getElementById('all_topic1').classList.add('header_menu_none');
+                document.getElementById('all_topic1').classList.remove('header_menu_none');
               }
               if (document.getElementById('_account1')) {
-                document.getElementById('_account1').classList.add('header_menu_none');
+                document.getElementById('_account1').classList.remove('header_menu_none');
               }
               if (document.getElementById('menu_option1')) {
-                document.getElementById('menu_option1').classList.add('header_menu_none');
+                document.getElementById('menu_option1').classList.remove('header_menu_none');
               }
               if (document.getElementById('menu_option2')) {
-                document.getElementById('menu_option2').classList.add('header_menu_none');
+                document.getElementById('menu_option2').classList.remove('header_menu_none');
               }
             }
-            const self = this;
+            const self1 = this;
             setTimeout(function () {
-              self.hsSliderValue();
+              self1.chartDataConfiguration();
             }, 500);
-            setTimeout(function () {
-              self.chartDataConfiguration();
-            }, 500);
-            this.scrollTop();
+  
             this.helpHides();
             this.progressShow();
-            this.evaluateJavaScript(response.data);
+          } else {
+            // this.router.navigate(['/topicshistory']);
+            this.gotToTopicHistory();
           }
-        } else {
-          // this.router.navigate(['/topicshistory']);
-          this.gotToTopicHistory();
-        }
-        this.scrollTop();
-        if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Intro') {
+          const self = this;
           setTimeout(function () {
-            document.getElementById('fdbRecommendations').classList.add('table-responsive');
-          }, 100);
+            self.hsSliderValue();
+          }, 500);
+          if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Intro') {
+            setTimeout(function () {
+              document.getElementById('fdbRecommendations').classList.add('table-responsive');
+            }, 100);
+          }
+          this.evaluateJavaScript(response.data);
+          this.scrollTop();
+          document.getElementById('loader').classList.remove('loading');
+        },
+        errors => {
+          console.log(errors);
+          this.scrollTop();
+          this.inputErrorMessage = errors.error.errorMessage;
+          document.getElementById('loader').classList.remove('loading');
         }
-
-        document.getElementById('loader').classList.remove('loading');
-      },
-      errors => {
-        console.log(errors);
-        this.scrollTop();
-        this.inputErrorMessage = errors.error.errorMessage;
-        document.getElementById('loader').classList.remove('loading');
-      }
-    );
+      ));
+  }
+  previousPane(currentPaneNumber: any) {
+    const object = {};
+    this.subscriptons.add(
+      this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/previousPane').subscribe(
+        data => {
+          const response = JSON.parse(JSON.stringify(data));
+          if (response.data.currentPane != null) {
+            if (response.data.currentPane.paneCode === this.users.currentPaneNumber.currentPane.paneCode) {
+              this.utilityService.showErrorMessage("Request Failed Please Retry.");
+              // this.gotToTopicHistory();
+            } else {
+              this.users.currentPaneNumber = response.data;
+              this.loginService.setUser(this.users);
+              if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
+                if (this.users.currentPaneNumber.last) {
+                  this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
+                }
+              }
+              if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile') {
+                if (document.getElementById('_home')) {
+                  document.getElementById('_home').classList.add('header_menu_none');
+                }
+                if (document.getElementById('all_topic')) {
+                  document.getElementById('all_topic').classList.add('header_menu_none');
+                }
+                if (document.getElementById('_account')) {
+                  document.getElementById('_account').classList.add('header_menu_none');
+                }
+                if (document.getElementById('menu_option')) {
+                  document.getElementById('menu_option').classList.add('header_menu_none');
+                }
+                if (document.getElementById('_home1')) {
+                  document.getElementById('_home1').classList.add('header_menu_none');
+                }
+                if (document.getElementById('all_topic1')) {
+                  document.getElementById('all_topic1').classList.add('header_menu_none');
+                }
+                if (document.getElementById('_account1')) {
+                  document.getElementById('_account1').classList.add('header_menu_none');
+                }
+                if (document.getElementById('menu_option1')) {
+                  document.getElementById('menu_option1').classList.add('header_menu_none');
+                }
+                if (document.getElementById('menu_option2')) {
+                  document.getElementById('menu_option2').classList.add('header_menu_none');
+                }
+              }
+              const self = this;
+              setTimeout(function () {
+                self.hsSliderValue();
+              }, 500);
+              setTimeout(function () {
+                self.chartDataConfiguration();
+              }, 500);
+              this.scrollTop();
+              this.helpHides();
+              this.progressShow();
+              this.evaluateJavaScript(response.data);
+            }
+          } else {
+            // this.router.navigate(['/topicshistory']);
+            this.gotToTopicHistory();
+          }
+          this.scrollTop();
+          if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Intro') {
+            setTimeout(function () {
+              document.getElementById('fdbRecommendations').classList.add('table-responsive');
+            }, 100);
+          }
+  
+          document.getElementById('loader').classList.remove('loading');
+        },
+        errors => {
+          console.log(errors);
+          this.scrollTop();
+          this.inputErrorMessage = errors.error.errorMessage;
+          document.getElementById('loader').classList.remove('loading');
+        }
+      ));
   }
 
 
   getSurveyLeak(surveyId: any) {
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyId + '/leaks').subscribe(
-      data => {
-        const response = JSON.parse(JSON.stringify(data));
-        this.users.leakList = response.data;
-        this.loginService.setUser(this.users);
-        document.getElementById('loader').classList.remove('loading');
-      },
-      errors => {
-        console.log(errors);
-        document.getElementById('loader').classList.remove('loading');
-      }
-    );
+    this.subscriptons.add(
+      this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyId + '/leaks').subscribe(
+        data => {
+          const response = JSON.parse(JSON.stringify(data));
+          this.users.leakList = response.data;
+          this.loginService.setUser(this.users);
+          document.getElementById('loader').classList.remove('loading');
+        },
+        errors => {
+          console.log(errors);
+          document.getElementById('loader').classList.remove('loading');
+        }
+      ));
   }
+
   change(value: any): any {
     if (value === 'true') {
       return 'false';
@@ -748,51 +763,69 @@ export class SurveyComponent implements OnInit, AfterViewInit {
     }
   }
   getAllSurvey() {
-    this.users.surveyCode = new Array;
-    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys').subscribe(
-      data => {
-        const response = JSON.parse(JSON.stringify(data));
-        document.getElementById('loader').classList.remove('loading');
-        this.users.surveyLength = Object.keys(response.data).length;
-        this.users.surveyList = response.data;
-        this.loginService.setUser(this.users);
-        if (document.getElementById('_home')) {
-          document.getElementById('_home').classList.remove('header_menu_none');
-        }
-        if (document.getElementById('all_topic')) {
-          document.getElementById('all_topic').classList.remove('header_menu_none');
-        }
-        if (document.getElementById('menu_option')) {
-          document.getElementById('menu_option').classList.remove('header_menu_none');
-        }
-        if (document.getElementById('_account')) {
-          document.getElementById('_account').classList.remove('header_menu_none');
-        }
-        if (document.getElementById('_home1')) {
-          document.getElementById('_home1').classList.remove('header_menu_none');
-        }
-        if (document.getElementById('all_topic1')) {
-          document.getElementById('all_topic1').classList.remove('header_menu_none');
-        }
-        if (document.getElementById('_account1')) {
-          document.getElementById('_account1').classList.remove('header_menu_none');
-        }
-        if (document.getElementById('menu_option1')) {
-          document.getElementById('menu_option1').classList.remove('header_menu_none');
-        }
-        if (document.getElementById('menu_option2')) {
-          document.getElementById('menu_option2').classList.remove('header_menu_none');
-        }
-      },
-      error => {
-        const response = JSON.parse(JSON.stringify(error));
-        console.log(response);
-        document.getElementById('loader').classList.remove('loading');
+    
+    let flag = false;
+    if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
+      if (this.users.currentPaneNumber.firstPage) {
+        flag = true;
       }
-    );
+    }
+
+    this.users.surveyCode = new Array;
+    this.subscriptons.add(
+      this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys'
+        + (flag ? '?loadRecommendations=false' : '')).subscribe(
+        data => {
+          const response = JSON.parse(JSON.stringify(data));
+          document.getElementById('loader').classList.remove('loading');
+          this.users.surveyLength = Object.keys(response.data).length;
+          this.users.surveyList = response.data;
+          this.loginService.setUser(this.users);
+          if (document.getElementById('_home')) {
+            document.getElementById('_home').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('all_topic')) {
+            document.getElementById('all_topic').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('menu_option')) {
+            document.getElementById('menu_option').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('_account')) {
+            document.getElementById('_account').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('_home1')) {
+            document.getElementById('_home1').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('all_topic1')) {
+            document.getElementById('all_topic1').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('_account1')) {
+            document.getElementById('_account1').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('menu_option1')) {
+            document.getElementById('menu_option1').classList.remove('header_menu_none');
+          }
+          if (document.getElementById('menu_option2')) {
+            document.getElementById('menu_option2').classList.remove('header_menu_none');
+          }
+
+          if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
+            if (this.users.currentPaneNumber.firstPage) {
+              this.getSurveyLeak(this.users.currentPaneNumber.survey.surveyId);
+            }
+          }
+
+        },
+        error => {
+          const response = JSON.parse(JSON.stringify(error));
+          console.log(response);
+          document.getElementById('loader').classList.remove('loading');
+        }
+      ));
   }
 
   getSessionPendingMessage() {
+  this.subscriptons.add(
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/sessionPendingMessage').subscribe(
       data => {
         document.getElementById('loader').classList.remove('loading');
@@ -801,7 +834,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
         console.log(errors);
         document.getElementById('loader').classList.remove('loading');
       }
-    );
+    )
+  );
   }
 
   leakView(id: number) {
@@ -815,29 +849,30 @@ export class SurveyComponent implements OnInit, AfterViewInit {
       paneCode = paneList[index].pane.paneCode;
       document.getElementById('loader').classList.add('loading');
       const object = {};
-      this.loginService.performPostMultiPartData(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
-        data => {
-          const response = JSON.parse(JSON.stringify(data));
-          console.log(response);
-          document.getElementById('loader').classList.remove('loading');
-          if (response.errorCode == null && response.errorMessage == null) {
-            this.users.currentPaneNumber = response.data;
-            this.users.paneNumber = index;
-            this.loginService.setUser(this.users);
-            const self = this;
-            setTimeout(function () {
-              self.chartDataConfiguration();
-            }, 500);
-          } else {
-            this.inputErrorMessage = response.errorMessage;
+      this.subscriptons.add(
+        this.loginService.performPostMultiPartData(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
+          data => {
+            const response = JSON.parse(JSON.stringify(data));
+            console.log(response);
+            document.getElementById('loader').classList.remove('loading');
+            if (response.errorCode == null && response.errorMessage == null) {
+              this.users.currentPaneNumber = response.data;
+              this.users.paneNumber = index;
+              this.loginService.setUser(this.users);
+              const self = this;
+              setTimeout(function () {
+                self.chartDataConfiguration();
+              }, 500);
+            } else {
+              this.inputErrorMessage = response.errorMessage;
+            }
+  
+          },
+          errors => {
+            console.log(errors);
+            document.getElementById('loader').classList.remove('loading');
           }
-
-        },
-        errors => {
-          console.log(errors);
-          document.getElementById('loader').classList.remove('loading');
-        }
-      );
+        ));
     }
   }
 
@@ -876,7 +911,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
 
   saveSurveyAnswerBlock(dataBlockId: any, setAsFirst: boolean): void {
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performPostMultiPartDataPost('', 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
+    this.subscriptons.add(
+      this.loginService.performPostMultiPartDataPost('', 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
       this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answerBlocks?dataBlockId=' + dataBlockId + '&setAsFirst=' + setAsFirst).subscribe(
         data => {
           const response = JSON.parse(JSON.stringify(data));
@@ -890,12 +926,14 @@ export class SurveyComponent implements OnInit, AfterViewInit {
           this.inputErrorMessage = errors.error.errorMessage;
           document.getElementById('loader').classList.remove('loading');
         }
-      );
+      )
+    );
   }
 
   deleteSurveyAnswerBlock(surveyAnswerBlockId: any): void {
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performDelete('customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
+    this.subscriptons.add(
+      this.loginService.performDelete('customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
       this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answerBlocks/' + surveyAnswerBlockId).subscribe(
         data => {
           const response = JSON.parse(JSON.stringify(data));
@@ -909,7 +947,8 @@ export class SurveyComponent implements OnInit, AfterViewInit {
           this.inputErrorMessage = errors.error.errorMessage;
           document.getElementById('loader').classList.remove('loading');
         }
-      );
+      )
+    );
   }
 
   evaluateJavaScript(value: any) {

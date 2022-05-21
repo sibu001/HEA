@@ -27,11 +27,13 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
   };
+  totalElements : any;
   disableNextButton  = false
   currentIndex = 0;
   dataListForSuggestions = [];
   selectedCustomer = null;
   keys = TableColumnData.SMART_METER_KEYS;
+  newFilterSearch = false;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -44,11 +46,16 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
     }
 
     if(this.adminFilter.recentUsageHistory != AppConstant.electricitySmartMeter){
+      this.sessionUtility(this.adminFilter.formValue);
       this.adminFilter.recentUsageHistory = AppConstant.electricitySmartMeter;
       this.adminFilter.page = undefined;
     }
   }
 
+  sessionUtility(event){
+    if(event)
+      this.adminFilter.formValue = { "auditId" : event.auditId , "customerName" : event.customerName };
+  }
 
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: UsageHistoryFilter;
@@ -57,6 +64,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
     this.getDataFromStore();
+    this.newFilterSearch = true;
     this.scrollTop();
   }
    scrollTop() {
@@ -79,30 +87,29 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
   getSmartElectricityList(force: boolean, userId  : string, filter: any): void {
     this.adminFilter.formValue = this.electricitySmartMeterForm.value;
     this.usageHistoryService.loadElectricitySmartMeterList(force, userId, filter);
-    this.subscriptions.add(this.usageHistoryService.getElectricitySmartMeterList().pipe(skipWhile((item: any) => !item))
-      .subscribe((gasList: any) => {
-        this.usageHistoryData.content = gasList.data;
-        this.dataSource = [...this.usageHistoryData.content];
-      }));
-
   }
 
   getDataFromStore(){
     this.subscriptions.add(this.usageHistoryService.getElectricitySmartMeterList().pipe(skipWhile((item: any) => !item))
     .subscribe(  (gasList: any) => {
       if(gasList.data.length == 10){
+        this.totalElements = this.usageHistoryData.totalElements;
         this.usageHistoryData.content = gasList.data;
         this.dataSource = [...this.usageHistoryData.content];
         this.pageIndex = this.currentIndex;
         this.disableNextButton = false;
       } else {
         this.disableNextButton = true;
-        this.pageIndex = this.currentIndex -1;
         if(gasList.data.length > 0){
           this.usageHistoryData.content = gasList.data;
           this.dataSource = [...this.usageHistoryData.content];
-        }
-    }}));
+        } else {
+          if(this.newFilterSearch)
+            this.dataSource = [...gasList.data];
+          this.pageIndex = this.currentIndex -1;
+        }}
+        this.newFilterSearch = false;
+  }));
 
   }
 
@@ -120,6 +127,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
   }
 
   findSelectedCustomer(force,filter){
+    document.getElementById('loader').classList.add('loading');
     const params = this.filterForCustomer();
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do',params)
@@ -141,6 +149,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
           this.electricitySmartMeterForm.value.customerName = this.selectedCustomer.user.name;
           this.setUpForm(this.electricitySmartMeterForm.value);
           localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+        // document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
         } 
@@ -148,10 +157,17 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
     );
   }
 
-  search(event: any, isSearch: boolean): void {
+  search(event: any, isSearch: boolean , forced ?: boolean): void {
     this.adminFilter.page = event;
     if(event)
       this.currentIndex = event.pageIndex;
+
+      if(forced){
+          this.currentIndex = 0;
+          this.adminFilter.page = undefined;
+          event = undefined;
+          this.newFilterSearch = true;
+        }
 
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);

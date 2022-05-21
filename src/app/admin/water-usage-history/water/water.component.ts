@@ -32,13 +32,14 @@ export class WaterComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
   };
+  totalElements : any;
   selectedCustomer = null;
   disableNextButton = false
   currentIndex = 0
   public force = false;
   private readonly subscriptions: Subscription = new Subscription();
   waterForm: FormGroup;
-
+  newFilterSearch = false;
   constructor(public router: Router, public fb: FormBuilder,
      public usageHistoryService: UsageHistoryService,
      private loginService: LoginService
@@ -50,15 +51,22 @@ export class WaterComponent implements OnInit, OnDestroy {
       }
 
       if(this.adminFilter.recentUsageHistory != AppConstant.waterList){
+        this.sessionUtility(this.adminFilter.formValue);
         this.adminFilter.recentUsageHistory = AppConstant.waterList;
         this.adminFilter.page = undefined;
       }
+    }
+
+    sessionUtility(event){
+      if(event)
+        this.adminFilter.formValue = { "auditId" : event.auditId , "customerName" : event.customerName };
     }
 
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page,false);
     this.getDataFromStore();
+    this.newFilterSearch = false;
     this.scrollTop();
   }
 
@@ -113,6 +121,7 @@ export class WaterComponent implements OnInit, OnDestroy {
   }
 
   findSelectedCustomer(force,filter){
+    document.getElementById('loader').classList.add('loading');
     const params = this.filterForCustomer();
     this.subscriptions.add(
       this.loginService.performGetWithParams('findCustomers.do',params)
@@ -134,6 +143,7 @@ export class WaterComponent implements OnInit, OnDestroy {
           this.waterForm.value.customerName = this.selectedCustomer.user.name;
           this.setUpForm(this.waterForm.value);
           localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+          // document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
         } 
@@ -163,28 +173,35 @@ export class WaterComponent implements OnInit, OnDestroy {
     .subscribe( (waterList: any) => {
       if(waterList.data.length == 10){
         this.data.content = waterList.data;
+        this.totalElements = this.data.totalElements
         this.dataSource = [...this.data.content];  
         this.pageIndex = this.currentIndex;
         this.disableNextButton = false;
       } else {
         this.disableNextButton = true;
-        this.pageIndex = this.currentIndex -1;
         if(waterList.data.length > 0){
           this.data.content = waterList.data;
           this.dataSource = [...this.data.content];  
-        }
-      //  if(this.currentIndex == 0)
-      //   this.UtilityService.showErrorMessage("no data available");
-      //  else
-      //  this.UtilityService.showErrorMessage("no next page available"); 
-      }
+        } else {
+          if(this.newFilterSearch)
+            this.dataSource = [...waterList.data];
+          this.pageIndex = this.currentIndex -1;
+        }}
+        this.newFilterSearch = false;
     }));
   }
 
-  search(event: any, isSearch: boolean): void {
+  search(event: any, isSearch: boolean, forced ?: boolean): void {
     this.adminFilter.page = event;
     if(event)
       this.currentIndex = event.pageIndex;
+
+      if(forced){
+          this.currentIndex = 0;
+          this.adminFilter.page = undefined;
+          event = undefined;
+          this.newFilterSearch = true;
+        }
 
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);

@@ -57,7 +57,7 @@
           <div class="row rowpadding">
             <div class="col-sm-12" style="text-align: right">
               <button type="submit" class="btn btn-primary" style="margin-top: 10px;"
-                (click)="search(undefined,true)">Show</button>
+                (click)="search(undefined,true,true)">Show</button>
             </div>
           </div>
         </form>
@@ -69,7 +69,7 @@
             <app-table [keys]="keys" [isPaginate]="true" [disableLastButton]=true
               [isHideAdd]=true [isSearch]="false" [disableNextButton]="disableNextButton"
               (goToEditEvent)='showPopUp($event)' [data]="dataSource" [pageIndex]="pageIndex"
-              [totalElement]="usageHistoryData.totalElements"
+              [totalElement]="totalElements"
               (changePageEvent)="search($event,false)">
             </app-table>
           </div>
