@@ -49,6 +49,25 @@ export class UtilityCredentialsComponent implements OnInit {
     }
   }
 
+  showSelectedServiceId(event : any, serviceId : string ,list :any) {
+
+    let selectedId;
+    if( serviceId == "electricityServiceId")
+      selectedId = event.credential.electricityServiceId;
+    else 
+      selectedId = event.credential.heatingServiceId;
+
+    return list.map( (services) => services.customerAgreement).indexOf(selectedId);
+
+  //  let selectedService =  event.serviceIds.find(
+  //     (item) => {
+  //       if(selectedId == item.customerAgreement) 
+  //         return true;
+  //       else 
+  //         return false;
+  //     });
+  }
+
   findCredentialType(force: boolean, filter: string): void {
     this.systemService.loadCredentialTypeList(force, filter);
     this.subscriptions.add(this.systemService.getCredentialTypeList().pipe(skipWhile((item: any) => !item))
@@ -60,6 +79,13 @@ export class UtilityCredentialsComponent implements OnInit {
   setForm(event: any) {
     if (event !== undefined) {
       event = event.data;
+
+      this.getAllElectricityServiceIdFromList(event.serviceIds);
+      this.getAllHeatingServiceIdFromList(event.serviceIds);
+
+    var selectedElectricityIndex =  this.showSelectedServiceId(event,"electricityServiceId",this.electricServiceIds);
+    var selectedHeatingIndex = this.showSelectedServiceId(event,"heatingServiceId",this.heatingServiceIds);
+
     }
     
     this.utilityCredentialForm = this.formBuilder.group({
@@ -69,11 +95,11 @@ export class UtilityCredentialsComponent implements OnInit {
       password: [event !== undefined ? event.credential.password : null],
       active: [event !== undefined ? event.credential.active : false],
       account: [event !== undefined ? event.credential.account : null],
-      electricityServiceId: [event !== undefined ? this.getAllElectricityServiceIdFromList(event.serviceIds)[0].customerAgreement : null],
-      electricityMeterId: [event !== undefined ? event.electricityMeterId : null],
+      electricityServiceId: [event !== undefined ? this.electricServiceIds[selectedElectricityIndex].customerAgreement : null],
+      electricityMeterId: [event !== undefined ? event.credential.electricityMeterId : null],
       electricitySignDate: [event !== undefined ? AppUtility.getDateFromMilllis(this.electricServiceIds[this.electricServiceIds.length -1].signDate) : null],
-      heatingServiceId: [event !== undefined ? this.getAllHeatingServiceIdFromList(event.serviceIds)[0].customerAgreement : null],
-      heatingMeterId: [event !== undefined ? event.heatingMeterId  : null],
+      heatingServiceId: [event !== undefined ? this.heatingServiceIds[selectedHeatingIndex].customerAgreement : null],
+      heatingMeterId: [event !== undefined ? event.credential.heatingMeterId  : null],
       heatingSignDate: [event !== undefined ? AppUtility.getDateFromMilllis(this.heatingServiceIds[this.heatingServiceIds.length -1].signDate) : null],
       waterServiceId: [event !== undefined ? event.credential.waterServiceId : null],
       waterMeterId: [event !== undefined ? event.credential.waterMeterId : null],
@@ -135,9 +161,24 @@ export class UtilityCredentialsComponent implements OnInit {
       .subscribe((response: any) => {
       }));
   }
+
+  settingServiceInUseValue(){
+    if(this.utilityCredentialForm.value.heatingServiceId == "none")
+      this.utilityCredentialForm.value.heatingInUse = false;
+    else
+      this.utilityCredentialForm.value.heatingInUse = true;
+
+    if(this.utilityCredentialForm.value.electricityServiceId == "none")
+      this.utilityCredentialForm.value.electricityInUse = false;
+    else
+      this.utilityCredentialForm.value.electricityInUse = true;
+  }
+
   save() {
     this.utilityCredentialForm.value.heatingSignDate = new Date(this.utilityCredentialForm.value.heatingSignDate).getTime(); 
     this.utilityCredentialForm.value.electricitySignDate = new Date(this.utilityCredentialForm.value.electricitySignDate).getTime(); 
+    this.settingServiceInUseValue();
+
     if (this.utilityCredentialForm.valid) {
       if (this.data.row && this.data.row.id) {
         this.subscriptions.add(this.customerService.updateUtilityCredential(this.data.customerId, this.data.row.id, this.utilityCredentialForm.value).pipe(skipWhile((item: any) => !item))
