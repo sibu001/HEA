@@ -113,6 +113,11 @@ export class AdministrativeManagementState {
         return state.prospects;
     }
 
+    @Selector() 
+    static getEventHistoryCount(state: AdministrativeManagementModel) :any{
+        return state.eventHistoryCount
+    }
+
     @Selector()
     static getEventHistoryList(state: AdministrativeManagementModel): any {
         return state.eventHistoryList;

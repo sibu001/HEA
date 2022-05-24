@@ -104,4 +104,5 @@ export class AppConstant {
     public static fixUsageHistoryData = 'fixUsageHistoryData';
     public static meters = 'meters';
     public static pageSize = '25';
+    public static debounceTime = 700;
 }

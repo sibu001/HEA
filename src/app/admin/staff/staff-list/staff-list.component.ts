@@ -44,6 +44,7 @@ export class StaffListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setUpForm(this.adminFilter.staffFilter.formValue);
     this.search(this.adminFilter.staffFilter.page, false);
+    this.getDataFromStore();
   }
 
   setUpForm(event: any) {
@@ -58,12 +59,15 @@ export class StaffListComponent implements OnInit, OnDestroy {
     this.adminFilter.staffFilter.formValue = this.staffForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     this.customerService.loadStaffList(force, filter);
+  }
+
+  getDataFromStore(){
     this.subscriptions.add(this.customerService.getStaffList().pipe(skipWhile((item: any) => !item))
-      .subscribe((staffList: any) => {
-        this.staffData.content = staffList.list;
-        this.staffData.totalElements = staffList.totalSize;
-        this.dataSource = [...this.staffData.content];
-      }));
+    .subscribe((staffList: any) => {
+      this.staffData.content = staffList.list;
+      this.staffData.totalElements = staffList.totalSize;
+      this.dataSource = [...this.staffData.content];
+    }));
   }
 
   goToEditStaff(event: any): void {

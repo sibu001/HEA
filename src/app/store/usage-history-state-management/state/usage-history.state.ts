@@ -1050,11 +1050,7 @@ export class UsageHistoryManagementState {
         ctx: StateContext<UsageHistoryManagementModel>,
         action: GetWaterListAction
     ): Actions {
-        const force: boolean =
-            action.force ||
-            UsageHistoryManagementState.getWaterList(ctx.getState()) === undefined;
         let result: Actions;
-        if (force) {
             document.getElementById('loader').classList.add('loading');
             result = this.loginService
                 .performGetWithParams(AppConstant.users + '/' + action.userId + '/usage/' + AppConstant.waterList, action.filter)
@@ -1072,7 +1068,6 @@ export class UsageHistoryManagementState {
                         }
                     )
                 );
-        }
         return result;
     }
 
@@ -1152,11 +1147,8 @@ export class UsageHistoryManagementState {
         ctx: StateContext<UsageHistoryManagementModel>,
         action: GetWaterSmartMeterListAction
     ): Actions {
-        const force: boolean =
-            action.force ||
-            UsageHistoryManagementState.getWaterSmartMeterList(ctx.getState()) === undefined;
         let result: Actions;
-        if (force) {
+        // if (force) {
             document.getElementById('loader').classList.add('loading');
             result = this.loginService
                 .performGetWithParams(AppConstant.users + '/' + action.userId + '/' + AppConstant.waterSmartMeterList, action.filter)
@@ -1174,7 +1166,7 @@ export class UsageHistoryManagementState {
                         }
                     )
                 );
-        }
+        // }
         return result;
     }
 

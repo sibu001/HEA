@@ -49,6 +49,7 @@ export class TopicDescriptionListComponent implements OnInit, OnDestroy {
     this.findCustomerGroup();
     this.setUpForm(this.adminFilter.topicDescriptionFilter.formValue);
     this.search(this.adminFilter.topicDescriptionFilter.page, false);
+    this.getDataFromStore();
   }
 
 
@@ -65,11 +66,15 @@ export class TopicDescriptionListComponent implements OnInit, OnDestroy {
     this.adminFilter.topicDescriptionFilter.formValue = this.topicForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     this.topicService.loadTopicDescriptionList(force, filter);
-    this.subscriptions.add(this.topicService.getTopicDescriptionList().pipe(skipWhile((item: any) => !item))
-      .subscribe((topicDescriptionList: any) => {
-        this.topicData.content = topicDescriptionList;
-        this.dataSource = [...this.topicData.content];
-      }));
+  }
+
+  getDataFromStore(){
+    this.subscriptions.add(this.topicService.getTopicDescriptionList()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((topicDescriptionList: any) => {
+      this.topicData.content = topicDescriptionList;
+      this.dataSource = [...this.topicData.content];
+    }));
   }
 
   findCustomerGroup() {

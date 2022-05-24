@@ -187,7 +187,7 @@
           aria-expanded='false'
           aria-controls='collapseUsageHistory'>Usage history</a>
         <ul class='collapse' id='collapseUsageHistory'>
-          <li><a [routerLink]="['/admin/shareMyData']">Share My Data</a></li>
+          <li><a [routerLink]="['/admin/shareMyData']" class="disabled-link" >Share My Data</a></li>
           <li><a [routerLink]="['/admin/gas/gasList']" [queryParams]="{
               isAdminView: 'true'}">Gas</a></li>
           <li><a [routerLink]="['/admin/gas/gasChargeList']" [queryParams]="{

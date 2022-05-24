@@ -19,6 +19,7 @@ import { HttpParams } from '@angular/common/http';
 import { ErrorStateMatcher } from '@angular/material';
 import { MustMatch } from 'src/app/common/password.validator';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { UsageHistoryFilter } from 'src/app/models/filter-object';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -170,9 +171,17 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.placeCode = placeList;
       }));
   }
+
+  async setUpValueInUsageHitoryFilter(customer){
+    let usageHistoryFilter = new UsageHistoryFilter();
+    usageHistoryFilter.formValue = { "auditId" : customer.auditId , "customerName" : customer.user.name };
+    localStorage.setItem('usageHistoryFilter',JSON.stringify(usageHistoryFilter));
+  }
+
   loadCustomerById() {
     this.subscriptions.add(this.customerService.getCustomerById().pipe(skipWhile((item: any) => !item))
       .subscribe((customer: any) => {
+        this.setUpValueInUsageHitoryFilter(customer);
         this.customerData = customer;
         if (this.isForce) {
           this.router.navigate(['admin/customer/customerEdit'], { queryParams: { 'id': customer.customerId } });

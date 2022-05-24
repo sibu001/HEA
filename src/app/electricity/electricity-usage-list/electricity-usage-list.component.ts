@@ -2,9 +2,9 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { throttleTime } from 'rxjs-compat/operator/throttleTime';
-import { skipWhile } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
@@ -67,13 +67,14 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
 
   private readonly subscriptions: Subscription = new Subscription();
   public adminFilter: UsageHistoryFilter;
-
+  subject$ = new Subject();
   ngOnInit() {
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
     this.getDataFromStore();
     this.newFilterSearch = true;
     this.scrollTop();
+    this.findCustomer();
   }
 
   scrollTop() {
@@ -163,11 +164,16 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
     }else{
       filters = filters.delete('auditId');
     }
-    this.findCustomer(filters);
+    this.subject$.next(filters);
   }
 
-  findCustomer(filters, calledFor ?: string){
-    this.subscriptions.add(
+  findCustomer(){
+    this.subscriptions.add(this.subject$
+      .pipe(
+       debounceTime(AppConstant.debounceTime)  
+      , distinctUntilChanged())
+      .subscribe(
+    (filters : any) =>{
       this.loginService.performGetWithParams('findCustomers.do',filters)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
@@ -177,8 +183,10 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
            console.log(error);
         }
       )
-    );
-  }
+    }
+    )
+  );
+}
 
   filterForElectricityList(force: boolean, filter: any){
     this.adminFilter.formValue = this.electricityForm.value;
@@ -210,7 +218,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
           if(response.length != 0){
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
-          this.getEletricityList(force, userId, filter);  
+          // this.getEletricityList(force, userId, filter);  
           }
             if(this.selectedCustomer != null){
               this.getEletricityList(force, this.selectedCustomer.userId, filter);
@@ -226,8 +234,8 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
               this.electricityForm.value.auditId = "";
               this.electricityForm.value.customerName = "";
               this.setUpForm(this.electricityForm.value);
+              document.getElementById('loader').classList.remove('loading');
             }
-        document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
            document.getElementById('loader').classList.remove('loading');

@@ -67,7 +67,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() selectionList: Array<any> = [];
   @Input() sortStateData: any;
   @Input() disableLastButton = false;
-  @Input() disableNextButton = false;
+  @Input() disableNextButton;
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
@@ -110,7 +110,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
  
 
   ngAfterViewChecked(): void {
-    if(this.disableNextButton){
+    if(this.disableNextButton == true){
       if(this.pageIndex < 0) this.matPaginator.pageIndex = 0;
        else this.matPaginator.pageIndex = this.pageIndex;
     }
@@ -194,7 +194,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   }
 
   disableLastButtonF(){
-    if(this.disableLastButton){
+    if(this.disableLastButton == true){
       var btnElement = (<HTMLButtonElement>this.ElByClassName.nativeElement).querySelector(
         '.mat-paginator-navigation-last'
         );
@@ -208,9 +208,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
         '.mat-paginator-navigation-next'
         );
         if(btnElement != null){
-          if(this.disableNextButton){
+          if(this.disableNextButton == true){
             btnElement.setAttribute('disabled', 'true');
-          } else {
+          } else if (this.disableNextButton == false) {
             btnElement.removeAttribute('disabled');
           }
         }

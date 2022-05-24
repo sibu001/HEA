@@ -10,8 +10,8 @@ import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, skipWhile } from 'rxjs/operators';
 import { AppConstant } from 'src/app/utility/app.constant';
 
 @Component({
@@ -40,6 +40,7 @@ export class WaterSmartMeterComponent implements OnInit {
   private readonly subscriptions: Subscription = new Subscription();
   waterSmartMeterForm: FormGroup;
   newFilterSearch = false;
+  subject$ = new Subject();
   pageSize = AppConstant.pageSize;
   constructor(public router: Router, public fb: FormBuilder,
     public usageHistoryService: UsageHistoryService,
@@ -66,6 +67,7 @@ export class WaterSmartMeterComponent implements OnInit {
       this.search(this.adminFilter.page,false);
       this.getDataFromStore();
       this.scrollTop();
+      this.findCustomer();
     }
     
     sessionUtility(event){
@@ -98,7 +100,7 @@ export class WaterSmartMeterComponent implements OnInit {
       }else{
         filters = filters.delete('auditId');
       }
-      this.findCustomer(filters);
+      this.subject$.next(filters);
     }
   
     filterForCustomer(){
@@ -108,8 +110,13 @@ export class WaterSmartMeterComponent implements OnInit {
         .set('useLike','true')
     }
   
-    findCustomer(filters, calledFor ?: string){
-      this.subscriptions.add(
+    findCustomer(){
+      this.subscriptions.add(this.subject$
+        .pipe(
+         debounceTime(AppConstant.debounceTime)  
+        , distinctUntilChanged())
+        .subscribe(
+      (filters : any) =>{
         this.loginService.performGetWithParams('findCustomers.do',filters)
         .pipe(skipWhile((item: any) => !item))
         .subscribe(
@@ -119,8 +126,10 @@ export class WaterSmartMeterComponent implements OnInit {
              console.log(error);
           }
         )
-      );
-    }
+      }
+      )
+    );
+  }
 
   findSelectedCustomer(force,filter){
     document.getElementById('loader').classList.add('loading');
@@ -133,7 +142,7 @@ export class WaterSmartMeterComponent implements OnInit {
           if(response.length != 0){
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
-          this.getWaterSmartMeter(force, userId, filter);  
+          // this.getWaterSmartMeter(force, userId, filter);  
           }
             if(this.selectedCustomer != null){
               this.getWaterSmartMeter(force, this.selectedCustomer.userId, filter);
@@ -149,9 +158,9 @@ export class WaterSmartMeterComponent implements OnInit {
               this.waterSmartMeterForm.value.auditId = "";
               this.waterSmartMeterForm.value.customerName = "";
               this.setUpForm(this.waterSmartMeterForm.value);
+              document.getElementById('loader').classList.remove('loading');
             }
 
-          document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
           document.getElementById('loader').classList.remove('loading');

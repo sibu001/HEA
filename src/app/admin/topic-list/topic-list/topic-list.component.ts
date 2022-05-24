@@ -69,6 +69,7 @@ export class TopicListComponent implements OnInit, OnDestroy {
 
     this.setUpForm(this.adminFilter.topicFilter.formValue);
     this.search(this.adminFilter.topicFilter.page, false);
+    this.getDataFromStore();
   }
 
   checkTopicListFilter() {
@@ -161,13 +162,16 @@ export class TopicListComponent implements OnInit, OnDestroy {
     this.adminFilter.topicFilter.formValue = this.topicForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     this.administrativeService.loadTopicList(force, filter);
+  }
+
+  getDataFromStore(){
     this.subscriptions.add(this.administrativeService.getTopicList().pipe(skipWhile((item: any) => !item))
-      .subscribe((topicList: any) => {
-        this.topicData.content = topicList.list;
-        this.topicData.totalElements = topicList.totalSize;
-        this.totalElement = topicList.total = topicList.totalSize;
-        this.dataSource = this.topicData.content;
-      }));
+    .subscribe((topicList: any) => {
+      this.topicData.content = topicList.list;
+      this.topicData.totalElements = topicList.totalSize;
+      this.totalElement = topicList.total = topicList.totalSize;
+      this.dataSource = this.topicData.content;
+    }));
   }
 
   search(event: any, isSearch: boolean): void {

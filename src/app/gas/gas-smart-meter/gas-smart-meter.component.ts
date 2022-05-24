@@ -2,8 +2,8 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
@@ -36,6 +36,7 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
   disableNextButton = false;
   newFilterSearch = false;
   pageSize = AppConstant.pageSize;
+  subject$ = new Subject();
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -62,6 +63,7 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
     this.getDataFromStore();
     this.newFilterSearch = true;
     this.scrollTop();
+    this.findCustomer();
   }
 
   sessionUtility(event){
@@ -140,7 +142,7 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
           if(response.length != 0){
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
-          this.getGasList(force, userId, filter);  
+          // this.getGasList(force, userId, filter);  
           }
             if(this.selectedCustomer != null){
               this.getGasList(force, this.selectedCustomer.userId, filter);
@@ -156,8 +158,8 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
               this.gasForm.value.auditId = "";
               this.gasForm.value.customerName = "";
               this.setUpForm(this.gasForm.value);
+              document.getElementById('loader').classList.remove('loading');
             }
-        document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
            document.getElementById('loader').classList.remove('loading');
@@ -228,11 +230,16 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
     }else{
       filters = filters.delete('auditId');
     }
-    this.findCustomer(filters,calledBy);
+    this.subject$.next(filters);
   }
 
-  findCustomer(filters, calledFor ?: string){
-    this.subscriptions.add(
+  findCustomer(){
+    this.subscriptions.add(this.subject$
+      .pipe(
+       debounceTime(AppConstant.debounceTime)  
+      , distinctUntilChanged())
+      .subscribe(
+    (filters : any) =>{
       this.loginService.performGetWithParams('findCustomers.do',filters)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
@@ -242,8 +249,10 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
            console.log(error);
         }
       )
-    );
-  }
+    }
+    )
+  );
+}
 
   selectedSuggestion(event : any, select : string){
     if(select == 'auditId')

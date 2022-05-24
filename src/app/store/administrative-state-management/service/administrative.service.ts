@@ -84,6 +84,9 @@ export class AdministrativeService {
     return this.store.select(AdministrativeManagementState.getEventHistoryById);
   }
 
+  getEventHistoryCountSeletor() : Observable<any> {
+    return this.store.select(AdministrativeManagementState.getEventHistoryCount)
+  }
 
   loadAdministrativeReportList(force: boolean, filter: any): Observable<AdministrativeManagementState> {
     return this.store.dispatch(new GetAdministrativeReportListAction(force, filter));

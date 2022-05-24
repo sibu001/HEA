@@ -2,8 +2,8 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { AdminFilter, UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
@@ -34,6 +34,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   disableNextButton = false;
   keys = TableColumnData.ELECTRICITY_CHARGE_KEYS;
   newFilterSearch = false;
+  subject$ = new Subject();
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -62,6 +63,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
     this.getDataFromStore();
     this.newFilterSearch = true;
     this.scrollTop();
+    this.findCustomer();
   }
 
   sessionUtility(event){
@@ -166,11 +168,17 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
     }else{
       filters = filters.delete('auditId');
     }
-    this.findCustomer(filters);
+
+    this.subject$.next(filters);
   }
 
-  findCustomer(filters, calledFor ?: string){
-    this.subscriptions.add(
+  findCustomer(){
+    this.subscriptions.add(this.subject$
+      .pipe(
+       debounceTime(AppConstant.debounceTime)  
+      , distinctUntilChanged())
+      .subscribe(
+    (filters : any) =>{
       this.loginService.performGetWithParams('findCustomers.do',filters)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
@@ -180,8 +188,10 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
            console.log(error);
         }
       )
-    );
-  }
+    }
+    )
+  );
+}
 
   filterForElectricityList(force: boolean, filter: any){
     this.adminFilter.formValue = this.electricityForm.value;
@@ -207,7 +217,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
           if(response.length != 0){
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
-          this.getEletricityList(force, userId, filter);  
+          // this.getEletricityList(force, userId, filter);  
           }
             if(this.selectedCustomer != null){
               this.getEletricityList(force, this.selectedCustomer.userId, filter);
@@ -223,9 +233,9 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
               this.electricityForm.value.auditId = "";
               this.electricityForm.value.customerName = "";
               this.setUpForm(this.electricityForm.value);
+              document.getElementById('loader').classList.remove('loading');
             }
             
-        document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
         document.getElementById('loader').classList.remove('loading');

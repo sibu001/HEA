@@ -26,6 +26,12 @@ a {
   text-decoration: none;
 }
 
+.disabled-link{
+  cursor: default;
+  pointer-events: none;        
+  color: #CCCCCC;
+}
+
 section.space-top {
   margin-top: 5.3em;
 }

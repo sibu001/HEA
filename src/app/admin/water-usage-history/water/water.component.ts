@@ -2,8 +2,8 @@ import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { LoginService } from 'src/app/services/login.service';
@@ -41,6 +41,7 @@ export class WaterComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   waterForm: FormGroup;
   newFilterSearch = false;
+  subject$ = new Subject();
   constructor(public router: Router, public fb: FormBuilder,
      public usageHistoryService: UsageHistoryService,
      private loginService: LoginService
@@ -69,6 +70,7 @@ export class WaterComponent implements OnInit, OnDestroy {
     this.getDataFromStore();
     this.newFilterSearch = false;
     this.scrollTop();
+    this.findCustomer();
   }
 
   scrollTop() {
@@ -97,8 +99,8 @@ export class WaterComponent implements OnInit, OnDestroy {
     }else{
       filters = filters.delete('auditId');
     }
-    this.findCustomer(filters);
-  }
+    this.subject$.next(filters);
+    }
 
   filterForCustomer(){
     return new HttpParams()
@@ -107,8 +109,13 @@ export class WaterComponent implements OnInit, OnDestroy {
       .set('useLike','true')
   }
 
-  findCustomer(filters, calledFor ?: string){
-    this.subscriptions.add(
+  findCustomer(){
+    this.subscriptions.add(this.subject$
+      .pipe(
+       debounceTime(AppConstant.debounceTime)  
+      , distinctUntilChanged())
+      .subscribe(
+    (filters : any) =>{
       this.loginService.performGetWithParams('findCustomers.do',filters)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
@@ -118,8 +125,10 @@ export class WaterComponent implements OnInit, OnDestroy {
            console.log(error);
         }
       )
-    );
-  }
+    }
+    )
+  );
+}
 
   findSelectedCustomer(force,filter){
     document.getElementById('loader').classList.add('loading');
@@ -132,7 +141,7 @@ export class WaterComponent implements OnInit, OnDestroy {
           if(response.length != 0){
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
-          this.getWaterList(force, userId, filter);  
+          // this.getWaterList(force, userId, filter);  
           }
             if(this.selectedCustomer != null){
               this.getWaterList(force, this.selectedCustomer.userId, filter);
@@ -148,9 +157,9 @@ export class WaterComponent implements OnInit, OnDestroy {
               this.waterForm.value.auditId = "";
               this.waterForm.value.customerName = "";
               this.setUpForm(this.waterForm.value);
+              document.getElementById('loader').classList.remove('loading');
             }
             
-          document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
            document.getElementById('loader').classList.remove('loading');

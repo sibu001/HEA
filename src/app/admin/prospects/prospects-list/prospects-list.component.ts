@@ -27,7 +27,6 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   public dataSource: any;
   public totalElement = 0;
   public selectedProspectListIds : any;
-  // public pageIndex : any;
   public prospectsData = {
     content: [],
     totalElements: 0,
@@ -52,6 +51,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
     this.findCoachId();
     this.setUpForm(undefined);
     this.search('', false);
+    this.getDataFromStore();
   }
 
   addProspects(event: any) {
@@ -83,13 +83,16 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
 
   findProspects(force: boolean, filter: any): void {
     this.administrativeService.loadProspectsList(force, filter);
+  }
+
+  getDataFromStore(){
     this.subscriptions.add(this.administrativeService.getProspectsList().pipe(skipWhile((item: any) => !item))
-      .subscribe((prospectsList: any) => {
-        this.prospectsData.content = prospectsList.list;
-        this.prospectsData.totalElements = prospectsList.totalSize;
-        this.prospectsData.pageIndex = prospectsList.startOfCurrentPage/prospectsList.size ;
-        this.dataSource = this.prospectsData.content;
-      }));
+    .subscribe((prospectsList: any) => {
+      this.prospectsData.content = [...prospectsList.list];
+      this.prospectsData.totalElements = prospectsList.totalSize;
+      this.prospectsData.pageIndex = parseInt(prospectsList.startOfCurrentPage/Number.parseInt(this.pageSize) + "");
+      this.dataSource = this.prospectsData.content;
+    }));
   }
 
   findCoachId() {
@@ -114,7 +117,8 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
           this.selectedProspectListIds = '';
 
       this.subscriptions.add(
-        this.administrativeService.deleteProspectListByIds(this.selectedProspectListIds).pipe(skipWhile((item: any) => !item))
+        this.administrativeService.deleteProspectListByIds(this.selectedProspectListIds)
+        .pipe(skipWhile((item: any) => !item))
         .subscribe(
           response =>{
             this.selectedProspectListIds = undefined;

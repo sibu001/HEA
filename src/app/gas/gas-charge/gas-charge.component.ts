@@ -3,8 +3,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, distinctUntilKeyChanged, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { UsageHistoryFilter } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
@@ -35,6 +35,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   totalElements : any;
   newFilterSearch = false;
   pageSize = AppConstant.pageSize;
+  subject$ = new Subject();
   constructor(private loginService: LoginService,
     private router: Router,
     private readonly usageHistoryService: UsageHistoryService,
@@ -62,6 +63,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
     this.getDataFromStore();
     this.newFilterSearch = true;
     this.scrollTop();
+    this.findCustomer();
   }
 
   sessionUtility(event){
@@ -193,7 +195,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
           if(response.length != 0){
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
-          this.getGasList(force, userId, filter);  
+          // this.getGasList(force, userId, filter);  
           }
             if(this.selectedCustomer != null){
               this.getGasList(force, this.selectedCustomer.userId, filter);
@@ -209,9 +211,9 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
               this.gasForm.value.auditId = "";
               this.gasForm.value.customerName = "";
               this.setUpForm(this.gasForm.value);
+              document.getElementById('loader').classList.remove('loading');
             }
 
-          document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
            document.getElementById('loader').classList.remove('loading');
@@ -220,8 +222,13 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
     );
   }
 
-  findCustomer(filters, calledFor ?: string){
-    this.subscriptions.add(
+  findCustomer(){
+    this.subscriptions.add(this.subject$
+      .pipe(
+       debounceTime(AppConstant.debounceTime)  
+      , distinctUntilChanged())
+      .subscribe(
+    (filters : any) =>{
       this.loginService.performGetWithParams('findCustomers.do',filters)
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
@@ -231,8 +238,10 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
            console.log(error);
         }
       )
-    );
-  }
+    }
+    )
+  );
+}
 
   findCustomerByAuditIdOrCustomerName(calledBy){
     let filters =  this.filterForCustomer();
@@ -245,7 +254,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
     }else{
       filters = filters.delete('auditId');
     }
-    this.findCustomer(filters);
+    this.subject$.next(filters);
   }
 
   selectedSuggestion(event : any, select : string){
