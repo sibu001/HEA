@@ -37,6 +37,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
   };
   keys = TableColumnData.GAS_KEYS;
   newFilterSearch = false;
+  pageSize = AppConstant.pageSize;
   constructor(private loginService: LoginService,
     private router: Router,
     private readonly usageHistoryService: UsageHistoryService,
@@ -140,19 +141,26 @@ export class GasListComponent implements OnInit ,OnDestroy{
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
           this.getGasList(force, userId, filter);  
-          }else{
+          }
             if(this.selectedCustomer != null){
               this.getGasList(force, this.selectedCustomer.userId, filter);
               this.setUpForm( this.gasForm.value);
               this.adminFilter.formValue = this.gasForm.value;
+              this.gasForm.value.auditId = this.selectedCustomer.auditId;
+              this.gasForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm(this.gasForm.value);
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
             }
-          }
-          this.gasForm.value.auditId = this.selectedCustomer.auditId;
-          this.gasForm.value.customerName = this.selectedCustomer.user.name;
-          this.setUpForm(this.gasForm.value);
-          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+
+            if(this.selectedCustomer == null){
+              this.gasForm.value.auditId = "";
+              this.gasForm.value.customerName = "";
+              this.setUpForm(this.gasForm.value);
+            }
+          document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
+           document.getElementById('loader').classList.remove('loading');
         } 
       )
     );
@@ -179,7 +187,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
     this.usageHistoryService.getGasList().pipe(
       skipWhile((item: any) => !item),
       ).subscribe((gasList: any) => {
-          if(gasList.data.length == 10){
+          if(gasList.data.length == AppConstant.pageSize){
             this.totalElements = this.usageHistoryData.totalElements;
             this.usageHistoryData.content = gasList.data;
             this.dataSource = [...this.usageHistoryData.content];
@@ -216,7 +224,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
       .set('type','gas')
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
         .set('sortOrders[0].propertyName', ((event && event.sort &&  event.sort.active !== undefined ) && (event.sort.active = '') ? event.sort.active : 'year'))

@@ -15,6 +15,7 @@ import { CustomerService } from 'src/app/store/customer-state-management/service
 import { Transformer } from 'src/app/store/customer-state-management/transformer/transformer';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { AddFileComponent } from '../add-file/add-file.component';
 import { CustomerEventTypeComponent } from '../customer-event-type/customer-event-type.component';
@@ -48,6 +49,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   isCheckBox: boolean;
   public fileObject: any;
 
+  pageSize = AppConstant.pageSize;
   private readonly subscriptions: Subscription = new Subscription();
 
   public searchForm: FormGroup;
@@ -207,7 +209,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       this.isCheckBox = true;
       params = new HttpParams()
         .set('filter.disableTotalSize', 'false')
-        .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+        .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
         .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
           (event.pageIndex * event.pageSize) + '' : '0'))
         .set('loadCustomers', 'true')
@@ -231,7 +233,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       this.isCheckBox = false;
       params = new HttpParams()
         .set('disableTotalSize', 'false')
-        .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+        .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
         .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
           (event.pageIndex * event.pageSize) + '' : '0'))
         .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))

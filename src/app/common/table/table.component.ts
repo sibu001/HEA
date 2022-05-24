@@ -45,6 +45,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatSort) sort: MatSort;
   @Input() data: any;
+  @Input() pageSize : any;
   @Input() totalElement: any;
   @Input() pageIndex: any;
   @Input() keys: any;
@@ -178,6 +179,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
       });
       
     }
+
+    if(!this.pageSize)
+    this.pageSize = 10;
 
     this.setForm();
     if (this.isInlineEdit) {

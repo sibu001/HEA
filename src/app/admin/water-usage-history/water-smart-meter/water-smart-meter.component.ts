@@ -40,6 +40,7 @@ export class WaterSmartMeterComponent implements OnInit {
   private readonly subscriptions: Subscription = new Subscription();
   waterSmartMeterForm: FormGroup;
   newFilterSearch = false;
+  pageSize = AppConstant.pageSize;
   constructor(public router: Router, public fb: FormBuilder,
     public usageHistoryService: UsageHistoryService,
     private loginService: LoginService, 
@@ -133,20 +134,27 @@ export class WaterSmartMeterComponent implements OnInit {
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
           this.getWaterSmartMeter(force, userId, filter);  
-          }else{
+          }
             if(this.selectedCustomer != null){
               this.getWaterSmartMeter(force, this.selectedCustomer.userId, filter);
               this.setUpForm( this.waterSmartMeterForm.value);
               this.adminFilter.formValue = this.waterSmartMeterForm.value;
+              this.waterSmartMeterForm.value.auditId = this.selectedCustomer.auditId;
+              this.waterSmartMeterForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm(this.waterSmartMeterForm.value);
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
             }
-          }
-          this.waterSmartMeterForm.value.auditId = this.selectedCustomer.auditId;
-          this.waterSmartMeterForm.value.customerName = this.selectedCustomer.user.name;
-          this.setUpForm(this.waterSmartMeterForm.value);
-          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-          // document.getElementById('loader').classList.remove('loading');
+
+            if(this.selectedCustomer == null){
+              this.waterSmartMeterForm.value.auditId = "";
+              this.waterSmartMeterForm.value.customerName = "";
+              this.setUpForm(this.waterSmartMeterForm.value);
+            }
+
+          document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
+          document.getElementById('loader').classList.remove('loading');
         } 
       )
     );
@@ -174,7 +182,7 @@ export class WaterSmartMeterComponent implements OnInit {
       .pipe(skipWhile((item: any) => !item))
       .subscribe(
       (waterList: any) => {
-        if(waterList.data.length == 10){
+        if(waterList.data.length == AppConstant.pageSize){
           this.data.totalElements = Number.MAX_SAFE_INTEGER;
           this.data.content = waterList.data;
           this.totalElements = this.data.totalElements;
@@ -212,7 +220,7 @@ export class WaterSmartMeterComponent implements OnInit {
         Number(event.pageIndex) + '' : 0);
       let params = new HttpParams()
         .set('type','smartMeterWater')
-        .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+        .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
         .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
           (event.pageIndex * event.pageSize) + '' : '0'))
           .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))

@@ -35,6 +35,7 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
   disableNextButton = false;
   currentIndex = 0;
   newFilterSearch = false;
+  pageSize = AppConstant.pageSize;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -131,20 +132,26 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
           this.getElectricityDailySmartMeterList(force, userId, filter);  
-          }else{
+          }
             if(this.selectedCustomer != null){
               this.getElectricityDailySmartMeterList(force, this.selectedCustomer.userId, filter);
               this.setUpForm( this.electricityDailySmartMeterForm.value);
               this.adminFilter.formValue = this.electricityDailySmartMeterForm.value;
+              this.electricityDailySmartMeterForm.value.auditId = this.selectedCustomer.auditId;
+              this.electricityDailySmartMeterForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm(this.electricityDailySmartMeterForm.value);
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
             }
-          }
-          this.electricityDailySmartMeterForm.value.auditId = this.selectedCustomer.auditId;
-          this.electricityDailySmartMeterForm.value.customerName = this.selectedCustomer.user.name;
-          this.setUpForm(this.electricityDailySmartMeterForm.value);
-          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-        // document.getElementById('loader').classList.remove('loading');
+
+            if(this.selectedCustomer == null){
+              this.electricityDailySmartMeterForm.value.auditId = "";
+              this.electricityDailySmartMeterForm.value.customerName = "";
+              this.setUpForm(this.electricityDailySmartMeterForm.value);
+            }
+        document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
+           document.getElementById('loader').classList.remove('loading');
         } 
       )
     );
@@ -171,7 +178,7 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
     this.subscriptions.add(this.usageHistoryService.getElectricityDailySmartMeterList().pipe(skipWhile((item: any) => !item))
     .subscribe(
     (gasList: any) => {
-      if(gasList.data.length == 10){
+      if(gasList.data.length == AppConstant.pageSize){
         this.usageHistoryData.content = gasList.data;
         this.totalElements = this.usageHistoryData.totalElements;
         this.dataSource = [...this.usageHistoryData.content];
@@ -207,7 +214,7 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))

@@ -10,6 +10,7 @@ import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { ProspectsEditComponent } from '../prospects-edit/prospects-edit.component';
 
@@ -35,6 +36,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
   prospectsForm: FormGroup;
+  pageSize = AppConstant.pageSize;
   constructor(public fb: FormBuilder,
     public dialog: MatDialog,
     private readonly administrativeService: AdministrativeService,
@@ -157,7 +159,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   createParamsForRequest(event, isSearch , sortOrder){
     return new HttpParams()
     .set('disableTotalSize', 'false')
-    .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+    .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
     .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       (event.pageIndex * event.pageSize) + '' : '0'))
     .set('sortOrders[0].propertyName', (event && event.sort.active != '' && event.sort.active !== undefined ? event.sort.active : 'createdDate'))

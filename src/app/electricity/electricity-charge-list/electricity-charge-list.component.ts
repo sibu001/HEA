@@ -30,6 +30,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   };
   totalElements : any;
   currentIndex = 0;
+  pageSize = AppConstant.pageSize;
   disableNextButton = false;
   keys = TableColumnData.ELECTRICITY_CHARGE_KEYS;
   newFilterSearch = false;
@@ -93,7 +94,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
     this.subscriptions.add(this.usageHistoryService.getElectricityList().pipe(skipWhile((item: any) => !item))
     .subscribe(
     (gasList: any) => {
-      if(gasList.data.length == 10){
+      if(gasList.data.length == AppConstant.pageSize){
         this.usageHistoryData.content = gasList.data;
         this.totalElements = this.usageHistoryData.totalElements;
         this.dataSource = [...this.usageHistoryData.content];
@@ -129,7 +130,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('type', 'electricityCharge')
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       // .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
@@ -207,20 +208,27 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
           this.getEletricityList(force, userId, filter);  
-          }else{
+          }
             if(this.selectedCustomer != null){
               this.getEletricityList(force, this.selectedCustomer.userId, filter);
               this.setUpForm( this.electricityForm.value);
               this.adminFilter.formValue = this.electricityForm.value;
+              this.electricityForm.value.auditId = this.selectedCustomer.auditId;
+              this.electricityForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm(this.electricityForm.value);
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
             }
-          }
-          this.electricityForm.value.auditId = this.selectedCustomer.auditId;
-          this.electricityForm.value.customerName = this.selectedCustomer.user.name;
-          this.setUpForm(this.electricityForm.value);
-          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-        // document.getElementById('loader').classList.remove('loading');
+
+            if(this.selectedCustomer == null){
+              this.electricityForm.value.auditId = "";
+              this.electricityForm.value.customerName = "";
+              this.setUpForm(this.electricityForm.value);
+            }
+            
+        document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
+        document.getElementById('loader').classList.remove('loading');
         } 
       )
     );

@@ -166,7 +166,7 @@
                     <div class="col-sm-12">
                         <app-table [keys]="keys" [isPaginate]="true" [checkbox]="isCheckBox" [isSearch]="false"
                             [showCSVExportButton]='showCSVExportButton' [data]="dataSource"
-                            [totalElement]="CustomerData.totalElements" [pageIndex]="pageIndex"
+                            [totalElement]="CustomerData.totalElements" [pageIndex]="pageIndex" [pageSize]="pageSize"
                             (changePageEvent)="findCustomer($event,false)" (goToEditEvent)="goToEditCustomer($event)"
                             (imageEvent)='onImageClickEvent($event)' (checkBoxChangeEvent)="checkBoxChangeEvent($event)"
                             (addEvent)='addNewCustomer()' (handleLinkEvent)="handleLink($event)" class="customerTable">

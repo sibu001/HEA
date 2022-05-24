@@ -35,6 +35,7 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
   currentIndex = 0;
   disableNextButton = false;
   newFilterSearch = false;
+  pageSize = AppConstant.pageSize;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -90,37 +91,12 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
     this.usageHistoryService.loadGasSmartMeterList(force, userId, filter);
   }
 
-  // getDataFromStore(){
-  //   this.subscriptions.add(
-  //   this.usageHistoryService.getGasSmartMeterList().pipe(
-  //   skipWhile((item: any) => !item))
-  //   .subscribe((gasList: any) => {
-  //     if(gasList.data.length == 10){
-  //       this.usageHistoryData.content = gasList.data;
-  //       this.dataSource = [...this.usageHistoryData.content];
-  //       this.pageIndex = this.currentIndex;
-  //       this.disableNextButton = false;
-  //     } else {
-  //       this.disableNextButton = true;
-  //       if(gasList.data.length > 0){
-  //         this.usageHistoryData.content = gasList.data;
-  //         this.dataSource = [...this.usageHistoryData.content];
-  //       } else {
-  //       if(this.newFilterSearch)
-  //           this.dataSource = [...gasList.data]; 
-  //       this.pageIndex = this.currentIndex -1;
-  //     }}  
-  //     this.newFilterSearch = false;
-  //     }));
-
-  // }
-
   getDataFromStore(){
     this.subscriptions.add(
     this.usageHistoryService.getGasSmartMeterList().pipe(
       skipWhile((item: any) => !item),
       ).subscribe((gasList: any) => {
-          if(gasList.data.length == 10){
+          if(gasList.data.length == AppConstant.pageSize){
             this.totalElements = this.usageHistoryData.totalElements;
             this.usageHistoryData.content = gasList.data;
             this.dataSource = [...this.usageHistoryData.content];
@@ -165,20 +141,26 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
           this.getGasList(force, userId, filter);  
-          }else{
+          }
             if(this.selectedCustomer != null){
               this.getGasList(force, this.selectedCustomer.userId, filter);
               this.setUpForm( this.gasForm.value);
               this.adminFilter.formValue = this.gasForm.value;
+              this.gasForm.value.auditId = this.selectedCustomer.auditId;
+              this.gasForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm(this.gasForm.value);
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
             }
-          }
-          this.gasForm.value.auditId = this.selectedCustomer.auditId;
-          this.gasForm.value.customerName = this.selectedCustomer.user.name;
-          this.setUpForm(this.gasForm.value);
-          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
-        // document.getElementById('loader').classList.remove('loading');
+
+            if(this.selectedCustomer == null){
+              this.gasForm.value.auditId = "";
+              this.gasForm.value.customerName = "";
+              this.setUpForm(this.gasForm.value);
+            }
+        document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
+           document.getElementById('loader').classList.remove('loading');
         } 
       )
     );
@@ -200,7 +182,7 @@ export class GasSmartMeterComponent implements OnInit , OnDestroy{
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))

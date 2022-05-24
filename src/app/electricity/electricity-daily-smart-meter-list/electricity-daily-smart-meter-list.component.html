@@ -82,7 +82,7 @@
             <app-table [keys]="keys" [isPaginate]="true"
               [isHideAdd]=true [isSearch]="false" [disableLastButton]=true
               [disableNextButton]="disableNextButton"
-              [data]="dataSource"  [pageIndex]="pageIndex" 
+              [data]="dataSource"  [pageIndex]="pageIndex" [pageSize]="pageSize" 
               [totalElement]="totalElements"
               (changePageEvent)="search($event,false)">
             </app-table>

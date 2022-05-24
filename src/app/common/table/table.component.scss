@@ -255,6 +255,16 @@ mat-header-cell:last-of-type {
 .anchorClass {
   cursor: pointer;
 }
+
+.mat-row {
+  min-height: 35px;
+  line-height: 16px;
+}
+
+.mat-header-row {
+  min-height: 46px;
+}
+
 .fixed-add-button {
   position: inherit;
 }

@@ -69,7 +69,7 @@
                             [isPaginate]="true" [isHideAdd]=true
                             [isSearch]="false"  [disableLastButton]=true
                             [disableNextButton]="disableNextButton"
-                            [data]="dataSource" [pageIndex]="pageIndex"
+                            [data]="dataSource" [pageIndex]="pageIndex" [pageSize]="pageSize" 
                             [totalElement]="totalElements"
                             (goToEditEvent)='showPopUp($event)'
                             (changePageEvent)="search($event,false)">

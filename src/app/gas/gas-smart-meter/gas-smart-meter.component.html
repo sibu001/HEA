@@ -79,7 +79,7 @@
           <div class="col-sm-12">
             <p class="Messages">
               <img src="assets/images/dot03.gif" alt="dot" class="dot">&nbsp;Values</p>
-            <app-table [keys]="keys" [isPaginate]="true"
+            <app-table [keys]="keys" [isPaginate]="true" [pageSize]="pageSize"
               [isHideAdd]=true [isSearch]="false" [disableLastButton]=true [disableNextButton]="disableNextButton"
               [data]="dataSource" [pageIndex]="pageIndex"
               [totalElement]="totalElements"

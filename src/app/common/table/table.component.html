@@ -64,7 +64,7 @@
                     </div>
                     <div id='2' (click)='goToEdit(row,col);' *ngIf="col.type!='image' &&col.type!='buttons' &&
                         col.type!=='input'&&
-                        col.type!='alert' &&
+                        col.type!='alert' && col.type!='link' &&
                         !col.isDate && !col.isAction && col.type!=='checkbox' && !col.isSurvey" class="div-wh-100">
                         <div *ngIf="col.isDolar">
                              ${{row[col.key]}}
@@ -110,12 +110,16 @@
                             </button>
                         </div>
                     </div>
-                    <div id='6' *ngIf="col.type=='link' && !col.isAction">
-                        <div *ngFor='let link of col.links'>
-                            <a
-                                (click)='linkCall(link.routerLink,link.queryParam,row)'
-                                class="anchorClass">{{link.displayName}}</a>
-                        </div>
+                    <div id='6' *ngIf="col.type=='link' && !col.isAction" >
+                        <ng-container *ngFor='let link of col.links; let i = index'>
+                            <a *ngIf="i<2" (click)='linkCall(link.routerLink,link.queryParam,row)'
+                                class="anchorClass">{{link.displayName}}</a> 
+                              <ng-container *ngIf="i == 0" >{{" | "}}</ng-container>
+                            <div *ngIf="i == 2">
+                                <a (click)='linkCall(link.routerLink,link.queryParam,row)'
+                                class="anchorClass">{{link.displayName}}</a> 
+                            </div>
+                        </ng-container>
                     </div>
                     <div id='8' *ngIf="col.type=='input' && !col.isAction">
                         <div *ngIf="row.isInputEdit" [formGroup]='row.tableForm' >
@@ -249,7 +253,7 @@
             <div class="col-sm-6 col-xs-12 removePadding p-inherit">
                 <mat-paginator disableRipple="true" *ngIf="isPaginate" #paginator
                     style-paginator hidePageSize
-                    [length]="totalLength" [pageSize]="10"
+                    [length]="totalLength" [pageSize]="pageSize"
                     [pageIndex]="pageIndexNumber"
                     (page)="onChangePage($event)" showFirstLastButtons
                     class="paginatorcss p-absolute z1 mt-5"

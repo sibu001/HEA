@@ -41,6 +41,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
   private readonly subscriptions: Subscription = new Subscription();
   newFilterSearch = false;
   waterForm: FormGroup;
+  pageSize = AppConstant.pageSize;
   constructor(public router: Router, public fb: FormBuilder,
     public usageHistoryService: UsageHistoryService,
     private loginService: LoginService, 
@@ -134,19 +135,26 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
           var userId = response[0].userId;
           this.selectedCustomer = response[0];
           this.getWaterList(force, userId, filter);  
-          }else{
+          }
             if(this.selectedCustomer != null){
               this.getWaterList(force, this.selectedCustomer.userId, filter);
               this.setUpForm( this.waterForm.value);
               this.adminFilter.formValue = this.waterForm.value;
+              this.waterForm.value.auditId = this.selectedCustomer.auditId;
+              this.waterForm.value.customerName = this.selectedCustomer.user.name;
+              this.setUpForm(this.waterForm.value);
+              localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
             }
-          }
-          this.waterForm.value.auditId = this.selectedCustomer.auditId;
-          this.waterForm.value.customerName = this.selectedCustomer.user.name;
-          this.setUpForm(this.waterForm.value);
-          localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+
+            if(this.selectedCustomer == null){
+              this.waterForm.value.auditId = "";
+              this.waterForm.value.customerName = "";
+              this.setUpForm(this.waterForm.value);
+            }
+            document.getElementById('loader').classList.remove('loading');
         }, error =>{
            console.log(error);
+           document.getElementById('loader').classList.remove('loading');
         } 
       )
     );
@@ -173,7 +181,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
     this.subscriptions.add(this.usageHistoryService.getWaterList().pipe(skipWhile((item: any) => !item))
     .subscribe(
     (waterList: any) => {
-      if(waterList.data.length == 10){
+      if(waterList.data.length == AppConstant.pageSize){
         this.data.content = waterList.data;
         this.totalElements = this.data.totalElements;
         this.dataSource = [...this.data.content];  
@@ -211,7 +219,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
       .set('type','waterCharge')
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
         .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
