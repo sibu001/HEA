@@ -151,11 +151,16 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   search(event: any, isSearch: boolean): void {
     
     let sortOrder = true;
+
     if (event && event.sort.direction !== undefined) {
       if (event.sort.direction === 'desc') {
         sortOrder = false;
       }
     }
+
+    if(event && event.sort && event.sort.active == "coachUserName")
+      event.sort.active = "coachUserId";
+
     const params = this.createParamsForRequest(event, isSearch,sortOrder);
     this.findProspects(true, params);
   }
@@ -167,7 +172,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
     .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       (event.pageIndex * event.pageSize) + '' : '0'))
     .set('sortOrders[0].propertyName', (event && event.sort.active != '' && event.sort.active !== undefined ? event.sort.active : 'createdDate'))
-    .set('sortOrders[0].desc', sortOrder + '')
+    .set('sortOrders[0].asc', !sortOrder + '')
     .set('field6Like', this.prospectsForm.value.page !== undefined ?  this.prospectsForm.value.page : '')
     .set('source', this.prospectsForm.value && this.prospectsForm.value.source !== undefined ? this.prospectsForm.value.source : '')
     .set('emailLike', this.prospectsForm.value && this.prospectsForm.value.email !== undefined ? this.prospectsForm.value.email : '')

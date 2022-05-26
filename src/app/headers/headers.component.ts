@@ -173,6 +173,8 @@ export class HeadersComponent implements OnInit, AfterViewInit {
       this.router.navigate(['/surveyRecommendationList']);
     } else if (routeNumber === 9) {
       window.open(window.location.origin + '/hea-web/trendingHome.do', '_self');
+    } else if(routeNumber = 10){
+      window.open(window.location.origin + '/hea-web/customerList.do','_self');
     }
   }
   logouts(): void {

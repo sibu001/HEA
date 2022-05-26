@@ -33,6 +33,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   public force = false;
   public adminFilter: AdminFilter;
   private readonly subscriptions: Subscription = new Subscription();
+  filter : any;
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
     private readonly router: Router,
@@ -50,6 +51,8 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setUpForm(this.adminFilter.eventHistoryFilter.formValue);
     this.search(this.adminFilter.eventHistoryFilter.page, false);
+    this.getEventHistoryListFromStore();
+    this.getEventHistoryDataCountFromStore();
   }
 
   addEventHistory(): any {
@@ -73,21 +76,31 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   }
 
   findEventHistory(force: boolean, filter: any): void {
+    this.force = force;
+    this.filter = filter;
     this.adminFilter.eventHistoryFilter.formValue = this.topicForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.administrativeService.getEventHistoryCount(filter).pipe(skipWhile((item: any) => !item))
-      .subscribe((eventHistoryCount: any) => {
-        this.reportData.totalElements = eventHistoryCount.administrativeManagement.eventHistoryCount;
-        this.totalElement = eventHistoryCount.administrativeManagement.eventHistoryCount;
-        this.administrativeService.loadEventHistoryList(force, filter);
-        this.subscriptions.add(this.administrativeService.getEventHistoryList().pipe(skipWhile((item: any) => !item))
-          .subscribe((eventHistoryList: any) => {
-            this.reportData.content = eventHistoryList;
-            this.dataSource = [...this.reportData.content];
-          }));
+    this.administrativeService.getEventHistoryCount(filter);
+  }
+
+  getEventHistoryDataCountFromStore(){
+    this.subscriptions.add( this.administrativeService.getEventHistoryCountSeletor()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((eventHistoryCount: any) => {
+        this.reportData.totalElements = eventHistoryCount;
+        this.totalElement = eventHistoryCount;
+        this.administrativeService.loadEventHistoryList(this.force, this.filter);
       }));
   }
 
+  getEventHistoryListFromStore(){
+    this.subscriptions.add(this.administrativeService.getEventHistoryList()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((eventHistoryList: any) => {
+      this.reportData.content = eventHistoryList;
+      this.dataSource = [...this.reportData.content];
+    }));
+  }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.eventHistoryFilter.page = event;
