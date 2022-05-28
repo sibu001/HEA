@@ -523,14 +523,15 @@ export class TableColumnData {
     ];
 
     static readonly SHARE_MY_DATA_KEYS: Array<TABLECOLUMN> = [
-        { key: 'auditId', sort: 'auditId', isEdit: true, displayName: 'Audit Id', isUnderline: true },
+        { key: 'auditId', sort: 'auditId', isEdit: true, displayName: 'Audit Id' },
         { key: 'subscriptionId', sort: 'subscriptionId', isEdit: true, displayName: 'Subscription Id' },
         { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Created Date' },
         { key: 'account', sort: 'account', isEdit: true, displayName: 'Account' },
         { key: 'name', sort: 'name', isEdit: true, displayName: 'Name' },
         { key: 'city', sort: 'city', isEdit: true, displayName: 'City' },
         { key: 'address', sort: 'address', isEdit: true, displayName: 'Address' },
-        { key: 'createNew', isEdit: true, displayName: 'create New?' },
+        { key: 'processAsNew', isEdit: true, displayName: 'create New?', type : 'checkbox' },
+        { key: 'update', type : 'buttons' , displayName: ' '}
     ];
 
     static readonly MAIL_ARCHIVE_KEY: Array<TABLECOLUMN> = [

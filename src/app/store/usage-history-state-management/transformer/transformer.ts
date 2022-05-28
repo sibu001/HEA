@@ -23,4 +23,18 @@ export class UsageHistoryTransformer {
         });
         return { data: dataSourceList };
     }
+
+    static shareMyDataTransformer(src : any) : any {
+         src.data.forEach(
+            (item) => {
+                item.auditId = item.customer.auditId;
+                item.account = item.credential.account;
+                item.name = item.customer.user.name;
+                item.city = item.customer.city;
+                item.address = item.customer.street1;
+                item.update = [{ name : 'update', isShow : true}];
+            })
+
+            return src;
+    }
 }

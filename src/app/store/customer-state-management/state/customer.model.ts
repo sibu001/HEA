@@ -8,6 +8,7 @@ export interface CustomerManagementModel {
     utilityCredentialList: any;
     utilityCredentialDataSourceList: any;
     openedUtilityCredential : any
+    usagePoints : any;
     utilityCredential: any;
     customerEventList: any;
     customerEventListByCode: any;

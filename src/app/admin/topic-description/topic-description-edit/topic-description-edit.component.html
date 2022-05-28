@@ -45,9 +45,10 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">First Pane Or
               Section:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control" formControlName="firstPaneOrSection"
-                id="firstPaneOrSection">
-                <option *ngFor='let topic of topicData' [value]="topic.key">{{topic.value}}</option>
+              <select class="form-control" formControlName="firstPaneOrSection">
+                <option *ngFor='let topic of topicData' value="{{topic.key}}">
+                  {{topic.value}}
+                </option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -57,7 +58,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="isActive">
-                <input type="checkbox" formControlName="isActive" id="isActive">
+                <input type="checkbox" formControlName="active" id="isActive">
                 Is active
               </label>
             </div>
@@ -102,7 +103,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="showLabelUnderProgressIndicator">
                 <input type="checkbox"
-                  formControlName="showLabelUnderProgressIndicator"
+                  formControlName="showDisplayLabel"
                   id="showLabelUnderProgressIndicator">
                 Show label under progress indicator
               </label>

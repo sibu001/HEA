@@ -66,7 +66,8 @@ import {
   UpdateStaffNoteAction,
   UpdateUtilityCredentialAction,
   ValidateUtilityCredentialDataAction,
-  OpenUtilityCredentialsAction
+  OpenUtilityCredentialsAction,
+  UsagePointsAction
 } from '../state/customer.action';
 import { CustomerManagementState } from '../state/customer.state';
 
@@ -161,6 +162,10 @@ export class CustomerService {
     return this.store.select(CustomerManagementState.getUserCustomerGroupList);
   }
 
+  getUsagePoints() : Observable<any>{
+    return this.store.select(CustomerManagementState.getUsagePoints)
+  }
+
   getOptOutList(): Observable<any> {
     return this.store.select(CustomerManagementState.getOptOutList);
   }
@@ -239,6 +244,10 @@ export class CustomerService {
 
   openUtilityCredentials(customerId : any, subscriptionId: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new OpenUtilityCredentialsAction(customerId, subscriptionId));
+  }
+
+  loadUsagePoints(credentialsCodeType : string, subscriptionId : string){
+    return this.store.dispatch( new UsagePointsAction(credentialsCodeType,subscriptionId));
   }
 
   saveUtilityCredential(customerId: any, utilityCredential: any): Observable<CustomerManagementState> {

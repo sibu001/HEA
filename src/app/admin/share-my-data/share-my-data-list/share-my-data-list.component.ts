@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -24,7 +25,7 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0,
   };
-  public force = false;
+  public force = true;
   private readonly subscriptions: Subscription = new Subscription();
   myDataForm: FormGroup = this.fb.group({
     auditId: this.fb.control(['']),
@@ -32,27 +33,34 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
     subscriptionId: this.fb.control(['']),
     customerAccount: this.fb.control([''])
   });
-  constructor(public router: Router, public fb: FormBuilder, public usageHistoryService: UsageHistoryService) { }
+  constructor(public router: Router, public fb: FormBuilder,
+     public usageHistoryService: UsageHistoryService,
+     public loginService : LoginService) {
+
+      }
 
   ngOnInit() {
-    document.getElementById('loader').classList.remove('loading');
+    // document.getElementById('loader').classList.remove('loading');
     this.findShareMyData(this.force, this.createRequestParameters(undefined));
+    this.getDataFromStore();
+    this.getDataFromStoreForShareMyDataProcessCustomer();
   }
 
   findShareMyData(force: boolean, filter: any): any {
     this.usageHistoryService.loadShareMyDataList(force, filter);
+  }
+
+  getDataFromStore(){
     this.subscriptions.add(this.usageHistoryService.getShareMyDataList().pipe(skipWhile((item: any) => !item))
-      .subscribe((shareMyDataList: any) => {
-        this.data.content = shareMyDataList;
-        this.dataSource = [...this.data.content];
-      }));
+    .subscribe((shareMyDataList: any) => {
+      this.data.content = shareMyDataList;
+      this.dataSource = [...this.data.content];
+      console.log(shareMyDataList);
+    }));
   }
 
   search(event: any): void {
     const filter = '?filter.startRow=0&formAction='
-      // + (event !== undefined && event.active !== undefined ? 'sort' : '') + '&sortField='
-      // + (event !== undefined && event.sort.active !== undefined ? event.sort.active : '') + '&sortOrder='
-      // + (event !== undefined && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC')
       + '&auditId=' + this.myDataForm.value.auditId
       + '&name=' + this.myDataForm.value.customerName
       + '&subscriptionId=' + this.myDataForm.value.subscriptionId
@@ -70,19 +78,34 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
     + '&useGbaUsagePointTable=' + ( event !== undefined && event.useGbaUsagePointTable !== undefined ? event.useGbaUsagePointTable : true)
     + '&loadFromFiles=' + ( event !== undefined && event.loadFromFiles !== undefined ? event.loadFromFiles : false)
     + '&clearData=' + (event !== undefined && event.clearData !== undefined ? event.clearData : true);
-    // return new HttpParams()
-    // .set('auditId',this.myDataForm.value.auditId !== undefined ? this.myDataForm.value.auditId : '')
-    // .set('clearData','')
-    // .set('customerAccount',this.myDataForm.value.auditId !== undefined ? this.myDataForm.value.auditId : '')
-    // .set('loadFromFiles','')
-    // .set('name',this.myDataForm.value.auditId !== undefined ? this.myDataForm.value.auditId : '')
-    // .set('subscriptionId',this.myDataForm.value.auditId !== undefined ? this.myDataForm.value.auditId : '')
-    // .set('useGbaUsagePointTable','')
   }
 
-  goToEditShareMyData(event: any): any { }
 
-  update(): any { }
+  shareMyDataProcesConsumerFilter(event) : HttpParams{
+    return new HttpParams()
+      .set('customerRef',event.subscriptionId)
+      .set('processAsNew', "" + (!event.optional && event.optional == false ? false : true) );
+  }
+
+  buttonUpdateEvent(event){
+    const httpsParams = this.shareMyDataProcesConsumerFilter(event.row);
+    this.shareMyDataProcessCustomer(httpsParams);
+  }
+
+  shareMyDataProcessCustomer(filters){
+    this.usageHistoryService.loadShareMyDataProcessCustomer(filters);
+  }
+
+  getDataFromStoreForShareMyDataProcessCustomer(){
+    this.subscriptions.add(
+        this.usageHistoryService.getShareMyStateProcessConsumer()
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          (item) => {
+              console.log(item);
+          }, error => console.log(error)
+          ))
+  }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

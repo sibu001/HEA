@@ -6,6 +6,7 @@ export enum UsageHistoryActionTypes {
     GET_GAS_LIST = 'Get All Gas List',
     GET_GAS_BY_ID = 'Get Gas By Id',
     UPDATE_GAS = 'Update Gas',
+    SHARE_MY_DATA_PROCESS_CUSTOMER = 'Share My Data Process Customer',
     DELETE_GAS_BY_ID = 'Delete Gas By Id',
     GET_GAS_CHARGE_LIST = 'Get All Gas Charge List',
     GET_GAS_CHARGE_BY_ID = 'Get Gas Charge By Id',
@@ -51,6 +52,11 @@ export class GetShareMyDataListAction {
     static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.GET_SHARE_MY_DATA_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
     }
+}
+
+export class ShareMyProcessCustomerAction{
+    static readonly type: UsageHistoryActionTypes = UsageHistoryActionTypes.SHARE_MY_DATA_PROCESS_CUSTOMER;
+    constructor(readonly filters : any) {}
 }
 
 export class GetShareMyDataByIdAction {

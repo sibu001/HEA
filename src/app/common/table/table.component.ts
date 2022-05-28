@@ -312,7 +312,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   checkBoxChangeOptional(event: any, row: any) {
     const i = this.dataSource.data.findIndex((item: any) => item.groupCode === row.groupCode);
     if (i !== -1) {
-      this.dataSource.data[i].optional = event.checked;
+      this.dataSource.data[i].optional = event.checked; 
     }
     this.checkBoxChangeEvent.emit(this.selection.selected);
   }

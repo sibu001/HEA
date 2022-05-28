@@ -73,6 +73,7 @@ export class AppConstant {
     public static keyIndicatorCustomerGroups = '';
     public static trendingParts = '';
     public static shareMyDataList = 'shareMyDataCustomerList.do';
+    public static shareMyDataProcessCustomer = 'shareMyDataProcessCustomer.do'
     public static shareMyData = '';
     public static gasList = 'gas';
     public static gas = 'gas';

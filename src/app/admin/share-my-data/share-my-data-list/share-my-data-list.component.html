@@ -5,23 +5,7 @@
         <p class="heading">
           Share My Data
         </p>
-        <form [formGroup]='myDataForm'>
-          <div class="row rowPadding borderBottom">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <span class="filterLabel">Audit Id:</span>
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='auditId' id='auditId'>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <span class="filterLabel">Customer Name:</span>
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-              <input type="text" class="form-control" formControlName='customerName' id='customerName'>
-            </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
-          </div>
+        <form [formGroup]='myDataForm'> 
           <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
@@ -46,7 +30,7 @@
           <div class="paddingTop">
             <app-table [keys]="keys" [isSearch]="false" [data]="dataSource" [checkbox]=true [isHideAdd]=true
               [totalElement]="data.totalElements" (changePageEvent)='search($event)' [isPaginate]=true
-              (goToEditEvent)='goToEditShareMyData($event)'>
+              (buttonListEvent)="buttonUpdateEvent($event)">
             </app-table>
           </div>
           <div class="row rowPadding">

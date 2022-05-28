@@ -71,7 +71,8 @@ import {
     UpdateStaffNoteAction,
     UpdateUtilityCredentialAction,
     ValidateUtilityCredentialDataAction,
-    OpenUtilityCredentialsAction
+    OpenUtilityCredentialsAction,
+    UsagePointsAction
 } from './customer.action';
 import { CustomerManagementModel } from './customer.model';
 
@@ -118,6 +119,7 @@ import { CustomerManagementModel } from './customer.model';
         weatherStation: undefined,
         error: undefined,
         openedUtilityCredential : undefined,
+        usagePoints : undefined
     }
 })
 
@@ -249,6 +251,11 @@ export class CustomerManagementState {
     @Selector()
     static getUserCustomerGroupList(state: CustomerManagementModel): any {
         return state.userCustomerGroupList;
+    }
+
+    @Selector()
+    static getUsagePoints(state: CustomerManagementModel): any {
+        return state.usagePoints;
     }
 
     @Selector()
@@ -634,6 +641,23 @@ export class CustomerManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
                         openedUtilityCredential: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(UsagePointsAction)
+    loadUsagePointsAction(ctx :StateContext<CustomerManagementModel> , action : UsagePointsAction) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet("usagePoints/" +action.customerCredentialsCode + "/" + action.subscriptionId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        usagePoints: response.data,
                     });
                 },
                     error => {

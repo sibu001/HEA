@@ -16,6 +16,7 @@ export enum SystemActionTypes {
     GET_UTILITY_CREDENTIAL_BY_ID = 'Get Utility Credential By Id',
     SAVE_UTILITY_CREDENTIAL = 'Save Utility Credential',
     UPDATE_UTILITY_CREDENTIAL = 'Update Utility Credential',
+    USAGE_POINTS = 'Usage Points',
     DELETE_UTILITY_CREDENTIAL_BY_ID = 'Delete Utility Credential By Id',
     GET_CUSTOMER_EVENT_LIST = 'Get All Customer Event List',
     GET_CUSTOMER_EVENT_BY_ID = 'Get Customer Event By Id',
@@ -167,6 +168,11 @@ export class OpenUtilityCredentialsAction{
     static readonly type = SystemActionTypes.OPENED_UTILIY_CREDENTIALS;
     constructor(readonly customerId: any, readonly subscriptionId: any) {
     }
+}
+
+export class UsagePointsAction{
+    static readonly type : SystemActionTypes = SystemActionTypes.USAGE_POINTS; 
+    constructor(readonly customerCredentialsCode : string , readonly subscriptionId : string){}
 }
 
 export class SaveUtilityCredentialAction {

@@ -1,3 +1,4 @@
+import { ShareMyProcessCustomerAction } from './usage-history.action';
 // import { LoadTopicDescriptionPaneByIdAction } from './../../topic-state-management/state/topic.action';
 import { Injectable } from '@angular/core';
 import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
@@ -82,6 +83,7 @@ import { UsageHistoryManagementModel } from './usage-history.model';
         waterCharge: undefined,
         waterSmartMeterList: undefined,
         waterSmartMeter: undefined,
+        shareMyCustomerProcess : undefined
         },
 })
 @Injectable()
@@ -95,6 +97,11 @@ export class UsageHistoryManagementState {
     @Selector()
     static getShareMyDataList(state: UsageHistoryManagementModel): any {
         return state.shareMyDataList;
+    }
+
+    @Selector() 
+    static getShareMyCustomerProcess(state : UsageHistoryManagementModel): any{
+        return state.shareMyCustomerProcess;
     }
 
     // gas selector
@@ -184,9 +191,10 @@ export class UsageHistoryManagementState {
                 .pipe(
                     tap(
                         (response: any) => {
+                            response =  UsageHistoryTransformer.shareMyDataTransformer(response);
                             document.getElementById('loader').classList.remove('loading');
                             ctx.patchState({
-                                shareMyDataList: response,
+                                shareMyDataList: response.data,
                             });
                         },
                         (error) => {
@@ -197,6 +205,27 @@ export class UsageHistoryManagementState {
                 );
         }
         return result;
+    }
+
+    @Action(ShareMyProcessCustomerAction)
+    loadShareMyProcessCustomer(ctx : StateContext<UsageHistoryManagementModel>, action: ShareMyProcessCustomerAction) : Actions{
+            document.getElementById('loader').classList.add('loading');
+            return this.loginService
+                .performGetWithParams(AppConstant.shareMyDataProcessCustomer,action.filters)
+                .pipe(
+                    tap(
+                        (response: any) => {
+                            document.getElementById('loader').classList.remove('loading');
+                            ctx.patchState({
+                                shareMyCustomerProcess: response.dataFileList,
+                            });
+                        },
+                        (error) => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.errorMessage);
+                        }
+                    )
+                );    
     }
 
     @Action(GetShareMyDataByIdAction)

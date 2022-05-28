@@ -1,4 +1,4 @@
-import { DeleteSelectedUsageHistory, UpdateUsageServiceByUsageServiceId } from './../state/usage-history.action';
+import { DeleteSelectedUsageHistory, UpdateUsageServiceByUsageServiceId, ShareMyProcessCustomerAction } from './../state/usage-history.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -69,6 +69,10 @@ export class UsageHistoryService {
     return this.store.select(UsageHistoryManagementState.getGasChargeList);
   }
 
+  getShareMyStateProcessConsumer()  : Observable<any>{
+    return this.store.select(UsageHistoryManagementState.getShareMyCustomerProcess);
+  }
+
   getGasSmartMeterList(): Observable<any> {
     return this.store.select(UsageHistoryManagementState.getGasSmartMeterList);
   }
@@ -107,6 +111,10 @@ export class UsageHistoryService {
 
   loadShareMyDataList(force: boolean, filter: any): Observable<UsageHistoryManagementState> {
     return this.store.dispatch(new GetShareMyDataListAction(force, filter));
+  }
+
+  loadShareMyDataProcessCustomer(filters : any){
+    return this.store.dispatch(new ShareMyProcessCustomerAction(filters));
   }
 
   GetShareMyDataByIdAction(id: number): Observable<UsageHistoryManagementState> {

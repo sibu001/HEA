@@ -59,7 +59,7 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
         </select>`
       }]
   };
-  topicData = TableColumnData.TOPIC_DESCRIPTION_SELECT_DATA;
+  topicData = TableColumnData.PANE_DATA;
   nextTopicCode = [];
 
   public customerGroupList : any;
@@ -148,12 +148,12 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
       displayLabel: [event !== undefined ? event.reportLabel : '', Validators.required],
       reportLabel: [event !== undefined ? event.reportLabel : '', Validators.required],
       description: [event !== undefined ? event.description : ''],
-      firstPaneOrSection: [event !== undefined ? event.firstPaneOrSection : ''],
-      isActive: [event !== undefined ? event.isActive : ''],
+      firstPaneOrSection: [event !== undefined ?  this.getSelectedPaneOrSection(event).key : ''],
+      active: [event !== undefined ? event.active : ''],
       permanent: [event !== undefined ? event.permanent : ''],
       mandatory: [event !== undefined ? event.mandatory : ''],
       showProgressIndicator: [event !== undefined ? event.showProgressIndicator : ''],
-      showLabelUnderProgressIndicator: [event !== undefined ? event.showLabelUnderProgressIndicator : ''],
+      showDisplayLabel: [event !== undefined ? event.showDisplayLabel : ''],
       showLeaks: [event !== undefined ? event.showLeaks : ''],
       showUnique: [event !== undefined ? event.showUnique : ''],
       showRightMenu: [event !== undefined ? event.showRightMenu : ''],
@@ -167,6 +167,18 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
       comments: [event !== undefined ? event.comments : ''],
       isRerunTopic: [event !== undefined ? event.isRerunTopic : ''],
     });
+  }
+
+
+  getSelectedPaneOrSection(event){
+    let ele;
+     for(let item of this.topicData){
+        if (item.key == event.firstPaneId){
+          ele = item;
+          break;
+        }
+     }
+     return ele;
   }
 
   topicCheckBoxChangeEvent(event: any) {

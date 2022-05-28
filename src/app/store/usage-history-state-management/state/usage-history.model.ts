@@ -1,6 +1,7 @@
 export interface UsageHistoryManagementModel {
     shareMyDataList: any;
     shareMyData: any;
+    shareMyCustomerProcess : any;
     gasList: any;
     gas: any;
     gasChargeList: any;

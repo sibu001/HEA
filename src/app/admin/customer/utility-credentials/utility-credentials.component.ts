@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, ElementRef, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnDestroy, OnInit } from '@angular/core';
 import { d } from '@angular/core/src/render3';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
@@ -8,13 +8,14 @@ import { skipWhile } from 'rxjs/operators';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { AppUtility } from 'src/app/utility/app.utility';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
   selector: 'app-utility-credentials',
   templateUrl: './utility-credentials.component.html',
   styleUrls: ['./utility-credentials.component.css']
 })
-export class UtilityCredentialsComponent implements OnInit {
+export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   utilityCredentialForm: FormGroup;
   credentialTypeList: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
@@ -23,7 +24,7 @@ export class UtilityCredentialsComponent implements OnInit {
   public removeOldBills: boolean = false;
   public heatingServiceIds: Array<any>;
   public electricServiceIds: Array<any>;
-
+  public usagePointsData  = { oauthRefreshToken : "", authScope : ""};
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
@@ -32,6 +33,10 @@ export class UtilityCredentialsComponent implements OnInit {
     public dialogRef: MatDialogRef<UtilityCredentialsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
+  }
+  
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 
   ngOnInit() {
@@ -43,10 +48,23 @@ export class UtilityCredentialsComponent implements OnInit {
         .subscribe((response) => {
           console.log("new response" + JSON.stringify(response));
           this.setForm(response);
+          this.getUsgaePoints(response.data);
           this.electricityInUse = response.data.credential.electricityInUse;
           this.heatingInUse = response.data.credential.heatingInUse;
         }));
     }
+  }
+
+  getUsgaePoints(event){
+    this.customerService.loadUsagePoints(event.credential.credentialTypeCode, event.credential.subscriptionId);
+    this.subscriptions.add(this.customerService.getUsagePoints()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe(
+      (usagePoints: any) => {
+          this.usagePointsData = usagePoints;
+      }, error => { console.error(error)}
+    ));
+
   }
 
   showSelectedServiceId(event : any, serviceId : string ,list :any) {
@@ -58,14 +76,6 @@ export class UtilityCredentialsComponent implements OnInit {
       selectedId = event.credential.heatingServiceId;
 
     return list.map( (services) => services.customerAgreement).indexOf(selectedId);
-
-  //  let selectedService =  event.serviceIds.find(
-  //     (item) => {
-  //       if(selectedId == item.customerAgreement) 
-  //         return true;
-  //       else 
-  //         return false;
-  //     });
   }
 
   findCredentialType(force: boolean, filter: string): void {
