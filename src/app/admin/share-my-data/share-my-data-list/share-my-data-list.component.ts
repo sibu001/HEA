@@ -107,6 +107,10 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
           ))
   }
 
+	  goToEditShareMyData(event: any): any { }
+  	
+    update(): any { }
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
