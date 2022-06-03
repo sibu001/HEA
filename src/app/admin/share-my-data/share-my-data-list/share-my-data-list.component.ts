@@ -26,6 +26,8 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
     totalElements: 0,
   };
   public force = true;
+  selectionList = [];
+  processDataCustomer : any;
   private readonly subscriptions: Subscription = new Subscription();
   myDataForm: FormGroup = this.fb.group({
     auditId: this.fb.control(['']),
@@ -55,6 +57,7 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
     .subscribe((shareMyDataList: any) => {
       this.data.content = shareMyDataList;
       this.dataSource = [...this.data.content];
+      this.processDataCustomer = [];
       console.log(shareMyDataList);
     }));
   }
@@ -97,19 +100,54 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
   }
 
   getDataFromStoreForShareMyDataProcessCustomer(){
+
     this.subscriptions.add(
         this.usageHistoryService.getShareMyStateProcessConsumer()
         .pipe(skipWhile((item: any) => !item))
         .subscribe(
           (item) => {
-              console.log(item);
-          }, error => console.log(error)
+              this.processDataCustomer = [];
+              let storeData = [];
+              let tempList = item;  
+            if(tempList.error == null){
+              tempList.dataFileList.forEach( (item) =>{ storeData.push(item.fileName);} )
+              this.processDataCustomer = { customerRef : item.customerRef , dataFileList : storeData , error : null};
+            }else {
+              this.processDataCustomer = { customerRef : item.customerRef , dataFileList : [] , error : tempList.error};
+            }
+              console.log(this.processDataCustomer);
+          }, error => console.error(error)
           ))
+  }
+
+
+  getAllSelectedItems(event){
+    this.selectionList = event;
   }
 
 	  goToEditShareMyData(event: any): any { }
   	
-    update(): any { }
+    update(): any {
+      let inputList = []
+      if(this.selectionList.length != 0){
+        this.selectionList.map(
+          (item) =>{
+            inputList.push({ "customerRef" : item.subscriptionId , "processAsNew" : (!item.optional && item.optional == false ? false : true)})
+          })}
+
+    document.getElementById('loader1').classList.add('row-loader-visibility');
+    this.subscriptions.add(
+      this.loginService.performPost
+      (inputList,'shareMyDataProcessCustomerList.do')
+      .subscribe(
+          (response) => {
+            document.getElementById('loader1').classList.remove('row-loader-visibility');
+            console.log(response)
+          }, error =>  { 
+            document.getElementById('loader1').classList.remove('row-loader-visibility');
+            console.error(error);}
+      ))
+     }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

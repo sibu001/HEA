@@ -25,7 +25,8 @@ export class AppConstant {
     public static validateNewPassword = 'users/validate/password';
     public static saveNewPassword = 'password';
     public static userCustomerGroups = 'userCustomerGroups';
-    public static lookupValues = 'lookupValues';
+    public static lookupBaseURL = 'lookups/';
+    public static lookupValues = '/lookupValues';
     public static themes = 'themes';
     public static mailDescription = 'mailDescriptions';
     public static mailConfiguration = 'mailConfigurations';
@@ -48,6 +49,8 @@ export class AppConstant {
     public static eC2Instance = 'ec2Servers';
     public static alertMessage = 'alertMessageTypes';
     public static topicDescription = 'surveyDescriptions';
+    public static topicDescritptionVariable = 'surveyDescriptionVariables';
+    public static findTopicDescriptionVariables = 'findSurveyDescriptionVariables.do';
     public static contextMethod = 'context/methods';
     public static paidService = 'paidServices';
     public static administrativeReport = 'adminReports';
@@ -106,4 +109,5 @@ export class AppConstant {
     public static meters = 'meters';
     public static pageSize = '25';
     public static debounceTime = 700;
+    public static lookUpCalculationPeriod = 'VARIABLE_PERIOD';
 }

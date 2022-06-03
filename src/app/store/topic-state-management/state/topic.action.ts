@@ -7,7 +7,11 @@ export enum TopicActionTypes {
     GET_CONTEXT_METHOD_LIST = 'Get context Method List',
     SCRIPT_DEBUG = 'Debug Script',
     GET_PAID_SERVICE = 'Get Paid Service List',
-    LOAD_TOPIC_DESCRIPTION_PANE_BY_ID = 'Load Topic Description Pane By Id'
+    LOAD_TOPIC_DESCRIPTION_PANE_BY_ID = 'Load Topic Description Pane By Id',
+    LOAD_TOPIC_VARIABLES = 'Load Topic Variables',
+    LOAD_LOOK_UP_CALCULATION_PERIOD = 'Load Look Up Calculation Period',
+    LOAD_SELECTED_TOPIC_DESCRIPTION_VARIABLES = 'Load Selected Topic Description Variables',
+    
 }
 export class GetTopicDescriptionListAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_LIST;
@@ -19,6 +23,21 @@ export class GetTopicDescriptionByIdAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_BY_ID;
     constructor(readonly id: number) {
     }
+}
+
+export class LoadLookUpCalculationPeriodAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_LOOK_UP_CALCULATION_PERIOD;
+    constructor(readonly type : string) { }
+}
+
+export class LoadSelectedTopicDescriptionVariableAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_SELECTED_TOPIC_DESCRIPTION_VARIABLES;
+    constructor(readonly id : string , readonly surevyDescriptionId : string) { }
+}
+
+export class LoadTopicVariablesAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_TOPIC_VARIABLES;
+    constructor(readonly id : number) {}
 }
 
 export class SaveTopicDescriptionAction {

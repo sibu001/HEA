@@ -209,19 +209,19 @@ export class UsageHistoryManagementState {
 
     @Action(ShareMyProcessCustomerAction)
     loadShareMyProcessCustomer(ctx : StateContext<UsageHistoryManagementModel>, action: ShareMyProcessCustomerAction) : Actions{
-            document.getElementById('loader').classList.add('loading');
+            // document.getElementById('loader1').classList.add('row-loader-visibility');
             return this.loginService
                 .performGetWithParams(AppConstant.shareMyDataProcessCustomer,action.filters)
                 .pipe(
                     tap(
                         (response: any) => {
-                            document.getElementById('loader').classList.remove('loading');
+                            document.getElementById('loader1').classList.remove('row-loader-visibility');
                             ctx.patchState({
-                                shareMyCustomerProcess: response.dataFileList,
+                                shareMyCustomerProcess: response,
                             });
                         },
                         (error) => {
-                            document.getElementById('loader').classList.remove('loading');
+                            document.getElementById('loader1').classList.remove('row-loader-visibility');
                             this.utilityService.showErrorMessage(error.errorMessage);
                         }
                     )

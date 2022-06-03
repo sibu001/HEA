@@ -1420,3 +1420,7 @@ section.space-top {
   margin-top: 5em !important;
   margin-bottom: 1em;
 }
+
+.row-loader-visibility{
+  visibility: visible !important;
+}

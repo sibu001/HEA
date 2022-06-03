@@ -8,12 +8,12 @@ import {
   LinkService,
   ToolbarService
 } from '@syncfusion/ej2-angular-richtexteditor';
-import { Subscription } from 'rxjs';
+import { pipe, Subject, Subscription } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
-import { skipWhile } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, skipWhile } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { templateJitUrl } from '@angular/compiler';
 import { LoginService } from 'src/app/services/login.service';
@@ -40,6 +40,12 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0,
   };
+  topicVariableDataList = [];
+  public topicVariableTableData = {
+    content: [],
+    totalElements: 0,
+  };
+  suggestionListTopicVariables = [];
   private readonly subscriptions: Subscription = new Subscription();
   public tools: object = {
     items: ['Undo', 'Redo', '|',
@@ -61,7 +67,7 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
   };
   topicData = TableColumnData.PANE_DATA;
   nextTopicCode = [];
-
+  public nextPermanentTopic = [];
   public customerGroupList : any;
   public selectionCustomerGroupList : any;
   public topicPaneDataSource : any;
@@ -77,23 +83,24 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
-
-
   }
 
   ngOnInit() {
+    this.getCalculationValueFromStore();
     this.keys = TableColumnData.CUSTOMER_GROUP_KEY;
     this.topicPaneKeys = TableColumnData.TOPIC_PANE_KEY;
     this.recommendationKeys = TableColumnData.RECOMMENDATION_KEY;
     this.topicVariablesKeys = TableColumnData.TOPIC_VARIABLES_KEYS;
-    
     this.loadcustomerGroups();
       this.setForm(undefined);
-
+    
       if(this.id){
+        this.getTopicVariableDataFromStore();
+        this.getPermanentTopicListFromStore();
         this.loadTopicDescription();
         this.loadCustomerGroupById();
-        this.loadTopicPanesById();
+        this.loadTopicVariable();
+        this.loadPermanentTopicList();
       }
   }
 
@@ -101,8 +108,8 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
     this.topicService.loadTopicDescriptionById(this.id);
     this.subscriptions.add(this.topicService.getTopicDescriptionById().pipe(skipWhile((item: any) => !item))
     .subscribe((topicDescription: any) => {
-      this.topicDescriptionData = topicDescription;            
-      this.setForm(this.topicDescriptionData);
+      this.topicDescriptionData = topicDescription;
+      this.loadTopicPanesById();
     }));
   }
 
@@ -115,7 +122,6 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
   }
 
    loadCustomerGroupById(){
-     
     this.selectionCustomerGroupList = [];
     this.subscriptions.add(
       this.loginService.performGet(AppConstant.topicDescription + '/' + this.id + '/surveyDescriptionGroups')
@@ -130,13 +136,47 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
       }));
    }
 
+   getCalculationValueFromStore(){
+    this.subscriptions.add(
+      this.topicService.getLookUpCalculationPeriod()
+      .pipe(skipWhile((item: any) => !item)
+      ).subscribe(
+        (response: any) =>{
+            for(let item of response){
+               for(let data of this.topicVariableDataList){
+                 if(data.calculationPeriod == item.lookupValue){
+                   data.calculationPeriodActual = item.valueName;
+                  //  break;
+                 }
+               }}
+           this.topicVariableTableData.content = [...this.topicVariableDataList];
+        })
+      )
+  }
+
+  findTopicVaribles(){
+    this.subscriptions.add(
+      this.loginService.performGet(AppConstant.findTopicDescriptionVariables )
+    )
+  }
+
+   loadLookUpCalculationPeriod(){
+     this.topicService.loadLookUpCalculationPeriod(AppConstant.lookUpCalculationPeriod);
+   }
 
    loadTopicPanesById(){
      this.topicPaneDataSource = [];
      this.subscriptions.add(
       this.loginService.performGet(AppConstant.topicDescription + '/' + this.id + '/panes')
       .subscribe((dataList : any) => {
-      this.topicPaneDataSource = dataList;
+          this.topicPaneDataSource = [...dataList];  
+          for(let topic of dataList){
+             if(topic.id == this.topicDescriptionData.firstPaneId){
+              this.topicForm.get('firstPaneOrSection').setValue(topic.id);
+             }
+          }
+
+          this.setForm(this.topicDescriptionData);
       },(error : any)  => {
         console.log("some error has occurred.");
       }));
@@ -148,7 +188,7 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
       displayLabel: [event !== undefined ? event.reportLabel : '', Validators.required],
       reportLabel: [event !== undefined ? event.reportLabel : '', Validators.required],
       description: [event !== undefined ? event.description : ''],
-      firstPaneOrSection: [event !== undefined ?  this.getSelectedPaneOrSection(event).key : ''],
+      firstPaneOrSection: [event !== undefined ?  '' : ''],
       active: [event !== undefined ? event.active : ''],
       permanent: [event !== undefined ? event.permanent : ''],
       mandatory: [event !== undefined ? event.mandatory : ''],
@@ -158,7 +198,7 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
       showUnique: [event !== undefined ? event.showUnique : ''],
       showRightMenu: [event !== undefined ? event.showRightMenu : ''],
       showTopMenu: [event !== undefined ? event.showTopMenu : ''],
-      nextTopic: [event !== undefined ? event.nextTopic : ''],
+      nextTopic: [event !== undefined ? this.selectNextPermanentTopic() : ''],
       allowPublic: [event !== undefined ? event.allowPublic : ''],
       messageForSurveyUnloadEvent: [event !== undefined ? event.messageForSurveyUnloadEvent : ''],
       topMenu: [event !== undefined ? event.showTopMenu : ''],
@@ -170,20 +210,61 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
   }
 
 
-  getSelectedPaneOrSection(event){
-    let ele;
-     for(let item of this.topicData){
-        if (item.key == event.firstPaneId){
-          ele = item;
-          break;
-        }
-     }
-     return ele;
+selectNextPermanentTopic(){
+
+  let index ;
+  for(let i = 0; i < this.nextPermanentTopic.length ; i++) {
+   if(this.id == this.nextPermanentTopic[i].id) {
+      index = i;
+      break;
+   }
   }
+  if(index + 1 == this.nextPermanentTopic.length) 
+    return ' '
+  else
+    return this.nextPermanentTopic[index + 1].id;
+}
+
+loadPermanentTopicList(){
+  this.topicService.loadTopicDescriptionList(true, '');
+}
+
+getPermanentTopicListFromStore(){
+  this.subscriptions.add(this.topicService.getTopicDescriptionList()
+  .pipe(skipWhile((item: any) => !item))
+  .subscribe((topicDescriptionList: any) => {
+    this.nextPermanentTopic = [...topicDescriptionList];
+    this.nextPermanentTopic.splice(0, 0, {});
+  }));
+}
+
+GetSuggestionListForFilter(event){
+    this.subscriptions.add(
+      this.loginService.performGet(AppConstant.findTopicDescriptionVariables + '?field=' + event.search)
+      .pipe(
+        distinctUntilChanged(),
+        debounceTime(AppConstant.debounceTime)
+      ).subscribe(
+        (response) =>{
+          let formatedList = [];
+          if(response){
+            if(response.length == 1){
+              this.goToEditTopicVariables(response[0]);
+            } else{
+              response.forEach(
+                (item) =>{formatedList.push({value : item.field , show : item.field});}
+              )
+              this.suggestionListTopicVariables = formatedList ;
+            }}else{
+            this.suggestionListTopicVariables = formatedList ;
+          }
+        },error =>{ console.error(error) }
+      )
+    )
+}
 
   topicCheckBoxChangeEvent(event: any) {
     this.selectionCustomerGroupList = [...event];
-    // this.topicGroupCheckBox = event;
   }
 
   back() {
@@ -197,7 +278,24 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
 
   ReInitTopic(): any { }
 
-  addTopicPanes(): any {
+  loadTopicVariable(){
+    this.topicService.loadTopicVariables(this.id);
+  }
+
+  getTopicVariableDataFromStore(){
+    this.subscriptions.add(this.topicService.getTopicVariable()
+      .pipe(
+        skipWhile((item: any) => !item)
+      ).subscribe(
+        (response) =>{
+          this.topicVariableDataList = response;
+          this.loadLookUpCalculationPeriod();
+        } , error => { console.error(error)}
+      )
+      )
+  }
+
+  addTopicPanes(): any {      
     this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit']);
   }
 
@@ -219,7 +317,7 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
   }
 
   goToEditTopicVariables(event: any): any {
-    this.router.navigate(['/admin/topicDescription/topicDescriptionVariableEdit'], { queryParams: { id: event } });
+    this.router.navigate(['/admin/topicDescription/topicDescriptionVariableEdit'], { queryParams: { id: event.id , surveyDescriptionId : event.surveyDescriptionId , topicDescription : this.topicDescriptionData.surveyCode + ", " + this.topicDescriptionData.label  } });
   }
 
   ngOnDestroy(): void {

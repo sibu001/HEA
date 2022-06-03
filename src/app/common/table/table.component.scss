@@ -352,3 +352,26 @@ tr.example-element-row:not(.example-expanded-row):active {
     display: grid;
     align-items: center;
 }
+
+.toTop{
+  align-items: baseline !important;
+  // font-size : 12px;
+}
+
+.reduce-font-size{
+   font-size : 12px;
+}
+  
+.exp-col{
+  flex-basis : 22%;
+}
+
+.row-loader-props{
+  width : 22px;
+  display : inline;
+}
+
+.row-loader-div{
+  display: inline-block;
+  visibility: hidden;
+}

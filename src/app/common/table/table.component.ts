@@ -2,6 +2,7 @@ import {
   Component,
   OnInit,
   ViewChild,
+  ViewChildren,
   Input,
   OnChanges,
   SimpleChanges,
@@ -11,14 +12,20 @@ import {
   AfterViewInit,
   ElementRef,
   AfterViewChecked,
+  QueryList,
+  OnDestroy,
 } from '@angular/core';
 import { Page } from '../../models/page';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { fromEvent, Subscription } from 'rxjs';
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { AppConstant } from 'src/app/utility/app.constant';
 
 export interface UserData {
   id: string;
@@ -40,7 +47,7 @@ export interface UserData {
     ]),
   ],
 })
-export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterViewChecked{
+export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterViewChecked, OnDestroy {
   displayedColumns = [];
   dataSource: MatTableDataSource<any>;
   @ViewChild(MatSort) sort: MatSort;
@@ -59,6 +66,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() isHideAdd = false;
   @Input() showDeleteButton = false;
   @Input() showCSVExportButton = false;
+  @Input() suggestionList = [];
   @Input() isFilePreview = false;
   @Input() showAddRowButton = false;
   @Input() showAddInputButton = false;
@@ -68,6 +76,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() sortStateData: any;
   @Input() disableLastButton = false;
   @Input() disableNextButton;
+  @Input() showSuggestionList = false;
+  @Input() pushedData: any;
+  @Input() showRowLoader = false;
+  @Input() showPushedDataPerRow = false;
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
@@ -89,6 +101,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
   @ViewChild('paginator') paginator : ElementRef;
   @ViewChild('paginator') matPaginator : MatPaginator;
+  @ViewChild('inputSuggestionField') inputSuggestionField;
   expandedElement: any = [];
   showInput = false;
   showRowInput = false;
@@ -101,13 +114,15 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   selectionOptional = new SelectionModel<any>(true, []);
   tableForm: FormGroup = this.formBuilder.group({});
   tableValueFormArray = new FormArray([]);
+  alterTable = false;
+  subscriptions : Subscription = new Subscription();
+  pushedDataArrayPerRow = new Array<any>();
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   constructor(
     private ElByClassName: ElementRef,
     private changeDetectorRefs: ChangeDetectorRef,  
     private formBuilder: FormBuilder
   ) { }
- 
 
   ngAfterViewChecked(): void {
     if(this.disableNextButton == true){
@@ -140,11 +155,20 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   }
 
   ngAfterViewInit() {
-    // this.changeSort(this.sortStateData);
+
+    if(this.showSuggestionList == true){
+      this.subscriptions.add(
+        fromEvent(this.inputSuggestionField.nativeElement,'keyup')
+        .pipe(
+          debounceTime(AppConstant.debounceTime)
+        ).subscribe((response : any) =>{
+            this.applyFilter(this.inputSuggestionField.nativeElement.value);}))
+    }
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] && changes['data'].currentValue) {
+      this.pushedDataArrayPerRow = new Array<any>(this.data.length);
       this.selection.clear();
       this.data = changes['data'].currentValue;
       this.totalLength = this.totalElement;
@@ -179,7 +203,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
           }
         });
       });
-      
     }
 
     if(!this.pageSize)
@@ -190,9 +213,38 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
       this.setExistingDataForm();
     }
 
-    this.disableLastButtonF()
+    this.disableLastButtonF();
     this.disableNextButtonF();
+
+    if(this.showPushedDataPerRow == true){
+      // this.pushedDataArrayPerRow = new Array<any>(this.data.length);
+    }
   
+    if(changes['pushedData'] && changes['pushedData'].currentValue ) {
+      if( (this.pushedData && this.pushedData.dataFileList && this.pushedData.dataFileList.length ) ||
+      this.pushedData.error ){
+        this.alterTable = true;
+      } else {
+         this.alterTable = false;
+      }
+  
+      // let pushedIndex = this.data.findIndex(
+      //   (item) =>{ item.subscriptionId == this.pushedData.customerRef } );
+
+      //   this.pushedDataArrayPerRow[pushedIndex] = this.pushedData;
+
+      if(this.pushedData && this.pushedData.error){
+        document.getElementById('5').style.backgroundColor = '#f2dede'; 
+      }
+      let cols = document.getElementsByClassName('expandCheck');
+      if(cols && cols.length > 0){
+        let contentDiv =  document.getElementsByClassName('div-wh-100')[0] as HTMLElement;
+        contentDiv.style.alignItems = '';
+        for(let col = 0; col < cols.length ; col++){
+          let parentElement = cols[0].parentElement;
+          parentElement.parentElement.style.flexBasis = '22%';
+        }}
+    }
   }
 
   disableLastButtonF(){
@@ -358,12 +410,16 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     // this.router.navigate([routerLink], { queryParams: queryParam });
   }
 
-  onButtonEvent(event: any, col: any, row: any) {
+  onButtonEvent(event: any, col: any, row: any , buttonEvent : any) {
     const obj = {
       buttonType: event,
       column: col,
       row: row
     };
+    if(this.showRowLoader == true) {
+        let loaderDiv = buttonEvent.path[2].children[1];
+        loaderDiv.classList.add('row-loader-visibility');
+    }
     this.buttonListEvent.emit(obj);
   }
 
@@ -415,4 +471,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   logRow(row) {
   }
   get f() { return this.tableForm.controls; }
+
+  ngOnDestroy(): void {
+   SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+ 
 }

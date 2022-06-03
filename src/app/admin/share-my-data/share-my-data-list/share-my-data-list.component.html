@@ -29,8 +29,9 @@
           </div>
           <div class="paddingTop">
             <app-table [keys]="keys" [isSearch]="false" [data]="dataSource" [checkbox]=true [isHideAdd]=true
-              [totalElement]="data.totalElements" (changePageEvent)='search($event)' [isPaginate]=true
-              (buttonListEvent)="buttonUpdateEvent($event)">
+              [totalElement]="data.totalElements" (changePageEvent)='search($event)'
+              (buttonListEvent)="buttonUpdateEvent($event)" (checkBoxChangeEvent)="getAllSelectedItems($event)" 
+              [pushedData]="processDataCustomer" [showRowLoader]='true'>
             </app-table>
           </div>
           <div class="row rowPadding">

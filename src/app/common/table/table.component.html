@@ -1,4 +1,5 @@
-<div class="mb-60">
+
+<div class="mb-60"> 
     <div class="row">
         <div class="col-md-4" *ngIf='isSearch'>
             <div class="form-group" style="margin-top: 11px;">
@@ -7,9 +8,13 @@
                         <i class="fa fa-search css" aria-hidden="true"></i>
                     </span>
                     <input type="text" class="form-control search"
-                        placeholder="search" aria-label="search"
-                        (keyup)="applyFilter($event.target.value)"
-                        aria-describedby="basic-addon1">
+                        placeholder="search" aria-label="search" #inputSuggestionField
+                        aria-describedby="basic-addon1" matInput [matAutocomplete]="auto">
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete" (optionSelected)="applyFilter($event.option.value)">
+                            <mat-option *ngFor="let option of suggestionList" value="{{option.value}}">
+                              {{option.show}}
+                            </mat-option>
+                        </mat-autocomplete>
                 </div>
             </div>
         </div>
@@ -20,7 +25,7 @@
             #exporter="matTableExporter" matSort (matSortChange)="sortData($event)"
             class="table">
             <ng-container matColumnDef="select">
-                <mat-header-cell *matHeaderCellDef>
+                <mat-header-cell *matHeaderCellDef >
                     <mat-checkbox (change)="$event ? masterToggle() :
                         null;checkBoxChange()"
                         [checked]="selection.hasValue() && isAllSelected()"
@@ -30,7 +35,8 @@
                         class="tableCheckBox">
                     </mat-checkbox>
                 </mat-header-cell>
-                <mat-cell *matCellDef="let row; let colIndex= index">
+                <mat-cell *matCellDef="let row; let colIndex= index" 
+                [ngClass]="{'toTop': alterTable}">  
                     <mat-checkbox (click)="$event.stopPropagation()"
                         (change)="$event ? selection.toggle(row) :
                         null;checkBoxChange()" color="primary"
@@ -42,13 +48,16 @@
             <ng-container *ngFor="let col of keys; let colIndex= index"
                 matColumnDef="{{col.key}}">
                 <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key"
+                [ngClass]="{'exp-col' : alterTable && colIndex == keys.length - 1, 'reduce-font-size' : alterTable }"
                     [id]="col.key" [disabled]="!col.sort"
                     class="text-nowrap">
                     {{col.displayName}}
                 </mat-header-cell>
-                <mat-cell [class.mat-cell-underline]='col.isUnderline'
+                <mat-cell #matCell 
+                [ngClass]="{'toTop': alterTable , 'reduce-font-size' : alterTable }"
+                [class.mat-cell-underline]='col.isUnderline'
                     *matCellDef="let
-                    row" style="display: grid;">
+                    row" style="display: grid;" >
                     <div *ngIf="col.type!='image' && col.isDate && !col.isAction">
                         {{ (col.isSurvey ? row.createdDate : row[col.key])|date:'mediumDate' : 'PST'}}</div>
                     <div id='1' *ngIf="col.type==='alert' && !col.isAction">
@@ -62,7 +71,9 @@
                             <p class="alertCircle"></p>
                         </div>
                     </div>
-                    <div id='2' (click)='goToEdit(row,col);' *ngIf="col.type!='image' &&col.type!='buttons' &&
+                    <div id='2'
+                    [ngClass]="{'toTop': alterTable }"
+                    (click)='goToEdit(row,col);' *ngIf="col.type!='image' &&col.type!='buttons' &&
                         col.type!=='input'&&
                         col.type!='alert' && col.type!='link' &&
                         !col.isDate && !col.isAction && col.type!=='checkbox' && !col.isSurvey" class="div-wh-100">
@@ -100,15 +111,35 @@
                             (click)='onSaveNewRowEvent(col,row)'>
                             Save
                         </button>
-                    </div>
-                    <div id='5' *ngIf="col.type=='buttons' && !col.isAction">
-                        <div class='inline-table btnPadding' *ngFor='let button of
+                    </div>  
+                        <div class='inline-table btnPadding expandCheck' *ngFor='let button of
                             row[col.key]'>
                             <button class='btn btn-primary' *ngIf="button.isShow"
-                                (click)='onButtonEvent(button,col,row)'>
+                                (click)='onButtonEvent(button,col,row,$event)'>
                                 {{button.name}}
                             </button>
                         </div>
+                        <!-- loader for for on button click -->
+   
+                        <div id="loader1" class="row-loader-div" >
+                            <img class="loaderimg center-block row-loader-props"
+                             alt="loader" src="../../../assets/images/loader.gif">
+                        </div>
+                    
+                        <ng-container *ngIf="!pushedData.error" >
+                            <div *ngFor="let data of pushedData.dataFileList">
+                                {{data}}
+                             </div>    
+                        </ng-container>
+
+                         <div *ngIf="pushedData.error" style='color :#a94442;'>
+                            {{pushedData.error}}
+                         </div>
+
+                        <!-- <div *ngIf="pushedDataArrayPerRow[{{colIndex / keys.length }}] &&
+                        pushedDataArrayPerRow[{{colIndex / keys.length }}].error">
+                            {{pushedDataArrayPerRow[{{colIndex / keys.length }}].error}}
+                         </div>  -->
                     </div>
                     <div id='6' *ngIf="col.type=='link' && !col.isAction" >
                         <ng-container *ngFor='let link of col.links; let i = index'>
@@ -150,7 +181,9 @@
                         <button class="btn btn-primary" type="submit"
                             (click)='saveColumn(col,row)' style="float: right;">Save</button>
                     </div>
-                    <div id='10' *ngIf="col.type=='checkbox' && !col.isAction">
+                    <div id='10'
+                    [ngClass]="{'toTop': alterTable }"
+                    *ngIf="col.type=='checkbox' && !col.isAction"  >
                         <mat-checkbox (change)="checkBoxChangeOptional($event,row)"
                             color="primary"
                             [checked]="row[col.key]" class="tableCheckBox">

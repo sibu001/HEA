@@ -5,4 +5,7 @@ export interface TopicManagementModel {
     scriptDebug: any;
     paidServiceList: any;
     topicDesctiptionPane : any;
+    topicVariables : any ;
+    calculationPeriod : any;
+    topicDescriptionVariable : any;
 }

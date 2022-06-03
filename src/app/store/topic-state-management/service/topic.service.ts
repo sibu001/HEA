@@ -1,3 +1,4 @@
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -49,9 +50,32 @@ export class TopicService {
     return this.store.dispatch(new GetTopicDescriptionByIdAction(id));
   }
 
+  getLookUpCalculationPeriod() : Observable<TopicManagementState>{
+    return this.store.select(TopicManagementState.getCalculationPeriod)
+  }
+
+  loadLookUpCalculationPeriod(type : string) : Observable<TopicManagementState>{
+    return this.store.dispatch(new LoadLookUpCalculationPeriodAction(type));
+  }
+
+  loadSelectedTopicDescriptionVariable(surveyDescriptionId : string , id : string) : Observable<any>{
+    return this.store.dispatch(new LoadSelectedTopicDescriptionVariableAction(id, surveyDescriptionId));
+  }
+
+  getSeletedTopicDescriptionVariable(): Observable<TopicManagementState>{
+    return this.store.select(TopicManagementState.getSelectedTopicVariable)
+  }
   // loadTopicDescriptionPaneById(id : number): Observable<TopicManagementState> {
   //   return this.store.dispatch(new LoadTopicDescriptionPaneByIdAction(id))
   // }
+
+  getTopicVariable() : Observable<any> {
+    return this.store.select(TopicManagementState.getTopicVariables);
+  }
+
+  loadTopicVariables(id : number){
+      return this.store.dispatch(new LoadTopicVariablesAction(id))
+  }
 
   saveTopicDescription(customer: any): Observable<TopicManagementState> {
     return this.store.dispatch(new SaveTopicDescriptionAction(customer));

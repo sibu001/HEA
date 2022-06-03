@@ -285,7 +285,7 @@ export class TableColumnData {
     static readonly TOPIC_VARIABLES_KEYS: Array<TABLECOLUMN> = [
         { key: 'field', isEdit: true, displayName: 'Field' },
         { key: 'comments', isEdit: true, displayName: 'Comments' },
-        { key: 'calculationPeriod', isEdit: true, displayName: 'Calculation Period' },
+        { key: 'calculationPeriodActual', isEdit: true, displayName: 'Calculation Period' },
     ];
 
     static readonly PANE_DATA_BLOCK_KEY: Array<TABLECOLUMN> = [

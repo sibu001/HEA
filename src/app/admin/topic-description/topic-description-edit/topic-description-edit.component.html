@@ -46,8 +46,8 @@
               Section:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="firstPaneOrSection">
-                <option *ngFor='let topic of topicData' value="{{topic.key}}">
-                  {{topic.value}}
+                <option *ngFor='let topic of topicPaneDataSource' value="{{topic.id}}">
+                  {{topic.selectionLabel}}
                 </option>
               </select>
             </div>
@@ -161,8 +161,9 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="nextTopic"
                 formControlName="nextTopic">
-                <option value="" selected></option>
-                <option *ngFor='let topic of nextTopicCode' [value]="topic.id">{{topic.label}}</option>
+                <option *ngFor='let topic of nextPermanentTopic' value="{{topic.id}}">
+                  {{topic.label}}
+                </option>
               </select>
 
             </div>
@@ -214,8 +215,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Comments:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                id="comments" formControlName="comments">
+              <textarea type="text" class="form-control form-control-sm"
+                id="comments" formControlName="comments"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -263,10 +264,14 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Variables </span></p>
             <app-table [keys]="topicVariablesKeys" [isPaginate]="true"
-              [isSearch]="true" [data]="dataSource"
-              [totalElement]="topicTableData.totalElements"
+              [isSearch]="true" [data]="topicVariableTableData.content"
+              [totalElement]="topicVariableTableData.totalElements"
               (addEvent)='addTopicVariables()'
-              (goToEditEvent)='goToEditTopicVariables()'>
+              (goToEditEvent)='goToEditTopicVariables($event)'
+              (changePageEvent)='GetSuggestionListForFilter($event)'
+              [showSuggestionList]='true'
+              [suggestionList]='suggestionListTopicVariables'
+              >
             </app-table>
           </div>
 

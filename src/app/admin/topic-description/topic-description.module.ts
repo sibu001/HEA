@@ -1,5 +1,6 @@
+import { MatCheckboxModule } from '@angular/material';
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { TopicDescriptionRoutingModule } from './topic-description-routing.module';
 import { TopicDescriptionListComponent } from './topic-description-list/topic-description-list.component';
@@ -30,6 +31,7 @@ import { LoginService } from 'src/app/services/login.service';
     FormsModule,
     RichTextEditorModule,
     TopicDescriptionRoutingModule,
+    MatCheckboxModule, 
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
@@ -45,6 +47,6 @@ import { LoginService } from 'src/app/services/login.service';
     TopicPaneDataFieldEditComponent,
     TopicPaneChartsEditComponent,
     TopicPaneReportsEditComponent],
-  providers: [SystemService, TopicService, LoginService]
+  providers: [SystemService, TopicService, LoginService,DatePipe]
 })
 export class TopicDescriptionModule { }

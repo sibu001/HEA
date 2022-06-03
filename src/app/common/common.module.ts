@@ -26,6 +26,7 @@ import { PasswordStrengthComponent } from './password-strength/password-strength
 import { TopicService } from '../store/topic-state-management/service/topic.service';
 import { NgxsModule } from '@ngxs/store';
 import { TopicManagementState } from '../store/topic-state-management/state/topic.state';
+import { MatAutocompleteModule } from '@angular/material';
 @NgModule({
   imports: [
     CommonModule,
@@ -38,6 +39,7 @@ import { TopicManagementState } from '../store/topic-state-management/state/topi
     MatPaginatorModule,
     MatInputModule,
     MatMenuModule,
+    MatAutocompleteModule,
     MatButtonModule,
     MatMenuModule,
     MatIconModule,

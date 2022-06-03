@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
+import { of } from 'rxjs';
 import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
@@ -14,6 +15,9 @@ import {
     GetContextMethodListAction,
     ScriptDebugAction,
     GetPaidServiceListAction,
+    LoadTopicVariablesAction,
+    LoadLookUpCalculationPeriodAction,
+    LoadSelectedTopicDescriptionVariableAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -26,6 +30,9 @@ import { TopicManagementModel } from './topic.model';
         scriptDebug: undefined,
         paidServiceList: undefined,
         topicDesctiptionPane : undefined,
+        topicVariables : undefined,
+        calculationPeriod : undefined,
+        topicDescriptionVariable : undefined
     }
 })
 
@@ -50,13 +57,28 @@ export class TopicManagementState {
     }
 
     @Selector()
+    static getSelectedTopicVariable(state: TopicManagementModel): any {
+         return state.topicDescriptionVariable;
+    }
+
+    @Selector()
     static getScriptDebug(state: TopicManagementModel): any {
         return state.scriptDebug;
     }
 
     @Selector()
+    static getCalculationPeriod(state: TopicManagementModel): any {
+        return state.calculationPeriod;
+    }
+
+    @Selector()
     static getPaidServiceList(state: TopicManagementModel): any {
         return state.paidServiceList;
+    }
+
+    @Selector()
+    static getTopicVariables(state : TopicManagementModel) : any {
+        return state.topicVariables;
     }
 
     @Action(GetTopicDescriptionListAction)
@@ -97,6 +119,64 @@ export class TopicManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
                     }));
+    }
+
+    @Action(LoadLookUpCalculationPeriodAction)
+    loadLookUpCalculationPeriodAction(ctx : StateContext<TopicManagementModel>, action: LoadLookUpCalculationPeriodAction) {
+        // if(ctx.getState().calculationPeriod != undefined){
+        //     ctx.patchState({ calculationPeriod : Object.assign({},ctx.getState().calculationPeriod)} )
+        // return;
+        // }
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookupBaseURL + action.type + AppConstant.lookupValues)
+        .pipe(
+            tap(
+                (response) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState(
+                        { calculationPeriod : response}
+                    )
+                } , error =>{ 
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+    @Action(LoadSelectedTopicDescriptionVariableAction)
+    loadSelectedTopicDescriptionVariableAction(ctx : StateContext<TopicManagementModel>, action: LoadSelectedTopicDescriptionVariableAction) : Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.surevyDescriptionId + '/' + AppConstant.topicDescritptionVariable + '/' + action.id)
+        .pipe(
+            tap(
+                (response : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        topicDescriptionVariable : response
+                    })
+                }, error => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error);
+                }
+            )
+        )
+    }
+
+    @Action(LoadTopicVariablesAction)
+    loadTopicVariablesAction(ctx : StateContext<TopicManagementModel>, action: LoadTopicVariablesAction) : Actions{
+        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id  + '/' + AppConstant.topicDescritptionVariable )
+        .pipe(
+            tap((response : any ) =>{
+                document.getElementById('loader').classList.add('loading');
+                ctx.patchState({
+                    topicVariables : response
+                })
+            }, error => { 
+                document.getElementById('loader').classList.remove('loading');
+                this.utilityService.showErrorMessage(error.message);
+                console.log(error);
+            }
+            )
+        )
     }
 
     @Action(DeleteTopicDescriptionByIdAction)
