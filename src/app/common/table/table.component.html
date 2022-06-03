@@ -112,6 +112,7 @@
                             Save
                         </button>
                     </div>  
+                    <div id='5' [ngClass]="{'expanded-col':pushedData&&pushedData.length }"  *ngIf="col.type=='buttons' && !col.isAction">
                         <div class='inline-table btnPadding expandCheck' *ngFor='let button of
                             row[col.key]'>
                             <button class='btn btn-primary' *ngIf="button.isShow"
@@ -135,11 +136,6 @@
                          <div *ngIf="pushedData.error" style='color :#a94442;'>
                             {{pushedData.error}}
                          </div>
-
-                        <!-- <div *ngIf="pushedDataArrayPerRow[{{colIndex / keys.length }}] &&
-                        pushedDataArrayPerRow[{{colIndex / keys.length }}].error">
-                            {{pushedDataArrayPerRow[{{colIndex / keys.length }}].error}}
-                         </div>  -->
                     </div>
                     <div id='6' *ngIf="col.type=='link' && !col.isAction" >
                         <ng-container *ngFor='let link of col.links; let i = index'>
