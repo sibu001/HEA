@@ -364,6 +364,10 @@ tr.example-element-row:not(.example-expanded-row):active {
   
 .exp-col{
   flex-basis : 22%;
+} 
+
+.cont-col{
+  flex-basis: '';
 }
 
 .row-loader-props{

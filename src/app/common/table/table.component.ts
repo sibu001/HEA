@@ -215,35 +215,28 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
     this.disableLastButtonF();
     this.disableNextButtonF();
-
-    if(this.showPushedDataPerRow == true){
-      // this.pushedDataArrayPerRow = new Array<any>(this.data.length);
-    }
   
+
+    
     if(changes['pushedData'] && changes['pushedData'].currentValue ) {
       if( (this.pushedData && this.pushedData.dataFileList && this.pushedData.dataFileList.length ) ||
       this.pushedData.error ){
         this.alterTable = true;
       } else {
-         this.alterTable = false;
+        this.alterTable = false;
       }
-  
-      // let pushedIndex = this.data.findIndex(
-      //   (item) =>{ item.subscriptionId == this.pushedData.customerRef } );
 
-      //   this.pushedDataArrayPerRow[pushedIndex] = this.pushedData;
-
-      if(this.pushedData && this.pushedData.error){
-        document.getElementById('5').style.backgroundColor = '#f2dede'; 
-      }
-      let cols = document.getElementsByClassName('expandCheck');
-      if(cols && cols.length > 0){
-        let contentDiv =  document.getElementsByClassName('div-wh-100')[0] as HTMLElement;
-        contentDiv.style.alignItems = '';
-        for(let col = 0; col < cols.length ; col++){
-          let parentElement = cols[0].parentElement;
-          parentElement.parentElement.style.flexBasis = '22%';
-        }}
+      // if(this.pushedData && this.pushedData.error){
+      //   document.getElementById('5').style.backgroundColor = '#f2dede'; 
+      // }
+      // let cols = document.getElementsByClassName('expandCheck');
+      // if(cols && cols.length > 0){
+      //   let contentDiv =  document.getElementsByClassName('div-wh-100')[0] as HTMLElement;
+      //   contentDiv.style.alignItems = '';
+      //   for(let col = 0; col < cols.length ; col++){
+      //     let parentElement = cols[0].parentElement;
+      //     parentElement.parentElement.style.flexBasis = '22%';
+      //   }}
     }
   }
 
@@ -417,7 +410,10 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
       row: row
     };
     if(this.showRowLoader == true) {
+        this.pushedData = [];
+        this.alterTable = false;
         let loaderDiv = buttonEvent.path[2].children[1];
+        buttonEvent.path[0].style = 'visibility : hidden';
         loaderDiv.classList.add('row-loader-visibility');
     }
     this.buttonListEvent.emit(obj);

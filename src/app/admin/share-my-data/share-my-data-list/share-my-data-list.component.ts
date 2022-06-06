@@ -58,8 +58,7 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
       this.data.content = shareMyDataList;
       this.dataSource = [...this.data.content];
       this.processDataCustomer = [];
-      console.log(shareMyDataList);
-    }));
+      }));
   }
 
   search(event: any): void {
@@ -115,7 +114,6 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
             }else {
               this.processDataCustomer = { customerRef : item.customerRef , dataFileList : [] , error : tempList.error};
             }
-              console.log(this.processDataCustomer);
           }, error => console.error(error)
           ))
   }
@@ -128,6 +126,10 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
 	  goToEditShareMyData(event: any): any { }
   	
     update(): any {
+      
+      if(this.selectionList.length == 0)
+        return false;
+
       let inputList = []
       if(this.selectionList.length != 0){
         this.selectionList.map(

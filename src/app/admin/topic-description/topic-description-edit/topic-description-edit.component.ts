@@ -130,7 +130,7 @@ export class TopicDescriptionEditComponent implements OnInit, OnDestroy {
         groupList.forEach((item: any) =>{
           testList.push(item.customerGroup.groupCode);
       })
-      this.selectionCustomerGroupList = testList;
+      this.selectionCustomerGroupList = [...testList];
       },(error : any)  => {
         console.log("some error has occurred.");
       }));

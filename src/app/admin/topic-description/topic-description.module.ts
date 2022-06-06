@@ -22,6 +22,7 @@ import { TopicPaneReportsEditComponent } from './topic-pane-reports-edit/topic-p
 import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { LoginService } from 'src/app/services/login.service';
+import { UtilityService } from 'src/app/services/utility.service';
 
 @NgModule({
   imports: [
@@ -47,6 +48,6 @@ import { LoginService } from 'src/app/services/login.service';
     TopicPaneDataFieldEditComponent,
     TopicPaneChartsEditComponent,
     TopicPaneReportsEditComponent],
-  providers: [SystemService, TopicService, LoginService,DatePipe]
+  providers: [SystemService, TopicService, LoginService,DatePipe, UtilityService]
 })
 export class TopicDescriptionModule { }

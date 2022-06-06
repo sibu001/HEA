@@ -9,6 +9,8 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+import { LoginService } from 'src/app/services/login.service';
+import { UtilityService } from 'src/app/services/utility.service';
 
 @Component({
   selector: 'app-topic-description-variable-edit',
@@ -28,8 +30,10 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
     private readonly activateRoute: ActivatedRoute,
     private readonly systemService: SystemService,
     private readonly topicService: TopicService,
+    private readonly loginService : LoginService,
     private readonly location: Location,
     private readonly datePipe: DatePipe,
+    private readonly utilityService: UtilityService,
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
@@ -119,7 +123,23 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
   }
 
   recalculate() {
-
+    document.getElementById('loader').classList.add('loading')
+    this.subscriptions.add(
+      this.loginService.performPost({},AppConstant.topicDescription +  '/' + this.surveyDescriptionId + '/' + AppConstant.topicDescritptionVariable + '/' + this.id + '/recalculate')
+      .subscribe(
+        (response) =>{
+          document.getElementById('loader').classList.remove('loading')
+           console.log(response);
+           if(response.errorMessage){
+            this.utilityService.showErrorMessage(response.errorMessage);
+           }else{
+            this.router.navigate(['/admin/topicDescription/topicDescriptionVariableEdit'], { queryParams: { id: this.id , surveyDescriptionId : this.surveyDescriptionId , topicDescription : this.topicDescription } });
+           }
+        }, error => { 
+          document.getElementById('loader').classList.remove('loading')
+          console.error(error)}
+      ) 
+    )
   }
 
   get f() { return this.variableForm.controls; }
