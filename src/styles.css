@@ -1424,3 +1424,67 @@ section.space-top {
 .row-loader-visibility{
   visibility: visible !important;
 }
+
+@media (min-width: 1024px ){
+
+  #chartElectrificationIntro {
+    width : 50% !important;
+  }
+  
+  /* canvas {
+   width : 100% !important;
+  }                                                                                                                    */
+}
+
+.accurate > p , .accurate > ul > li{
+  font-weight : 500;
+  color: rgb(104 111 120);
+  font-size: 14px;
+}
+.centerChart .col-lg-12.col-sm-12 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.surveyChart{
+  width: 100%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1%;
+}
+
+table.surveyChart {
+  width: 100%;
+  height: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1%;
+}
+
+table.surveyChart TD {
+  text-align: center;
+}
+
+table.surveyAnswers {
+  width: 95%;
+  height: 98%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+#surveyFooter {
+  color: rgb(39%, 39%, 40%);
+  font-weight: bold;
+  font-size: 14px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 99%;
+}
+
+.accurate > p > img {
+  width : auto !important;
+}

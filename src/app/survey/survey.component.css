@@ -89,7 +89,7 @@ div.accurate {
   text-align: justify;
   line-height: 1.4;
   margin-top: 10px;
-  max-width: 800px;
+  /* max-width: 800px; */
   /* margin-bottom: 30px; */
   /* border-bottom: 1px solid #efefef; */
 }
@@ -2326,4 +2326,27 @@ input::-webkit-inner-spin-button {
 
 #inputSlider, input[type=number] {
   -moz-appearance: textfield;
+}
+
+.center-ele {
+    display: flex;
+    justify-content: center;
+}
+
+/* table, tbody {
+  width : 100% !important
+}
+
+td {
+  text-align: -webkit-center;
+} */
+
+
+.leaksdiscovery1 {
+}
+@media 
+  (-webkit-min-device-pixel-ratio: 2), 
+  (min-resolution: 192dpi) { 
+  .leaksdiscovery1 {
+  }
 }

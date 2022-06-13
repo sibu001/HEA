@@ -117,16 +117,17 @@
                     *ngIf="col.type=='buttons' && !col.isAction">
                         <div #buttonElement class='inline-table btnPadding expandCheck' *ngFor='let button of
                             row[col.key]'>
-                            <button class='btn btn-primary' *ngIf="button.isShow" [ngClass]='{ "row-loader-visibility" : alterTable }'
+                            <button class='btn btn-primary' *ngIf="button.isShow" [ngClass]='{ "row-loader-visibility" : alterTable, "button-shrink" : showRowLoader }'
                                 (click)='onButtonEvent(button,col,row,$event)'>
                                 {{button.name}}
                             </button>
                         </div>
                         <!-- loader for for on button click -->
    
+
                         <div id="loader1" class="row-loader-div" >
                             <img class="loaderimg center-block row-loader-props"
-                             alt="loader" src="/assets/images/loader.gif">
+                             alt="loader" src="./assets/images/loader.gif">
                         </div>
                     
                         <ng-container *ngIf="!pushedData.error" >
