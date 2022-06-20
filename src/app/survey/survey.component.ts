@@ -438,6 +438,12 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
               setTimeout(function () {
                 self.evaluateJavaScript(self.users.currentPaneNumber);
               }, 1000);
+              setTimeout(function () {
+                self.chartDataConfiguration();
+              }, 500);            +
+
+              // eval(this.users.currentPaneNumber.currentPane.paneCharts.chart.freeChartConfigurationJS);
+  
               document.getElementById('loader').classList.remove('loading');
             } else {
               if (id === 'next') {

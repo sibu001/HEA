@@ -1282,7 +1282,8 @@ table.jqplot-table-legend {
 @media (min-width: 768px) and (max-width: 792px) {
  
   div.energy_analytic > p > img {
-    width:220px!important;
+    max-width: 100%;
+    height: auto;
   }
 }
 
@@ -1436,7 +1437,7 @@ section.space-top {
   }                                                                                                                    */
 }
 
-.accurate > p , .accurate > ul > li{
+.accurate > p , .accurate > ul > li, .accurate{
   font-weight : 500;
   color: rgb(104 111 120);
   font-size: 14px;
@@ -1487,4 +1488,49 @@ table.surveyAnswers {
 
 .accurate > p > img {
   width : auto !important;
+}
+
+TABLE.survey th {
+  font-size: 21px;
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  .label-field{
+    text-align: right;
+  }
+}
+
+.display-center-col{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.p-lf-30px{
+  padding : 0px 30px;
+  font-weight: 500 !important;
+  color: rgb(104 111 120) !important;
+  font-size: 14px !important;
+}
+
+
+.ml-30{
+  align-items: baseline !important;
+  margin-left: 30%;
+}
+
+@media (min-width: 768px)  and (max-width: 901px) {
+ .shift-down{
+  margin-top: 118px;
+ }
+}
+
+app-survey a{
+  text-decoration : underline;
+}
+
+.mat-column-serialNumber{
+  width : 55px !important;   
 }

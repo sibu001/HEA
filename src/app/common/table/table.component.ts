@@ -225,18 +225,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
       } else {
         this.alterTable = false;
       }
-
-      // if(this.pushedData && this.pushedData.error){
-      //   document.getElementById('5').style.backgroundColor = '#f2dede'; 
-      // }
-      // let cols = document.getElementsByClassName('expandCheck');
-      // if(cols && cols.length > 0){
-      //   let contentDiv =  document.getElementsByClassName('div-wh-100')[0] as HTMLElement;
-      //   contentDiv.style.alignItems = '';
-      //   for(let col = 0; col < cols.length ; col++){
-      //     let parentElement = cols[0].parentElement;
-      //     parentElement.parentElement.style.flexBasis = '22%';
-      //   }}
     }
   }
 

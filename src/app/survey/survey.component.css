@@ -394,13 +394,7 @@ p.utility {
   font-weight: 400;
   line-height: 20px;
 }
-div.agree {
-  font-weight: normal;
-  color: #bbbbbb;
-  font-size: 12px;
-  margin-bottom: 15px;
-  /* text-align: center; */
-}
+
 .radio_buttonfirst {
   /* text-align: center; */
   color: #000;
@@ -2192,6 +2186,13 @@ select {
   /* margin-left: -10px; */
   padding: 0px 20px 0px 20px;
 }
+
+@media (min-width: 768px) and (max-width: 792px) {
+  .rightColumnDiv{
+    padding: 0px 10px 0px 10px;
+  }
+}
+
 div#leftColumn {
   position: relative;
 }
@@ -2333,20 +2334,20 @@ input::-webkit-inner-spin-button {
     justify-content: center;
 }
 
-/* table, tbody {
-  width : 100% !important
+.m-auto{
+  margin : auto;
 }
 
-td {
-  text-align: -webkit-center;
-} */
-
-
-.leaksdiscovery1 {
+.w-100{
+  width: 100%;
 }
-@media 
-  (-webkit-min-device-pixel-ratio: 2), 
-  (min-resolution: 192dpi) { 
-  .leaksdiscovery1 {
-  }
+
+.m-15px{
+  margin : 15px 0px;
+}
+
+@media (min-width: 320px) and (max-width: 442px){
+  select{
+    width : 290px !important;
+}
 }

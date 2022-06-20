@@ -90,7 +90,7 @@
             </div>
 
           <div id="surveyData" > 
-            <table class="survey" style = " margin : auto;" >
+            <table class="survey w-100" >
               <thead>
                 <tr>
                   <td>
@@ -112,10 +112,10 @@
               </tbody>
             </table>
 
-            <table class="surveyAnswers center-ele">
+            <table class="surveyAnswers">
                     <ng-container                           
                     *ngIf="users.currentPaneNumber.currentPane.paneCode!='w_hardscapeData'&&users.currentPaneNumber.currentPane.paneCode!='w_landscapeDetails'">
-                    <tr style *ngFor="let answersList of
+                    <tr class="surveyAnswer" style *ngFor="let answersList of
                     users.currentPaneNumber.currentPaneAnswers;index as j">
                       <td>
                         <!-- <div
@@ -123,11 +123,13 @@
                         <ng-container *ngFor="let answersList of
                           users.currentPaneNumber.currentPaneAnswers;index as j"> -->
                           <!----------------------vradiobutton ------------------------>
-                          <div
+                          <ng-container
                             *ngIf="answersList.dataField.inputType=='vradiobutton'&&answersList.dataField.userDisplay&&answersList.viewable">
-                            <div class="row">
-                              <div class="col-lg-12 col-sm-12">
-                                <div class="radio_buttonfirst">
+                            <!-- <div class="row"> -->
+                              <!-- <div class="col-lg-12 col-sm-12"> -->
+                                <div class="radio_buttonfirst display-center-col"
+                                  [ngClass]="{'ml-30' : users.currentPaneNumber.currentPane.paneCode == 'prf_ReferralSource'}"
+                                >
                                   <!--data field label-->
                                   <div [innerHTML]="answersList.dataField.label |
                                     safeHtml" class="agree"></div>
@@ -145,10 +147,10 @@
                                     <span class="checkmark1"></span>
                                   </label>
                                 </div>
-                              </div>
-                            </div>
+                              <!-- </div> -->
+                            <!-- </div> -->
                             <hr class="bottom">
-                          </div>
+                          </ng-container>
                           <!--------------------second------------------------>
                           <form class="form-horizontal"
                             *ngIf="(answersList.dataField.inputType=='text'||answersList.dataField.inputType=='password')&&answersList.dataField.userDisplay&&answersList.viewable">
@@ -156,8 +158,8 @@
                             <div id="1" class="form-group thiredPane"
                               *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
                               <div class="row">
-                                <div class="col-lg-11 col-sm-11">
-                                  <label class="control-label" for="YourName">
+                                <div class="col-lg-4 col-sm-5 col-md-4 col-xs-12 label-field">
+                                  <label class="control-label m-15px" for="YourName">
                                     <span class="inputfieldcss">{{answersList.dataField.label}}</span>
                                   </label>
                                   <p class="demo" *ngIf="answersList.helpHide"
@@ -166,29 +168,29 @@
                                     <span class="hidebuttondemo"
                                       (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                   </p>
-                                  <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-6
-                                      col-xs-12">
+                                </div>
+                                  <!-- <div class="row"> -->
+                                    <div class="col-lg-4 col-sm-5 col-md-6 col-xs-10">
                                       <form>
                                         <div class="form-group"
                                           *ngIf="answersList.dataField.inputType=='text'">
-                                          <input type="text" class="form-control"
+                                          <input type="text" class="form-control" style=" height: 34px; padding: 0px; font-size: inherit;"
                                             id="YourName" name="name"
                                             [(ngModel)]="answersList.value">
                                         </div>
                                         <div class="form-group"
                                           *ngIf="answersList.dataField.inputType=='password'">
                                           <input type="password"
-                                            class="form-control"
+                                            class="form-control" 
                                             id="YourName" name="name"
                                             [(ngModel)]="answersList.value">
                                         </div>
                                       </form>
                                     </div>
-                                  </div>
-                                </div>
-                                <div class="col-md-1 col-sm-1">
-                                  <div
+                                  <!-- </div> -->
+                                <!-- </div> -->
+                                <div class="col-lg-1 col-sm-2 col-md-2 col-xs-2">
+                                  <div class="m-15px"
                                     *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
                                     style="float:right;">
                                     <img alt="icon"
@@ -262,7 +264,7 @@
                             <div class="fourethPane"
                               *ngIf="answersList.dataField.fieldValues.length==0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
                               <div class="row">
-                                <div class="col-lg-11 col-sm-11">
+                                <div class="col-lg-11 col-sm-11 display-center-col">
                                   <div [innerHTML]="answersList.dataField.label |
                                     safeHtml" class="address fourthPaneLable">
                                   </div>
@@ -321,7 +323,7 @@
                             </div>
                             <div
                               *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.inputType=='text'&&answersList.dataField.fieldValues.length>=0&&answersList.dataField.nextRowAnswer">
-                              <div class="row seven">
+                              <div class="row seven text-center">
                                 <div class="col-lg-11 col-md-11 col-sm-11">
                                   <h3 class="about_program">{{answersList.dataField.label}}</h3>
                                   <p class="demo" *ngIf="answersList.helpHide"
@@ -407,13 +409,13 @@
                               </div>
                               <hr class="bottom">
                             </div>
-              
+              `
                             <div id="3" class="form-group thiredPaneNumber"
                               *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.nextRowAnswer">
                               <div class="row">
                                 <div class="col-lg-11 col-md-11 col-sm-11">
                                   <div class="row">
-                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                    <div class="col-lg-6 col-md-7 col-sm-12 col-xs-12 m-15px">
                                       <label class="control-label" for="YourName">
                                         <span class="inputfieldcss">{{answersList.dataField.label}}</span>
                                       </label>
@@ -424,10 +426,10 @@
                                           (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                       </p>
                                     </div>
-                                  </div>
-                                  <div class="row">
-                                    <div class="col-lg-5 col-md-5 col-sm-8
-                                      col-xs-12">
+                                  <!-- </div> -->
+                                  <!-- <div class="row"> -->
+                                    <div class="col-lg-6 col-md-5 col-sm-12
+                                    col-xs-12">
                                       <form>
                                         <div class="form-group">
                                           <div class="row">
@@ -522,7 +524,7 @@
                                       flex-wrap:wrap;">
               
                                         <mat-slider [(ngModel)]="answersList.value" 
-                                        style="  width : 25em;" [step]="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
+                                        style="  width : 20em;" [step]="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
                                         [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id" (change)="handleChange($event)"></mat-slider>
               
                                         <div>
@@ -553,8 +555,8 @@
                           <div
                             *ngIf="answersList.dataField.inputType=='select'&&answersList.dataField.userDisplay&&answersList.viewable">
                             <div class="row select">
-                              <div class="col-sm-11"></div>
-                              <div class="col-sm-1 ">
+                              <div class="col-sm-9"></div>
+                              <div class="col-sm-3 ">
                                 <div *ngIf="answersList.dataField.helpText!=null"
                                   style="float:right;">
                                   <img alt="icon" src="assets/images/icon_help.svg"
@@ -563,7 +565,7 @@
                                 </div>
                               </div>
                               <div class="col-sm-12 para_th ">
-                                <h3 class="survey TH">{{answersList.dataField.label}}</h3>
+                                <h3 class="survey TH" [innerHTML]="answersList.dataField.label"></h3>
                                 <div class="row">
                                   <div class="col-sm-12">
                                     <p class="demo1" *ngIf="answersList.helpHide"
@@ -617,7 +619,7 @@
                                   *ngIf="answersList.dataField.label!=null">
                                   <abbr
                                     title="A duplex is a multi-family complex with
-                                    2-4 units; an apartment has 5 or more units.">{{answersList.dataField.label}}</abbr>
+                                    2-4 units; an apartment has 5 or more units." [innerHTML]="answersList.dataField.label"></abbr>
                                 </h3>
                               </div>
                               <div class="col-sm-8 radio_button">
@@ -749,7 +751,7 @@
                             *ngIf="answersList.dataField.inputType=='textarea'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='text'&&answersList.viewable">
                             <div class="row">
                               <div class="col-sm-11">
-                                <h3 class="survey TH">{{answersList.dataField.label}}</h3>
+                                <h3 class="survey TH" [innerHTML]="answersList.dataField.label"></h3>
                                 <p class="demo" *ngIf="answersList.helpHide"
                                   id="helpiconcontaindesktop">
                                   {{answersList.dataField.helpText}}
@@ -849,21 +851,21 @@
               </table>
             </div>
 
-            <table >
+            <table class="w-100">
               <tr>
                 <td>
                   <div id="surveyFooter">
                     <div
                     *ngIf="users.currentPaneNumber.currentPane.htmFooter!=null&&users.currentPaneNumber.currentPane.htmFooter.length>1">
                     <div class="row">
-                      <div class="col-sm-1"></div>
-                      <div class="col-sm-11">
+            
+                      <div class="col-sm-12">
                         <div
                           [innerHTML]="users.currentPaneNumber.currentPane.htmFooter |
-                          safeHtml" class="accurate"></div>
+                          safeHtml" class="accurate p-lf-30px"></div>
                       </div>
                     </div>
-                    <!-- <hr class="bottomLine footers"> -->
+                    <hr class="bottomLine footers">
                   </div>
                   </div>
                 </td>

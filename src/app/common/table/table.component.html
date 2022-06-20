@@ -47,14 +47,16 @@
             </ng-container>
             <ng-container *ngFor="let col of keys; let colIndex= index"
                 matColumnDef="{{col.key}}">
-                <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key"
+                <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" 
                 [ngClass]="{'exp-col' : alterTable && colIndex == keys.length - 1, 'reduce-font-size' : alterTable }"
                     [id]="col.key" [disabled]="!col.sort"
-                    class="text-nowrap">
+                    class="text-nowrap"
+                    [ngClass]="{'test' : col.displayName == '#'}"
+                    >
                     {{col.displayName}}
                 </mat-header-cell>
                 <mat-cell #matCell 
-                [ngClass]="{'exp-col' : alterTable && colIndex == keys.length - 1 ,'toTop': alterTable , 'reduce-font-size' : alterTable }"
+                [ngClass]="{'exp-col' : alterTable && colIndex == keys.length - 1 ,'toTop': alterTable , 'reduce-font-size' : alterTable , 'test' : col.displayName == '#' }"
                 [class.mat-cell-underline]='col.isUnderline'
                     *matCellDef="let
                     row" style="display: grid;" >
