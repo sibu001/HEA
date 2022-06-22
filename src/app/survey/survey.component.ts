@@ -440,7 +440,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
               }, 1000);
               setTimeout(function () {
                 self.chartDataConfiguration();
-              }, 500);            +
+              }, 500);    
 
               // eval(this.users.currentPaneNumber.currentPane.paneCharts.chart.freeChartConfigurationJS);
   

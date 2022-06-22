@@ -1515,6 +1515,14 @@ TABLE.survey th {
   font-size: 14px !important;
 }
 
+.p-lf-30px h1 {
+  font-size : 20px;
+}
+
+.p-lf-30px p {
+  width : 100% !important;
+}
+
 
 .ml-30{
   align-items: baseline !important;
@@ -1534,3 +1542,278 @@ app-survey a{
 .mat-column-serialNumber{
   width : 55px !important;   
 }
+
+.jqplot-table-legend.jqplot-table-legend-label {
+  font-size: 10pt;
+  text-align: left;
+  color: #312422;
+  font-weight: bolder;
+}
+
+
+app-gas-list .mat-column-year ,app-gas-list .mat-column-month ,app-gas-list .mat-column-value{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 14% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-gas-list .mat-column-billingPeriod , app-gas-charge .mat-column-billingPeriod,
+app-electricity-usage-list .mat-column-billingPeriod, app-electricity-charge-list .mat-column-billingPeriod 
+{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 38% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-gas-charge .mat-column-year,app-gas-charge .mat-column-value ,
+app-electricity-usage-list .mat-column-year ,app-electricity-usage-list .mat-column-value
+app-electricity-charge-list .mat-column-year ,app-electricity-charge-list .mat-column-value
+{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 13% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+
+app-water .mat-column-billingPeriod , 
+app-water-charge .mat-column-billingPeriod
+{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 28% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-water .mat-column-billingDate ,
+app-water-charge .mat-column-billingDate 
+{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 23% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-water .mat-column-month,
+app-water-charge .mat-column-month,
+app-electricity-smart-meter-list .mat-column-day ,
+app-electricity-smart-meter-list .mat-column-value
+{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 20% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-electricity-smart-meter-list .mat-column-month{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 25% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+
+app-electricity-daily-smart-meter-list .mat-column-month{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 30% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-electricity-daily-smart-meter-list .mat-column-value{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 24% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-gas-smart-meter .mat-column-month{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 25% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+
+app-gas-smart-meter .mat-column-year, app-gas-smart-meter .mat-column-hour{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 21% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-water-smart-meter .mat-column-value
+{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 16% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-water-smart-meter .mat-column-month{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 25% !important; 
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-share-my-data-list .mat-column-city{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 7% !important;
+  width: 5% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-survey p{
+  font-size : 16px !important;
+}
+
+/* app-share-my-data-list .mat-column-update{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 7% !important;
+  width: 5% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+} */
+
+div.jqplot-xaxis-tick {
+  font-size : 1.65em !important; 
+}
+
+
+@media (min-width: 769px) {
+  .margin-flexible{
+    margin-left: 30% !important;
+  }
+}
+

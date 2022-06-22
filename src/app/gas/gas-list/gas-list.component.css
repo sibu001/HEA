@@ -407,3 +407,35 @@ i.fa.fa-sort.float-right {
   font-weight: 500 !important;
   font-size: 17.5px;
 }
+
+.mat-column-billingPeriod{
+  word-wrap: break-word !important;
+white-space: unset !important;
+flex: 0 0 38% !important;
+width: 8% !important;
+overflow-wrap: break-word;
+word-wrap: break-word;
+
+word-break: break-word;
+
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;
+}
+
+.mat-column-year , .mat-column-month , .mat-column-value{
+word-wrap: break-word !important;
+white-space: unset !important;
+flex: 0 0 13% !important;
+width: 8% !important;
+overflow-wrap: break-word;
+word-wrap: break-word;
+
+word-break: break-word;
+
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;
+}
