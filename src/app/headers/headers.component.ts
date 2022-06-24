@@ -181,7 +181,7 @@ export class HeadersComponent implements OnInit, AfterViewInit {
       if(this.router.url == '/surveyView')
         this.sendDataToClassicVersion();    
       else
-        window.open(window.location.origin + '/hea-web/customerEventList.do', '_self');
+        window.open(window.location.origin + '/hea-web/customerList.do', '_self');
     }
   }
 
@@ -191,7 +191,7 @@ export class HeadersComponent implements OnInit, AfterViewInit {
     const data = user.currentPaneNumber;
 
     const formData = new FormData();
-    formData.append("formAction","loadPane");
+    // formData.append("formAction","loadPane");
     formData.append("surveyId",data.survey.surveyId);
     formData.append("surveyDescriptionId",data.surveyDescriptionId);
     formData.append("paneCode",data.currentPane.paneCode);
