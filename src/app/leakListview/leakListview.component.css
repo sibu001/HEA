@@ -264,3 +264,12 @@ span.helpMessage {
 .leak_div{
   margin-bottom: 10px;;
 }
+
+.color-white{
+  background-color : #fff !important;
+  border-color : #fff !important;
+}
+
+button.color-white img{
+  width : 52px !important;
+}

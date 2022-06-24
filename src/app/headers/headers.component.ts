@@ -172,11 +172,43 @@ export class HeadersComponent implements OnInit, AfterViewInit {
     } else if (routeNumber === 8) {
       this.router.navigate(['/surveyRecommendationList']);
     } else if (routeNumber === 9) {
-      window.open(window.location.origin + '/hea-web/trendingHome.do', '_self');
+      console.log(this.router.url)  
+      if(this.router.url == '/surveyView')
+        this.sendDataToClassicVersion();    
+      else
+        window.open(window.location.origin + '/hea-web/trendingHome.do', '_self');  
     } else if(routeNumber = 10){
-      window.open(window.location.origin + '/hea-web/customerList.do','_self');
+      if(this.router.url == '/surveyView')
+        this.sendDataToClassicVersion();    
+      else
+        window.open(window.location.origin + '/hea-web/customerEventList.do', '_self');
     }
   }
+
+  sendDataToClassicVersion(){
+
+    const user = this.loginService.getUser();
+    const data = user.currentPaneNumber;
+
+    const formData = new FormData();
+    formData.append("formAction","loadPane");
+    formData.append("surveyId",data.survey.surveyId);
+    formData.append("surveyDescriptionId",data.surveyDescriptionId);
+    formData.append("paneCode",data.currentPane.paneCode);
+    formData.append("userId",data.survey.userId);
+
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performPostMultiPartData(
+      formData, 'survey.do'
+    ).subscribe(
+      (response) =>{
+      } ,(error) =>{
+        console.log(error.url);
+          window.open(error.url,'_self');
+      }
+    )
+  }
+
   logouts(): void {
     this.loginService.logout();
   }

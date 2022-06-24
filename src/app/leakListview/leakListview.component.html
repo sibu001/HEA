@@ -16,7 +16,7 @@
             <div class="col-lg-10 col-sm-10 border_bottom">
                 <div class="row">
                     <div class="col-lg-1 col-sm-1 col-xs-3 leaks_img">
-                        <button type="button" class="btn btn-primary button leaksdiscovery">
+                        <button type="button" class="btn btn-primary button leaksdiscovery" [ngClass]="{'color-white': leak.recommendation.takebackIcon == 'leakghg-mini.png' }">
                             <img alt="icon" src="assets/images/{{leak.recommendation.takebackIcon}}" class="leaksdiscovery"
                                 style="width: 48px;">
                             <p class="mo">{{leak.count}} {{leak.unit}}</p>

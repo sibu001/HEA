@@ -133,7 +133,7 @@
                           </ng-container>
                           <!--------------------second------------------------>
                           <form class="form-horizontal"
-                            *ngIf="(answersList.dataField.inputType=='text'||answersList.dataField.inputType=='password')&&answersList.dataField.userDisplay&&answersList.viewable">
+                            *ngIf="((answersList.dataField.inputType=='text'||answersList.dataField.inputType=='password')&& answersList.dataField.userDisplay&&answersList.viewable) && answersList.dataField.label != 'Electric Utility Username'">
                             <!-- new start-->
                             <div id="1" class="form-group thiredPane"
                               *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
@@ -1307,7 +1307,7 @@
                           </div>
                         </div>
                         <div class="col-sm-12 para_th ">
-                          <h3 class="survey TH" [innerHTML]="answersList.dataField.label"></h3>
+                          <h3 class="survey TH" [innerHTML]="answersList.dataField.label | safeHtml"></h3>
                           <div class="row">
                             <div class="col-sm-12">
                               <p class="demo1" *ngIf="answersList.helpHide"

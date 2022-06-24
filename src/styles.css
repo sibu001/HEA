@@ -1550,6 +1550,9 @@ app-survey a{
   font-weight: bolder;
 }
 
+app-survey li {
+  font-size : 16px !important;
+}
 
 app-gas-list .mat-column-year ,app-gas-list .mat-column-month ,app-gas-list .mat-column-value{
   word-wrap: break-word !important;
