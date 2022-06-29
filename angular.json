@@ -43,6 +43,7 @@
               "src/assets/jqplot/jqplot.cursor.js",
               "src/assets/jqplot/jqplot.pieRenderer.js",
               "src/assets/jqplot/jqplot.barRenderer.js",
+              "src/assets/jqplot/jqplot.pointLabels.js",
               "src/assets/jqplot/jqplot.categoryAxisRenderer.js",
               "src/assets/jqplot/jqplot.canvasOverlay.js",
               "src/assets/jqplot/jqplot.canvasAxisLabelRenderer.js",

@@ -587,20 +587,24 @@ p.recurring_load {
 .smallcheckicon {
   display: none;
 }
+
+.hr_space{
+  margin-bottom: 10px;
+}
 hr.bottom {
-  margin-top: 25px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   border: 1px solid #efefef;
 }
 hr.bottomLine {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   border: 0;
   border-top: 1px solid #eee;
 }
 hr.bottomLineTop {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   border: 0;
   border-top: 1px solid #eee;
 }

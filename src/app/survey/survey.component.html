@@ -389,7 +389,7 @@
                               </div>
                               <hr class="bottom">
                             </div>
-              `
+              
                             <div id="3" class="form-group thiredPaneNumber"
                               *ngIf="answersList.dataField.dataType=='number'&&answersList.dataField.fieldValues.length==0&&!answersList.dataField.nextRowAnswer">
                               <div class="row">
@@ -891,7 +891,7 @@
                           </div>
                         <!-- </div> -->
                       <!-- </div> -->
-                      <hr class="bottom">
+                      <hr class="bottom" >
                     </ng-container>
                     <!--------------------second------------------------>
                     <form class="form-horizontal"
@@ -1567,7 +1567,7 @@
         </div>
         <!-------------------- next and prev button ------------------------------------>
         <div id="surveyButtons">
-          <div class="row footerRow"
+          <div class="row"
           *ngIf="users.currentPaneNumber.currentPane!=null">
           <div class="col-sm-6 col-xs-6">
             <a *ngIf="users.currentPaneNumber.currentPane.showPrev">
@@ -1589,7 +1589,7 @@
         </div>
         </div>
 
-        <hr class="bottomLine">
+        <hr class="bottomLine footers">
         <div id="surveyProgress">
           <div class="row" *ngIf="users.currentPaneNumber.survey!=null">
             <div class="col-sm-12" style="text-align: center;"

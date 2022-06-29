@@ -102,10 +102,15 @@ p.feedback {
 }
 
 .sidebar-heading-row {
-  margin: 2em 0 0 0;
+  margin: 1em 0 0 0;
 }
 
 .method {
   border-left: 1px solid #ddd;
   padding-left: 10px;
+}
+
+hr{
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
