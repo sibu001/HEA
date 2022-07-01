@@ -1,8 +1,10 @@
+import { TopicHistoryComponent } from './../survey/topichistory.component';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ContentChild, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
+import { Location } from '@angular/common';
 declare var FB: any;
 @Component({
   selector: 'app-login',
@@ -23,11 +25,15 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private location: Location
   ) {
     this.route.queryParams.subscribe((params) => {
       this.theme = params['theme'] || null;
     });
+    this.users =JSON.parse(localStorage.getItem('users'));
+    if (this.users == null) this.users = new Users(); 
+
     if (this.theme == null) {
       this.theme = 'MBL';
     }
@@ -36,10 +42,14 @@ export class LoginComponent implements OnInit {
 
       if (this.loginService.getUser().role == "ADMIN")
         this.router.navigate(['/admin/customer']);
-      else
-        this.router.navigate(['/dashboard']);
-
+      else{
+        if(this.users.lastVisitedURL == '/surveyView')
+          this.router.navigate(['surveyView']);
+        else
+          this.router.navigate(['/dashboard']);
+      }
     } else {
+      // if(this.loginService.getUser().lastVisitedURL == null)
       this.loginService.setUser(this.users);
     }
 
@@ -52,8 +62,12 @@ export class LoginComponent implements OnInit {
     if (this.users.token) {
       if (this.loginService.getUser().role == "ADMIN")
         this.router.navigate(['/admin/customer']);
-      else
-        this.router.navigate(['/dashboard']);
+      else{
+        if(this.users.lastVisitedURL == '/surveyView')
+          this.router.navigate(['surveyView']);
+        else
+          this.router.navigate(['/dashboard']);
+      }
     }
     this.fbConnect();
     this.googleInitialize();
@@ -250,8 +264,9 @@ export class LoginComponent implements OnInit {
           const response = JSON.parse(JSON.stringify(data));
           if (response.errorMessage == null) {
             if (
-              response.data.currentPane == null ||
-              response.data.currentPane === undefined
+              (response.data.currentPane == null ||
+              response.data.currentPane === undefined)
+               && this.users.lastVisitedURL != '/surveyView'
             ) {
               this.users.allSurveyCheck = false;
               this.loginService.setUser(this.users);
@@ -262,7 +277,11 @@ export class LoginComponent implements OnInit {
               this.users.isDashboard = true;
               this.users.isFirstTime = true;
               this.loginService.setUser(this.users);
-              this.router.navigate(['surveyView']);
+              let topicHistory = new TopicHistoryComponent(this.loginService,this.router,this.location);
+              const survey = this.users.surveyList[0]
+              const paneInfo =  survey.panes[0];
+              topicHistory.goToTopicPage(survey.surveyId,paneInfo.paneCode,survey.surveyDescription.surveyCode,0);
+              // this.router.navigate(['surveyView']);
             }
           } else {
             this.errorMessage = response.errorMessage;

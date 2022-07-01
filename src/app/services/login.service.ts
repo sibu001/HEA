@@ -21,7 +21,10 @@ export class LoginService {
         } else {
             this.users = new Users();
         }
-        return (AppUtility.isEmptyObject(this.users) || AppUtility.isEmptyString(this.users.theme)) ? new Users() : users;
+        const lastVisitedURL = this.users.lastVisitedURL
+        this.users = (AppUtility.isEmptyObject(this.users) || AppUtility.isEmptyString(this.users.theme)) ? new Users() : users;
+        this.users.lastVisitedURL = lastVisitedURL;
+        return this.users;
     }
 
     public updateUser(): void {
@@ -229,6 +232,7 @@ export class LoginService {
         return this.http.get(url, this.getOptionsLogOut());
     }
     public logout(): void {
+
         let theme = '';
         document.getElementById('loader').classList.add('loading');
         this.performGetLogOut('j_spring_security_logout').subscribe(
@@ -238,8 +242,10 @@ export class LoginService {
                 this.users = this.getUser();
                 theme = this.users.theme;
                 this.users = new Users();
-                localStorage.removeItem('users');
-                localStorage.clear();
+                // localStorage.removeItem('users');
+                this.users.lastVisitedURL = this.router.url;
+                localStorage.setItem('users', JSON.stringify(this.users));
+                // localStorage.clear();
                 console.log('logged out');
                 this.router.navigate(['\login'], { queryParams: { 'theme': theme } });
                 document.getElementById('loader').classList.remove('loading');
@@ -249,8 +255,10 @@ export class LoginService {
                 this.users = this.getUser();
                 theme = this.users.theme;
                 this.users = new Users();
-                localStorage.removeItem('users');
-                localStorage.clear();
+                // localStorage.removeItem('users');
+                this.users.lastVisitedURL = this.router.url;
+                localStorage.setItem('users', JSON.stringify(this.users));
+                // localStorage.clear();
                 this.router.navigate(['\login'], { queryParams: { 'theme': theme } });
                 document.getElementById('loader').classList.remove('loading');
             }
