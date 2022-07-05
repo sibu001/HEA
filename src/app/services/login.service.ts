@@ -241,7 +241,9 @@ export class LoginService {
                 console.log(response);
                 this.users = this.getUser();
                 theme = this.users.theme;
+                const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
+                this.users.currentPaneNumber = currentPaneNumber;
                 // localStorage.removeItem('users');
                 this.users.lastVisitedURL = this.router.url;
                 localStorage.setItem('users', JSON.stringify(this.users));
@@ -254,7 +256,9 @@ export class LoginService {
                 console.log(errors);
                 this.users = this.getUser();
                 theme = this.users.theme;
+                const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
+                this.users.currentPaneNumber = currentPaneNumber;
                 // localStorage.removeItem('users');
                 this.users.lastVisitedURL = this.router.url;
                 localStorage.setItem('users', JSON.stringify(this.users));

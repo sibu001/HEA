@@ -69,7 +69,7 @@ section.space-top {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #d8d8d8;
+  /* background-color: #d8d8d8; */
   z-index: 1000;
 }
 .container-fluid.responsiveMenu {

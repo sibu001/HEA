@@ -272,16 +272,14 @@ export class LoginComponent implements OnInit {
               this.loginService.setUser(this.users);
               this.router.navigate(['dashboard']);
             } else {
-              this.users.currentPaneNumber = response.data;
               this.users.allSurveyCheck = true;
               this.users.isDashboard = true;
               this.users.isFirstTime = true;
               this.loginService.setUser(this.users);
               let topicHistory = new TopicHistoryComponent(this.loginService,this.router,this.location);
-              const survey = this.users.surveyList[0]
-              const paneInfo =  survey.panes[0];
-              topicHistory.goToTopicPage(survey.surveyId,paneInfo.paneCode,survey.surveyDescription.surveyCode,0);
-              // this.router.navigate(['surveyView']);
+              const survey = this.users.currentPaneNumber.survey;
+              const paneInfo =  this.users.currentPaneNumber.currentPane;
+              topicHistory.goToTopicPage(survey.surveyId,paneInfo.paneCode,survey.surveyDescription.surveyCode,this.users.paneNumber);
             }
           } else {
             this.errorMessage = response.errorMessage;

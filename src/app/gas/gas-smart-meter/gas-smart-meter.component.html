@@ -2,7 +2,8 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-lg-9 col-md-9 col-sm-8">
-        <h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>        <p class="accurate">Gas smart meter</p>
+        <h4 class="text-danger" *ngIf='selectedCustomer==null && users.role!=="USERS" ' >Customer selection is mandatory.</h4>
+        <p class="accurate">Gas smart meter</p>
         <form [formGroup]='gasForm' class="form-horizontal">
           <div *ngIf="users.role!=='USERS'">
             <div class="row rowPadding borderBottom">

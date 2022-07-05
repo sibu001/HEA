@@ -524,8 +524,10 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
           this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
-            if (element.dataType == "boolean" && (element.value === "undefined" || element.value === undefined || element.value === "null" || element.value === null))
+            if (element.dataType == "boolean" && (element.value === "undefined" || element.value === undefined || element.value === "null" || element.value === null ||element.value === "N" ))
               element.value = "false";
+            else if(element.dataType == "boolean" && (element.value === "Y"))
+              element.value = "true"
           });
           this.loginService.setUser(this.users);
         }
