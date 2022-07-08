@@ -119,7 +119,7 @@ export class LoginComponent implements OnInit {
           if (response.error.error_description) {
             this.errorMessage = response.error.error_description;
           } else {
-            this.errorMessage = 'Invalid Credentials';
+            this.errorMessage = response.statusText;
           }
           document.getElementById('loader').classList.remove('loading');
         }
@@ -127,11 +127,29 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  // performTest(){
+  //   let formData = new HttpParams();
+  //   formData = formData.append('j_username',this.users.username);
+  //   formData = formData.append('j_password',this.users.password);
+  //   this.loginService.performPostWithParam({},'j_spring_security_check',formData)
+  //   .subscribe(
+  //     data=>{
+  //       console.log(data);
+  //     }, error => {
+  //       console.log(error);
+  //     }
+  //   )
+  // }
+
   performOuthMe() {
     this.loginService.performGetMultiPartData('oauth/me').subscribe(
       (data) => {
         const response = JSON.parse(JSON.stringify(data));
-        this.performGetUserRole(response.userId);
+        if(this.users.userId != response.userId){
+          this.users.lastVisitedURL = undefined;
+          this.users.currentPaneNumber = undefined;
+        }
+          this.performGetUserRole(response.userId);
       },
       (error) => {
         const response = JSON.parse(JSON.stringify(error));
@@ -264,12 +282,13 @@ export class LoginComponent implements OnInit {
           const response = JSON.parse(JSON.stringify(data));
           if (response.errorMessage == null) {
             if (
-              (response.data.currentPane == null ||
-              response.data.currentPane === undefined)
-               && this.users.lastVisitedURL != '/surveyView'
+               this.users.lastVisitedURL != '/surveyView'
+               &&  (this.users.currentPaneNumber == undefined 
+                || this.users.currentPaneNumber == null)
             ) {
               this.users.allSurveyCheck = false;
               this.loginService.setUser(this.users);
+              document.getElementById('loader').classList.add('loading');
               this.router.navigate(['dashboard']);
             } else {
               this.users.allSurveyCheck = true;
@@ -279,6 +298,7 @@ export class LoginComponent implements OnInit {
               let topicHistory = new TopicHistoryComponent(this.loginService,this.router,this.location);
               const survey = this.users.currentPaneNumber.survey;
               const paneInfo =  this.users.currentPaneNumber.currentPane;
+              document.getElementById('loader').classList.add('loading');
               topicHistory.goToTopicPage(survey.surveyId,paneInfo.paneCode,survey.surveyDescription.surveyCode,this.users.paneNumber);
             }
           } else {

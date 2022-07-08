@@ -2356,3 +2356,6 @@ input::-webkit-inner-spin-button {
 }
 }
 
+.text-danger-imp{
+  color:red !important;
+}

@@ -68,6 +68,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
 
+    document.getElementById('loader').classList.add('loading');
     /* for demonstration purposes only */
     $('.navbar-toggle').click(function () {
       if ($(this).hasClass('collapsed')) {

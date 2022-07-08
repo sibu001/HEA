@@ -72,7 +72,8 @@ import {
     UpdateUtilityCredentialAction,
     ValidateUtilityCredentialDataAction,
     OpenUtilityCredentialsAction,
-    UsagePointsAction
+    UsagePointsAction,
+    OpenUtilityCredentialsByIdAction
 } from './customer.action';
 import { CustomerManagementModel } from './customer.model';
 
@@ -119,7 +120,8 @@ import { CustomerManagementModel } from './customer.model';
         weatherStation: undefined,
         error: undefined,
         openedUtilityCredential : undefined,
-        usagePoints : undefined
+        usagePoints : undefined,
+        openedUtilityCredentialById : undefined
     }
 })
 
@@ -176,6 +178,11 @@ export class CustomerManagementState {
     @Selector()
     static getOpenedUtiliyCredentials(state: CustomerManagementModel) : any{
         return state.openedUtilityCredential;
+    }
+
+    @Selector()
+    static getOpenedUtiliyCredentialsById(state : CustomerManagementModel) : any{
+        return state.openedUtilityCredentialById;
     }
 
     @Selector()
@@ -641,6 +648,23 @@ export class CustomerManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
                         openedUtilityCredential: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(OpenUtilityCredentialsByIdAction)
+    getOpenUtilityCredentialsByIdAction(ctx: StateContext<CustomerManagementModel>, action: OpenUtilityCredentialsByIdAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet("customers/" +action.customerId + "/credentials/" + action.credendtiaId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        openedUtilityCredentialById: response,
                     });
                 },
                     error => {

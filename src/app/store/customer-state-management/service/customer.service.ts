@@ -67,7 +67,8 @@ import {
   UpdateUtilityCredentialAction,
   ValidateUtilityCredentialDataAction,
   OpenUtilityCredentialsAction,
-  UsagePointsAction
+  UsagePointsAction,
+  OpenUtilityCredentialsByIdAction
 } from '../state/customer.action';
 import { CustomerManagementState } from '../state/customer.state';
 
@@ -112,6 +113,10 @@ export class CustomerService {
 
   getOpenedUtiliyCredentials(): Observable<any> {
     return this.store.select(CustomerManagementState.getOpenedUtiliyCredentials)
+  }
+
+  getOpenUtilityCredentialsById() : Observable<any> {
+    return this.store.select(CustomerManagementState.getOpenedUtiliyCredentialsById)
   }
 
   getUtilityCredentialById(): Observable<any> {
@@ -240,6 +245,10 @@ export class CustomerService {
 
   loadUtilityCredentialById(customerId: any, id: number): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetUtilityCredentialByIdAction(customerId, id));
+  }
+  
+  openUtilityCredentialsById(customerId : string , utlitlity: any){
+    return this.store.dispatch(new  OpenUtilityCredentialsByIdAction(customerId, utlitlity));
   }
 
   openUtilityCredentials(customerId : any, subscriptionId: any): Observable<CustomerManagementState> {

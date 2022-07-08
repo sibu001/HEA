@@ -66,7 +66,8 @@ export enum SystemActionTypes {
     GET_WEATHER_STATION_BY_CUSTOMER_ID = 'Get Weather Station by ',
     CUSTOMER_ERROR = 'Customer Error',
     REORDER_CUSTOMER_BILLS = 'Reorder Customer Bills',
-    OPENED_UTILIY_CREDENTIALS = 'Open Utility Credentials'
+    OPENED_UTILIY_CREDENTIALS = 'Open Utility Credentials',
+    OPEN_UTILITY_CREDENTIAL_BY_ID = 'Open Utility Credentials by ID'
 }
 export class GetCustomerListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_LIST;
@@ -161,6 +162,12 @@ export class GetUtilityCredentialListAction {
 export class GetUtilityCredentialByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_UTILITY_CREDENTIAL_BY_ID;
     constructor(readonly customerId: any, readonly id: number) {
+    }
+}
+
+export class OpenUtilityCredentialsByIdAction{
+    static readonly type = SystemActionTypes.OPEN_UTILITY_CREDENTIAL_BY_ID;
+    constructor(readonly customerId: any, readonly credendtiaId: any) {
     }
 }
 

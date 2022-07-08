@@ -40,19 +40,39 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   }
 
   ngOnInit() {
+    this.getOpenedUtiliyCredentialsById();
+    this.getOpenUtilityCredentials();
     this.setForm(undefined);
     this.findCredentialType(false, '');
-    if (this.data.row !== undefined) {
-      this.customerService.openUtilityCredentials(this.data.customerId, this.data.row.subscriptionId);
-      this.subscriptions.add(this.customerService.getOpenedUtiliyCredentials().pipe(skipWhile((item: any) => item === undefined))
-        .subscribe((response) => {
-          console.log("new response" + JSON.stringify(response));
-          this.setForm(response);
-          this.getUsgaePoints(response.data);
-          this.electricityInUse = response.data.credential.electricityInUse;
-          this.heatingInUse = response.data.credential.heatingInUse;
-        }));
+    if (this.data.row !== undefined) {  
+      if(this.data.row.subscriptionId == null){
+        this.customerService.openUtilityCredentialsById(this.data.customerId,this.data.row.id);
+      }else{
+        this.customerService.openUtilityCredentials(this.data.customerId, this.data.row.subscriptionId);
+      }
     }
+  }
+
+  getOpenedUtiliyCredentialsById(){
+    this.subscriptions.add(this.customerService.getOpenUtilityCredentialsById()
+    .subscribe(
+      data =>{
+        this.setFormStyle2(data);
+        console.log({credential : data});
+      }, error => {
+        console.log(error);
+      }))
+  }
+
+  getOpenUtilityCredentials(){
+    this.subscriptions.add(this.customerService.getOpenedUtiliyCredentials().pipe(skipWhile((item: any) => item === undefined))
+    .subscribe((response) => {
+      console.log("new response" + JSON.stringify(response));
+      this.setForm(response);
+      this.getUsgaePoints(response.data);
+      this.electricityInUse = response.data.credential.electricityInUse;
+      this.heatingInUse = response.data.credential.heatingInUse;
+    }));
   }
 
   getUsgaePoints(event){
@@ -126,6 +146,37 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
       waterInUse: [event !== undefined ? event.credential.waterInUse : false],
     });
 
+  }
+
+
+  setFormStyle2(event){
+    this.utilityCredentialForm = this.formBuilder.group({
+      id: [event !== undefined ? event.id : ''],
+      credentialTypeCode: [event !== undefined ? event.credentialType.credentialType : 'calwater', Validators.required],
+      login: [event !== undefined ? event.login : null],
+      password: [event !== undefined ? event.password : null],
+      active: [event !== undefined ? event.active : false],
+      account: [event !== undefined ? event.account : null],
+      electricityServiceId: [event !== undefined ? event.electricityServiceId : null],
+      electricityMeterId: [event !== undefined ? event.electricityMeterId : null],
+      electricitySignDate: [event !== undefined && event.electricitySignDate !== null? AppUtility.getDateFromMilllis(this.electricServiceIds[this.electricServiceIds.length -1].signDate) : null],
+      heatingServiceId: [event !== undefined ? event.heatingServiceId : null],
+      heatingMeterId: [event !== undefined ? event.heatingMeterId  : null],
+      heatingSignDate: [event !== undefined && event.heatingSignDate !== null ? event.heatingSignDateAppUtility.getDateFromMilllis(this.heatingServiceIds[this.heatingServiceIds.length -1].signDate) : null],
+      waterServiceId: [event !== undefined ? event.waterServiceId : null],
+      waterMeterId: [event !== undefined ? event.waterMeterId : null],
+      waterSignDate: [event !== undefined ? event.waterSignDate : null],
+      subscriptionId: [event !== undefined ? event.subscriptionId : null],
+      feedId: [event !== undefined ? event.feedId : null],
+      houseNumber: [event !== undefined ? event.houseNumber : null],
+      postalCode: [event !== undefined ? event.postalCode : null],
+      billDateDay: [event !== undefined ? event.billDateDay : null],
+      dataInUse: [event !== undefined ? event.dataInUse : false],
+      utilityInUse: [event !== undefined ? event.utilityInUse : false],
+      electricityInUse: [event !== undefined ? event.electricityInUse : false],
+      heatingInUse: [event !== undefined ? event.heatingInUse : false],
+      waterInUse: [event !== undefined ? event.waterInUse : false],
+    });
   }
 
   getDateFromMilllis(millisecond: any) {

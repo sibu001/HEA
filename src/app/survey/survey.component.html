@@ -545,7 +545,8 @@
                                 </div>
                               </div>
                               <div class="col-sm-12 para_th ">
-                                <h3 class="survey TH" [innerHTML]="answersList.dataField.label"></h3>
+                                <h3 class="survey TH" [innerHTML]="answersList.dataField.label"
+                                ></h3>
                                 <div class="row">
                                   <div class="col-sm-12">
                                     <p class="demo1" *ngIf="answersList.helpHide"
@@ -1307,7 +1308,9 @@
                           </div>
                         </div>
                         <div class="col-sm-12 para_th ">
-                          <h3 class="survey TH" [innerHTML]="answersList.dataField.label | safeHtml"></h3>
+                          <h3 class="survey TH" [innerHTML]="answersList.dataField.label | safeHtml"
+                          [ngClass]="{ 'text-danger-imp' : users.currentPaneNumber.errors!=null && (answersList.field == 'be_waterHeaterElectrificationPlan' || answersList.field == 'be_heatingElectrificationPlan')}"
+                          ></h3>
                           <div class="row">
                             <div class="col-sm-12">
                               <p class="demo1" *ngIf="answersList.helpHide"

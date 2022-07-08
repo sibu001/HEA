@@ -240,10 +240,12 @@ export class LoginService {
                 const response = JSON.parse(JSON.stringify(data));
                 console.log(response);
                 this.users = this.getUser();
+                const userId = this.users.outhMeResponse.userId;
                 theme = this.users.theme;
                 const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
                 this.users.currentPaneNumber = currentPaneNumber;
+                this.users.userId = userId;
                 // localStorage.removeItem('users');
                 this.users.lastVisitedURL = this.router.url;
                 localStorage.setItem('users', JSON.stringify(this.users));
@@ -256,9 +258,11 @@ export class LoginService {
                 console.log(errors);
                 this.users = this.getUser();
                 theme = this.users.theme;
+                const userId = this.users.outhMeResponse.userId;
                 const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
                 this.users.currentPaneNumber = currentPaneNumber;
+                this.users.userId = userId;
                 // localStorage.removeItem('users');
                 this.users.lastVisitedURL = this.router.url;
                 localStorage.setItem('users', JSON.stringify(this.users));

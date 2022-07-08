@@ -133,6 +133,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly router: Router,
     private datePipe: DatePipe,
     private readonly el: ElementRef) {
+      this.setForm(undefined);
     this.getPasswordValidationRule();
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
@@ -144,19 +145,21 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.findPlace(true, '');
     this.loadCustomerGroup();
-    this.setForm(undefined);
     if (this.id !== undefined) {
-      this.loadWeatherStationId(this.id);
-      this.loadUtilityCredential(this.id);
-      this.loadCustomerAlert(this.id);
-      this.loadCustomerEvent(this.id);
-      this.loadStaffNote(this.id);
-      this.loadCustomerFile(this.id);
-      this.loadEmailSetting(this.id);
-      this.getElectricityPlanRate(this.id);
-      this.getHeatingPlanRate(this.id);
       this.customerService.loadCustomerById(this.id);
       this.loadCustomerById();
+      const self = this;
+      setTimeout(() =>{
+        self.loadWeatherStationId(self.id);
+        self.loadUtilityCredential(self.id);
+        self.loadCustomerAlert(self.id);
+        self.loadCustomerEvent(self.id);
+        self.loadStaffNote(self.id);
+        self.loadCustomerFile(self.id);
+        self.loadEmailSetting(self.id);
+        self.getElectricityPlanRate(self.id);
+        self.getHeatingPlanRate(self.id);
+      },200)
     }
   }
 

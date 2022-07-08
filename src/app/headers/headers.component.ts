@@ -160,7 +160,7 @@ export class HeadersComponent implements OnInit, AfterViewInit {
         this.router.navigate(['/accountDetail']);
       }
     } else if (routeNumber === 4 || routeNumber === 5) {
-      if (this.users.surveyLength > 3) {
+      if (this.users.surveyLength >= 3) {
         this.router.navigate(['/topicshistory']);
       }
     } else if (routeNumber === 6) {

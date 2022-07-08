@@ -55,6 +55,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
+    document.getElementById('loader').classList.remove('loading');
     this.users = this.loginService.getUser();
     this.users.isSurvey = true;
     this.loginService.setUser(this.users);
@@ -242,6 +243,10 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
+    if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'Profile') {
+      this.hideNavBarOpitonsInProfile();
+    }
+    
     const ua = navigator.userAgent;
     if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i.test(ua)) {
       console.log('Mobile');
@@ -420,6 +425,15 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
         dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks };
       }
 
+      if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
+        this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
+          if (element.dataField.dataType == "boolean" && (element.value === "undefined" || element.value === undefined || element.value === "null" || element.value === null ||element.value === "N" ))
+            element.value = "false";
+          else if(element.dataField.dataType == "boolean" && (element.value == "Y"))
+            element.value = "true"
+        });
+        this.loginService.setUser(this.users);
+      }
 
       this.subscriptons.add(
         this.loginService.performPostMultiPartDataPost(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
@@ -522,16 +536,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
           }
         }
 
-        if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
-          this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
-            if (element.dataType == "boolean" && (element.value === "undefined" || element.value === undefined || element.value === "null" || element.value === null ||element.value === "N" ))
-              element.value = "false";
-            else if(element.dataType == "boolean" && (element.value === "Y"))
-              element.value = "true"
-          });
-          this.loginService.setUser(this.users);
-        }
-
         if (this.users.currentPaneNumber.currentPane.paneCode === 'prf_onHold') {
           this.hideMenu();
         }
@@ -564,7 +568,39 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     document.getElementById('loader').classList.remove('loading');
     this.scrollTop();
+  }
 
+
+
+
+  hideNavBarOpitonsInProfile(){
+    if (document.getElementById('_home')) {
+      document.getElementById('_home').classList.add('header_menu_none');
+    }
+    if (document.getElementById('all_topic')) {
+      document.getElementById('all_topic').classList.add('header_menu_none');
+    }
+    if (document.getElementById('_account')) {
+      document.getElementById('_account').classList.add('header_menu_none');
+    }
+    if (document.getElementById('menu_option')) {
+      document.getElementById('menu_option').classList.add('header_menu_none');
+    }
+    if (document.getElementById('_home1')) {
+      document.getElementById('_home1').classList.add('header_menu_none');
+    } 
+    if (document.getElementById('all_topic1')) {
+      document.getElementById('all_topic1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('_account1')) {
+      document.getElementById('_account1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('menu_op tion1')) {
+      document.getElementById('menu_option1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('menu_option2')) {
+      document.getElementById('menu_option2').classList.add('header_menu_none');
+    }
   }
 
   nextPane(currentPaneNumber: any) {
@@ -662,8 +698,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
           const response = JSON.parse(JSON.stringify(data));
           if (response.data.currentPane != null) {
             if (response.data.currentPane.paneCode === this.users.currentPaneNumber.currentPane.paneCode) {
-              this.utilityService.showErrorMessage("Request Failed Please Retry.");
-              // this.gotToTopicHistory();
+              // this.utilityService.showErrorMessage("Request Failed Please Retry.");
+              this.gotToTopicHistory();
             } else {
               this.users.currentPaneNumber = response.data;
               this.loginService.setUser(this.users);
