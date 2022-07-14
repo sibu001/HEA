@@ -107,7 +107,7 @@ export class Transformer {
                         },
                         {
                             routerLink: 'userReportLink.do',
-                            displayName: 'User History',
+                            displayName: 'History',
                             queryParam: {}
                         }
                     ]
