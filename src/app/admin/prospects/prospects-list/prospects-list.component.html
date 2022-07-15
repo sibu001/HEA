@@ -90,7 +90,7 @@
           <img src='assets/images/dot03.gif' alt="dot" class='dot'>
           <span class="messageName">Prospects (Number of Records = {{prospectsData?.totalElements}})</span></p>
         <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [checkbox]=true
-          [pageSize]="pageSize" 
+          [pageSize]="pageSize"  [sortOrder]='desc'
           [totalElement]="prospectsData.totalElements" (changePageEvent)="search($event,false)" [isHideAdd]="true"
           [pageIndex]="prospectsData.pageIndex"
           (goToEditEvent)="addProspects($event)" (checkBoxChangeEvent)="getAllSelectedProspects($event)">

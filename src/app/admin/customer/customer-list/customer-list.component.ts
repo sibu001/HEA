@@ -201,6 +201,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         case 'joinDate':
           event.sort.active = 'createdDate';
           break;
+        case 'group':
+          event.sort.active = 'customerGroup.groupName'
         default:
           break;
       }

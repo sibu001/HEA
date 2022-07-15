@@ -22,7 +22,7 @@
     
     <div class="example-container mat-elevation-z0 table-wrapper">
         <mat-table [dataSource]="dataSource" matTableExporter multiTemplateDataRows
-            #exporter="matTableExporter" matSort (matSortChange)="sortData($event)"
+            #exporter="matTableExporter" matSort (matSortChange)="sortData($event)" [matSortDirection]='sortOrder'
             class="table">
             <ng-container matColumnDef="select">
                 <mat-header-cell *matHeaderCellDef >

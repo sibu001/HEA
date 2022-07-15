@@ -58,6 +58,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() keys: any;
   @Input() id: any;
   @Input() sideBorder = false;
+  @Input() sortOrder = 'asc';
   @Input() action = false;
   @Input() checkbox = false;
   @Input() isSearch = false;
@@ -82,6 +83,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() showPushedDataPerRow = false;
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
+  @Output() suggestionListEvent : EventEmitter<any> = new EventEmitter();
   @Output() goToEditEvent: EventEmitter<any> = new EventEmitter();
   @Output() deleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() imageEvent: EventEmitter<any> = new EventEmitter();

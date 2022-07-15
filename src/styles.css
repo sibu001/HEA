@@ -1123,14 +1123,14 @@ button.feedbackButton:hover {
   .mat-sort-header-arrow
   .mat-sort-header-indicator
   ::before {
-  content: url("assets/images/arrow-sortdown1.png");
-}
+    content: url("assets/images/arrow-sortup1.png");
+  }
 
 [aria-sort="descending"]
   .mat-sort-header-arrow
   .mat-sort-header-indicator
   ::before {
-  content: url("assets/images/arrow-sortup1.png");
+  content: url("assets/images/arrow-sortdown1.png");
   margin-top: -15px;
   position: absolute;
 }
