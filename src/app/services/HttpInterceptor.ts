@@ -7,6 +7,8 @@ import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/switchMap';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { AppConstant } from '../utility/app.constant';
+import { Router } from '@angular/router';
+import { Users } from '../models/user';
 
 
 @Injectable()
@@ -15,7 +17,8 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     isRefreshingToken = false;
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-    constructor(private loginService: LoginService) { }
+    constructor(private loginService: LoginService,
+                private router : Router) { }
 
     addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
         return req;
@@ -25,9 +28,9 @@ export class AuthorizationInterceptor implements HttpInterceptor {
         return next.handle(this.addToken(req, this.loginService.getUser().token)).do((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
                 const response = <HttpResponseBase>event;
-                console.log(response);  
-                if(response.headers.get('Location') == AppConstant.classicVesionRedirectURLsandbox)
-                    this.loginService.logout(); 
+                if(response.url == AppConstant.classicVesionRedirectURLsandbox){
+                    this.loginService.logout();
+                }
                 return event;
             }
         }, (error: any) => {
