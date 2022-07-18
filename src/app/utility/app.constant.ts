@@ -21,6 +21,8 @@ export class AppConstant {
     public static rescrapeCustomerUsage = 'rescrapeCustomerUsage';
     public static rescrapeCustomerBills = 'rescrapeCustomerBills';
     public static validateUtilityData = 'validateUtilityData';
+    public static pane = 'panes';
+    public static nextPane = 'panesForSelectionAsNext';
     public static passwordValidationRule = 'users/password/rules';
     public static validateNewPassword = 'users/validate/password';
     public static saveNewPassword = 'password';
@@ -51,6 +53,7 @@ export class AppConstant {
     public static topicDescription = 'surveyDescriptions';
     public static topicDescritptionVariable = 'surveyDescriptionVariables';
     public static findTopicDescriptionVariables = 'findSurveyDescriptionVariables.do';
+    public static findDataFieldVariables = 'findDataFieldVariables.do';
     public static contextMethod = 'context/methods';
     public static paidService = 'paidServices';
     public static administrativeReport = 'adminReports';
@@ -110,4 +113,5 @@ export class AppConstant {
     public static pageSize = '25';
     public static debounceTime = 700;
     public static lookUpCalculationPeriod = 'VARIABLE_PERIOD';
+    public static classicVesionRedirectURLsandbox = 'https://sandbox.hea.com/hea-web/login.do';
 }

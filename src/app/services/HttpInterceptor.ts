@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
 import { LoginService } from '../services/login.service';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/take';
 import 'rxjs/add/operator/switchMap';
 import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { AppConstant } from '../utility/app.constant';
 
 
 @Injectable()
@@ -23,6 +24,10 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(this.addToken(req, this.loginService.getUser().token)).do((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
+                const response = <HttpResponseBase>event;
+                console.log(response);  
+                if(response.headers.get('Location') == AppConstant.classicVesionRedirectURLsandbox)
+                    this.loginService.logout(); 
                 return event;
             }
         }, (error: any) => {
