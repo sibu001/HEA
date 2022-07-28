@@ -112,6 +112,13 @@ export class AppConstant {
     public static meters = 'meters';
     public static pageSize = '25';
     public static debounceTime = 700;
+    public static dataBlock = 'dataBlocks';
+    public static dataField = 'dataFields';
     public static lookUpCalculationPeriod = 'VARIABLE_PERIOD';
+    public static lookUpCodeTakeBackValue = 'TAKEBACK_TYPE';
+    public static lookUpCodeDataType = 'DATA_TYPE';
+    public static lookUpCodeInputType = 'INPUT_TYPE';
+    public static lookUpCodeSource = 'FIELD_SOURCE';
+    public static lookUPCalcutaionEvent = 'CALCULATION_EVENT';
     public static classicVesionRedirectURLsandbox = 'https://sandbox.hea.com/hea-web/login.do';
 }

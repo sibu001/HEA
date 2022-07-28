@@ -1,3 +1,5 @@
+import { LoadUsageHistoryDataByTypeAndId } from './../../../store/usage-history-state-management/state/usage-history.action';
+import { TopicDescriptionPaneCopyComponent } from './../topic-description-pane-copy/topic-description-pane-copy.component';
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -5,8 +7,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { Subscription } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
+import { LoginService } from 'src/app/services/login.service';
+import { UtilityService } from 'src/app/services/utility.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+import { MatDialog } from '@angular/material';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-topic-description-pane',
@@ -17,16 +24,18 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
   id: any;
-  paneForm: FormGroup;
+  public paneForm: FormGroup;
+  public paneData;
   dataBlockKeys = TableColumnData.PANE_DATA_BLOCK_KEY;
   dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
   chartKeys = TableColumnData.PANE_CHART_KEYS;
   reportKeys = TableColumnData.PANE_REPORT_KEYS;
-  nextPaneSectionList: any[] = TableColumnData.NEXT_PANE_SECTION;
-  public dataBlockDataSource: any;
-  public dataFieldDataSource: any;
+  nextPaneSectionList: any[] = Array<any>();
+  public dataBlockDataSource =  [];
+  public dataFieldDataSource = [];
   public chartDataSource: any;
   public reportsDataSource: any;
+  public surveyDescriptionId : any;
 
   public totalElement = 0;
   public dataBlockData = {
@@ -69,67 +78,223 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     private readonly activateRoute: ActivatedRoute,
     private readonly topicService: TopicService,
     private readonly location: Location,
-    private readonly router: Router) {
+    private readonly router: Router,
+    private readonly loginService: LoginService,
+    private readonly utilityService : UtilityService,
+    private readonly matDialog : MatDialog) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.surveyDescriptionId = params['topicDescriptionId']
     });
-  }
-
-
-  ngOnInit() {
     this.setForm(undefined);
   }
 
 
+  ngOnInit() {
+    if(this.id) {
+      this.getDataFieldForPane();
+      this.getDataBlockListForPane();
+      this.getNextPaneList();
+      this.getSelectedPaneById();
+      this.loadPaneById();
+      this.loadDataBlockForPane();
+      this.loadDataFieldForPane();
+    }
+  }
+
+  getNextPaneList(){
+    this.subscriptions.add(
+      this.loginService
+      .performGet(AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane + '/' + this.id + '/' + AppConstant.nextPane)
+      .subscribe(
+        next =>{
+          this.nextPaneSectionList = [...next];
+        } , error =>
+        { console.error(error);
+          this.utilityService.showErrorMessage(error.error.errorMessage);
+        }
+      )
+    )
+  }
+  
+
+
   setForm(event: any) {
     this.paneForm = this.formBuilder.group({
-      isSection: [event !== undefined ? event.isSection : ''],
-      hideSection: [event !== undefined ? event.hideSection : ''],
-      paneCode: [event !== undefined ? event.paneCode : '', Validators.required],
-      mainSectionLabel: [event !== undefined ? event.mainSectionLabel : ''],
-      label: [event !== undefined ? event.label : ''],
-      nextPane: [event !== undefined ? event.nextPane : ''],
-      orderNumber: [event !== undefined ? event.orderNumber : ''],
-      filter: [event !== undefined ? event.filter : ''],
-      pageHeader: [event !== undefined ? event.pageHeader : ''],
-      pageText: [event !== undefined ? event.pageText : ''],
-      pageFooter: [event !== undefined ? event.pageFooter : ''],
-      factoid: [event !== undefined ? event.factoid : ''],
-      pendingMessages: [event !== undefined ? event.pendingMessages : ''],
-      topMenu: [event !== undefined ? event.topMenu : ''],
-      rightMenuTopPart: [event !== undefined ? event.rightMenuTopPart : ''],
-      rightMenuBottomPart: [event !== undefined ? event.rightMenuBottomPart : ''],
-      paneHelp: [event !== undefined ? event.paneHelp : ''],
-      showPrev: [event !== undefined ? event.showPrev : ''],
-      showNext: [event !== undefined ? event.showNext : ''],
-      comments: [event !== undefined ? event.comments : ''],
+      section: [event !== undefined ? event.section : false],
+      hideSection: [event !== undefined ? event.hideSection : null],
+      paneCode: [event !== undefined ? event.paneCode : null, Validators.required],
+      paneLabel: [event !== undefined ? event.paneLabel : null],
+      label: [event !== undefined ? event.label : null],
+      nextPaneId: [event !== undefined ? event.nextPaneId : null],
+      orderNumber: [event !== undefined ? event.orderNumber : 0],
+      filter: [event !== undefined ? event.filter : null],
+      htmHeaderTemplate: [event !== undefined ? event.htmHeaderTemplate : null],
+      htmPageTextTemplate: [event !== undefined ? event.htmPageTextTemplate : null],
+      htmFooterTemplate: [event !== undefined ? event.htmFooterTemplate : null],
+      htmFactoidTemplate: [event !== undefined ? event.htmFactoidTemplate : null],
+      htmPendingMessageTemplate: [event !== undefined ? event.htmPendingMessageTemplate : null],
+      htmTopMenuTemplate: [event !== undefined ? event.htmTopMenuTemplate : null],
+      htmRightTopTemplate: [event !== undefined ? event.htmRightTopTemplate : null],
+      htmRightBottomTemplate: [event !== undefined ? event.htmRightBottomTemplate : null],
+      htmHelpTemplate: [event !== undefined ? event.htmHelpTemplate : null],
+      showPrev: [event !== undefined ? event.showPrev : true],
+      showNext: [event !== undefined ? event.showNext : true],
+      comments: [event !== undefined ? event.comments : null],
     });
   }
-  back() {
-    this.location.back();
+
+  back(): any {
+    this.router.navigate(['/admin/topicDescription/topicDescriptionEdit'],{queryParams: {id: this.surveyDescriptionId}});
   }
+
 
   save() {
-
+    document.getElementById('loader').classList.add('loading')
+    const body = Object.assign(this.paneData ? this.paneData : {}, this.paneForm.value);
+    body.surveyDescriptionId = this.surveyDescriptionId;
+    this.subscriptions.add(
+      this.loginService.performPost(body,AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane)
+      .subscribe(
+        next =>{
+          document.getElementById('loader').classList.remove('loading');
+          this.id = next.id;
+          this.router.navigate([], { 
+            relativeTo: this.activateRoute,
+            queryParams: {id : this.id},
+            queryParamsHandling : 'merge'
+          })
+          this.ngOnInit();
+        }, error => {
+          document.getElementById('loader').classList.remove('loading')
+          console.error(error);
+        }
+      )
+    )
   }
-  delete() {
 
+  delete() {
+    document.getElementById('loader').classList.add('loading')
+     this.subscriptions.add(
+       this.loginService
+       .performDelete(AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane + '/' + this.id)
+       .subscribe(
+          response =>{
+            document.getElementById('loader').classList.remove('loading')
+            this.back();
+          }, error =>{
+            document.getElementById('loader').classList.add('loading')
+            this.utilityService.showErrorMessage(error.error.errorMessage);
+            console.error(error);
+          }
+       )
+     )
   }
 
   copy() {
+    const dialog = this.matDialog.open(TopicDescriptionPaneCopyComponent,
+      { 
+        width: '50vw',
+        height: '50vh',
+        disableClose: false
+      });
+    dialog.afterClosed().subscribe(
+      data => {
+        if(data)
+          this.createCopy(data);
+    })
+    
+  }
 
+  private createCopy(data){
+
+    document.getElementById('loader').classList.add('loading')
+
+    let params = new HttpParams();
+    params = params.append('newPaneCode',data.paneCode);
+    params = params.append('prefix',data.prefixDataField);
+    params = params.append('toSurveyDescriptionId', data.topicDescription);
+
+    this.subscriptions.add(
+      this.loginService
+      .performPostWithParam({},AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane + '/' + this.id + '/copy' ,params)
+      .subscribe(
+        data =>{
+          document.getElementById('loader').classList.remove('loading');
+          this.id = data.id;
+            this.router.navigate([],{
+              relativeTo: this.activateRoute,
+              queryParams: {id : data.id},
+              queryParamsHandling : 'merge'
+            });
+            this.ngOnInit();
+        }, error =>{
+          document.getElementById('loader').classList.remove('loading');
+          this.utilityService.showErrorMessage(error.error.errorMessage)
+          console.log(error);
+        }
+      )
+    )
+  }
+
+  loadDataBlockForPane(){
+    this.topicService.LoadDataBlocksForPaneById(this.id);
+  }
+
+  getDataBlockListForPane(){
+    this.subscriptions.add(
+      this.topicService.getDataBlockListByPaneId()
+    .subscribe(
+      response => {
+        console.log(response);
+        this.dataBlockDataSource = response;
+    }, error => {
+      this.utilityService.showErrorMessage(error.error.errorMessage);
+      console.error(error);
+    }
+    ))
+  }
+
+  loadDataFieldForPane(){
+    this.topicService.loadDataFieldByPaneId(this.id);
+  }
+
+  getDataFieldForPane(){
+    this.subscriptions.add(
+      this.topicService.getDataFieldByPaneId()
+      .subscribe(
+        response =>{
+          this.dataFieldDataSource = response;
+        }, error =>{
+          console.error(error);
+        }
+      ));
   }
 
   loadPaneById(){
-        
+    this.topicService.loadSelectedTopicPaneById(this.surveyDescriptionId,this.id);
+  }
+
+  getSelectedPaneById(){
+    this.subscriptions.add(
+      this.topicService.getSelectedTopicPaneById()
+      .subscribe(
+        next => {
+          this.paneData = next;
+          this.setForm(next);
+        }, error => {
+          console.error(error)
+        }
+    )
+    )
   }
 
   addDataBlock() {
-    this.router.navigate(['admin/topicDescription/topicPaneDataBlockEdit']);
+    this.router.navigate(['/admin/topicDescription/topicPaneDataBlockEdit'],{ queryParams: { paneId : this.id , topicDescriptionId : this.surveyDescriptionId}} );
   }
 
   addDataField() {
-    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit']);
+    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit'],{ queryParams: { paneId : this.id , topicDescriptionId : this.surveyDescriptionId}});
   }
 
   addCharts() {
@@ -140,12 +305,12 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/topicDescription/topicPaneReportEdit']);
   }
 
-  goToEditDataBlock() {
-    this.router.navigate(['admin/topicDescription/topicPaneDataBlockEdit'], { queryParams: {} });
+  goToEditDataBlock(event) {
+    this.router.navigate(['admin/topicDescription/topicPaneDataBlockEdit'], { queryParams: {id: event.id, paneId : this.id , topicDescriptionId : this.surveyDescriptionId} });
   }
 
-  goToEditDataField() {
-    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit'], { queryParams: {} });
+  goToEditDataField(event) {
+    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit'], { queryParams: {id: event.id, paneId : this.id , topicDescriptionId : this.surveyDescriptionId} });
   }
 
   goToEditCharts() {

@@ -19,7 +19,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class TopicDescriptionListComponent implements OnInit, OnDestroy {
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.TOPIC_DESCRIPTION_KEY;
-  public dataSource: any;
+  public dataSource = [];
   public force = false;
   public adminFilter: AdminFilter;
   public totalElement = 0;

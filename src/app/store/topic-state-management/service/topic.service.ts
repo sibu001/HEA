@@ -1,4 +1,5 @@
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction } from './../state/topic.action';
+import { LoginService } from './../../../services/login.service';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -14,13 +15,15 @@ import {
   // LoadTopicDescriptionPaneByIdAction
 } from '../state/topic.action';
 import { TopicManagementState } from '../state/topic.state';
+import { AppConstant } from 'src/app/utility/app.constant';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TopicService {
 
-  constructor(private readonly store: Store) { }
+  constructor(private readonly store: Store,
+    private readonly loginService: LoginService) { }
 
   getTopicDescriptionList(): Observable<any> {
     return this.store.select(TopicManagementState.getTopicDescriptionList);
@@ -65,16 +68,53 @@ export class TopicService {
   getSeletedTopicDescriptionVariable(): Observable<TopicManagementState>{
     return this.store.select(TopicManagementState.getSelectedTopicVariable)
   }
-  // loadTopicDescriptionPaneById(id : number): Observable<TopicManagementState> {
-  //   return this.store.dispatch(new LoadTopicDescriptionPaneByIdAction(id))
-  // }
+
+  getSelectedTopicPaneById(){
+    return this.store.select(TopicManagementState.getSelectedTopicPane)
+  }
+
+  loadSelectedTopicPaneById(surveyDescriptionId,paneId) : Observable<any>{
+    return this.store.dispatch(new LoadTopicPaneVariableById(surveyDescriptionId,paneId))
+  }
+
+  loadDataBlockById(id : number, paneId : number){
+    return this.store.dispatch(new LoadDataBlockById(id, paneId));
+  }
+
+  getDataBlockByPaneId(){
+    return this.store.select(TopicManagementState.getDataBlockByPaneId);
+  }
+
+  LoadDataBlocksForPaneById(paneId : number){
+    return this.store.dispatch(new LoadDataBlockByPaneId(paneId))
+  } 
+
+  getDataBlockListByPaneId(){
+    return this.store.select(TopicManagementState.getDataBlockListByPaneId);
+  }
+
+  loadDataFieldByPaneId(paneId : number){
+    return this.store.dispatch(new LoadDataFiledByPaneId(paneId))
+  }
+
+  getDataFieldByPaneId(){
+    return this.store.select(TopicManagementState.getDataFieldByPaneId);
+  }
+
+  loadDataFieldById(id : number, paneId : number){
+    return this.store.dispatch(new LoadDataFieldById(id,paneId))
+  }
+
+  getDataFieldById(){
+    return this.store.select(TopicManagementState.getDataFieldById)
+  }
 
   getTopicVariable() : Observable<any> {
     return this.store.select(TopicManagementState.getTopicVariables);
   }
 
-  loadTopicVariables(id : number){
-      return this.store.dispatch(new LoadTopicVariablesAction(id))
+  loadTopicVariables(id : number, params : any){
+      return this.store.dispatch(new LoadTopicVariablesAction(id, params))
   }
 
   saveTopicDescription(customer: any): Observable<TopicManagementState> {
@@ -100,4 +140,50 @@ export class TopicService {
   loadPaidServiceList(): Observable<TopicManagementState> {
     return this.store.dispatch(new GetPaidServiceListAction());
   }
+
+  loadPaneListByTopicDescriptionId(id : number){
+    return this.store.dispatch(new LoadPaneListByTopicDescriptionId(id))
+  }
+
+  getPaneListByTopicDescriptionId(){
+    return this.store.select(TopicManagementState.getPaneListByTopicDescriptionId)
+  }
+
+  saveDataFiedlById(paneId : number, body : any){
+    return this.store.dispatch(new SaveDataFieldByPaneIdAction(paneId,body))
+  }
+
+  deleteDataFieldById(paneId : number , id : number){
+    return this.store.dispatch(new DeleteDataFieldByIdAction(paneId,id))
+  }
+
+  getLookUpValues(lookUpCode : string){
+    return this.loginService.performGet(AppConstant.lookup + '/' + lookUpCode + '/' + AppConstant.lookupValues)
+  }
+
+  loadLookUpValuesByType(type : string){
+    return this.store.dispatch(new LoadLookUpValueByType(type))
+  }
+
+  getLookValueForCalculationType(){
+    return this.store.select(TopicManagementState.getCalculationTypeLookUp)
+  }
+
+  getLookValueForCalculationEvent(){
+    return this.store.select(TopicManagementState.getCalculationEventLookUp)
+  }
+
+  getLookValueForDataType(){
+    return this.store.select(TopicManagementState.getDataTypeLookUp)
+  }
+
+  getLookValueForInputType(){
+    return this.store.select(TopicManagementState.getInputTypeLookUp)
+  }
+
+  getLookValueForSource(){
+    return this.store.select(TopicManagementState.getSourceLookUp)
+  }
+
+
 }

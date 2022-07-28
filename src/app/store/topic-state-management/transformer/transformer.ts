@@ -17,4 +17,16 @@ export class TopicUtilityTransformer {
         });
         return dataSourceList;
     }
+
+    static transformDataBlocksTableData(src : any) : any{
+        src.map(
+            item =>{
+                if(item.array == true) 
+                    item.array = '*'
+                else
+                   item.array = '';
+            }
+        )
+        return src;
+    }
 }

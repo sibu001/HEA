@@ -115,6 +115,7 @@ export class Transformer {
                 {
                     key: 'group',
                     displayName: 'Group',
+                    sort: 'customerGroupName'
                 },
                 {
                     key: 'notes',

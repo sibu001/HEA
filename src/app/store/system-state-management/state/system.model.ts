@@ -28,4 +28,5 @@ export interface SystemManagementModel {
     contentType: any;
     debugConsoleData: any;
     error: Error;
+    recommendation: any;
 }

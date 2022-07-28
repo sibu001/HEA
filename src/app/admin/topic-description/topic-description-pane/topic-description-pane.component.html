@@ -7,20 +7,20 @@
           <span class="messageName">Pane</span>
         </p>
         <form [formGroup]="paneForm" class="form-group form-padding">
-          <div class="row borderBottom rowPadding">
+          <div class="row borderTop borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <label for="isSection">
-                <input type="checkbox" id="isSection" formControlName="isSection">
+              <label for="section">
+                <input type="checkbox" id="section" formControlName="section">
                 Is Section
               </label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf='f.isSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='f.section.value' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <label for="isSection">
+              <label for="section">
                 <input type="checkbox" id="hideSection" formControlName="hideSection">
                 Hide Section In Topic
               </label>
@@ -37,23 +37,23 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pane Main Section Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="mainSectionLabel" id="mainSectionLabel">
+              <input type="text" class="form-control" formControlName="paneLabel" id="paneLabel">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row borderBottom rowPadding">
+          <div *ngIf="id !== undefined" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Next Pane Or Section:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control" formControlName="nextPane" id="nextPane">
-                <option value=""></option>
-                <option *ngFor='let group of nextPaneSectionList' [value]="group.key">{{group.value}}</option>
+              <select class="form-control" formControlName="nextPaneId" id="nextPaneId">
+                <option *ngFor='let group of nextPaneSectionList' 
+                value="{{group.id}}">{{group.selectionLabel}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row borderBottom rowPadding">
+          <div *ngIf="id !== undefined" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order Number:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control" formControlName="orderNumber" id="orderNumber">
@@ -76,73 +76,73 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id && surveyDescriptionId)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page Header:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='pageHeader' id='pageHeader'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmHeaderTemplate' id='htmHeaderTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
 
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page Text:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='pageText' id='pageText'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmPageTextTemplate' id='htmPageTextTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page Footer:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='pageFooter' id='pageFooter'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmFooterTemplate' id='htmFooterTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Factoid:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='factoid' id='factoid'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmFactoidTemplate' id='htmFactoidTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pending Messages:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='pendingMessages' id='pendingMessages'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmPendingMessageTemplate' id='htmPendingMessageTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Top Menu:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='topMenu' id='topMenu'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmTopMenuTemplate' id='htmTopMenuTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Right Menu Top Part:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='rightMenuTopPart' id='rightMenuTopPart'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmRightTopTemplate' id='htmRightTopTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Right Menu Bottom Part:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='rightMenuBottomPart'
-                id='rightMenuBottomPart'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmRightBottomTemplate'
+                id='htmRightBottomTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pane Help:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='paneHelp' id='paneHelp'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmHelpTemplate' id='htmHelpTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
 
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="showPrev">
@@ -152,7 +152,7 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf='!f.hideSection.value' class="row borderBottom rowPadding">
+          <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="showNext">
@@ -165,7 +165,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Comments:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="comments" formControlName="comments">
+              <textarea type="text" class="form-control form-control-sm" id="comments" formControlName="comments">
+              </textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -177,7 +178,7 @@
             </p>
             <app-table [keys]="dataBlockKeys" [isPaginate]="false" [isSearch]="false" [data]="dataBlockDataSource"
               [totalElement]="dataBlockData.totalElements" (addEvent)='addDataBlock()'
-              (goToEditEvent)='goToEditDataBlock()'>
+              (goToEditEvent)='goToEditDataBlock($event)'>
             </app-table>
           </div>
 
@@ -188,7 +189,7 @@
             </p>
             <app-table [keys]="dataFieldKeys" [isPaginate]="true" [isSearch]="false" [data]="dataFieldDataSource"
               [totalElement]="dataFieldData.totalElements" (addEvent)='addDataField()'
-              (goToEditEvent)='goToEditDataField()'>
+              (goToEditEvent)='goToEditDataField($event)'>
             </app-table>
           </div>
 

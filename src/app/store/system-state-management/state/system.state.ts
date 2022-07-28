@@ -3,7 +3,7 @@ import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
-import { AppConstant } from 'src/app/utility/app.constant';
+import { AppConstant} from 'src/app/utility/app.constant';
 import { SystemTransformer } from '../transformer/transformer';
 import {
     AssignPlaceToCustomerGroupAction,
@@ -53,7 +53,8 @@ import {
     GetReportTypeListAction,
     SetDebugConsoleData,
     GetMailPeriodListAction,
-    GetContentTypeListAction
+    GetContentTypeListAction,
+    RecommendationsLeakAndUniqueAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -88,7 +89,8 @@ import { SystemManagementModel } from './system.model';
         debugConsoleData: undefined,
         mailPeriod: undefined,
         contentType: undefined,
-        error: undefined
+        error: undefined,
+        recommendation: undefined,
     }
 
 })
@@ -238,6 +240,11 @@ export class SystemManagementState {
         return state.contentType;
     }
 
+    @Selector()
+    static getRecommendatonLeakAndUnique(state : SystemManagementModel){
+        return state.recommendation
+    }
+
     @Action(GetCustomerGroupListAction)
     getAllCustomerGroup(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupListAction): Actions {
         const force: boolean = action.force || SystemManagementState.getCustomerGroupList(ctx.getState()) === undefined;
@@ -310,6 +317,25 @@ export class SystemManagementState {
                         this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
+
+
+    @Action(RecommendationsLeakAndUniqueAction)
+    recommendationsLeakAndUniqueAction(ctx: StateContext<SystemManagementModel>, action: RecommendationsLeakAndUniqueAction){
+        document.getElementById('loader').classList.add('loading')
+        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id + '/' + 'recommendations')
+        .subscribe(
+            response =>{
+                document.getElementById('loader').classList.remove('loading');
+                ctx.patchState({
+                    recommendation: response
+                })
+            }, error =>{
+                document.getElementById('loader').classList.remove('loading');
+                this.utilityService.showErrorMessage(error.error.errorMessage);
+            }
+        )
+    }
+
 
     @Action(UpdateCustomerGroupAction)
     updateCustomerGroup(ctx: StateContext<SystemManagementModel>, action: UpdateCustomerGroupAction): Actions {
@@ -980,6 +1006,10 @@ export class SystemManagementState {
 
     @Action(GetLookupValueCalculationTypeListAction)
     getAllCalculationTypeList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueLotSizeListAction): Actions {
+        
+        if(ctx.getState().calculationType)
+            return null;
+            
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.lookupValues + '/CALCULATION_TYPE')
             .pipe(

@@ -39,8 +39,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <label for="isArray">
-                <input type="checkbox" formControlName="isArray" id="isArray">
+              <label for="array">
+                <input type="checkbox" formControlName="array" id="array">
                 Is Array
               </label>
 
@@ -48,23 +48,23 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf="f.isArray.value" class="row borderBottom rowPadding">
+          <div *ngIf="f.array.value" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Minimum Rows Count:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="minRowsCount" formControlName="minRowsCount">
+              <input type="text" class="form-control form-control-sm" id="minRows" formControlName="minRows">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf="f.isArray.value" class="row borderBottom rowPadding">
+          <div *ngIf="f.array.value" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Maximum Rows Count:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="maxRowsCount" formControlName="maxRowsCount">
+              <input type="text" class="form-control form-control-sm" id="maxRows" formControlName="maxRows">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf="f.isArray.value" class="row borderBottom rowPadding">
+          <div *ngIf="f.array.value" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Show first n-rows, count:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="showFirstRows"
@@ -73,52 +73,46 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf="f.isArray.value" class="row borderBottom rowPadding">
+          <div *ngIf="f.array.value" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <label for="allowRemoving">
-                <input type="checkbox" formControlName="allowRemoving" id="allowRemoving">
+              <label for="allowTotalRemoving">
+                <input type="checkbox" formControlName="allowTotalRemoving" id="allowTotalRemoving">
                 Allow removing of all elements if it possible
               </label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="paddingTop" *ngIf="id !== undefined && id !== null && f.isArray.value">
+          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Data Fields</span></p>
-            <app-table [keys]="dataFieldKeys" [isPaginate]="true" [isSearch]="false"
+            <app-table [keys]="dataFieldKeys" [isPaginate]="false" [isSearch]="false"
               [data]="dataFieldDataSource" [totalElement]="dataFieldData.totalElements" (addEvent)='addDataField()'
               (goToEditEvent)='goToEditDataField()'>
             </app-table>
           </div>
 
           <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 sidePadding" style="text-align: left !important;">
               <button type="button" class="btn btn-primary" (click)="back()">
                 Back
               </button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
-              </div>
-              <div class="col-sm-8 col-md-10 col-lg-9 col-xs-8 sidePadding" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="recalculate()">
-                  Recalculate
-                </button>
-              </div>
-              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding" *ngIf="id !== undefined && id !== null">
+            <!-- <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding"> -->
+              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-6 sidePadding" *ngIf="id !== undefined && id !== null">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
                   Delete
                 </button>
               </div>
-              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding">
+              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-6 sidePadding" *ngIf="id == undefined || id == null"></div>
+              <div class="col-sm-2 col-md-2 col-lg-1 col-xs-12 sidePadding">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
                   Save
                 </button>
               </div>
-            </div>
+            <!-- </div> -->
           </div>
         </form>
       </div>

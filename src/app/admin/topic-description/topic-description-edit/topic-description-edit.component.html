@@ -9,11 +9,11 @@
 
         <form [formGroup]="topicForm" class="form-group">
         <div class="form-p">
-          <div class="row borderBottom rowPadding">
+          <div class="row borderTop borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Topic code</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
-                id="topicCode" formControlName="topicCode">
+                id="surveyCode" formControlName="surveyCode">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -21,7 +21,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Display Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control"
-                formControlName="displayLabel" id="displayLabel">
+                formControlName="label" id="label">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -41,12 +41,12 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row borderBottom rowPadding">
+          <div *ngIf="id !== undefined && topicDescriptionData && topicDescriptionData.firstPaneId" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">First Pane Or
               Section:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control" formControlName="firstPaneOrSection">
-                <option *ngFor='let topic of topicPaneDataSource' value="{{topic.id}}">
+              <select class="form-control" formControlName="firstPaneId">
+                <option *ngFor='let topic of allTopicPane' value="{{topic.id}}">
                   {{topic.selectionLabel}}
                 </option>
               </select>
@@ -76,7 +76,7 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row borderBottom rowPadding">
+          <div *ngIf='id !== undefined' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="mandatory">
@@ -155,7 +155,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row borderBottom rowPadding">
+          <div *ngIf="topicForm.value.permanent == true" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Next Permanent
               Topic:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -170,14 +170,23 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row borderBottom rowPadding">
+          <div *ngIf='id !== undefined' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="allowPublic">
                 <input type="checkbox" formControlName="allowPublic"
-                  id="allowPublic">
+                  id="alwlowPublic">
                 Allow Public
               </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Message for survey unload events:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control"
+                formControlName="messageOnUnload" id="messageOnUnload">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -186,7 +195,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Top Menu:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <ejs-richtexteditor [toolbarSettings]='tools'
-                formControlName='topMenu' id='topMenu'>
+                formControlName='htmTopMenuTemplate' id='htmTopMenuTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
@@ -196,7 +205,7 @@
               part:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <ejs-richtexteditor [toolbarSettings]='tools'
-                formControlName='rightMenuTopPart' id='rightMenuTopPart'>
+                formControlName='htmRightTopTemplate' id='htmRightTopTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
@@ -206,8 +215,8 @@
               part::</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <ejs-richtexteditor [toolbarSettings]='tools'
-                formControlName='rightMenuBottomPart'
-                id='rightMenuBottomPart'>
+                formControlName='htmRightBottomTemplate'
+                id='htmRightBottomTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
@@ -228,9 +237,9 @@
               <span class="messageName">Topic Group</span></p>
             <app-table [keys]="keys" [isPaginate]="false" [checkbox]=true
               [isHideAdd]=true [isSearch]="false"
-              [data]="customerGroupList" [totalElement]="topicTableData.totalElements" 
-              [selectionList]='selectionCustomerGroupList' id = "groupCode"
-              (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)"
+              [data]="customerGroupList"
+              [(selectionList)]='selectionCustomerGroupList' id = "groupCode"
+              (checkBoxChangeEvent)="selectionListCustomerGroup = ($event)"
               >
             </app-table>
           </div>
@@ -240,10 +249,17 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Panes </span></p>
             <app-table [keys]="topicPaneKeys" [isPaginate]="true"
-              [isSearch]="true" [data]="topicPaneDataSource"
-              [totalElement]="topicTableData.totalElements"
+              [pageSize]="pageSize" 
+              [pageIndex]="topicPane.index"
+              [isSearch]="true" [data]="topicPane.dataSource"
+              [totalElement]="topicPane.totalElement"
               (addEvent)='addTopicPanes()'
-              (goToEditEvent)='goToEditTopicPanes($event)'>
+              (goToEditEvent)='goToEditTopicPanes($event)'
+              [showSuggestionList]='true'
+              (suggestionListEvent)='getSuggestionListForFilterForTopicPane($event)'
+              [disableLastButton]='true'
+              (changePageEvent)='topicPanePagination($event)'
+              [suggestionList]='suggestionListTopicVariables'>
             </app-table>
           </div>
 
@@ -251,11 +267,15 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Recommendations, Leaks,Unique </span></p>
-            <app-table [keys]="recommendationKeys" [isPaginate]="true"
+            <app-table [keys]="recommendationKeys"
+              [isPaginate]="true"
+              [data]="recommendationsList"
+              [pageSize]="pageSize"
               [isSearch]="false" [data]="dataSource"
               [totalElement]="topicTableData.totalElements"
               (addEvent)='addRecommendationLeaks()'
-              (goToEditEvent)='goToEditRecommendationLeaks()'>
+              (goToEditEvent)='goToEditRecommendationLeaks()'
+              >
             </app-table>
           </div>
 
@@ -263,15 +283,21 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Variables </span></p>
-            <app-table [keys]="topicVariablesKeys" [isPaginate]="true"
-              [isSearch]="true" [data]="topicVariableTableData.content"
+            <app-table [keys]="topicVariablesKeys" 
+            [isPaginate]="true"
+              [isSearch]="true"
+              [data]="topicVariableTableData.content"
+              [pageSize]="pageSize"
+              [pageIndex]="topicVariableTableData.pageIndex"
               [totalElement]="topicVariableTableData.totalElements"
               (addEvent)='addTopicVariables()'
-              (goToEditEvent)='goToEditTopicVariables($event)'
-              (changePageEvent)='GetSuggestionListForFilter($event)'
+              (goToEditEvent)='goToEditTopicVariables($event)'  
+              (changePageEvent)='topicVariablesPageChangeEvent($event)'
+              (suggestionListEvent)='getSuggestionListForFilterForTopicVariable($event)'
               [showSuggestionList]='true'
-              [suggestionList]='suggestionListTopicVariables'
-              >
+              [disableLastButton]='true'
+              [disableNextButton]='disableNextButtonTopicVariable'
+              [suggestionList]='suggestionListTopicVariables' >
             </app-table>
           </div>
 
@@ -279,26 +305,26 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 display-inline-button-large display-responsive-large">
               <button type="button" class="btn btn-primary" (click)="back()" style="float :left">Back</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 button-text-align display-responsive-large">
+            <div *ngIf="id !== undefined" class="col-sm-2 col-md-2 col-lg-2 col-xs-6 button-text-align display-responsive-large">
               <button type="button" class="btn btn-primary"
                 (click)="copy()" style="float :right">
                 Copy
               </button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-3 col-xs-6 display-inline-button-large display-responsive-large">
+            <div  *ngIf="id !== undefined" class="col-sm-2 col-md-2 col-lg-3 col-xs-6 display-inline-button-large display-responsive-large">
               <label for="isRerunTopic" class="label-margin-bottom">
                 <input type="checkbox" formControlName='isRerunTopic'
                   id='isRerunTopic' style="float :left">
-                Require to rerun topic
+                  Require users to rerun topic
               </label>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 display-inline-button-large1 display-responsive-large">
+            <div *ngIf="id !== undefined"  class="col-sm-2 col-md-2 col-lg-2 col-xs-6 display-inline-button-large1 display-responsive-large">
               <button type="button" class="btn btn-primary"
                 (click)="ReInitTopic()" style="float :right">
                 Reinit topics
               </button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-1 col-xs-6 display-responsive-large button-text-align">
+            <div *ngIf="id !== undefined" class="col-sm-2 col-md-2 col-lg-1 col-xs-6 display-responsive-large button-text-align">
               <button type="button" class="btn btn-primary" (click)="delete()" style="float :left">Delete</button>
             </div>
             <div class="col-sm-12 col-md-12 col-lg-2 col-xs-6 div-margin-top display-responsive-large button-text-align button-text-align1">

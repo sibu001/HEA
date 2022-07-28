@@ -11,6 +11,8 @@ import { TopicService } from 'src/app/store/topic-state-management/service/topic
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
+import { AppComponent } from 'src/app/app.component';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'app-topic-description-variable-edit',
@@ -24,6 +26,7 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
   calculationTypeList: any[] = [];
   surveyDescriptionId : any;
   topicDescriptionData : any;
+  topicDescriptionData2 : any;
   topicDescription : any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
@@ -37,35 +40,46 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
-      this.surveyDescriptionId = params['surveyDescriptionId'];
+      this.surveyDescriptionId = params['topicDescriptionId'];
       this.topicDescription = params['topicDescription'];
     });
-    console.log(this.id); 
+
+      this.getCalculationValueFromStore()
+      this.getCalculationTypeListFromStore();
+
+      this.loadCalculationTypeList(); 
+      this.loadLookUpCalculationPeriod();
   }
 
 
   ngOnInit() {
-    this.getCalculationValueFromStore()
-    this.loadLookUpCalculationPeriod();
-    this.getSeletedTopicDescriptionVariableFromStore();
-    this.loadCalculationTypeList();
     this.setForm(undefined);
-    this.loadtopicDescriptionVariableData();
+    if(this.id){
+      this.getSeletedTopicDescriptionVariableFromStore();
+      this.loadtopicDescriptionVariableData();
+    }
   }
 
   loadCalculationTypeList(): any {
     this.systemService.loadCalculationTypeList();
-    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
-      .subscribe((calculationTypeList: any) => {
-        this.calculationTypeList = calculationTypeList.data;
-      }));
   }
 
+  getCalculationTypeListFromStore() : any{
+    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
+    .subscribe((calculationTypeList: any) => {
+      this.calculationTypeList = calculationTypeList.data;
+      if(this.variableForm)
+      this.variableForm.patchValue({calculationType : this.calculationTypeList[1].lookupValue});
+      console.log(this.calculationTypeList);
+    }));
+  }
+
+  
   setForm(event: any): any {
     this.variableForm = this.formBuilder.group({
       field: [event !== undefined ? event.field : '', Validators.required],
-      calculationType: [event !== undefined ? event.calculationType : '1'],
-      calculationExpression: [event !== undefined ? event.calculation : ''],
+      calculationType: [event !== undefined ? event.calculationType : ''],
+      calculation: [event !== undefined ? event.calculation : ''],
       calculationPeriod: [event !== undefined ? event.calculationPeriod : ''],
       comments: [event !== undefined ? event.comments : ''],
       keepVaca : [ event !== undefined ? event.keepVaca : false]
@@ -79,6 +93,8 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
       ).subscribe(
         (response: any) =>{
             this.calculationPeriodList = response;
+            if(this.variableForm)
+            this.variableForm.patchValue({calculationPeriod : this.calculationPeriodList[2].lookupValue});
         })
       )
   }
@@ -94,7 +110,10 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
       .subscribe(
         (response) =>{
           this.topicDescriptionData = {...response};
+          this.topicDescriptionData2 = {...this.topicDescriptionData};
           this.topicDescriptionData.updatedDate = this.datePipe.transform(this.topicDescriptionData.updatedDate,'mm/dd/yyyy HH:MM:ss')
+          this.topicDescriptionData.createdDate = this.datePipe.transform(this.topicDescriptionData.createdDate,'mm/dd/yyyy HH:MM:ss')
+
           this.setForm(response);
         }
         ));
@@ -107,19 +126,48 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
   goToDebug() {
     this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: {} });
   }
+
   back(): any {
-    this.location.back();
+    this.router.navigate(['/admin/topicDescription/topicDescriptionEdit'],{queryParams: {id: this.surveyDescriptionId}});
   }
 
   save(): any {
 
-  }
+    const body = Object.assign(this.topicDescriptionData ? this.topicDescriptionData : {},this.variableForm.value);
+    body.createdDate = undefined;
+    body.updatedDate = undefined;
+
+    this.subscriptions.add(
+      this.loginService
+      .performPostWithParam(body,AppConstant.topicDescription + '/' +this.surveyDescriptionId + '/' + AppConstant.topicDescritptionVariable ,{})
+      .subscribe(
+        next => {
+          this.id = next.id;
+            this.router.navigate([], { 
+              relativeTo: this.activateRoute,
+              queryParams: {id : this.id},
+              queryParamsHandling : 'merge'
+            })
+          this.ngOnInit();
+        } ,error =>{
+            this.utilityService.showErrorMessage(error.message);
+        }
+      )
+    )
+  }  
   delete(): any {
-
-  }
-
-  copy(): any {
-
+    document.getElementById('loader').classList.add('loading');
+    this.subscriptions.add(
+      this.loginService.performDelete(AppConstant.topicDescription + '/' + this.id + '/' + AppConstant.topicDescritptionVariable + '/' + this.id)
+      .subscribe(
+        next =>{
+          document.getElementById('loader').classList.remove('loading');
+          this.back();
+        }, error =>{ 
+          document.getElementById('loader').classList.remove('loading');
+          console.error(error)}
+      ) 
+    )
   }
 
   recalculate() {
@@ -133,7 +181,7 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
            if(response.errorMessage){
             this.utilityService.showErrorMessage(response.errorMessage);
            }else{
-            this.router.navigate(['/admin/topicDescription/topicDescriptionVariableEdit'], { queryParams: { id: this.id , surveyDescriptionId : this.surveyDescriptionId , topicDescription : this.topicDescription } });
+            this.router.navigate(['/admin/topicDescription/topicDescriptionVariableEdit'], { queryParams: { id: this.id , topicDescriptionId : this.surveyDescriptionId , topicDescription : this.topicDescription } });
            }
         }, error => { 
           document.getElementById('loader').classList.remove('loading')

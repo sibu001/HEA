@@ -18,6 +18,15 @@ import {
     LoadTopicVariablesAction,
     LoadLookUpCalculationPeriodAction,
     LoadSelectedTopicDescriptionVariableAction,
+    LoadTopicPaneVariableById,
+    LoadDataBlockByPaneId,
+    LoadDataBlockById,
+    LoadDataFiledByPaneId,
+    LoadDataFieldById,
+    LoadPaneListByTopicDescriptionId,
+    SaveDataFieldByPaneIdAction,
+    DeleteDataFieldByIdAction,
+    LoadLookUpValueByType,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -32,7 +41,18 @@ import { TopicManagementModel } from './topic.model';
         topicDesctiptionPane : undefined,
         topicVariables : undefined,
         calculationPeriod : undefined,
-        topicDescriptionVariable : undefined
+        topicDescriptionVariable : undefined,
+        topicPane : undefined,
+        dataBlockList : undefined,
+        dataBlock : undefined,
+        dataFieldList : undefined,
+        dataField : undefined,
+        paneList : undefined,
+        FIELD_SOURCE : undefined,
+        DATA_TYPE : undefined,
+        INPUT_TYPE : undefined,
+        CALCULATION_EVENT : undefined,
+        CALCULATION_TYPE : undefined
     }
 })
 
@@ -79,6 +99,61 @@ export class TopicManagementState {
     @Selector()
     static getTopicVariables(state : TopicManagementModel) : any {
         return state.topicVariables;
+    }
+
+    @Selector()
+    static getSelectedTopicPane(state : TopicManagementModel) : any{
+        return state.topicPane
+    }
+
+    @Selector()
+    static getDataBlockListByPaneId(state: TopicManagementModel): any {
+        return state.dataBlockList;
+    }
+
+    @Selector()
+    static getDataBlockByPaneId(state: TopicManagementModel): any {
+        return state.dataBlock;
+    }
+
+    @Selector()
+    static getDataFieldByPaneId(state: TopicManagementModel): any {
+        return state.dataFieldList;
+    }
+
+    @Selector()
+    static getDataFieldById(state: TopicManagementModel): any {
+        return state.dataField;
+    }
+
+    @Selector()
+    static getPaneListByTopicDescriptionId(state: TopicManagementModel): any {
+        return state.paneList;
+    }
+
+    @Selector()
+    static getCalculationTypeLookUp(state: TopicManagementModel): any {
+        return state.CALCULATION_TYPE;
+    }
+
+    @Selector()
+    static getCalculationEventLookUp(state: TopicManagementModel): any {
+        return state.CALCULATION_EVENT;
+    }
+
+    @Selector()
+    static getSourceLookUp(state: TopicManagementModel): any {
+        return state.FIELD_SOURCE;
+    }
+
+    @Selector()
+    static getDataTypeLookUp(state: TopicManagementModel): any {
+        return state.DATA_TYPE;
+    }
+
+    @Selector()
+    static getInputTypeLookUp(state: TopicManagementModel): any {
+        return state.INPUT_TYPE;
     }
 
     @Action(GetTopicDescriptionListAction)
@@ -163,10 +238,11 @@ export class TopicManagementState {
 
     @Action(LoadTopicVariablesAction)
     loadTopicVariablesAction(ctx : StateContext<TopicManagementModel>, action: LoadTopicVariablesAction) : Actions{
-        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id  + '/' + AppConstant.topicDescritptionVariable )
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGetWithParams(AppConstant.topicDescription + '/' + action.id  + '/' + AppConstant.topicDescritptionVariable ,action.params)
         .pipe(
             tap((response : any ) =>{
-                document.getElementById('loader').classList.add('loading');
+                document.getElementById('loader').classList.remove('loading');
                 ctx.patchState({
                     topicVariables : response
                 })
@@ -204,6 +280,102 @@ export class TopicManagementState {
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         topicDescription: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(LoadDataBlockByPaneId)
+    loadDataBlockByPaneId(ctx: StateContext<TopicManagementModel>, action: LoadDataBlockByPaneId) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataBlock)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    response = TopicUtilityTransformer.transformDataBlocksTableData(response);
+                    ctx.patchState({
+                        dataBlockList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    })
+            );
+
+    }
+
+    @Action(LoadDataFiledByPaneId)
+    loadDataFiledByPaneId(ctx: StateContext<TopicManagementModel>, action: LoadDataFiledByPaneId) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.pane + '/' + action.id + '/' + AppConstant.dataField)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        dataFieldList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    })
+            );
+
+    }
+
+    @Action(LoadDataFieldById)
+    loadDataFiledById(ctx: StateContext<TopicManagementModel>, action: LoadDataFieldById) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataField +'/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        dataField: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    })
+            );
+
+    }
+
+    @Action(LoadTopicPaneVariableById)
+    loadTopicPaneVariableById(ctx : StateContext<TopicManagementModel>, action: LoadTopicPaneVariableById){
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.surevyDescriptionId + '/' + AppConstant.pane + '/' + action.paneId)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        topicPane: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                    }));
+    }
+
+    @Action(LoadDataBlockById)
+    loadDataBlockById(ctx : StateContext<TopicManagementModel>, action: LoadDataBlockById){
+        const currentState = ctx.getState();
+        if(currentState.dataBlock && currentState.dataBlock.id == action.id) return null;
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataBlock + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    // this.utilityService.showSuccessMessage('Save Successfully');
+                    ctx.patchState({
+                        dataBlock: response,
                     });
                 },
                     error => {
@@ -283,4 +455,87 @@ export class TopicManagementState {
                     }));
     }
 
+    
+    @Action(LoadPaneListByTopicDescriptionId)
+    loadPaneListByTopicDescriptionId(ctx: StateContext<TopicManagementModel>, action: LoadPaneListByTopicDescriptionId): Actions {
+        const paneList = ctx.getState().paneList;
+        if( paneList && paneList[0].surveyDescriptionId == action.id)
+            return null;
+            
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id + '/' + AppConstant.pane)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        paneList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+    @Action(SaveDataFieldByPaneIdAction)
+    saveDataFieldByPaneIdAction(ctx: StateContext<TopicManagementModel>, action: SaveDataFieldByPaneIdAction): Actions {            
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataField)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        dataField: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+    @Action(DeleteDataFieldByIdAction)
+    deleteDataFieldByIdAction(ctx: StateContext<TopicManagementModel>, action: DeleteDataFieldByIdAction): Actions {            
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataField + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    let dataFieldList = ctx.getState().dataFieldList;
+                    dataFieldList = dataFieldList.filter( data => data.id != action.id);
+                    ctx.patchState({
+                        dataFieldList: dataFieldList
+                    })
+                    ctx.patchState({
+                        dataField: undefined,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+    @Action(LoadLookUpValueByType)
+    loadLookUpValueByType(ctx: StateContext<TopicManagementModel>, action: LoadLookUpValueByType): Actions {
+
+        const state = ctx.getState();
+        if(state[action.type])
+            return null;
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.lookup + '/' + action.type + '/' + AppConstant.lookupValues)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    // console.log("pre state :- " + JSON.stringify(state))
+                    state[action.type] = response
+                    ctx.setState(state);
+                    // console.log("post state :- " + JSON.stringify(state))
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
 }

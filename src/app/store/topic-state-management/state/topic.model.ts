@@ -8,4 +8,15 @@ export interface TopicManagementModel {
     topicVariables : any ;
     calculationPeriod : any;
     topicDescriptionVariable : any;
+    topicPane : any;
+    dataBlockList : any;
+    dataBlock : any;
+    dataFieldList : any;
+    dataField : any;
+    paneList : any;
+    FIELD_SOURCE : any;
+    DATA_TYPE : any;
+    INPUT_TYPE : any;
+    CALCULATION_EVENT : any;
+    CALCULATION_TYPE : any
 }

@@ -1,4 +1,4 @@
-import { MatCheckboxModule } from '@angular/material';
+import { MatCheckboxModule, MAT_DIALOG_DATA } from '@angular/material';
 import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 
@@ -23,6 +23,8 @@ import { TopicManagementState } from 'src/app/store/topic-state-management/state
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
+import { TopicDescriptionEditCopyComponent } from './topic-description-edit-copy/topic-description-edit-copy.component';
+import { TopicDescriptionPaneCopyComponent } from './topic-description-pane-copy/topic-description-pane-copy.component';
 
 @NgModule({
   imports: [
@@ -47,7 +49,10 @@ import { UtilityService } from 'src/app/services/utility.service';
     TopicPaneDataBlockEditComponent,
     TopicPaneDataFieldEditComponent,
     TopicPaneChartsEditComponent,
-    TopicPaneReportsEditComponent],
-  providers: [SystemService, TopicService, LoginService,DatePipe, UtilityService]
+    TopicPaneReportsEditComponent,
+    TopicDescriptionEditCopyComponent,
+    TopicDescriptionPaneCopyComponent],
+  providers: [SystemService, TopicService, LoginService,DatePipe, UtilityService, { provide: MAT_DIALOG_DATA, useValue: {} }],
+  entryComponents: [TopicDescriptionEditCopyComponent,TopicDescriptionPaneCopyComponent]
 })
 export class TopicDescriptionModule { }

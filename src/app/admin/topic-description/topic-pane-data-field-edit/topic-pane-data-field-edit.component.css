@@ -56,3 +56,8 @@ section.space-top {
     }
   }
   
+  .disableInput{
+    border: none !important;
+    box-shadow: none !important;
+    background-color: #ffff !important;
+  }

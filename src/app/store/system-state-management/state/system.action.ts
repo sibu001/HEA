@@ -47,6 +47,7 @@ export enum SystemActionTypes {
     GET_CONTENT_TYPE_LIST = 'Get Content Type List',
     CUSTOMER_GROUP_ERROR = 'Customer Error',
     SET_DEBUG_CONSOLE_DATA = 'Set Debug Console Data',
+    RECOMMENDATION_LEAK_UNIQUE = 'Recommendation Leak and Unique'
 }
 export class GetCustomerGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_LIST;
@@ -63,6 +64,11 @@ export class UpdateCustomerGroupAction {
     static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_CUSTOMER_GROUP;
     constructor(readonly id: number, readonly customerGroup: any) {
     }
+}
+
+export class RecommendationsLeakAndUniqueAction{
+    static readonly type : SystemActionTypes = SystemActionTypes.RECOMMENDATION_LEAK_UNIQUE;
+    constructor(readonly id : number){}
 }
 
 export class SaveCustomerGroupAction {

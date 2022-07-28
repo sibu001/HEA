@@ -272,9 +272,9 @@ export class TableColumnData {
     ];
 
     static readonly RECOMMENDATION_KEY: Array<TABLECOLUMN> = [
-        { key: 'Code', isEdit: true, displayName: 'Code' },
-        { key: 'type', isEdit: true, displayName: 'Type' },
-        { key: 'label', isEdit: true, displayName: 'Label' },
+        { key: 'takebackCode', isEdit: true, displayName: 'Code' },
+        { key: 'lookupType', isEdit: true, displayName: 'Type' },
+        { key: 'takebackLabelTemplate', isEdit: true, displayName: 'Label' },
     ];
 
     static readonly RECOMMENDATION_EDIT_KEY: Array<TABLECOLUMN> = [
@@ -292,11 +292,11 @@ export class TableColumnData {
         { key: 'blockCode', isEdit: true, displayName: 'Block Code' },
         { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
         { key: 'label', isEdit: true, displayName: 'Label' },
-        { key: 'isArray', isEdit: true, displayName: 'Is Array' }
+        { key: 'array', isEdit: true, displayName: 'Is array' }
     ];
 
     static readonly PANE_DATA_FIELD_KEY: Array<TABLECOLUMN> = [
-        { key: 'fieldCode', isEdit: true, displayName: 'Field Code' },
+        { key: 'field', isEdit: true, displayName: 'Field Code' },
         { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
         { key: 'label', isEdit: true, displayName: 'Label' },
     ];

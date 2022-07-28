@@ -258,7 +258,7 @@ export class LoginService {
                 console.log(errors);
                 this.users = this.getUser();
                 theme = this.users.theme;
-                const userId = this.users.outhMeResponse.userId;
+                const userId = this.users.userId;
                 const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
                 this.users.currentPaneNumber = currentPaneNumber;

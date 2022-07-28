@@ -48,7 +48,8 @@ import {
   SetDebugConsoleData,
   GetLookupValueHomeSizeListAction,
   GetMailPeriodListAction,
-  GetContentTypeListAction
+  GetContentTypeListAction,
+  RecommendationsLeakAndUniqueAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -171,12 +172,20 @@ export class SystemService {
     return this.store.select(SystemManagementState.getContentType);
   }
 
+  getRecommendatonLeakAndUnique(){
+    return this.store.select(SystemManagementState.getRecommendatonLeakAndUnique);
+  }
+
   loadCustomerGroupList(force: boolean, filter: any): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCustomerGroupListAction(force, filter));
   }
 
   loadCustomerGroupById(id: number): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCustomerGroupByIdAction(id));
+  }
+
+  loadRecommendationsLeakAndUnique(id : number){
+    return this.store.dispatch(new RecommendationsLeakAndUniqueAction(id))
   }
 
   saveCustomerGroup(customerGroup: any): Observable<SystemManagementState> {

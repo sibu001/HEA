@@ -1,4 +1,5 @@
-import { Location } from '@angular/common';
+import { LoadLookUpValueByType } from './../../../store/topic-state-management/state/topic.action';
+import { DatePipe, Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +8,8 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -19,72 +22,195 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   id: any;
   isBlockField: false;
   dataFieldForm: FormGroup;
-  dataFieldKeys: TABLECOLUMN[];
+  paneId : any;
+  topicDescriptionId : any;
+  dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
+  dataFieldDataValue : any;
   dataFieldData = {
     content: [],
     totalElements: 0
   };
   calculationTypeList: any[] = [];
   dataFieldDataSource: any;
-  paneData = TableColumnData.PANE_DATA;
-  inputData = TableColumnData.INPUT_TYPE_DATA;
-  sourceTypeList: any[] = TableColumnData.TOPIC_SOURCE_TYPE;
-  dataTypeList: any[] = TableColumnData.DATA_TYPE;
-  calculationEventList: any[] = TableColumnData.CALCULATION_EVENT_TYPE;
+  paneData =[];
+  inputTypeList = [];
+  sourceTypeList = [];
+  dataTypeList = [];
+  calculationEventList = [];
   calculationPeriodList: any[] = TableColumnData.CALCULATION_PERIOD;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
     private readonly systemService: SystemService,
+    private readonly topicService: TopicService,
     private readonly location: Location,
+    private readonly datePipe : DatePipe,
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.isBlockField = params['isBlockField'] !== undefined ? JSON.parse(params['isBlockField']) : false;
+      this.paneId = params['paneId'];
+      this.topicDescriptionId = params['topicDescriptionId']
     });
+    this.setForm(undefined);
+    this.getLookUpDataType();
+    this.getLookUpInputType();
+    this.getLookUpSource();
+    this.getCalculationTypeList();
+    this.getLookUpCalculationEvent();
+    this.getPanesForTopicDescripition();
+
+    this.loadLookUpInputType();
+    this.loadLookUpDataType();
+    this.loadLookUpSource();
+    this.loadLookUpCalculationEvent();
+  }
+
+  ngOnInit() {
+    this.loadPanesForTopicDescription();
+    this.loadCalculationTypeList();
+    this.getDataFieldById();
+
+    if(this.id){
+      this.loadDataFieldById();
+    }
   }
 
   loadCalculationTypeList(): any {
     this.systemService.loadCalculationTypeList();
-    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
-      .subscribe((calculationTypeList: any) => {
-        this.calculationTypeList = calculationTypeList.data;
-      }));
   }
-  ngOnInit() {
-    this.dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
-    this.setForm(undefined);
+
+  getCalculationTypeList(){
+    this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
+    .subscribe((calculationTypeList: any) => {
+      this.calculationTypeList = calculationTypeList.data;
+      this.dataFieldForm.patchValue({calculationType : this.calculationTypeList[1].lookupValue})
+    }));
+  }
+
+  loadPanesForTopicDescription(){
+    this.topicService.loadPaneListByTopicDescriptionId(this.topicDescriptionId);
+  }
+
+  getPanesForTopicDescripition(){
+    this.subscriptions.add(
+    this.topicService.getPaneListByTopicDescriptionId()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe(
+      response =>{
+        this.paneData = response;
+      }, error =>{
+        console.error(error);
+      }
+    ));
+  }
+
+  loadLookUpDataType(){
+    this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeDataType);
+  }
+
+  getLookUpDataType(){
+    this.subscriptions.add(
+    this.topicService.getLookValueForDataType()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe(
+      response =>{
+        this.dataTypeList = response;
+        this.dataFieldForm.patchValue({dataType : this.dataTypeList[0].lookupValue})
+      }, error =>{
+        console.error(error);
+      }
+    ))
+  }
+
+  loadLookUpInputType(){
+    this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeInputType);
+  }
+
+  getLookUpInputType(){
+    this.subscriptions.add(
+    this.topicService.getLookValueForInputType()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe(
+      response =>{
+        this.inputTypeList = response;
+        this.dataFieldForm.patchValue({inputType : this.inputTypeList[0].lookupValue})
+      }, error =>{
+        console.error(error);
+      }
+    ))
+  }
+
+  loadLookUpSource(){
+    this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeSource);
+  }
+
+  getLookUpSource(){
+    this.subscriptions.add(
+    this.topicService.getLookValueForSource()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe(
+      response =>{
+        this.sourceTypeList = response;
+        this.dataFieldForm.patchValue({source : this.sourceTypeList[0].lookupValue})
+      }, error =>{
+        console.error(error);
+      }
+    ))
+  }
+
+  loadLookUpCalculationEvent(){
+    this.topicService.loadLookUpValuesByType(AppConstant.lookUPCalcutaionEvent);
+  }
+
+  getLookUpCalculationEvent(){
+    this.subscriptions.add(
+      this.topicService.getLookValueForCalculationEvent()
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        response =>{
+          this.calculationEventList = response;
+          this.dataFieldForm.patchValue({calculationEvent : this.calculationEventList[0].lookupValue})
+        }, error =>{
+          console.error(error);
+        }
+      )
+    )
   }
 
   setForm(event: any): any {
     this.dataFieldForm = this.formBuilder.group({
-      fieldCode: [event !== undefined ? event.blockCode : '', Validators.required],
-      pane: [event !== undefined ? event.blockCode : '', Validators.required],
-      orderNumber: [event !== undefined ? event.calculationType : ''],
-      label: [event !== undefined ? event.calculationExpression : '', Validators.required],
-      reportLabel: [event !== undefined ? event.calculationPeriod : '', Validators.required],
-      source: [event !== undefined ? event.isArray : ''],
-      dataType: [event !== undefined ? event.minRowsCount : ''],
-      inputType: [event !== undefined ? event.maxRowsCount : ''],
-      viewCondition: [event !== undefined ? event.blockCode : ''],
-      validationRule: [event !== undefined ? event.showFirstRows : ''],
-      validationMessage: [event !== undefined ? event.allowRemoving : ''],
-      calculationType: [event !== undefined ? event.allowRemoving : ''],
-      calculationRule: [event !== undefined ? event.allowRemoving : ''],
-      calculationEvent: [event !== undefined ? event.allowRemoving : ''],
-      displayPattern: [event !== undefined ? event.allowRemoving : ''],
-      inputMask: [event !== undefined ? event.allowRemoving : ''],
-      readOnly: [event !== undefined ? event.allowRemoving : ''],
-      unit: [event !== undefined ? event.allowRemoving : ''],
-      helpText: [event !== undefined ? event.allowRemoving : ''],
-      comments: [event !== undefined ? event.allowRemoving : ''],
-      displayToUser: [event !== undefined ? event.allowRemoving : ''],
-      required: [event !== undefined ? event.allowRemoving : ''],
-      refreshPane: [event !== undefined ? event.allowRemoving : ''],
-      nextRowAnswer1: [event !== undefined ? event.allowRemoving : ''],
-      rowsBetween: [event !== undefined ? event.allowRemoving : ''],
-      rowsBefore: [event !== undefined ? event.allowRemoving : ''],
-      rowsAfter: [event !== undefined ? event.allowRemoving : '']
+      field: [event !== undefined ? event.field : '', Validators.required],
+      paneId: [event !== undefined ? event.paneId : this.paneId, Validators.required],
+      orderNumber: [event !== undefined ? event.orderNumber : ''],
+      label: [event !== undefined ? event.label : '', Validators.required],
+      reportLabel: [event !== undefined ? event.reportLabel : '', Validators.required],
+      source: [event !== undefined ? event.source : ''],
+      dataType: [event !== undefined ? event.dataType : ''],
+      inputType: [event !== undefined ? event.inputType : ''],
+      viewCondition: [event !== undefined ? event.viewCondition : ''],
+      validation: [event !== undefined ? event.validation : ''],
+      skipFieldValuesValidation : [event !== undefined ? event.skipFieldValuesValidation : ''],
+      validationErrorMessage: [event !== undefined ? event.validationErrorMessage : ''],
+      calculationType: [event !== undefined ? event.calculationType : ''],
+      calculationPeriod : [event !== undefined ? event.calculationPeriod : ''],
+      calculation: [event !== undefined ? event.calculation : ''],
+      calculationEvent: [event !== undefined ? event.calculationEvent : ''],
+      displayPattern: [event !== undefined ? event.displayPattern : ''],
+      inputMask: [event !== undefined ? event.inputMask : ''],
+      readOnly: [event !== undefined ? event.readOnly : ''],
+      unit: [event !== undefined ? event.unit : ''],
+      helpText: [event !== undefined ? event.helpText : ''],
+      comments: [event !== undefined ? event.comments : ''],
+      userDisplay: [event !== undefined ? event.userDisplay : ''],
+      required: [event !== undefined ? event.required : ''],
+      onChangeRefresh: [event !== undefined ? event.onChangeRefresh : ''],
+      nextRowAnswer: [event !== undefined ? event.nextRowAnswer : ''],
+      rowsBefore: [event !== undefined ? event.rowsBefore : ''], 
+      rowsAfter: [event !== undefined ? event.rowsAfter : ''],
+      rowsBetween: [event !== undefined ? event.rowsBetween : ''],
+      updatedBy: [event !== undefined ? (event.updatedBy ? event.updatedBy : event.createdBy ) : ''],
+      updatedDate: [event !== undefined ? this.datePipe.transform((event.updatedDate ? event.updatedDate : event.createdDate),'MM/dd/yyyy HH:mm:ss'): '']
     });
   }
 
@@ -95,14 +221,47 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/topicDescription/topicPaneDataFieldEdit'], { queryParams: {} });
   }
   back(): any {
-    this.location.back();
+    this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId }})
+  }
+
+  loadDataFieldById(){
+   this.topicService.loadDataFieldById(this.id,this.paneId); 
+  }
+
+  getDataFieldById(){
+    this.subscriptions.add(
+      this.topicService.getDataFieldById()
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe(
+        response =>{
+          if(!this.id){
+            this.id = response.id;
+            this.router.navigate([],{
+              relativeTo: this.activateRoute,
+              queryParams: {id : this.id},
+              queryParamsHandling : 'merge'
+            })
+          }
+          this.dataFieldDataValue = response;
+          this.setForm(response);
+        } , error =>{
+          console.error(error);
+        }
+      )
+    )
   }
 
   save(): any {
+    const body = {...this.dataFieldForm.value, ...this.dataFieldDataValue};
+    body.createdDate = undefined;
+    body.updatedDate = undefined;
+    this.topicService.saveDataFiedlById(this.paneId,body);
 
   }
-  delete(): any {
 
+  delete(): any {
+    this.topicService.deleteDataFieldById(this.paneId,this.id);
+    this.back();
   }
 
   copy(): any {

@@ -10,15 +10,15 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Field code:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" formControlName="fieldCode" id="fieldCode">
+              <input type="text" class="form-control form-control-sm" formControlName="field" id="field">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div *ngIf='!isBlockField' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pane:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="pane" formControlName="pane">
-                <option *ngFor='let pane of paneData' [value]="pane.key">{{pane.value}}</option>
+              <select class="form-control form-control-sm" id="paneId" formControlName="paneId">
+                <option *ngFor='let pane of paneData' [value]="pane.id">{{pane.selectionLabel}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -48,7 +48,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Source:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="source" formControlName="source">
-                <option *ngFor='let group of sourceTypeList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of sourceTypeList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -58,7 +58,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Data Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="dataType" formControlName="dataType">
-                <option *ngFor='let group of dataTypeList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of dataTypeList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -68,7 +68,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Input Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="inputType" formControlName="inputType">
-                <option *ngFor='let input of inputData' [value]="input.key">{{input.value}}</option>
+                <option *ngFor='let input of inputTypeList' [value]="input.lookupValue">{{input.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -87,8 +87,19 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Validation Rule:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control form-control-sm" id="validationRule"
-                formControlName="validationRule"></textarea>
+              <textarea class="form-control form-control-sm" id="validation"
+                formControlName="validation"></textarea>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label>
+                <input type='checkbox' formControlName="skipFieldValuesValidation" id="skipFieldValuesValidation">
+                Skip validation by Field Values
+              </label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -96,8 +107,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Validation Message:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="validationMessage"
-                formControlName="validationMessage">
+              <input type="text" class="form-control form-control-sm" id="validationErrorMessage"
+                formControlName="validationErrorMessage">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -115,8 +126,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Rule:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control form-control-sm" formControlName="calculationType"
-                id="calculationType"></textarea>
+              <textarea class="form-control form-control-sm" formControlName="calculation"
+                id="calculation"></textarea>
               <span class='debug' (click)='goToDebug()'>Debug</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -126,7 +137,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Event:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" formControlName="calculationEvent" id="calculationEvent">
-                <option *ngFor='let group of calculationEventList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of calculationEventList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -198,14 +209,14 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label>
-                <input type='checkbox' formControlName="displayToUser" id="displayToUser">
+                <input type='checkbox' formControlName="userDisplay" id="userDisplay">
                 Display To User
               </label>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf='f.displayToUser.value' class="row borderBottom rowPadding">
+          <div *ngIf='f.userDisplay.value' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label>
@@ -217,11 +228,11 @@
           </div>
 
 
-          <div *ngIf='f.displayToUser.value' class="row borderBottom rowPadding">
+          <div *ngIf='f.userDisplay.value' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label>
-                <input type='checkbox' formControlName="refreshPane" id="refreshPane">
+                <input type='checkbox' formControlName="onChangeRefresh" id="onChangeRefresh">
                 Refresh Pane On Change Event
               </label>
             </div>
@@ -229,11 +240,11 @@
           </div>
 
 
-          <div *ngIf='f.displayToUser.value && !isBlockField' class="row borderBottom rowPadding">
+          <div *ngIf='f.userDisplay.value && !field' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label>
-                <input type='checkbox' formControlName="nextRowAnswer1" id="nextRowAnswer1">
+                <input type='checkbox' formControlName="nextRowAnswer" id="nextRowAnswer">
                 Set Answer On Next Row
               </label>
             </div>
@@ -241,7 +252,7 @@
           </div>
 
 
-          <div *ngIf='f.displayToUser.value && f.nextRowAnswer1.value  && !isBlockField'
+          <div *ngIf='f.userDisplay.value && f.nextRowAnswer.value == true'
             class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Rows between question and answer:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -251,7 +262,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf='f.displayToUser.value  && f.nextRowAnswer1.value  && !isBlockField'
+          <div *ngIf='f.userDisplay.value '
             class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Rows Before Question:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -260,7 +271,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf='f.displayToUser.value  && f.nextRowAnswer1.value && !isBlockField'
+          <div *ngIf='f.userDisplay.value '
             class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Rows After Answer:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -269,56 +280,53 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Updated By:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-
+          <ng-container *ngIf="id">
+            <div class="row borderBottom rowPadding">
+              <div class="col-sbm-4 col-md-4 col-lg-4 col-xs-12">Updated By:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm disableInput" formControlName="updatedBy" readOnly id="updatedBy">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Updated Date:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+  
+            <div class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Updated Date:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12"> 
+                <input type="text" class="form-control form-control-sm disableInput" formControlName="updatedDate" readOnly id="updatedDate">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
+          </ng-container>
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Field Values</span></p>
             <app-table [keys]="dataFieldKeys" [isSearch]="false" [isDelete]=true [data]="dataFieldDataSource"
-              [totalElement]="dataFieldData.totalElements" [isHideAdd]=true [showAddRowButton]=true
+              [totalElement]="dataFieldData.totalElements" [isHideAdd]=false [showAddRowButton]=false
               (saveRowEvent)="saveRow()">
             </app-table>
           </div>
 
           <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 sidePadding" style="text-align: left !important;">
               <button type="button" class="btn btn-primary" (click)="back()">
                 Back
               </button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
-              </div>
-              <div class="col-sm-8 col-md-10 col-lg-9 col-xs-8 sidePadding" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="recalculate()">
-                  Recalculate
-                </button>
-              </div>
-              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding" *ngIf="id !== undefined && id !== null">
+            <!-- <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding"> -->
+              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-6 sidePadding" *ngIf="id !== undefined && id !== null">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
                   Delete
                 </button>
               </div>
-              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding">
+              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-6 sidePadding" *ngIf="id == undefined || id == null"></div>
+              <div class="col-sm-2 col-md-2 col-lg-1 col-xs-12 sidePadding">
                 <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
                   Save
                 </button>
               </div>
-            </div>
+            <!-- </div> -->
           </div>
         </form>
       </div>

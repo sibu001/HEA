@@ -11,7 +11,15 @@ export enum TopicActionTypes {
     LOAD_TOPIC_VARIABLES = 'Load Topic Variables',
     LOAD_LOOK_UP_CALCULATION_PERIOD = 'Load Look Up Calculation Period',
     LOAD_SELECTED_TOPIC_DESCRIPTION_VARIABLES = 'Load Selected Topic Description Variables',
-    
+    LOAD_TOPIC_PANE_BY_ID = "Load Topic Pane By Id",
+    LOAD_DATA_BLOCK_BY_PANE_ID = 'Load Data Block By Pane Id',
+    LOAD_DATA_BLOCK_BY_ID = 'Load Data Block By Id',
+    LOAD_DATA_FIELD_BY_PANE_ID = 'Load Data Field By Pane Id',
+    LOAD_DATA_FIELD_BY_ID = 'Load Data Field By Id',
+    LOAD_TOPIC_DESCRIPTION_BY_PANE_ID = 'Load Topic Description by Pane Id',
+    SAVE_DATA_FIELD = 'Save Data Field',
+    DELETE_DATA_FIELD_BY_ID = 'Delete Data Field',
+    LOAD_LOOKUP_VALUE_BY_TYPE = 'Load Lookup Value By Type'
 }
 export class GetTopicDescriptionListAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_LIST;
@@ -37,7 +45,17 @@ export class LoadSelectedTopicDescriptionVariableAction{
 
 export class LoadTopicVariablesAction{
     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_TOPIC_VARIABLES;
-    constructor(readonly id : number) {}
+    constructor(readonly id : number, readonly params : any) {}
+}
+
+export class LoadTopicPaneVariableById{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_TOPIC_PANE_BY_ID;
+    constructor(readonly surevyDescriptionId : number , readonly paneId : number){}
+}
+
+export class LoadDataBlockById{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_DATA_BLOCK_BY_ID
+    constructor(readonly id : number, readonly paneId : number){}
 }
 
 export class SaveTopicDescriptionAction {
@@ -45,6 +63,17 @@ export class SaveTopicDescriptionAction {
     constructor(readonly topicDescription: any) {
     }
 }
+
+export class LoadDataBlockByPaneId{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_DATA_BLOCK_BY_PANE_ID;
+    constructor(readonly paneId : number){}
+}
+
+export class LoadDataFiledByPaneId{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_DATA_FIELD_BY_PANE_ID;
+    constructor(readonly id : number){}
+}
+
 
 // export class LoadTopicDescriptionPaneByIdAction{
 //     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_TOPIC_DESCRIPTION_PANE_BY_ID;
@@ -54,6 +83,12 @@ export class SaveTopicDescriptionAction {
 export class UpdateTopicDescriptionAction {
     static readonly type: TopicActionTypes = TopicActionTypes.UPDATE_TOPIC_DESCRIPTION;
     constructor(readonly id: number, readonly topicDescription: any) {
+    }
+}
+
+export class LoadDataFieldById{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_DATA_FIELD_BY_ID;
+    constructor(readonly id: number, readonly paneId: number) {
     }
 }
 
@@ -76,3 +111,23 @@ export class ScriptDebugAction {
 export class GetPaidServiceListAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_PAID_SERVICE;
 }
+
+export class LoadPaneListByTopicDescriptionId{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_TOPIC_DESCRIPTION_BY_PANE_ID;
+    constructor(readonly id : number){}
+}
+
+export class SaveDataFieldByPaneIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.SAVE_DATA_FIELD;
+    constructor(readonly paneId : number, readonly body : any){}
+}
+
+export class DeleteDataFieldByIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.DELETE_DATA_FIELD_BY_ID;
+    constructor(readonly paneId : number, readonly id : number){}
+}
+
+export class LoadLookUpValueByType{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_LOOKUP_VALUE_BY_TYPE;
+    constructor(readonly type : string){}
+}   

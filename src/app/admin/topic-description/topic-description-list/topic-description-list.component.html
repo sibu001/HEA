@@ -61,7 +61,7 @@
             <span class="messageName">Topic description list (Number of Records
               = {{totalElement}})</span></p>
           <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
-            [data]="dataSource"
+            [data]="topicData.content"
             [totalElement]="topicData.totalElements"
             (changePageEvent)="search($event,false)"
             (goToEditEvent)="goToEditTopicDescription($event)"
