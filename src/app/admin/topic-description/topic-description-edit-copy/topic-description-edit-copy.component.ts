@@ -28,7 +28,7 @@ export class TopicDescriptionEditCopyComponent implements OnInit {
      });
   }
 
-  save(form: any) {
+  save() {
     this.dialog.close(this.copyForm.value);
   }
   
