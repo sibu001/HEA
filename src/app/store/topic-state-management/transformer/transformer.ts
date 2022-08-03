@@ -29,4 +29,20 @@ export class TopicUtilityTransformer {
         )
         return src;
     }
+
+    static transformFieldValuesTableData(src : any){
+       return src.map(
+            data =>{
+                data.range = (data.rangeStart ? data.rangeStart.toFixed(1) : '') +
+                 ' - ' +  (data.rangeEnd ? data.rangeEnd.toFixed(1) : '' );
+                return data;
+            }
+        )
+    } 
+
+    static transformFieldValuesSingleData(data : any){
+                 data.range = (data.rangeStart ? data.rangeStart.toFixed(1) : '') +
+                  ' - ' +  (data.rangeEnd ? data.rangeEnd.toFixed(1) : '' );
+                 return data;
+     } 
 }

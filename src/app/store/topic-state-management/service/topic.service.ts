@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -185,5 +185,47 @@ export class TopicService {
     return this.store.select(TopicManagementState.getSourceLookUp)
   }
 
+  getChartTypeLookUp(){
+    return this.store.select(TopicManagementState.getChartTypeLookUp);
+  }
 
+  loadAllFieldValuesForDataField(paneId : number , dataFieldId : number){
+    return this.store.dispatch(new LoadFieldValuesForDataField(paneId, dataFieldId));
+  }
+
+  getFieldValuesForDataField(){
+    return this.store.select(TopicManagementState.getFieldValueListForDataField);
+  }
+
+  deleteFieldValuesForDataField(paneId : number , dataFieldId : number , id : number):Observable<TopicManagementState>{
+    return this.store.dispatch( new DeleteFieldValuesForDataField(paneId,dataFieldId,id))
+  }
+
+  saveDataFieldValue(body: any ,paneId : number , dataFieldId : number):Observable<TopicManagementState>{
+    return this.store.dispatch(new SaveFieldValuesForDataField(body, paneId, dataFieldId))
+  }
+
+  loadAllPossibleColorsForCharts():Observable<TopicManagementState>{
+    return this.store.dispatch(new LoadAllPossibleColorForChartAction());
+  }
+
+  getAllPossibleColorsForChart():Observable<TopicManagementState>{
+    return this.store.select(TopicManagementState.getAllPossibleColorsForChart);
+  }
+
+  loadAllPossibleStyleForCharts():Observable<TopicManagementState>{
+    return this.store.dispatch(new LoadAllPossibleStyleForChartAction());
+  }
+
+  getAllPossibleStyleForChart():Observable<TopicManagementState>{
+    return this.store.select(TopicManagementState.getAllPossibleStyleForChart);
+  }
+
+  loadAllPossibleFontFamilyNames():Observable<TopicManagementState>{
+    return this.store.dispatch(new LoadAllAvaliableFontFamiliesNamesForChartAction());
+  }
+
+  getAllPossibleFontFamilyNames():Observable<TopicManagementState>{
+    return this.store.select(TopicManagementState.getAllPossibleFontFamilyNames);
+  }
 }

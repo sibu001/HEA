@@ -3,7 +3,7 @@ import { DatePipe, Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { pipe, Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
@@ -24,7 +24,7 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   dataFieldForm: FormGroup;
   paneId : any;
   topicDescriptionId : any;
-  dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
+  dataFieldKeys = TableColumnData.PANE_DATA_FIELD_VALUES_KEY;
   dataFieldDataValue : any;
   dataFieldData = {
     content: [],
@@ -72,7 +72,9 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     this.getDataFieldById();
 
     if(this.id){
+      this.getAllFieldValues();
       this.loadDataFieldById();
+      this.loadAllFieldValues();
     }
   }
 
@@ -264,16 +266,34 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     this.back();
   }
 
-  copy(): any {
-
+  loadAllFieldValues(){
+    this.topicService.loadAllFieldValuesForDataField(this.paneId,this.id);
   }
 
-  recalculate() {
-
+  getAllFieldValues(){
+    this.topicService.getFieldValuesForDataField()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe(
+      response =>{
+        this.dataFieldData.content = [...response];
+      }, error =>{
+        console.error(error);
+      }
+    )
   }
 
   saveRow() {
 
+  }
+
+  deleteRow(event){
+    console.log(event);
+    this.topicService.deleteFieldValuesForDataField(this.paneId,this.id,event.id);
+  }
+
+  addRowEvent(event){
+    console.log(event);
+    this.topicService.saveDataFieldValue(event,this.paneId,this.id);
   }
 
   goToDebug() {

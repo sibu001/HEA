@@ -114,11 +114,17 @@ export class AppConstant {
     public static debounceTime = 700;
     public static dataBlock = 'dataBlocks';
     public static dataField = 'dataFields';
+    public static fieldValues = 'fieldValues'
     public static lookUpCalculationPeriod = 'VARIABLE_PERIOD';
     public static lookUpCodeTakeBackValue = 'TAKEBACK_TYPE';
     public static lookUpCodeDataType = 'DATA_TYPE';
     public static lookUpCodeInputType = 'INPUT_TYPE';
     public static lookUpCodeSource = 'FIELD_SOURCE';
     public static lookUPCalcutaionEvent = 'CALCULATION_EVENT';
+    public static lookUpCodeForChartType = 'CHART_TYPE';
+    public static charts ='charts';
+    public static possibleColors = 'possibleColors';
+    public static possibleStyles = 'possibleStyles';
+    public static availableFontFamilyNames = 'availableFontFamilyNames';
     public static classicVesionRedirectURLsandbox = 'https://sandbox.hea.com/hea-web/login.do';
 }

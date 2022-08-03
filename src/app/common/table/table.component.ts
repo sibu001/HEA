@@ -91,6 +91,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Output() inputChangeEvent: EventEmitter<any> = new EventEmitter();
   @Output() filePreviewEvent: EventEmitter<any> = new EventEmitter();
   @Output() addEvent: EventEmitter<any> = new EventEmitter();
+  @Output() addRowEvent: EventEmitter<any> = new EventEmitter();
   @Output() bulkDeleteEvent: EventEmitter<any> = new EventEmitter();
   @Output() checkBoxChangeEvent: EventEmitter<any> = new EventEmitter();
   @Output() toggleSaveButtonEvent: EventEmitter<any> = new EventEmitter();
@@ -104,6 +105,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @ViewChild('paginator') paginator : ElementRef;
   @ViewChild('paginator') matPaginator : MatPaginator;
   @ViewChild('inputSuggestionField') inputSuggestionField;
+  inputFormFields = false;
+  addDataObject = {};
   expandedElement: any = [];
   showInput = false;
   showRowInput = false;
@@ -171,6 +174,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   ngOnChanges(changes: SimpleChanges) {
     if (changes['data'] && changes['data'].currentValue) {
       this.pushedDataArrayPerRow = new Array<any>(this.data.length);
+      this.inputFormFields = false;
+      this.addDataObject = {};
       this.selection.clear();
       this.data = changes['data'].currentValue;
       this.totalLength = this.totalElement;
@@ -364,7 +369,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   }
 
   deleteRow(event: any) {
-    this.deleteEvent.emit(event);
+      this.deleteEvent.emit(event);
   }
 
   imageClickEvent(col, row) {
@@ -411,6 +416,17 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
   onAddEvent(event: any): any {
     this.addEvent.emit(event);
+    if(this.inputFormFields == false){
+      const pushedObj = {showInputFields : true};
+      this.data.push(pushedObj);
+      this.dataSource = new MatTableDataSource(this.data);
+      this.inputFormFields = true;
+    }
+  }
+
+
+  addRow(event : any){
+    this.addRowEvent.emit(this.addDataObject);
   }
 
   onAddRowEvent(): any {

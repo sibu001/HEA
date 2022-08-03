@@ -19,4 +19,9 @@ export interface TopicManagementModel {
     INPUT_TYPE : any;
     CALCULATION_EVENT : any;
     CALCULATION_TYPE : any
+    CHART_TYPE : any;
+    fieldValueList : any;
+    possibleColors : any;
+    possibleStyle : any;
+    fontFamilyNames : any;
 }

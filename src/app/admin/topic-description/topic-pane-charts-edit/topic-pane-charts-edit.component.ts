@@ -1,3 +1,5 @@
+import { AppConstant } from 'src/app/utility/app.constant';
+import { skipWhile } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -7,6 +9,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 
 @Component({
   selector: 'app-topic-pane-charts-edit',
@@ -28,11 +31,11 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   chartDataSource: any;
   paneData = TableColumnData.PANE_DATA;
   inputData = TableColumnData.INPUT_TYPE_DATA;
-  colorData = TableColumnData.COLOR_DATA;
-  fontData = TableColumnData.FONT_STYLE_DATA;
+  colorData = [];
+  fontData = [];
   toolTypeList: any[] = TableColumnData.TOOL_TYPE;
-  chartTypeList: any[] = TableColumnData.CHART_TYPE;
-  fontStyleList: any[] = TableColumnData.FONT_STYLE;
+  chartTypeList = [];
+  fontStyleList = [];
   locationList: any[] = TableColumnData.LOCATION;
   private readonly subscriptions: Subscription = new Subscription();
   public tools: object = {
@@ -56,18 +59,28 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
     private readonly location: Location,
+    private readonly topicService : TopicService,
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
+
+    this.setForm(undefined);
   }
 
 
   ngOnInit() {
-    this.chartKeys = TableColumnData.CHART_SERIES_FIELD_KEY;
-    this.setForm(undefined);
-  }
+    this.getAllPossibleColorsForChart();
+    this.getAllFontFamilyNames();
+    this.getAllPossibleStyle();
+    this.getLookUpChartType();
 
+    this.loadAllPossibleColors();
+    this.loadAllFontFamilyName();
+    this.loadAllPossibleStyle();
+    this.loadLookUpChartType();
+    this.chartKeys = TableColumnData.CHART_SERIES_FIELD_KEY;
+  }
   setForm(event: any): any {
     this.chartForm = this.formBuilder.group({
       chartCode: [event !== undefined ? event.chartCode : '', Validators.required],
@@ -123,6 +136,80 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
       helpText: [event !== undefined ? event.helpText : '']
     });
   }
+
+
+  loadAllPossibleColors(){
+    this.topicService.loadAllPossibleColorsForCharts();
+  }
+
+  getAllPossibleColorsForChart(){
+    this.subscriptions.add(
+      this.topicService.getAllPossibleColorsForChart()
+      .pipe(skipWhile((item: any) => item == undefined))
+      .subscribe(
+        data =>{
+          console.log(data);
+          if(data) this.colorData = data;
+        }, error =>{
+          console.error(error);
+        }
+      )
+    )
+  }
+
+  loadAllPossibleStyle(){
+    this.topicService.loadAllPossibleStyleForCharts();
+  }
+
+  getAllPossibleStyle(){
+     this.subscriptions.add(
+      this.topicService.getAllPossibleStyleForChart()
+      .pipe(skipWhile((item: any) => item == undefined))
+      .subscribe(
+        data =>{
+          console.log(data);
+          if(data) this.fontStyleList = data;
+        },error =>{
+          console.error(error);
+        }
+      )
+     )
+  }
+
+  loadAllFontFamilyName(){
+    this.topicService.loadAllPossibleFontFamilyNames();
+  }
+
+  getAllFontFamilyNames(){
+    this.subscriptions.add(
+      this.topicService.getAllPossibleFontFamilyNames()
+      .pipe(skipWhile((item: any) => item == undefined))
+      .subscribe(data =>{
+        console.log(data);
+        if(data) this.fontData = data;
+      }, error =>{
+        console.log(error);
+      })
+    )
+  }
+
+  loadLookUpChartType(){
+    this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeForChartType);
+  }
+
+  getLookUpChartType(){
+    this.topicService.getChartTypeLookUp()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe(
+      data=>{
+        console.log(data);
+        if(data) this.chartTypeList = data
+      }, error =>{
+        console.error(error);
+      }
+    )
+  }
+
 
   back(): any {
     this.location.back();

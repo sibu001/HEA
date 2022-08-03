@@ -27,6 +27,12 @@ import {
     SaveDataFieldByPaneIdAction,
     DeleteDataFieldByIdAction,
     LoadLookUpValueByType,
+    LoadFieldValuesForDataField,
+    DeleteFieldValuesForDataField,
+    SaveFieldValuesForDataField,
+    LoadAllPossibleColorForChartAction,
+    LoadAllPossibleStyleForChartAction,
+    LoadAllAvaliableFontFamiliesNamesForChartAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -52,7 +58,12 @@ import { TopicManagementModel } from './topic.model';
         DATA_TYPE : undefined,
         INPUT_TYPE : undefined,
         CALCULATION_EVENT : undefined,
-        CALCULATION_TYPE : undefined
+        CALCULATION_TYPE : undefined,
+        CHART_TYPE  : undefined,
+        fieldValueList : undefined,
+        possibleColors : undefined,
+        possibleStyle : undefined,
+        fontFamilyNames : undefined
     }
 })
 
@@ -154,6 +165,31 @@ export class TopicManagementState {
     @Selector()
     static getInputTypeLookUp(state: TopicManagementModel): any {
         return state.INPUT_TYPE;
+    }
+
+    @Selector()
+    static getChartTypeLookUp(state: TopicManagementModel): any {
+        return state.CHART_TYPE;
+    }
+
+    @Selector()
+    static getFieldValueListForDataField(state: TopicManagementModel): any {
+        return state.fieldValueList;
+    }
+
+    @Selector()
+    static getAllPossibleColorsForChart(state: TopicManagementModel): any {
+        return state.possibleColors;
+    }
+
+    @Selector()
+    static getAllPossibleStyleForChart(state: TopicManagementModel): any {
+        return state.possibleStyle;
+    }
+
+    @Selector()
+    static getAllPossibleFontFamilyNames(state: TopicManagementModel): any {
+        return state.fontFamilyNames;
     }
 
     @Action(GetTopicDescriptionListAction)
@@ -532,6 +568,127 @@ export class TopicManagementState {
                     state[action.type] = response
                     ctx.setState(state);
                     // console.log("post state :- " + JSON.stringify(state))
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+    @Action(LoadFieldValuesForDataField)
+    loadFieldValuesForDataField(ctx: StateContext<TopicManagementModel>, action: LoadFieldValuesForDataField): Actions {
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataField + '/' + action.dataField + '/' + AppConstant.fieldValues)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+
+                    response = TopicUtilityTransformer.transformFieldValuesTableData(response);
+                    ctx.patchState({
+                        fieldValueList: response
+                    });  
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+    @Action(DeleteFieldValuesForDataField)
+    deleteFieldValuesForDataField(ctx: StateContext<TopicManagementModel>, action: DeleteFieldValuesForDataField): Actions {
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.pane + '/' + action.paneId + '/' +  AppConstant.dataField + '/' + action.dataFieldId + '/' + AppConstant.fieldValues + '/' + action.id)
+            .pipe(
+                tap((response: any) => {
+                    if(response.data = 'OK'){
+                        document.getElementById('loader').classList.remove('loading');
+                        let fieldValueList = ctx.getState().fieldValueList;
+                        fieldValueList = fieldValueList.filter( data => data.id != action.id );
+                        ctx.patchState({ 
+                            fieldValueList: fieldValueList
+                        })
+                    }else{
+                        this.utilityService.showErrorMessage(response.errorMessage);
+                    }
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+    @Action(SaveFieldValuesForDataField)
+    saveFieldValuesForDataField(ctx: StateContext<TopicManagementModel>, action: SaveFieldValuesForDataField): Actions {
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.body, AppConstant.pane + '/' + action.paneId + '/' +  AppConstant.dataField + '/' + action.dataFieldId + '/' + AppConstant.fieldValues)
+            .pipe(
+                tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        let fieldValueList = ctx.getState().fieldValueList;
+                        fieldValueList.push(TopicUtilityTransformer.transformFieldValuesSingleData(response));
+                        ctx.patchState({ 
+                            fieldValueList: [...fieldValueList]
+                        })
+
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+    @Action(LoadAllPossibleColorForChartAction)
+    loadAllPossibleColorForChartAction(ctx: StateContext<TopicManagementModel>, action: LoadAllPossibleColorForChartAction): Actions {
+
+        // if(ctx.getState().possibleColors){
+        //     return null;
+        // }
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.charts + '/' + AppConstant.possibleColors)
+            .pipe(
+                tap((response: any) => {
+                  ctx.patchState({possibleColors : response.data});
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+
+    @Action(LoadAllPossibleStyleForChartAction)
+    loadAllPossibleStyleForChartAction(ctx: StateContext<TopicManagementModel>, action: LoadAllPossibleStyleForChartAction): Actions {
+
+        // if(ctx.getState().possibleStyle){
+        //     return null;
+        // }
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.charts + '/' + AppConstant.possibleStyles)
+            .pipe(
+                tap((response: any) => {
+                  ctx.patchState({possibleStyle : response.data});
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+    @Action(LoadAllAvaliableFontFamiliesNamesForChartAction)
+    loadAllAvaliableFontFamiliesNamesForChartAction(ctx: StateContext<TopicManagementModel>, action: LoadAllAvaliableFontFamiliesNamesForChartAction): Actions {
+
+            // if(ctx.getState().fontFamilyNames){
+            //     return null;
+            // }
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.charts + '/' + AppConstant.availableFontFamilyNames)
+            .pipe(
+                tap((response: any) => {
+                  ctx.patchState({fontFamilyNames : response.data});
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

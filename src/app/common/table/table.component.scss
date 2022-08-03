@@ -577,5 +577,8 @@ tr.example-element-row:not(.example-expanded-row):active {
   hyphens: auto;
 }
 
-
-  
+.inline-table-form{
+  cursor: default ;
+  border: none;
+  background: transparent;
+}

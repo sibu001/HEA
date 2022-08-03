@@ -1821,3 +1821,7 @@ div.jqplot-xaxis-tick {
 .jqplot-point-label {
   font-size: 1.35em !important;
 }
+
+.width25{
+  width: 25%;
+}

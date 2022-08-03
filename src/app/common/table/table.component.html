@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="example-container mat-elevation-z0 table-wrapper">
         <mat-table [dataSource]="dataSource" matTableExporter multiTemplateDataRows
             #exporter="matTableExporter" matSort (matSortChange)="sortData($event)" [matSortDirection]='sortOrder'
@@ -76,7 +76,7 @@
                     <div id='2'
                     [ngClass]="{'toTop': alterTable }"
                     (click)='goToEdit(row,col);' *ngIf="col.type!='image' &&col.type!='buttons' &&
-                        col.type!=='input'&&
+                        col.type!=='input'&& col.type!='inputField' && 
                         col.type!='alert' && col.type!='link' &&
                         !col.isDate && !col.isAction && col.type!=='checkbox' && !col.isSurvey" class="div-wh-100">
                         <div *ngIf="col.isDolar">
@@ -201,15 +201,31 @@
                                     {{row.customer.customerGroup.groupName}}
                             </ng-container>
                                                         
+                    </div>  
+                    <div id='12' *ngIf='col.type=="inputField"'>
+                        <input type="text" name="{{col.key}}" *ngIf="row.showInputFields == true && col.key != 'range'" class="form-control form-control-sm" [(ngModel)]="addDataObject[col.key]">
+                        
+                        <ng-container  *ngIf="row.showInputFields == true && col.key == 'range'">
+                            <input type="text" name="{{col.key}}" class="form-control form-control-sm" [(ngModel)]="addDataObject['rangeStart']" style="width : 30%; display: initial;"> &nbsp; - &nbsp;
+                            <input type="text" name="{{col.key}}" class="form-control form-control-sm" [(ngModel)]="addDataObject['rangeEnd']" style="width : 30%; display: initial;">    
+                        </ng-container>
+
+                        <input type="text" *ngIf="!row.showInputFields" class="form-control form-control-sm disableInput inline-table-form" value='{{row[col.key]}}' disabled >
                     </div>
+
                 </mat-cell>
             </ng-container>
             <ng-container matColumnDef="delete">
                 <mat-header-cell *matHeaderCellDef class="text-nowrap"></mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                    <img
+                    <img *ngIf="element && element.showInputFields == undefined"
                         src="assets/images/ico_minus.gif"
                         (click)="deleteRow(element)" alt="icon">
+                    
+                    <img *ngIf="element && element.showInputFields == true"
+                        src="assets/images/ico_add.gif"
+                        (click)="addRow(element)" alt="icon">
+                    
                     <img *ngIf="isFilePreview"
                         src="assets/images/ico_preview.png"
                         (click)="filePreview(element)" alt="icon">
@@ -226,6 +242,11 @@
             </ng-container>
             <div *ngIf="isShowHeader">
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            </div>
+
+            <div *ngIf=" row && row.showInputFields == true">
+                <input type="text"
+                class='form-control'>
             </div>
     
             <mat-row *matRowDef="let row; columns: displayedColumns;"
@@ -294,23 +315,23 @@
                      >
                 </mat-paginator>
             </div>
-            <div *ngIf="!isHideAdd" class="col-sm-12 col-xs-12 fixed-add-button z3"
+            <div *ngIf="!isHideAdd" class="col-sm-12 col-xs-12 fixed-add-button"
                 style="text-align:right;">
-                <button class="btn btn-primary" type="button"
+                <button class="btn btn-primary z3" type="button"
                     (click)="onAddEvent($event)">Add</button>
             </div>
     
-            <div *ngIf="showAddRowButton && !showInput" class="col-sm-6 col-xs-12
-                fixed-add-button"
-                style="text-align:right;">
-                <button class="btn btn-primary" type="button"
+            <div *ngIf="showAddRowButton && !showInput " class="col-sm-6 col-xs-12
+                fixed-add-button "
+                style="text-align:right; ">
+                <button class="btn btn-primary z3" type="button"
                     (click)="onAddRowEvent()">Add Row</button>
             </div>
             <div *ngIf="showAddInputButton && !showRowInput" class="col-sm-6
                 col-xs-12
-                fixed-add-button"
+                fixed-add-button "
                 style="text-align:right;">
-                <button class="btn btn-primary" type="button"
+                <button class="btn btn-primary z3" type="button"
                     (click)="onAddNewRowEvent()">Add</button>
             </div>
         </div>

@@ -77,7 +77,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="chartType"
                 formControlName="chartType">
-                <option *ngFor='let group of chartTypeList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of chartTypeList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -97,7 +97,7 @@
                 <select class="form-control form-control-sm"
                   id="backgroundColor" formControlName="backgroundColor"
                   [value]='f.backgroundColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
                 </select>
               </div>
             </div>
@@ -128,7 +128,7 @@
                 <select class="form-control form-control-sm" id="borderColor"
                   formControlName="borderColor"
                   [value]='f.borderColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
                 </select>
               </div>
             </div>
@@ -236,7 +236,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="titleFontName" class="form-control form-control-sm"
                 formControlName="titleFontName">
-                <option *ngFor='let font of fontData' [value]="font.key">{{font.value}}</option>
+                <option *ngFor='let font of fontData' [value]="font.lookupValue">{{font.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -249,7 +249,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm"
                 formControlName="titleFontStyle" id="titleFontStyle">
-                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of fontStyleList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -281,7 +281,7 @@
                 <select class="form-control form-control-sm" id="titleColor"
                   formControlName="titleColor"
                   [value]='f.titleColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
                 </select>
               </div>
             </div>
@@ -309,7 +309,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="legendFontName" class="form-control form-control-sm"
                 formControlName="legendFontName">
-                <option *ngFor='let font of fontData' [value]="font.key">{{font.value}}</option>
+                <option *ngFor='let font of fontData' [value]="font.lookupValue">{{font.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -320,7 +320,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm"
                 formControlName="legendFontStyle" id="legendFontStyle">
-                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of fontStyleList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -335,7 +335,7 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
+          <!-- <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
             class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Location:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -346,8 +346,8 @@
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
+          </div> -->
+          <!-- <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
             class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -356,13 +356,13 @@
               Outside grid
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
+          </div> -->
 
           <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
             <img class="pointer" src="assets/images/dot03.gif" alt="dot" class="dot">
             <span class="messageName">Range</span>
           </p>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+          <!-- <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
             ' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Label</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -390,7 +390,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="rangeFontName" class="form-control form-control-sm"
                 formControlName="rangeFontName">
-                <option *ngFor='let font of fontData' [value]="font.key">{{font.value}}</option>
+                <option *ngFor='let font of fontData' [value]="font.lookupValue">{{font.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -403,7 +403,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm"
                 formControlName="rangeFontStyle" id="rangeFontStyle">
-                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of fontStyleList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -435,7 +435,7 @@
                 <select class="form-control form-control-sm" id="rangeColor"
                   formControlName="rangeColor"
                   [value]='f.rangeColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
                 </select>
               </div>
             </div>
@@ -468,7 +468,7 @@
                   id="rangeGridlineColor"
                   formControlName="rangeGridlineColor"
                   [value]='f.rangeGridlineColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
                 </select>
               </div>
             </div>
@@ -504,14 +504,26 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
+        -->
+
+        <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+        rowPadding">
+        <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
+        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+          <input type='checkbox' formControlName="roundToZero"
+            id="roundToZero">
+          Round to integer
+        </div>
+        <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+      </div>
 
           <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
             <img class="pointer" src="assets/images/dot03.gif" alt="dot" class="dot">
             <span class="messageName">Domain</span>
-          </p>
+          </p> 
 
 
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+          <!-- <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
             ' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Domain Label</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -538,7 +550,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="domainFontName" class="form-control form-control-sm"
                 formControlName="domainFontName">
-                <option *ngFor='let font of fontData' [value]="font.key">{{font.value}}</option>
+                <option *ngFor='let font of fontData' [value]="font.lookupValue">{{font.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -551,7 +563,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm"
                 formControlName="domainFontStyle" id="domainFontStyle">
-                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of fontStyleList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -583,7 +595,7 @@
                 <select class="form-control form-control-sm" id="domainColor"
                   formControlName="domainColor"
                   [value]='f.domainColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
                 </select>
               </div>
             </div>
@@ -617,12 +629,12 @@
                   id="domainGridlineColor"
                   formControlName="domainGridlineColor"
                   [value]='f.domainGridlineColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
                 </select>
               </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
+          </div> -->
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>

@@ -57,12 +57,12 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
+    this.recommendationKeys = TableColumnData.RECOMMENDATION_EDIT_KEY;
+    this.setForm(undefined);
   }
 
 
   ngOnInit() {
-    this.recommendationKeys = TableColumnData.RECOMMENDATION_EDIT_KEY;
-    this.setForm(undefined);
   }
 
   setForm(event: any): any {

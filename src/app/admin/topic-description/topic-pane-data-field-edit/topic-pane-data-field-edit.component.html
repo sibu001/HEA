@@ -302,8 +302,9 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Field Values</span></p>
-            <app-table [keys]="dataFieldKeys" [isSearch]="false" [isDelete]=true [data]="dataFieldDataSource"
-              [totalElement]="dataFieldData.totalElements" [isHideAdd]=false [showAddRowButton]=false
+            <app-table [keys]="dataFieldKeys" [isSearch]="false" [isDelete]=true [data]="dataFieldData.content"
+              [totalElement]="dataFieldData.totalElements" [isHideAdd]=false (addRowEvent)='addRowEvent($event)'
+              (deleteEvent)='deleteRow($event)' 
               (saveRowEvent)="saveRow()">
             </app-table>
           </div>

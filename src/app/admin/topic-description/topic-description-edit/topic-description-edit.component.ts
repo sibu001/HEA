@@ -103,7 +103,6 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       this.id = params['id'];
     });
 
-    this.scrolltop();
     this.getPermanentTopicListFromStore();
     this.loadPermanentTopicList();
     this.getCustomerGroups();
@@ -118,6 +117,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
 
   ngOnInit() {
 
+    this.scrolltop();
     this.customerGroupList.length == 0 ? this.loadcustomerGroups() : '';
     this.keys = TableColumnData.CUSTOMER_GROUP_KEY;
     this.topicPaneKeys = TableColumnData.TOPIC_PANE_KEY;
@@ -588,7 +588,7 @@ getSuggestionListForFilterForTopicVariable(event){
   }
 
   goToEditRecommendationLeaks(event: any): any {
-    this.router.navigate(['/admin/topicDescription/topicDescriptionRecommendationEdit'], { queryParams: { id: event } });
+    this.router.navigate(['/admin/topicDescription/topicDescriptionRecommendationEdit'], { queryParams: { id: event.id, topicDescriptionId: this.topicDescriptionData.id  } });
   }
 
   goToEditTopicVariables(event: any): any {

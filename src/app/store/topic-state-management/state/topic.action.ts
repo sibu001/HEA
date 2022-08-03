@@ -19,7 +19,14 @@ export enum TopicActionTypes {
     LOAD_TOPIC_DESCRIPTION_BY_PANE_ID = 'Load Topic Description by Pane Id',
     SAVE_DATA_FIELD = 'Save Data Field',
     DELETE_DATA_FIELD_BY_ID = 'Delete Data Field',
-    LOAD_LOOKUP_VALUE_BY_TYPE = 'Load Lookup Value By Type'
+    LOAD_LOOKUP_VALUE_BY_TYPE = 'Load Lookup Value By Type',
+    LOAD_FIELD_VALUES_FOR_DATA_FIELD = 'Load Field Values For Data Field',
+    DELETE_FIELD_VALUE_BY_ID = 'Delete Field Value By Id',
+    SAVE_FIELD_VALUES_FOR_DATA_FIELD= 'Save Field Values For Data Field',
+    LOAD_ALL_POSSIBLE_COLORS_FOR_CHARTS = 'Load All Available Colors For Chart',
+    LOAD_ALL_POSSIBLE_STYLE_FOR_CHARTS = 'Load All Available Style For Chart',
+    LOAD_ALL_AVALIABLES_FONT_FAMILY_NAMES_FOR_CHARTS = 'Load All Available Font Family Names For Chart',
+
 }
 export class GetTopicDescriptionListAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_LIST;
@@ -131,3 +138,33 @@ export class LoadLookUpValueByType{
     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_LOOKUP_VALUE_BY_TYPE;
     constructor(readonly type : string){}
 }   
+
+export class LoadFieldValuesForDataField{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_FIELD_VALUES_FOR_DATA_FIELD;
+    constructor(readonly paneId : number, readonly dataField : number){}
+}
+
+export class DeleteFieldValuesForDataField{
+    static readonly type: TopicActionTypes = TopicActionTypes.DELETE_FIELD_VALUE_BY_ID;
+    constructor(readonly paneId : number ,readonly dataFieldId : number ,readonly id : number){}
+}
+
+export class SaveFieldValuesForDataField{
+    static readonly type: TopicActionTypes = TopicActionTypes.SAVE_FIELD_VALUES_FOR_DATA_FIELD;
+    constructor(readonly body : any,  readonly paneId : number ,readonly dataFieldId : number){}
+}
+
+export class LoadAllPossibleColorForChartAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_ALL_POSSIBLE_COLORS_FOR_CHARTS;
+    constructor(){}
+}
+
+export class LoadAllPossibleStyleForChartAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_ALL_POSSIBLE_STYLE_FOR_CHARTS;
+    constructor(){}
+}
+
+export class LoadAllAvaliableFontFamiliesNamesForChartAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_ALL_AVALIABLES_FONT_FAMILY_NAMES_FOR_CHARTS;
+    constructor(){}
+}

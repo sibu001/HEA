@@ -295,6 +295,13 @@ export class TableColumnData {
         { key: 'array', isEdit: true, displayName: 'Is array' }
     ];
 
+    static readonly PANE_DATA_FIELD_VALUES_KEY: Array<TABLECOLUMN> = [
+        { key: 'order', isEdit: true, displayName: 'Order', type :'inputField' },
+        { key: 'value', isEdit: true, displayName: 'Value', type :'inputField' },
+        { key: 'range', isEdit: true, displayName: 'Rage' , type :'inputField'},
+        { key: 'name', isEdit: true, displayName: 'Value Name', type :'inputField' }
+    ];
+
     static readonly PANE_DATA_FIELD_KEY: Array<TABLECOLUMN> = [
         { key: 'field', isEdit: true, displayName: 'Field Code' },
         { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
