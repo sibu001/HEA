@@ -243,11 +243,6 @@
             <div *ngIf="isShowHeader">
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
             </div>
-
-            <div *ngIf=" row && row.showInputFields == true">
-                <input type="text"
-                class='form-control'>
-            </div>
     
             <mat-row *matRowDef="let row; columns: displayedColumns;"
                 [ngClass]="{'border-left-green': sideBorder && !row.accountLocked,
