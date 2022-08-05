@@ -481,7 +481,7 @@ getSuggestionListForFilterForTopicVariable(event){
           this.id = next.id;
           this.router.navigate([], { 
             relativeTo: this.activateRoute,
-            queryParams: {id : next.id},
+            queryParams: {id : next.id , addRequest : null},
             queryParamsHandling : 'merge'
           })
           this.ngOnInit();
@@ -576,7 +576,7 @@ getSuggestionListForFilterForTopicVariable(event){
   }
 
   addRecommendationLeaks(): any {
-    this.router.navigate(['/admin/topicDescription/topicDescriptionRecommendationEdit']);
+    this.router.navigate(['/admin/topicDescription/topicDescriptionRecommendationEdit'], { queryParams: { topicDescriptionId: this.topicDescriptionData.id, addRequest : true } });
   }
 
   addTopicVariables(): any {

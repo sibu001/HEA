@@ -185,6 +185,26 @@ export class TopicService {
     return this.store.select(TopicManagementState.getSourceLookUp)
   }
 
+  getLookValueForTakeBackType(){
+    return this.store.select(TopicManagementState.getTakeBackTypeLookUp)
+  }
+
+  getLookUpForActionType(){
+    return this.store.select(TopicManagementState.getActionTypeLookUp)
+  }
+
+  getLookUpForTakeBackImage(){
+    return this.store.select(TopicManagementState.getTakeBackImageLookUp)
+  }
+
+  getLookUpForTakeBackIcon(){
+    return this.store.select(TopicManagementState.getTakeBackIconLookUp)
+  }
+
+  getLookUpForConservationCategory(){
+    return this.store.select(TopicManagementState.getConservationCategoryLookUp)
+  }
+
   getChartTypeLookUp(){
     return this.store.select(TopicManagementState.getChartTypeLookUp);
   }

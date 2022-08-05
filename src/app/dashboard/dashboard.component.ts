@@ -347,7 +347,7 @@ export class DashboardComponent implements OnInit {
         console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
         setTimeout(function () {
           eval(response.data.chart.freeChartConfigurationJS);
-        }, 50);
+        }, 100);
         if (this.users.recommendationList != null && this.users.recommendationList.length > 0 && !this.users.recommendationStatusChange) {
           document.getElementById('loader').classList.remove('loading');
         }
@@ -410,56 +410,17 @@ export class DashboardComponent implements OnInit {
             }
             i++;
           }
-          console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
-           
+          console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);          
           if (self.globalM === self.globalK) {
             self.trendingHomeChart = self.trendingHomeChartCopy;
           }
           setTimeout(function () {
-
             if (self.globalM === self.globalK) {
-              
-
-const currentMonthIndex = 6 - 1;
-const currentYear = 2022;
-  $.heaplot.seasonalChart([line1,line2,line3,line4,line5], [line6], {
-    you: 1500.5500000000002,
-    unit: '$',
-    n1: 1172,
-    n1Label: 'California',
-          n2: 4898,
-          n2Label: 'Similar Homes'
-  },
-  {
-      showLegend: false,
-      series: [
-          { label: 'Always on', color: $.heaplot.colors.baseLoads },
-          { label: 'Recurring Loads', color: $.heaplot.colors.recurringLoads },
-          { label: 'Variable Loads (Avg)', color: $.heaplot.colors.variableLoads },
-          { label: 'Summer Cooling', color: $.heaplot.colors.summerAC },
-          { label: 'Winter Space Heating', color: $.heaplot.colors.winterSpaceHeating }
-      ]
-  }, true, currentMonthIndex, currentYear);
-  
-  
-const  tipText = "This figure is an aggregate of several different load types, and each load is compared to a unique set of homes that share traits with yours. These details are only listed for individual loads.";
-  
-  $('#chartThreeNorms2').qtip({
-        content: tipText,
-        style: 'cream',
-        hide: { fixed: true },
-        position: {
-          corner: {
-             target: 'leftMiddle',
-          }
-        }
-     });
-
-
-              self.globalM = 0;
-              self.globalK = 0;
+              eval(self.trendingHomeChartCopy.chart.freeChartConfigurationJS);
+               self.globalM = 0;
+               self.globalK = 0;
             }
-          }, 50);
+          }, 100);
           if (self.users.recommendationList != null && self.users.recommendationList.length > 0 && !self.users.recommendationStatusChange) {
             document.getElementById('loader').classList.remove('loading');
           }
@@ -467,16 +428,10 @@ const  tipText = "This figure is an aggregate of several different load types, a
             $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
           }, 100);
           i++;
-        }, 100);
+        }, 1000);
       }
     }
   }
-
-getChartRendered(){
-
-
-}
-  
   getTrendingProfileChart() {
     document.getElementById('loader').classList.add('loading');
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingHome/trendingParts').subscribe(

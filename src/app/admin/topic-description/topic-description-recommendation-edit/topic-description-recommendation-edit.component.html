@@ -7,18 +7,20 @@
           <span class="messageName">Recommendation/Leaks</span>
         </p>
         <form [formGroup]="recommendationForm" class="form-group form-padding">
+
+
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Code</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class='form-control form-control-sm' id="code" formControlName="code">
+              <input type="text" class='form-control form-control-sm' id="takebackCode  " formControlName="takebackCode">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Type</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="type" class='form-control form-control-sm' formControlName="type">
-                <option *ngFor='let group of recommendationLeakTypeList' [value]="group.key">{{group.value}}</option>
+              <select id="takebackType" class='form-control form-control-sm' formControlName="takebackType">
+                <option *ngFor='let group of recommendationLeakTypeList' value="{{group.lookupValue}}">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -26,25 +28,25 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="label" id="label">
+              <input type="text" class="form-control" formControlName="takebackLabelTemplate" id="takebackLabelTemplate">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf='f.type.value==="2" || f.type.value==="3"' class="row borderBottom rowPadding">
+          <div *ngIf='f.takebackType=="2" || f.takebackType=="3"'   class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Suggestion:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea type="text" class="form-control" formControlName="suggestion" id="suggestion"></textarea>
+              <textarea class="form-control" formControlName="suggestionTemplate" id="suggestionTemplate">
+              </textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf="f.type.value!=='3'" class="row borderBottom rowPadding">
+          <div *ngIf="f.takebackType!='3'" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Unit:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control" formControlName="unit" id="unit">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Recommendation Filter:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -54,34 +56,34 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf="f.type.value!=='3'" class="row borderBottom rowPadding">
+          <!-- <div *ngIf="f.takebackType!='3'" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Value Calculation:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <textarea class="form-control" formControlName="valueCalculation" id="valueCalculation">
               </textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
+          </div> -->
 
-          <div *ngIf="f.type.value==='3'" class="row borderBottom rowPadding">
+          <div *ngIf="f.takebackType=='3'" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Conservation Category:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="conservationCategory" id="conservationCategory">
-                <option selected="selected" value="other">Other</option>
+                <option *ngFor="let group of conservationCategory" [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf="f.type.value==='3'" class="row borderBottom rowPadding">
+          <div *ngIf="f.takebackType=='3'" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Action Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="actionType" id="actionType">
-                <option *ngFor='let group of actionTypeList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of actionTypeList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf="f.type.value==='3'" class="row borderBottom rowPadding">
+          <div *ngIf="f.takebackType=='3'" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="sendReminderMail">
@@ -91,7 +93,7 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf="f.type.value==='3'" class="row borderBottom rowPadding">
+          <div *ngIf="f.takebackType=='3'" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Price Calculation Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="priceValueAlgType" formControlName="priceValueAlgType">
@@ -102,36 +104,34 @@
           </div>
 
 
-          <div *ngIf="f.priceValueAlgType.value==='F' || f.type.value==='2'" class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Price Calculation:</div>
+          <div *ngIf="f.takebackType!='3'" class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Value Calculation:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="priceCalculation" id="priceCalculation" cols="30"
-                rows="10"></textarea>
+              <textarea class="form-control" formControlName="takebackValueAlg" id="takebackValueAlg"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf="f.priceValueAlgType.value==='P'  || f.type.value!=='2'" class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Price Calculation:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="priceCalculation" id="priceCalculation">
-              <span class="inline">%</span>
-            </div>
+              <textarea type="text" class="form-control" formControlName="priceValueAlg" id="priceValueAlg"></textarea>
+            </div> 
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf="f.type.value==='2'" class="row borderBottom rowPadding">
+          <div *ngIf="f.takebackType=='2'" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Image:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" formControlName="image" id="image">
-                <option *ngFor='let group of imageList' [value]="group.key">{{group.value}}</option>
+              <select class="form-control form-control-sm" formControlName="takebackImage" id="takebackImage">
+                <option *ngFor='let group of imageList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf='f.type.value==="2"' class="row borderBottom rowPadding">
+          <div *ngIf='f.takebackType=="2"' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Icon:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control  form-control-sm" formControlName="icon" id="icon">
-                <option *ngFor='let group of iconList' [value]="group.key">{{group.value}}</option>
+              <select class="form-control  form-control-sm" formControlName="takebackIcon" id="takebackIcon">
+                <option *ngFor='let group of iconList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -140,19 +140,28 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Html Template:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmlTemplate' id='htmlTemplate'>
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmlTextTemplate' id='htmlTextTemplate'>
+              </ejs-richtexteditor>
+            </div>
+          </div>
+
+          <div *ngIf='f.takebackType == 3' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Instruction HTML template:	
+            </div>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='instructionTemplate' id='instructionTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Comments:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="comments" formControlName="comments">
+              <textarea type="text" class="form-control form-control-sm" id="comments" formControlName="comments"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="paddingTop" *ngIf="f.type.value==='2'">
+          <div class="paddingTop" *ngIf="f.takebackType=='2'">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Recommendation List </span></p>
@@ -162,7 +171,7 @@
             </app-table>
           </div>
 
-          <div class="paddingTop" *ngIf="f.type.value==='3'">
+          <div class="paddingTop" *ngIf="f.takebackType=='3'">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Leaks List </span></p>

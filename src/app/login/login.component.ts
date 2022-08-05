@@ -1,6 +1,6 @@
 import { TopicHistoryComponent } from './../survey/topichistory.component';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, ContentChild, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ContentChild, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
@@ -11,7 +11,7 @@ declare var FB: any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, AfterViewInit{
   @ViewChild('loginRef') loginElement: ElementRef;
   users: Users = new Users();
   errorMessage: string;
@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   hide = false;
   theme: string;
   code: string;
-  buildForSandbox = true;
+  buildForSandbox = true; 
   auth2: any;
   @ContentChild('showhideinput') input;
   constructor(
@@ -29,12 +29,12 @@ export class LoginComponent implements OnInit {
     private location: Location
   ) {
     this.route.queryParams.subscribe((params) => {
-      this.theme = params['theme'] || null;
+      this.theme = params['theme'] || 'MBL';
     });
     this.users =JSON.parse(localStorage.getItem('users'));
     if (this.users == null) this.users = new Users(); 
 
-    if (this.theme == null) {
+    if (this.theme) {
       this.theme = 'MBL';
     }
     this.users.theme = this.theme;
@@ -56,6 +56,14 @@ export class LoginComponent implements OnInit {
     if (window.location.origin === 'https://www.hea.com' || window.location.origin === 'http://www.hea.com') {
       this.buildForSandbox = false;
     }
+  }
+  ngAfterViewInit(): void {
+    this.router.navigate([''],{ 
+      relativeTo : this.route,
+      queryParams : { theme : 'MBL'},
+      queryParamsHandling : 'merge'
+      
+    })
   }
   ngOnInit() {
     this.users = this.loginService.getUser();

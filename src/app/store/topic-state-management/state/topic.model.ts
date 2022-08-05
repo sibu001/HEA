@@ -20,6 +20,11 @@ export interface TopicManagementModel {
     CALCULATION_EVENT : any;
     CALCULATION_TYPE : any
     CHART_TYPE : any;
+    TAKEBACK_TYPE : any;
+    TAKEBACK_IMAGE : any;
+    TAKEBACK_ICON : any;
+    ACTION_TYPE : any;
+    CONSERVATION_CATEGORY : any
     fieldValueList : any;
     possibleColors : any;
     possibleStyle : any;

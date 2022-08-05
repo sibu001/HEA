@@ -54,6 +54,9 @@ export class AppConstant {
     public static topicDescritptionVariable = 'surveyDescriptionVariables';
     public static findTopicDescriptionVariables = 'findSurveyDescriptionVariables.do';
     public static findDataFieldVariables = 'findDataFieldVariables.do';
+    public static recommendations = 'recommendations';
+    public static recommendationsOrLeakstions = 'recommendationsOrLeaks';
+    public static leaks = 'leaks';
     public static contextMethod = 'context/methods';
     public static paidService = 'paidServices';
     public static administrativeReport = 'adminReports';
@@ -122,6 +125,10 @@ export class AppConstant {
     public static lookUpCodeSource = 'FIELD_SOURCE';
     public static lookUPCalcutaionEvent = 'CALCULATION_EVENT';
     public static lookUpCodeForChartType = 'CHART_TYPE';
+    public static lookUpCodeForTakeBackImage = 'TAKEBACK_IMAGE';
+    public static lookUpCodeForTakeBackIcon = 'TAKEBACK_ICON';
+    public static lookUpCodeForActionType = 'ACTION_TYPE';
+    public static lookUpCodeForConservationCategory = 'CONSERVATION_CATEGORY';
     public static charts ='charts';
     public static possibleColors = 'possibleColors';
     public static possibleStyles = 'possibleStyles';

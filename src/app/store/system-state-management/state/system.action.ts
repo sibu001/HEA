@@ -47,7 +47,14 @@ export enum SystemActionTypes {
     GET_CONTENT_TYPE_LIST = 'Get Content Type List',
     CUSTOMER_GROUP_ERROR = 'Customer Error',
     SET_DEBUG_CONSOLE_DATA = 'Set Debug Console Data',
-    RECOMMENDATION_LEAK_UNIQUE = 'Recommendation Leak and Unique'
+    RECOMMENDATION_LEAK_UNIQUE = 'Recommendation Leak and Unique',
+    LOAD_RECOMMENDATION_LEAK_UNIQUE_BY_ID = 'Load Recommendation Leak and Unique By Id',
+    LOAD_RELATED_RECOMMENDATION_LIST_BY_ID = 'Related Recommendation List By Id',
+    DELETE_RECOMMENDATION_BY_ID = 'Delete Recommendation By Id',
+    LOAD_RELATED_LEAKS_BY_ID = 'Load Related Leaks By Id',
+    SAVE_RECOMMENDATION_LEAK_ACTION = 'Save Recommendation Leak and Unique',
+    SAVE_RELATED_LEAK_ACTION = 'Save Related Leaks',
+    SAVE_RELATED_RECOMMENDATION_ACTION = 'Save Related Recommendations'
 }
 export class GetCustomerGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_LIST;
@@ -201,7 +208,7 @@ export class UpdateCredentialTypeAction {
     static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_CREDENTIAL_TYPE;
     constructor(readonly id: number, readonly credentialType: any) {
     }
-}
+}   
 
 export class SaveCredentialTypeAction {
     static readonly type: SystemActionTypes = SystemActionTypes.SAVE_CREDENTIAL_TYPE;
@@ -314,5 +321,46 @@ export class CustomerGroupError {
 export class SetDebugConsoleData {
     static readonly type: SystemActionTypes = SystemActionTypes.SET_DEBUG_CONSOLE_DATA;
     constructor(readonly debugData: Error) {
+    }
+}
+
+export class LoadRecommendationsLeakAndUniqueByIdAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.LOAD_RECOMMENDATION_LEAK_UNIQUE_BY_ID;
+    constructor(readonly topicDescriptionId : number, readonly id : number) {
+    }
+}
+
+export class LoadRelatedRecommendationListAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.LOAD_RELATED_RECOMMENDATION_LIST_BY_ID;
+    constructor(readonly topicDescriptionId : number, readonly id : number) {
+    }
+}
+export class DeleteRecommendationUniqueLeakById{
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_RECOMMENDATION_BY_ID;
+    constructor(readonly topicDescriptionId : number, readonly id : number) {
+    }
+}
+
+export class LoadRelatedLeakListAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.LOAD_RELATED_LEAKS_BY_ID;
+    constructor(readonly topicDescriptionId : number, readonly id : number) {
+    }
+}
+
+export class SaveRecommendationLeakAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_RECOMMENDATION_LEAK_ACTION;
+    constructor(readonly topicDescriptionId : number, readonly body : any) {
+    }
+}
+
+export class SaveRelatedLeakAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_RELATED_LEAK_ACTION;
+    constructor(readonly topicDescriptionId : number, readonly leakId : number ,readonly recommendationId : number) {
+    }
+}
+
+export class SaveRelatedRecommendationAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_RELATED_RECOMMENDATION_ACTION;
+    constructor(readonly topicDescriptionId : number, readonly leakId : number ,readonly recommendationId : number) {
     }
 }

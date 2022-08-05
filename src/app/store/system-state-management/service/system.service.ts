@@ -49,7 +49,12 @@ import {
   GetLookupValueHomeSizeListAction,
   GetMailPeriodListAction,
   GetContentTypeListAction,
-  RecommendationsLeakAndUniqueAction
+  RecommendationsLeakAndUniqueAction,
+  LoadRecommendationsLeakAndUniqueByIdAction,
+  LoadRelatedRecommendationListAction,
+  DeleteRecommendationUniqueLeakById,
+  LoadRelatedLeakListAction,
+  SaveRecommendationLeakAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -366,5 +371,37 @@ export class SystemService {
 
   setDebugConsoleData(debugData: any): Observable<SystemManagementState> {
     return this.store.dispatch(new SetDebugConsoleData(debugData));
+  }
+
+  loadRecommendationsLeakAndUniqueById(topicDescriptionId, id){
+    return this.store.dispatch(new LoadRecommendationsLeakAndUniqueByIdAction(topicDescriptionId, id));
+  }
+
+  getRecommendatonLeakAndUniqueById(){
+    return this.store.select(SystemManagementState.getRecommendatonLeakAndUniqueById)
+  }
+  
+  LoadRelatedRecommendationList(topicDescriptionId, id){
+    return this.store.dispatch(new LoadRelatedRecommendationListAction(topicDescriptionId,id))
+  }
+
+  getRelatedRecommendatonById(){
+    return this.store.select(SystemManagementState.getRelatedRecommendatonById);
+  }
+
+  deleteRecommendationUniqueLeakListAction(topicDescriptionId,id){
+    return this.store.dispatch(new DeleteRecommendationUniqueLeakById(topicDescriptionId, id))
+  }
+
+  loadRelatedLeaksById(topicDescriptionId, id){
+    return this.store.dispatch(new LoadRelatedLeakListAction(topicDescriptionId, id))
+  }
+
+  getRelatedLeaksById(){
+    return this.store.select(SystemManagementState.getrelatedLeaksById);
+  }
+
+  saveRecommendationLeakByIdAction(topicDescriptionId : number, body : any){
+    return this.store.dispatch(new SaveRecommendationLeakAction(topicDescriptionId, body))
   }
 }

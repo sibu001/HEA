@@ -60,10 +60,15 @@ import { TopicManagementModel } from './topic.model';
         CALCULATION_EVENT : undefined,
         CALCULATION_TYPE : undefined,
         CHART_TYPE  : undefined,
+        TAKEBACK_TYPE : undefined,
         fieldValueList : undefined,
         possibleColors : undefined,
         possibleStyle : undefined,
-        fontFamilyNames : undefined
+        fontFamilyNames : undefined,
+        TAKEBACK_IMAGE : undefined,
+        TAKEBACK_ICON : undefined,
+        CONSERVATION_CATEGORY : undefined,
+        ACTION_TYPE : undefined,
     }
 })
 
@@ -158,8 +163,39 @@ export class TopicManagementState {
     }
 
     @Selector()
+    static getTakeBackTypeLookUp(state: TopicManagementModel): any {
+        return state.TAKEBACK_TYPE;
+    }
+
+    @Selector()
+    static getActionTypeLookUp(state: TopicManagementModel): any {
+        return state.ACTION_TYPE;
+    }
+
+    @Selector()
+    static getTakeBackIconLookUp(state: TopicManagementModel): any {
+        return state.TAKEBACK_ICON;
+    }
+
+    @Selector()
+    static getConservationCategoryLookUp(state: TopicManagementModel): any {
+        return state.CONSERVATION_CATEGORY;
+    }
+
+    @Selector()
+    static getActionImageLookUp(state: TopicManagementModel): any {
+        return state.TAKEBACK_IMAGE;
+    }
+
+
+    @Selector()
     static getDataTypeLookUp(state: TopicManagementModel): any {
         return state.DATA_TYPE;
+    }
+
+    @Selector()
+    static getTakeBackImageLookUp(state: TopicManagementModel): any {
+        return state.TAKEBACK_IMAGE;
     }
 
     @Selector()
@@ -495,7 +531,7 @@ export class TopicManagementState {
     @Action(LoadPaneListByTopicDescriptionId)
     loadPaneListByTopicDescriptionId(ctx: StateContext<TopicManagementModel>, action: LoadPaneListByTopicDescriptionId): Actions {
         const paneList = ctx.getState().paneList;
-        if( paneList && paneList[0].surveyDescriptionId == action.id)
+        if( paneList && paneList[0] && paneList[0].surveyDescriptionId == action.id)
             return null;
             
         document.getElementById('loader').classList.add('loading');

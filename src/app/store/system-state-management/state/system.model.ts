@@ -29,4 +29,7 @@ export interface SystemManagementModel {
     debugConsoleData: any;
     error: Error;
     recommendation: any;
+    recommendationList : any;
+    relatedRecommendationList : any;
+    relatedLeakList : any;
 }

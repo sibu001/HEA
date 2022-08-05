@@ -74,6 +74,7 @@ export class LoginService {
     getOptions() {
         const httpOptions = {
             headers: new HttpHeaders({
+                "accept" : "application/json",
                 'Content-Type': 'application/json'
             }), withCredentials: true,
         };
@@ -82,6 +83,7 @@ export class LoginService {
     getHttpParamsOptions(parameter: HttpParams) {
         const httpOptions = {
             headers: new HttpHeaders({
+                "accept" : "application/json",
                 'Content-Type': 'application/json'
             }), withCredentials: true,
             params: parameter
@@ -92,6 +94,7 @@ export class LoginService {
     getOptionsForm(parameter?: HttpParams) {
         const httpOptions = {
             headers: new HttpHeaders({
+                "accept" : "application/json",
                 'Content-Type': 'application/x-www-form-urlencoded'
             }), withCredentials: true,
             params: parameter,
@@ -102,6 +105,7 @@ export class LoginService {
         if (this.getUser != null) {
             const httpOptions = {
                 headers: new HttpHeaders({
+                    "accept" : "application/json",
                     'Content-Type': 'application/json',
                 }), withCredentials: true,
             };
@@ -113,6 +117,7 @@ export class LoginService {
         if (this.getUser != null) {
             const httpOptions = {
                 headers: new HttpHeaders({
+                    "accept" : "application/json",
                     'Content-Type': 'application/x-www-form-urlencoded',
                 }), withCredentials: true,
             };
@@ -124,6 +129,7 @@ export class LoginService {
         if (this.getUser != null) {
             const httpOptions = {
                 headers: new HttpHeaders({
+                    "accept" : "application/json",
                 }), withCredentials: true,
                 params: params,
             };
@@ -134,6 +140,7 @@ export class LoginService {
         if (this.getUser != null) {
             const httpOptions = {
                 headers: new HttpHeaders({
+                    "accept" : "application/json",
                 }), withCredentials: true,
             };
             return httpOptions;
@@ -144,6 +151,7 @@ export class LoginService {
         if (this.getUser != null) {
             const httpOptions = {
                 headers: new HttpHeaders({
+                    "accept" : "application/json",
                     'Authorization': 'Bearer ' + this.users.token,
                 }),
                 params: params,
@@ -233,15 +241,15 @@ export class LoginService {
     }
     public logout(): void {
 
-        let theme = '';
+        let theme = 'MBL';
         document.getElementById('loader').classList.add('loading');
         this.performGetLogOut('j_spring_security_logout').subscribe(
             data => {
                 const response = JSON.parse(JSON.stringify(data));
                 console.log(response);
                 this.users = this.getUser();
-                const userId = this.users.outhMeResponse.userId;
                 theme = this.users.theme;
+                const userId = this.users.userId;
                 const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
                 this.users.currentPaneNumber = currentPaneNumber;
@@ -250,7 +258,6 @@ export class LoginService {
                 this.users.lastVisitedURL = this.router.url;
                 localStorage.setItem('users', JSON.stringify(this.users));
                 // localStorage.clear();
-                console.log('logged out');
                 this.router.navigate(['\login'], { queryParams: { 'theme': theme } });
                 document.getElementById('loader').classList.remove('loading');
             },
