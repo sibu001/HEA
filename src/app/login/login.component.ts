@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
       this.theme = params['theme'] || 'MBL';
     });
     this.users =JSON.parse(localStorage.getItem('users'));
-    if (this.users) this.users = new Users(); 
+    if (!this.users) this.users = new Users(); 
 
     if (this.theme) {
       this.theme = 'MBL';
@@ -383,6 +383,9 @@ export class LoginComponent implements OnInit, AfterViewInit{
   }
 
   prepareLogin() {
+    if(!this.loginElement)
+       return null;
+       
     this.auth2.attachClickHandler(this.loginElement.nativeElement, {},
       (googleUser) => {
         let profile = googleUser.getBasicProfile();

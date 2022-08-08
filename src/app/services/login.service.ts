@@ -221,6 +221,11 @@ export class LoginService {
         const url = this.getFormattedUrl(endPoint);
         return this.http.delete(url, this.getOptionsMultiPartData());
     }
+
+    performDeleteWithParams(endPoint: any, params : any): any {
+        const url = this.getFormattedUrl(endPoint);
+        return this.http.delete(url, this.getHttpParamsOptions(params));
+    }
     performOauthToken(endPoint: any, body: any, params?: HttpParams): any {
         const url = this.getFormattedUrl(endPoint);
         const tokens = this.http.post(url, body, this.getOptionsForm(params));
@@ -249,7 +254,7 @@ export class LoginService {
                 console.log(response);
                 this.users = this.getUser();
                 theme = this.users.theme;
-                const userId = this.users.userId;
+                const userId = this.users.outhMeResponse.userId;
                 const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
                 this.users.currentPaneNumber = currentPaneNumber;
@@ -265,7 +270,7 @@ export class LoginService {
                 console.log(errors);
                 this.users = this.getUser();
                 theme = this.users.theme;
-                const userId = this.users.userId;
+                const userId = this.users.outhMeResponse.userId;
                 const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
                 this.users.currentPaneNumber = currentPaneNumber;
