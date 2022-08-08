@@ -2,13 +2,13 @@ import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
-import { skipWhile } from 'rxjs/operators';
+import { skipWhile,skip } from 'rxjs/operators';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 
@@ -23,7 +23,7 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   id: any;
   recommendationForm: FormGroup;
   recommendationKeys: TABLECOLUMN[];
-  recommendationLeakTypeList =[];
+  recommendationLeakTypeList = [];
   actionTypeList = [];
   recommendationLeakObject;
   priceCalculationType: any = TableColumnData.PRICE_CALCULATION_TYPE;
@@ -32,10 +32,14 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   addRequest = false;
   iconList = [];
   allPossibleLeaksRecommendations = [];
+  allPossibleLeaks = [];
+  allPossibleRecommendations = [];
   allRelatedRecommendations = [];
   allRelatedLeaks = [];
   dataSource: any;
   topicDescriptionId;
+  dataListner : Subject<any> = new Subject();
+  recommendationAndLeakSeperaterSubject : Subject<any> = new Subject();
   recommendationData = {
     content: [],
     totalElements: 0
@@ -61,7 +65,7 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   };
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
-    private readonly topicService  : TopicService,
+    private readonly topicService: TopicService,
     private readonly activateRoute: ActivatedRoute,
     private readonly location: Location,
     private readonly router: Router) {
@@ -72,6 +76,10 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
     });
     this.recommendationKeys = TableColumnData.RECOMMENDATION_EDIT_KEY;
 
+    this.setForm(undefined);
+
+    this.dataListnerFun();
+    this.recommendationAndLeakSeperaterSubjectListner();
     this.getTakeBackTypeLookUp();
     this.getTakeBackIconLookUp();
     this.getTakeBackImageLookUp();
@@ -84,17 +92,16 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
     this.loadConservationCategoryLookUp();
     this.loadTakeBackImageLookUp();
     this.getRecommendationsLeakAndUniqueById();
-
-    this.setForm(undefined);
-    
   }
 
 
   ngOnInit() {
-    if(this.id){
+    if (this.id) {
       this.getRelatedLeakById();
       this.getRelatedRecommendationList();
-
+      this.getRecommendationsLeakAndUnique();
+      
+      this.loadRecommendationsLeakAndUnique();
       this.loadRecommendationsLeakAndUniqueById();
       this.loadRelatedLeaksById();
       this.loadRelatedRecommendationList();
@@ -111,34 +118,50 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
       recommendationFilter: [event !== undefined ? event.recommendationFilter : ''],
       valueCalculation: [event !== undefined ? event.valueCalculation : ''],
       conservationCategory: [event !== undefined ? event.conservationCategory : ''],
-      actionType: [event !== undefined ? event.actionType != null ? event.actionType :'2': ''],
+      actionType: [event !== undefined ? event.actionType != null ? event.actionType : '2' : ''],
       sendReminderMail: [event !== undefined ? event.sendReminderMail : ''],
       priceValueAlgType: [event !== undefined ? event.priceValueAlgType : 'P'],
       priceValueAlg: [event !== undefined ? event.priceValueAlg : ''],
       takebackImage: [event !== undefined ? event.takebackImage : ''],
-      takebackValueAlg : [event !== undefined ? event.takebackValueAlg : ''],
+      takebackValueAlg: [event !== undefined ? event.takebackValueAlg : ''],
       takebackIcon: [event !== undefined ? event.takebackIcon : ''],
       htmlTextTemplate: [event !== undefined ? event.htmlTextTemplate : ''],
-      instructionTemplate : [event !== undefined ? event.instructionTemplate : ''],
+      instructionTemplate: [event !== undefined ? event.instructionTemplate : ''],
       comments: [event !== undefined ? event.comments : ''],
     });
   }
 
   back(): any {
-    this.router.navigate(['/admin/topicDescription/topicDescriptionEdit'],{queryParams: {id: this.topicDescriptionId}});
+    this.router.navigate(['/admin/topicDescription/topicDescriptionEdit'], { queryParams: { id: this.topicDescriptionId } });
   }
 
-  loadRecommendationsLeakAndUnique(){
-    this.systemService.loadRecommendationsLeakAndUnique(this.id);
+  loadRecommendationsLeakAndUnique() {
+    this.systemService.loadRecommendationsLeakAndUnique(this.topicDescriptionId);
   }
-  
-  getRecommendationsLeakAndUnique(){
+
+  getRecommendationsLeakAndUnique() {
     this.subscriptions.add(
       this.systemService.getRecommendatonLeakAndUnique()
-      .pipe(skipWhile((data)=> !data))
+        .pipe(skipWhile((data) => !data))
+        .subscribe(
+          data => {
+            this.allPossibleLeaksRecommendations = data;
+            this.recommendationAndLeakSeperaterSubject.next('getRecommendationsLeakAndUnique');
+          }, error => {
+            console.error(error);
+          }
+        )
+    )
+  }
+
+
+  private recommendationAndLeakSeperaterSubjectListner(){ 
+    this.subscriptions.add(
+      this.recommendationAndLeakSeperaterSubject
+      .pipe(skipWhile((item: any) => !this.recommendationLeakTypeList[0]))
       .subscribe(
         data =>{
-          this.allPossibleLeaksRecommendations = data;
+          this.seperateLeaksAndRecommendation();
         }, error => {
           console.error(error);
         }
@@ -146,186 +169,265 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
     )
   }
 
+  private seperateLeaksAndRecommendation(){
+
+    let leakCode;
+    let recommendationCode;
+
+    this.recommendationLeakTypeList.forEach(
+      element =>{
+        if(element.valueName == 'Leaks')
+          leakCode = element.lookupValue;
+          
+        if(element.valueName == 'Recommendations')
+          recommendationCode = element.lookupValue;
+      })
+
+      if( this.allPossibleLeaksRecommendations.length != 0){
+        this.extractLeaksList(this.allPossibleLeaksRecommendations,leakCode);
+        this.extractRecommendationsList(this.allPossibleLeaksRecommendations,recommendationCode);
+      }
+  }
+
+  private async extractLeaksList(src : any,takebackType : any){
+    src = src.filter(
+        element =>{
+          if(element.takebackType == takebackType)
+            return true;
+          return false;
+        }
+    )
+    this.allPossibleLeaks = src;
+  }
+
+  private async extractRecommendationsList(src : any , takebackType : any){
+    src = src.filter(
+        element =>{
+          if(element.takebackType == takebackType)
+            return true;
+          return false;
+        }
+    )
+    console.log(src);
+    this.allPossibleRecommendations = src;
+  }
 
 
-  loadRecommendationsLeakAndUniqueById(){
+  loadRecommendationsLeakAndUniqueById() {
     this.systemService.loadRecommendationsLeakAndUniqueById(this.topicDescriptionId, this.id);
   }
 
-  getRecommendationsLeakAndUniqueById(){
+  getRecommendationsLeakAndUniqueById() {
     this.subscriptions.add(
       this.systemService.getRecommendatonLeakAndUniqueById()
-      .pipe(skipWhile((item: any) => !item))
-      .subscribe(
-        data =>{
-          if(!this.addRequest){
-            this.setForm(data);
-            this.recommendationLeakObject = data;
-            if(!this.id){
-              this.router.navigate([], { 
-                relativeTo: this.activateRoute,
-                queryParams: {id : data.id},
-                queryParamsHandling : 'merge'
-              })
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          data => {
+            if (!this.addRequest) {
+              this.setForm(data);
+              this.recommendationLeakObject = data;
+              if (!this.id) {
+                this.router.navigate([], {
+                  relativeTo: this.activateRoute,
+                  queryParams: { id: data.id },
+                  queryParamsHandling: 'merge'
+                })
+              }
+            }
+          }, error => {
+            console.error(error);
           }
-        }
-        }, error =>{
-          console.error(error);
-        }
-      )
+        )
     )
   }
 
-  loadTakeBackTypeLookUp(){
+  loadTakeBackTypeLookUp() {
     this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeTakeBackValue);
   }
 
-  getTakeBackTypeLookUp(){
+  getTakeBackTypeLookUp() {
     this.subscriptions.add(
       this.topicService.getLookValueForTakeBackType()
-      .pipe(skipWhile((item: any) => !item))
-      .subscribe(
-        data =>{
-          this.recommendationLeakTypeList = data;
-        },  error =>{
-          console.error(error);
-        }
-      )
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          data => {
+            this.recommendationLeakTypeList = data;
+            this.recommendationAndLeakSeperaterSubject.next('getTakeBackTypeLookUp');
+          }, error => {
+            console.error(error);
+          }
+        )
     )
   }
 
-  loadActiontypeLookUp(){
+  loadActiontypeLookUp() {
     this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeForActionType)
   }
 
-  getActionTypeLookUp(){
+  getActionTypeLookUp() {
     this.subscriptions.add(
       this.topicService.getLookUpForActionType()
-      .pipe(skipWhile((item: any) => !item))
-      .subscribe(
-        data =>{
-          this.actionTypeList = data;
-        }, error =>{
-          console.error(error);
-        }
-      )
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          data => {
+            this.actionTypeList = data;
+          }, error => {
+            console.error(error);
+          }
+        )
     )
   }
 
-  loadTakeBackImageLookUp(){
+  loadTakeBackImageLookUp() {
     this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeForTakeBackImage);
   }
 
-  getTakeBackImageLookUp(){
+  getTakeBackImageLookUp() {
     this.subscriptions.add(
       this.topicService.getLookUpForTakeBackImage()
-      .pipe(skipWhile((item: any) => !item))
-      .subscribe(
-        data =>{
-          this.imageList = data;
-          console.log(data);
-        }, error =>{
-          console.error(error);
-        }
-      )
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          data => {
+            this.imageList = data;
+          }, error => {
+            console.error(error);
+          }
+        )
     )
   }
 
-  loadTakeBackIconLookUp(){
+  loadTakeBackIconLookUp() {
     this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeForTakeBackIcon);
   }
 
-  getTakeBackIconLookUp(){
+  getTakeBackIconLookUp() {
     this.subscriptions.add(
       this.topicService.getLookUpForTakeBackIcon()
-      .pipe(skipWhile((item: any) => !item))
-      .subscribe(
-        data =>{
-          this.iconList = data;
-        }, error =>{
-          console.error(error);
-        }
-      )
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          data => {
+            this.iconList = data;
+          }, error => {
+            console.error(error);
+          }
+        )
     )
   }
 
-  loadConservationCategoryLookUp(){
+  loadConservationCategoryLookUp() {
     this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeForConservationCategory);
   }
 
-  getConservationCategoryLookUp(){
+  getConservationCategoryLookUp() {
     this.subscriptions.add(
       this.topicService.getLookUpForConservationCategory()
-      .pipe(skipWhile((item: any) => !item))
-      .subscribe(
-        data => {
-          console.log(data);
-          this.conservationCategory = data;
-        } , error => {
-          console.error(error);
-        }
-      )
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          data => {
+            this.conservationCategory = data;
+          }, error => {
+            console.error(error);
+          }
+        )
     )
   }
 
-  loadRelatedRecommendationList(){
-    this.systemService.LoadRelatedRecommendationList(this.topicDescriptionId,this.id);
+  loadRelatedRecommendationList() {
+    this.systemService.LoadRelatedRecommendationList(this.topicDescriptionId, this.id);
   }
 
-  getRelatedRecommendationList(){
+  getRelatedRecommendationList() {
     this.subscriptions.add(
       this.systemService.getRelatedRecommendatonById()
-      .pipe(skipWhile((item: any) => !item))
-      .subscribe(
-        data =>{
-          console.log(data);
-        }, error =>{
-          console.error(error);
-        }
-      )
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          data => {
+            let tempList = [];
+            data.forEach((item: any) => {tempList.push(item.id)});
+            const item = tempList.find(res => this.id == res.id);
+            if(item){
+              this.dataListner.next('getRelatedRecommendationList');
+            }else{
+              this.allRelatedRecommendations = tempList;
+            }
+          }, error => {
+            console.error(error);
+          }
+        )
     )
   }
 
-  loadRelatedLeaksById(){
-    this.systemService.loadRelatedLeaksById(this.topicDescriptionId,this.id);
+  loadRelatedLeaksById() {
+    this.systemService.loadRelatedLeaksById(this.topicDescriptionId, this.id);
   }
 
-  getRelatedLeakById(){
+  getRelatedLeakById() {
     this.subscriptions.add(
       this.systemService.getRelatedLeaksById()
-      .pipe(skipWhile((item: any) => !item))
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe(
+          data => {
+            let tempList = [];
+            data.forEach((item: any) => {tempList.push(item.id)});
+            const item = tempList.find(res => this.id == res.id);
+            if(item){
+              this.dataListner.next('getRelatedLeakById');
+            }else{
+              this.allRelatedLeaks = tempList;
+            }
+          }, error => {
+            console.error(error);
+          }
+        )
+    )
+  }
+
+  dataListnerFun(){
+    this.subscriptions.add(
+      this.dataListner
+      .pipe( skip(1),skipWhile((data: any) => !this.recommendationLeakObject))
       .subscribe(
         data =>{
-          console.log(data);
-        }, error =>{
-          console.error(error);
-        }
-      )
+          if(data == 'getRelatedLeakById'){
+            this.allPossibleLeaks.push(this.recommendationLeakObject);
+            this.allPossibleLeaks = [...this.allPossibleLeaks];
+          } else if( data == 'getRelatedRecommendationList'){
+            this.allPossibleRecommendations.push(this.recommendationLeakObject);
+            this.allPossibleRecommendations = [...this.allPossibleRecommendations];
+          }
+        })
     )
   }
 
   save(): any {
     this.addRequest = false;
-    this.router.navigate([], { 
+    this.router.navigate([], {
       relativeTo: this.activateRoute,
-      queryParams: {addRequest : null},
-      queryParamsHandling : 'merge'
+      queryParams: { addRequest: null },
+      queryParamsHandling: 'merge'
     })
-    const body = Object.assign(this.recommendationLeakObject ? this.recommendationLeakObject : {},this.recommendationForm.value);
-    this.systemService.saveRecommendationLeakByIdAction(this.topicDescriptionId,body);
+    const body = Object.assign(this.recommendationLeakObject ? this.recommendationLeakObject : {}, this.recommendationForm.value);
+    this.systemService.saveRecommendationLeakByIdAction(this.topicDescriptionId, body);
   }
 
   delete(): any {
-    this.systemService.deleteRecommendationUniqueLeakListAction(this.topicDescriptionId,this.id);
+    this.systemService.deleteRecommendationUniqueLeakListAction(this.topicDescriptionId, this.id);
     this.back();
   }
 
-  addRelatedLeaks(event: any){
-    
+  addRelatedLeaks(event: any) {
+    if(event.isCheckedCheckbox == true)
+      this.systemService.saveRelatedLeaksById(this.topicDescriptionId,this.id,event);
+    else if(event.isCheckedCheckbox == false)
+      this.systemService.deleteRelatedLeaksById(this.topicDescriptionId,this.id,event);
+
   }
 
-  addRelatedRecommendations(event: any){
-
+  addRelatedRecommendations(event: any) {
+    if(event.isCheckedCheckbox == true)
+      this.systemService.saveRelatedRecommendationsById(this.topicDescriptionId,event,this.id);
+    else if(event.isCheckedCheckbox == false)
+      this.systemService.deleteRelatedRecommendationAction(this.topicDescriptionId,event,this.id);
   }
 
   onCheckboxChangeEvent(event: any): any {

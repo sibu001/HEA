@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/internal/operators/tap';
@@ -61,7 +62,11 @@ import {
     LoadRelatedLeakListAction,
     SaveRecommendationLeakAction,
     SaveRelatedLeakAction,
-    SaveRelatedRecommendationAction
+    SaveRelatedRecommendationAction,
+    DeleteRelatedRecommendationAction,
+    DeleteRelatedLeakAction,
+    SaveCustomerGoupToList,
+    RemoveCustomerGroupList
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -1140,47 +1145,13 @@ export class SystemManagementState {
                     }));
     }
 
-    @Action(LoadRelatedRecommendationListAction)
-    loadRelatedRecommendationListAction(ctx: StateContext<SystemManagementModel>, action: LoadRelatedRecommendationListAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' + AppConstant.recommendations + '/' + action.id + '/' + AppConstant.recommendations)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    ctx.patchState({
-                        relatedRecommendationList: response,
-                    })
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
-    }
-
-    @Action(LoadRelatedLeakListAction)
-    loadRelatedLeakListAction(ctx: StateContext<SystemManagementModel>, action: LoadRelatedLeakListAction): Actions {
-        document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' + AppConstant.recommendations + '/' + action.id + '/' + AppConstant.leaks)
-            .pipe(
-                tap((response: any) => {
-                    document.getElementById('loader').classList.remove('loading');
-                    ctx.patchState({
-                        relatedRecommendationList: response,
-                    })
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
-    }
-
     @Action(RecommendationsLeakAndUniqueAction)
     recommendationsLeakAndUniqueAction(ctx: StateContext<SystemManagementModel>, action: RecommendationsLeakAndUniqueAction) {
         document.getElementById('loader').classList.add('loading')
 
-        //    const recommendationList = ctx.getState().recommendationList;
-        //     if(recommendationList && recommendationList[0] && recommendationList[0].surveyDescriptionId == action.id )
-        //         return null;
+           const recommendationList = ctx.getState().recommendationList;
+            if(recommendationList && recommendationList[0] && recommendationList[0].surveyDescriptionId == action.id )
+                return null;
 
         return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id + '/' + 'recommendations')
             .subscribe(
@@ -1194,6 +1165,58 @@ export class SystemManagementState {
                     this.utilityService.showErrorMessage(error.error.errorMessage);
                 }
             )
+    }
+
+    @Action(LoadRelatedRecommendationListAction)
+    loadRelatedRecommendationListAction(ctx: StateContext<SystemManagementModel>, action: LoadRelatedRecommendationListAction): Actions {
+
+        const relatedRecommendationList =  ctx.getState().relatedRecommendationList;
+        if(relatedRecommendationList && relatedRecommendationList[0] && relatedRecommendationList[0].relativeCaller == action.id)
+            return null;
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' + AppConstant.recommendations + '/' + action.id + '/' + AppConstant.recommendations)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    if(response[0]){
+                        response[0].relativeCaller = action.id;
+                    }
+
+                    ctx.patchState({
+                        relatedRecommendationList: response,
+                    })
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(LoadRelatedLeakListAction)
+    loadRelatedLeakListAction(ctx: StateContext<SystemManagementModel>, action: LoadRelatedLeakListAction): Actions {
+
+        const relatedLeakList = ctx.getState().relatedLeakList;
+        if(relatedLeakList && relatedLeakList[0] && relatedLeakList[0].relativeCaller == action.id)
+            return null;
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' + AppConstant.recommendations + '/' + action.id + '/' + AppConstant.leaks)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    if(response[0]){
+                        response[0].relativeCaller = action.id;
+                    }
+
+                    ctx.patchState({
+                        relatedLeakList: response,
+                    })
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
     }
 
     @Action(DeleteRecommendationUniqueLeakById)
@@ -1240,13 +1263,21 @@ export class SystemManagementState {
     saveRelatedLeakAction(ctx: StateContext<SystemManagementModel>, action: SaveRelatedLeakAction): Actions {
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performPost({}, AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' 
-        + AppConstant.recommendations + '/' + action.recommendationId + '/' + AppConstant.leaks + '/' + action.leakId )
+        + AppConstant.recommendations + '/' + action.recommendationId + '/' + AppConstant.leaks + '/' + action.leak.id )
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // ctx.patchState({
-                    //     recommendation: response,
-                    // })
+                    const relatedLeakList= ctx.getState().relatedLeakList;
+                    if(relatedLeakList){
+                        relatedLeakList.push(action.leak);
+                        ctx.patchState({
+                            relatedLeakList : [...relatedLeakList]
+                        })
+                    } else{
+                        ctx.patchState({
+                            relatedLeakList : [action.leak]
+                        })
+                    }
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1260,13 +1291,97 @@ export class SystemManagementState {
     saveRelatedRecommendationAction(ctx: StateContext<SystemManagementModel>, action: SaveRelatedRecommendationAction): Actions {
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performPost({}, AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' 
-        + AppConstant.leaks + '/' + action.leakId + '/' + AppConstant.recommendations + '/' + action.recommendationId )
+        + AppConstant.recommendations + '/' + action.leakId + '/' + AppConstant.recommendations + '/' + action.recommendation.id )
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // ctx.patchState({
-                    //     recommendation: response,
-                    // })
+                    const relatedRecommendationList= ctx.getState().relatedRecommendationList;
+                    if(relatedRecommendationList){
+                        relatedRecommendationList.push(action.recommendation);
+                        ctx.patchState({
+                            relatedRecommendationList : [...relatedRecommendationList]
+                        })
+                    } else{
+                        ctx.patchState({
+                            relatedRecommendationList : [action.recommendation]
+                        })
+                    }
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+
+    }
+
+    @Action(DeleteRelatedLeakAction)
+    deleteRelatedLeakAction(ctx: StateContext<SystemManagementModel>, action: DeleteRelatedLeakAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' 
+        + AppConstant.recommendations + '/' + action.recommendationId + '/' + AppConstant.leaks + '/' + action.leak.id )
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    let relatedLeakList = ctx.getState().relatedLeakList;
+                    if(relatedLeakList){
+                        relatedLeakList = relatedLeakList.filter(ele => ele.id != action.leak.id);
+                        ctx.patchState({relatedLeakList : relatedLeakList})
+                    }
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+
+    }
+
+
+    @Action(DeleteRelatedRecommendationAction)
+    deleteRelatedRecommendationAction(ctx: StateContext<SystemManagementModel>, action: DeleteRelatedRecommendationAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete(AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' 
+        + AppConstant.recommendations + '/' + action.leakId + '/' + AppConstant.recommendations + '/' + action.recommendation.id )
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    let relatedRecommendationList = ctx.getState().relatedRecommendationList;
+                    if(relatedRecommendationList){
+                        relatedRecommendationList = relatedRecommendationList.filter(ele => ele.id != action.recommendation.id );
+                        ctx.patchState( { relatedRecommendationList : relatedRecommendationList})
+                    }
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+
+    }
+
+    @Action(SaveCustomerGoupToList)
+    saveCustomerGoupToList(ctx: StateContext<SystemManagementModel>, action: SaveCustomerGoupToList): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPostWithParam({},AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' 
+        +  AppConstant.topicDescriptionGroups, new HttpParams().append('customerGroupId', action.customerGroupId.toString()))
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+
+    }
+
+    @Action(RemoveCustomerGroupList)
+    removeCustomerGroupList(ctx: StateContext<SystemManagementModel>, action: RemoveCustomerGroupList): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDeleteWithParams(AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' 
+        +  AppConstant.topicDescriptionGroups, new HttpParams().append('customerGroupId', action.customerGroupId.toString()))
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

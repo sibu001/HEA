@@ -237,9 +237,10 @@
               <span class="messageName">Topic Group</span></p>
             <app-table [keys]="keys" [isPaginate]="false" [checkbox]=true
               [isHideAdd]=true [isSearch]="false"
-              [data]="customerGroupList"
+              [data]="customerGroupList"  [hideMasterCheckBox]=true
               [(selectionList)]='selectionCustomerGroupList' id = "groupCode"
               (checkBoxChangeEvent)="selectionListCustomerGroup = ($event)"
+              (singleSelectedRow)='addRemoveCustomerGroup($event)'
               >
             </app-table>
           </div>

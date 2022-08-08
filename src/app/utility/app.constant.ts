@@ -51,6 +51,7 @@ export class AppConstant {
     public static eC2Instance = 'ec2Servers';
     public static alertMessage = 'alertMessageTypes';
     public static topicDescription = 'surveyDescriptions';
+    public static topicDescriptionGroups = 'surveyDescriptionGroups';
     public static topicDescritptionVariable = 'surveyDescriptionVariables';
     public static findTopicDescriptionVariables = 'findSurveyDescriptionVariables.do';
     public static findDataFieldVariables = 'findDataFieldVariables.do';

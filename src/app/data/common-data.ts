@@ -278,8 +278,8 @@ export class TableColumnData {
     ];
 
     static readonly RECOMMENDATION_EDIT_KEY: Array<TABLECOLUMN> = [
-        { key: 'Code', isEdit: true, displayName: 'Code' },
-        { key: 'label', isEdit: true, displayName: 'Label' },
+        { key: 'takebackCode', isEdit: true, displayName: 'Code' },
+        { key: 'takebackLabelTemplate', isEdit: true, displayName: 'Label' },
     ];
 
     static readonly TOPIC_VARIABLES_KEYS: Array<TABLECOLUMN> = [

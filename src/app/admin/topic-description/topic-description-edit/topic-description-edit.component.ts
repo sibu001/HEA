@@ -13,7 +13,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
-import { debounceTime, distinctUntilChanged, skipWhile, map } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, skipWhile, map, skip, filter } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { templateJitUrl } from '@angular/compiler';
 import { LoginService } from 'src/app/services/login.service';
@@ -57,6 +57,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     pageIndex : 0
   };
   suggestionListTopicVariables = [];
+  leaksRecommendationTakeBackTypeSubject : Subject<any> = new Subject();
   private readonly subscriptions: Subscription = new Subscription();
   public tools: object = {
     items: ['Undo', 'Redo', '|',
@@ -82,6 +83,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
   public customerGroupList : Array<any> = [];
   public selectionListCustomerGroup : Array<any> = [];
   public selectionCustomerGroupList : Array<any> = [];
+  recommendationLeakData = [];
   public topicPane = {
     dataSource : [],
     totalElement : 0,
@@ -103,12 +105,15 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       this.id = params['id'];
     });
 
+    this.setForm(undefined);
+
     this.getPermanentTopicListFromStore();
+    this.setLookUpTypeInRecommendationAndLeaks();
     this.loadPermanentTopicList();
+    this.getTakeBackTypeLookUp();
     this.getCustomerGroups();
     this.getCalculationValueFromStore();
-    this.loadLookUpValuesForRecommendation();
-    this.setForm(undefined);
+    this.loadTakeBackTypeLookUp();
   }
 
   scrolltop(){
@@ -125,6 +130,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     this.topicVariablesKeys = TableColumnData.TOPIC_VARIABLES_KEYS;
     
       if(this.id){
+        this.getTopicDescription();
         this.getTopicPanesById();
         this.loadTopicPanesById();
         this.getRecommendationsLeakAndUnique()
@@ -138,11 +144,15 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
 
   private loadTopicDescription() {
     this.topicService.loadTopicDescriptionById(this.id);
-    this.subscriptions.add(this.topicService.getTopicDescriptionById().pipe(skipWhile((item: any) => !item))
+  }
+
+  private getTopicDescription(){
+    this.subscriptions.add(
+    this.topicService.getTopicDescriptionById()
+    .pipe( filter(x => x !== undefined))
     .subscribe((topicDescription: any) => {
       this.topicDescriptionData = topicDescription;
       this.setForm(this.topicDescriptionData);
-      // if(this.topicPane.dataSource.length == 0)
     }));
   }
 
@@ -194,23 +204,6 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     )
   }
 
-  //  loadTopicPanesById(){
-  //    this.topicPane.dataSource = [];
-  //    this.subscriptions.add(
-  //     this.loginService.performGet(AppConstant.topicDescription + '/' + this.id + '/panes')
-  //     .subscribe((dataList : any) => {
-  //         this.allTopicPane = [...dataList];
-  //         this.topicPane.dataSource = this.allTopicPane.slice(0,this.pageSize);   
-  //         this.topicPane.totalElement = this.allTopicPane.length;
-  //         this.topicPane.index = 0;
-
-  //         this.setForm(this.topicDescriptionData);
-  //     },(error : any)  => {
-  //       console.log("some error has occurred.");
-  //       console.error(error);
-  //     }));
-  // }
-
   loadTopicPanesById(){
     this.topicService.loadPaneListByTopicDescriptionId(this.id);
   }
@@ -220,11 +213,12 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       this.topicService.getPaneListByTopicDescriptionId()
       .pipe(skipWhile((item: any) => !item))
       .subscribe((dataList : any) => {
+      if(dataList){
         this.allTopicPane = [...dataList];
         this.topicPane.dataSource = this.allTopicPane.slice(0,this.pageSize);   
         this.topicPane.totalElement = this.allTopicPane.length;
         this.topicPane.index = 0;
-  
+      }
         // this.setForm(this.topicDescriptionData);
     },(error : any)  => {
       console.log("some error has occurred.");
@@ -291,11 +285,12 @@ loadPermanentTopicList(){
 }
 
 getPermanentTopicListFromStore(){
-  this.subscriptions.add(this.topicService.getTopicDescriptionList()
+  this.subscriptions.add(
+  this.topicService.getTopicDescriptionList()
   .pipe(skipWhile((item: any) => !item))
   .subscribe((topicDescriptionList: any) => {
-    this.nextPermanentTopic = [...topicDescriptionList];
-    this.nextPermanentTopic.splice(0, 0, {label : "" , id : 0});
+      this.nextPermanentTopic = [...topicDescriptionList];
+      this.nextPermanentTopic.splice(0, 0, {label : "" , id : 0});
   }));
 }
 
@@ -306,11 +301,11 @@ loadRecommendationsLeakAndUnique(){
 getRecommendationsLeakAndUnique(){
   this.subscriptions.add(
     this.systemService.getRecommendatonLeakAndUnique()
-    .pipe(skipWhile((data)=> this.lookupRecommendation.length == 0))
+    .pipe(skipWhile((data)=> !data))
     .subscribe(
       data =>{
-        if(data)
-        this.transformRecommendationData([...data])
+        this.recommendationLeakData = data;
+        this.leaksRecommendationTakeBackTypeSubject.next("getRecommendationsLeakAndUnique");
       }, error => {
         console.error(error);
       }
@@ -318,29 +313,44 @@ getRecommendationsLeakAndUnique(){
   )
 }
 
-loadLookUpValuesForRecommendation(){
+loadTakeBackTypeLookUp(){
+  this.topicService.loadLookUpValuesByType(AppConstant.lookUpCodeTakeBackValue);
+}
+
+getTakeBackTypeLookUp(){
   this.subscriptions.add(
-  this.topicService.getLookUpValues(AppConstant.lookUpCodeTakeBackValue)
-  .subscribe(
-    data =>{
-      this.lookupRecommendation = data;
-    }, error =>{
-       console.log(error);
-       this.utilityService.showErrorMessage(error.error.errorMessage);
-    }
-  ));
+    this.topicService.getLookValueForTakeBackType()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe(
+      data =>{
+        this.lookupRecommendation = data;
+        this.leaksRecommendationTakeBackTypeSubject.next("getTakeBackTypeLookUp");
+      },  error =>{
+        console.error(error);
+      }
+    )
+  )
+}
+
+private setLookUpTypeInRecommendationAndLeaks(){
+  this.subscriptions.add(
+    this.leaksRecommendationTakeBackTypeSubject
+    .subscribe(
+      data =>{
+        this.transformRecommendationData([...this.recommendationLeakData])
+      }, error =>{ console.log(error); }
+    )
+  )
 }
 
 private transformRecommendationData(src){
-  src = src.map(
-    (element) =>{
-      const lookup = this.lookupRecommendation.find((lookup) => lookup.lookupValue == element.takebackType);
-      element.lookupType = lookup.valueName;
-      return element;
-    }
-  )
-
-  console.log(src);
+    src = src.map(
+      (element) =>{
+        const lookup = this.lookupRecommendation.find((lookup) => lookup.lookupValue == element.takebackType);
+        if(lookup) element.lookupType = lookup.valueName;
+        return element;
+      }
+    )
   this.recommendationsList = src;
 }
 
@@ -535,7 +545,7 @@ getSuggestionListForFilterForTopicVariable(event){
    getTopicVariableDataFromStore(){
     this.subscriptions.add(this.topicService.getTopicVariable()
       .pipe(
-        skipWhile((item: any) => !item)
+        filter(x => x !== undefined)
       ).subscribe(
         (response) =>{
           this.topicVariableDataList = [...response]
@@ -547,6 +557,14 @@ getSuggestionListForFilterForTopicVariable(event){
         } , error => { console.error(error)}
       )
       )
+  }
+
+  addRemoveCustomerGroup(event : any){
+    // console.log(event);
+    if(event.isCheckedCheckbox == true)
+      this.systemService.addCustomerGroupToList(this.id,event.id)
+    else if(event.isCheckedCheckbox == false)
+      this.systemService.removeCustomerGroupToList(this.id,event.id);
   }
 
   setTopicDescriptionValues(){

@@ -54,7 +54,13 @@ import {
   LoadRelatedRecommendationListAction,
   DeleteRecommendationUniqueLeakById,
   LoadRelatedLeakListAction,
-  SaveRecommendationLeakAction
+  SaveRecommendationLeakAction,
+  SaveRelatedLeakAction,
+  SaveRelatedRecommendationAction,
+  DeleteRelatedLeakAction,
+  DeleteRelatedRecommendationAction,
+  RemoveCustomerGroupList,
+  SaveCustomerGoupToList
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -403,5 +409,30 @@ export class SystemService {
 
   saveRecommendationLeakByIdAction(topicDescriptionId : number, body : any){
     return this.store.dispatch(new SaveRecommendationLeakAction(topicDescriptionId, body))
+  }
+
+  saveRelatedLeaksById(topicDescriptionId, recommendationId, leak){
+    return this.store.dispatch(new SaveRelatedLeakAction(topicDescriptionId, leak, recommendationId));
+  }
+
+  deleteRelatedLeaksById(topicDescriptionId, recommendationId, leak){
+    return this.store.dispatch(new DeleteRelatedLeakAction(topicDescriptionId, leak, recommendationId))
+  }
+
+  saveRelatedRecommendationsById(topicDescriptionId,recommendation,leakId){
+    return this.store.dispatch(new SaveRelatedRecommendationAction(topicDescriptionId, leakId,recommendation));
+  }
+
+  deleteRelatedRecommendationAction(topicDescriptionId,recommendation,leakId){
+    return this.store.dispatch(new DeleteRelatedRecommendationAction(topicDescriptionId,recommendation,leakId))
+  }
+
+  addCustomerGroupToList(topicDescriptionId : number, customerGroupList : number){
+    return this.store.dispatch(new SaveCustomerGoupToList(topicDescriptionId,customerGroupList));
+  }
+
+  removeCustomerGroupToList(topicDescriptionId : number, customerGroupList : number){
+    return this.store.dispatch(new RemoveCustomerGroupList(topicDescriptionId,customerGroupList));
+
   }
 }

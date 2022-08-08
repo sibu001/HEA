@@ -26,8 +26,8 @@
             class="table">
             <ng-container matColumnDef="select">
                 <mat-header-cell *matHeaderCellDef >
-                    <mat-checkbox (change)="$event ? masterToggle() :
-                        null;checkBoxChange()"
+                    <mat-checkbox (change)="$event ? masterToggle() : 
+                        null;checkBoxChange()" [ngStyle]="{display : hideMasterCheckBox ? 'none' : 'inherit' }"
                         [checked]="selection.hasValue() && isAllSelected()"
                         color="primary"
                         [indeterminate]="selection.hasValue() && !isAllSelected()"
@@ -39,7 +39,7 @@
                 [ngClass]="{'toTop': alterTable}">  
                     <mat-checkbox (click)="$event.stopPropagation()"
                         (change)="$event ? selection.toggle(row) :
-                        null;checkBoxChange()" color="primary"
+                        null;checkBoxChange(); singleSelectedEvent(row,$event.checked);" color="primary"
                         [checked]="selection.isSelected(row)"
                         [aria-label]="checkboxLabel(row)" class="tableCheckBox">
                     </mat-checkbox>

@@ -10,14 +10,14 @@
 
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Code</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Code:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class='form-control form-control-sm' id="takebackCode  " formControlName="takebackCode">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Type</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="takebackType" class='form-control form-control-sm' formControlName="takebackType">
                 <option *ngFor='let group of recommendationLeakTypeList' value="{{group.lookupValue}}">{{group.valueName}}</option>
@@ -166,8 +166,9 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Recommendation List </span></p>
             <app-table [keys]="recommendationKeys" [checkbox]=true [isPaginate]="false" [isSearch]="false"
-              [data]="dataSource" [totalElement]="recommendationData.totalElements"
-              (checkBoxChangeEvent)="onCheckboxChangeEvent($event)" [isHideAdd]=true>
+              [data]="allPossibleRecommendations" [totalElement]="recommendationData.totalElements"
+              [(selectionList)]='allRelatedRecommendations' id = "id" [hideMasterCheckBox]=true
+              (singleSelectedRow)="addRelatedRecommendations($event)" [isHideAdd]=true>
             </app-table>
           </div>
 
@@ -176,8 +177,9 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Leaks List </span></p>
             <app-table [keys]="recommendationKeys" [checkbox]=true [isPaginate]="false" [isSearch]="false"
-              [data]="dataSource" [totalElement]="recommendationData.totalElements"
-              (checkBoxChangeEvent)="onCheckboxChangeEvent($event)" [isHideAdd]=true>
+              [data]="allPossibleLeaks" [totalElement]="recommendationData.totalElements"
+              [(selectionList)]='allRelatedLeaks' id = "id" [hideMasterCheckBox]=true
+              (singleSelectedRow)="addRelatedLeaks($event)" [isHideAdd]=true>
             </app-table>
           </div>
           <div class="row rowPadding">

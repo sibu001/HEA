@@ -1,6 +1,8 @@
 export enum SystemActionTypes {
     GET_CUSTOMER_GROUP_LIST = 'Get All Customer Group List',
     GET_CUSTOMER_GROUP_BY_ID = 'Get Customer Group By Id',
+    ADD_CUSTOMER_GROUP_TO_TOPIC_DESCRIPTION = 'Add Customer Group To List',
+    REMOVE_CUSTOMER_GROUP_TO_TOPIC_DESCRIPTION = 'Remove Customer Group To List',
     UPDATE_CUSTOMER_GROUP = 'Update Customer Group',
     SAVE_CUSTOMER_GROUP = 'Save Customer Group',
     DELETE_CUSTOMER_GROUP_BY_ID = 'Delete Customer Group By Id',
@@ -54,7 +56,9 @@ export enum SystemActionTypes {
     LOAD_RELATED_LEAKS_BY_ID = 'Load Related Leaks By Id',
     SAVE_RECOMMENDATION_LEAK_ACTION = 'Save Recommendation Leak and Unique',
     SAVE_RELATED_LEAK_ACTION = 'Save Related Leaks',
-    SAVE_RELATED_RECOMMENDATION_ACTION = 'Save Related Recommendations'
+    SAVE_RELATED_RECOMMENDATION_ACTION = 'Save Related Recommendations',
+    DELETE_RELATED_RECOMMENDATION_ACTION = 'Delete Related Recommendations',
+    DELETE_RELATED_LEAK_ACTION = 'Delete Related Leaks'
 }
 export class GetCustomerGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_LIST;
@@ -355,12 +359,36 @@ export class SaveRecommendationLeakAction{
 
 export class SaveRelatedLeakAction{
     static readonly type: SystemActionTypes = SystemActionTypes.SAVE_RELATED_LEAK_ACTION;
-    constructor(readonly topicDescriptionId : number, readonly leakId : number ,readonly recommendationId : number) {
+    constructor(readonly topicDescriptionId : number, readonly leak : any ,readonly recommendationId : number) {
     }
 }
 
 export class SaveRelatedRecommendationAction{
     static readonly type: SystemActionTypes = SystemActionTypes.SAVE_RELATED_RECOMMENDATION_ACTION;
-    constructor(readonly topicDescriptionId : number, readonly leakId : number ,readonly recommendationId : number) {
+    constructor(readonly topicDescriptionId : number, readonly leakId : number ,readonly recommendation : any) {
+    }
+}
+
+export class DeleteRelatedRecommendationAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_RELATED_RECOMMENDATION_ACTION;
+    constructor(readonly topicDescriptionId : number,readonly recommendation : any, readonly leakId : number ) {
+    }
+}
+
+export class DeleteRelatedLeakAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_RELATED_LEAK_ACTION;
+    constructor(readonly topicDescriptionId : number, readonly leak : any ,readonly recommendationId : number) {
+    }
+}
+
+export class SaveCustomerGoupToList{
+    static readonly type: SystemActionTypes = SystemActionTypes.ADD_CUSTOMER_GROUP_TO_TOPIC_DESCRIPTION;
+    constructor(readonly topicDescriptionId : number,readonly customerGroupId : number) {
+    }
+}
+
+export class RemoveCustomerGroupList{
+    static readonly type: SystemActionTypes = SystemActionTypes.REMOVE_CUSTOMER_GROUP_TO_TOPIC_DESCRIPTION;
+    constructor(readonly topicDescriptionId : number,readonly customerGroupId : number) {
     }
 }

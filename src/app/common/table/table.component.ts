@@ -81,6 +81,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() pushedData: any;
   @Input() showRowLoader = false;
   @Input() showPushedDataPerRow = false;
+  @Input() hideMasterCheckBox = false;
+  @Output() singleSelectedRow : EventEmitter<any> = new EventEmitter();
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
   @Output() suggestionListEvent : EventEmitter<any> = new EventEmitter();
@@ -347,6 +349,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
   checkBoxChange(): any {
     this.checkBoxChangeEvent.emit(this.selection.selected);
+  }
+
+  singleSelectedEvent(event : any, isChecked : boolean){
+    event.isCheckedCheckbox = isChecked;
+    this.singleSelectedRow.emit(event);
   }
 
   checkBoxChangeOptional(event: any, row: any) {
