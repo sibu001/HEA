@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
       this.theme = params['theme'] || 'MBL';
     });
     this.users =JSON.parse(localStorage.getItem('users'));
-    if (this.users == null) this.users = new Users(); 
+    if (this.users) this.users = new Users(); 
 
     if (this.theme) {
       this.theme = 'MBL';
