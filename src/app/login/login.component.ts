@@ -57,14 +57,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
       this.buildForSandbox = false;
     }
   }
-  ngAfterViewInit(): void {
-    this.router.navigate([''],{ 
-      relativeTo : this.route,
-      queryParams : { theme : 'MBL'},
-      queryParamsHandling : 'merge'
-      
-    })
-  }
+
   ngOnInit() {
     this.users = this.loginService.getUser();
     if (this.users.token) {
@@ -79,6 +72,15 @@ export class LoginComponent implements OnInit, AfterViewInit{
     }
     this.fbConnect();
     this.googleInitialize();
+  }
+  
+  ngAfterViewInit(): void {
+    this.router.navigate([''],{ 
+      relativeTo : this.route,
+      queryParams : { theme : 'MBL'},
+      queryParamsHandling : 'merge'
+      
+    })
   }
 
   login() {
@@ -153,7 +155,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
     this.loginService.performGetMultiPartData('oauth/me').subscribe(
       (data) => {
         const response = JSON.parse(JSON.stringify(data));
-        if(this.users.userId != response.userId){
+        if(this.users.outhMeResponse && this.users.outhMeResponse.userId != response.userId ){
           this.users.lastVisitedURL = undefined;
           this.users.currentPaneNumber = undefined;
         }
@@ -385,7 +387,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
   prepareLogin() {
     if(!this.loginElement)
        return null;
-       
+
     this.auth2.attachClickHandler(this.loginElement.nativeElement, {},
       (googleUser) => {
         let profile = googleUser.getBasicProfile();
