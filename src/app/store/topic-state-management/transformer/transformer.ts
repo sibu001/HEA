@@ -33,16 +33,16 @@ export class TopicUtilityTransformer {
     static transformFieldValuesTableData(src : any){
        return src.map(
             data =>{
-                data.range = (data.rangeStart ? data.rangeStart.toFixed(1) : '') +
-                 ' - ' +  (data.rangeEnd ? data.rangeEnd.toFixed(1) : '' );
+                data.range = (data.rangeStart ? data.rangeStart.toFixed(1) : '0.0') +
+                 ' - ' +  (data.rangeEnd ? data.rangeEnd.toFixed(1) : '0.0' );
                 return data;
             }
         )
     } 
 
     static transformFieldValuesSingleData(data : any){
-                 data.range = (data.rangeStart ? data.rangeStart.toFixed(1) : '') +
-                  ' - ' +  (data.rangeEnd ? data.rangeEnd.toFixed(1) : '' );
+                 data.range = (data.rangeStart ? data.rangeStart.toFixed(1) : 0.0) +
+                  ' - ' +  (data.rangeEnd ? data.rangeEnd.toFixed(1) : 0.0 );
                  return data;
      } 
 }

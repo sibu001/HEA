@@ -108,7 +108,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @ViewChild('paginator') matPaginator : MatPaginator;
   @ViewChild('inputSuggestionField') inputSuggestionField;
   inputFormFields = false;
-  addDataObject = {};
+  addDataObjectList = [];
   expandedElement: any = [];
   showInput = false;
   showRowInput = false;
@@ -177,7 +177,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     if (changes['data'] && changes['data'].currentValue) {
       this.pushedDataArrayPerRow = new Array<any>(this.data.length);
       this.inputFormFields = false;
-      this.addDataObject = {};
+      this.addDataObjectList = this.data;
       this.selection.clear();
       this.data = changes['data'].currentValue;
       this.totalLength = this.totalElement;
@@ -369,6 +369,14 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   }
 
   goToEdit(event: any, col: any): any {
+    console.log(event + "     " + col);
+
+    if( col.type == "inputField"){
+      const data = this.dataSource.data.find( res => res.id == event.id);
+      data.disabled = false;
+      data.showInputFields = true; 
+    }
+
     if (col.isEdit ) {
       event.col = col;
       this.goToEditEvent.emit(event);
@@ -424,7 +432,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   onAddEvent(event: any): any {
     this.addEvent.emit(event);
     if(this.inputFormFields == false){
-      const pushedObj = {showInputFields : true};
+      const pushedObj = {showInputFields : true, index : this.data.length};
       this.data.push(pushedObj);
       this.dataSource = new MatTableDataSource(this.data);
       this.inputFormFields = true;
@@ -433,7 +441,13 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
 
   addRow(event : any){
-    this.addRowEvent.emit(this.addDataObject);
+    this.addRowEvent.emit(event);
+    let item = this.dataSource.data.find(res => res.id == event.id)
+    if(!item){
+      item = this.dataSource.data[this.dataSource.data.length - 1];
+    }
+    item.showInputFields = undefined;
+    item.disabled = true
   }
 
   onAddRowEvent(): any {

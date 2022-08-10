@@ -202,15 +202,15 @@
                             </ng-container>
                                                         
                     </div>  
-                    <div id='12' *ngIf='col.type=="inputField"'>
-                        <input type="text" name="{{col.key}}" *ngIf="row.showInputFields == true && col.key != 'range'" class="form-control form-control-sm" [(ngModel)]="addDataObject[col.key]">
+                    <div id='12' *ngIf='col.type=="inputField"' (click)='goToEdit(row,col);' >
+                        <input type="text" name="{{col.key}}" *ngIf="row.showInputFields == true && col.key != 'range'" class="form-control form-control-sm" [(ngModel)]="addDataObjectList[row.index][col.key]">
                         
                         <ng-container  *ngIf="row.showInputFields == true && col.key == 'range'">
-                            <input type="text" name="{{col.key}}" class="form-control form-control-sm" [(ngModel)]="addDataObject['rangeStart']" style="width : 30%; display: initial;"> &nbsp; - &nbsp;
-                            <input type="text" name="{{col.key}}" class="form-control form-control-sm" [(ngModel)]="addDataObject['rangeEnd']" style="width : 30%; display: initial;">    
+                            <input type="text" name="{{col.key}}" class="form-control form-control-sm" [(ngModel)]="addDataObjectList[row.index]['rangeStart']" style="width : 30%; display: initial;"> &nbsp; - &nbsp;
+                            <input type="text" name="{{col.key}}" class="form-control form-control-sm" [(ngModel)]="addDataObjectList[row.index]['rangeEnd']" style="width : 30%; display: initial;">    
                         </ng-container>
 
-                        <input type="text" *ngIf="!row.showInputFields" class="form-control form-control-sm disableInput inline-table-form" value='{{row[col.key]}}' disabled >
+                        <input type="text" *ngIf="!row.showInputFields" class="form-control form-control-sm disableInput inline-table-form" value='{{row[col.key]}}' [disabled]='row.disabled' >
                     </div>
 
                 </mat-cell>
@@ -218,11 +218,11 @@
             <ng-container matColumnDef="delete">
                 <mat-header-cell *matHeaderCellDef class="text-nowrap"></mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                    <img *ngIf="element && element.showInputFields == undefined"
+                    <img *ngIf="(element && element.showInputFields == undefined) && (element.disabled || element.disabled == true)"
                         src="assets/images/ico_minus.gif"
                         (click)="deleteRow(element)" alt="icon">
                     
-                    <img *ngIf="element && element.showInputFields == true"
+                    <img *ngIf="(element && element.showInputFields == true) ||  element.disabled == false"
                         src="assets/images/ico_add.gif"
                         (click)="addRow(element)" alt="icon">
                     

@@ -664,7 +664,9 @@ export class TopicManagementState {
                 tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         let fieldValueList = ctx.getState().fieldValueList;
-                        fieldValueList.push(TopicUtilityTransformer.transformFieldValuesSingleData(response));
+                        const index = fieldValueList.findIndex( res => res.id == response.id);
+                        if(index == -1) fieldValueList.push(TopicUtilityTransformer.transformFieldValuesSingleData(response));
+                        else fieldValueList[index] = TopicUtilityTransformer.transformFieldValuesSingleData(response);
                         ctx.patchState({ 
                             fieldValueList: [...fieldValueList]
                         })

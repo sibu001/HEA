@@ -275,6 +275,10 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     .pipe(skipWhile((item: any) => !item))
     .subscribe(
       response =>{
+        response.forEach((data,index) =>{
+          data.disabled = true;
+          data.index = index;
+        })
         this.dataFieldData.content = [...response];
       }, error =>{
         console.error(error);
@@ -292,7 +296,6 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   }
 
   addRowEvent(event){
-    console.log(event);
     this.topicService.saveDataFieldValue(event,this.paneId,this.id);
   }
 
