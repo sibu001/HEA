@@ -45,4 +45,15 @@ export class TopicUtilityTransformer {
                   ' - ' +  (data.rangeEnd ? data.rangeEnd.toFixed(1) : 0.0 );
                  return data;
      } 
+
+    static transformDynamicFilterList(data : any){
+        const outData = data.map(
+            item =>{
+                item.sharedShow = item.shared == true ? '*' : '';
+                return item;
+            }
+        )
+
+        return outData;
+    } 
 }

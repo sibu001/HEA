@@ -144,10 +144,13 @@
                     </div>
                     <div id='6' *ngIf="col.type=='link' && !col.isAction" >
                         <ng-container *ngFor='let link of col.links; let i = index'>
-                            <a *ngIf="i<2" (click)='linkCall(link.routerLink,link.queryParam,row)'
-                                class="anchorClass">{{link.displayName}}</a> 
-                              <ng-container *ngIf="i == 0" >{{" | "}}</ng-container>
-                            <div *ngIf="i == 2">
+                            <ng-container *ngIf="i<col.links.length-1">
+                                <a (click)='linkCall(link.routerLink,link.queryParam,row)'
+                                class="anchorClass">{{link.displayName}}
+                            </a> 
+                            <ng-container *ngIf="i%2 == 0" >{{" | "}}</ng-container>
+                            </ng-container>
+                            <div *ngIf="i == col.links.length-1">
                                 <a (click)='linkCall(link.routerLink,link.queryParam,row)'
                                 class="anchorClass">{{link.displayName}}</a> 
                             </div>

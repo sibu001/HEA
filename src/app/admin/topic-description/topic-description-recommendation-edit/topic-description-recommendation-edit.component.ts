@@ -8,7 +8,7 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
-import { skipWhile,skip } from 'rxjs/operators';
+import { skipWhile, skip, filter } from 'rxjs/operators';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 
@@ -36,9 +36,12 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   allPossibleRecommendations = [];
   allRelatedRecommendations = [];
   allRelatedLeaks = [];
+  allRelatedLeaksData = [];
+  allRelatedRecommendationsData = [];
   dataSource: any;
   topicDescriptionId;
-  dataListner : Subject<any> = new Subject();
+  // dataListnerLeaks : Subject<any> = new Subject();
+  // dataListnerRecommendations : Subject<any> = new Subject();
   recommendationAndLeakSeperaterSubject : Subject<any> = new Subject();
   recommendationData = {
     content: [],
@@ -78,8 +81,9 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
 
     this.setForm(undefined);
 
-    this.dataListnerFun();
     this.recommendationAndLeakSeperaterSubjectListner();
+    // this.dataListnerRecommendationsFunction();
+    // this.dataListnerLeaksFunction();
     this.getTakeBackTypeLookUp();
     this.getTakeBackIconLookUp();
     this.getTakeBackImageLookUp();
@@ -198,6 +202,7 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
         }
     )
     this.allPossibleLeaks = src;
+    // this.dataListnerLeaks.next('allPossibleLeaks');
   }
 
   private async extractRecommendationsList(src : any , takebackType : any){
@@ -208,8 +213,8 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
           return false;
         }
     )
-    console.log(src);
     this.allPossibleRecommendations = src;
+    // this.dataListnerRecommendations.next('allPossibleRecommendations')
   }
 
 
@@ -343,19 +348,33 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
         .subscribe(
           data => {
             let tempList = [];
+            this.allRelatedRecommendationsData = data;
             data.forEach((item: any) => {tempList.push(item.id)});
-            const item = tempList.find(res => this.id == res.id);
-            if(item){
-              this.dataListner.next('getRelatedRecommendationList');
-            }else{
-              this.allRelatedRecommendations = tempList;
-            }
+            this.allRelatedRecommendations = tempList;
+            // this.dataListnerRecommendations.next('getRelatedRecommendationList');
           }, error => {
             console.error(error);
           }
         )
     )
   }
+
+  // dataListnerRecommendationsFunction(){
+  //   this.subscriptions.add(
+  //     this.dataListnerRecommendations
+  //     .pipe( filter( res => this.allPossibleRecommendations[0] != undefined && this.allRelatedRecommendationsData[0] != undefined))
+  //     .subscribe(
+  //       data => {
+  //           const item = this.allRelatedRecommendationsData.find( res => res.id ==  this.id);
+  //           if(item){
+  //             this.allPossibleRecommendations.push(item);
+  //             this.allPossibleRecommendations = [...this.allPossibleRecommendations];
+  //             this.allRelatedRecommendations = [...this.allRelatedRecommendations];
+  //           }
+  //       } 
+  //     )
+  //   )
+  // }
 
   loadRelatedLeaksById() {
     this.systemService.loadRelatedLeaksById(this.topicDescriptionId, this.id);
@@ -368,13 +387,10 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
         .subscribe(
           data => {
             let tempList = [];
+            this.allRelatedLeaksData = data;
             data.forEach((item: any) => {tempList.push(item.id)});
-            const item = tempList.find(res => this.id == res.id);
-            if(item){
-              this.dataListner.next('getRelatedLeakById');
-            }else{
-              this.allRelatedLeaks = tempList;
-            }
+            this.allRelatedLeaks = tempList;
+            // this.dataListnerLeaks.next('allRelatedLeaks');
           }, error => {
             console.error(error);
           }
@@ -382,22 +398,22 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
     )
   }
 
-  dataListnerFun(){
-    this.subscriptions.add(
-      this.dataListner
-      .pipe( skip(1),skipWhile((data: any) => !this.recommendationLeakObject))
-      .subscribe(
-        data =>{
-          if(data == 'getRelatedLeakById'){
-            this.allPossibleLeaks.push(this.recommendationLeakObject);
-            this.allPossibleLeaks = [...this.allPossibleLeaks];
-          } else if( data == 'getRelatedRecommendationList'){
-            this.allPossibleRecommendations.push(this.recommendationLeakObject);
-            this.allPossibleRecommendations = [...this.allPossibleRecommendations];
-          }
-        })
-    )
-  }
+  // dataListnerLeaksFunction(){
+  //   this.subscriptions.add(
+  //     this.dataListnerLeaks
+  //     .pipe( filter( res => this.allRelatedLeaksData[0] != undefined && this.allPossibleLeaks[0] != undefined))
+  //     .subscribe(
+  //       data =>{
+  //         const item = this.allRelatedLeaksData.find(res => res.id == this.id);
+  //         if (item){
+  //           this.allPossibleLeaks.push(item);
+  //           this.allPossibleLeaks = [... this.allPossibleLeaks];
+  //           this.allRelatedLeaks = [... this.allRelatedLeaks];
+  //         }
+  //       }
+  //     )
+  //   )
+  // }
 
   save(): any {
     this.addRequest = false;

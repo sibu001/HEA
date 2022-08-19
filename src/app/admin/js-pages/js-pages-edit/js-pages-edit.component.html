@@ -140,7 +140,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf='f.needAuthorization.value' class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0">Page HTML Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <div class='border'>
@@ -155,7 +155,7 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">JS Page Customer groups</span></p>
-            <app-table [keys]="customerGroupKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true
+            <app-table [keys]="customerGroupKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true [hideMasterCheckBox]=true
               [isSearch]="false" [data]="customerGroupDataSource" [totalElement]="customerGroupData.totalElements">
             </app-table>
           </div>

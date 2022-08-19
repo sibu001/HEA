@@ -3,6 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -15,15 +17,19 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
   id: any;
   configForm: FormGroup;
   isForce = false;
+  user : Users = new Users();
+  dynamicViewData;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
     private readonly dynamicViewService: DynamicViewService,
     private readonly router: Router,
-    private readonly el: ElementRef) {
+    private readonly el: ElementRef,
+    private readonly loginService: LoginService) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
+    this.user = this.loginService.getUser();
   }
 
   ngOnInit() {
@@ -33,16 +39,31 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
       this.loadDynamicViewById();
     }
   }
+
   setForm(event: any) {
     this.configForm = this.formBuilder.group({
+      owner : [event !== undefined ? event.createdBy : this.user.name],
       configurationName: [event !== undefined ? event.configurationName : '', Validators.required],
       baseEntity: [event !== undefined ? event.baseEntity : ''],
-      isPaged: [event !== undefined ? event.isPaged : ''],
+      paged: [event !== undefined ? event.paged : ''],
       shared: [event !== undefined ? event.shared : ''],
       note: [event !== undefined ? event.note : ''],
       totalCalls: [event !== undefined ? event.totalCalls : ''],
       totalProcessedTime: [event !== undefined ? event.totalProcessedTime : ''],
     });
+
+  }
+
+  get totalCalls(){
+    return this.configForm.value.totalCalls;
+  }
+
+  get totalProcessedTime(){ 
+    return this.configForm.value.totalProcessedTime
+  }
+
+  get owner(){
+    return this.configForm.value.owner;
   }
 
   goToAttributeList(): any {
@@ -56,6 +77,7 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
           this.router.navigate(['admin/viewConfiguration/viewConfigurationEdit'], { queryParams: { 'id': dynamicView.id } });
         }
         this.setForm(dynamicView);
+        this.dynamicViewData = dynamicView;
       }));
   }
 
@@ -79,7 +101,9 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
             this.loadDynamicViewById();
           }));
       } else {
-        this.subscriptions.add(this.dynamicViewService.saveDynamicView(this.configForm.value).pipe(
+        const body = {...this.configForm.value};
+        body.userId = this.user.userId;
+        this.subscriptions.add(this.dynamicViewService.saveDynamicView(body).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;

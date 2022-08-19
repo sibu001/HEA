@@ -1035,25 +1035,35 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   setValueInModel(id, value){
     let list = this.users.currentPaneNumber.currentPaneAnswers;
     for (let data of list){
-        if(data.id == id)
+        if(data.id == id){
           data.value = value;
+          break;
+        }
     }
 
     this.loginService.setUser(this.users);
-
   }
   
   handleChange(event){
+
     let id = event.source._elementRef.nativeElement.id;
     let oldValue = this.slidermap.get(id);
-    
-    if(event.value > oldValue){
-      this.setValueInModel(id, 1 + parseInt(oldValue));
-      this.slidermap.set(id, 1 + parseInt(oldValue));
-    }else if (event.value < oldValue){
-      this.setValueInModel(id,parseInt(oldValue) - 1);
-      this.slidermap.set(id,parseInt(oldValue) - 1);
-    }
+
+    if((this.users.currentPaneNumber.currentPane.paneCode == 'be_BaseGasLoads' 
+    && this.users.currentPaneNumber.currentPane.label == 'Water Heating Efficiency')
+    || (  this.users.currentPaneNumber.currentPane.paneCode == 'be_ElectfySpaceHtg1'  &&
+      this.users.currentPaneNumber.currentPane.label == 'Home Heating Efficiency')){
+
+        if(event.value > oldValue){
+          this.setValueInModel(id, 1 + parseInt(oldValue));
+          this.slidermap.set(id, 1 + parseInt(oldValue));
+        }else if (event.value < oldValue){
+          this.setValueInModel(id,parseInt(oldValue) - 1);
+          this.slidermap.set(id,parseInt(oldValue) - 1);
+        }
+
+      }
+  
   }
 
 }

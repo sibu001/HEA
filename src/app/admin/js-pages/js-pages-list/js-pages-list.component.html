@@ -39,7 +39,7 @@
             <app-table [keys]="keys" [isPaginate]="true"
               (goToEditEvent)='goToEditJsPages($event)' (addEvent)='addJsPages()'
               [isSearch]="false" [data]="dataSource"
-              [totalElement]="jsPagesData.totalElements"
+              [totalElement]="jsPagesData.totalElements" [disableLastButton]='true'
               (changePageEvent)="search($event,false)">
             </app-table>
           </div>

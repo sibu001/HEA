@@ -46,8 +46,8 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/viewConfiguration/viewConfigurationEdit']);
   }
 
-  goToEditViewConfigurations(): any {
-    this.router.navigate(['/admin/viewConfiguration/viewConfigurationEdit'], { queryParams: { id: this.id } });
+  goToEditViewConfigurations(event : any): any {
+    this.router.navigate(['/admin/viewConfiguration/viewConfigurationEdit'], { queryParams: { id: event.id } });
   }
 
   disableFilter(): any {
@@ -56,6 +56,10 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
 
   disableValueCache(): any {
     this.cache = !this.cache;
+  }
+
+  handleLink(event){
+    this.router.navigate([event.routeLink],{queryParams : { id : event.value.id}});
   }
 
   setUpForm(event: any) {
@@ -69,8 +73,8 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
     this.dynamicViewService.loadDynamicViewList(force, filter);
     this.subscriptions.add(this.dynamicViewService.getDynamicViewList().pipe(skipWhile((item: any) => !item))
       .subscribe((dynamicViewList: any) => {
-        this.viewData.content = dynamicViewList.list;
-        this.viewData.totalElements = dynamicViewList.totalSize;
+        this.viewData.content = dynamicViewList;
+        this.viewData.totalElements = dynamicViewList.length;
         this.dataSource = [...this.viewData.content];
       }));
   }

@@ -9,8 +9,8 @@
         <form [formGroup]="configForm" class="form-group form-padding">
           <div class="row borderBottom borderTop rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Owner:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12"> 
+              {{owner}}
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -34,7 +34,7 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='checkbox' formControlName="isPaged" id="isPaged">
+              <input type='checkbox' formControlName="paged" id="paged">
               Is Paged
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -74,7 +74,7 @@
                     id="totalProcessedTime">
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                  (000 ms per request)
+                  ({{(totalProcessedTime / totalCalls) | number: '1.0-0'}} ms per request)
                 </div>
               </div>
             </div>

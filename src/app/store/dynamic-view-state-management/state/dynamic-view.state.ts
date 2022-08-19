@@ -4,6 +4,7 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { TopicUtilityTransformer } from '../../topic-state-management/transformer/transformer';
 import {
     GetAttributeListAction,
     GetAttributeByIdAction,
@@ -187,10 +188,11 @@ export class DynamicViewManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.dynamicViews + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.dynamicViews,action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
+                        response = TopicUtilityTransformer.transformDynamicFilterList(response);
                         ctx.patchState({
                             dynamicViewList: response,
                         });

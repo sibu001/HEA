@@ -436,11 +436,11 @@ export class TableColumnData {
     ];
 
     static readonly VIEW_CONF_KEYS: Array<TABLECOLUMN> = [
-        { key: 'name', sort: 'name', isEdit: true, displayName: 'Name', isUnderline: true },
-        { key: 'username', sort: 'username', isEdit: true, displayName: 'User Name' },
-        { key: 'shared', isEdit: true, displayName: 'Shared' },
+        { key: 'configurationName', sort: 'name', isEdit: true, displayName: 'ConfigurationName', isUnderline: true },
+        { key: 'createdBy', sort: 'username', isEdit: true, displayName: 'User Name' },
+        { key: 'sharedShow', isEdit: true, displayName: 'Shared' },
         { key: 'baseEntity', isEdit: true, displayName: 'Base Entity' },
-        { key: 'attributes', isEdit: true, displayName: '', type: 'link', links: [{ routerLink: '/admin/viewConfiguration/viewConfigurationAttributeList', isEdit: true, displayName: 'Attributes', queryParam: {} }] },
+        { key: 'attributes', isEdit: true, displayName: '', type: 'link', links: [{ routerLink: '/admin/viewConfiguration/viewConfigurationAttributeList', isEdit: true, displayName: 'Attributes', queryParam: { } }] },
     ];
 
     static readonly ATTRIBUTE_LIST_KEYS: Array<TABLECOLUMN> = [
