@@ -12,7 +12,7 @@ export class RoleGuard implements CanActivate {
 
     canActivate(): boolean {
         this.users = this.loginService.getUser();
-        if (!this.loginService.isLoggedIn() || (this.users.role !== 'ADMIN' && this.users.role !== 'COACH')) {
+        if (!this.loginService.isLoggedIn() || (this.users.role !== 'ADMIN' && this.users.role !== 'COACH' &&  this.users.role !== 'STAFF' )) {
             this.router.navigate(['/login']);
             return false;
         }

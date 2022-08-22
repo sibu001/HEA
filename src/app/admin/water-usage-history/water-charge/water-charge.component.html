@@ -5,7 +5,7 @@
         <h4 class="text-danger" *ngIf='selectedCustomer==null' >Customer selection is mandatory.</h4>
         <p class="accurate">Water Charge</p>
         <form [formGroup]='waterForm'>
-          <div *ngIf="users.role!=='USERS'" class="row rowPadding borderBottom">
+          <div *ngIf="selectionPrivilege" class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Audit Id:</span>

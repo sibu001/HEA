@@ -4,7 +4,8 @@
       <div class="col-xs-12 col-sm-12 sidebar-heading-div sidebar-info">
         <p class='info'>
           <img src='assets/images/dot03.gif' alt="dot" class='dot top-dot'>
-          HEA Administrator's Home Page</p>
+          HEA Administrator's Home Page
+        </p>
       </div>
     </div>
     <p class='feedback'>
@@ -15,10 +16,10 @@
       Use the menu below to navigate to the appropriate administrative function.
     </p>
   </div>
-  <div *ngIf="showDataFields && topicVariableField.length>0"
-    [class.overflow]='topicVariableField.length>0'>
+  <div *ngIf="showDataFields && topicVariableField.length>0" [class.overflow]='topicVariableField.length>0'>
     <p class='info'>
-      <img src='assets/images/dot03.gif' alt="dot" class='dot'>Data field list</p>
+      <img src='assets/images/dot03.gif' alt="dot" class='dot'>Data field list
+    </p>
     <table summary="datalist">
       <thead>
         <tr>
@@ -35,10 +36,10 @@
     </table>
   </div>
 
-  <div *ngIf="showDataFields && dataField.length>0"
-    [class.overflow]='dataField.length>0'>
+  <div *ngIf="showDataFields && dataField.length>0" [class.overflow]='dataField.length>0'>
     <p class='info'>
-      <img src='assets/images/dot03.gif' alt="dot" class='dot'>Data field list</p>
+      <img src='assets/images/dot03.gif' alt="dot" class='dot'>Data field list
+    </p>
     <table summary="datalist1">
       <thead>
         <tr>
@@ -55,10 +56,10 @@
     </table>
   </div>
 
-  <div *ngIf="showMethod && methodName.length>0"
-    [class.overflow]='methodName.length>0' class="method">
+  <div *ngIf="showMethod && methodName.length>0" [class.overflow]='methodName.length>0' class="method">
     <p class='method-info'>
-      <img src='assets/images/dot03.gif' alt="dot" class='method-dot'>Method list</p>
+      <img src='assets/images/dot03.gif' alt="dot" class='method-dot'>Method list
+    </p>
     <table summary="method">
       <thead>
         <tr>
@@ -77,155 +78,182 @@
   </div>
   <hr>
   <div class='feedback'>
-    <ul>
-      <li><a data-toggle='collapse' data-target='#collapseSystem'
-          aria-expanded='false'
-          aria-controls='collapseSystem'>System</a>
-        <ul class='collapse' id='collapseSystem'>
-          <li><a [routerLink]="['/admin/role/roleList']">Roles</a></li>
-          <li><a [routerLink]="['/admin/place/placeList']">Places</a></li>
-          <li><a [routerLink]="['/admin/program/programGroupList']">Program
-              Groups</a></li>
-          <li><a [routerLink]="['/admin/customer-group/customerGroupList']">Customer
-              Groups</a></li>
-          <li><a [routerLink]="['/admin/customerEvent/customerEventTypeList']">Customer
-              Event Types</a></li>
-          <li><a [routerLink]="['/admin/customer-alert/customerAlertTypeList']">Customer
-              Alert Types</a></li>
-          <li><a
-              [routerLink]="['/admin/customerComparisonGroup/comparisonGroupList']">Comparison
-              Groups</a></li>
-          <li><a [routerLink]="['/admin/credential-type/credentialTypeList']">Credential
-              Types</a></li>
-          <li><a [routerLink]="['/admin/factor/factorList']">Factors</a></li>
-          <li><a [routerLink]="['/admin/lookup/lookupList']">Lookups</a></li>
-          <li><a [routerLink]="['/admin/systemParameter/systemParameterList']">System
-              parameter</a></li>
-          <li><a [routerLink]="['/admin/logs/logsList']">Logs</a></li>
-          <li><a [routerLink]="['/admin/weatherStation/weatherStationList']">Weather
-              Stations</a></li>
-          <li><a [routerLink]="['/admin/degreeDays/degreeDayList']">Degree days</a></li>
-          <li><a [routerLink]="['/admin/cimisStation/cimisStationList']">CIMIS
-              Stations</a></li>
-          <li><a
-              [routerLink]="['/admin/cimisMeasurements/cimisMeasurementsList']">CIMIS
-              Measurements</a></li>
-          <li><a [routerLink]="['/admin/debug/scriptDebugConsole']">Script
-              Console</a></li>
-          <li><a [routerLink]="['/admin/batchScript/batchScriptList']">Script
-              batches</a></li>
-          <li><a [routerLink]="['/admin/systemJobs/systemJobsList']">System jobs</a></li>
-          <li><a [routerLink]='["/admin/ec2Instances/ec2InstancesList" ]'>EC2
-              Instances</a></li>
-          <li><a [routerLink]='["/admin/alertMessages/alertMessagesList" ]'>Alert
-              Messages</a></li>
-        </ul>
-      </li>
-      <li><a [routerLink]="['/admin/staff/staffList']">Staff</a></li>
-      <li><a [routerLink]="['/admin/customer/customerList']">Customers</a></li>
-      <li><a [routerLink]="['/admin/prospects/prospectsList']">Prospects</a></li>
-      <li><a [routerLink]="['/admin/topicDescription/topicDescriptionList']">Topic
-          descriptions</a></li>
-      <li><a [routerLink]="['/admin/topic/topicList']">Topics</a></li>
-      <li><a
-          [routerLink]="['/admin/administrativeReport/administrativeReportList']">Administrative
-          Reports</a></li>
-      <!-- don't display historyList for admins since this moved to customers-> surveys link-->
-      <li><a [routerLink]="['/admin/eventHistory/eventHistoryList']">Events
-          history</a>
-      </li>
-      <li><a data-toggle='collapse' data-target='#collapseMail'
-          aria-expanded='false' aria-controls='collapseMail'>Mail
-          definitions</a>
-        <ul class='collapse' id='collapseMail'>
-          <li>
-            <a [routerLink]="['/admin/mailDescription/mailDescriptionList']">Mail
-              Descriptions</a>
-          </li>
-          <li>
-            <a
-              [routerLink]="['/admin/customerGroupMailParts/customerGroupMailPartsList']">Customer
-              Group Mail Parts</a>
-          </li>
-        </ul>
-      </li>
-      <li><a
-          [routerLink]="['/admin/userReportDefinitions/userReportDefinitionsList']">User
-          report definitions</a>
-      </li>
-      <li><a data-toggle='collapse' data-target='#collapseDynamicView'
-          aria-expanded='false'
+    <ng-container *ngIf='role == "ADMIN"'>
+      <ul>
+        <li><a data-toggle='collapse' data-target='#collapseSystem' aria-expanded='false'
+            aria-controls='collapseSystem'>System</a>
+          <ul class='collapse' id='collapseSystem'>
+            <li><a [routerLink]="['/admin/role/roleList']">Roles</a></li>
+            <li><a [routerLink]="['/admin/place/placeList']">Places</a></li>
+            <li><a [routerLink]="['/admin/program/programGroupList']">Program
+                Groups</a></li>
+            <li><a [routerLink]="['/admin/customer-group/customerGroupList']">Customer
+                Groups</a></li>
+            <li><a [routerLink]="['/admin/customerEvent/customerEventTypeList']">Customer
+                Event Types</a></li>
+            <li><a [routerLink]="['/admin/customer-alert/customerAlertTypeList']">Customer
+                Alert Types</a></li>
+            <li><a [routerLink]="['/admin/customerComparisonGroup/comparisonGroupList']">Comparison
+                Groups</a></li>
+            <li><a [routerLink]="['/admin/credential-type/credentialTypeList']">Credential
+                Types</a></li>
+            <li><a [routerLink]="['/admin/factor/factorList']">Factors</a></li>
+            <li><a [routerLink]="['/admin/lookup/lookupList']">Lookups</a></li>
+            <li><a [routerLink]="['/admin/systemParameter/systemParameterList']">System
+                parameter</a></li>
+            <li><a [routerLink]="['/admin/logs/logsList']">Logs</a></li>
+            <li><a [routerLink]="['/admin/weatherStation/weatherStationList']">Weather
+                Stations</a></li>
+            <li><a [routerLink]="['/admin/degreeDays/degreeDayList']">Degree days</a></li>
+            <li><a [routerLink]="['/admin/cimisStation/cimisStationList']">CIMIS
+                Stations</a></li>
+            <li><a [routerLink]="['/admin/cimisMeasurements/cimisMeasurementsList']">CIMIS
+                Measurements</a></li>
+            <li><a [routerLink]="['/admin/debug/scriptDebugConsole']">Script
+                Console</a></li>
+            <li><a [routerLink]="['/admin/batchScript/batchScriptList']">Script
+                batches</a></li>
+            <li><a [routerLink]="['/admin/systemJobs/systemJobsList']">System jobs</a></li>
+            <li><a [routerLink]='["/admin/ec2Instances/ec2InstancesList" ]'>EC2
+                Instances</a></li>
+            <li><a [routerLink]='["/admin/alertMessages/alertMessagesList" ]'>Alert
+                Messages</a></li>
+          </ul>
+        </li>
+        <li><a [routerLink]="['/admin/staff/staffList']">Staff</a></li>
+        <li><a [routerLink]="['/admin/customer/customerList']">Customers</a></li>
+        <li><a [routerLink]="['/admin/prospects/prospectsList']">Prospects</a></li>
+        <li><a [routerLink]="['/admin/topicDescription/topicDescriptionList']">Topic
+            descriptions</a></li>
+        <li><a [routerLink]="['/admin/topic/topicList']">Topics</a></li>
+        <li><a [routerLink]="['/admin/administrativeReport/administrativeReportList']">Administrative
+            Reports</a></li>
+        <!-- don't display historyList for admins since this moved to customers-> surveys link-->
+        <li><a [routerLink]="['/admin/eventHistory/eventHistoryList']">Events
+            history</a>
+        </li>
+        <li><a data-toggle='collapse' data-target='#collapseMail' aria-expanded='false'
+            aria-controls='collapseMail'>Mail
+            definitions</a>
+          <ul class='collapse' id='collapseMail'>
+            <li>
+              <a [routerLink]="['/admin/mailDescription/mailDescriptionList']">Mail
+                Descriptions</a>
+            </li>
+            <li>
+              <a [routerLink]="['/admin/customerGroupMailParts/customerGroupMailPartsList']">Customer
+                Group Mail Parts</a>
+            </li>
+          </ul>
+        </li>
+        <li><a [routerLink]="['/admin/userReportDefinitions/userReportDefinitionsList']">User
+            report definitions</a>
+        </li>
+        <li><a data-toggle='collapse' data-target='#collapseDynamicView' aria-expanded='false'
+            aria-controls='collapseDynamicView'>Dynamic Views</a>
+          <ul class='collapse' id='collapseDynamicView'>
+            <li>
+              <a [routerLink]="['/admin/jsPages/jsPagesList']">JS Pages</a>
+            </li>
+            <li>
+              <a [routerLink]="['/admin/viewConfiguration/viewConfigurationList']">View
+                Configurations</a>
+            </li>
+          </ul>
+        </li>
+        <li><a data-toggle='collapse' data-target='#collapseTrending' aria-expanded='false'
+            aria-controls='collapseTrending'>Trending definitions</a>
+          <ul class='collapse' id='collapseTrending'>
+            <li><a [routerLink]="['/admin/keyIndicator/keyIndicatorList']">Key
+                Indicators</a></li>
+            <li><a [routerLink]="['/admin/trendingChartDefinition/trendingChartDefinitionList']">Trending
+                chart
+                definitions</a></li>
+          </ul>
+        </li>
+        <li><a [routerLink]="['/admin/summaryChartDefinition/summaryChartDefinitionList']">Summary
+            chart definitions</a>
+        </li>
+        <li><a data-toggle='collapse' data-target='#collapseUsageHistory' aria-expanded='false'
+            aria-controls='collapseUsageHistory'>Usage history</a>
+          <ul class='collapse' id='collapseUsageHistory'>
+            <li><a [routerLink]="['/admin/shareMyData']">Share My Data</a></li>
+            <li><a [routerLink]="['/admin/gas/gasList']" [queryParams]="{
+              isAdminView: 'true'}">Gas</a></li>
+            <li><a [routerLink]="['/admin/gas/gasChargeList']" [queryParams]="{
+              isAdminView: 'true'}">Gas charge</a></li>
+            <li><a [routerLink]="['/admin/electricity/electricityUsageList']"
+                [queryParams]="{ isAdminView: 'true'}">Electricity</a></li>
+            <li><a [routerLink]="['/admin/electricity/electricityChargeList']"
+                [queryParams]="{ isAdminView: 'true'}">Electricity charge</a>
+            </li>
+            <li><a [routerLink]="['/admin/waterUsageHistory/waterList']">Water</a></li>
+            <li><a [routerLink]="['/admin/waterUsageHistory/waterChargeList']">Water
+                charge</a></li>
+            <li><a [routerLink]="['/admin/electricity/electricitySmartMeterList']"
+                [queryParams]="{ isAdminView: 'true'}">Electric smart
+                meter</a></li>
+            <li><a [routerLink]="['/admin/electricity/electricityDailySmartMeterList']"
+                [queryParams]="{ isAdminView: 'true'}">Electric Daily
+                smart meter</a></li>
+            <li><a [routerLink]="['/admin/gas/gasSmartMeterList']" [queryParams]="{ isAdminView: 'true'}">Gas smart
+                meter</a>
+            </li>
+            <li><a [routerLink]="['/admin/waterUsageHistory/waterSmartMeterList']">Water
+                smart meter</a></li>
+          </ul>
+        </li>
+        <li><a data-toggle='collapse' data-target='#menuDashboard' aria-expanded='false'
+            aria-controls='menuDashboard'>Dashboards</a>
+          <ul class='collapse' id='menuDashboard'>
+            <li><a href='{{apiURL +" dashboard.jspage" }}' target='_blank'>Program
+                Dashboard</a></li>
+            <li><a href='{{apiURL +" status.jspage" }}' target='_blank'>Summary of
+                Customer Status</a></li>
+          </ul>
+        </li>
+      </ul>
+    </ng-container>
+    <ng-container *ngIf='role == "STAFF"'>
+      <ul>
+        <li><a [routerLink]="['/admin/customer/customerList']">Customers</a></li>
+        <li><a [routerLink]="['/admin/prospects/prospectsList']">Prospects</a></li>
+        <li><a [routerLink]="['/admin/topic/topicList']">Topics</a></li>
+        <li><a data-toggle='collapse' data-target='#collapseDynamicView' aria-expanded='false'
           aria-controls='collapseDynamicView'>Dynamic Views</a>
         <ul class='collapse' id='collapseDynamicView'>
-          <li>
-            <a [routerLink]="['/admin/jsPages/jsPagesList']">JS Pages</a>
-          </li>
-          <li>
-            <a
-              [routerLink]="['/admin/viewConfiguration/viewConfigurationList']">View
-              Configurations</a>
-          </li>
         </ul>
       </li>
-      <li><a data-toggle='collapse' data-target='#collapseTrending'
-          aria-expanded='false'
-          aria-controls='collapseTrending'>Trending definitions</a>
-        <ul class='collapse' id='collapseTrending'>
-          <li><a [routerLink]="['/admin/keyIndicator/keyIndicatorList']">Key
-              Indicators</a></li>
-          <li><a
-              [routerLink]="['/admin/trendingChartDefinition/trendingChartDefinitionList']">Trending
-              chart
-              definitions</a></li>
-        </ul>
-      </li>
-      <li><a
-          [routerLink]="['/admin/summaryChartDefinition/summaryChartDefinitionList']">Summary
-          chart definitions</a>
-      </li>
-      <li><a data-toggle='collapse' data-target='#collapseUsageHistory'
-          aria-expanded='false'
-          aria-controls='collapseUsageHistory'>Usage history</a>
-        <ul class='collapse' id='collapseUsageHistory'>
-          <li><a [routerLink]="['/admin/shareMyData']"  >Share My Data</a></li>
-          <li><a [routerLink]="['/admin/gas/gasList']" [queryParams]="{
-              isAdminView: 'true'}">Gas</a></li>
-          <li><a [routerLink]="['/admin/gas/gasChargeList']" [queryParams]="{
-              isAdminView: 'true'}">Gas charge</a></li>
-          <li><a [routerLink]="['/admin/electricity/electricityUsageList']"
-              [queryParams]="{ isAdminView: 'true'}">Electricity</a></li>
-          <li><a [routerLink]="['/admin/electricity/electricityChargeList']"
-              [queryParams]="{ isAdminView: 'true'}">Electricity charge</a>
-          </li>
-          <li><a [routerLink]="['/admin/waterUsageHistory/waterList']">Water</a></li>
-          <li><a [routerLink]="['/admin/waterUsageHistory/waterChargeList']">Water
-              charge</a></li>
-          <li><a [routerLink]="['/admin/electricity/electricitySmartMeterList']"
-              [queryParams]="{ isAdminView: 'true'}">Electric smart
-              meter</a></li>
-          <li><a
-              [routerLink]="['/admin/electricity/electricityDailySmartMeterList']"
-              [queryParams]="{ isAdminView: 'true'}">Electric Daily
-              smart meter</a></li>
-          <li><a [routerLink]="['/admin/gas/gasSmartMeterList']"
-              [queryParams]="{ isAdminView: 'true'}">Gas smart
-              meter</a>
-          </li>
-          <li><a
-              [routerLink]="['/admin/waterUsageHistory/waterSmartMeterList']">Water
-              smart meter</a></li>
-        </ul>
-      </li>
-      <li><a data-toggle='collapse' data-target='#menuDashboard'
-          aria-expanded='false'
-          aria-controls='menuDashboard'>Dashboards</a>
-        <ul class='collapse' id='menuDashboard'>
-          <li><a href='{{apiURL +" dashboard.jspage" }}' target='_blank'>Program
-              Dashboard</a></li>
-          <li><a href='{{apiURL +" status.jspage" }}' target='_blank'>Summary of
-              Customer Status</a></li>
-        </ul>
-      </li>
-    </ul>
+      <li><a data-toggle='collapse' data-target='#collapseUsageHistory' aria-expanded='false'
+        aria-controls='collapseUsageHistory'>Usage history</a>
+      <ul class='collapse' id='collapseUsageHistory'>
+        <li><a [routerLink]="['/admin/gas/gasList']" [queryParams]="{
+          isAdminView: 'true'}">Gas</a></li>
+        <li><a [routerLink]="['/admin/gas/gasChargeList']" [queryParams]="{
+          isAdminView: 'true'}">Gas charge</a></li>
+        <li><a [routerLink]="['/admin/electricity/electricityUsageList']"
+            [queryParams]="{ isAdminView: 'true'}">Electricity</a></li>
+        <li><a [routerLink]="['/admin/electricity/electricityChargeList']"
+            [queryParams]="{ isAdminView: 'true'}">Electricity charge</a>
+        </li>
+        <li><a [routerLink]="['/admin/waterUsageHistory/waterList']">Water</a></li>
+        <li><a [routerLink]="['/admin/waterUsageHistory/waterChargeList']">Water
+            charge</a></li>
+        <li><a [routerLink]="['/admin/electricity/electricitySmartMeterList']"
+            [queryParams]="{ isAdminView: 'true'}">Electric smart
+            meter</a></li>
+        <li><a [routerLink]="['/admin/electricity/electricityDailySmartMeterList']"
+            [queryParams]="{ isAdminView: 'true'}">Electric Daily
+            smart meter</a></li>
+        <li><a [routerLink]="['/admin/gas/gasSmartMeterList']" [queryParams]="{ isAdminView: 'true'}">Gas smart
+            meter</a>
+        </li>
+        <li><a [routerLink]="['/admin/waterUsageHistory/waterSmartMeterList']">Water
+            smart meter</a></li>
+      </ul>
+    </li>
+      </ul>
+    </ng-container>
+    
   </div>
 </div>

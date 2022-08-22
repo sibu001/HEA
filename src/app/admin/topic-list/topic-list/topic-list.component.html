@@ -57,7 +57,7 @@
               <span class="messageName">Topic list (Number of Records =
                 {{totalElement}})</span>
             </p>
-            <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false" [data]="dataSource"
+            <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false" [data]="dataSource" [pageSize]="pageSize"
               [totalElement]="topicData.totalElements" (changePageEvent)="search($event,false)" (goToEditEvent)="showSurveys($event)">
             </app-table>
           </div>

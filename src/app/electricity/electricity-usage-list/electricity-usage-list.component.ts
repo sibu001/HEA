@@ -29,6 +29,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
     totalElements: Number.MAX_SAFE_INTEGER,
   };
 
+  selectionPrivilege : boolean = false;
   selectedCustomer = null;
   disableNextButton = false
   currentIndex = 0
@@ -69,12 +70,17 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   public adminFilter: UsageHistoryFilter;
   subject$ = new Subject();
   ngOnInit() {
+    this.setSelectionPrivilege();
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
     this.getDataFromStore();
     this.newFilterSearch = true;
     this.scrollTop();
     this.findCustomer();
+  }
+
+  setSelectionPrivilege(){
+    this.selectionPrivilege = this.users.role === 'ADMIN'  || this.users.role === 'STAFF';
   }
 
   scrollTop() {
@@ -86,7 +92,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
       year: [event !== undefined && event !== null ? event.year : ''],
       month: [event !== undefined && event !== null ? event.month : ''],
     });
-    if (this.users.role === 'ADMIN') {
+    if (this.selectionPrivilege) {
       this.electricityForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
       this.electricityForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
     }
@@ -191,7 +197,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   filterForElectricityList(force: boolean, filter: any){
     this.adminFilter.formValue = this.electricityForm.value;
     let userId = null;
-    if(this.users.role == 'ADMIN'){
+    if(this.selectionPrivilege){
       if(this.electricityForm.value.auditId != '' || this.electricityForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
@@ -246,7 +252,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   get f() { return this.electricityForm.controls; }
 
   showPopUp(event : any): any {
-    if (this.users.role !== 'USERS') {
+    if (this.selectionPrivilege) {
     const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
       width: '70vw',
       height: '70vh',

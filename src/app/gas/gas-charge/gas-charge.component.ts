@@ -28,6 +28,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
     totalElements: Number.MAX_SAFE_INTEGER,
   };
   selectedCustomer = null;
+  selectionPrivilege : boolean = false;
   dataListForSuggestions = null;
   disableNextButton = false;
   keys = TableColumnData.GAS_CHARGE_KEYS;
@@ -58,12 +59,17 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   public adminFilter: UsageHistoryFilter;
 
   ngOnInit() {
+    this.setSelectionPrivilege();
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
     this.getDataFromStore();
     this.newFilterSearch = true;
     this.scrollTop();
     this.findCustomer();
+  }
+
+  setSelectionPrivilege(){
+    this.selectionPrivilege = this.users.role === 'ADMIN' || this.users.role === 'STAFF';
   }
 
   sessionUtility(event){
@@ -80,7 +86,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
       year: [event !== undefined && event !== null ? event.year : ''],
       month: [event !== undefined && event !== null ? event.month : ''],
     });
-    if (this.users.role === 'ADMIN') {
+    if (this.selectionPrivilege) {
       this.gasForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
       this.gasForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
     }
@@ -89,7 +95,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   findGasList(force: boolean, filter: any): void {
     this.adminFilter.formValue = this.gasForm.value;
     let userId = null;
-    if(this.users.role == 'ADMIN'){
+    if(this.selectionPrivilege){
       if(this.gasForm.value.auditId != '' || this.gasForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
@@ -153,7 +159,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
       .set('sortOrders[0].asc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
     .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
       .set('month', (this.gasForm.value.month !== null ? this.gasForm.value.month : ''));
-    if (this.users.role === 'ADMIN') {
+    if (this.selectionPrivilege) {
       params.set('auditId', this.gasForm.value.auditId !== null ? this.gasForm.value.auditId : '');
       params.set('customerName', this.gasForm.value.customerName !== null ? this.gasForm.value.customerName : '');
     }

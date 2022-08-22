@@ -6,7 +6,7 @@
         <p class="accurate">Gas Charge</p>
         <form [formGroup]='gasForm' class="form-horizontal">
           <div> 
-            <ng-container  *ngIf="users.role!=='USERS'">
+            <ng-container  *ngIf="selectionPrivilege">
               <div class="row rowPadding borderBottom">
                 <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
                 <div class="col-sm-

@@ -41,6 +41,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
   private readonly subscriptions: Subscription = new Subscription();
   newFilterSearch = false;
   waterForm: FormGroup;
+  selectionPrivilege : boolean  = false;
   pageSize = AppConstant.pageSize;
   subject$ = new Subject();
   constructor(public router: Router, public fb: FormBuilder,
@@ -62,12 +63,17 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
   }
 
   ngOnInit() {
+    this.setSelectionPrivilege();
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page,false);
     this.getDataFromStore();
     this.newFilterSearch = false;
     this.scrollTop();
     this.findCustomer();
+  }
+
+  setSelectionPrivilege(){
+    this.selectionPrivilege = this.users.role === 'ADMIN'  || this.users.role === 'STAFF';
   }
 
   sessionUtility(event){
@@ -84,7 +90,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
       year: [event !== undefined && event !== null ? event.year : ''],
       month: [event !== undefined && event !== null ? event.month : ''],
     });
-    if (this.users.role === 'ADMIN') {
+    if (this.selectionPrivilege) {
       this.waterForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
       this.waterForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
     }
@@ -173,7 +179,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
     this.adminFilter.formValue = this.waterForm.value;
     // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
-    if(this.users.role == 'ADMIN'){
+    if(this.selectionPrivilege){
       if(this.waterForm.value.auditId != '' || this.waterForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
@@ -235,7 +241,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
         .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
         .set('year', (this.waterForm.value.year !== null ? this.waterForm.value.year : ''))
       .set('month', (this.waterForm.value.month !== null ? this.waterForm.value.month : ''));
-    if (this.users.role === 'ADMIN') {
+    if (this.setSelectionPrivilege) {
      params =  params.set('auditId', this.waterForm.value.auditId !== null ? this.waterForm.value.auditId : '')
       .set('customerName', this.waterForm.value.customerName !== null ? this.waterForm.value.customerName : '');
     }

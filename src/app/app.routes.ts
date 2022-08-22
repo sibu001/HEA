@@ -4,6 +4,7 @@ import { HeadersComponent } from 'src/app/headers/headers.component';
 import { NgModule } from '@angular/core';
 import { RoleGuard } from './role.guard';
 import { MultipleRoleGuardService } from './multiple-role.guard';
+import { StaffAdminRoleGuardGuard } from './staff-admin-role-guard.guard';
 const ROUTES: Routes = [
   {
     path: '',
@@ -220,7 +221,7 @@ const ROUTES: Routes = [
       },
       {
         path: 'jsPages',
-        canActivate : [MultipleRoleGuardService],
+        canActivate : [StaffAdminRoleGuardGuard],
         loadChildren: './admin/js-pages/js-pages.module#JsPagesModule'
       },
       {

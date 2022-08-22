@@ -34,6 +34,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   disableNextButton = false;
   keys = TableColumnData.ELECTRICITY_CHARGE_KEYS;
   newFilterSearch = false;
+  selectionPrivilege : boolean = false;
   subject$ = new Subject();
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
@@ -58,12 +59,17 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   dataListForSuggestions = [];
   selectedCustomer = null;
   ngOnInit() {
+    this.setSelectionPrivilege();
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
     this.getDataFromStore();
     this.newFilterSearch = true;
     this.scrollTop();
     this.findCustomer();
+  }
+
+  setSelectionPrivilege(){
+    this.selectionPrivilege = this.users.role === 'ADMIN'  || this.users.role === 'STAFF';
   }
 
   sessionUtility(event){
@@ -80,7 +86,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
       year: [event !== undefined && event !== null ? event.year : ''],
       month: [event !== undefined && event !== null ? event.month : ''],
     });
-    if (this.users.role === 'ADMIN') {
+    if (this.selectionPrivilege) {
       this.electricityForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
       this.electricityForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
     }
@@ -140,7 +146,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
       .set('sortOrders[0].asc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
       .set('year', (this.electricityForm.value.year !== null ? this.electricityForm.value.year : ''))
       .set('month', (this.electricityForm.value.month !== null ? this.electricityForm.value.month : ''));
-    if (this.users.role === 'ADMIN') {
+    if (this.selectionPrivilege) {
       params.set('auditId', this.electricityForm.value.auditId !== null ? this.electricityForm.value.auditId : '');
       params.set('customerName', this.electricityForm.value.customerName !== null ? this.electricityForm.value.customerName : '');
     }
@@ -197,7 +203,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
     this.adminFilter.formValue = this.electricityForm.value;
     // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
-    if(this.users.role == 'ADMIN'){
+    if(this.selectionPrivilege){
       if(this.electricityForm.value.auditId != '' || this.electricityForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {

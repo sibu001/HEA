@@ -37,6 +37,7 @@ export class WaterSmartMeterComponent implements OnInit {
   };
   totalElements : any;
   selectedCustomer = null;
+  selectionPrivilege : boolean  = false;
   private readonly subscriptions: Subscription = new Subscription();
   waterSmartMeterForm: FormGroup;
   newFilterSearch = false;
@@ -63,11 +64,16 @@ export class WaterSmartMeterComponent implements OnInit {
 
      ngOnInit() {
       // document.getElementById('loader').classList.remove('loading');
+      this.setSelectionPrivilege();
       this.setUpForm(this.adminFilter.formValue);
       this.search(this.adminFilter.page,false);
       this.getDataFromStore();
       this.scrollTop();
       this.findCustomer();
+    }
+
+    setSelectionPrivilege(){
+      this.selectionPrivilege = this.users.role === 'ADMIN'  || this.users.role === 'STAFF';
     }
     
     sessionUtility(event){
@@ -83,7 +89,7 @@ export class WaterSmartMeterComponent implements OnInit {
         year: [event !== undefined && event !== null ? event.year : ''],
         month: [event !== undefined && event !== null ? event.month : ''],
       });
-      if (this.users.role === 'ADMIN') {
+      if (this.selectionPrivilege) {
         this.waterSmartMeterForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
         this.waterSmartMeterForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
       }
@@ -173,7 +179,7 @@ export class WaterSmartMeterComponent implements OnInit {
       this.adminFilter.formValue = this.waterSmartMeterForm.value;
       // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
       let userId = null;
-      if(this.users.role == 'ADMIN'){
+      if(this.selectionPrivilege){
         if(this.waterSmartMeterForm.value.auditId !== '')
           this.findSelectedCustomer(force, filter);
       } else {
@@ -236,7 +242,7 @@ export class WaterSmartMeterComponent implements OnInit {
           .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
           .set('year', (this.waterSmartMeterForm.value.year !== null ? this.waterSmartMeterForm.value.year : ''))
         .set('month', (this.waterSmartMeterForm.value.month !== null ? this.waterSmartMeterForm.value.month : ''));
-      if (this.users.role === 'ADMIN') {
+      if (this.selectionPrivilege) {
        params =  params.set('auditId', this.waterSmartMeterForm.value.auditId !== null ? this.waterSmartMeterForm.value.auditId : '')
         .set('customerName', this.waterSmartMeterForm.value.customerName !== null ? this.waterSmartMeterForm.value.customerName : '');
       }

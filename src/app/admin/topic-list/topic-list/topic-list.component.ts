@@ -14,8 +14,8 @@ import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { LoginService } from 'src/app/services/login.service';
-import { AppConstant } from 'src/app/utility/app.constant';
 import { UtilityService } from 'src/app/services/utility.service';
+import { AppConstant } from '../../../utility/app.constant';
 
 @Component({
   selector: 'app-topic-list',
@@ -35,6 +35,7 @@ export class TopicListComponent implements OnInit, OnDestroy {
   public filter = false;
   public cache = false;
   topicForm: FormGroup;
+  pageSize = AppConstant.pageSize;
   public force = false;
   public adminFilter: AdminFilter;
   public customerGroupList = new Array();
@@ -179,7 +180,7 @@ export class TopicListComponent implements OnInit, OnDestroy {
     const params = new HttpParams()
       .set('disableTotalSize', 'false')
       .set('homeowner', 'false')
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))

@@ -32,6 +32,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
   currentIndex = 0;
   dataListForSuggestions = [];
   selectedCustomer = null;
+  selectionPrivilege : boolean  = false;
   keys = TableColumnData.SMART_METER_KEYS;
   newFilterSearch = false;
   pageSize = AppConstant.pageSize;
@@ -62,6 +63,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
   public adminFilter: UsageHistoryFilter;
   subject$ = new Subject();
   ngOnInit() {
+    this.setSelectionPrivilege();
     this.setUpForm(this.adminFilter.formValue);
     this.search(this.adminFilter.page, false);
     this.getDataFromStore();
@@ -69,6 +71,11 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
     this.scrollTop();
     this.findCustomer();
   }
+
+  setSelectionPrivilege(){
+    this.selectionPrivilege = this.users.role === 'ADMIN'  || this.users.role === 'STAFF';
+  }
+
    scrollTop() {
      window.scrollTo(0,0)
    }
@@ -80,7 +87,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
       day: [event !== undefined && event !== null ? event.day : ''],
       hour: [event !== undefined && event !== null ? event.hour : ''],
     });
-    if (this.users.role === 'ADMIN') {
+    if (this.selectionPrivilege) {
       this.electricitySmartMeterForm.addControl('auditId', this.fb.control(event !== undefined && event !== null ? event.auditId : ''));
       this.electricitySmartMeterForm.addControl('customerName', this.fb.control(event !== undefined && event !== null ? event.customerName : ''));
     }
@@ -119,7 +126,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
     this.adminFilter.formValue = this.electricitySmartMeterForm.value;
     localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
-    if(this.users.role == 'ADMIN'){
+    if(this.selectionPrivilege){
       if(this.electricitySmartMeterForm.value.auditId != '' || this.electricitySmartMeterForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {
@@ -189,7 +196,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
       .set('hour', (this.electricitySmartMeterForm.value.hour !== null ? this.electricitySmartMeterForm.value.hour : ''))
       .set('day', (this.electricitySmartMeterForm.value.day !== null ? this.electricitySmartMeterForm.value.day : ''))
       .set('month', (this.electricitySmartMeterForm.value.month !== null ? this.electricitySmartMeterForm.value.month : ''));
-    if (this.users.role === 'ADMIN') {
+    if (this.selectionPrivilege) {
       params = params.set('auditId', this.electricitySmartMeterForm.value.auditId !== null ? this.electricitySmartMeterForm.value.auditId : '')
       .set('customerName', this.electricitySmartMeterForm.value.customerName !== null ? this.electricitySmartMeterForm.value.customerName : '');
     }
