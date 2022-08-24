@@ -132,9 +132,9 @@ div.factoid > div > p {
   font-weight: 500 !important;
 }
 
-#chartSeasonalPie {
+/* #chartSeasonalPie {
   margin-left: 0% !important;
-}
+} */
 
 #chartThreeNorms1 {
   margin-top: 15px !important;
@@ -155,9 +155,9 @@ div.factoid > div > p {
 }
 
 .surveyChartDiv > div {
-  width: 95% !important;
+  /* width: 95% !important; */
 }
-@media (min-width: 300px) and (max-width: 370px) {
+@media (min-width: 300px) and (max-width: 570px) {
   .surveyChartDiv > div {
     width: 100% !important;
   }
@@ -208,8 +208,8 @@ div.factoid > div > p {
   .chartDiv > div > :nth-child(2) > :nth-child(2) {
     height: 200px !important;
   }
-  .accurate > p > img {
-    width: 290px !important;
+  .accurate1 > p > img {
+    width: 100% !important;
   }
   .chartDiv > div > :nth-child(2) {
     height: auto !important;
@@ -230,6 +230,7 @@ div.factoid > div > p {
   }
   #chartSeasonalStack {
     width: 100% !important;
+    margin-bottom: 80px !important;
   }
   .surveyChartDiv > div > div {
     margin-left: 0px !important;
@@ -248,6 +249,16 @@ div.factoid > div > p {
     margin-top: 15px;
   }
 }
+
+@media only screen and (max-width: 425px) {
+  .accurate2  p  img {
+    width: 80% !important;
+  }
+}
+
+/* .accurate2 > div{
+  overflow-x: auto !important;
+} */
 
 .surveyChartDiv > div > :nth-child(2) {
   height: 300px !important;
@@ -433,10 +444,24 @@ div.factoid > div > p {
   td > #chartThreeNorms3 {
     width: 140px !important;
   }
-}
 
-div#trendingProfileChartTrends {
-  height: 137px !important;
+  /* #fdbRecommendations tbody{
+    display: block !important;
+    overflow: auto !important;
+  }
+
+  #fdbRecommendations table{
+    table-layout: fixed !important;
+  } */
+
+  /* div#fdbRecommendations {
+    width: 48% !important;
+    overflow-x: scroll;
+} */
+
+
+
+
 }
 
 a {
@@ -536,6 +561,23 @@ div#trendingProfileChartTrends > :nth-child(2) > :nth-child(1) > :nth-child(1) {
 
 td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   margin-left: 12px !important;
+}
+
+.jqplot-table-legend tbody >:nth-child(2) >:nth-child(5){
+  display: none !important;
+}
+
+#surveyData .survey.w-100{
+  table-layout: fixed;
+}
+
+#surveyData .survey.w-100 tbody{
+  display: block;
+  overflow: auto;
+}
+
+#chartSeasonalStack .jqplot-table-legend tbody >:nth-child(2) >:nth-child(6){
+  display: none !important;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 1024px) {
@@ -1484,10 +1526,6 @@ table.surveyAnswers {
   width: 99%;
 }
 
-.accurate > p > img {
-  width : auto !important;
-}
-
 TABLE.survey th {
   font-size: 21px;
   text-align: left;
@@ -1824,4 +1862,19 @@ div.jqplot-xaxis-tick {
 
 .width25{
   width: 25%;
+}
+
+.img-fluid{
+  width: 100% !important;
+  height: auto;
+}
+
+@media (max-width : 534px){
+  #surveyPageText ul{
+  display : inline-grid !important;   
+ }
+
+ #surveyPageText ul li{
+  display : inline-grid !important;   
+ }
 }

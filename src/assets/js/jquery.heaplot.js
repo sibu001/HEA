@@ -517,7 +517,7 @@ function findTickIntervalBase(max, min, numTicks) {
 					seriesColors: seriesColors,
 					title: {
 						show: true,
-						text: options.title,
+						text: options.title? options.title : '',
 						fontSize: '1.3em',
 					},
 					legend: options.showLegend ? {
@@ -566,7 +566,7 @@ function findTickIntervalBase(max, min, numTicks) {
 						yaxis: {
 							min: 0,
 							max: options.maxY,
-							label: options.yAxisLabel,
+							label: options.yAxisLabel?options.yAxisLabel:'',
 							labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
 							labelOptions: {
 								angle: 270,

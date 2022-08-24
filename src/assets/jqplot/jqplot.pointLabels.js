@@ -331,8 +331,10 @@
                     if (this.barDirection === "vertical") {
                         elt = (this._barPoints[i][0][1] + this._barPoints[i][1][1]) / 2 + plot._gridPadding.top - 0.5 * elem.outerHeight(true);
                     }
-                    else {
+                    else if(this._barPoints){
                         ell = (this._barPoints[i][2][0] + this._barPoints[i][0][0]) / 2 + plot._gridPadding.left - 0.5 * elem.outerWidth(true);
+                    }else {
+                        ell = '';
                     }
                 }
 

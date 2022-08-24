@@ -2281,33 +2281,39 @@ button.btn.btn-info {
   }  
 }
 
-@media (min-width: 300px) and (max-width: 370px) {
+@media (min-width: 290px) and (max-width: 425px) {
   div#content {
     margin-right: 0px;
   }
   ::ng-deep #chartSeasonalPie > table{
-    right: -13px!important;
+    right: -50px!important;
+  }
+}
+
+@media only screen and (min-width: 290px) and (max-width: 425px) {
+  ::ng-deep #idlePie > table{
+    right: -30px!important;
   }
 }
 
 @media (min-width: 1000px) and (max-width: 1600px) {
-  ::ng-deep #chartSeasonalPie > table{
+  /* ::ng-deep #chartSeasonalPie > table{
     right: calc(95% - 75%)!important;
-  }
+  } */
 
-  ::ng-deep #idlePie > table{
+  /* ::ng-deep #idlePie > table{
     right: calc(95% - 75%)!important;
   }
-  
+   */
 }
 
 @media (min-width: 1601px)and (max-width: 2500px) {
-  ::ng-deep #chartSeasonalPie > table{
+  /* ::ng-deep #chartSeasonalPie > table{
     right: calc(95% - 70%)!important;
-  }
-  ::ng-deep #idlePie > table{
+  } */
+  /* ::ng-deep #idlePie > table{
     right: calc(95% - 70%)!important;
-  }
+  } */
 }
 
 #chartSeasonalPie{

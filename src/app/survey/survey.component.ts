@@ -211,7 +211,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
         eval(paneCharts.chart.freeChartConfigurationJS);
-        if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
+                if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
           const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
           const news = scriptTag.replace('<script>', '');
           $('#content').bind(
@@ -229,6 +229,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     }
+
     if (this.users.currentPaneNumber.currentPane.htmPageText != null) {
       if (this.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
         const scriptTag = this.users.currentPaneNumber.currentPane.htmPageText.substring(this.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
@@ -239,7 +240,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
   }
-
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -1046,23 +1046,23 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   
   handleChange(event){
 
-    let id = event.source._elementRef.nativeElement.id;
-    let oldValue = this.slidermap.get(id);
+    // let id = event.source._elementRef.nativeElement.id;
+    // let oldValue = this.slidermap.get(id);
 
-    if((this.users.currentPaneNumber.currentPane.paneCode == 'be_BaseGasLoads' 
-    && this.users.currentPaneNumber.currentPane.label == 'Water Heating Efficiency')
-    || (  this.users.currentPaneNumber.currentPane.paneCode == 'be_ElectfySpaceHtg1'  &&
-      this.users.currentPaneNumber.currentPane.label == 'Home Heating Efficiency')){
+    // if((this.users.currentPaneNumber.currentPane.paneCode == 'be_BaseGasLoads' 
+    // && this.users.currentPaneNumber.currentPane.label == 'Water Heating Efficiency')
+    // || (  this.users.currentPaneNumber.currentPane.paneCode == 'be_ElectfySpaceHtg1'  &&
+    //   this.users.currentPaneNumber.currentPane.label == 'Home Heating Efficiency')){
 
-        if(event.value > oldValue){
-          this.setValueInModel(id, 1 + parseInt(oldValue));
-          this.slidermap.set(id, 1 + parseInt(oldValue));
-        }else if (event.value < oldValue){
-          this.setValueInModel(id,parseInt(oldValue) - 1);
-          this.slidermap.set(id,parseInt(oldValue) - 1);
-        }
+    //     if(event.value > oldValue){
+    //       this.setValueInModel(id, 1 + parseInt(oldValue));
+    //       this.slidermap.set(id, 1 + parseInt(oldValue));
+    //     }else if (event.value < oldValue){
+    //       this.setValueInModel(id,parseInt(oldValue) - 1);
+    //       this.slidermap.set(id,parseInt(oldValue) - 1);
+    //     }
 
-      }
+    //   }
   
   }
 
