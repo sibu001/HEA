@@ -235,9 +235,9 @@ div.factoid > div > p {
   .surveyChartDiv > div > div {
     margin-left: 0px !important;
   }
-  #chartRepeatingLoad {
+  /* #chartRepeatingLoad {
     width: 100% !important;
-  }
+  } */
   #chartMovAvg {
     width: 100% !important;
   }
@@ -1405,13 +1405,13 @@ table.jqplot-table-legend {
 
 /* ============ my css ============================ */
 @media (min-width: 320px) and (max-width: 767px) {
-  #chartElectrificationChart canvas.jqplot-base-canvas{
+  /* #chartElectrificationChart canvas.jqplot-base-canvas{
     position: unset!important;
     left: 0!important;
     top:  0!important;
     width:  0px !important;
     height:  0px !important;
-  }
+  } */
 
 }
 
@@ -1878,3 +1878,18 @@ div.jqplot-xaxis-tick {
   display : inline-grid !important;   
  }
 }
+
+/* #chartRepeatingLoad > canvas {
+  min-width: 600px;
+}
+
+#chartRepeatingLoad {
+  overflow-x: scroll;
+  overflow-y: auto;
+} */
+
+/* .dropdown_responsive option {
+  white-space: nowrap;
+  width: 100%;
+   border-bottom: 1px #ccc solid;
+} */

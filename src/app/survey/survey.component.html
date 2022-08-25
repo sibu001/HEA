@@ -85,12 +85,12 @@
                   </td>
                 </tr>
               </thead>
-              <tbody>
+              <tbody class="text-center-webkit">
                 <tr>
                   <td>    
                     <div class ="analysis-table" id="surveyPageText" *ngIf="users.currentPaneNumber.currentPane.htmPageText!=null&&users.currentPaneNumber.currentPane.htmPageText.length>0">
                     <div [innerHTML]="users.currentPaneNumber.currentPane.htmPageText | safeHtml" class="accurate accurate2 top"></div>
-                    <hr class="bottomLineTop">
+                    <hr class="bottomLineTop ">
                   </div>
                   </td>
                 </tr>
@@ -149,15 +149,15 @@
                                   <label class="control-label m-15px" [for]="answersList.dataField.label">
                                     <span class="inputfieldcss">{{answersList.dataField.label}}</span>
                                   </label>
-                                  <p class="demo" *ngIf="answersList.helpHide"
+                                  <!-- <p class="demo" *ngIf="answersList.helpHide"
                                     id="helpiconcontaindesktop">
                                     {{answersList.dataField.helpText}}
                                     <span class="hidebuttondemo"
                                       (click)="answersList.helpHide=!answersList.helpHide">hide</span>
-                                  </p>
+                                  </p> -->
                                 </div>
                                   <!-- <div class="row"> -->
-                                    <div class="col-lg-4 col-sm-5 col-md-6 col-xs-10">
+                                  <div class="col-lg-4 col-sm-5 col-md-6 col-xs-10">
                                       <form>
                                         <div class="form-group"
                                           *ngIf="answersList.dataField.inputType=='text'">
@@ -186,16 +186,16 @@
                                       (click)="answersList.helpHide=!answersList.helpHide">
                                   </div>
                                 </div>
-                                <div class="row" id="helpiconcontainresponsive"
-                                  *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                                  <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                      <span class="hidebuttondemo"
-                                        (click)="answersList.helpHide=!answersList.helpHide">hide</span>
-                                    </p>
-                                  </div>
-                                </div>
                               </div>
+                              <div class="row center-ele" id=""
+                              *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                              <div class="col-lg-6 col-md-16 col-sm-8 col-xs-12">
+                                <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
+                                  <span class="hidebuttondemo"
+                                    (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                </p>
+                              </div>
+                            </div>
                               <hr class="bottom">
                             </div>
               
@@ -547,9 +547,9 @@
                                   <div class="col-lg-12 col-md-12 col-sm-12
                                     col-xs-12 center-ele">
                                     <form class="form-tag">
-                                      <div class="form-group" style="height: 34px;">
-                                        <select name="pool/spa" class="form-control
-                                          dropdown-form-control dropdown_responsive"
+                                      <div class="form-group text-center-webkit" style="height: 34px;">
+                                        <select name="pool/spa" class="form-control 
+                                          dropdown-form-control dropdown_responsive "
                                           [(ngModel)]="answersList.value"
                                           [ngClass]="answersList.dataField.field"
                                           [id]="answersList.dataField.dataFieldId"
@@ -613,27 +613,27 @@
                                       safeHtml"></div>
                                   </label>
                                 </div>
-                                <div
-                                  *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                                  <div style="float: right;">
-                                    <img alt="icon"
-                                      src="assets/images/icon_help.svg"
-                                      style="margin-bottom: 12px;"
-                                      class="media-object"
-                                      id="help_btn"
-                                      (click)="answersList.helpHide=!answersList.helpHide">
-                                  </div>
-                                </div>
-                                <div class="row helpIconCss"
-                                  *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                                  <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
-                                      <span class="hidebuttondemo"
-                                        (click)="answersList.helpHide=!answersList.helpHide">hide</span>
-                                    </p>
-                                  </div>
-                                </div>
                               </div>
+                              <div class="col-xs-12"
+                              *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                              <div style="float: right;">
+                                <img alt="icon"
+                                  src="assets/images/icon_help.svg"
+                                  style="margin-bottom: 12px;"
+                                  class="media-object"
+                                  id="help_btn"
+                                  (click)="answersList.helpHide=!answersList.helpHide">
+                              </div>
+                            </div>
+                              <div class="col-xs-12 col-md-12 col-lg-12 center-ele"
+                              *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
+                              <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12  ">
+                                <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
+                                  <span class="hidebuttondemo"
+                                    (click)="answersList.helpHide=!answersList.helpHide">hide</span>
+                                </p>
+                              </div>
+                            </div>
               
                             </div>
                             <hr class="bottom">
@@ -813,9 +813,9 @@
                         </div>
                         <!-- help icon end -->  
                         <div class="row">
-                          <div class="col-lg-12 col-sm-12 col-xs-12">
+                          <div class="col-lg-12 col-sm-12 col-xs-12" [ngClass]="{'padding-heating-eff':users.currentPaneNumber.currentPane.paneCode == 'hcl_BTUAnalysis'}">
                             <div [innerHTML]="charts.chart.freeChartDiv |
-                              safeHtml" class="surveyChartDiv centerChart" id="content" style="width:95%">
+                              safeHtml" class="surveyChartDiv centerChart" id="content" style="width:95%;">
                             </div>
                             <div [innerHTML]="charts.chart.htmFooter | safeHtml"
                               class="footers"></div>
@@ -1245,7 +1245,7 @@
                               [min]="answersList.dataField.fieldValues[0].rangeStart" 
                               [max]="answersList.dataField.fieldValues[0].rangeEnd"
                               [(ngModel)]="answersList.value"  
-                              style="width:5em" [id]="answersList.id" (change)="setValueInLimit($event)" >
+                              style="width:5em" [id]="answersList.id" (change)="setValueInLimit($event)" [value]="answersList.value" >
                               <span>{{answersList.dataField.unit}}</span>
                             </div>
                           </div>
@@ -1297,7 +1297,7 @@
                             <div class="col-lg-12 col-md-12 col-sm-12
                               col-xs-12 center-ele">
                               <form class="form-tag">
-                                <div class="form-group" style="height: 34px;">
+                                <div class="form-group  text-center-webkit" style="height: 34px;">
                                   <select name="pool/spa" class="form-control
                                     dropdown-form-control dropdown_responsive"
                                     [(ngModel)]="answersList.value"

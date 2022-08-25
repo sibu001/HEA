@@ -38,6 +38,7 @@
     "core-js": "^2.5.4",
     "datatables": "^1.10.18",
     "font-awesome": "^4.7.0",
+    "hammerjs": "^2.0.8",
     "jqplot": "^1.0.9",
     "jquery": "^3.3.1",
     "jquery-migrate": "^1.4.1",

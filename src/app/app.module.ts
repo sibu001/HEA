@@ -1,4 +1,4 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppComponent } from './app.component';
@@ -18,7 +18,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeadersComponent } from './headers/headers.component';
 import { RoleGuard } from './role.guard';
 import { UtilityService } from './services/utility.service';
-import { MatSnackBarModule } from '@angular/material';
+import { GestureConfig, MatSnackBarModule } from '@angular/material';
 import { MultipleRoleGuardService } from './multiple-role.guard';
 
 @NgModule({
@@ -45,7 +45,9 @@ import { MultipleRoleGuardService } from './multiple-role.guard';
     provide: HTTP_INTERCEPTORS,
     useClass: AuthorizationInterceptor,
     multi: true
-  }],
+  },
+  { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

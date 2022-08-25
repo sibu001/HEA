@@ -2360,8 +2360,25 @@ input::-webkit-inner-spin-button {
   select{
     width : 290px !important;
 }
+.padding-heating-eff{
+  padding: 0px !important;
+}
 }
 
 .text-danger-imp{
   color:red !important;
+}
+
+.padding-heating-eff{
+}
+
+
+.dropdown_responsive {
+  width: 100% !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-center-webkit{
+  text-align: -webkit-center;
 }

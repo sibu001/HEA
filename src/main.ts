@@ -1,6 +1,7 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
+
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
@@ -12,6 +13,7 @@ import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/matchbrackets';
 import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/lint/json-lint';
+import 'hammerjs';
 
 if (environment.production) {
   enableProdMode();
