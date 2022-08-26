@@ -3,7 +3,7 @@ import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit, 
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { fromEvent, Subscription } from 'rxjs';
 import { SubscriptionUtil } from '../utility/subscription-utility';
 
 declare var $: any;
@@ -30,6 +30,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   totalPanes: any[] = [];
   selectDate: Date;
   users: Users = new Users();
+  changeSliderFlaf = false;
   globalM = 0;
   globalK = 0;
   subscriptons : Subscription = new Subscription();
@@ -1043,16 +1044,22 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.loginService.setUser(this.users);
   }
+
+  inputSliderEvent(event){
+    console.log(event);
+    this.changeSliderFlaf = true;
+  }
   
   handleChange(event){
 
+    console.log(event);
+
+    // if(this.sliderInputAndChangeFlaf == true){
+    //   return;
+    // }
+
     // let id = event.source._elementRef.nativeElement.id;
     // let oldValue = this.slidermap.get(id);
-
-    // if((this.users.currentPaneNumber.currentPane.paneCode == 'be_BaseGasLoads' 
-    // && this.users.currentPaneNumber.currentPane.label == 'Water Heating Efficiency')
-    // || (  this.users.currentPaneNumber.currentPane.paneCode == 'be_ElectfySpaceHtg1'  &&
-    //   this.users.currentPaneNumber.currentPane.label == 'Home Heating Efficiency')){
 
     //     if(event.value > oldValue){
     //       this.setValueInModel(id, 1 + parseInt(oldValue));
@@ -1060,10 +1067,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     //     }else if (event.value < oldValue){
     //       this.setValueInModel(id,parseInt(oldValue) - 1);
     //       this.slidermap.set(id,parseInt(oldValue) - 1);
-    //     }
-
-    //   }
-  
+    //     }  
   }
 
 }

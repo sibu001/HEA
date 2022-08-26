@@ -5,6 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
 import { Location } from '@angular/common';
+import { AdminFilter, UsageHistoryFilter } from '../models/filter-object';
 declare var FB: any;
 @Component({
   selector: 'app-login',
@@ -155,9 +156,11 @@ export class LoginComponent implements OnInit, AfterViewInit{
     this.loginService.performGetMultiPartData('oauth/me').subscribe(
       (data) => {
         const response = JSON.parse(JSON.stringify(data));
-        if(this.users.outhMeResponse && this.users.outhMeResponse.userId != response.userId ){
+        if(this.users && this.users.userId != response.userId ){
           this.users.lastVisitedURL = undefined;
           this.users.currentPaneNumber = undefined;
+          localStorage.setItem('adminFilter', JSON.stringify(new AdminFilter()));
+          localStorage.setItem('usageHistoryFilter', JSON.stringify(new UsageHistoryFilter()));
         }
           this.performGetUserRole(response.userId);
       },

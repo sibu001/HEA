@@ -251,6 +251,16 @@ div.factoid > div > p {
 }
 
 @media only screen and (max-width: 425px) {
+  .accurate2>div>p>img {
+    width: 80% ;
+  }
+
+  .accurate2  p a >img {
+    width: auto !important;
+  }
+}
+
+@media only screen and (max-width: 425px) {
   .accurate2  p  img {
     width: 80% !important;
   }
@@ -1849,10 +1859,21 @@ div.jqplot-xaxis-tick {
   font-size : 1.65em !important; 
 }
 
+#helpiconcontaindesktop{
+  text-align: center
+}
 
 @media (min-width: 769px) {
   .margin-flexible{
     margin-left: 30% !important;
+  }
+
+  .accurate2>div:nth-child(3){
+    width: auto !important;
+  }
+
+  .accurate2>div:nth-child(4){
+    width: 80% !important;
   }
 }
 
@@ -1893,3 +1914,7 @@ div.jqplot-xaxis-tick {
   width: 100%;
    border-bottom: 1px #ccc solid;
 } */
+
+.helpText-align{
+  text-align: center !important;
+}

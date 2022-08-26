@@ -254,7 +254,7 @@ export class LoginService {
                 console.log(response);
                 this.users = this.getUser();
                 theme = this.users.theme;
-                const userId = this.users.outhMeResponse.userId;
+                const userId = this.users.userData.userId;
                 const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
                 this.users.currentPaneNumber = currentPaneNumber;
@@ -270,7 +270,9 @@ export class LoginService {
                 console.log(errors);
                 this.users = this.getUser();
                 theme = this.users.theme;
-                const userId = this.users.outhMeResponse.userId;
+                let userId;
+                if(this.users.userData)
+                userId = this.users.userData.userId;
                 const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
                 this.users.currentPaneNumber = currentPaneNumber;

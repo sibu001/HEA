@@ -189,8 +189,8 @@
                               </div>
                               <div class="row center-ele" id=""
                               *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                              <div class="col-lg-6 col-md-16 col-sm-8 col-xs-12">
-                                <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
+                              <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                                <p class="demo1 helpText-align" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
                                   <span class="hidebuttondemo"
                                     (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
@@ -486,9 +486,10 @@
                                   justify-content: center;
                                   flex-wrap:wrap;">
           
-                                    <mat-slider [(ngModel)]="answersList.value" 
-                                    style="  width : 18em;" [step]="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
-                                    [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id" (change)="handleChange($event)"></mat-slider>
+                                    <mat-slider [(ngModel)]="answersList.value" #slider
+                                    style="  width : 18em;" step="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
+                                    [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id" (change)="handleChange($event)"
+                                    (input)="inputSliderEvent($event)"></mat-slider>
           
                                     <div>
                                       <input type="number" pInputText 
@@ -627,8 +628,8 @@
                             </div>
                               <div class="col-xs-12 col-md-12 col-lg-12 center-ele"
                               *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                              <div class="col-lg-6 col-md-8 col-sm-10 col-xs-12  ">
-                                <p class="demo1" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
+                              <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12  ">
+                                <p class="demo1 helpText-align" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
                                   <span class="hidebuttondemo"
                                     (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
@@ -1236,9 +1237,10 @@
                           justify-content: center;
                           flex-wrap:wrap;">
   
-                            <mat-slider [(ngModel)]="answersList.value" 
+                            <mat-slider [(ngModel)]="answersList.value"  #slider
                             style="  width : 18em;" [step]="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
-                            [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id" (change)="handleChange($event)"></mat-slider>
+                            [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id" (change)="handleChange($event)"
+                            (input)="inputSliderEvent($event)"></mat-slider>
   
                             <div>
                               <input type="number" pInputText 
