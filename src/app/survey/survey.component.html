@@ -3,7 +3,7 @@
   <div class="container-fluid"
     *ngIf="users.currentPaneNumber.currentPane!=null">
     <div class="row" id="leftColumn">
-      <div class="col-md-9 col-sm-9">
+      <div class="col-md-9 col-sm-8">
         <div class="background_leaksresponsive"
           *ngIf="users.currentPaneNumber.survey.surveyDescription.showLeaks">
           <ng-container *ngFor="let leak of users.leakList;index as i">
@@ -1594,7 +1594,7 @@
         <br />
       </div>
 
-      <div class="col-md-3 col-sm-3 rightColumn"
+      <div class="col-md-3 col-sm-4 rightColumn"
         *ngIf="users.currentPaneNumber.currentPane!=null"
         [style.height.px]="divHeight">
         <!-------------------- Html RightTop And RightBottm Text ----------------------------------->

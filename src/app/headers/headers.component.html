@@ -12,7 +12,7 @@
 </div>
 <button class="feedbackButton" *ngIf="users?.role=='USERS'"
     (click)="openFeedBackPage()">FeedBack</button>
-<button class="customer-chat-button" *ngIf="users?.role!=='USERS'"
+<button id="customerChatButton" class="customer-chat-button" *ngIf="users?.role!=='USERS'"
     (click)="openCustomerChat()">Customer Chat</button>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation"
     *ngIf="!isResponsive">

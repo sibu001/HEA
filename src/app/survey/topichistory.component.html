@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row"
             *ngIf="users.surveyList!=null&&users.surveyList!=undefined">
-            <div class="col-sm-9 topic_list ">
+            <div class="col-sm-8 topic_list ">
                 <h3 class="select_next">
                     <img alt="icon" src="assets/images/right-.png" class="back_img"
                         (click)="back()">&nbsp;&nbsp;Topics history</h3>
@@ -61,7 +61,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-3" *ngIf="users.role!=='ADMIN'">
+            <div class="col-sm-4" *ngIf="users.role!=='ADMIN'">
                 <p class="Energy_anaiytic">
                     <img alt="icon" src="assets/images/dot03.gif" class="dot">&nbsp;Powered
                     by Home Energy Analytics, Inc.</p>
