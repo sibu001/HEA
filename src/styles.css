@@ -455,6 +455,9 @@ div.factoid > div > p {
     width: 140px !important;
   }
 
+  #chartElectrificationChart > table {
+    margin : -80px !important;
+  }  
   /* #fdbRecommendations tbody{
     display: block !important;
     overflow: auto !important;
@@ -473,6 +476,15 @@ div.factoid > div > p {
 
 
 }
+
+#chartElectrificationChart > table {
+  margin : 0px !important;
+  /* display: none !important; */
+} 
+#chartElectrificationChart{
+  width:  120% !important; 
+}
+
 
 a {
   /* color: #76ba19!important; */
@@ -1917,4 +1929,30 @@ div.jqplot-xaxis-tick {
 
 .helpText-align{
   text-align: center !important;
+}
+
+.mrl-auto{
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#chartSeasonalPie{
+  margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+.accurate2 a{
+  pointer-events: none;
+}
+
+@media screen and (min-width: 981px) {
+  #resizable2 #chartSeasonalStack table {
+    margin-bottom: -100px !important;
+  }
+}
+
+@media screen and (max-width: 769px){
+  #customerChatButton{
+    display: none;
+  }
 }
