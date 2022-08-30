@@ -236,7 +236,7 @@
 
         var opts = $.extend(true, {}, hl, serieshl);
 
-        if (opts.useAxesFormatters) {
+        if (opts.useAxesFormatters && series._xaxis._ticks.length > 0 && series._yaxis._ticks.length > 0) { 
             var xf = series._xaxis._ticks[0].formatter;
             var yf = series._yaxis._ticks[0].formatter;
             var xfstr = series._xaxis._ticks[0].formatString;

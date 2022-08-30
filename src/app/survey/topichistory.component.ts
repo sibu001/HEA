@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
@@ -12,6 +12,7 @@ import { Location } from '@angular/common';
 export class TopicHistoryComponent implements OnInit {
   hide = true;
   users: Users = new Users();
+  backUpSurveyListForBigScreen: Array<any>;
 
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
@@ -22,6 +23,8 @@ export class TopicHistoryComponent implements OnInit {
     } else {
       this.users.allSurveyCheck = false;
       this.loginService.setUser(this.users);
+      this.backUpSurveyListForBigScreen = [...this.users.surveyList];
+      this.checkForUserFeedBackInSmallScreen(this.users.surveyList);
     }
   }
 
@@ -33,6 +36,22 @@ export class TopicHistoryComponent implements OnInit {
         this.router.navigate(['surveyView']);
       }
     }
+  }
+
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    const surveyList = this.users.surveyList;
+    console.log(window.innerWidth);
+    if(window.innerWidth <= 900){
+      const lastSurvey = surveyList[surveyList.length-1];
+      if(lastSurvey && lastSurvey.surveyDescription.surveyCode == 'Feedback') {
+        surveyList.pop();
+      }
+    }else{
+      this.users.surveyList = this.backUpSurveyListForBigScreen;
+    }  
+  
   }
 
   goToTopicPage(surveyId, paneCode, surveyCode, index) {
@@ -73,12 +92,25 @@ export class TopicHistoryComponent implements OnInit {
         this.users.surveyList = response.data;
         this.users.allSurveyCheck = false;
         this.loginService.setUser(this.users);
+        this.checkForUserFeedBackInSmallScreen(this.users.surveyList);
       },
       error => {
         document.getElementById('loader').classList.remove('loading');
       }
     );
   }
+
+  checkForUserFeedBackInSmallScreen(surveyList :any){
+
+    this.backUpSurveyListForBigScreen = [...surveyList];
+    if(window.innerWidth <= 900){
+      const lastSurvey = surveyList[surveyList.length-1];
+      if(lastSurvey && lastSurvey.surveyDescription.surveyCode == 'Feedback') {
+        surveyList.pop();
+      }
+    }
+  }
+
   back() {
     if (this.users.role === 'USERS') {
       this.location.back();

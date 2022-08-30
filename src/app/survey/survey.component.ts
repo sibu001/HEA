@@ -441,6 +441,18 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answers').subscribe(
           data => {
             const response = JSON.parse(JSON.stringify(data));
+
+
+            // temprory code for exiting survey screen when screen size is smaller than 900 px.
+
+            if(window.innerWidth <= 900){
+              if(response.data.survey.surveyDescription.surveyCode == 'Feedback'){
+                this.router.navigate(['/topicshistory']);
+              }
+            }
+
+            //  end -------------------------------
+
             if (response.data.errors != null) {
               if (response.data.currentPane.paneCode === 'pv_EditPVConfigs') {
                 response.data.currentPaneBlocks = this.users.currentPaneNumber.currentPaneBlocks;
@@ -488,6 +500,22 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     }
   } 
+
+
+// temprory code for exiting survey screen when screen size is smaller than 900 px.
+
+  @HostListener('window:resize', ['$event'])
+  onResize1(event) {
+  
+  if(window.innerWidth <= 900){
+    if(this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'Feedback'){
+      this.router.navigate(['/topicshistory']);
+      }
+    }
+  }
+
+  //  end -------------------------------
+
 
   nextPaneWithAnswer(data: any) {
     this.getSessionPendingMessage();

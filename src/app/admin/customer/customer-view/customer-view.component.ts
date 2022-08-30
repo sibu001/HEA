@@ -53,6 +53,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   heatingRatePlan: any;
   weatherStation: any;
   helpHide: boolean;
+  updateWithUtilityAddressFlag : boolean = false;
   placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
   electricModelList: Array<any> = TableColumnData.ELECTRIC_MODEL;
@@ -185,6 +186,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.add(this.customerService.getCustomerById().pipe(skipWhile((item: any) => !item))
       .subscribe((customer: any) => {
         this.setUpValueInUsageHitoryFilter(customer);
+        this.setUpdateWithUtilityAddressFlag(customer);
         this.customerData = customer;
         if (this.isForce) {
           this.router.navigate(['admin/customer/customerEdit'], { queryParams: { 'id': customer.customerId } });
@@ -203,6 +205,31 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setForm(customer);
       }));
   }
+
+  setUpdateWithUtilityAddressFlag(customer: any){
+
+    if(customer.city.toUpperCase() != customer.pgeCity.toUpperCase() || customer.street1.toUpperCase() != customer.pgeStreet.toUpperCase()
+      || customer.state.toUpperCase() != customer.pgeState.toUpperCase() || customer.postalCode.toUpperCase() != customer.pgePostalCode.toUpperCase()){
+        this.updateWithUtilityAddressFlag = true;
+      }
+
+  }
+
+  UpdateWithUtilityAddressFlagChangeEvent(){
+
+    if(this.customerData.city.toUpperCase() != this.customerData.pgeCity.toUpperCase())
+      this.customerForm.patchValue({city : this.customerData.pgeCity});
+
+    if(this.customerData.postalCode.toUpperCase() != this.customerData.pgePostalCode.toUpperCase())
+      this.customerForm.patchValue({postalCode : this.customerData.pgePostalCode});
+
+    if(this.customerData.state.toUpperCase() != this.customerData.pgeState.toUpperCase())    
+      this.customerForm.patchValue({state : this.customerData.pgeState});
+
+    if(this.customerData.street1.toUpperCase() != this.customerData.pgeStreet.toUpperCase())    
+      this.customerForm.patchValue({street1 :  this.customerData.pgeStreet});
+  }
+  
   loadWeatherStationId(customerId: any): void {
     this.customerService.loadWeatherStationByCustomerId(customerId);
     this.subscriptions.add(this.customerService.getWeatherStationByCustomerId().pipe(skipWhile((item: any) => !item))
