@@ -1967,6 +1967,8 @@ div.jqplot-xaxis-tick {
 }
 
 /* temprory disabled */
-.accurate2 >p:nth-child(2)>a{
-  display: none ;
+@media screen and (max-width:900px){
+  .accurate2 >p:nth-child(2)>a{
+    display: none ;
+  }
 }
