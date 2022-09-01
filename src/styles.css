@@ -1962,7 +1962,7 @@ div.jqplot-xaxis-tick {
   display:none;
 }
 
-#resizable2 .jqplot-highlighter-tooltip {
+.jqplot-highlighter-tooltip {
   display: none !important;
 }
 

@@ -2230,10 +2230,10 @@ button.btn.btn-info {
 }
 
 .tooltiptext {
-  visibility: hidden;
+  display:none;
   background-color: #f9f9f9;
   color: #000;
-  width: 180px;
+  width: 155px;
   text-align: center;
   border-radius: 6px;
   padding: 5px 0;
@@ -2241,10 +2241,12 @@ button.btn.btn-info {
   font-size: medium;
   font-weight: 300;
   z-index: 1;
+  white-space: pre-wrap;
+  left: 36px;
 }
 
 .htmltooltip:hover .tooltiptext {
-  visibility: visible;
+  display: block;
 }
 
 ::ng-deep .accurate .red {
@@ -2381,4 +2383,12 @@ input::-webkit-inner-spin-button {
 
 .text-center-webkit{
   text-align: -webkit-center;
+}
+
+td, th{
+  text-align: -webkit-center;
+}
+
+.ui-datepicker-calendar-container{
+  z-index: 10000;
 }
