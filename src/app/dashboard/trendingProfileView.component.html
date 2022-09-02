@@ -59,7 +59,7 @@
                             <li>
                         </ul>
                     </div>
-                    <div class="col-sm-4">
+                    <div class="col-sm-2">
                         <ul class="saving" style="float:right;font-size: 15px;">
                             <li>
                                 <span class="Trendswithoutline">Show</span>
@@ -161,7 +161,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-sm-8" *ngIf="trendingProfileData!=null&&trendingProfileData!=undefined">
+                    <div class="col-sm-12" *ngIf="trendingProfileData!=null&&trendingProfileData!=undefined">
                         <div [innerHTML]="trendingProfileData.chart.freeChartDiv | safeHtml"
                             class="trendingProfileChart"></div>
                     </div>

@@ -7,6 +7,7 @@ import { HttpParams } from '@angular/common/http';
 import { TABLECOLUMN } from '../interface/table-column.interface';
 import { TableColumnData } from '../data/common-data';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { AppConstant } from '../utility/app.constant';
 @Component({
   selector: 'mailArchiveList',
   templateUrl: './mailArchiveList.component.html',
@@ -15,6 +16,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 export class MailArchiveListComponent implements OnInit {
   errorMessage: any;
   users: Users = new Users();
+  pageSize = AppConstant.pageSize;
   mailArchiveForm: FormGroup;
   public keys: Array<TABLECOLUMN> = TableColumnData.MAIL_ARCHIVE_KEY;
   dataSource: any;
@@ -96,7 +98,7 @@ export class MailArchiveListComponent implements OnInit {
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('periodStart', (this.mailArchiveForm.value.periodStart ? this.datePipe.transform(this.mailArchiveForm.value.periodStart, 'MM/dd/yyyy') : ''))
       .set('periodEnd', (this.mailArchiveForm.value.periodEnd ? this.datePipe.transform(this.mailArchiveForm.value.periodEnd, 'MM/dd/yyyy') : ''))
-      .set('subject', (this.mailArchiveForm.value.subject !== null ? this.mailArchiveForm.value.subject : ''));
+      .set('subject', (this.mailArchiveForm.value.subject !== null ? this.mailArchiveForm.value.subject : ''))
     this.getMailList(params);
   }
   goToEditMailArchive(event: any) {

@@ -789,7 +789,7 @@
             </table>
 
              <!--pane block  -->
-             <div *ngIf="users.currentPaneNumber.currentPaneBlocks!=null" class="text-center-webkit">
+             <div id="paneBlock" *ngIf="users.currentPaneNumber.currentPaneBlocks!=null" class="text-center-webkit">
               <div class="row p-lf-30px" *ngFor="let currentPaneBlock of
                 users.currentPaneNumber.currentPaneBlocks">
                 <div class="col-sm-12">
@@ -849,7 +849,7 @@
                               *ngIf="surveyAnswerValue.dataField.userDisplay">
                               <div
                                 *ngIf="surveyAnswerValue.dataField.dataType=='datetime'&&surveyAnswerValue.dataField.inputType=='date'"
-                                class="form-group" style="width: 160px;">
+                                class="form-group" style="width: 160px; text-align: left;">
                                 <p-calendar
                                   [ngModel]="surveyAnswerValue.value ? surveyAnswerValue.value : undefined"
                                   (ngModelChange)="surveyAnswerValue.value=$event"

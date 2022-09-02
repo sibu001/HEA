@@ -845,6 +845,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isForce = true;
             this.scrollTop();
             this.loadCustomerById();
+            this.router.navigate(['/admin/customer']);
           }));
       } else {
         this.subscriptions.add(this.customerService.saveCustomer(this.customerForm.value).pipe(skipWhile((item: any) => !item))
@@ -852,6 +853,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isForce = true;
             this.scrollTop();
             this.loadCustomerById();
+            this.router.navigate(['/admin/customer']);
           }));
       }
     } else {

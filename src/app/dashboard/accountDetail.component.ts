@@ -93,7 +93,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   postCustomerData() {
     document.getElementById('loader').classList.add('loading');
-    this.subscriptions.add(this.loginService.performPut(this.users.outhMeResponse, 'customers/' + this.users.outhMeResponse.userId).subscribe(
+    this.subscriptions.add(this.loginService.performPut(this.users.outhMeResponse, 'customers/' + this.users.outhMeResponse.customerId).subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
         this.scrollTop();

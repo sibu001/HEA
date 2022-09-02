@@ -433,7 +433,7 @@ div.Recommendation_text.a {
 }
 p.plug {
   color: #929292;
-  text-align: right;
+  /* text-align: right; */
   border-bottom: 1px solid #f7f1f1;
   padding-bottom: 10px;
 }

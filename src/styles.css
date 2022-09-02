@@ -232,6 +232,11 @@ div.factoid > div > p {
     width: 100% !important;
     margin-bottom: 80px !important;
   }
+
+  .trendingProfileChart #chartSeasonalStack {
+    margin-bottom: 0px !important;
+  }
+
   .surveyChartDiv > div > div {
     margin-left: 0px !important;
   }
@@ -598,6 +603,9 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   overflow: auto;
 }
 
+/* #paneBlock .table-responsive{
+  overflow:visible !important;
+} */
 #chartSeasonalStack .jqplot-table-legend tbody >:nth-child(2) >:nth-child(6){
   display: none !important;
 }
@@ -955,7 +963,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
 
 @media only screen and (min-width: 931px) and (max-width: 1223px) {
   .trendingProfileChart > :nth-child(2) {
-    width: 132% !important;
+    width: 100% !important;
     margin-top: 6em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -1971,4 +1979,30 @@ div.jqplot-xaxis-tick {
   .accurate2 >p:nth-child(2)>a{
     display: none ;
   }
+}
+
+.ui-calendar .ui-datepicker {
+  min-width: 100%;
+  position: relative;
+}
+
+table .ui-calendar .ui-calendar-button:enabled,table .ui-calendar .ui-calendar-button {
+  height: 40px;
+}
+
+.ui-datepicker.ui-widget.ui-widget-content{
+  top : 0px !important;  
+}
+
+ .jqplot-point-label{
+  display: none;
+}
+
+mailarchivelist .ui-calendar .ui-calendar-button,mailarchivelist .ui-calendar .ui-calendar-button {
+  height: 30px !important
+}
+
+#trendingProfileChartTrends + div {
+  position: relative;
+  top: 150px;
 }
