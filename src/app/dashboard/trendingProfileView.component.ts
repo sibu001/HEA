@@ -127,7 +127,7 @@ export class TrendingProfileViewComponent implements OnInit {
           return b.unitTypes[0].used - a.unitTypes[0].used || b.unitTypes[1].used - a.unitTypes[1].used;
         });
         this.trendingProfile = JSON.parse(localStorage.getItem('trendingProfile'));
-        if (this.trendingProfile != null && this.trendingProfile !== undefined) {
+        if (this.trendingProfile != null && this.trendingProfile !== undefined && this.trendingProfile.customerId == this.users.outhMeResponse.customerId ) {
           this.profileResourceType = this.trendingProfile.profileResourceType;
           this.profileUnitType = this.trendingProfile.profileUnitType;
           this.profileLookupValue = this.trendingProfile.profileLookupValue;
@@ -171,6 +171,7 @@ export class TrendingProfileViewComponent implements OnInit {
               this.trendingProfile.unitTypecolor1 = '#000';
               this.trendingProfile.unitTypecolor2 = '#76ba19';
               this.trendingProfile.color = this.colors;
+              this.trendingProfile.customerId = this.users.outhMeResponse.customerId;
               localStorage.setItem('trendingProfile', JSON.stringify(this.trendingProfile));
               break;
             }
@@ -191,6 +192,13 @@ export class TrendingProfileViewComponent implements OnInit {
     const param = 'resourceType=' + resourcesUse + '&unitType=' + unitType + '&useType=' + useType;
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingProfileChart?' + param).subscribe(
       data => {
+
+
+        // check for removing the double text label on the graph
+        const rootEle = document.getElementById('trendingProfileView');
+        if(rootEle)
+          rootEle.innerHTML = this.trendingProfileData.chart.freeChartDiv;
+
         const response = JSON.parse(JSON.stringify(data));
         this.trendingProfileData = response.data;
         const line1 = new Array;

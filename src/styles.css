@@ -168,7 +168,7 @@ div.factoid > div > p {
   margin-bottom: 15px;
 }
 
-@media screen and (min-width: 769px) and (max-width: 900px) {
+/* @media screen and (min-width: 769px) and (max-width: 900px) {
   .accurate > p > img {
     width: 400px !important;
   }
@@ -202,7 +202,7 @@ div.factoid > div > p {
   .accurate > p > img {
     width: 600px !important;
   }
-}
+} */
 
 @media only screen and (max-width: 768px) {
   .chartDiv > div > :nth-child(2) > :nth-child(2) {
@@ -257,7 +257,7 @@ div.factoid > div > p {
 
 @media only screen and (max-width: 425px) {
   .accurate2>div>p>img {
-    width: 80% ;
+    max-width: 80% ;
   }
 
   .accurate2  p a >img {
@@ -267,7 +267,7 @@ div.factoid > div > p {
 
 @media only screen and (max-width: 425px) {
   .accurate2  p  img {
-    width: 80% !important;
+    max-width: 80% !important;
   }
 }
 
@@ -1949,10 +1949,10 @@ div.jqplot-xaxis-tick {
   margin-left: auto !important;
 }
 
-.accurate2 a{
+/* .accurate2 a{
   pointer-events: none;
 
-}
+} */
 
 @media screen and (min-width: 981px) {
   #resizable2 #chartSeasonalStack table {
@@ -2005,4 +2005,8 @@ mailarchivelist .ui-calendar .ui-calendar-button,mailarchivelist .ui-calendar .u
 #trendingProfileChartTrends + div {
   position: relative;
   top: 150px;
+}
+
+#chartElectrificationIntro .jqplot-point-label{
+  display: block;
 }

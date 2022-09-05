@@ -90,7 +90,11 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
   }
 
   getTrendingPartResource() {
-    this.trendingParts = JSON.parse(localStorage.getItem('trendingParts')) ? JSON.parse(localStorage.getItem('trendingParts')) : this.trendingParts;
+    const trendingPartsLocalStorage = JSON.parse(localStorage.getItem('trendingParts')); 
+    if(trendingPartsLocalStorage && trendingPartsLocalStorage.customerId == this.users.outhMeResponse.customerId){
+      this.trendingParts = trendingPartsLocalStorage;
+    }
+
     this.useType = new Array;
     this.unitType = new Array;
     const resourceType = this.trendingParts.activeResource;
@@ -195,6 +199,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     this.trendingParts.activeResource = resourcesUse;
     this.trendingParts.unitType = unitType;
     this.trendingParts.useTypes = this.partLookupValue = useType;
+    this.trendingParts.customerId = this.users.outhMeResponse.customerId;
     localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
     const param = 'resourceUse=' + resourcesUse + '&unitType=' + unitType + '&useType=' + useType;
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingParts?' + param).subscribe(

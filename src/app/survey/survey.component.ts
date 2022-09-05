@@ -1048,19 +1048,9 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   inputSliderEvent(event){
-    console.log(event);
-    this.changeSliderFlaf = true;
-  }
-  
-  handleChange(event){
+    let id = event.source._elementRef.nativeElement.id;
+    this.setValueInModel(id, event.value);
 
-    console.log(event);
-
-    // if(this.sliderInputAndChangeFlaf == true){
-    //   return;
-    // }
-
-    // let id = event.source._elementRef.nativeElement.id;
     // let oldValue = this.slidermap.get(id);
 
     //     if(event.value > oldValue){

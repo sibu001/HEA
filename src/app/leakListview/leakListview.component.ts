@@ -28,7 +28,18 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.scrollTop();
+    if(this.users.leakFocusId){
+      try {
+        document.getElementById('leak' + this.users.leakFocusId).scrollIntoView();
+        setTimeout(() =>{
+          window.scrollTo(0,document.documentElement.scrollTop- 100);
+        },100)
+      } catch (e) {
+        console.error(e)
+       }
+    }else{
+      this.scrollTop();
+    }
   }
 
   scrollTop() {

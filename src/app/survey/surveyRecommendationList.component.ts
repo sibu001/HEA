@@ -61,7 +61,7 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
   leakView(id) {
     this.users.leakFocusId = id;
     this.loginService.setUser(this.users);
-    this.router.navigate(['leakListView']);
+    this.router.navigate(['leakListView'],{fragment : id});
   }
 
   questionHelp(instruction) {

@@ -133,7 +133,7 @@
                     </div>
                     <div class="media-body">
                         <form>
-                            <div class="form-group">
+                            <div class="form-group">    
                                 <select name="profileValue" [(ngModel)]="profileLookupValue"
                                     (change)="changeLookupValue(profileLookupValue)" class="form-control"
                                     style="width:207px;">
@@ -162,7 +162,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12" *ngIf="trendingProfileData!=null&&trendingProfileData!=undefined">
-                        <div [innerHTML]="trendingProfileData.chart.freeChartDiv | safeHtml"
+                        <div [innerHTML]="trendingProfileData.chart.freeChartDiv | safeHtml" id="trendingProfileView"
                             class="trendingProfileChart"></div>
                     </div>
                 </div>

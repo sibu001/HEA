@@ -12,7 +12,7 @@
         </div>
         <br>
         <!-------------------- First ------------------------------------>
-        <div class="row leak_div" *ngFor="let leak of users.leakList;index as i">
+        <section class="row leak_div"  id="{{'leak' + leak.recommendationId}}" *ngFor="let leak of users.leakList;index as i">
             <div class="col-lg-10 col-sm-10 border_bottom">
                 <div class="row">
                     <div class="col-lg-1 col-sm-1 col-xs-3 leaks_img">
@@ -72,7 +72,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-11 col-sm-11 Recommendations">
-                        <p class="plug">Recommendations to plug this leak:</p>
+                        <p class="plug" >Recommendations to plug this leak:</p>
                         <div class="back" *ngIf="leak.recommendations!=null&&leak.recommendations!=undefined">
                             <div class="row" style="margin-bottom: 15px;"
                                 *ngFor="let recommendationsList of leak.recommendations">
@@ -101,7 +101,7 @@
                         <div class="col-lg-1 col-sm-1"></div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" >
                     <div class="col-lg-9" *ngIf="leak.flag"></div>
                     <div class="col-lg-3 col-xs-12" *ngIf="leak.flag">
                         <p class="help">
@@ -122,6 +122,6 @@
                 <hr>
             </div>
             <div class="col-lg-2 col-sm-2"></div>
-        </div>
+        </section>
     </div>
 </section>
