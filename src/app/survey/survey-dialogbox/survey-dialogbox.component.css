@@ -1,0 +1,53 @@
+img.question {
+    width: 33px;
+    cursor: pointer;
+}
+
+div.questionHelp{
+    line-height: 1.4;
+    background-color: #f9f9f9;
+    font-weight: 500;
+    padding: 15px 15px 15px 15px;
+    text-align: justify;
+    color: #000;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+span.hidebuttondemo {
+    color: #75ba18;
+    display: block;
+    text-align: right;
+    font-weight: 500;
+    margin-top: 3px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.center-ele {
+    display: flex;
+    justify-content: center;
+}
+
+.btn {
+    color: #fff;
+    background-color: #76ba19;
+    border-color: #76ba19;
+}
+
+.cancle-btn{
+    background-color: #FFF;
+    border-color: #ccc;
+    color: #333;
+}
+
+@media (max-width: 768px){
+    .text-right{
+        text-align: left;
+    }
+
+}
+
+#help_btn{
+    float: right;
+}

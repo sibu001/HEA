@@ -2010,3 +2010,7 @@ mailarchivelist .ui-calendar .ui-calendar-button,mailarchivelist .ui-calendar .u
 #chartElectrificationIntro .jqplot-point-label{
   display: block;
 }
+
+snack-bar-container simple-snack-bar{
+  justify-content: center !important;
+}

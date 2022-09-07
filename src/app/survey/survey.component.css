@@ -2392,3 +2392,7 @@ td, th{
 .ui-datepicker-calendar-container{
   z-index: 10000;
 }
+
+.cursor-pointer{
+  cursor:pointer;
+}

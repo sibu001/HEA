@@ -9,6 +9,7 @@ import { CommonHEAModule } from '../common/common.module';
 import { PipeModule } from '../pipes/pipe/pipe.module';
 import {SliderModule} from 'primeng/slider';
 import { MatSliderModule } from '@angular/material/slider';
+import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.component';
 
 @NgModule({
     declarations: [
@@ -16,6 +17,7 @@ import { MatSliderModule } from '@angular/material/slider';
         TopicHistoryComponent,
         surveyRecommendationListComponent,
         RecommendationInstructionComponent,
+        SurveyDialogboxComponent,
     ],
     imports: [
         SharedModule,
@@ -26,6 +28,6 @@ import { MatSliderModule } from '@angular/material/slider';
         MatSliderModule
     ],
     providers: [],
-
+    entryComponents: [SurveyDialogboxComponent]
 })
 export class SurveyModule { }

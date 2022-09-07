@@ -20,6 +20,9 @@ import { RoleGuard } from './role.guard';
 import { UtilityService } from './services/utility.service';
 import { GestureConfig, MatSnackBarModule } from '@angular/material';
 import { MultipleRoleGuardService } from './multiple-role.guard';
+import { ManageHttpInterceptor } from './services/managehttp.interceptor';
+import { HttpCancelService } from './services/httpcancel.service';
+import { DisplayPatternPipe } from './pipes/display-pattern.pipe';
 
 @NgModule({
   declarations: [
@@ -41,9 +44,13 @@ import { MultipleRoleGuardService } from './multiple-role.guard';
     MatSnackBarModule
   ],
   exports: [HeaderModule],
-  providers: [LoginService, AuthGuard, RoleGuard, MultipleRoleGuardService, UtilityService, {
+  providers: [LoginService, AuthGuard, RoleGuard, MultipleRoleGuardService, UtilityService,HttpCancelService, {
     provide: HTTP_INTERCEPTORS,
     useClass: AuthorizationInterceptor,
+    multi: true
+  },{
+    provide: HTTP_INTERCEPTORS,
+    useClass: ManageHttpInterceptor,
     multi: true
   },
   { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }

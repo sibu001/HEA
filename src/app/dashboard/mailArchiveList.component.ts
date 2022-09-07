@@ -44,7 +44,7 @@ export class MailArchiveListComponent implements OnInit {
 
   getMailList(params: any) {
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetWithParams('customers/' + this.users.outhMeResponse.customerId + '/mails', params).subscribe(
+    this.loginService.performGetWithParams('customers/' + this.users.outhMeResponse.customerId + '/mails?subject=Home%', params).subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
         this.usageHistoryData.content = this.transformMailArchiveList(response);
@@ -98,7 +98,8 @@ export class MailArchiveListComponent implements OnInit {
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('periodStart', (this.mailArchiveForm.value.periodStart ? this.datePipe.transform(this.mailArchiveForm.value.periodStart, 'MM/dd/yyyy') : ''))
       .set('periodEnd', (this.mailArchiveForm.value.periodEnd ? this.datePipe.transform(this.mailArchiveForm.value.periodEnd, 'MM/dd/yyyy') : ''))
-      .set('subject', (this.mailArchiveForm.value.subject !== null ? this.mailArchiveForm.value.subject : ''))
+      // .set('subject', (this.mailArchiveForm.value.subject !== null ? this.mailArchiveForm.value.subject + '%' : ''))
+      .set('systemMessage','false');
     this.getMailList(params);
   }
   goToEditMailArchive(event: any) {

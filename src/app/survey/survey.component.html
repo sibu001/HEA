@@ -479,10 +479,13 @@
                                   justify-content: center;
                                   flex-wrap:wrap;">
           
-                                    <mat-slider [(ngModel)]="answersList.value" #slider
+                                    <mat-slider [(ngModel)]="answersList.value"
+                                    (ngModelChange)="answersList.value=$event + ''"
+                                    #slider
                                     style="  width : 18em;" step="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
                                     [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id"
-                                    (input)="inputSliderEvent($event)"></mat-slider>
+                                    (input)="inputSliderEvent($event)" displayValue="string"
+                                    ></mat-slider>
           
                                     <div>
                                       <input type="number" pInputText 
@@ -797,12 +800,12 @@
                     <!-- <div class="col-sm-12 table-responsive"> -->
                     <table class="table" summary="User Value">
                       <thead>
-                        <tr>
+                        <tr >
                           <th id="pane_id" scope="col">#</th>
                           <ng-container *ngFor="let dataFieldValue of
                             currentPaneBlock.dataBlock.dataFields">
-                            <th *ngIf="dataFieldValue.userDisplay"
-                            id="pane_user_display" scope="col">{{dataFieldValue.label}}
+                            <th *ngIf="dataFieldValue.paneBlockDisplay"
+                            id="pane_user_display" scope="col">{{dataFieldValue.reportLabel}}
                             <span class="htmltooltip"
                               *ngIf="dataFieldValue.helpText!=null&&dataFieldValue.helpText.length>1">
                               <img alt="icon"
@@ -813,10 +816,9 @@
                           </th>
                           </ng-container>
                           <th id="pane_arrow" scope="col">
-                            <p style="margin-bottom:0px; padding:
-                              20px;text-align: center;">
-                              <img alt="icon"
-                                src="assets/images/ico_add.gif"
+                            <p >
+                              <img alt="icon" style="max-width:21px; margin:auto;"
+                                src="assets/images/add.png"
                                 (click)="addDataBlockRow('first')">
                             </p>
                           </th>
@@ -830,17 +832,20 @@
                                 class="img-responsive">
                             </p>
                           </th>
+                          <th>
+                            <!-- for delete icon -->
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let surveyAnswer of
+                        <tr class="cursor-pointer" *ngFor="let surveyAnswer of
                           currentPaneBlock.surveyAnswerBlocks;index as i">
                           <th scope="row"><p style="margin-top: 16px;">{{i+1}}</p></th>
                           <ng-container *ngFor="let surveyAnswerValue of
                             surveyAnswer.surveyAnswers; index as j">
                             <td
-                              *ngIf="surveyAnswerValue.dataField.userDisplay">
-                              <div
+                              *ngIf="surveyAnswerValue.dataField.paneBlockDisplay">
+                              <!-- <div
                                 *ngIf="surveyAnswerValue.dataField.dataType=='datetime'&&surveyAnswerValue.dataField.inputType=='date'"
                                 class="form-group" style="width: 160px; text-align: left;">
                                 <p-calendar
@@ -852,20 +857,25 @@
                                   class="prime-date-picker"></p-calendar>
                               </div>
                               <span
-                                *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='select'">{{surveyAnswerValue.value}}</span>
+                                *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='select'">{{surveyAnswerValue.value}}</span> -->
                               <!-- <span *ngIf="surveyAnswerValue.dataField.dataType=='text'&&surveyAnswerValue.dataField.inputType=='text'">{{surveyAnswerValue.value}}</span> -->
                               <div class="form-group"
-                                *ngIf="(surveyAnswerValue?.dataField?.dataType=='number'||surveyAnswerValue?.dataField?.dataType=='text')&&surveyAnswerValue.dataField.inputType=='text'">
-                                <input type="text" name="jan"
-                                  class="form-control
-                                  table_input_responsive"
+                                *ngIf="surveyAnswerValue?.dataField?.dataType!='number'">
+                               {{surveyAnswerValue.value}}
+                                <!-- <input type="text" name="jan"
+                                  class="table_input_responsive"
                                   [ngClass]="surveyAnswerValue.field"
                                   id="input_gallons"
                                   (change)="evaluateJavaScript(users.currentPaneNumber)"
-                                  [(ngModel)]="surveyAnswerValue.value">
+                                  [(ngModel)]="surveyAnswerValue.value"> -->
                               </div>
 
-                              <div id="checkbox_id" class="form-group"
+                              <div class="form-group"
+                               *ngIf="surveyAnswerValue?.dataField?.dataType=='number'">
+                                {{((surveyAnswerValue.numberValue ) + (surveyAnswerValue?.dataField?.unit? surveyAnswerValue?.dataField?.unit : '') | displayPatternPipe:surveyAnswerValue?.dataField)}}
+                              </div>
+
+                              <!-- <div id="checkbox_id" class="form-group"
                                 *ngIf="surveyAnswerValue?.dataField?.dataType=='boolean'&&surveyAnswerValue?.dataField?.inputType=='checkbox'">
                                 <input [id]="surveyAnswerValue.field"
                                   type="checkbox" style="display:
@@ -888,26 +898,36 @@
                                     [value]="optionList.value"
                                     class="options">{{optionList.name}}</option>
                                 </select>&nbsp;
+                              </div >
+                              <div
+                              *ngIf="surveyAnswerValue?.dataField?.dataType=='boolean'&&surveyAnswerValue?.dataField?.inputType=='radiobutton'"
+                              >
+                              <div *ngFor="let item of surveyAnswerValue?.dataField?.fieldValues"> 
+                                <input type="radio"
+                                [name]="item.name" [id]="item.fieldValueId"
+                                [value]="item.value"
+                                [(ngModel)]="surveyAnswerValue.value" (change)="testhandle(surveyAnswerValue)"
+                                [checked]="'Y'==item.value">{{item.name}}
                               </div>
+                              </div> -->
+
                             </td>
                           </ng-container>
-                          <td style="text-align: center;"
-                            *ngIf="currentPaneBlock?.surveyAnswerBlocks?.length>1">
-                            <img alt="icon" style="margin-top: 38%;"
-                              src="assets/images/ico_minus.gif"
-                              (click)="deleteDataBlockRow(i)">
+                          <td id="pane_arrow" scope="col">
+                            <p class="form-group" >
+                              <img alt="icon" style="max-width:20px; margin:auto;"
+                                src="assets/images/pencil.png"
+                                (click)="editDataBlockRow(i)">
+                            </p>
                           </td>
-                          <!-- <td *ngIf="currentPaneBlock.blockCount>1"  style="width: 100%;">
-                              <img alt="icon"
-                                src="assets/images/ico_minus.gif"
-                                (click)="deleteDataBlockRow(i)"
-                                >
-                            </td> -->
-                          <!-- <td *ngIf="i==13&&!hideBlockArrow"  style="width: 100%;">
-                              <img alt="icon"
-                                src="assets/images/ico_minus.gif"
-                               >
-                            </td> -->
+                          <td 
+                            *ngIf="currentPaneBlock?.surveyAnswerBlocks?.length>1">
+                            <p class="form-group">                                                                                                                                                                                                                                                                                                                            
+                              <img alt="icon" style="max-width:21px; margin:auto;"
+                              src="assets/images/trashcan.png"
+                              (click)="deleteDataBlockRow(i)">
+                            </p>
+                          </td>
                         </tr>
                         <tr>
                           <td></td>
@@ -915,14 +935,14 @@
                           <ng-container *ngFor="let surveyAnswer of
                             currentPaneBlock?.surveyAnswerBlocks[0]?.surveyAnswers;index
                             as i">
-                            <td *ngIf="surveyAnswer.dataField.userDisplay"
+                            <td *ngIf="surveyAnswer.dataField.paneBlockDisplay"
                               style="text-align: center;">
                             </td>
                             <td
                               *ngIf="i==currentPaneBlock?.surveyAnswerBlocks[0]?.surveyAnswers?.length-1"
                               style="text-align: center;">
-                              <img alt="icon"
-                                src="assets/images/ico_add.gif"
+                              <img alt="icon" style="max-width:20px; margin:auto;"
+                                src="assets/images/add.png"
                                 (click)="addDataBlockRow('last')">
                             </td>
                           </ng-container>
@@ -1394,10 +1414,13 @@
                           justify-content: center;
                           flex-wrap:wrap;">
   
-                            <mat-slider [(ngModel)]="answersList.value"  #slider
+                            <mat-slider [ngModel]="answersList.value"
+                            (ngModelChange)="answersList.value=$event + ''"
+                            #slider
                             style="  width : 18em;" [step]="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
                             [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id"
-                            (input)="inputSliderEvent($event)"></mat-slider>
+                            (input)="inputSliderEvent($event)" displayValue="string"
+                            ></mat-slider>
   
                             <div>
                               <input type="number" pInputText 

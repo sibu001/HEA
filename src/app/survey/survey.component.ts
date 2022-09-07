@@ -5,6 +5,8 @@ import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
 import { fromEvent, Subscription } from 'rxjs';
 import { SubscriptionUtil } from '../utility/subscription-utility';
+import { MatDialog } from '@angular/material';
+import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.component';
 
 declare var $: any;
 @Component({
@@ -35,7 +37,11 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   globalK = 0;
   subscriptons : Subscription = new Subscription();
   private slidermap = new Map();
-  constructor(private loginService: LoginService, private router: Router, private utilityService: UtilityService) {
+  constructor(private loginService: LoginService, 
+    private router: Router, 
+    private utilityService: UtilityService,
+    private matDialog : MatDialog
+    ) {
     this.users = this.loginService.getUser();
 
     if (this.users.currentPaneNumber.currentPane == null || this.users.currentPaneNumber.currentPane == undefined) {
@@ -125,6 +131,11 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
       this.users.currentPaneNumber.currentPaneAnswers[i].helpHide = false;
     }
   }
+
+  testhandle(event){
+    console.log(event)
+  }
+
   chartDataConfiguration() {
     this.paneCharts = this.users.currentPaneNumber.paneCharts;
     let line1: Array<any>;
@@ -390,11 +401,11 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.users.allSurveyCheck = true;
     this.chartHelpHide = false;
     this.loginService.setUser(this.users);
-    // if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
-    //   this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
-    // } else {
+    if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
+      this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
+    } else {
     this.previousPane(this.users.currentPaneNumber);
-    // }
+    }
     document.getElementById('loader').classList.add('loading');
   }
 
@@ -435,8 +446,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         this.loginService.setUser(this.users);
       }
-
-      console.log(dataObj);
 
       this.subscriptons.add(
         this.loginService.performPostMultiPartDataPost(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
@@ -949,11 +958,17 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
       const setAsFirst = position === 'last' ? false : true;
       this.saveSurveyAnswerBlock(this.users.currentPaneNumber.currentPaneBlocks[0].dataBlock.dataBlockId, setAsFirst);
     }
+    // this.showDilalogBox(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[0])
   }
   deleteDataBlockRow(index: any) {
     if (this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
       this.deleteSurveyAnswerBlock(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[index].surveyAnswerBlockId);
     }
+  }
+
+  editDataBlockRow(postion: number){
+    this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[postion].indexValue = postion;
+    this.showDilalogBox(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[postion]);
   }
 
   saveSurveyAnswerBlock(dataBlockId: any, setAsFirst: boolean): void {
@@ -966,6 +981,16 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
           this.users.currentPaneNumber = response.data;
           this.loginService.setUser(this.users);
           document.getElementById('loader').classList.remove('loading');
+
+          if(setAsFirst){
+            this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[0].indexValue = 0;
+            this.showDilalogBox(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[0])
+          }else{
+            const lastIndex = this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks.length -1;
+            this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[lastIndex].indexValue = lastIndex;
+            this.showDilalogBox(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[lastIndex])
+          }
+
         },
         errors => {
           console.log(errors);
@@ -1060,6 +1085,25 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     //       this.setValueInModel(id,parseInt(oldValue) - 1);
     //       this.slidermap.set(id,parseInt(oldValue) - 1);
     //     }  
+  }
+
+  showDilalogBox(event : any){
+    const dialogRef = this.matDialog.open(SurveyDialogboxComponent, {
+      width: '70vw',
+      height: '70vh',
+      data: event,
+      disableClose: false
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+          if(result.action == 'save'){
+              this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[result.indexValue] = result;
+              this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers,this.users.currentPaneNumber.currentPaneBlocks,'change',true,undefined);
+          }else{
+            this.deleteSurveyAnswerBlock(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[result.indexValue].surveyAnswerBlockId)
+          }
+      }
+    });
   }
 
 }

@@ -1,0 +1,127 @@
+<div class="row">
+  <div class="col-sm-12">
+    <button (click)="close(undefined)" class="closeButton" cdkFocusInitial>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" width="8pt" height="8pt"
+        viewBox="0 0 8 8" version="1.1">
+        <g id="surface1">
+          <path
+            style="stroke:none;fill-rule:nonzero;fill:#76ba19;fill-opacity:1;"
+            d="M 0.109375 0.644531 C -0.0351562 0.5 -0.0351562 0.257812 0.109375
+            0.109375 C 0.257812 -0.0351562 0.492188 -0.0351562 0.644531 0.109375
+            L 3.84375 3.3125 L 7.050781 0.109375 C 7.195312 -0.0351562 7.4375
+            -0.0351562 7.578125 0.109375 C 7.726562 0.257812 7.726562 0.5
+            7.578125 0.644531 L 4.378906 3.84375 L 7.578125 7.050781 C 7.726562
+            7.195312 7.726562 7.433594 7.578125 7.585938 C 7.433594 7.726562
+            7.195312 7.726562 7.050781 7.585938 L 3.84375 4.378906 L 0.644531
+            7.585938 C 0.492188 7.726562 0.257812 7.726562 0.109375 7.585938 C
+            -0.0351562 7.433594 -0.0351562 7.195312 0.109375 7.050781 L 3.3125
+            3.84375 Z M 0.109375 0.644531" />
+          </g>
+        </svg>
+      </button>
+    </div>
+  </div>
+  <hr style="margin-bottom: 60px">
+<div class="row center-ele">
+  <div class="col-md-12">
+    <ng-container  *ngFor="let surveyAnswerValue of
+      surveyAnswer.surveyAnswers; index as j">
+      <div class="row rowPadding" *ngIf="surveyAnswerValue.dataField.userDisplay">
+        <div class="col-md-6 text-right">{{surveyAnswerValue.dataField.label}}</div>
+        <div class="col-md-4">
+          <div 
+            *ngIf="surveyAnswerValue.dataField.dataType=='datetime'&&surveyAnswerValue.dataField.inputType=='date'"
+            class=" form-group">
+            <p-calendar
+              [ngModel]="surveyAnswerValue.value ? surveyAnswerValue.value : undefined"
+              (ngModelChange)="surveyAnswerValue.value=$event"
+              dataType="string"
+              [showIcon]="true" dateFormat="mm/dd/yy"
+              [ngClass]="surveyAnswerValue.field"
+              class="prime-date-picker"></p-calendar>
+          </div>
+          <span 
+            *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='select'">{{surveyAnswerValue.value}}</span>
+          <div class="form-group"
+            *ngIf="(surveyAnswerValue?.dataField?.dataType=='text' || surveyAnswerValue?.dataField?.dataType=='number') &&surveyAnswerValue.dataField.inputType=='text'">
+            <input type="text" name="jan"
+              class="table_input_responsive form-control"
+              [ngClass]="surveyAnswerValue.field"
+              id="input_gallons"
+              [(ngModel)]="surveyAnswerValue.value">
+          </div>
+  
+          <div id="checkbox_id" class="form-group"
+            *ngIf="surveyAnswerValue?.dataField?.dataType=='boolean'&&surveyAnswerValue?.dataField?.inputType=='checkbox'">
+            <input [id]="surveyAnswerValue.field"
+              type="checkbox" style="display:
+              block;margin: 0px;"
+              [ngClass]="surveyAnswerValue.field"
+              [name]="surveyAnswerValue.field"
+              [checked]="surveyAnswerValue.value=='true'||surveyAnswerValue.value=='1'||surveyAnswerValue.value=='Y'||surveyAnswerValue.value=='Yes'">
+          </div>
+          <div class="form-group" style="height:34px;"
+            *ngIf="surveyAnswerValue.dataField.inputType=='select'">
+            <select name="pool/spa"
+              class="form-control dropdown-form-control"
+              style="width:auto;"
+              [(ngModel)]="surveyAnswerValue.value"
+              [ngClass]="surveyAnswerValue.field">
+              <option *ngFor="let optionList of
+                surveyAnswerValue.dataField.fieldValues"
+                [value]="optionList.value"
+                class="options">{{optionList.name}}</option>
+            </select>&nbsp;
+          </div >
+          <div
+          *ngIf="surveyAnswerValue?.dataField?.dataType=='boolean'&&surveyAnswerValue?.dataField?.inputType=='radiobutton'"
+          >
+          <div *ngFor="let item of surveyAnswerValue?.dataField?.fieldValues"> 
+            <input type="radio"
+            [name]="item.name" [id]="item.fieldValueId"
+            [value]="item.value"
+            [(ngModel)]="surveyAnswerValue.value"
+            [checked]="'Y'==item.value">{{item.name}}
+          </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div
+            *ngIf="surveyAnswerValue.dataField.helpText!=null&&surveyAnswerValue.dataField.helpText.length>1">
+            <img alt="icon" src="assets/images/icon_help.svg"
+              class="question" id="help_btn"
+              (click)="surveyAnswerValue.helpHide=!surveyAnswerValue.helpHide">
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12">
+        <div class="row center-ele">
+          <div class="col-md-10 questionHelp" *ngIf="surveyAnswerValue.helpHide">
+            <p class="demo"
+            id="helpiconcontaindesktop">
+            {{surveyAnswerValue.dataField.helpText}}
+            <span class="hidebuttondemo"
+              (click)="surveyAnswerValue.helpHide=!surveyAnswerValue.helpHide">hide</span>
+          </p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+<hr style="margin-top: 60px">
+<div class="row">
+  <div class="col-md-8">
+  </div>
+  <div class="col-md-2 col-xs-6 ">
+    <button type="button" class="btn cancle-btn" (click)="cancle()"
+    style="float: right; margin-right: -4px;">Cancle</button>
+  </div>
+  <div class="col-md-2 col-xs-6 ">
+    <button type="button" class="btn btn-primary" (click)="save()"
+    style="float: right; margin-right: -4px;">Save</button>
+  </div>
+</div>

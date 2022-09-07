@@ -1,17 +1,19 @@
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
 import { ShowInfoComponent } from './show-info/show-info.component';
 import { MatDialog } from '@angular/material';
 import { AppConstant } from '../utility/app.constant';
+import { fromEvent, Observable, Subscription } from 'rxjs';
+import { UtilityService } from '../services/utility.service';
 declare var $: any;
 @Component({
   selector: 'app-headers',
   templateUrl: './headers.component.html',
   styleUrls: ['./headers.component.css']
 })
-export class HeadersComponent implements OnInit, AfterViewInit {
+export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy {
   hides = true;
   hideLogo = true;
   float: string;
@@ -21,8 +23,17 @@ export class HeadersComponent implements OnInit, AfterViewInit {
   isResponsive = false;
   users: Users = new Users();
   dialogRef: any;
+
+  onlineEvent: Observable<Event>;
+  offlineEvent: Observable<Event>;
+  subscriptions: Subscription[] = [];
+  connectionStatusMessage: string;
+  connectionStatus: string;
+
+
   constructor(private loginService: LoginService,
     private router: Router,
+    private utilityService: UtilityService,
     private readonly dialog: MatDialog) {
     this.users = this.loginService.getUser();
     if (this.users.role === 'USERS') {
@@ -31,6 +42,7 @@ export class HeadersComponent implements OnInit, AfterViewInit {
     }
     this.screenWidth = window.screen.width;
   }
+
   ngAfterViewInit(): void {
     if (this.users.theme === 'P4P') {
       if (document.getElementById('main-bar-menu')) {
@@ -72,6 +84,23 @@ export class HeadersComponent implements OnInit, AfterViewInit {
       this.headerResponsiveMenu();
     }
     this.hideResponsiveMenu();
+
+    this.onlineEvent = fromEvent(window, 'online');
+    this.offlineEvent = fromEvent(window, 'offline');
+
+    this.subscriptions.push(this.onlineEvent.subscribe(e => {
+      this.connectionStatusMessage = 'Back to online';
+      this.connectionStatus = 'online';
+      this.utilityService.showSuccessMessage(this.connectionStatusMessage);
+    }));
+
+    this.subscriptions.push(this.offlineEvent.subscribe(e => {
+      this.connectionStatusMessage = 'Connection lost! You are not connected to internet';
+      this.connectionStatus = 'offline';
+      console.log('Offline...');
+      this.utilityService.showErrorMessage(this.connectionStatusMessage);
+    }));
+
   }
   hideResponsiveMenu(): void {
     if (this.isResponsive) {
@@ -251,5 +280,9 @@ export class HeadersComponent implements OnInit, AfterViewInit {
   }
   openCustomerChat(): void {
     window.open(window.location.origin + '/hea-web/chatMain.do', '_blank');
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }
