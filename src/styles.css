@@ -1960,12 +1960,6 @@ div.jqplot-xaxis-tick {
   }
 }
 
-@media screen and (max-width: 769px){
-  #customerChatButton{
-    display: none;
-  }
-}
-
 #resizable2 #chartSeasonalStack .jqplot-point-label{
   display:none;
 }
@@ -2013,4 +2007,15 @@ mailarchivelist .ui-calendar .ui-calendar-button,mailarchivelist .ui-calendar .u
 
 snack-bar-container simple-snack-bar{
   justify-content: center !important;
+}
+
+@media (max-width:980px){
+  #chartSeasonalStack+div{
+    width: 100% !important;
+  }
+
+  #chartSeasonalStack+div>div{
+    float : none !important;
+    margin : auto !important;
+  }
 }

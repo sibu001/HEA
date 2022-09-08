@@ -67,7 +67,8 @@
             <select name="pool/spa"
               class="form-control dropdown-form-control"
               style="width:auto;"
-              [(ngModel)]="surveyAnswerValue.value"
+              [ngModel]="surveyAnswerValue.value? surveyAnswerValue.value: surveyAnswerValue.dataField.fieldValues[0].value"
+              (ngModelChange)="surveyAnswerValue.value=$event" 
               [ngClass]="surveyAnswerValue.field">
               <option *ngFor="let optionList of
                 surveyAnswerValue.dataField.fieldValues"
@@ -118,7 +119,7 @@
   </div>
   <div class="col-md-2 col-xs-6 ">
     <button type="button" class="btn cancle-btn" (click)="cancle()"
-    style="float: right; margin-right: -4px;">Cancle</button>
+    style="float: right; margin-right: -4px;">Cancel</button>
   </div>
   <div class="col-md-2 col-xs-6 ">
     <button type="button" class="btn btn-primary" (click)="save()"

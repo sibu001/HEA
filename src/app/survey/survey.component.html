@@ -143,10 +143,13 @@
                             *ngIf="((answersList.dataField.inputType=='text'||answersList.dataField.inputType=='password')&& answersList.dataField.userDisplay&&answersList.viewable)">
                             <!-- new start-->
                             <div id="1" class="form-group thiredPane"
+                            [ngStyle]="{'display': setStyle('display',answersList.dataField.labelCssStyle) }"
                               *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
                               <div class="row">
                                 <div class="col-lg-4 col-sm-5 col-md-4 col-xs-12 label-field">
-                                  <label class="control-label m-15px" [for]="answersList.dataField.label">
+                                  <label class="control-label m-15px" [for]="answersList.dataField.label"
+                                  [ngStyle]="{'display': setStyle('display',answersList.dataField.labelCssStyle) }"
+                                  >
                                     <span class="inputfieldcss">{{answersList.dataField.label}}</span>
                                   </label>
                                   <!-- <p class="demo" *ngIf="answersList.helpHide"
@@ -163,11 +166,13 @@
                                           *ngIf="answersList.dataField.inputType=='text'">
                                           <input type="text" class="form-control" style=" height: 34px; padding: 0px; font-size: inherit;"
                                           [id]="answersList.dataField.label" name="name"
+                                          [ngStyle]="{'display': setStyle('display',answersList.dataField.valueCssStyle) }"
                                             [(ngModel)]="answersList.value">
                                         </div>
                                         <div class="form-group"
                                           *ngIf="answersList.dataField.inputType=='password'">
                                           <input type="password"
+                                          [ngStyle]="{'display': setStyle('display',answersList.dataField.valueCssStyle) }"
                                             class="form-control" 
                                             [id]="answersList.dataField.label" name="name"
                                             [(ngModel)]="answersList.value">
@@ -1079,10 +1084,13 @@
                       *ngIf="(answersList.dataField.inputType=='text'||answersList.dataField.inputType=='password')&&answersList.dataField.userDisplay&&answersList.viewable">
                       <!-- new start-->
                       <div id="1" class="form-group thiredPane"
+                      [ngStyle]="{'display': setStyle('display',answersList.dataField.labelCssStyle) }"
                         *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
                         <div class="row">
                           <div class="col-lg-4 col-sm-5 col-md-4 col-xs-12 label-field">
-                            <label class="control-label m-15px" [for]="answersList.dataField.label">
+                            <label class="control-label m-15px" [for]="answersList.dataField.label"
+                            [ngStyle]="{'display': setStyle('display',answersList.dataField.labelCssStyle) }"
+                            >
                               <span class="inputfieldcss">{{answersList.dataField.label}}</span>
                             </label>
                             <p class="demo" *ngIf="answersList.helpHide"
@@ -1099,11 +1107,13 @@
                                     *ngIf="answersList.dataField.inputType=='text'">
                                     <input type="text" class="form-control" style=" height: 34px; padding: 0px; font-size: inherit;"
                                     [id]="answersList.dataField.label" name="name"
+                                    [ngStyle]="{'display': setStyle('display',answersList.dataField.valueCssStyle) }"
                                       [(ngModel)]="answersList.value">
                                   </div>
                                   <div class="form-group"
                                     *ngIf="answersList.dataField.inputType=='password'">
                                     <input type="password"
+                                    [ngStyle]="{'display': setStyle('display',answersList.dataField.valueCssStyle) }"
                                       class="form-control" 
                                       [id]="answersList.dataField.label" name="name"
                                       [(ngModel)]="answersList.value">

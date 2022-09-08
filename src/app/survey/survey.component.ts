@@ -961,8 +961,10 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     // this.showDilalogBox(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[0])
   }
   deleteDataBlockRow(index: any) {
-    if (this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
-      this.deleteSurveyAnswerBlock(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[index].surveyAnswerBlockId);
+    if(confirm('Are you sure you want to delete?')){
+      if (this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
+        this.deleteSurveyAnswerBlock(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[index].surveyAnswerBlockId);
+      }
     }
   }
 
@@ -1026,9 +1028,11 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   evaluateJavaScript(value: any) {
     if (value.currentPane.paneCode === 'prf_ElectricVehicle') {
       const myDiv = document.getElementById('EVEstimation');
+      if(myDiv){
       myDiv.innerHTML = '';
       const values = this.substringBetween(value.currentPane.htmFooter, '<![CDATA[', '// ]]>');
       eval(values);
+    }
     }
   }
   substringBetween(s, a, b) {
@@ -1104,6 +1108,16 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
           }
       }
     });
+  }
+
+  setStyle(data : string,eleRef : string){
+
+    const indexOfData  = eleRef.indexOf(data+ ":");
+    eleRef = eleRef.substring(indexOfData, eleRef.length);
+    const endValueIndex = eleRef.indexOf(";");
+    const cssValue = eleRef.substring(data.length + 1,endValueIndex);
+
+    return cssValue;
   }
 
 }

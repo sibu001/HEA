@@ -232,3 +232,7 @@ p.menuresponsive {
   position: fixed;
   top: 21px;
 }
+
+#customerChatButton{
+  display: none;
+}

@@ -183,6 +183,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         const tableValue = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value), customerList1.customerManagement.customerList);
         this.keys = tableValue.key;
         const customerValue = Transformer.transformCustomerTableData(customerList1.customerManagement.customerList, Number(this.searchForm.controls['customerView'].value), tableValue.dataKey);
+        console.log(customerValue);
         this.CustomerData.content = customerValue.list;
         this.CustomerData.totalElements = customerValue.totalSize;
         this.dataSource = [...this.CustomerData.content];

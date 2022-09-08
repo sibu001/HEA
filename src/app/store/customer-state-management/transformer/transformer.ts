@@ -13,6 +13,8 @@ export class Transformer {
                 dataSourceObj.name = element.user.name;
                 dataSourceObj.group = element.customerGroup.groupName;
                 dataSourceObj.notes = element.notes;
+                dataSourceObj.solarPvInstalled = element.solarPvInstalled? 'Y': '';
+                dataSourceObj.eligibleStartDate = element.eligibleStartDate
                 dataSourceObj.place = element.place.placeName;
                 dataSourceObj.joinDate = new Date(element.createdDate);
                 dataSourceObj.maxAlertLevel = element.maxAlertLevel;
@@ -112,10 +114,20 @@ export class Transformer {
                         }
                     ]
                 },
+                // {
+                //     key: 'group',
+                //     displayName: 'Group',
+                //     sort: 'customerGroupName'
+                // },
                 {
-                    key: 'group',
-                    displayName: 'Group',
-                    sort: 'customerGroupName'
+                    key: 'solarPvInstalled',
+                    displayName: 'PV',
+                    sort: 'solarPvInstalled'
+                },
+                {
+                    key: 'eligibleStartDate',
+                    displayName: 'Eligible',
+                    sort: 'eligibleStartDate'
                 },
                 {
                     key: 'notes',
