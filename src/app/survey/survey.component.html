@@ -89,7 +89,9 @@
                 <tr>
                   <td>    
                     <div class ="analysis-table" id="surveyPageText" *ngIf="users.currentPaneNumber.currentPane.htmPageText!=null&&users.currentPaneNumber.currentPane.htmPageText.length>0">
-                    <div [innerHTML]="users.currentPaneNumber.currentPane.htmPageText | safeHtml" class="accurate accurate2 top"></div>
+                    <div [innerHTML]="users.currentPaneNumber.currentPane.htmPageText | safeHtml" class="accurate accurate2 top"
+                    [ngClass]="{ 'disable-contractor-report-link' : users.currentPaneNumber.currentPane.paneCode == 'be_ContractorReportPane'}"
+                    ></div>
                     <hr class="bottomLineTop ">
                   </div>
                   </td>

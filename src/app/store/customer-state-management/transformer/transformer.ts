@@ -120,16 +120,6 @@ export class Transformer {
                 //     sort: 'customerGroupName'
                 // },
                 {
-                    key: 'solarPvInstalled',
-                    displayName: 'PV',
-                    sort: 'solarPvInstalled'
-                },
-                {
-                    key: 'eligibleStartDate',
-                    displayName: 'Eligible',
-                    sort: 'eligibleStartDate'
-                },
-                {
                     key: 'notes',
                     displayName: 'Notes',
                     isEdit: true,
@@ -147,6 +137,17 @@ export class Transformer {
                     isEdit: true,
                     sort: 'joinDate',
                     isDate: true
+                },
+                {
+                    key: 'eligibleStartDate',
+                    displayName: 'Eligible',
+                    sort: 'eligibleStartDate',
+                    isDate: true 
+                },
+                {
+                    key: 'solarPvInstalled',
+                    displayName: 'PV',
+                    sort: 'solarPvInstalled'
                 },
                 {
                     key: 'maxAlertLevel',

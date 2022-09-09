@@ -1960,6 +1960,16 @@ div.jqplot-xaxis-tick {
   }
 }
 
+@media (max-width:900px){
+  .disable-contractor-report-link>p:nth-child(1)>a{
+  pointer-events:none;
+}
+
+.disable-contractor-report-link>p:nth-child(2)>a{
+  display: none;
+}
+}
+
 #resizable2 #chartSeasonalStack .jqplot-point-label{
   display:none;
 }
@@ -1969,11 +1979,11 @@ div.jqplot-xaxis-tick {
 }
 
 /* temprory disabled */
-@media screen and (max-width:900px){
+/* @media screen and (max-width:900px){
   .accurate2 >p:nth-child(2)>a{
     display: none ;
   }
-}
+} */
 
 .ui-calendar .ui-datepicker {
   min-width: 100%;
