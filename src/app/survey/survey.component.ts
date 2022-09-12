@@ -35,6 +35,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   changeSliderFlaf = false;
   globalM = 0;
   globalK = 0;
+  paneblockRowErrorNotation = [];
+
   subscriptons : Subscription = new Subscription();
   private slidermap = new Map();
   constructor(private loginService: LoginService, 
@@ -401,7 +403,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.users.allSurveyCheck = true;
     this.chartHelpHide = false;
     this.loginService.setUser(this.users);
-    if (this.users.currentPaneNumber.currentPaneAnswers.length > 0) {
+    if (this.users.currentPaneNumber.currentPaneAnswers.length > 0 || this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
       this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
     } else {
     this.previousPane(this.users.currentPaneNumber);
@@ -483,6 +485,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
                 document.getElementById('loader').classList.remove('loading');
               }
             }
+
           },
           errors => {
             console.log(errors);
@@ -970,6 +973,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
 
   editDataBlockRow(postion: number){
     this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[postion].indexValue = postion;
+    this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[postion].creation = false;
     this.showDilalogBox(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[postion]);
   }
 
@@ -986,10 +990,12 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
 
           if(setAsFirst){
             this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[0].indexValue = 0;
+            this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[0].creation = true;
             this.showDilalogBox(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[0])
           }else{
             const lastIndex = this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks.length -1;
             this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[lastIndex].indexValue = lastIndex;
+            this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[lastIndex].creation = true;
             this.showDilalogBox(this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[lastIndex])
           }
 
@@ -1095,7 +1101,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     const dialogRef = this.matDialog.open(SurveyDialogboxComponent, {
       width: '70vw',
       height: '70vh',
-      data: event,
+      data: JSON.parse(JSON.stringify(event)),
       disableClose: false
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -1118,6 +1124,29 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     const cssValue = eleRef.substring(data.length + 1,endValueIndex);
 
     return cssValue;
+  }
+
+
+  highlightErrorRowCheck(surveyAnswerValue : any){
+    const errorList = this.users.currentPaneNumber.errors;
+    if(!errorList) return true;
+
+    if(this.paneblockRowErrorNotation.indexOf(surveyAnswerValue.surveyAnswerBlockId) == -1){
+      for(let error of errorList){
+          if(error.surveyAnswerId == surveyAnswerValue.surveyAnswerId){
+              this.paneblockRowErrorNotation.push(surveyAnswerValue.surveyAnswerBlockId);
+          }
+      }   
+    }
+
+    return true;
+  }
+
+  highLightErroRowInPaneBlock(surveyAnswerBlockId : string): boolean {
+    if(this.paneblockRowErrorNotation.indexOf(surveyAnswerBlockId) == -1){
+      return false;
+    }
+    return true;
   }
 
 }

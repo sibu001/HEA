@@ -20,9 +20,18 @@ export class SurveyDialogboxComponent implements OnInit {
     this.dialogRef.close(surveyAnswer);
   }
 
-  save(){
-    this.surveyAnswer.action = 'save';
-    this.close(this.surveyAnswer);
+  save(formEvent : any){
+    console.log(formEvent);
+    if(formEvent.form.status != 'INVALID'){
+      this.surveyAnswer.action = 'save';
+      this.close(this.surveyAnswer);
+    }
+    
+  }
+
+  dropdownDefaultSelection(surveyAnswerValue : any){
+    surveyAnswerValue.value = surveyAnswerValue.value? surveyAnswerValue.value : surveyAnswerValue.dataField.fieldValues[0].value
+    return true;
   }
 
   cancle(){
@@ -31,7 +40,7 @@ export class SurveyDialogboxComponent implements OnInit {
       this.dialogRef.close(undefined);
 
       
-    if(confirm('Are you sure you want to delete?'))
+    if(this.surveyAnswer.creation && confirm('Are you sure you want to delete?'))
       this.close(this.surveyAnswer);
     else
       this.dialogRef.close(undefined);

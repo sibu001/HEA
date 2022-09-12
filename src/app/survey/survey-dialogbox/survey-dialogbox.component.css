@@ -51,3 +51,11 @@ span.hidebuttondemo {
 #help_btn{
     float: right;
 }
+
+.input-field-highlight{
+    border : 2px solid red
+}
+
+.ui-calendar .ui-calendar-button {
+    height: 40px !important;
+}

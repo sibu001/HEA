@@ -31,12 +31,12 @@
             <div class="row" *ngIf="users.currentPaneNumber.errors!=null">
               <ng-container *ngFor="let errors of
                 users.currentPaneNumber.errors">
-                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12"  style="color:red;font-size: 18px; word-break : break-word;"
+                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 error-fields-highlight"  style="font-size: 18px; word-break : break-word;"
                   [innerHTML]="errors.errorCode | safeHtml"></div>
               </ng-container>
             </div>
             <div class="row" *ngIf="inputErrorMessage!=undefined&&inputErrorMessage!=null">
-              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12"  style="color:red;font-size: 18px; word-break : break-word;"
+              <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12 error-fields-highlight"  style="font-size: 18px; word-break : break-word;"
                 [innerHTML]="inputErrorMessage"></div>
             </div>
             <div id="surveyDataHeader" class="row">
@@ -794,7 +794,7 @@
              <!--pane block  -->
              <div id="paneBlock" *ngIf="users.currentPaneNumber.currentPaneBlocks!=null" class="text-center-webkit">
               <div class="row p-lf-30px" *ngFor="let currentPaneBlock of
-                users.currentPaneNumber.currentPaneBlocks">
+                users.currentPaneNumber.currentPaneBlocks;index as k">
                 <div class="col-sm-12">
                   <div class="row">
                     <div class="col-sm-1"></div>
@@ -813,13 +813,13 @@
                             currentPaneBlock.dataBlock.dataFields">
                             <th *ngIf="dataFieldValue.paneBlockDisplay"
                             id="pane_user_display" scope="col">{{dataFieldValue.reportLabel}}
-                            <span class="htmltooltip"
+                            <!-- <span class="htmltooltip"
                               *ngIf="dataFieldValue.helpText!=null&&dataFieldValue.helpText.length>1">
                               <img alt="icon"
                                 src="assets/images/icon_help.svg"
                                 class="help-img">
                               <span class="tooltiptext">{{dataFieldValue.helpText}}</span>
-                            </span>
+                            </span> -->
                           </th>
                           </ng-container>
                           <th id="pane_arrow" scope="col">
@@ -846,78 +846,23 @@
                       </thead>
                       <tbody>
                         <tr class="cursor-pointer" *ngFor="let surveyAnswer of
-                          currentPaneBlock.surveyAnswerBlocks;index as i">
-                          <th scope="row"><p style="margin-top: 16px;">{{i+1}}</p></th>
+                          currentPaneBlock.surveyAnswerBlocks;index as i"
+                          [ngClass]="{'error-fields-highlight' : highLightErroRowInPaneBlock(surveyAnswer.surveyAnswerBlockId)}"
+                          >
+                          <td scope="row"><p style="margin-top: 16px;">{{i+1}}</p></td>
                           <ng-container *ngFor="let surveyAnswerValue of
                             surveyAnswer.surveyAnswers; index as j">
                             <td
-                              *ngIf="surveyAnswerValue.dataField.paneBlockDisplay">
-                              <!-- <div
-                                *ngIf="surveyAnswerValue.dataField.dataType=='datetime'&&surveyAnswerValue.dataField.inputType=='date'"
-                                class="form-group" style="width: 160px; text-align: left;">
-                                <p-calendar
-                                  [ngModel]="surveyAnswerValue.value ? surveyAnswerValue.value : undefined"
-                                  (ngModelChange)="surveyAnswerValue.value=$event"
-                                  dataType="string"
-                                  [showIcon]="true" dateFormat="mm/dd/yy"
-                                  [ngClass]="surveyAnswerValue.field"
-                                  class="prime-date-picker"></p-calendar>
-                              </div>
-                              <span
-                                *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='select'">{{surveyAnswerValue.value}}</span> -->
-                              <!-- <span *ngIf="surveyAnswerValue.dataField.dataType=='text'&&surveyAnswerValue.dataField.inputType=='text'">{{surveyAnswerValue.value}}</span> -->
+                            *ngIf="surveyAnswerValue.dataField.paneBlockDisplay && highlightErrorRowCheck(surveyAnswerValue)">
                               <div class="form-group"
                                 *ngIf="surveyAnswerValue?.dataField?.dataType!='number'">
                                {{surveyAnswerValue.value}}
-                                <!-- <input type="text" name="jan"
-                                  class="table_input_responsive"
-                                  [ngClass]="surveyAnswerValue.field"
-                                  id="input_gallons"
-                                  (change)="evaluateJavaScript(users.currentPaneNumber)"
-                                  [(ngModel)]="surveyAnswerValue.value"> -->
                               </div>
 
-                              <div class="form-group"
+                              <div class="form-group" 
                                *ngIf="surveyAnswerValue?.dataField?.dataType=='number'">
                                 {{((surveyAnswerValue.numberValue ) + (surveyAnswerValue?.dataField?.unit? surveyAnswerValue?.dataField?.unit : '') | displayPatternPipe:surveyAnswerValue?.dataField)}}
                               </div>
-
-                              <!-- <div id="checkbox_id" class="form-group"
-                                *ngIf="surveyAnswerValue?.dataField?.dataType=='boolean'&&surveyAnswerValue?.dataField?.inputType=='checkbox'">
-                                <input [id]="surveyAnswerValue.field"
-                                  type="checkbox" style="display:
-                                  block;margin: 0px;"
-                                  [ngClass]="surveyAnswerValue.field"
-                                  [name]="surveyAnswerValue.field"
-                                  [checked]="surveyAnswerValue.value=='true'||surveyAnswerValue.value=='1'||surveyAnswerValue.value=='Y'||surveyAnswerValue.value=='Yes'"
-                                  (change)="surveyAnswerValue.value=change(surveyAnswerValue.value)">
-                              </div>
-                              <div class="form-group" style="height:34px;"
-                                *ngIf="surveyAnswerValue.dataField.inputType=='select'">
-                                <select name="pool/spa"
-                                  class="form-control dropdown-form-control"
-                                  style="width:auto;"
-                                  [(ngModel)]="surveyAnswerValue.value"
-                                  [ngClass]="surveyAnswerValue.field"
-                                  (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',surveyAnswerValue.dataField.onChangeRefresh,'')">
-                                  <option *ngFor="let optionList of
-                                    surveyAnswerValue.dataField.fieldValues"
-                                    [value]="optionList.value"
-                                    class="options">{{optionList.name}}</option>
-                                </select>&nbsp;
-                              </div >
-                              <div
-                              *ngIf="surveyAnswerValue?.dataField?.dataType=='boolean'&&surveyAnswerValue?.dataField?.inputType=='radiobutton'"
-                              >
-                              <div *ngFor="let item of surveyAnswerValue?.dataField?.fieldValues"> 
-                                <input type="radio"
-                                [name]="item.name" [id]="item.fieldValueId"
-                                [value]="item.value"
-                                [(ngModel)]="surveyAnswerValue.value" (change)="testhandle(surveyAnswerValue)"
-                                [checked]="'Y'==item.value">{{item.name}}
-                              </div>
-                              </div> -->
-
                             </td>
                           </ng-container>
                           <td id="pane_arrow" scope="col">
@@ -929,14 +874,14 @@
                           </td>
                           <td 
                             *ngIf="currentPaneBlock?.surveyAnswerBlocks?.length>1">
-                            <p class="form-group">                                                                                                                                                                                                                                                                                                                            
+                            <p class="form-group trash-can-p-width">                                                                                                                                                                                                                                                                                                                            
                               <img alt="icon" style="max-width:21px; margin:auto;"
                               src="assets/images/trashcan.png"
                               (click)="deleteDataBlockRow(i)">
                             </p>
                           </td>
                         </tr>
-                        <tr>
+                        <tr class="cursor-pointer">
                           <td></td>
                           <!-- <td></td> -->
                           <ng-container *ngFor="let surveyAnswer of

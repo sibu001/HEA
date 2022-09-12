@@ -2396,3 +2396,18 @@ td, th{
 .cursor-pointer{
   cursor:pointer;
 }
+
+.error-pane-block-fileds{
+  color: red;
+}
+
+
+.error-pane-block-fileds ~ div{
+  color: red;
+}
+
+@media (max-width: 768px){
+  .trash-can-p-width{
+    min-width: 42px !important;
+  }
+}

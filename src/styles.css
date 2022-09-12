@@ -1990,7 +1990,7 @@ div.jqplot-xaxis-tick {
   position: relative;
 }
 
-table .ui-calendar .ui-calendar-button:enabled,table .ui-calendar .ui-calendar-button {
+.ui-calendar .ui-calendar-button:enabled,table .ui-calendar .ui-calendar-button {
   height: 40px;
 }
 
@@ -1998,7 +1998,7 @@ table .ui-calendar .ui-calendar-button:enabled,table .ui-calendar .ui-calendar-b
   top : 0px !important;  
 }
 
- .jqplot-point-label{
+.jqplot-point-label{
   display: none;
 }
 
@@ -2029,3 +2029,32 @@ snack-bar-container simple-snack-bar{
     margin : auto !important;
   }
 }
+
+.calendar-field-highlight input{
+  border : 2px solid red
+}
+
+.error-fields-highlight{
+  color: red;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+  background-color: rgba(255,255,255, 0);
+  -webkit-border-radius: 100px;
+}
+::-webkit-scrollbar:hover {
+  width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  -webkit-border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb:hover,
+::-webkit-scrollbar-thumb:active  {
+  background: #c0c0c0;
+}
+

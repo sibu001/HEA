@@ -7,9 +7,10 @@ import { SharedModule } from '../general/share.module';
 import { SurveyRoutingModule } from './survey.routes';
 import { CommonHEAModule } from '../common/common.module';
 import { PipeModule } from '../pipes/pipe/pipe.module';
-import {SliderModule} from 'primeng/slider';
+import { SliderModule} from 'primeng/slider';
 import { MatSliderModule } from '@angular/material/slider';
 import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
     declarations: [
@@ -25,7 +26,8 @@ import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.co
         CommonHEAModule,
         PipeModule,
         SliderModule,
-        MatSliderModule
+        MatSliderModule,
+        FormsModule
     ],
     providers: [],
     entryComponents: [SurveyDialogboxComponent]
