@@ -44,14 +44,14 @@ export class LoginComponent implements OnInit, AfterViewInit{
     this.users.theme = this.theme;
     if (this.loginService.getUser().token != null) {
 
-      if (this.loginService.getUser().role == "ADMIN")
-        this.router.navigate(['/admin/customer']);
-      else{
-        if(this.users.lastVisitedURL == '/surveyView')
-          this.router.navigate(['surveyView']);
-        else
-          this.router.navigate(['/dashboard']);
-      }
+      // if (this.loginService.getUser().role == "ADMIN")
+      //   this.router.navigate(['/admin/customer']);
+      // else{
+      //   if(this.users.lastVisitedURL == '/surveyView')
+      //     this.router.navigate(['surveyView']);
+      //   else
+      //     this.router.navigate(['/dashboard']);
+      // }
     } else {
       // if(this.loginService.getUser().lastVisitedURL == null)
       this.loginService.setUser(this.users);
@@ -67,28 +67,32 @@ export class LoginComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit() {
+
+  }
+  
+  ngAfterViewInit(): void {
+
     this.users = this.loginService.getUser();
     if (this.users.token) {
       if (this.loginService.getUser().role == "ADMIN")
-        this.router.navigate(['/admin/customer']);
+        this.router.navigate(['admin/customer']);
       else{
         if(this.users.lastVisitedURL == '/surveyView')
           this.router.navigate(['surveyView']);
         else
           this.router.navigate(['/dashboard']);
       }
+    } else {
+
+      this.router.navigate([''],{ 
+        relativeTo : this.route,
+        queryParams : { theme : 'MBL'},
+        queryParamsHandling : 'merge'
+      })
+
+      this.fbConnect();
+      this.googleInitialize();
     }
-    this.fbConnect();
-    this.googleInitialize();
-  }
-  
-  ngAfterViewInit(): void {
-    this.router.navigate([''],{ 
-      relativeTo : this.route,
-      queryParams : { theme : 'MBL'},
-      queryParamsHandling : 'merge'
-      
-    })
   }
 
   login() {
@@ -202,7 +206,8 @@ export class LoginComponent implements OnInit, AfterViewInit{
       .subscribe(
         (data) => {
           const response = JSON.parse(JSON.stringify(data));
-          this.users.outhMeResponse = { user: response };
+          if(!this.users.outhMeResponse)
+            this.users.outhMeResponse = { user: response };
           this.users.userData = response;
           this.users.name = response.name;
           this.loginService.setUser(this.users);
