@@ -245,8 +245,11 @@ export class LoginService {
         return this.http.get(url, this.getOptionsLogOut());
     }
     public logout(): void {
-
         let theme = 'MBL';
+        if(!this.users){
+            this.router.navigate(['\login'], { queryParams: { 'theme': theme } });
+            return ;
+        }    
         document.getElementById('loader').classList.add('loading');
         this.performGetLogOut('j_spring_security_logout').subscribe(
             data => {
@@ -271,8 +274,12 @@ export class LoginService {
                 this.users = this.getUser();
                 theme = this.users.theme;
                 let userId;
-                if(this.users.userData)
-                userId = this.users.userData.userId;
+                if(this.users.role == "USERS")
+                    userId = this.users.outhMeResponse.user.userId;
+                else{
+                    if(this.users.userData)
+                    userId = this.users.userData.userId;
+                }
                 const currentPaneNumber = this.users.currentPaneNumber;
                 this.users = new Users();
                 this.users.currentPaneNumber = currentPaneNumber;

@@ -902,14 +902,15 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loginService.setUser(this.users);
     this.router.navigate(['/leakListView']);
   }
-  goToSurvey(surveyCode, surveyId, paneList, index) {
+  goToSurvey(surveyCode, surveyId, paneList, index , customerId?:string) {
     let paneCode;
     if (index < this.users.currentPaneNumber.currentPaneProgress) {
       paneCode = paneList[index].pane.paneCode;
       document.getElementById('loader').classList.add('loading');
       const object = {};
+      customerId = this.users && this.users.outhMeResponse && this.users.outhMeResponse.customerId ? this.users.outhMeResponse.customerId :customerId  
       this.subscriptons.add(
-        this.loginService.performPostMultiPartData(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
+        this.loginService.performPostMultiPartData(object, 'customers/' + customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
           data => {
             const response = JSON.parse(JSON.stringify(data));
             console.log(response);

@@ -36,10 +36,11 @@ export class TopicHistoryComponent implements OnInit {
   }
 
 
-  goToTopicPage(surveyId, paneCode, surveyCode, index) {
+  goToTopicPage(surveyId, paneCode, surveyCode, index,customerId?:string) {
     document.getElementById('loader').classList.add('loading');
     const object = {};
-    this.loginService.performPostMultiPartData(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
+    customerId = this.users && this.users.outhMeResponse && this.users.outhMeResponse.customerId ? this.users.outhMeResponse.customerId :customerId  
+    this.loginService.performPostMultiPartData(object, 'customers/' + customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
         console.log(response);

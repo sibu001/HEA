@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
   buildForSandbox = true; 
   auth2: any;
   @ContentChild('showhideinput') input;
+  requestType = 'login';
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -61,6 +62,10 @@ export class LoginComponent implements OnInit, AfterViewInit{
     }
   }
 
+  public setRequestType(requestType : string){
+    this.requestType = requestType;
+  }
+
   ngOnInit() {
     this.users = this.loginService.getUser();
     if (this.users.token) {
@@ -95,16 +100,6 @@ export class LoginComponent implements OnInit, AfterViewInit{
     ) {
       this.errorMessage = 'please enter valid password';
     } else {
-      // const body =
-      //   'username=' +
-      //   this.users.username +
-      //   '&password=' +
-      //   this.users.password +
-      //   '&client_id=' +
-      //   this.users.username +
-      //   '&client_secret=' +
-      //   this.users.password +
-      //   '&grant_type=password&scope=read';
       const params = new HttpParams()
         .set('username', this.users.username)
         .set('password', this.users.password)
@@ -123,6 +118,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
             this.users.token = response.access_token;
             this.users.refreshToken = response.refresh_token;
             this.loginService.setUser(this.users);
+            this.requestType = 'login';
             this.browserInfoDo();
             this.performOuthMe();
           }
@@ -150,20 +146,6 @@ export class LoginComponent implements OnInit, AfterViewInit{
       }
     )
   } 
-
-  // performTest(){
-  //   let formData = new HttpParams();
-  //   formData = formData.append('j_username',this.users.username);
-  //   formData = formData.append('j_password',this.users.password);
-  //   this.loginService.performPostWithParam({},'j_spring_security_check',formData)
-  //   .subscribe(
-  //     data=>{
-  //       console.log(data);
-  //     }, error => {
-  //       console.log(error);
-  //     }
-  //   )
-  // }
 
   performOuthMe() {
     this.loginService.performGetMultiPartData('oauth/me').subscribe(
@@ -224,7 +206,8 @@ export class LoginComponent implements OnInit, AfterViewInit{
           this.users.userData = response;
           this.users.name = response.name;
           this.loginService.setUser(this.users);
-          this.router.navigate(['admin/customer']);
+          if( this.requestType == 'login')
+            this.router.navigate(['admin/customer']);
         },
         (error) => {
           const response = JSON.parse(JSON.stringify(error));
@@ -283,7 +266,8 @@ export class LoginComponent implements OnInit, AfterViewInit{
             this.users.surveyLength = surveyLength;
             this.users.surveyList = response.data;
             this.loginService.setUser(this.users);
-            this.getCurrentSurvey();
+            if( this.requestType == 'login')
+              this.getCurrentSurvey();
           } else {
             this.errorMessage = response.errorMessage;
           }

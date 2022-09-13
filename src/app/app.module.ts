@@ -23,11 +23,13 @@ import { MultipleRoleGuardService } from './multiple-role.guard';
 import { ManageHttpInterceptor } from './services/managehttp.interceptor';
 import { HttpCancelService } from './services/httpcancel.service';
 import { DisplayPatternPipe } from './pipes/display-pattern.pipe';
+import { RedirectionComponent } from './redirection/redirection.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeadersComponent,
+    RedirectionComponent,
   ],
   imports: [
     ReactiveFormsModule,

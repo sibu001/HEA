@@ -1,3 +1,4 @@
+import { RedirectionComponent } from './redirection/redirection.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { HeadersComponent } from 'src/app/headers/headers.component';
@@ -12,6 +13,9 @@ const ROUTES: Routes = [
     pathMatch: 'full'
   },
   {
+    path : 'redirection',
+    component: RedirectionComponent
+  },{
     path: '',
     children: [
       {
