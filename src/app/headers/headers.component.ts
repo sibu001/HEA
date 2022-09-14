@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, AfterViewChecked } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
@@ -13,7 +13,7 @@ declare var $: any;
   templateUrl: './headers.component.html',
   styleUrls: ['./headers.component.css']
 })
-export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   hides = true;
   hideLogo = true;
   float: string;
@@ -41,6 +41,9 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy {
         this.users.outhMeResponse.auditId + '&amp;typeform-embed=popup-drawer';
     }
     this.screenWidth = window.screen.width;
+  }
+  ngAfterViewChecked(): void {
+    this.users = this.loginService.getUser();
   }
 
   ngAfterViewInit(): void {

@@ -9,9 +9,10 @@ export class LoginService {
     private users: Users;
     constructor(private http: HttpClient, private router: Router) {
     }
-    public setUser(users: Users) {
+    public setUser(users: Users) : Users{
         localStorage.setItem('users', JSON.stringify(users));
         this.users = users;
+        return this.users;
     }
 
     public getUser(): Users {
@@ -63,8 +64,8 @@ export class LoginService {
 
     public isLoggedIn(): boolean {
         this.users = this.getUser();
-        if (this.users.token !== undefined && this.users.token !== null) {
-            return (AppUtility.isEmptyObject(this.users) || AppUtility.isEmptyString(this.users.token)) ?
+        if (this.users.outhMeResponse !== undefined && this.users.outhMeResponse !== null) {
+            return (AppUtility.isEmptyObject(this.users) || AppUtility.isEmptyObject(this.users.outhMeResponse)) ?
                 false : true;
         } else {
             return false;

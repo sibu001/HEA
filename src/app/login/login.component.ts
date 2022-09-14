@@ -25,7 +25,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
   buildForSandbox = true; 
   auth2: any;
   @ContentChild('showhideinput') input;
-  requestType = 'login';
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -62,18 +62,13 @@ export class LoginComponent implements OnInit, AfterViewInit{
     }
   }
 
-  public setRequestType(requestType : string){
-    this.requestType = requestType;
-  }
-
   ngOnInit() {
 
   }
   
   ngAfterViewInit(): void {
 
-    this.users = this.loginService.getUser();
-    if (this.users.token) {
+    if (this.users.outhMeResponse) {
       if (this.loginService.getUser().role == "ADMIN")
         this.router.navigate(['admin/customer']);
       else{
@@ -122,7 +117,6 @@ export class LoginComponent implements OnInit, AfterViewInit{
             this.users.token = response.access_token;
             this.users.refreshToken = response.refresh_token;
             this.loginService.setUser(this.users);
-            this.requestType = 'login';
             this.browserInfoDo();
             this.performOuthMe();
           }
@@ -206,13 +200,11 @@ export class LoginComponent implements OnInit, AfterViewInit{
       .subscribe(
         (data) => {
           const response = JSON.parse(JSON.stringify(data));
-          if(!this.users.outhMeResponse)
-            this.users.outhMeResponse = { user: response };
+          this.users.outhMeResponse = { user: response };
           this.users.userData = response;
           this.users.name = response.name;
           this.loginService.setUser(this.users);
-          if( this.requestType == 'login')
-            this.router.navigate(['admin/customer']);
+          this.router.navigate(['admin/customer']);
         },
         (error) => {
           const response = JSON.parse(JSON.stringify(error));
@@ -271,8 +263,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
             this.users.surveyLength = surveyLength;
             this.users.surveyList = response.data;
             this.loginService.setUser(this.users);
-            if( this.requestType == 'login')
-              this.getCurrentSurvey();
+            this.getCurrentSurvey();
           } else {
             this.errorMessage = response.errorMessage;
           }
