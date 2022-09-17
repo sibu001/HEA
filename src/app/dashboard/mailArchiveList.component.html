@@ -58,9 +58,11 @@
                         <p class="Messages">
                             <img src="assets/images/dot03.gif" class="dot" alt="dot" />&nbsp;Message
                         </p>
-                        <app-table [keys]="keys" [isPaginate]="false"
+                        <app-table [keys]="keys" [isPaginate]="true"
                             [isHideAdd]=true [isSearch]="false"
-                            [data]="dataSource"
+                            [disableNextButton]="disableNextButton"
+                            [disableLastButton]="true" [pageIndex]="pageIndex"
+                            [data]="this.usageHistoryData.content" [pageSize]="pageSize"
                             [totalElement]="usageHistoryData.totalElements"
                             (changePageEvent)="search($event,false)"
                             (goToEditEvent)="goToEditMailArchive($event)"

@@ -543,8 +543,8 @@ export class TableColumnData {
 
     static readonly MAIL_ARCHIVE_KEY: Array<TABLECOLUMN> = [
         { key: 'subject', sort: 'subject', isEdit: true, displayName: 'Subject', isUnderline: true },
-        { key: 'dateSent', sort: 'dateSent', isEdit: true, displayName: 'Date sent' },
-        { key: 'sentTo', sort: 'sentTo', isEdit: true, displayName: 'Sent to' },
+        { key: 'dateSent', sort: 'dateSent', isEdit: true, displayName: 'Date sent', isDate: true },
+        { key: 'sentTo', sort: 'sentTo', isEdit: true, displayName: 'Sent to'  },
         { key: 'inBouncedList', isEdit: true, displayName: 'Bounced' },
         { key: 'wasOpened', isEdit: true, displayName: 'Opened' },
         { key: 'permanentLink', isEdit: true, displayName: 'Permanent link', isUnderline: true }

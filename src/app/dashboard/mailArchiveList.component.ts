@@ -17,12 +17,14 @@ export class MailArchiveListComponent implements OnInit {
   errorMessage: any;
   users: Users = new Users();
   pageSize = AppConstant.pageSize;
+  pageIndex = 0;
   mailArchiveForm: FormGroup;
   public keys: Array<TABLECOLUMN> = TableColumnData.MAIL_ARCHIVE_KEY;
   dataSource: any;
+  disableNextButton = false;
   usageHistoryData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
 
   constructor(private location: Location,
@@ -46,9 +48,20 @@ export class MailArchiveListComponent implements OnInit {
     document.getElementById('loader').classList.add('loading');
     this.loginService.performGetWithParams('customers/' + this.users.outhMeResponse.customerId + '/mails', params).subscribe(
       data => {
-        const response = JSON.parse(JSON.stringify(data));
-        this.usageHistoryData.content = this.transformMailArchiveList(response);
-        this.dataSource = [...this.usageHistoryData.content];
+        // const response = JSON.parse(JSON.stringify(data));
+        console.warn(this.pageIndex)
+        const emailList = data.data;
+        if(emailList.length == this.pageSize) {
+          this.disableNextButton = false;
+          this.usageHistoryData.content = emailList;
+        }else if (emailList.length < this.pageSize && emailList.length != 0){
+          this.disableNextButton = true;
+          this.usageHistoryData.content = emailList;
+        }else if (emailList.length == 0){
+          this.disableNextButton = true;
+          this.pageIndex = this.pageIndex - 1;
+        }
+
         document.getElementById('loader').classList.remove('loading');
       },
       error => {
@@ -89,18 +102,23 @@ export class MailArchiveListComponent implements OnInit {
   }
 
   search(event: any, isSearch: boolean) {
-    // .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-    // .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-    //   (event.pageIndex * event.pageSize) + '' : '0'))
     const params = new HttpParams()
-      .set('startRow', '0')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('periodStart', (this.mailArchiveForm.value.periodStart ? this.datePipe.transform(this.mailArchiveForm.value.periodStart, 'MM/dd/yyyy') : ''))
       .set('periodEnd', (this.mailArchiveForm.value.periodEnd ? this.datePipe.transform(this.mailArchiveForm.value.periodEnd, 'MM/dd/yyyy') : ''))
       .set('subject', (this.mailArchiveForm.value.subject !== null ? this.mailArchiveForm.value.subject : ''))
+      .set('pageSize', this.pageSize)
       .set('useLikeSearch','true')
       .set('systemMessage','false');
+      
+      if(event)
+        this.pageIndex = event.pageIndex;
+      else
+        this.pageIndex = 0;
+        
     this.getMailList(params);
   }
   goToEditMailArchive(event: any) {
