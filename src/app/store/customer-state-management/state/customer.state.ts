@@ -430,7 +430,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Clear Value Cache Successfully');
+                    // this.utilityService.showSuccessMessage('Clear Value Cache Successfully');
                     ctx.patchState({
                         clearCustomerValueCache: response,
                     });
@@ -449,7 +449,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Recalculate Successfully');
+                    // this.utilityService.showSuccessMessage('Recalculate Successfully');
                     ctx.patchState({
                         recalculateCustomerVariable: response,
                     });
@@ -1474,7 +1474,7 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Reorder Successfully');
+                    // this.utilityService.showSuccessMessage('Reorder Successfully');
                     ctx.patchState({
                         reorderCustomerBill: response,
                     });

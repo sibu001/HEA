@@ -298,6 +298,7 @@ export class Transformer {
             const newArray = element.fileName.split('/');
             dataSourceObj.name = newArray[newArray.length - 1];
             dataSourceObj.isInlineEdit = true;
+            dataSourceObj.isHideActualValue= false;
             dataSourceObj.timestamp = element.timestamp ? new DatePipe('en-US').transform(new Date(element.timestamp), 'MM/dd/yyyy HH:mm:ss') : '';
             dataSource.list.push(dataSourceObj);
         });

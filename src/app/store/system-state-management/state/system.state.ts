@@ -66,7 +66,8 @@ import {
     DeleteRelatedRecommendationAction,
     DeleteRelatedLeakAction,
     SaveCustomerGoupToList,
-    RemoveCustomerGroupList
+    RemoveCustomerGroupList,
+    LoadProgramGroupByCustomerGroup
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -106,6 +107,7 @@ import { SystemManagementModel } from './system.model';
         recommendationList: undefined,
         relatedRecommendationList: undefined,
         relatedLeakList: undefined,
+        customerProgramGroupList : undefined,      
     }
 
 })
@@ -276,6 +278,11 @@ export class SystemManagementState {
         return state.relatedLeakList;
     }
 
+    @Selector()
+    static getCustomerProgramGroupList(state: SystemManagementModel){
+        return state.customerProgramGroupList;
+    }
+
     @Action(GetCustomerGroupListAction)
     getAllCustomerGroup(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupListAction): Actions {
         const force: boolean = action.force || SystemManagementState.getCustomerGroupList(ctx.getState()) === undefined;
@@ -370,7 +377,7 @@ export class SystemManagementState {
     @Action(GetPlaceListByCustomerGroupIdAction)
     getPlaceListByCustomerGroupId(ctx: StateContext<SystemManagementModel>, action: GetPlaceListByCustomerGroupIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.places)
+        return this.loginService.performGet(AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.programGroups)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -505,6 +512,26 @@ export class SystemManagementState {
         }
         return result;
     }
+
+    @Action(LoadProgramGroupByCustomerGroup)
+    loadProgramGroupByCustomerGroup(ctx: StateContext<SystemManagementModel>, action: LoadProgramGroupByCustomerGroup) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        let result = this.loginService.performGet('/' + AppConstant.customerGroups + '/' + action.customerGroupId + '/' + AppConstant.programGroups)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        customerProgramGroupList: response,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    
+        return result;
+    }
+
 
     @Action(GetProgramGroupByIdAction)
     getAllProgramGroupById(ctx: StateContext<SystemManagementModel>, action: GetProgramGroupByIdAction): Actions {

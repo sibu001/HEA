@@ -32,4 +32,5 @@ export interface SystemManagementModel {
     recommendationList : any;
     relatedRecommendationList : any;
     relatedLeakList : any;
+    customerProgramGroupList : any;
 }

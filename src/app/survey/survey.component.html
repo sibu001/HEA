@@ -488,6 +488,7 @@
           
                                     <mat-slider [(ngModel)]="answersList.value"
                                     (ngModelChange)="answersList.value=$event + ''"
+                                    (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh,'')"
                                     #slider
                                     style="  width : 18em;" step="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
                                     [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id"
@@ -1374,6 +1375,7 @@
                             <mat-slider [ngModel]="answersList.value"
                             (ngModelChange)="answersList.value=$event + ''"
                             #slider
+                            (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh,'')"
                             style="  width : 18em;" [step]="1" [min]="answersList.dataField.fieldValues[0].rangeStart" 
                             [max]="answersList.dataField.fieldValues[0].rangeEnd" [id]="answersList.id"
                             (input)="inputSliderEvent($event)" displayValue="string"

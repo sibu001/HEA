@@ -303,7 +303,7 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Field Values</span></p>
             <app-table [keys]="dataFieldKeys" [isSearch]="false" [isDelete]=true [data]="dataFieldData.content"
-              [totalElement]="dataFieldData.totalElements" [isHideAdd]=false (addRowEvent)='addRowEvent($event)'
+              [totalElement]="dataFieldData.totalElements" [isHideAdd]=false (addRowEvent)='addRowEvent($event)' [showInlineTableForm]="true"
               (deleteEvent)='deleteRow($event)' 
               (saveRowEvent)="saveRow()">
             </app-table>

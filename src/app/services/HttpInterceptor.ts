@@ -37,7 +37,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             if (error instanceof HttpErrorResponse) {
                 switch ((<HttpErrorResponse>error).status) {
                     case 400:
-                    // return this.handle400Error(error);
+                        return ;
                     case 401:
                         return this.handle401Error(req, next);
                     case 302:

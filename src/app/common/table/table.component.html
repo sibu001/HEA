@@ -75,17 +75,21 @@
                     </div>
                     <div id='2'
                     [ngClass]="{'toTop': alterTable }"
+                    [ngStyle]="{'display' : row.isHideActualValue && col.type==='textArea' ? 'none' : 'block'}"
                     (click)='goToEdit(row,col);' *ngIf="col.type!='image' &&col.type!='buttons' &&
                         col.type!=='input'&& col.type!='inputField' && 
                         col.type!='alert' && col.type!='link' &&
-                        !col.isDate && !col.isAction && col.type!=='checkbox' && !col.isSurvey" class="div-wh-100">
-                        <div *ngIf="col.isDolar">
+                        !col.isDate && !col.isAction && col.type!=='checkbox' && !col.isSurvey">
+                         <!-- class="div-wh-100"> -->
+                        <div *ngIf="col.isDolar" 
+                        [ngClass]="{'edit-button-center' : col.type==='textArea'&&row['isInlineEdit'] }">
                              ${{row[col.key]}}
                         </div>
-                        <div *ngIf="!col.isDolar">
+                        <div *ngIf="!col.isDolar" style="display:inline;" 
+                        [ngClass]="{'edit-button-center' : col.type==='textArea'&&row['isInlineEdit'] }">
                             {{row[col.key]}}
                         </div>
-                        <button class="btn btn-primary" type="submit"
+                        <button class="btn btn-primary edited" type="submit"
                             *ngIf="col.type==='textArea'&&row['isInlineEdit']"
                             (click)='editColumn(col,row)' style="float: right;">Edit</button>
                     </div>
@@ -221,17 +225,18 @@
             <ng-container matColumnDef="delete">
                 <mat-header-cell *matHeaderCellDef class="text-nowrap"></mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                    <img *ngIf="(element && element.showInputFields == undefined) && (element.disabled || element.disabled == true)"
+
+                    <img *ngIf="isFilePreview"
+                        src="assets/images/ico_preview.png"
+                        (click)="filePreview(element)" alt="icon">
+
+                    <img *ngIf="(element && element.showInputFields == undefined)"
                         src="assets/images/ico_minus.gif"
                         (click)="deleteRow(element)" alt="icon">
                     
                     <img *ngIf="(element && element.showInputFields == true) ||  element.disabled == false"
                         src="assets/images/ico_add.gif"
                         (click)="addRow(element)" alt="icon">
-                    
-                    <img *ngIf="isFilePreview"
-                        src="assets/images/ico_preview.png"
-                        (click)="filePreview(element)" alt="icon">
     
                 </mat-cell>
             </ng-container>

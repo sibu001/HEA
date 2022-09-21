@@ -90,7 +90,54 @@ export class LoginComponent implements OnInit, AfterViewInit{
     }
   }
 
-  login() {
+  // login() {
+  //   if (this.users.username === undefined || this.users.username.length === 0) {
+  //     this.errorMessage = 'please enter user name';
+  //   } else if (
+  //     this.users.password === undefined ||
+  //     this.users.password.length === 0
+  //   ) {
+  //     this.errorMessage = 'please enter valid password';
+  //   } else {
+  //     const params = new HttpParams()
+  //       .set('username', this.users.username)
+  //       .set('password', this.users.password)
+  //       .set('client_id', this.users.username)
+  //       .set('client_secret', this.users.password)
+  //       .set('grant_type', 'password')
+  //       .set('scope', 'read');
+  //     document.getElementById('loader').classList.add('loading');
+  //     this.loginService.performOauthToken('oauth/token', params.toString()).subscribe(
+  //       (data) => {
+  //         const response = JSON.parse(JSON.stringify(data));
+  //         if (response.status === 401) {
+  //           this.errorMessage = 'Invalid Credentials';
+  //           document.getElementById('loader').classList.remove('loading');
+  //         } else {
+  //           this.users.token = response.access_token;
+  //           this.users.refreshToken = response.refresh_token;
+  //           this.loginService.setUser(this.users);
+  //           this.browserInfoDo();
+  //           this.performOuthMe();
+  //         }
+  //       },
+  //       (error) => {
+  //         const response = JSON.parse(JSON.stringify(error));
+  //         console.log(response);
+  //         if (response.error.error_description) {
+  //           this.errorMessage = response.error.error_description;
+  //         } else {
+  //           this.errorMessage = response.statusText;
+  //         }
+  //         document.getElementById('loader').classList.remove('loading');
+  //       }
+  //     );
+  //   }
+  // }
+
+
+  login(){
+
     if (this.users.username === undefined || this.users.username.length === 0) {
       this.errorMessage = 'please enter user name';
     } else if (
@@ -99,27 +146,16 @@ export class LoginComponent implements OnInit, AfterViewInit{
     ) {
       this.errorMessage = 'please enter valid password';
     } else {
-      const params = new HttpParams()
-        .set('username', this.users.username)
-        .set('password', this.users.password)
-        .set('client_id', this.users.username)
-        .set('client_secret', this.users.password)
-        .set('grant_type', 'password')
-        .set('scope', 'read');
-      document.getElementById('loader').classList.add('loading');
-      this.loginService.performOauthToken('oauth/token', params.toString()).subscribe(
-        (data) => {
-          const response = JSON.parse(JSON.stringify(data));
-          if (response.status === 401) {
-            this.errorMessage = 'Invalid Credentials';
-            document.getElementById('loader').classList.remove('loading');
-          } else {
-            this.users.token = response.access_token;
-            this.users.refreshToken = response.refresh_token;
-            this.loginService.setUser(this.users);
-            this.browserInfoDo();
-            this.performOuthMe();
-          }
+    document.getElementById('loader').classList.add('loading');
+    const params = new HttpParams()
+      .append('j_username',this.users.username)
+      .append('j_password',this.users.password)
+
+      this.loginService.performOauthToken('j_spring_security_check',params.toString())
+      .subscribe(
+        (response) =>{
+          this.browserInfoDo();
+          this.performOuthMe();
         },
         (error) => {
           const response = JSON.parse(JSON.stringify(error));
@@ -131,7 +167,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
           }
           document.getElementById('loader').classList.remove('loading');
         }
-      );
+      )
     }
   }
 

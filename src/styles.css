@@ -2058,3 +2058,7 @@ snack-bar-container simple-snack-bar{
   background: #c0c0c0;
 }
 
+
+.error-fields-border{
+  border: 2px solid red !important;
+}

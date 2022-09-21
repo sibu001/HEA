@@ -15,6 +15,7 @@ export enum SystemActionTypes {
     GET_VIEW_CONFIGURATION_LIST = 'Get All View Configuration List',
     GET_PROGRAM_GROUP_LIST = 'Get All Program Group List',
     GET_PROGRAM_GROUP_BY_ID = 'Get Program Group By Id',
+    GET_PROGRAM_GROUP_BY_CUSTOMER_GROUP_ID = 'Get Customer Group By Id',
     UPDATE_PROGRAM_GROUP = 'Update Program Group',
     SAVE_PROGRAM_GROUP = 'Save Program Group',
     DELETE_PROGRAM_GROUP_BY_ID = 'Delete Program Group By Id',
@@ -134,6 +135,11 @@ export class GetProgramGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_PROGRAM_GROUP_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
     }
+}
+
+export class LoadProgramGroupByCustomerGroup{
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_PROGRAM_GROUP_BY_CUSTOMER_GROUP_ID
+    constructor(readonly customerGroupId: Number){}
 }
 
 export class GetProgramGroupByIdAction {

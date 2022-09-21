@@ -20,6 +20,7 @@ import { ErrorStateMatcher } from '@angular/material';
 import { MustMatch } from 'src/app/common/password.validator';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { UsageHistoryFilter } from 'src/app/models/filter-object';
+import { CustomValidator } from 'src/app/utility/custom-validators';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -53,6 +54,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   heatingRatePlan: any;
   weatherStation: any;
   helpHide: boolean;
+  isFormSubmitted : boolean = false;
   updateWithUtilityAddressFlag : boolean = false;
   placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
@@ -138,6 +140,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getPasswordValidationRule();
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.getProgramGroupByCustomerGroupId();
     });
   }
   ngAfterViewInit(): void {
@@ -203,13 +206,16 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
           this.scrollTop();
         }
         this.setForm(customer);
+        this.loadProgramGroupByCustomerGroupId(customer.customerGroupId);
       }));
   }
 
   setUpdateWithUtilityAddressFlag(customer: any){
 
-    if(customer.city.toUpperCase() != customer.pgeCity.toUpperCase() || customer.street1.toUpperCase() != customer.pgeStreet.toUpperCase()
-      || customer.state.toUpperCase() != customer.pgeState.toUpperCase() || customer.postalCode.toUpperCase() != customer.pgePostalCode.toUpperCase()){
+    if( (customer.pgeCity &&  customer.pgeStreet && customer.pgeState &&  customer.pgePostalCode) &&
+        ( customer.city.toUpperCase() != customer.pgeCity.toUpperCase() || customer.street1.toUpperCase() != customer.pgeStreet.toUpperCase()
+        || customer.state.toUpperCase() != customer.pgeState.toUpperCase() || customer.postalCode.toUpperCase() != customer.pgePostalCode.toUpperCase())
+      ){
         this.updateWithUtilityAddressFlag = true;
       }
 
@@ -234,14 +240,14 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.customerService.loadWeatherStationByCustomerId(customerId);
     this.subscriptions.add(this.customerService.getWeatherStationByCustomerId().pipe(skipWhile((item: any) => !item))
       .subscribe((weatherStation: any) => {
-        console.log(weatherStation);
         this.weatherStation = weatherStation.data.stationId;
+        this.customerForm.patchValue({stationId : this.weatherStation});
       }));
   }
   loadCustomerGroup() {
     this.systemService.loadCoachUserList(true, '?filter.withRole=COACH');
     this.systemService.loadCustomerGroupList(false, '');
-    this.systemService.loadProgramGroupsList(false, '');
+    // this.systemService.loadProgramGroupsList(false, '');
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
         this.customerGroupList = customerGroupList;
@@ -250,12 +256,33 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       .subscribe((coachUserList: any) => {
         this.coachUserList = coachUserList.list;
       }));
-    this.subscriptions.add(this.systemService.getProgramGroupList().pipe(skipWhile((item: any) => !item))
-      .subscribe((programGroupList: any) => {
-        this.programGroupList = programGroupList;
-      }));
+    // this.subscriptions.add(this.systemService.getProgramGroupList().pipe(skipWhile((item: any) => !item))
+    //   .subscribe((programGroupList: any) => {
+    //     this.programGroupList = programGroupList;
+    //   }));
 
   }
+
+  loadProgramGroupByCustomerGroupId(customerGroupId : number){
+    this.systemService.loadPlaceListByCustomerGroupId(customerGroupId);
+  } 
+
+  getProgramGroupByCustomerGroupId(){
+    this.subscriptions.add(
+      this.systemService.getProgramGroupByCustomerGroupId()
+      .subscribe(
+        programGroupList =>{
+          if (programGroupList && programGroupList.length != 0 ) {
+            this.isProgramGroup = true;
+          }else{
+            this.isProgramGroup= false;
+          }
+          this.programGroupList = programGroupList;
+        }
+      )
+    )
+  }
+
   setPasswordForm() {
     this.passwordForm = this.formBuilder.group({
       password: ['', [Validators.required, Validators.maxLength(this.maxLength), Validators.minLength(this.minLength), Validators.pattern(this.pattern)]],
@@ -264,9 +291,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   setForm(event: any) {
-    if (event && event.programGroup) {
-      this.isProgramGroup = true;
-    }
     this.customerForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
       customerId: [event !== undefined ? event.customerId : ''],
@@ -332,7 +356,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       elCoolingModel: [event !== undefined ? event.elCoolingModel : null],
       elHeatingModel: [event !== undefined ? event.elHeatingModel : ''],
       modelChangedBy: [event !== undefined ? event.modelChangedBy : ''],
-      eligibleStartDate: [event !== undefined ? (this.datePipe.transform(event.eligibleStartDate, 'MM/dd/yyyy h:mm:ss')) : null],
+      eligibleStartDate: [event !== undefined ? 
+        (this.datePipe.transform(event.eligibleStartDate, 'MM/dd/yyyy h:mm:ss')) : null,
+         CustomValidator.customDateValidatorforInptField('MM/dd/yyyy h:mm:ss',this.isFormSubmitted)],
       latitude: [event !== undefined ? event.latitude : ''],
       longitude: [event !== undefined ? event.longitude : ''],
       maxAlertLevel: [event !== undefined ? event.maxAlertLevel : ''],
@@ -391,6 +417,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       repeatedActivationMail: [false],
       stationId: [this.weatherStation]
     });
+  }
+
+  get eligibleStartDate() {
+    return this.customerForm.get('eligibleStartDate');
   }
 
   getPasswordValidationRule() {
@@ -717,12 +747,16 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     element.click();
   }
 
-  uploadFile() {
-    this.subscriptions.add(this.customerService.saveCustomerFile(this.id, this.fileObject, '?description=' + this.description).pipe(skipWhile((item: any) => !item))
+  uploadFile(formEvent : any) {
+
+    if(formEvent.form.status != 'INVALID'){
+      this.subscriptions.add(this.customerService.saveCustomerFile(this.id, this.fileObject, '?description=' + this.description).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.loadCustomerFile(this.id);
         this.fileObject = undefined;
-      }));
+      }));   
+     }
+
   }
 
   handleDeleteEvent(event: any) {
@@ -738,6 +772,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   handleInLineEditEvent(event: any): any {
     const i = this.filesData.content.findIndex((item: any) => item.name === event.row.name);
     this.filesData.content[i].isInlineEdit = false;
+    this.filesData.content[i].isHideActualValue = true;
     this.filesDataSource = [...this.filesData.content];
 
   }
@@ -755,6 +790,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   handle(files: any) {
     if (files.length > 0) {
       this.fileObject = files[0];
+      console.log(this.fileObject);
     }
   }
 
@@ -763,7 +799,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     let i = -1;
     switch (type) {
       case 'coachUser':
-        i = this.coachUserList.findIndex((item: any) => item.id === event.target.value);
+        i = this.coachUserList.findIndex((item: any) => item.id == event.target.value);
         if (i !== -1) {
           this.customerForm.value.coachUser = this.coachUserList[i];
         } else {
@@ -771,15 +807,17 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         break;
       case 'customerGroup':
-        i = this.customerGroupList.findIndex((item: any) => item.id === event.target.value);
+        i = this.customerGroupList.findIndex((item: any) => item.id == event.target.value);
         if (i !== -1) {
           this.customerForm.value.customerGroup = this.customerGroupList[i];
+          // if(this.id) {this.customerService.saveUserCustomerGroup(this.id,this.customerGroupList[i].customerGroupId)}
+          this.loadProgramGroupByCustomerGroupId(this.customerGroupList[i].customerGroupId)
         } else {
           this.customerForm.value.customerGroup = '';
         }
         break;
       case 'place':
-        i = this.placeCode.findIndex((item: any) => item.id === event.target.value);
+        i = this.placeCode.findIndex((item: any) => item.id == event.target.value);
         if (i !== -1) {
           this.customerForm.value.place = this.placeCode[i];
         } else {
@@ -812,6 +850,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   save() {
+    this.isFormSubmitted = true;
     if (this.p.password.value) {
       this.p.password.setValidators([Validators.required,
       Validators.minLength(this.minLength),
@@ -822,8 +861,15 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       this.customerForm.value.activationDate = this.convertToMillisecond(this.customerForm.value.activationDate);
       this.customerForm.value.registrationDate = this.convertToMillisecond(this.customerForm.value.registrationDate);
       this.customerForm.value.vacaCalculationDate = this.convertToMillisecond(this.customerForm.value.vacaCalculationDate);
+      this.customerForm.value.eligibleStartDate = this.convertToMillisecond(this.customerForm.value.eligibleStartDate);
+
       this.customerForm.value.lastMonthlyCalc = this.convertToMillisecond(this.customerForm.value.lastMonthlyCalc);
       this.customerForm.value.user.lastSuccessfulUtilityReadDate = this.convertToMillisecond(this.customerForm.value.user.lastSuccessfulUtilityReadDate);
+
+
+      if( this.p.password.value != undefined && this.p.password.value != null && this.p.password.value != ""){
+        this.saveNewPassword(this.p.password.value);
+      }
 
       if (this.id !== null && this.id !== undefined) {
         if (this.customerForm.value.repeatedActivationMail) {
@@ -917,4 +963,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         }));
     }
   }
+
+  
 }

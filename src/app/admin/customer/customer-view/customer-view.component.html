@@ -27,7 +27,7 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="programGroupId"
-                (change)="changeDropDownValue($event,'customerGroup')" formControlName="programGroupId">
+                (change)="changeDropDownValue($event,'programGroup')" formControlName="programGroupId">
                 <option value=null selected="selected">Unassigned</option>
                 <option *ngFor="let group of programGroupList" [value]="group.programGroupId">
                   {{group.programName}}</option>
@@ -399,8 +399,10 @@
             </div>
           </div>
           <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Eligible start date::
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"
+            [ngClass]="{'error-fields-highlight' : (eligibleStartDate.errors?.invalidDate && isFormSubmitted)}"
+            >
+              Eligible start date:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="eligibleStartDate"
@@ -612,27 +614,25 @@
             </div>
           </div>
           <div class="row" *ngIf="fileObject!=undefined">
-            <div class="col-sm-6">
+            <div class="col-sm-4 col-xs-10 col-xs-offset-1 file-description-box">
               <div class="row" style="margin: 0px;">
-                <div class="row">
-                  <div class="col-sm-3">
-                    <button type="button" class="btn btn-primary" (click)="uploadFile()">upload</button>
+                <form #fileForm="ngForm">
+                  <div class="col-sm-4 col-xs-4">
+                    <button type="submit" class="btn btn-primary" (click)="uploadFile(fileForm)">upload</button>
                   </div>
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control
-                    form-control-sm show-value" id="fileName" disabled [(ngModel)]="fileObject.name">
+                  <div class="col-sm-8 col-xs-8" style="height: 31px;line-height: 31px; word-break: break-word;">
+                    {{fileObject.name}}
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <p>Description</p>
-                    <textarea class="form-control textarea_scroll" rows="3" id="description" name="description"
-                      [(ngModel)]="description"></textarea>
+                  <div class="col-sm-12 col-xs-12">
+                        <div *ngIf="!fileForm.submitted && fileForm.form.status != 'INVALID'">Description</div>
+                        <div *ngIf="fileForm.submitted && fileForm.form.status == 'INVALID'" 
+                        style="color:red;">Description is mandatory!</div>
+                        <textarea class="form-control textarea_scroll" rows="3" id="description" name="description"
+                        [ngClass]="{'error-fields-border' : fileForm.submitted && fileForm.form.status == 'INVALID'}"
+                          #fileDescription="ngModel"  [(ngModel)]="description" required ></textarea>
                   </div>
-                </div>
+                </form>
               </div>
-            </div>
-            <div class="col-sm-6">
             </div>
           </div>
           <!-- Email Settings -->
@@ -678,7 +678,7 @@
               <button type="button" class="btn btn-primary" (click)="delete()" *ngIf="id!=undefined">Delete</button>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
-              <button type="button" class="btn btn-primary" (click)="save()"
+              <button type="submit" form="formCustomer" class="btn btn-primary" (click)="save(formCustomer)"
                 style="float:right; margin-right: -4px;">Save</button>
             </div>
           </div>

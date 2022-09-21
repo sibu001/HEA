@@ -69,6 +69,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() showCSVExportButton = false;
   @Input() suggestionList = [];
   @Input() isFilePreview = false;
+  @Input() showInlineTableForm = false;
   @Input() showAddRowButton = false;
   @Input() showAddInputButton = false;
   @Input() isShowHeader = true;
@@ -431,7 +432,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
   onAddEvent(event: any): any {
     this.addEvent.emit(event);
-    if(this.inputFormFields == false){
+    if(this.inputFormFields == false && this.showInlineTableForm){
       const pushedObj = {showInputFields : true, index : this.data.length};
       this.data.push(pushedObj);
       this.dataSource = new MatTableDataSource(this.data);

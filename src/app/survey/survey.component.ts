@@ -385,8 +385,10 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loginService.setUser(this.users);
     this.inputErrorMessage = undefined;
 
-    for (const answers of this.users.currentPaneNumber.currentPaneAnswers)
+    for (const answers of this.users.currentPaneNumber.currentPaneAnswers){
+      if(answers.value != null)
       answers.value = answers.value + "";
+    }
 
     if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
       this.gotToTopicHistory();
@@ -403,11 +405,11 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.users.allSurveyCheck = true;
     this.chartHelpHide = false;
     this.loginService.setUser(this.users);
-    if (this.users.currentPaneNumber.currentPaneAnswers.length > 0 || this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
-      this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
-    } else {
+    // if (this.users.currentPaneNumber.currentPaneAnswers.length > 0 || this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
+    //   this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
+    // } else {
     this.previousPane(this.users.currentPaneNumber);
-    }
+    // }
     document.getElementById('loader').classList.add('loading');
   }
 
@@ -1118,6 +1120,9 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   setStyle(data : string,eleRef : string){
+
+    if (!eleRef)
+      return '';
 
     const indexOfData  = eleRef.indexOf(data+ ":");
     eleRef = eleRef.substring(indexOfData, eleRef.length);
