@@ -71,7 +71,7 @@ img.question path {
 }
 
 .home_energy > p {
-  font-size: 23px !important;
+  font-size: 20px !important;
   color: #4550a1 !important;
   font-weight: 500 !important;
   /* margin-bottom: 30px; */
@@ -1617,7 +1617,7 @@ app-survey a{
 }
 
 app-survey li {
-  font-size : 15px !important;
+  font-size : 14px !important;
 }
 
 app-gas-list .mat-column-year ,app-gas-list .mat-column-month ,app-gas-list .mat-column-value{
@@ -1859,7 +1859,7 @@ app-share-my-data-list .mat-column-city{
 }
 
 app-survey p{
-  font-size : 16px !important;
+  font-size : 14px !important;
 }
 
 /* app-share-my-data-list .mat-column-update{
@@ -2056,9 +2056,4 @@ snack-bar-container simple-snack-bar{
 ::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:active  {
   background: #c0c0c0;
-}
-
-
-.error-fields-border{
-  border: 2px solid red !important;
 }

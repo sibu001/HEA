@@ -172,7 +172,9 @@ export class LoginComponent implements OnInit, AfterViewInit{
   }
 
   browserInfoDo(){
-    this.loginService.performPost( {screenWidth : window.innerWidth, screenscreenHeight : window.innerHeight, timezoneOffset : new Date().getTimezoneOffset(), mobilecheck : mobilecheck()},'free/browserInfo.do')
+    const params = new HttpParams()
+    .append('currentApplicationUI','smartAudit');
+    this.loginService.performPostWithParam( {screenWidth : window.innerWidth, screenscreenHeight : window.innerHeight, timezoneOffset : new Date().getTimezoneOffset(), mobilecheck : mobilecheck()},'free/browserInfo.do',params)
     .subscribe(
       response => {
       }, error =>{
@@ -323,26 +325,36 @@ export class LoginComponent implements OnInit, AfterViewInit{
           document.getElementById('loader').classList.remove('loading');
           const response = JSON.parse(JSON.stringify(data));
           if (response.errorMessage == null) {
-            if (
-               this.users.lastVisitedURL != '/surveyView'
-               &&  (this.users.currentPaneNumber == undefined 
-                || this.users.currentPaneNumber == null)
-            ) {
-              this.users.allSurveyCheck = false;
-              this.loginService.setUser(this.users);
-              document.getElementById('loader').classList.add('loading');
-              this.router.navigate(['dashboard']);
-            } else {
-              this.users.allSurveyCheck = true;
-              this.users.isDashboard = true;
-              this.users.isFirstTime = true;
-              this.loginService.setUser(this.users);
-              let topicHistory = new TopicHistoryComponent(this.loginService,this.router,this.location);
-              const survey = this.users.currentPaneNumber.survey;
-              const paneInfo =  this.users.currentPaneNumber.currentPane;
-              document.getElementById('loader').classList.add('loading');
-              topicHistory.goToTopicPage(survey.surveyId,paneInfo.paneCode,survey.surveyDescription.surveyCode,this.users.paneNumber);
+
+
+            if(response.data.currentPane){
+              this.users.currentPaneNumber = response.data;
+              this.users = this.loginService.setUser(this.users);
+              this.router.navigate(['surveyView']);
+            }else{
+
+              if (this.users.lastVisitedURL != '/surveyView') {
+               this.users.allSurveyCheck = false;
+               this.loginService.setUser(this.users);
+               document.getElementById('loader').classList.add('loading');
+               this.router.navigate(['dashboard']);
+             } else {
+               this.users.allSurveyCheck = true;
+               this.users.isDashboard = true;
+               this.users.isFirstTime = true;
+               this.loginService.setUser(this.users);
+               let topicHistory = new TopicHistoryComponent(this.loginService,this.router,this.location);
+               const survey = this.users.currentPaneNumber.survey;
+               const paneInfo =  this.users.currentPaneNumber.currentPane;
+               document.getElementById('loader').classList.add('loading');
+               topicHistory.goToTopicPage(survey.surveyId,paneInfo.paneCode,survey.surveyDescription.surveyCode,this.users.paneNumber);
+             }
+
+              if(response.data.errorMessage != null){
+                this.errorMessage = response.errorMessage;
+              }
             }
+
           } else {
             this.errorMessage = response.errorMessage;
           }

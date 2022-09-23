@@ -1,5 +1,5 @@
 import { UtilityService } from './../services/utility.service';
-import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ declare var $: any;
   templateUrl: './survey.component.html',
   styleUrls: ['./survey.component.css']
 })
-export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   @ViewChild('inp1') inp1: ElementRef;
   @ViewChild('panel') public panel: ElementRef;
   inputErrorMessage: string;
@@ -90,6 +90,10 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
       // self.addClass();
     }, 1000);
 
+  }
+
+  ngAfterViewChecked(): void{
+    this.surveyLengthManage();
   }
 
   hideMenu() {
@@ -405,11 +409,11 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.users.allSurveyCheck = true;
     this.chartHelpHide = false;
     this.loginService.setUser(this.users);
-    // if (this.users.currentPaneNumber.currentPaneAnswers.length > 0 || this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
-    //   this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
-    // } else {
+    if (this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
+      this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
+    } else {
     this.previousPane(this.users.currentPaneNumber);
-    // }
+    }
     document.getElementById('loader').classList.add('loading');
   }
 
@@ -456,6 +460,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answers').subscribe(
           data => {
             const response = JSON.parse(JSON.stringify(data));
+            this.paneblockRowErrorNotation = [];
             if (response.data.errors != null) {
               if (response.data.currentPane.paneCode === 'pv_EditPVConfigs') {
                 response.data.currentPaneBlocks = this.users.currentPaneNumber.currentPaneBlocks;
@@ -889,7 +894,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   this.subscriptons.add(
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/sessionPendingMessage').subscribe(
       data => {
-        document.getElementById('loader').classList.remove('loading');
+        // document.getElementById('loader').classList.remove('loading');
       },
       errors => {
         console.log(errors);
@@ -1133,16 +1138,25 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  highlightErrorRowCheck(surveyAnswerValue : any){
+   highlightErrorRowCheck(surveyAnswer : any){
     const errorList = this.users.currentPaneNumber.errors;
+    
     if(!errorList) return true;
 
-    if(this.paneblockRowErrorNotation.indexOf(surveyAnswerValue.surveyAnswerBlockId) == -1){
-      for(let error of errorList){
-          if(error.surveyAnswerId == surveyAnswerValue.surveyAnswerId){
-              this.paneblockRowErrorNotation.push(surveyAnswerValue.surveyAnswerBlockId);
-          }
-      }   
+    if(this.paneblockRowErrorNotation.indexOf(surveyAnswer.surveyAnswerBlockId) != -1 ) return true;
+
+
+    // console.log(surveyAnswer);
+    const surveAnswerValue = surveyAnswer.surveyAnswers;
+
+    for(let error of errorList){
+      for(let answer of surveAnswerValue){
+        if(error.surveyAnswerId == answer.surveyAnswerId && this.paneblockRowErrorNotation.indexOf(answer.surveyAnswerBlockId) == -1 ){
+          this.paneblockRowErrorNotation.push(answer.surveyAnswerBlockId);
+          console.log(this.paneblockRowErrorNotation);
+          break;
+        }
+      }
     }
 
     return true;
@@ -1153,6 +1167,23 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy {
       return false;
     }
     return true;
+  }
+
+  surveyLengthManage(){
+
+
+    const currentSurveyDetails = this.users.currentPaneNumber;
+
+    if(this.users.surveyLength > 3) return null;
+
+    const currentSurveyCode = currentSurveyDetails.survey.surveyDescription.surveyCode;    
+
+    if(this.users.surveyCode.indexOf(currentSurveyCode) == -1){
+      this.users.surveyCode.push(currentSurveyCode);
+        this.users.surveyLength = this.users.surveyCode.length;
+        this.loginService.setUser(this.users);
+    }
+
   }
 
 }

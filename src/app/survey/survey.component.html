@@ -121,7 +121,7 @@
                                 >
                                   <!--data field label-->
                                   <div [innerHTML]="answersList.dataField.label |
-                                    safeHtml" class="agree"></div>
+                                    safeHtml" class="agree label-size"></div>
                                   <label class="secondpage"
                                     *ngFor="let dataFieldValue of
                                     answersList.dataField.fieldValues;index as k">
@@ -595,15 +595,15 @@
                           <div
                             *ngIf="answersList.dataField.inputType=='radiobutton'&&answersList.dataField.userDisplay&&answersList.viewable">
                             <div class="row">
-                              <div class="col-sm-4">
-                                <h3 class="survey TH"
+                              <div class="col-sm-4 col-lg-5">
+                                <h3 class="survey TH text-right"
                                   *ngIf="answersList.dataField.label!=null">
                                   <abbr
                                     title="A duplex is a multi-family complex with
                                     2-4 units; an apartment has 5 or more units." [innerHTML]="answersList.dataField.label"></abbr>
                                 </h3>
                               </div>
-                              <div class="col-sm-8 radio_button">
+                              <div class="col-sm-8 col-lg-7 radio_button">
                                 <div class="radio"
                                   *ngFor="let radioButtonList of
                                   answersList.dataField.fieldValues;index as L">
@@ -614,7 +614,7 @@
                                       [(ngModel)]="answersList.value"
                                       [checked]="radioButtonList.value==answersList.value">
                                     <span class="checkmark1"></span>
-                                    <div [innerHTML]="radioButtonList.name |
+                                    <div class="text-left" [innerHTML]="radioButtonList.name |
                                       safeHtml"></div>
                                   </label>
                                 </div>
@@ -850,11 +850,12 @@
                           currentPaneBlock.surveyAnswerBlocks;index as i"
                           [ngClass]="{'error-fields-highlight' : highLightErroRowInPaneBlock(surveyAnswer.surveyAnswerBlockId)}"
                           >
-                          <td scope="row"><p style="margin-top: 16px;">{{i+1}}</p></td>
+                          <td scope="row"><p class="form-group">{{i+1}}</p></td>
+                          <ng-container *ngIf="highlightErrorRowCheck(surveyAnswer)"></ng-container>
                           <ng-container *ngFor="let surveyAnswerValue of
                             surveyAnswer.surveyAnswers; index as j">
                             <td
-                            *ngIf="surveyAnswerValue.dataField.paneBlockDisplay && highlightErrorRowCheck(surveyAnswerValue)">
+                            *ngIf="surveyAnswerValue.dataField.paneBlockDisplay">
                               <div class="form-group"
                                 *ngIf="surveyAnswerValue?.dataField?.dataType!='number'">
                                {{surveyAnswerValue.value}}
@@ -1008,7 +1009,7 @@
                           >
                             <!--data field label-->
                             <div [innerHTML]="answersList.dataField.label |
-                              safeHtml" class="agree"></div>
+                              safeHtml" class="agree label-size"></div>
                             <label class="secondpage"
                               *ngFor="let dataFieldValue of
                               answersList.dataField.fieldValues;index as k">
@@ -1481,7 +1482,7 @@
                     <div
                       *ngIf="answersList.dataField.inputType=='radiobutton'&&answersList.dataField.userDisplay&&answersList.viewable">
                       <div class="row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-4 col-lg-5">
                           <h3 class="survey TH"
                             *ngIf="answersList.dataField.label!=null">
                             <abbr
@@ -1489,7 +1490,7 @@
                               2-4 units; an apartment has 5 or more units." [innerHTML]="answersList.dataField.label"></abbr>
                           </h3>
                         </div>
-                        <div class="col-sm-8 radio_button">
+                        <div class="col-sm-8 col-lg-5 radio_button">
                           <div class="radio"
                             *ngFor="let radioButtonList of
                             answersList.dataField.fieldValues;index as L">

@@ -44,6 +44,15 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   }
   ngAfterViewChecked(): void {
     this.users = this.loginService.getUser();
+
+    if(this.users.role == 'USERS'){
+      if (this.users.surveyLength <= 3 ||
+        (this.users.currentPaneNumber ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile' : false)) {
+         this.hideMenuOption();
+     }else{
+       this.showHiddenMenu();
+     }
+    }
   }
 
   ngAfterViewInit(): void {
@@ -105,6 +114,59 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     }));
 
   }
+
+  showHiddenMenu(){
+
+    if (document.getElementById('_home')) {
+      document.getElementById('_home').classList.remove('header_menu_none');
+    }
+    
+    if (document.getElementById('_account')) {
+      document.getElementById('_account').classList.remove('header_menu_none');
+    }
+    if (document.getElementById('all_topic')) {
+      document.getElementById('all_topic').classList.remove('header_menu_none');
+    }
+
+    if (document.getElementById('_home1')) {
+      document.getElementById('_home1').classList.remove('header_menu_none');
+    }
+
+    if (document.getElementById('all_topic1')) {
+      document.getElementById('all_topic1').classList.remove('header_menu_none');
+    }
+    if (document.getElementById('_account1')) {
+      document.getElementById('_account1').classList.remove('header_menu_none');
+    }
+    
+  }
+
+  hideMenuOption(){
+
+    if (document.getElementById('_home')) {
+      document.getElementById('_home').classList.add('header_menu_none');
+    }
+  
+    if (document.getElementById('_account')) {
+      document.getElementById('_account').classList.add('header_menu_none');
+    }
+    if (document.getElementById('all_topic')) {
+      document.getElementById('all_topic').classList.add('header_menu_none');
+    }
+
+    if (document.getElementById('_home1')) {
+      document.getElementById('_home1').classList.add('header_menu_none');
+    }
+  
+    if (document.getElementById('all_topic1')) {
+      document.getElementById('all_topic1').classList.add('header_menu_none');
+    }
+    if (document.getElementById('_account1')) {
+      document.getElementById('_account1').classList.add('header_menu_none');
+    }
+
+  }
+
   hideResponsiveMenu(): void {
     if (this.isResponsive) {
       let surveyCode;

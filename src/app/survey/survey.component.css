@@ -88,7 +88,7 @@ div.accurate {
   font-size: 16px;
   text-align: justify;
   line-height: 1.4;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   /* max-width: 800px; */
   /* margin-bottom: 30px; */
   /* border-bottom: 1px solid #efefef; */
@@ -270,7 +270,7 @@ img.energyflow.center-block {
   color: #4550a1;
   line-height: 22px;
   font-weight: 500;
-  margin-top: 10px;
+  /* margin-top: 10px; */
   line-height: 1.5;
 }
 
@@ -288,7 +288,7 @@ div.home_energyProfile {
   line-height: 22px;
 }
 .select_next {
-  font-size: 21px;
+  font-size: 19px;
   color: #4550a1;
   font-weight: 500;
   line-height: 22px;
@@ -330,10 +330,10 @@ h3.about_program {
   margin-top: 0px;
 }
 h3.survey.TH {
-  font-size: 19px;
+  font-size: 17px;
   color: #373737;
   font-weight: 400;
-  padding-bottom: 15px;
+  /* padding-bottom: 10px; */
   margin-top: 0px;
   /* text-align: center; */
   margin-bottom: 0px;
@@ -482,13 +482,13 @@ p.undefine {
 p.address {
   color: #000;
   /* text-align: center; */
-  font-size: 23px;
+  font-size: 20px;
   /* margin-top: 12px; */
 }
 div.address {
   color: #312422;
   /* text-align: center; */
-  font-size: 23px;
+  font-size: 16px;
   /* margin-top: 12px; */
 }
 ul.demo {
@@ -1755,7 +1755,7 @@ ul.a li {
   padding-left: 35px;
   margin-bottom: 12px;
   cursor: pointer;
-  font-size: 19px;
+  font-size: 15px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -1774,8 +1774,8 @@ ul.a li {
   position: absolute;
   top: 3px;
   left: 0;
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   background-color: #efefef;
   border-radius: 50%;
   border: 1px solid #9b9b9b;
@@ -1868,7 +1868,7 @@ label.col-lg-7.col-sm-6 {
   padding-left: 0px;
 }
 .form-group {
-  margin: 15px 0 !important;
+  margin: 8px 0 !important;
   margin-left: 0px !important;
   margin-right: 0px !important;
 }
@@ -2410,4 +2410,12 @@ td, th{
   .trash-can-p-width{
     min-width: 42px !important;
   }
+}
+
+.label-size{
+  font-size: 20px;
+}
+
+td .form-group{
+  margin: 4px 0 !important;
 }
