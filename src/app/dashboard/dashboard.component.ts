@@ -44,6 +44,10 @@ export class DashboardComponent implements OnInit {
     if (this.users.outhMeResponse === undefined) {
       this.loginService.logout();
     }
+
+    if(this.users.currentPaneNumber.currentPane.paneCode == 'prf_onHold')
+    this.router.navigate(['/surveyView']);
+
     this.getNextSurvey();
     this.getTrendingHomeChart();
     this.getTrendingProfileChart();
