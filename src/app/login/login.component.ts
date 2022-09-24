@@ -172,9 +172,15 @@ export class LoginComponent implements OnInit, AfterViewInit{
   }
 
   browserInfoDo(){
-    const params = new HttpParams()
-    .append('currentApplicationUI','smartAudit');
-    this.loginService.performPostWithParam( {screenWidth : window.innerWidth, screenscreenHeight : window.innerHeight, timezoneOffset : new Date().getTimezoneOffset(), mobilecheck : mobilecheck()},'free/browserInfo.do',params)
+    const body = {
+      screenWidth : window.innerWidth,
+      screenscreenHeight : window.innerHeight,
+      timezoneOffset : new Date().getTimezoneOffset(),
+      mobilecheck : mobilecheck(),
+      "currentApplicationUI":"smartAudit"
+    }
+
+    this.loginService.performPost(body,'free/browserInfo.do')
     .subscribe(
       response => {
       }, error =>{
