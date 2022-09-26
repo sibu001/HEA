@@ -45,9 +45,9 @@ export class DashboardComponent implements OnInit {
       this.loginService.logout();
     }
 
-    if(this.users.role == 'USERS' && ( this.users.currentPaneNumber.currentPane.paneCode == 'prf_onHold'
-      ||  this.users.surveyLength <= 3))
-    this.router.navigate(['/surveyView']);
+    if(this.users.role == 'USERS' && this.users.currentPaneNumber && this.users.currentPaneNumber.currentPane &&
+     ( this.users.currentPaneNumber.currentPane.paneCode == 'prf_onHold' ||  this.users.surveyLength <= 3))
+      this.router.navigate(['/surveyView']);
 
     this.getNextSurvey();
     this.getTrendingHomeChart();

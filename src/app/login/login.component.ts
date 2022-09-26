@@ -173,8 +173,8 @@ export class LoginComponent implements OnInit, AfterViewInit{
 
   browserInfoDo(){
     const body = {
-      screenWidth : window.innerWidth,
-      screenscreenHeight : window.innerHeight,
+      screenWidth : window.screen.width,
+      screenHeight : window.screen.height,
       timezoneOffset : new Date().getTimezoneOffset(),
       mobilecheck : mobilecheck(),
       "currentApplicationUI":"smartAudit"
