@@ -116,8 +116,8 @@ div.factoid > p {
 }
 div.factoid {
   font-size: 16px !important;
-  margin-bottom: 20px !important;
-  margin-top: 20px !important;
+  /* margin-bottom: 20px !important;
+  margin-top: 20px !important; */
   color: #4550a1 !important;
   line-height: 22px !important;
   font-weight: 500 !important;
@@ -2056,4 +2056,133 @@ snack-bar-container simple-snack-bar{
 ::-webkit-scrollbar-thumb:hover,
 ::-webkit-scrollbar-thumb:active  {
   background: #c0c0c0;
+}
+
+app-customer-view .mat-column-password{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 4% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-customer-view .mat-column-utilityInUse{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 5% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-customer-view .mat-column-waterInUse{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 6% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-customer-view .mat-column-active{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 6% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-customer-view .mat-column-heatingInUse{
+   word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 6% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;   
+}
+
+
+app-customer-view .mat-column-alertLevels{
+  word-wrap: break-word !important;
+white-space: unset !important;
+flex: 0 0 10% !important;
+width: 8% !important;
+overflow-wrap: break-word;
+word-wrap: break-word;
+
+word-break: break-word;
+
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;   
+}
+
+app-customer-view .mat-column-eventDatetime{
+  word-wrap: break-word !important;
+white-space: unset !important;
+flex: 0 0 18% !important;
+width: 8% !important;
+overflow-wrap: break-word;
+word-wrap: break-word;
+
+word-break: break-word;
+
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;   
+}
+ 
+app-customer-view .mat-column-linkedPersonName{
+  word-wrap: break-word !important;
+white-space: unset !important;
+flex: 0 0 18% !important;
+width: 8% !important;
+overflow-wrap: break-word;
+word-wrap: break-word;
+
+word-break: break-word;
+
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;   
 }
