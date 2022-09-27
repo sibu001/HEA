@@ -604,9 +604,11 @@ export class SystemManagementState {
 
     @Action(GetCustomerAlertTypeListAction)
     getAllCustomerAlertType(ctx: StateContext<SystemManagementModel>, action: GetCustomerAlertTypeListAction): Actions {
-        const force: boolean = action.force || SystemManagementState.getCustomerAlertTypeList(ctx.getState()) === undefined;
+        const force = ctx.getState().customerAlertTypeList;
+
+        // const force: boolean = action.force || SystemManagementState.getCustomerAlertTypeList(ctx.getState()) === undefined;
         let result: Actions;
-        if (force) {
+        if (force == undefined) {
             document.getElementById('loader').classList.add('loading');
             result = this.loginService.performGetWithParams(AppConstant.customerAlertTypes, action.filter)
                 .pipe(

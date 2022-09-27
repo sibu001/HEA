@@ -129,7 +129,7 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
     
     this.utilityCredentialForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
-      credentialTypeCode: [event !== undefined ? event.credential.credentialType.credentialType : 'calwater', Validators.required],
+      credentialTypeCode: [event !== undefined ? event.credential.credentialType.credentialType : '', Validators.required],
       login: [event !== undefined ? event.credential.login : null],
       password: [event !== undefined ? event.credential.password : null],
       active: [event !== undefined ? event.credential.active : false],

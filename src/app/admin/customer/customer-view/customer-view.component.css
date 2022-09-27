@@ -108,3 +108,7 @@ p.demo1 {
   border-radius: 13px;
 }
 
+label{
+  font-family: "Roboto", sans-serif !important;
+  font-weight: initial !important;
+}

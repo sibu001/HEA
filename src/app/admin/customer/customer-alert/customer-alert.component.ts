@@ -26,6 +26,7 @@ export class CustomerAlertComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
+    this.getCustomerAlertType();
     this.findCustomerAlertType(true, '');
     this.setForm(undefined);
     if (this.data.row !== undefined) {
@@ -39,10 +40,13 @@ export class CustomerAlertComponent implements OnInit {
 
   findCustomerAlertType(force: boolean, filter: any): void {
     this.systemService.loadGetCustomerAlertTypeList(force, filter);
+  }
+
+  getCustomerAlertType(){
     this.subscriptions.add(this.systemService.getCustomerAlertTypeList().pipe(skipWhile((item: any) => !item))
-      .subscribe((customerAlertTypeList: any) => {
-        this.customerAlertTypes = customerAlertTypeList;
-      }));
+    .subscribe((customerAlertTypeList: any) => {
+      this.customerAlertTypes = customerAlertTypeList;
+    }));
   }
 
   onNoClick() {

@@ -2109,7 +2109,7 @@ app-customer-view .mat-column-waterInUse{
 app-customer-view .mat-column-active{
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 6% !important;
+  flex: 0 0 9% !important;
   width: 8% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -2142,7 +2142,7 @@ app-customer-view .mat-column-heatingInUse{
 app-customer-view .mat-column-alertLevels{
   word-wrap: break-word !important;
 white-space: unset !important;
-flex: 0 0 10% !important;
+flex: 0 0 11% !important;
 width: 8% !important;
 overflow-wrap: break-word;
 word-wrap: break-word;
@@ -2185,4 +2185,8 @@ word-break: break-word;
 -moz-hyphens: auto;
 -webkit-hyphens: auto;
 hyphens: auto;   
+}
+
+app-customer-event-type .ui-calendar .ui-calendar-button:enabled{
+  height: 29px !important;
 }

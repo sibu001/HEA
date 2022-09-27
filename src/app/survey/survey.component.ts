@@ -1064,18 +1064,23 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
   }
 
-  setValueInLimit(event){
-    var minVal = parseInt(event.target.attributes.min.value);
-    var maxVal = parseInt(event.target.attributes.max.value);
+  setValueInLimit(event,onChangeRefresh : boolean){
+    var minVal = event.target.attributes.min.value;
+    var maxVal = event.target.attributes.max.value;
     var id = parseInt(event.target.id);
-    var value = event.target.value == "" ||  event.target.value == "e" ? 0 : parseInt(event.target.value);
+    var value = event.target.value == "" ||  event.target.value == "e" ? 0 : event.target.value;
 
-    if( value > maxVal )
+    if( parseInt(value) > parseInt(maxVal) ){
       this.setValueInModel(id, maxVal);
-    
-    else if (value <= minVal) {
+      value = maxVal;
+    }else if (parseInt(value) < parseInt(minVal)) {
+      value = minVal;
       this.setValueInModel(id, minVal);  
    }
+
+   this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers,
+    this.users.currentPaneNumber.currentPaneBlocks,'change',onChangeRefresh,'')
+
   }
 
   setValueInModel(id, value){

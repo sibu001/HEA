@@ -499,8 +499,9 @@
                                       <input type="number" pInputText 
                                       [min]="answersList.dataField.fieldValues[0].rangeStart" 
                                       [max]="answersList.dataField.fieldValues[0].rangeEnd"
-                                      [(ngModel)]="answersList.value"  
-                                      style="width:5em" [id]="answersList.id" (change)="setValueInLimit($event)" >
+                                      [ngModel]="answersList.value"  
+                                      (ngModelChange)="answersList.value=$event + ''"
+                                      style="width:5em" [id]="answersList.id" (change)="setValueInLimit($event,answersList.dataField.onChangeRefresh)" >
                                       <span>{{answersList.dataField.unit}}</span>
                                     </div>
                                   </div>
@@ -1386,8 +1387,9 @@
                               <input type="number" pInputText 
                               [min]="answersList.dataField.fieldValues[0].rangeStart" 
                               [max]="answersList.dataField.fieldValues[0].rangeEnd"
-                              [(ngModel)]="answersList.value"  
-                              style="width:5em" [id]="answersList.id" (change)="setValueInLimit($event)" [value]="answersList.value" >
+                              [ngModel]="answersList.value"  
+                              (ngModelChange)="answersList.value=$event + ''"
+                              style="width:5em" [id]="answersList.id" (change)="setValueInLimit($event,answersList.dataField.onChangeRefresh)" [value]="answersList.value" >
                               <span>{{answersList.dataField.unit}}</span>
                             </div>
                           </div>

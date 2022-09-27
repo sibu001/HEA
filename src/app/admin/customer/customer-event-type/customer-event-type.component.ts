@@ -37,6 +37,7 @@ export class CustomerEventTypeComponent implements OnInit {
 
   ngOnInit() {
     this.setForm(undefined);
+    this.getCustomerEventType();
     this.loadCustomerEventType();
     if (this.data.isList) {
       const eventObj = {
@@ -72,9 +73,27 @@ export class CustomerEventTypeComponent implements OnInit {
   }
 
   loadCustomerEventType() {
-    this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeList(true, '').pipe(skipWhile((item: any) => !item))
+    this.systemUtilityService.loadCustomerEventTypeList(true, '');
+    // .pipe(skipWhile((item: any) => !item))
+    //   .subscribe((response: any) => {
+    //     this.customerEventTypeList = response.systemUtilityManagement.customerEventTypeList;
+    //     if (this.data.isList && !this.showDelete) {
+    //       const i = this.customerEventTypeList.findIndex((item: any) => item.eventCode === this.data.key);
+    //       if (i !== -1) {
+    //         this.customerEventTypeForm.controls['eventCode'].setValue(this.customerEventTypeList[i].eventCode);
+    //         this.customerEventTypeForm.controls['eventDescription'].setValue(this.customerEventTypeList[i].description);
+    //         this.customerEventTypeForm.controls['customerEventTypeId'].setValue(this.customerEventTypeList[i].customerEventTypeId);
+    //       }
+    //     }
+    //   }));
+  }
+
+  getCustomerEventType(){
+    this.subscriptions.add(
+      this.systemUtilityService.getCustomerEventTypeList()
+      .pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-        this.customerEventTypeList = response.systemUtilityManagement.customerEventTypeList;
+        this.customerEventTypeList = response;
         if (this.data.isList && !this.showDelete) {
           const i = this.customerEventTypeList.findIndex((item: any) => item.eventCode === this.data.key);
           if (i !== -1) {
@@ -83,7 +102,8 @@ export class CustomerEventTypeComponent implements OnInit {
             this.customerEventTypeForm.controls['customerEventTypeId'].setValue(this.customerEventTypeList[i].customerEventTypeId);
           }
         }
-      }));
+      }
+    ));
   }
 
   onNoClick() {

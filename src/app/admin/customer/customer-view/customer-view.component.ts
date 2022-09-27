@@ -54,7 +54,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   heatingRatePlan: any;
   weatherStation: any;
   helpHide: boolean;
-  isFormSubmitted : boolean = false;
   updateWithUtilityAddressFlag : boolean = false;
   placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
@@ -358,7 +357,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       modelChangedBy: [event !== undefined ? event.modelChangedBy : ''],
       eligibleStartDate: [event !== undefined ? 
         (this.datePipe.transform(event.eligibleStartDate, 'MM/dd/yyyy h:mm:ss')) : null,
-         CustomValidator.customDateValidatorforInptField('MM/dd/yyyy h:mm:ss',this.isFormSubmitted)],
+         CustomValidator.customDateValidatorforInptField('MM/dd/yyyy h:mm:ss')],
       latitude: [event !== undefined ? event.latitude : ''],
       longitude: [event !== undefined ? event.longitude : ''],
       maxAlertLevel: [event !== undefined ? event.maxAlertLevel : ''],
@@ -408,7 +407,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
       passwordForm: this.formBuilder.group(
         {
-          password: ['',
+          password: ['',  
           ],
           confirmPassword: [''],
         },
@@ -534,6 +533,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteUtilityCredential(event: any) {
+    if(!confirm('Are you sure you want to delete this credential?')) return null;
+
     this.subscriptions.add(this.customerService.deleteUtilityCredentialById(this.id, event.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.loadUtilityCredential(this.id);
@@ -578,6 +579,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteCustomerAlert(event: any) {
+    if(!confirm('Are you sure you want to delete this alert?')) return null;
+    
     this.subscriptions.add(this.customerService.deleteAlertById(this.id, event.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.loadCustomerAlert(this.id);
@@ -627,6 +630,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.addCustomerEvent(obj);
   }
   deleteCustomerEvent(event: any) {
+    if(!confirm('Are you sure you want to delete this event?')) return null;
     this.subscriptions.add(this.customerService.deleteCustomerEventById(this.id, event.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.loadCustomerEvent(this.id);
@@ -850,7 +854,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   save() {
-    this.isFormSubmitted = true;
     if (this.p.password.value) {
       this.p.password.setValidators([Validators.required,
       Validators.minLength(this.minLength),
@@ -964,5 +967,11 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  loadCurrentOptOutsList(){
+    
+  }
   
+  getCurrentOptOutsList(){
+
+  }
 }

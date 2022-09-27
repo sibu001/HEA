@@ -111,7 +111,7 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="checkbox" name="optOutMail" formControlName="optOutMail">
-              <label class="checkbox">Opt Out mail</label>
+              <label>Opt Out mail</label>
             </div>
           </div>
           <div class="row borderBottom w100 rowPadding">
@@ -400,7 +400,7 @@
           </div>
           <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"
-            [ngClass]="{'error-fields-highlight' : (eligibleStartDate.errors?.invalidDate && isFormSubmitted)}"
+            [ngClass]="{'error-fields-highlight' : (eligibleStartDate.errors?.invalidDate)}"
             >
               Eligible start date:
             </div>
