@@ -267,20 +267,14 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     } else if (routeNumber === 8) {
       this.router.navigate(['/surveyRecommendationList']);
     } else if (routeNumber === 9) {
-      // console.log(this.router.url)  
-      // if(this.router.url == '/surveyView'){
-      //   this.users.lastVisitedURL = this.router.url;
-      //   localStorage.setItem('users',JSON.stringify(this.users));
-      //   this.sendDataToClassicVersion();    
-      // }else
-      //   window.open(window.location.origin + '/hea-web/trendingHome.do', '_self');  
-      this.sendDataToClassicVersion();   
+        this.users.lastVisitedURL = this.router.url;
+        this.redirectUserToclassicUI();
     } else if(routeNumber = 10){
-      // if(this.router.url == '/surveyView')
-      //   this.sendDataToClassicVersion();    
-      // else
-      //   window.open(window.location.origin + '/hea-web/customerList.do', '_self');
-      this.sendDataToClassicVersion();
+      if(this.router.url == '/surveyView')
+        this.sendDataToClassicVersion();    
+      else
+        window.open(window.location.origin + '/hea-web/customerList.do', '_self');
+      // this.sendDataToClassicVersion();
     }
   }
 
@@ -290,31 +284,42 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     const data = user.currentPaneNumber;
 
     const formData = new FormData();
-    // formData.append("formAction","loadPane");
-    // formData.append("surveyId",data.survey.surveyId);
-    // formData.append("surveyDescriptionId",data.surveyDescriptionId);
-    // formData.append("paneCode",data.currentPane.paneCode);
-    // formData.append("userId",data.survey.userId);
 
-    // document.getElementById('loader').classList.add('loading');
-    // this.loginService.performPostMultiPartData(
-    //   formData, 'survey.do'
-    // ).subscribe(
-    //   (response) =>{
-    //   } ,(error) =>{
-    //     console.log(error.url);
-    //       window.open(error.url,'_self');
-    //   }
-    // )
+    formData.append("formAction","loadPane");
+    formData.append("surveyId",data.survey.surveyId);
+    formData.append("surveyDescriptionId",data.surveyDescriptionId);
+    formData.append("paneCode",data.currentPane.paneCode);
+    formData.append("userId",data.survey.userId);
 
-    const params = new HttpParams().set("uiCode","V1");
-    formData.append('uiCode','V1')
-    this.loginService.performPostMultiPartData(formData,'customers/'+  this.users.outhMeResponse.customerId + '/selectUI')
-    .subscribe(response =>{
+    document.getElementById('loader').classList.add('loading');
+    this.loginService.performPostMultiPartData(
+      formData, 'survey.do'
+    ).subscribe(
+      (response) =>{
+      } ,(error) =>{
+        console.log(error.url);
+          window.open(error.url,'_self');
+      }
+    )
+
+  }
+
+  redirectUserToclassicUI(){
+
+    const formData = new FormData();
+    formData.append('uiCode','V1');
+
+    document.getElementById('loader').classList.add('loading');
+
+    this.loginService.performPostMultiPartFromData
+    (formData,'customers/'+  this.users.outhMeResponse.customerId + '/selectUI')
+    .subscribe((response : any) =>{
       console.log(response);
+      window.open(response.data,'_self');
     }, error =>{ 
       console.log(error);
     })
+
   }
 
   logouts(): void {

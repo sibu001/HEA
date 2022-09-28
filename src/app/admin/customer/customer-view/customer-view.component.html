@@ -636,24 +636,26 @@
             </div>
           </div>
           <!-- Email Settings -->
-          <div class="row marginTop">
-            <div class="col-sm-12">
-              <p class="Messages">
-                <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Email
-                  Settings</strong>
-              </p>
+            <div class="row marginTop">
+              <div class="col-sm-12">
+                <p class="Messages">
+                  <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Email
+                    Settings</strong>
+                </p>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-12">
-              <app-table [keys]="emailKeys" [data]="emailDataSource" [isDelete]=false [isHideAdd]=true
-                [totalElement]="staffData.totalElements">
-              </app-table>
+            <div class="row">
+              <div class="col-sm-12">
+                <app-table [keys]="emailKeys" [data]="emailDataSource" [isDelete]=false [isHideAdd]=true
+                  [totalElement]="staffData.totalElements">
+                </app-table>
+              </div>
             </div>
-          </div>
-
+  
+          
           <!-- Opt Out -->
-          <div class="row marginTop" *ngIf="isOptOut">
+          <ng-container *ngIf="optOutDataSource && optOutDataSource.length != 0">
+          <div class="row marginTop">
             <div class="col-sm-12">
               <p class="Messages">
                 <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Current
@@ -661,13 +663,14 @@
               </p>
             </div>
           </div>
-          <div class="row" *ngIf="isOptOut">
+          <div class="row">
             <div class="col-sm-12">
               <app-table [keys]="optOutKeys" [data]="optOutDataSource" [isDelete]=true [isHideAdd]=true
                 [totalElement]="optOutData.totalElements" (deleteEvent)="deleteOptOut($event)">
               </app-table>
             </div>
           </div>
+        </ng-container>
 
           <div class="row rowPadding paddingTop">
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-4">

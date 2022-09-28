@@ -2172,7 +2172,7 @@ hyphens: auto;
 }
  
 app-customer-view .mat-column-linkedPersonName{
-  word-wrap: break-word !important;
+word-wrap: break-word !important;
 white-space: unset !important;
 flex: 0 0 18% !important;
 width: 8% !important;
@@ -2189,4 +2189,20 @@ hyphens: auto;
 
 app-customer-event-type .ui-calendar .ui-calendar-button:enabled{
   height: 29px !important;
+}
+
+app-customer-view .mat-column-mailDescriptionId{
+word-wrap: break-word !important;
+white-space: unset !important;
+flex: 0 0 14% !important;
+width: 8% !important;
+overflow-wrap: break-word;
+word-wrap: break-word;
+
+word-break: break-word;
+
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;   
 }

@@ -2,7 +2,7 @@ import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnIn
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { filter, map, skipWhile } from 'rxjs/operators';
 import { GoogleMapComponent } from 'src/app/common/google-map/google-map.component';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -64,6 +64,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   credentialsKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_CREDENTIAL_KEY;
   public credentialsDataSource: any;
   public openedUtilityCredential : any;
+  private subject : Subject<any> = new Subject();
 
   public credentialsData = {
     content: [],
@@ -101,14 +102,14 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   emailKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_EMAIL_KEY;
   public emailDataSource: any = [];
   public emailData = {
-    content: [],
+    content: undefined,
     totalElements: 0,
   };
 
   optOutKeys: Array<TABLECOLUMN> = TableColumnData.OPT_OUT_KEY;
   public optOutDataSource: any = [];
   public optOutData = {
-    content: [],
+    content: undefined,
     totalElements: 0,
   };
 
@@ -150,7 +151,11 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadCustomerGroup();
     if (this.id !== undefined) {
       this.customerService.loadCustomerById(this.id);
+      this.getOptOut();
+      this.emailSettingsList();
       this.loadCustomerById();
+      this.getEmailSettings();
+      this.loadOptOut(this.id);
       const self = this;
       setTimeout(() =>{
         self.loadWeatherStationId(self.id);
@@ -194,8 +199,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
           this.router.navigate(['admin/customer/customerEdit'], { queryParams: { 'id': customer.customerId } });
         }
         if (customer.optOutMail) {
-          this.isOptOut = true;
-          this.loadOptOut(this.id);
+          // this.isOptOut = true;
+          // this.loadOptOut(this.id);
         }
         this.customerGroupCode = customer.customerGroup.groupCode;
         if (customer.coachUser) {
@@ -649,6 +654,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   loadEmailSetting(customerId: any) {
     this.customerService.loadEmailSettingList(customerId);
+  }
+
+  getEmailSettings(){
     this.subscriptions.add(
       this.customerService.getEmailSettingList()
         .pipe(
@@ -658,23 +666,53 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         .subscribe((emailSetting: any) => {
           this.emailData.content = emailSetting;
           this.emailData.totalElements = emailSetting.length;
-          this.emailDataSource = [...this.emailData.content];
+          this.subject.next('emailSettings');
+          // this.emailDataSource = [...this.emailData.content];
         }));
   }
 
   loadOptOut(customerId: any) {
     this.customerService.loadOptOutList(customerId);
-    this.subscriptions.add(this.customerService.getOptOutList().
-      pipe(
-        skipWhile((item: any) => !item),
-        map((item) => item.filter((item2) => item2.mailDescription.active))
-      )
-      .subscribe((optOutList: any) => {
-        this.optOutData.content = optOutList;
-        this.optOutData.totalElements = optOutList.length;
-        this.optOutDataSource = [...this.optOutData.content];
-      }));
   }
+
+  getOptOut(){
+    this.subscriptions.add(this.customerService.getOptOutList().
+    pipe(
+      skipWhile((item: any) => !item),
+      map((item) => item.filter((item2) => item2.mailDescription.active))
+    )
+    .subscribe((optOutList: any) => {
+      this.optOutData.content = optOutList;
+      this.optOutData.totalElements = optOutList.length;
+      this.optOutDataSource = [...this.optOutData.content];
+      this.subject.next('optOutList');
+    }));
+  }
+
+  emailSettingsList(){
+    this.subscriptions.add(
+      this.subject
+      // .pipe(filter(data => ))
+      .subscribe(
+        response =>{
+
+          if(this.emailData.content && this.optOutData.content){
+
+          for(let optOut of this.optOutData.content){
+            for(let emailData of this.emailData.content){
+              if(emailData.mailDescriptionId == optOut.mailDescriptionId){
+                emailData.active = false;
+                break;
+              }
+            }
+          }
+        }
+          this.emailDataSource = this.emailData.content;
+        }
+      )
+    )
+  }
+  
 
   deleteOptOut(event: any) {
     this.subscriptions.add(this.customerService.deleteOptOut(this.id, event.mailDescriptionId)
@@ -967,11 +1005,5 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  loadCurrentOptOutsList(){
-    
-  }
-  
-  getCurrentOptOutsList(){
 
-  }
 }
