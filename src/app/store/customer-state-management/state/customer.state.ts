@@ -1216,9 +1216,7 @@ export class CustomerManagementState {
     @Action(SetNewPasswordAction)
     setNewPassword(ctx: StateContext<CustomerManagementModel>, action: SetNewPasswordAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        const formData = new FormData();
-        formData.set('password', action.params);
-        return this.loginService.performPutWithMultiPart(formData, AppConstant.users + '/' + action.userId + '/' + AppConstant.saveNewPassword)
+        return this.loginService.performPutWithMultiPart({'password': action.params}, AppConstant.users + '/' + action.userId + '/' + AppConstant.saveNewPassword)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
