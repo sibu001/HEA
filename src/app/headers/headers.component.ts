@@ -237,7 +237,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     this.users.isSurvey = false;
     this.loginService.setUser(this.users);
     if (routeNumber === 2) {
-      if (this.users.role === 'ADMIN') {
+      if (this.users.role != 'USERS') {
         this.router.navigate(['admin/customer']);
       } else {
         if (this.users.surveyLength <= 3) {
@@ -251,7 +251,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
         (this.users.currentPaneNumber ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'Profile' : true)) {
         this.router.navigate(['/accountDetail']);
       }
-      if (this.users.role === 'ADMIN') {
+      if (this.users.role != 'USERS') {
         this.router.navigate(['/accountDetail']);
       }
     } else if (routeNumber === 4 || routeNumber === 5) {

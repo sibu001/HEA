@@ -1216,7 +1216,9 @@ export class CustomerManagementState {
     @Action(SetNewPasswordAction)
     setNewPassword(ctx: StateContext<CustomerManagementModel>, action: SetNewPasswordAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPostWithParam({ 'password': action.params }, AppConstant.users + '/' + action.userId + '/' + AppConstant.saveNewPassword, null)
+        const formData = new FormData();
+        formData.set('password', action.params);
+        return this.loginService.performPutWithMultiPart(formData, AppConstant.users + '/' + action.userId + '/' + AppConstant.saveNewPassword)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -1391,6 +1393,21 @@ export class CustomerManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     //  this.utilityService.showSuccessMessage('Deleted Successfully');
+
+                    let optOutList = ctx.getState().optOutList;
+                    let emailSettingList = ctx.getState().emailSettingList;
+                    emailSettingList.find( item => item.mailDescriptionId == action.mailDescriptionId).active = true;
+                    optOutList = optOutList.filter(item => item.mailDescriptionId != action.mailDescriptionId);
+
+                    ctx.patchState({
+                        optOutList : [...optOutList]
+                    })
+                    
+                    ctx.patchState({
+                        emailSettingList: [...emailSettingList]
+                    })
+
+
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1406,6 +1423,17 @@ export class CustomerManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
+                    
+                   let optOutList = ctx.getState().optOutList;
+                   let emailSettingList = ctx.getState().emailSettingList;                   
+                   const removedElementList = emailSettingList.filter(item => item.mailDescriptionId == action.mailDescriptionId);
+                   optOutList.push(removedElementList[0]);
+
+                    ctx.patchState({
+                        optOutList : [...optOutList]
+                    })
+
+
                     ctx.patchState({
                         optOut: response,
                     });

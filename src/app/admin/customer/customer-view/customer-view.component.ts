@@ -40,7 +40,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   matcher = new MyErrorStateMatcher();
   customerForm: FormGroup;
-  passwordForm: FormGroup;
+  // passwordForm: FormGroup;
   customerGroupList: any;
   programGroupList: any;
   coachUserList: any;
@@ -287,12 +287,12 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     )
   }
 
-  setPasswordForm() {
-    this.passwordForm = this.formBuilder.group({
-      password: ['', [Validators.required, Validators.maxLength(this.maxLength), Validators.minLength(this.minLength), Validators.pattern(this.pattern)]],
-      confirmPassword: ['']
-    }, { validator: MustMatch('password', 'confirmPassword') });
-  }
+  // setPasswordForm() {
+  //   this.passwordForm = this.formBuilder.group({
+  //     password: ['', [Validators.required, Validators.maxLength(this.maxLength), Validators.minLength(this.minLength), Validators.pattern(this.pattern)]],
+  //     confirmPassword: ['']
+  //   }, { validator: MustMatch('password', 'confirmPassword') });
+  // }
 
   setForm(event: any) {
     this.customerForm = this.formBuilder.group({
@@ -412,8 +412,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       }),
       passwordForm: this.formBuilder.group(
         {
-          password: ['',  
-          ],
+          password: ['',[Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]],
           confirmPassword: [''],
         },
         { validator: MustMatch('password', 'confirmPassword') }),
@@ -441,7 +440,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
           this.regex = '^.*(?=(?:.*?[' + this.pattern
             .replace(']', '').concat('\\\]')
             + ']){' + this.charactersCount + ',}).*$';
-          this.p.password.setValidators([Validators.pattern(new RegExp(this.regex))]);
+          this.p.password.setValidators([Validators.pattern(new RegExp(this.regex)),
+          Validators.minLength(this.minLength),Validators.maxLength(this.maxLength)]);
           this.p.password.updateValueAndValidity();
           // this.setPasswordForm();
         }
@@ -679,7 +679,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.add(this.customerService.getOptOutList().
     pipe(
       skipWhile((item: any) => !item),
-      map((item) => item.filter((item2) => item2.mailDescription.active))
+      map((item) => {
+        return item.filter((item2) => item2.mailDescription.active);
+      })
     )
     .subscribe((optOutList: any) => {
       this.optOutData.content = optOutList;
@@ -706,8 +708,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
               }
             }
           }
+          this.emailDataSource = [...this.emailData.content];
         }
-          this.emailDataSource = this.emailData.content;
         }
       )
     )
@@ -715,10 +717,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   
 
   deleteOptOut(event: any) {
-    this.subscriptions.add(this.customerService.deleteOptOut(this.id, event.mailDescriptionId)
-      .subscribe((response: any) => {
-        this.loadOptOut(this.id);
-      }));
+    this.customerService.deleteOptOut(this.id, event.mailDescriptionId);
   }
 
   getElectricityPlanRate(customerId) {
@@ -893,10 +892,20 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   save() {
     if (this.p.password.value) {
-      this.p.password.setValidators([Validators.required,
+      this.p.password.setValidators([
       Validators.minLength(this.minLength),
       Validators.maxLength(this.maxLength)]);
-      this.p.confirmPassword.setValidators([Validators.required]);
+      // this.p.confirmPassword.setValidators([]);
+      const passwordForm = this.customerForm.controls.passwordForm;
+      if(!passwordForm.valid){
+        for (const key of Object.keys(this.p)) {
+          if (this.p[key].invalid) {
+            const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+            invalidControl.focus();
+            break;
+          }
+        }
+      }
     }
     if (this.customerForm.valid) {
       this.customerForm.value.activationDate = this.convertToMillisecond(this.customerForm.value.activationDate);
@@ -1003,6 +1012,16 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         .subscribe((response: any) => {
         }));
     }
+  }
+
+  emailSettingsCheckBoxEvent(event : any){
+    console.log(event);
+    if(event.isCheckboxChecked == false){
+      this.customerService.saveOptOut(this.id,event.mailDescriptionId);
+    }else if(event.isCheckboxChecked == true){
+      this.customerService.deleteOptOut(this.id,event.mailDescriptionId);
+    }
+
   }
 
 

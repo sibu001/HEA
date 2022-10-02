@@ -21,6 +21,7 @@ export class CustomerEventTypeComponent implements OnInit {
   eventDescription: string;
   author: any;
   authorType: any;
+  isFormSubmitted :boolean = false;
   index = 0;
   showDelete = false;
   constructor(
@@ -180,6 +181,7 @@ export class CustomerEventTypeComponent implements OnInit {
       }));
   }
   save() {
+    this.isFormSubmitted = true;
     if (this.customerEventTypeForm.valid) {
       this.customerEventTypeForm.value.customerEventTypeId = Number(this.customerEventTypeForm.value.customerEventTypeId);
       if (this.data.row && this.data.row.id) {

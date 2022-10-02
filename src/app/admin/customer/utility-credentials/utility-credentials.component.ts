@@ -254,12 +254,14 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   }
 
   settingServiceInUseValue(){
-    if(this.utilityCredentialForm.value.heatingServiceId == "none")
+    if(this.utilityCredentialForm.value.heatingServiceId == "none" || 
+    this.utilityCredentialForm.value.heatingServiceId == "")
       this.utilityCredentialForm.value.heatingInUse = false;
     else
       this.utilityCredentialForm.value.heatingInUse = true;
 
-    if(this.utilityCredentialForm.value.electricityServiceId == "none")
+    if(this.utilityCredentialForm.value.electricityServiceId == "none" ||
+    this.utilityCredentialForm.value.electricityServiceId == "")
       this.utilityCredentialForm.value.electricityInUse = false;
     else
       this.utilityCredentialForm.value.electricityInUse = true;

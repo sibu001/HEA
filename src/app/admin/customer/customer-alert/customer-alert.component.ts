@@ -16,6 +16,7 @@ export class CustomerAlertComponent implements OnInit {
   customerAlertForm: FormGroup;
   customerAlertTypes: Array<any>;
   alertLevels: Array<any> = TableColumnData.ALERT_LEVEL;
+  isFormSubmitted : boolean = false;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -62,6 +63,7 @@ export class CustomerAlertComponent implements OnInit {
     });
   }
   save() {
+    this.isFormSubmitted = true;
     if (this.customerAlertForm.valid) {
       if (this.data.row && this.data.row.id) {
         this.subscriptions.add(this.customerService.updateAlert(this.data.customerId, this.data.row.id, this.customerAlertForm.value).pipe(skipWhile((item: any) => !item))

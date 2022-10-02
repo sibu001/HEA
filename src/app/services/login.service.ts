@@ -206,6 +206,12 @@ export class LoginService {
         const url = this.getFormattedUrl(endpoint);
         return this.http.put(url, object, this.getOptionsMultiPart());
     }
+
+    performPutWithMultiPart(object: any, endpoint: any): any {
+        const url = this.getFormattedUrl(endpoint);
+        return this.http.put(url, object, this.getMultipartOption());
+    }
+
     performGet(endPoint: any): any {
         const url = this.getFormattedUrl(endPoint);
         return this.http.get(url, this.getOptions());

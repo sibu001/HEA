@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, ElementRef, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
@@ -67,7 +67,7 @@ export class StaffNoteComponent implements OnInit, OnDestroy {
     this.staffNoteForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
       noteDate: [event !== undefined ? new Date(event.noteDate) : new Date()],
-      note: [event !== undefined ? event.note : ''],
+      note: [event !== undefined ? event.note : '',Validators.required],
       userId: [event !== undefined ? event.userId : this.userId],
       customerId: [event !== undefined ? event.customerId : this.data.customerId],
     });

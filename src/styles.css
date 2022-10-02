@@ -2090,38 +2090,6 @@ app-customer-view .mat-column-utilityInUse{
   hyphens: auto;
 }
 
-app-customer-view .mat-column-waterInUse{
-  word-wrap: break-word !important;
-  white-space: unset !important;
-  flex: 0 0 6% !important;
-  width: 8% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  
-  word-break: break-word;
-  
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
-app-customer-view .mat-column-active{
-  word-wrap: break-word !important;
-  white-space: unset !important;
-  flex: 0 0 9% !important;
-  width: 8% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  
-  word-break: break-word;
-  
-  -ms-hyphens: auto;
-  -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
 app-customer-view .mat-column-heatingInUse{
    word-wrap: break-word !important;
   white-space: unset !important;
@@ -2139,10 +2107,76 @@ app-customer-view .mat-column-heatingInUse{
 }
 
 
+.mat-column-delete{
+  word-wrap: break-word !important;
+white-space: unset !important;
+flex: 0 0 3% !important;
+width: 8% !important;
+overflow-wrap: break-word;
+word-wrap: break-word;
+
+word-break: break-word;
+
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;
+}
+
+app-customer-view .mat-column-active{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 6% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-customer-view #email-settings .mat-column-active{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 12% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-customer-view .mat-column-waterInUse{
+word-wrap: break-word !important;
+white-space: unset !important;
+flex: 0 0 6% !important;
+width: 8% !important;
+overflow-wrap: break-word;
+word-wrap: break-word;
+
+word-break: break-word;
+
+-ms-hyphens: auto;
+-moz-hyphens: auto;
+-webkit-hyphens: auto;
+hyphens: auto;
+}
+
+
+
 app-customer-view .mat-column-alertLevels{
   word-wrap: break-word !important;
 white-space: unset !important;
-flex: 0 0 11% !important;
+flex: 0 0 12% !important;
 width: 8% !important;
 overflow-wrap: break-word;
 word-wrap: break-word;
@@ -2156,9 +2190,9 @@ hyphens: auto;
 }
 
 app-customer-view .mat-column-eventDatetime{
-  word-wrap: break-word !important;
+word-wrap: break-word !important;
 white-space: unset !important;
-flex: 0 0 18% !important;
+flex: 0 0 12% !important;
 width: 8% !important;
 overflow-wrap: break-word;
 word-wrap: break-word;
@@ -2206,3 +2240,35 @@ word-break: break-word;
 -webkit-hyphens: auto;
 hyphens: auto;   
 }
+
+app-staff-note .ui-calendar .ui-calendar-button:enabled, 
+table .ui-calendar .ui-calendar-button {
+  height: 29px;
+}
+
+.cursor-pointer{
+  cursor:pointer;
+}
+
+app-customer-view .mat-column-note,
+app-customer-view .mat-column-description{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 45% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;   
+  }
+
+
+/* app-customer-view app-table > div {
+  min-width: 110%;
+  overflow-x: auto;
+} */

@@ -45,9 +45,7 @@
                 [value]="group.eventCode">
                 {{group.eventName}}</option>
             </select>
-            <div *ngIf="f.customerEventTypeId.invalid &&
-              (f.customerEventTypeId.dirty ||
-              f.customerEventTypeId.touched)">
+            <div *ngIf="f.customerEventTypeId.invalid && isFormSubmitted">
               <span class="error" *ngIf="f.customerEventTypeId.errors.required">
                 Event Type is required.
               </span>
@@ -93,8 +91,7 @@
           <div class="control-label col-sm-8 col-xs-12">
             <textarea class="form-control textarea_scroll" rows="3" id="comment"
               name="description" formControlName="description"></textarea>
-            <div *ngIf="f.description.invalid && (f.description.dirty ||
-              f.description.touched)">
+            <div *ngIf="f.description.invalid && isFormSubmitted">
               <span class="error" *ngIf="f.description.errors.required">
                 Note is required.
               </span>
