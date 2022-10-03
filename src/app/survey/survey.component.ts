@@ -95,6 +95,17 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   ngAfterViewChecked(): void{
     this.surveyLengthManage();
   }
+  
+  disableNextPrevButtonCheck(event){
+    if (this.users.currentPaneNumber.currentPane.paneCode === 'prf_welcome') {
+      if (event !== 'Y') {
+        this.disableButton = true;
+      } else {
+        this.disableButton = false;
+      }
+    }
+    return true;
+  }
 
   hideMenu() {
     if (document.getElementById('_home')) {

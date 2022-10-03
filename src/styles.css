@@ -2268,7 +2268,14 @@ app-customer-view .mat-column-description{
   }
 
 
-/* app-customer-view app-table > div {
-  min-width: 110%;
-  overflow-x: auto;
-} */
+@media (max-width: 767px) {
+  .survey.TH.text-right{
+    text-align: left;
+  }
+}
+
+@media (max-width: 550px) {
+  .ml-30{
+    margin-left: 5%;
+  }
+}

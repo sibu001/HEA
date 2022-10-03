@@ -127,7 +127,7 @@
                                     answersList.dataField.fieldValues;index as k">
                                     <div [innerHTML]="dataFieldValue.name |
                                       safeHtml" class="silvercolorsecond"></div>
-                                    <input type="radio"
+                                    <input type="radio" *ngIf="disableNextPrevButtonCheck(answersList.value)"
                                       [name]="answersList.dataField.field" [id]="k"
                                       [value]="dataFieldValue.value"
                                       [(ngModel)]="answersList.value"
@@ -615,7 +615,7 @@
                                       [(ngModel)]="answersList.value"
                                       [checked]="radioButtonList.value==answersList.value">
                                     <span class="checkmark1"></span>
-                                    <div class="text-left" [innerHTML]="radioButtonList.name |
+                                    <div class="text-left font-w-400" [innerHTML]="radioButtonList.name |
                                       safeHtml"></div>
                                   </label>
                                 </div>
@@ -1016,7 +1016,7 @@
                               answersList.dataField.fieldValues;index as k">
                               <div [innerHTML]="dataFieldValue.name |
                                 safeHtml" class="silvercolorsecond"></div>
-                              <input type="radio"
+                              <input type="radio" *ngIf="disableNextPrevButtonCheck(answersList.value)"
                                 [name]="answersList.dataField.field" [id]="k"
                                 [value]="dataFieldValue.value"
                                 [(ngModel)]="answersList.value"
@@ -1503,7 +1503,7 @@
                                 [(ngModel)]="answersList.value"
                                 [checked]="radioButtonList.value==answersList.value">
                               <span class="checkmark1"></span>
-                              <div [innerHTML]="radioButtonList.name |
+                              <div class="text-left font-w-400" [innerHTML]="radioButtonList.name |
                                 safeHtml"></div>
                             </label>
                           </div>

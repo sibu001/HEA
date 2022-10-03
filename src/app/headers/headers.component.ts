@@ -316,6 +316,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     .subscribe((response : any) =>{
       console.log(response);
       window.open(response.data,'_self');
+      document.getElementById('loader').classList.remove('loading');
     }, error =>{ 
       console.log(error);
     })
@@ -323,8 +324,15 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   }
 
   logouts(): void {
+    this.closeOpenedDialogBox();
     this.loginService.logout();
   }
+
+  closeOpenedDialogBox(){
+     let closeButton = document.getElementsByClassName('closeButton')[0] as HTMLElement;
+     closeButton.click();
+  }
+
   back(): void {
     this.isResponsive = false;
   }

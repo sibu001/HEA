@@ -2419,3 +2419,7 @@ td, th{
 td .form-group{
   margin: 4px 0 !important;
 }
+
+.font-w-400{
+  font-weight: 400;
+}
