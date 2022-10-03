@@ -330,7 +330,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
 
   closeOpenedDialogBox(){
      let closeButton = document.getElementsByClassName('closeButton')[0] as HTMLElement;
-     closeButton.click();
+     if(closeButton) closeButton.click();
   }
 
   back(): void {
