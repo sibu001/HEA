@@ -61,6 +61,7 @@ export class AppConstant {
     public static contextMethod = 'context/methods';
     public static paidService = 'paidServices';
     public static administrativeReport = 'adminReports';
+    public static reports = 'reports';
     public static callAdministrativeReport = 'report.do';
     public static customerGroupMailPart = 'customerGroupMailParts';
     public static topic = 'surveys';

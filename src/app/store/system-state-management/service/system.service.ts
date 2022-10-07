@@ -61,7 +61,8 @@ import {
   DeleteRelatedRecommendationAction,
   RemoveCustomerGroupList,
   SaveCustomerGoupToList,
-  LoadProgramGroupByCustomerGroup
+  LoadProgramGroupByCustomerGroup,
+  LoadSelectedTopicGroupListAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -443,5 +444,13 @@ export class SystemService {
   removeCustomerGroupToList(topicDescriptionId : number, customerGroupList : number){
     return this.store.dispatch(new RemoveCustomerGroupList(topicDescriptionId,customerGroupList));
 
+  }
+
+  loadSelectedTopicGroupList(id : number): Observable<SystemManagementState>{
+    return this.store.dispatch(new LoadSelectedTopicGroupListAction(id))
+  }
+
+  getSelectedTopicGroupList() : Observable<SystemManagementState>{
+    return this.store.select(SystemManagementState.getSelectedTopicGroupList);
   }
 }

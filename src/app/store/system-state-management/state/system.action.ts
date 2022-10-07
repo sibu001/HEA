@@ -59,7 +59,9 @@ export enum SystemActionTypes {
     SAVE_RELATED_LEAK_ACTION = 'Save Related Leaks',
     SAVE_RELATED_RECOMMENDATION_ACTION = 'Save Related Recommendations',
     DELETE_RELATED_RECOMMENDATION_ACTION = 'Delete Related Recommendations',
-    DELETE_RELATED_LEAK_ACTION = 'Delete Related Leaks'
+    DELETE_RELATED_LEAK_ACTION = 'Delete Related Leaks',
+    LOAD_SELECTED_TOPIC_GROUP_LIST_BY_ID = 'Load Selected Topic Group List By ID'
+
 }
 export class GetCustomerGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_LIST;
@@ -398,3 +400,9 @@ export class RemoveCustomerGroupList{
     constructor(readonly topicDescriptionId : number,readonly customerGroupId : number) {
     }
 }
+
+export class LoadSelectedTopicGroupListAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.LOAD_SELECTED_TOPIC_GROUP_LIST_BY_ID;
+    constructor(readonly id: number){}
+}
+

@@ -43,17 +43,18 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
       this.surveyDescriptionId = params['topicDescriptionId'];
       this.topicDescription = params['topicDescription'];
     });
-
-      this.getCalculationValueFromStore()
-      this.getCalculationTypeListFromStore();
-
-      this.loadCalculationTypeList(); 
-      this.loadLookUpCalculationPeriod();
   }
 
 
   ngOnInit() {
     this.setForm(undefined);
+
+    this.getCalculationValueFromStore()
+    this.getCalculationTypeListFromStore();
+
+    this.loadCalculationTypeList(); 
+    this.loadLookUpCalculationPeriod();
+
     if(this.id){
       this.getSeletedTopicDescriptionVariableFromStore();
       this.loadtopicDescriptionVariableData();
@@ -68,7 +69,7 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
     this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
     .subscribe((calculationTypeList: any) => {
       this.calculationTypeList = calculationTypeList.data;
-      if(this.variableForm)
+      if(this.id === undefined)
       this.variableForm.patchValue({calculationType : this.calculationTypeList[1].lookupValue});
       console.log(this.calculationTypeList);
     }));
@@ -88,19 +89,20 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
 
   getCalculationValueFromStore(){
     this.subscriptions.add(
-      this.topicService.getLookUpCalculationPeriod()
+      this.topicService.getLookUpForVariablePeriod()
       .pipe(skipWhile((item: any) => !item)
       ).subscribe(
         (response: any) =>{
             this.calculationPeriodList = response;
-            if(this.variableForm)
+            if(this.id === undefined)
             this.variableForm.patchValue({calculationPeriod : this.calculationPeriodList[2].lookupValue});
         })
       )
   }
 
   loadLookUpCalculationPeriod(){  
-    this.topicService.loadLookUpCalculationPeriod(AppConstant.lookUpCalculationPeriod);
+    // this.topicService.loadLookUpCalculationPeriod(AppConstant.lookUpCalculationPeriod);
+    this.topicService.loadLookUpValuesByType(AppConstant.lookUpCalculationPeriod);
   }
 
   getSeletedTopicDescriptionVariableFromStore(){

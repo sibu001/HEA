@@ -270,6 +270,7 @@
               <span class="messageName">Recommendations, Leaks,Unique </span></p>
             <app-table [keys]="recommendationKeys"
               [isPaginate]="true"
+              [disableLastButton]='true'
               [data]="recommendationsList"
               [pageSize]="pageSize"
               [isSearch]="false" [data]="dataSource"

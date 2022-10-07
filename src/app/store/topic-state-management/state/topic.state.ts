@@ -33,6 +33,12 @@ import {
     LoadAllPossibleColorForChartAction,
     LoadAllPossibleStyleForChartAction,
     LoadAllAvaliableFontFamiliesNamesForChartAction,
+    LoadPanesForSelectionAsNext,
+    LoadPaneReportsByPaneId,
+    LoadPaneReportById,
+    SaveNewPaneReport,
+    SaveExistingPaneReportAction,
+    DeletePaneReportByIdAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -69,6 +75,10 @@ import { TopicManagementModel } from './topic.model';
         TAKEBACK_ICON : undefined,
         CONSERVATION_CATEGORY : undefined,
         ACTION_TYPE : undefined,
+        VARIABLE_PERIOD : undefined,
+        panesForSelectionAsNext : undefined,
+        paneReportList : undefined,
+        paneReport : undefined
     }
 })
 
@@ -204,6 +214,11 @@ export class TopicManagementState {
     }
 
     @Selector()
+    static getVariablePeriodTypeLookUp(state : TopicManagementModel): any {
+        return state.VARIABLE_PERIOD
+    }
+
+    @Selector()
     static getChartTypeLookUp(state: TopicManagementModel): any {
         return state.CHART_TYPE;
     }
@@ -228,9 +243,25 @@ export class TopicManagementState {
         return state.fontFamilyNames;
     }
 
+    @Selector()
+    static getSelectionForPaneAsNext(state : TopicManagementModel) : any{
+        return state.panesForSelectionAsNext;
+    }
+
+    @Selector()
+    static getPaneReportsByPaneId(state : TopicManagementModel) : any{
+        return state.paneReportList;
+    }
+
+    @Selector()
+    static getPaneReportById(state : TopicManagementModel) : any{
+        return state.paneReport;
+    }
+
     @Action(GetTopicDescriptionListAction)
     getAllTopicDescriptionList(ctx: StateContext<TopicManagementModel>, action: GetTopicDescriptionListAction): Actions {
-        const force: boolean = action.force || TopicManagementState.getTopicDescriptionList(ctx.getState()) === undefined;
+        // const force: boolean = action.force || TopicManagementState.getTopicDescriptionList(ctx.getState()) === undefined;
+        const force = ctx.getState().topicDescriptionList == undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -253,6 +284,12 @@ export class TopicManagementState {
 
     @Action(GetTopicDescriptionByIdAction)
     getTopicDescriptionById(ctx: StateContext<TopicManagementModel>, action: GetTopicDescriptionByIdAction): Actions {
+
+        const topicDescription =  ctx.getState().topicDescription;
+        if(topicDescription && topicDescription.id == action.id) {
+            return ;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id)
             .pipe(
@@ -362,6 +399,7 @@ export class TopicManagementState {
 
     @Action(LoadDataBlockByPaneId)
     loadDataBlockByPaneId(ctx: StateContext<TopicManagementModel>, action: LoadDataBlockByPaneId) : Actions{
+        // const dataBlockList = ctx.getState().dataBlockList;
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataBlock)
             .pipe(
@@ -420,6 +458,12 @@ export class TopicManagementState {
 
     @Action(LoadTopicPaneVariableById)
     loadTopicPaneVariableById(ctx : StateContext<TopicManagementModel>, action: LoadTopicPaneVariableById){
+        
+        const topicPane = ctx.getState().topicPane;
+        if(topicPane && action.paneId == topicPane.paneId && action.surevyDescriptionId == topicPane.surveyDescriptionId){
+            return ;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.topicDescription + '/' + action.surevyDescriptionId + '/' + AppConstant.pane + '/' + action.paneId)
             .pipe(
@@ -732,5 +776,115 @@ export class TopicManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
                 }));
+    }
+
+    @Action(LoadPanesForSelectionAsNext)
+    loadPanesForSelectionAsNext(ctx: StateContext<TopicManagementModel>, action: LoadPanesForSelectionAsNext): Actions {
+
+        const panesForSelectionAsNext = ctx.getState().panesForSelectionAsNext;
+        if(panesForSelectionAsNext && panesForSelectionAsNext[0] && panesForSelectionAsNext[0].surveyDescriptionId == action.surveyDescriptionId){
+            return;
+        }
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.surveyDescriptionId +  '/' + AppConstant.pane + 
+          '/' + action.paneId + '/' + AppConstant.nextPane)
+            .pipe(
+                tap((response: any) => {
+                  ctx.patchState({panesForSelectionAsNext : response});
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.message);
+                }));
+    }
+
+
+    @Action(LoadPaneReportsByPaneId)
+    loadPaneReportsByPaneId(ctx : StateContext<TopicManagementModel>, action: LoadPaneReportsByPaneId) : Actions{
+
+        const paneReports = ctx.getState().paneReportList;
+        if(paneReports && paneReports[0] && paneReports[0].paneId == action.paneId){
+            return null;
+        }
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.reports)
+          .pipe(
+              tap((response: any) => {
+                ctx.patchState({paneReportList : TopicUtilityTransformer.paneReportsUtility(response)});
+              },
+                  error => {
+                      document.getElementById('loader').classList.remove('loading');
+                      this.utilityService.showErrorMessage(error.message);
+              }));
+
+    }
+
+    @Action(LoadPaneReportById)
+    loadPaneReportById(ctx: StateContext<TopicManagementModel>, action: LoadPaneReportById) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.reports + '/' + action.id)
+          .pipe(
+              tap((response: any) => {
+                ctx.patchState({paneReport : response});
+              },
+                  error => {
+                      document.getElementById('loader').classList.remove('loading');
+                      this.utilityService.showErrorMessage(error.message);
+              })
+        );    
+    }
+
+    @Action(SaveNewPaneReport)
+    saveNewPaneReport(ctx: StateContext<TopicManagementModel>, action: SaveNewPaneReport) :Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost( action.body ,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.reports)
+        .pipe(
+            tap((response: any) => {
+              ctx.patchState({paneReport : response});
+            },
+                error => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+            })
+      );       
+    }
+
+    @Action(SaveExistingPaneReportAction)
+    saveExistingPaneReportAction(ctx: StateContext<TopicManagementModel>, action: SaveExistingPaneReportAction) : Actions{
+        document.getElementById('loader').classList.add('loading');
+     
+        return this.loginService.performPut( action.body ,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.reports + '/' + action.id)
+        .pipe(
+            tap((response: any) => {
+              ctx.patchState({paneReport : response});
+            },
+                error => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+            })
+      );   
+    }
+
+    @Action(DeletePaneReportByIdAction)
+    deletePaneReportByIdAction(ctx: StateContext<TopicManagementModel>, action: DeletePaneReportByIdAction) : Actions {
+        document.getElementById('loader').classList.add('loading');
+
+        return this.loginService.performDelete(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.reports + '/' + action.id)
+        .pipe(
+            tap((response: any) => {
+                let paneReportList =  ctx.getState().paneReportList;
+                paneReportList = paneReportList.filter( (data) => data.id != action.id);
+
+                ctx.patchState({paneReport : undefined});
+                ctx.patchState({paneReportList : paneReportList});
+              
+            },
+                error => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+            })
+      );   
     }
 }

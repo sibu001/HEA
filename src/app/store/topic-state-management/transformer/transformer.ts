@@ -56,4 +56,13 @@ export class TopicUtilityTransformer {
 
         return outData;
     } 
+
+    static paneReportsUtility(dataSource : Array<any>){
+        return dataSource.map(
+            (data) =>{
+                data.reportLabel = data.report.reportLabel;
+                return data;
+            }
+        )
+    }
 }

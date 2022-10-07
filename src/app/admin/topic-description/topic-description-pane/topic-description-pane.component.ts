@@ -1,3 +1,4 @@
+import { LoadPanesForSelectionAsNext } from './../../../store/topic-state-management/state/topic.action';
 import { LoadUsageHistoryDataByTypeAndId } from './../../../store/usage-history-state-management/state/usage-history.action';
 import { TopicDescriptionPaneCopyComponent } from './../topic-description-pane-copy/topic-description-pane-copy.component';
 import { Location } from '@angular/common';
@@ -5,7 +6,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
-import { Subscription } from 'rxjs';
+import { Subscription, pipe } from 'rxjs';
 import { TableColumnData } from 'src/app/data/common-data';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
@@ -14,6 +15,7 @@ import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { MatDialog } from '@angular/material';
 import { HttpParams } from '@angular/common/http';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-topic-description-pane',
@@ -96,18 +98,25 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       this.getDataBlockListForPane();
       this.getNextPaneList();
       this.getSelectedPaneById();
+      this.getPaneReportByPaneId();
+      this.loadNextPaneList();
       this.loadPaneById();
       this.loadDataBlockForPane();
       this.loadDataFieldForPane();
+      this.loadPaneReportByPaneId();
     }
+  }
+
+  loadNextPaneList(){
+    this.topicService.loadPanesForSelectionAsNext(this.surveyDescriptionId , this.id);
   }
 
   getNextPaneList(){
     this.subscriptions.add(
-      this.loginService
-      .performGet(AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane + '/' + this.id + '/' + AppConstant.nextPane)
-      .subscribe(
-        next =>{
+      this.topicService
+      .getPanesForSelectionAsNext()
+      .pipe(filter( item => item != undefined ))
+      .subscribe( (next : any) =>{
           this.nextPaneSectionList = [...next];
         } , error =>
         { console.error(error);
@@ -289,6 +298,22 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     )
   }
 
+  loadPaneReportByPaneId(){
+    this.topicService.loadPaneReportsByPaneId(this.id);
+  }
+
+  getPaneReportByPaneId(){
+    this.subscriptions.add(
+      this.topicService.getPaneReportByPaneId()
+      .pipe(filter(data => data != undefined))
+      .subscribe(
+        (response) =>{
+          this.reportsDataSource = response;
+        }
+      )
+    )
+  }
+
   addDataBlock() {
     this.router.navigate(['/admin/topicDescription/topicPaneDataBlockEdit'],{ queryParams: { paneId : this.id , topicDescriptionId : this.surveyDescriptionId}} );
   }
@@ -317,8 +342,8 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/topicDescription/topicPaneChartEdit'], { queryParams: {} });
   }
 
-  goToEditReports() {
-    this.router.navigate(['admin/topicDescription/topicPaneReportEdit'], { queryParams: {} });
+  goToEditReports(event : any) {
+    this.router.navigate(['admin/topicDescription/topicPaneReportEdit'], { queryParams: {id : event.id, paneId : this.id , topicDescriptionId : this.surveyDescriptionId} });
   }
 
   get f() { return this.paneForm.controls; }

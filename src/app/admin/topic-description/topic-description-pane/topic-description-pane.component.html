@@ -209,7 +209,7 @@
               <span class="messageName">Reports</span>
             </p>
             <app-table [keys]="reportKeys" [isPaginate]="true" [isSearch]="false" [data]="reportsDataSource"
-              [totalElement]="reportData.totalElements" (addEvent)='addReports()' (goToEditEvent)='goToEditReports()'>
+              [totalElement]="reportData.totalElements" (addEvent)='addReports()' (goToEditEvent)='goToEditReports($event)'>
             </app-table>
           </div>
 

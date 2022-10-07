@@ -67,7 +67,8 @@ import {
     DeleteRelatedLeakAction,
     SaveCustomerGoupToList,
     RemoveCustomerGroupList,
-    LoadProgramGroupByCustomerGroup
+    LoadProgramGroupByCustomerGroup,
+    LoadSelectedTopicGroupListAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -107,7 +108,8 @@ import { SystemManagementModel } from './system.model';
         recommendationList: undefined,
         relatedRecommendationList: undefined,
         relatedLeakList: undefined,
-        customerProgramGroupList : undefined,      
+        customerProgramGroupList : undefined,     
+        selectedTopicGroupList : undefined, 
     }
 
 })
@@ -283,9 +285,15 @@ export class SystemManagementState {
         return state.customerProgramGroupList;
     }
 
+    @Selector()
+    static getSelectedTopicGroupList(state: SystemManagementModel) : any {
+        return state.selectedTopicGroupList;
+    }
+
     @Action(GetCustomerGroupListAction)
     getAllCustomerGroup(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupListAction): Actions {
-        const force: boolean = action.force || SystemManagementState.getCustomerGroupList(ctx.getState()) === undefined;
+        // const force: boolean = action.force || SystemManagementState.getCustomerGroupList(ctx.getState()) === undefined;
+        const force = ctx.getState().customerGroupList === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -1394,6 +1402,24 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    const globalState = ctx.getState();
+                    const customerGroupList = globalState.customerGroupList;
+                    let selectedCustomerGroupList = globalState.selectedTopicGroupList;
+                    
+                    const customerGroupObject =  customerGroupList.find((item) => item.id == response.customerGroupId);
+
+                    if(selectedCustomerGroupList == undefined){
+                        selectedCustomerGroupList = [];
+                    }
+                    
+                    response.customerGroup = customerGroupObject;
+                    selectedCustomerGroupList.push(response);
+
+                    ctx.patchState({
+                        selectedTopicGroupList : [...selectedCustomerGroupList]
+                    })
+
+
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1410,12 +1436,47 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    const globalState = ctx.getState();
+                    let selectedCustomerGroupList = globalState.selectedTopicGroupList;
+
+                    selectedCustomerGroupList = 
+                    selectedCustomerGroupList.filter( data => data.customerGroupId != action.customerGroupId);
+
+                    ctx.patchState({
+                        selectedTopicGroupList : [...selectedCustomerGroupList]
+                    })
 
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
+
+    }
+
+
+    @Action(LoadSelectedTopicGroupListAction)
+    getSelectedTopicGroupListAction(ctx : StateContext<SystemManagementModel>, action: LoadSelectedTopicGroupListAction) : Actions{
+
+        const selectedTopicGroupList = ctx.getState().selectedTopicGroupList;
+
+        if(selectedTopicGroupList && action.id == selectedTopicGroupList[0].surveyDescriptionId){
+            return;
+        }
+
+        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id + '/surveyDescriptionGroups')
+        .pipe(
+            tap((response: any) => {
+                document.getElementById('loader').classList.remove('loading');
+                ctx.patchState({
+                    selectedTopicGroupList: response,
+                });
+            },
+                error => {
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+            })
+        )
 
     }
 }

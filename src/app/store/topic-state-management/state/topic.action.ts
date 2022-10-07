@@ -26,6 +26,12 @@ export enum TopicActionTypes {
     LOAD_ALL_POSSIBLE_COLORS_FOR_CHARTS = 'Load All Available Colors For Chart',
     LOAD_ALL_POSSIBLE_STYLE_FOR_CHARTS = 'Load All Available Style For Chart',
     LOAD_ALL_AVALIABLES_FONT_FAMILY_NAMES_FOR_CHARTS = 'Load All Available Font Family Names For Chart',
+    LOAD_PANES_FOR_SELECTION_AS_NEXT = 'Load PANes For Selection As Next',
+    LOAS_PANE_REPORTS_PANE_ID = 'Load Pane Reports By Pane Id',
+    LOAD_PANE_REPORT_ID = 'Load Pane Report By Id',
+    SAVE_NEW_PANE_REPORT = 'Save New Pane Report',
+    SAVE_EXISTING_PANE_REPORT = 'Save Existing Pane Report',
+    DELETE_PANE_REPORT_BY_ID = 'Delete Pane By Id'
 
 }
 export class GetTopicDescriptionListAction {
@@ -167,4 +173,34 @@ export class LoadAllPossibleStyleForChartAction{
 export class LoadAllAvaliableFontFamiliesNamesForChartAction{
     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_ALL_AVALIABLES_FONT_FAMILY_NAMES_FOR_CHARTS;
     constructor(){}
+}
+
+export class LoadPanesForSelectionAsNext{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_PANES_FOR_SELECTION_AS_NEXT;
+    constructor(readonly surveyDescriptionId : number, readonly paneId : number){}
+}
+
+export class LoadPaneReportsByPaneId{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAS_PANE_REPORTS_PANE_ID;
+    constructor(readonly paneId : number){}
+}
+
+export class LoadPaneReportById{
+    static readonly type : TopicActionTypes = TopicActionTypes.LOAD_PANE_REPORT_ID;
+    constructor(readonly paneId : number, readonly id : number){}
+}
+
+export class SaveNewPaneReport{
+    static readonly type : TopicActionTypes = TopicActionTypes.SAVE_NEW_PANE_REPORT
+    constructor(readonly paneId : number, readonly body : any){}
+}
+
+export class SaveExistingPaneReportAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.SAVE_EXISTING_PANE_REPORT;
+    constructor(readonly paneId : number , readonly body: any, readonly id : number){}
+}
+
+export class DeletePaneReportByIdAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.DELETE_PANE_REPORT_BY_ID;
+    constructor(readonly paneId : number, readonly id : number){}
 }

@@ -24,9 +24,13 @@ export interface TopicManagementModel {
     TAKEBACK_IMAGE : any;
     TAKEBACK_ICON : any;
     ACTION_TYPE : any;
+    VARIABLE_PERIOD : any;
     CONSERVATION_CATEGORY : any
     fieldValueList : any;
     possibleColors : any;
     possibleStyle : any;
     fontFamilyNames : any;
+    panesForSelectionAsNext : any;
+    paneReportList: any;
+    paneReport : any;
 }

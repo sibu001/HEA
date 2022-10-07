@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -205,6 +205,10 @@ export class TopicService {
     return this.store.select(TopicManagementState.getConservationCategoryLookUp)
   }
 
+  getLookUpForVariablePeriod(){
+    return this.store.select(TopicManagementState.getVariablePeriodTypeLookUp);
+  }
+
   getChartTypeLookUp(){
     return this.store.select(TopicManagementState.getChartTypeLookUp);
   }
@@ -247,5 +251,41 @@ export class TopicService {
 
   getAllPossibleFontFamilyNames():Observable<TopicManagementState>{
     return this.store.select(TopicManagementState.getAllPossibleFontFamilyNames);
+  }
+
+  loadPanesForSelectionAsNext(surveyDescriptionId : number, paneId : number) : Observable<TopicManagementState>{
+    return this.store.dispatch(new LoadPanesForSelectionAsNext(surveyDescriptionId, paneId))
+  }
+
+  getPanesForSelectionAsNext(): Observable<TopicManagementState>{
+    return this.store.select(TopicManagementState.getSelectionForPaneAsNext);
+  } 
+
+  loadPaneReportsByPaneId(paneId : number) : Observable<TopicManagementState> {
+    return this.store.dispatch(new LoadPaneReportsByPaneId(paneId))
+  }
+
+  getPaneReportByPaneId() : Observable<TopicManagementState> {
+    return this.store.select(TopicManagementState.getPaneReportsByPaneId);
+  }
+
+  loadPaneReportById(paneId : number, id : number) : Observable<TopicManagementState> {
+    return this.store.dispatch(new LoadPaneReportById(paneId, id))
+  }
+
+  getPaneReportById() : Observable<TopicManagementState>{
+    return this.store.select(TopicManagementState.getPaneReportById);
+  }
+
+  saveNewPaneReport(paneId, body) : Observable<TopicManagementState>{
+    return this.store.dispatch(new SaveNewPaneReport(paneId,body))
+  }
+
+  SaveExistingPaneReport(paneId: number, body: any, id : number) : Observable<TopicManagementState>{
+    return this.store.dispatch(new SaveExistingPaneReportAction(paneId, body,id)); 
+  }
+
+  deletePaneReportById(paneId : number, id : number) : Observable<TopicManagementState>{
+    return this.store.dispatch(new DeletePaneReportByIdAction(paneId,id));
   }
 }

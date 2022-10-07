@@ -1230,6 +1230,7 @@ button.feedbackButton:hover {
   border-color: #76ba19;
 }
 
+/* use this css only for close button over the dialog-box component */
 .closeButton {
   float: right;
   height: 20px;
@@ -2110,7 +2111,7 @@ app-customer-view .mat-column-heatingInUse{
 .mat-column-delete{
   word-wrap: break-word !important;
 white-space: unset !important;
-flex: 0 0 3% !important;
+flex: 0 0 4% !important;
 width: 8% !important;
 overflow-wrap: break-word;
 word-wrap: break-word;

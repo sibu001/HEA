@@ -315,7 +315,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     (formData,'customers/'+  this.users.outhMeResponse.customerId + '/selectUI')
     .subscribe((response : any) =>{
       console.log(response);
-      window.open(response.data,'_self');
+      // window.open(response.data,'_self');
       document.getElementById('loader').classList.remove('loading');
     }, error =>{ 
       console.log(error);

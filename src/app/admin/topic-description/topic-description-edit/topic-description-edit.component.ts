@@ -133,7 +133,8 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
         this.getTopicDescription();
         this.getTopicPanesById();
         this.loadTopicPanesById();
-        this.getRecommendationsLeakAndUnique()
+        this.getRecommendationsLeakAndUnique();
+        this.getCustomerGroupById();
         this.getTopicVariableDataFromStore();
         this.loadTopicDescription();
         this.loadCustomerGroupById();
@@ -168,9 +169,11 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     }));
   }
 
-   loadCustomerGroupById(){
+  getCustomerGroupById(){
+
     this.subscriptions.add(
-      this.loginService.performGet(AppConstant.topicDescription + '/' + this.id + '/surveyDescriptionGroups')
+      this.systemService.getSelectedTopicGroupList()
+      .pipe( filter( item => item != undefined))
      .subscribe((groupList : any) => {
         let testList = [];
         groupList.forEach((item: any) =>{
@@ -180,6 +183,10 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       },(error : any)  => {
         console.log("some error has occurred.");
       }));
+  }
+
+   loadCustomerGroupById(){
+    this.systemService.loadSelectedTopicGroupList(this.id);
    }
 
   loadLookUpCalculationPeriod(){
@@ -257,7 +264,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       htmRightTopTemplate: [event !== undefined ? event.htmRightTopTemplate : ''],
       htmRightBottomTemplate: [event !== undefined ? event.htmRightBottomTemplate : ''],
       comments: [event !== undefined ? event.comments : ''],
-      isRerunTopic: [event !== undefined ? event.isRerunTopic : ''],
+      isRerunTopic: [false],
     });
   }
 
@@ -287,7 +294,7 @@ loadPermanentTopicList(){
 getPermanentTopicListFromStore(){
   this.subscriptions.add(
   this.topicService.getTopicDescriptionList()
-  .pipe(skipWhile((item: any) => !item))
+  .pipe(filter((item: any) => item != undefined))
   .subscribe((topicDescriptionList: any) => {
       this.nextPermanentTopic = [...topicDescriptionList];
       this.nextPermanentTopic.splice(0, 0, {label : "" , id : 0});
@@ -507,7 +514,7 @@ getSuggestionListForFilterForTopicVariable(event){
 
   ReInitTopic(): any {
     let params = new HttpParams();
-    let isRerunTopic = this.topicForm.value.isRerunTopic == ''  || this.topicForm.value.isRerunTopic == false ? false : this.topicForm.value.isRerunTopic
+    let isRerunTopic = this.topicForm.value.isRerunTopic == false ? false : this.topicForm.value.isRerunTopic
     params = params.append('rerunSurvey',isRerunTopic);
     document.getElementById('loader').classList.add('loading');
     this.subscriptions.add(

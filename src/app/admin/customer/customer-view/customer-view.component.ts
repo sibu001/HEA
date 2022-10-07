@@ -53,6 +53,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   electricityRatePlan: any;
   heatingRatePlan: any;
   weatherStation: any;
+  userId:number;
   helpHide: boolean;
   updateWithUtilityAddressFlag : boolean = false;
   placeCode: Array<any>;
@@ -202,6 +203,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
           // this.isOptOut = true;
           // this.loadOptOut(this.id);
         }
+        this.userId =  customer.userId;
         this.customerGroupCode = customer.customerGroup.groupCode;
         if (customer.coachUser) {
           this.energyCoach = customer.coachUser.name;
@@ -470,7 +472,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   saveNewPassword(password: any) {
-    this.subscriptions.add(this.customerService.setNewPassword(this.id, password).pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.customerService.setNewPassword(this.userId, password).pipe(skipWhile((item: any) => !item))
       .subscribe((passwordValidation: any) => {
         console.log(passwordValidation);
       }));
@@ -767,6 +769,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   deleteStaffNote(event: any) {
+
+    if(!confirm('Are you sure you want to delete this note?')) return null;
+
     this.subscriptions.add(this.customerService.deleteStaffNoteById(this.id, event.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.loadStaffNote(this.id);
@@ -803,7 +808,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   handleDeleteEvent(event: any) {
     this.deleteCustomerFile(this.id, event.name);
   }
+
   deleteCustomerFile(customerId: any, fileName: any) {
+    if(!confirm('Are you sure you want to delete?')) return null;
     this.subscriptions.add(this.customerService.deleteCustomerFileById(customerId, fileName).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.loadCustomerFile(customerId);
