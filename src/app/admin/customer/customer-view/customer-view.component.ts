@@ -925,7 +925,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
       if( this.p.password.value != undefined && this.p.password.value != null && this.p.password.value != ""){
-        this.saveNewPassword(this.p.password.value);
+        // creating issue if called parralley with service /customers/{customerId} so called with setTimeout
+        setTimeout(() => {this.saveNewPassword(this.p.password.value);},500);  
       }
 
       if (this.id !== null && this.id !== undefined) {
