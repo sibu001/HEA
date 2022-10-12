@@ -42,6 +42,7 @@
     "jqplot": "^1.0.9",
     "jquery": "^3.3.1",
     "jquery-migrate": "^1.4.1",
+    "malihu-custom-scrollbar-plugin": "^3.1.5",
     "mat-table-exporter": "1.2.0",
     "moment": "^2.29.4",
     "ng-include": "^1.0.0",

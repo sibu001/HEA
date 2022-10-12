@@ -267,15 +267,19 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     } else if (routeNumber === 8) {
       this.router.navigate(['/surveyRecommendationList']);
     } else if (routeNumber === 9) {
-        this.users.lastVisitedURL = this.router.url;
-        this.redirectUserToclassicUI();
+      // if(this.router.url == '/surveyView'){
+       this.users.lastVisitedURL = this.router.url;
+      localStorage.setItem('users',JSON.stringify(this.users));
+      // this.sendDataToClassicVersion(); 
+      this.redirectUserToclassicUI();
+      // }else
+      //   window.open(window.location.origin + '/hea-web/trendingHome.do', '_self'); 
     } else if(routeNumber = 10){
       if(this.router.url == '/surveyView')
         this.sendDataToClassicVersion();    
       else
         window.open(window.location.origin + '/hea-web/customerList.do', '_self');
-      // this.sendDataToClassicVersion();
-    }
+      }
   }
 
   sendDataToClassicVersion(){
@@ -296,6 +300,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
       formData, 'survey.do'
     ).subscribe(
       (response) =>{
+        console.log(response);
       } ,(error) =>{
         console.log(error.url);
           window.open(error.url,'_self');
@@ -314,9 +319,11 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     this.loginService.performPostMultiPartFromData
     (formData,'customers/'+  this.users.outhMeResponse.customerId + '/selectUI')
     .subscribe((response : any) =>{
-      console.log(response);
-      window.open(response.data,'_self');
-      document.getElementById('loader').classList.remove('loading');
+      if(this.users.lastVisitedURL == '/surveyView') this.sendDataToClassicVersion();
+      else { 
+        window.open(response.data,'_self');
+        document.getElementById('loader').classList.remove('loading');
+      }
     }, error =>{ 
       console.log(error);
     })

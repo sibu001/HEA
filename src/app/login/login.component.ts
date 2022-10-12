@@ -160,6 +160,9 @@ export class LoginComponent implements OnInit, AfterViewInit{
         (error) => {
           const response = JSON.parse(JSON.stringify(error));
           console.log(response);
+          if(response.status == '400')
+            this.errorMessage = "Invalid credentials";
+          else
           if (response.error.error_description) {
             this.errorMessage = response.error.error_description;
           } else {

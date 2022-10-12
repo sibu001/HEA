@@ -2280,3 +2280,10 @@ app-customer-view .mat-column-description{
     margin-left: 5%;
   }
 }
+.mCSB_horizontal.mCSB_inside > .mCSB_container {
+  margin-bottom: -10px !important;
+}
+
+#paneBlockTable td, #paneBlockTable th{
+    white-space: nowrap;
+}

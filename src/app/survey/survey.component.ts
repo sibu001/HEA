@@ -94,6 +94,21 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   ngAfterViewChecked(): void{
     this.surveyLengthManage();
+    $('#paneBlockTable').mCustomScrollbar(
+      { axis:"x",
+        theme:"dark",
+        scrollbarPosition : "inside"
+      });
+
+      // setTimeout(
+      //   () =>{
+          // $('#chartRender>div').mCustomScrollbar(
+          //   { axis:"x",
+          //     theme:"dark",
+          //     scrollbarPosition : "inside"
+          //   });
+      //   },2000
+      // )
   }
   
   disableNextPrevButtonCheck(event){
@@ -1201,5 +1216,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
   }
+
+
 
 }

@@ -1,17 +1,26 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-
+declare var $: any;
 @Component({
   selector: 'app-survey-dialogbox',
   templateUrl: './survey-dialogbox.component.html',
   styleUrls: ['./survey-dialogbox.component.css']
 })
-export class SurveyDialogboxComponent implements OnInit {
+export class SurveyDialogboxComponent implements OnInit, AfterViewChecked {
 
+  
   constructor(
     public dialogRef: MatDialogRef<SurveyDialogboxComponent>,
     @Inject(MAT_DIALOG_DATA) public surveyAnswer: any
   ) { }
+
+  ngAfterViewChecked(): void {
+    $('mat-dialog-container').mCustomScrollbar(
+      { axis:"y",
+        theme:"dark",
+        scrollbarPosition : "inside"
+      });
+  }
 
   ngOnInit() {
   }

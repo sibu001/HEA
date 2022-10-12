@@ -31,10 +31,13 @@
               "node_modules/primeicons/primeicons.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/assets/jqplot/jquery.jqplot.min.css",
-              "node_modules/qtip2/dist/jquery.qtip.min.css"
+              "node_modules/qtip2/dist/jquery.qtip.min.css",
+              "src/assets/css/jquery.mCustomScrollbar.css"
             ],
             "scripts": [
               "node_modules/datatables/media/js/jquery.dataTables.min.js",
+              "src/assets/js/jquery.mCustomScrollbar.min.js",
+              "src/assets/js/jquery.mousewheel.min.js",
               "node_modules/datatables/media/js/jquery.dataTables.js",
               "node_modules/bootstrap/dist/js/bootstrap.min.js",
               "src/assets/jqplot/jquery.jqplot.min.js",
