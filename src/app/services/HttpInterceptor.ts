@@ -9,6 +9,8 @@ import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { AppConstant } from '../utility/app.constant';
 import { Router } from '@angular/router';
 import { Users } from '../models/user';
+import { HttpCancelService } from './httpcancel.service';
+import { map, takeUntil } from 'rxjs/operators';
 
 
 @Injectable()
@@ -17,8 +19,9 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     isRefreshingToken = false;
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
-    constructor(private loginService: LoginService,
-                private router : Router) { }
+    constructor(private readonly loginService: LoginService,
+                private readonly  : Router,
+                private readonly httpCancelService: HttpCancelService) { }
 
     addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
         return req;
@@ -54,7 +57,10 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     }
 
     handle401Error(req: HttpRequest<any>, next: HttpHandler) {
-        return this.loginService.logout();
+        document.getElementById('loader').classList.add('loading');
+        this.httpCancelService.cancelPendingRequests();
+        this.loginService.logout();
+
         // if (!this.isRefreshingToken) {
         //     this.isRefreshingToken = true;
         //     this.tokenSubject.next(null);

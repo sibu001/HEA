@@ -268,7 +268,7 @@
         <div *ngIf='(dataSource===undefined || dataSource===null) && !showInput '
             class="row">
             <div class='col-sm-12 col-xs-12 z2 p-absolute' style='text-align: center;'>
-                <h5>No records found.</h5>
+                <h5 style="margin-top: 20px" >No records found.</h5>
             </div>
         </div>
         <div class="row" *ngIf='showInput'>
@@ -314,7 +314,7 @@
                     [length]="totalLength" [pageSize]="pageSize"
                     [pageIndex]="pageIndexNumber"
                     (page)="onChangePage($event)" showFirstLastButtons
-                    class="paginatorcss p-absolute z1 mt-5"
+                    class="paginatorcss p-absolute z1"
                      >
                 </mat-paginator>
             </div>

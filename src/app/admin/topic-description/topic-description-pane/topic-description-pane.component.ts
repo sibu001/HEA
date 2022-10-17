@@ -88,11 +88,11 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       this.id = params['id'];
       this.surveyDescriptionId = params['topicDescriptionId']
     });
-    this.setForm(undefined);
   }
 
 
   ngOnInit() {
+    this.setForm(undefined);
     if(this.id) {
       this.getDataFieldForPane();
       this.getDataBlockListForPane();

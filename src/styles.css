@@ -2287,3 +2287,11 @@ app-customer-view .mat-column-description{
 #paneBlockTable td, #paneBlockTable th{
     white-space: nowrap;
 }
+
+mat-paginator{
+  margin-top: 12px;
+}
+
+.display-none{
+  display : none;
+}
