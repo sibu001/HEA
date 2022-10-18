@@ -33,4 +33,6 @@ export interface TopicManagementModel {
     panesForSelectionAsNext : any;
     paneReportList: any;
     paneReport : any;
+    paneChartList : any;
+    paneChart : any;
 }

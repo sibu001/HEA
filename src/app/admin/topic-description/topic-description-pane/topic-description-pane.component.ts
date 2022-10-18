@@ -99,11 +99,13 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       this.getNextPaneList();
       this.getSelectedPaneById();
       this.getPaneReportByPaneId();
+      this.getAllPaneCharts();
       this.loadNextPaneList();
       this.loadPaneById();
       this.loadDataBlockForPane();
       this.loadDataFieldForPane();
       this.loadPaneReportByPaneId();
+      this.loadAllPaneCharts();
     }
   }
 
@@ -314,6 +316,22 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     )
   }
 
+  loadAllPaneCharts(){
+    this.topicService.LoadAllPaneChartByPaneId(this.id);
+  }
+
+  getAllPaneCharts(){
+    this.topicService.GetAllPaneChartByPaneId()
+    .pipe(filter(resposne => resposne != undefined ))
+    .subscribe(
+      (response : any) =>{
+        this.chartData.content = response;
+        this.chartDataSource = response;
+        console.log(" pane chart data :- " + response == undefined);
+      }
+    )
+  }
+
   addDataBlock() {
     this.router.navigate(['/admin/topicDescription/topicPaneDataBlockEdit'],{ queryParams: { paneId : this.id , topicDescriptionId : this.surveyDescriptionId}} );
   }
@@ -323,11 +341,11 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   }
 
   addCharts() {
-    this.router.navigate(['admin/topicDescription/topicPaneChartEdit']);
+    this.router.navigate(['admin/topicDescription/topicPaneChartEdit'],{ queryParams: { paneId : this.id , topicDescriptionId : this.surveyDescriptionId} });
   }
 
   addReports() {
-    this.router.navigate(['admin/topicDescription/topicPaneReportEdit']);
+    this.router.navigate(['admin/topicDescription/topicPaneReportEdit'],{ queryParams: { paneId : this.id , topicDescriptionId : this.surveyDescriptionId} });
   }
 
   goToEditDataBlock(event) {
@@ -338,8 +356,8 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit'], { queryParams: {id: event.id, paneId : this.id , topicDescriptionId : this.surveyDescriptionId} });
   }
 
-  goToEditCharts() {
-    this.router.navigate(['admin/topicDescription/topicPaneChartEdit'], { queryParams: {} });
+  goToEditCharts( event : any) {
+    this.router.navigate(['admin/topicDescription/topicPaneChartEdit'], { queryParams: { id : event.id, paneId : this.id,topicDescriptionId : this.surveyDescriptionId} });
   }
 
   goToEditReports(event : any) {

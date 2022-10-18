@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -287,5 +287,33 @@ export class TopicService {
 
   deletePaneReportById(paneId : number, id : number) : Observable<TopicManagementState>{
     return this.store.dispatch(new DeletePaneReportByIdAction(paneId,id));
+  }
+
+  LoadAllPaneChartByPaneId(paneId : number) : Observable<TopicManagementState>{
+    return this.store.dispatch(new GetAppPaneChartByPaneIdAction(paneId));
+  }
+
+  GetAllPaneChartByPaneId() : Observable<TopicManagementState>{
+    return this.store.select(TopicManagementState.getPaneChartListByPaneId) 
+  }
+
+  loadPaneChartById(paneId: number,id : number) : Observable<TopicManagementState> {
+    return this.store.dispatch(new LoadPaneChartByIdAction(paneId,id));
+  }
+
+  getPaneChartById() : Observable<TopicManagementState> {
+    return this.store.select(TopicManagementState.getPaneChart);
+  }
+
+  deletePaneChart(paneId : number, chartId : number) : Observable<TopicManagementState> {
+    return this.store.dispatch(new DeletePaneChartByIdAction(paneId, chartId));
+  }
+
+  saveNewPaneChart(paneId: number,chartBody : any) : Observable<TopicManagementState> {
+    return this.store.dispatch(new SaveNewPaneChartAction(paneId,chartBody));
+  }
+
+  SaveExistingPaneChart(paneId: number , chartId : number, chartBody : any){
+    return this.store.dispatch(new SaveExistingPaneChartAction(paneId, chartId,chartBody))
   }
 }

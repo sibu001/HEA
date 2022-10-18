@@ -65,4 +65,14 @@ export class TopicUtilityTransformer {
             }
         )
     }
+
+    public static paneChartListDataTransformer(dataList : Array<any>){
+        return dataList.map(
+            data => {
+                data.chartTitle = data.chart.title;
+                data.chartCode = data.chart.chartCode;
+                return data;
+            }
+        )
+    }
 }

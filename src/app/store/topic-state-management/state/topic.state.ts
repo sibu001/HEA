@@ -39,6 +39,11 @@ import {
     SaveNewPaneReport,
     SaveExistingPaneReportAction,
     DeletePaneReportByIdAction,
+    GetAppPaneChartByPaneIdAction,
+    LoadPaneChartByIdAction,
+    DeletePaneChartByIdAction,
+    SaveNewPaneChartAction,
+    SaveExistingPaneChartAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -78,7 +83,9 @@ import { TopicManagementModel } from './topic.model';
         VARIABLE_PERIOD : undefined,
         panesForSelectionAsNext : undefined,
         paneReportList : undefined,
-        paneReport : undefined
+        paneReport : undefined,
+        paneChartList : undefined,
+        paneChart: undefined,
     }
 })
 
@@ -256,6 +263,16 @@ export class TopicManagementState {
     @Selector()
     static getPaneReportById(state : TopicManagementModel) : any{
         return state.paneReport;
+    }
+
+    @Selector() 
+    static getPaneChartListByPaneId(state : TopicManagementModel) : any{
+        return state.paneChartList;
+    }
+
+    @Selector()
+    static getPaneChart(state : TopicManagementModel) : any{
+        return state.paneChart;
     }
 
     @Action(GetTopicDescriptionListAction)
@@ -886,5 +903,107 @@ export class TopicManagementState {
                     this.utilityService.showErrorMessage(error.message);
             })
       );   
+    }
+
+
+    @Action(GetAppPaneChartByPaneIdAction)
+    getAppPaneChartByPaneIdAction(ctx: StateContext<TopicManagementModel>, action: GetAppPaneChartByPaneIdAction) : Actions{
+
+        const paneChartList = ctx.getState().paneChartList;
+        if(paneChartList && paneChartList[0] && paneChartList[0].paneId == action.paneId){
+            return null;
+        }
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts)
+        .pipe(
+            tap(
+                (response) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({paneChartList : TopicUtilityTransformer.paneChartListDataTransformer(response as Array<any>)});
+                },(error) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }
+            )
+        )
+    }
+
+    @Action(LoadPaneChartByIdAction)
+    loadPaneChartByIdAction(ctx: StateContext<TopicManagementModel>, action: LoadPaneChartByIdAction) : Actions {
+
+        const paneChart = ctx.getState().paneChart;
+        if(paneChart && paneChart.id == action.chartId){
+            return null;
+        }
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService
+        .performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts + '/' + action.chartId)
+        .pipe(
+            tap(
+                (response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({paneChart : response});
+                },(error) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }
+            )
+        )
+    }
+
+    @Action(DeletePaneChartByIdAction)
+    deletePaneChartByIdAction(ctx: StateContext<TopicManagementModel>, action: DeletePaneChartByIdAction) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService
+        .performDelete(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts + '/' + action.chartId )
+        .pipe(
+            tap(
+                (reaponse : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({paneChart : undefined})
+                }
+            ),(error : any) =>{
+                document.getElementById('loader').classList.remove('loading');
+                this.utilityService.showErrorMessage(error.message);
+            }
+        )
+    }
+
+    @Action(SaveNewPaneChartAction)
+    saveNewPaneChartAction(ctx: StateContext<TopicManagementModel>, action: SaveNewPaneChartAction) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService
+        .performPost(action.chartBody, AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts)
+        .pipe(
+            tap(
+                (response : any ) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({paneChart : response});
+                }, (error : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }
+            )
+        )
+    }
+
+    @Action(SaveExistingPaneChartAction)
+    saveExistingPaneChartAction(ctx: StateContext<TopicManagementModel>, action: SaveExistingPaneChartAction) : Actions{
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService
+        .performPut(action.chartBody, AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts + '/' + action.chartId)
+        .pipe(
+            tap(
+                (response : any ) =>{   
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({paneChart : response});
+                }, (error : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }
+            )
+        )
     }
 }

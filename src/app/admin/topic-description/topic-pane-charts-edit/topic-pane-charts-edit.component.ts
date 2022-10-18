@@ -1,5 +1,6 @@
+import { TopicHistoryComponent } from 'src/app/survey/topichistory.component';
 import { AppConstant } from 'src/app/utility/app.constant';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -28,6 +29,8 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0
   };
+  topicDescriptionId : any;
+  paneId : any;
   chartDataSource: any;
   paneData = TableColumnData.PANE_DATA;
   inputData = TableColumnData.INPUT_TYPE_DATA;
@@ -36,6 +39,7 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   toolTypeList: any[] = TableColumnData.TOOL_TYPE;
   chartTypeList = [];
   fontStyleList = [];
+  paneChartData : any;
   locationList: any[] = TableColumnData.LOCATION;
   private readonly subscriptions: Subscription = new Subscription();
   public tools: object = {
@@ -63,6 +67,8 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.topicDescriptionId = params['topicDescriptionId'];
+      this.paneId = params['paneId'];
     });
 
     this.setForm(undefined);
@@ -70,6 +76,13 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+
+
+    if(this.id){
+      this.getPaneChartById();
+      this.loadPaneChartById();
+    }
+
     this.getAllPossibleColorsForChart();
     this.getAllFontFamilyNames();
     this.getAllPossibleStyle();
@@ -81,6 +94,7 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     this.loadLookUpChartType();
     this.chartKeys = TableColumnData.CHART_SERIES_FIELD_KEY;
   }
+  
   setForm(event: any): any {
     this.chartForm = this.formBuilder.group({
       chartCode: [event !== undefined ? event.chartCode : '', Validators.required],
@@ -210,21 +224,41 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     )
   }
 
+  loadPaneChartById(){
+    this.topicService.loadPaneChartById(this.paneId,this.id);
+  }
+
+  getPaneChartById(){
+    this.topicService.getPaneChartById()
+    .pipe(filter(data => data != undefined))
+    .subscribe(
+      (response : any) =>{
+        this.paneChartData = response.chart;
+        this.setForm(response.chart);
+      }
+    )
+  }
 
   back(): any {
-    this.location.back();
+    this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescription : this.topicDescriptionId }})
   }
 
   save(): any {
-
+    if(this.id){
+      this.topicService.saveNewPaneChart(this.paneId,this.chartForm.value);
+    }else{
+      const paneChartData =  this.paneChartData;
+      const body = {paneChartData,...this.chartForm.value}
+      this.topicService.SaveExistingPaneChart(this.paneId,this.id,body)
+    }
   }
   delete(): any {
-
+    this.topicService.deletePaneChart(this.paneId,this.id);
   }
 
-  recalculate() {
+  // recalculate() {
 
-  }
+  // }
 
   saveRow() {
 

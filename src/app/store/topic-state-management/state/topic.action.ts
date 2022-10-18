@@ -31,8 +31,12 @@ export enum TopicActionTypes {
     LOAD_PANE_REPORT_ID = 'Load Pane Report By Id',
     SAVE_NEW_PANE_REPORT = 'Save New Pane Report',
     SAVE_EXISTING_PANE_REPORT = 'Save Existing Pane Report',
-    DELETE_PANE_REPORT_BY_ID = 'Delete Pane By Id'
-
+    DELETE_PANE_REPORT_BY_ID = 'Delete Pane By Id',
+    GET_ALL_PANE_CHARTS_BY_ID = 'Get All Pane Chart By Pane Id',
+    LOAD_PANE_CHART_BY_ID = 'Load Pane Chart By Id',
+    DELETE_PANE_CHART_BY_ID = 'Delete Pane Chart By Id',
+    SAVE_NEW_PANE_CHART = 'Save New Pane Chart',
+    SAVE_EXISTING_PANE_CHART = 'Save Existing Pane Chart'
 }
 export class GetTopicDescriptionListAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_LIST;
@@ -203,4 +207,29 @@ export class SaveExistingPaneReportAction{
 export class DeletePaneReportByIdAction{
     static readonly type : TopicActionTypes = TopicActionTypes.DELETE_PANE_REPORT_BY_ID;
     constructor(readonly paneId : number, readonly id : number){}
+}
+
+export class GetAppPaneChartByPaneIdAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.GET_ALL_PANE_CHARTS_BY_ID;
+    constructor(readonly paneId : number){}
+}
+
+export class LoadPaneChartByIdAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.LOAD_PANE_CHART_BY_ID;
+    constructor(readonly paneId : number, readonly chartId : number){}
+}
+
+export class DeletePaneChartByIdAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.DELETE_PANE_CHART_BY_ID;
+    constructor(readonly paneId : number, readonly chartId : number){}
+}
+
+export class SaveNewPaneChartAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.SAVE_NEW_PANE_CHART;
+    constructor(readonly paneId : number, readonly chartBody : any){}
+}
+
+export class SaveExistingPaneChartAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.SAVE_EXISTING_PANE_CHART;
+    constructor(readonly paneId : number,readonly chartId: number,readonly chartBody : any){}
 }
