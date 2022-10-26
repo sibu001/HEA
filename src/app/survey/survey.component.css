@@ -2423,3 +2423,8 @@ td .form-group{
 .font-w-400{
   font-weight: 400;
 }
+
+.survey-para-font-style{
+  color : rgb(104 111 120);
+  font-weight: 500;
+}

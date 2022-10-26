@@ -2295,3 +2295,21 @@ mat-paginator{
 .display-none{
   display : none;
 }
+
+#useDrPower > img{
+    max-width : 300px;
+    margin : 0px 20px;
+    height: 300px;
+    padding: 15px 0px;
+}
+
+.survey-heading-color{
+  color : #4550a1;
+}
+
+
+@media (min-width: 541px){
+ #aboutDrPower{
+    margin : 0px 40px;
+ }   
+}

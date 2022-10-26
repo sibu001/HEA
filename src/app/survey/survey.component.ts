@@ -7,6 +7,7 @@ import { fromEvent, Subscription } from 'rxjs';
 import { SubscriptionUtil } from '../utility/subscription-utility';
 import { MatDialog } from '@angular/material';
 import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.component';
+import { AppConstant } from '../utility/app.constant';
 
 declare var $: any;
 @Component({
@@ -36,6 +37,10 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   globalM = 0;
   globalK = 0;
   paneblockRowErrorNotation = [];
+  private static readonly DR_POWER_URL_LOCAL: string = 'http://localhost:4201/#/redirection';
+  private static readonly DR_POWER_URL_SANDBOX: string = 'http://localhost:4201/#/redirection';
+  private static readonly DR_POWER_URL_LIVE: string = 'http://localhost:4201/#/redirection';
+
 
   subscriptons : Subscription = new Subscription();
   private slidermap = new Map();
@@ -1218,5 +1223,23 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
 
+  authenticateToDrPower(event: any){
+    event.preventDefault();
+    return null;
+    
+    this.loginService.performGet('oauth2/accessToken')
+    .subscribe(
+      (response : any) =>{
+        const responseData = response.data;
+        console.log(response);
+        window.open(`${AppConstant.DR_POWER_URL_LOCAL}?access_token=${responseData.access_token}&error_url=${location.href}`,'_blank');
+      }, (error) =>{
+          console.error(error);
+          this.scrollTop();
+          this.inputErrorMessage = error.error.errorMessage;
+          document.getElementById('loader').classList.remove('loading');
+        }
+    )
+  }
 
 }

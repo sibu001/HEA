@@ -87,7 +87,34 @@
               </thead>
               <tbody class="text-center-webkit">
                 <tr>
-                  <td>    
+                  <td>
+                    <ng-container *ngIf="users.currentPaneNumber.currentPane.paneCode == 'bl_UseDrPower'">
+                      <div id="useDrPower">
+                        <h3 class="survey-heading-color"> Application Preview.</h3>
+                        <img src="/assets/images/drPowerHogs.png" class="" alt="dr power Energy hogs">
+                        <img src="/assets/images/drPowerRecommendation.png" alt=" dr power recommendations">
+
+                        <p>Click to use
+                          <a href="#" type="button" class="" id="drPowerSwitch" (click)="authenticateToDrPower($event)">Dr.
+                            Power</a>
+                          .</p>
+                          <div id="aboutDrPower" >
+                            <h4 class="text-left survey-heading-color">About Dr. Power :</h4>
+                            <p class="text-left survey-para-font-style">
+                              This application was prepared as the result of work sponsored by the California Energy
+                              Commission. It does not necessarily represent the views of the Energy Commission, its
+                              employees or the State of California. The Energy Commission, the State of California, its
+                              employees, contractors and subcontractors make no warrant, express or implied, and assume no
+                              legal liability for the information in this application; nor does any party represent that
+                              the uses of this information will not infringe upon privately owned rights. This application
+                              has not been approved or disapproved by the California Energy Commission, nor has the
+                              California Energy Commission passed upon the accuracy or adequacy of the information in this
+                              application(<a href="#"(click)="authenticateToDrPower($event)">Dr. Power</a>). 
+                            </p>
+                          </div>
+                      </div>
+                    </ng-container>
+                        
                     <div class ="analysis-table" id="surveyPageText" *ngIf="users.currentPaneNumber.currentPane.htmPageText!=null&&users.currentPaneNumber.currentPane.htmPageText.length>0">
                     <div [innerHTML]="users.currentPaneNumber.currentPane.htmPageText | safeHtml" class="accurate accurate2 top"
                     [ngClass]="{ 'disable-contractor-report-link' : users.currentPaneNumber.currentPane.paneCode == 'be_ContractorReportPane'}"
