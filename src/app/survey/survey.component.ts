@@ -1224,12 +1224,12 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
 
   authenticateToDrPower(event: any){
-    event.preventDefault();
-    return null;
-    
+    event.preventDefault();    
+    document.getElementById('loader').classList.add('loading');
     this.loginService.performGet('oauth2/accessToken')
     .subscribe(
       (response : any) =>{
+        document.getElementById('loader').classList.remove('loading');
         const responseData = response.data;
         console.log(response);
         window.open(`${AppConstant.DR_POWER_URL_LOCAL}?access_token=${responseData.access_token}&error_url=${location.href}`,'_blank');
