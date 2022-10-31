@@ -267,45 +267,47 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     } else if (routeNumber === 8) {
       this.router.navigate(['/surveyRecommendationList']);
     } else if (routeNumber === 9) {
-      // if(this.router.url == '/surveyView'){
-       this.users.lastVisitedURL = this.router.url;
-      localStorage.setItem('users',JSON.stringify(this.users));
-      // this.sendDataToClassicVersion(); 
-      this.redirectUserToclassicUI();
-      // }else
-      //   window.open(window.location.origin + '/hea-web/trendingHome.do', '_self'); 
+      if(this.router.url == '/surveyView'){
+        localStorage.setItem('users',JSON.stringify(this.users));
+        this.redirectUserToclassicUI();
+        // this.sendDataToClassicVersion();
+      }else{
+      window.open(window.location.origin + '/hea-web/trendingHome.do', '_self');
+      } 
     } else if(routeNumber = 10){
-      if(this.router.url == '/surveyView')
-        this.sendDataToClassicVersion();    
-      else
         window.open(window.location.origin + '/hea-web/customerList.do', '_self');
       }
   }
 
   sendDataToClassicVersion(){
 
-    const user = this.loginService.getUser();
-    const data = user.currentPaneNumber;
+    console.log(window.location.origin + '/hea-web/survey.do');
+    window.open(window.location.origin + '/hea-web/survey.do','_self');
+    
 
-    const formData = new FormData();
+    // const user = this.loginService.getUser();
+    // const data = user.currentPaneNumber;
 
-    formData.append("formAction","loadPane");
-    formData.append("surveyId",data.survey.surveyId);
-    formData.append("surveyDescriptionId",data.surveyDescriptionId);
-    formData.append("paneCode",data.currentPane.paneCode);
-    formData.append("userId",data.survey.userId);
+    // const formData = new FormData();
 
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performPostMultiPartData(
-      formData, 'survey.do'
-    ).subscribe(
-      (response) =>{
-        console.log(response);
-      } ,(error) =>{
-        console.log(error.url);
-          window.open(error.url,'_self');
-      }
-    )
+    // formData.append("formAction","loadPane");
+    // formData.append("surveyId",data.survey.surveyId);
+    // formData.append("surveyDescriptionId",data.surveyDescriptionId);
+    // formData.append("paneCode",data.currentPane.paneCode);
+    // formData.append("userId",data.survey.userId);
+    // formData.append("returnPath","surveyHistoryList.do")
+
+    // document.getElementById('loader').classList.add('loading');
+    // this.loginService.performPostMultiPartFromData(    
+    //   formData, 'survey.do'
+    // ).subscribe(
+    //   (response) =>{
+    //     console.log(response);
+    //   } ,(error) =>{
+    //     console.log(error.url);
+    //       window.open(error.url,'_self');
+    //   }
+    // )
 
   }
 
@@ -313,19 +315,15 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
 
     const formData = new FormData();
     formData.append('uiCode','V1');
-
     document.getElementById('loader').classList.add('loading');
-
     this.loginService.performPostMultiPartFromData
     (formData,'customers/'+  this.users.outhMeResponse.customerId + '/selectUI')
     .subscribe((response : any) =>{
-      if(this.users.lastVisitedURL == '/surveyView') this.sendDataToClassicVersion();
-      else { 
-        window.open(response.data,'_self');
-        document.getElementById('loader').classList.remove('loading');
-      }
+      this.sendDataToClassicVersion();
     }, error =>{ 
       console.log(error);
+    },() =>{
+      this.sendDataToClassicVersion();
     })
 
   }
@@ -348,11 +346,11 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     document.getElementById('feedback2').classList.add('feedbackiframeCss');
     document.getElementById('feedback3').classList.add('feedBackDiv1');
   }
-  closeFeedBackPage(): void {
+  closeFeedBackPage(): void { 
     document.getElementById('feedback1').classList.remove('feedbackDivCss');
     document.getElementById('feedback2').classList.remove('feedbackiframeCss');
     document.getElementById('feedback3').classList.remove('feedBackDiv1');
-  }
+  }  
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any): void {

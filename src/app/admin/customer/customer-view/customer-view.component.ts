@@ -21,6 +21,8 @@ import { MustMatch } from 'src/app/common/password.validator';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { UsageHistoryFilter } from 'src/app/models/filter-object';
 import { CustomValidator } from 'src/app/utility/custom-validators';
+import * as moment from 'moment';
+
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -64,6 +66,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   uiVersionList: Array<any> = TableColumnData.UI_VERSION;
   credentialsKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_CREDENTIAL_KEY;
   public credentialsDataSource: any;
+  private expectedDateFormate : string = 'MM/dd/yyyy h:mm:ss';
   public openedUtilityCredential : any;
   private subject : Subject<any> = new Subject();
 
@@ -363,8 +366,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       elHeatingModel: [event !== undefined ? event.elHeatingModel : ''],
       modelChangedBy: [event !== undefined ? event.modelChangedBy : ''],
       eligibleStartDate: [event !== undefined ? 
-        (this.datePipe.transform(event.eligibleStartDate, 'MM/dd/yyyy h:mm:ss')) : null,
-         CustomValidator.customDateValidatorforInptField('MM/dd/yyyy h:mm:ss')],
+        (this.datePipe.transform(event.eligibleStartDate, 'MM/dd/yyyy h:mm:ss')) : null],
       latitude: [event !== undefined ? event.latitude : ''],
       longitude: [event !== undefined ? event.longitude : ''],
       maxAlertLevel: [event !== undefined ? event.maxAlertLevel : ''],
@@ -918,6 +920,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       this.customerForm.value.activationDate = this.convertToMillisecond(this.customerForm.value.activationDate);
       this.customerForm.value.registrationDate = this.convertToMillisecond(this.customerForm.value.registrationDate);
       this.customerForm.value.vacaCalculationDate = this.convertToMillisecond(this.customerForm.value.vacaCalculationDate);
+      if(moment(this.customerForm.value.eligibleStartDate,this.expectedDateFormate).isValid())
       this.customerForm.value.eligibleStartDate = this.convertToMillisecond(this.customerForm.value.eligibleStartDate);
 
       this.customerForm.value.lastMonthlyCalc = this.convertToMillisecond(this.customerForm.value.lastMonthlyCalc);
@@ -925,8 +928,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
       if( this.p.password.value != undefined && this.p.password.value != null && this.p.password.value != ""){
-        // creating issue if called parralley with service /customers/{customerId} so called with setTimeout
-        setTimeout(() => {this.saveNewPassword(this.p.password.value);},500);  
+        const password = new String(this.p.password.value + "");
+        setTimeout(() => {this.saveNewPassword(password);},500);  
       }
 
       if (this.id !== null && this.id !== undefined) {
