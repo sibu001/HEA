@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, AfterViewChecked } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit, AfterViewChecked, DoCheck } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ declare var $: any;
   templateUrl: './headers.component.html',
   styleUrls: ['./headers.component.css']
 })
-export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
+export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked,DoCheck {
   hides = true;
   hideLogo = true;
   float: string;
@@ -43,17 +43,22 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     }
     this.screenWidth = window.screen.width;
   }
-  ngAfterViewChecked(): void {
-    this.users = this.loginService.getUser();
+  ngDoCheck(): void {
 
-    if(this.users.role == 'USERS'){
+    if(this.users.role == 'USERS' && this.router.url == '/surveyView'){
       if (this.users.surveyLength <= 3 ||
         (this.users.currentPaneNumber ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile' : false)) {
          this.hideMenuOption();
      }else{
        this.showHiddenMenu();
      }
-    }
+    }else {
+      this.showHiddenMenu();
+    } 
+  
+  }
+  ngAfterViewChecked(): void {
+    this.users = this.loginService.getUser();
   }
 
   ngAfterViewInit(): void {
