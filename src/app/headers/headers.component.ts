@@ -45,20 +45,27 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   }
   ngDoCheck(): void {
 
-    if(this.users.role == 'USERS' && this.router.url == '/surveyView'){
-      if (this.users.surveyLength <= 3 ||
+    // if(this.users.role == 'USERS' && this.router.url == '/surveyView'){
+      if ((this.users.role == 'USERS' && this.router.url == '/surveyView' && this.users.surveyLength <= 3) ||
         (this.users.currentPaneNumber ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile' : false)) {
          this.hideMenuOption();
      }else{
        this.showHiddenMenu();
      }
-    }else {
-      this.showHiddenMenu();
-    } 
+    // }else {
+    //   this.showHiddenMenu();
+    // } 
   
   }
   ngAfterViewChecked(): void {
     this.users = this.loginService.getUser();
+    if ( this.router.url == '/surveyView' && 
+    ((this.users.role == 'USERS' && this.users.surveyLength <= 3) ||
+    (this.users.currentPaneNumber ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile' : false))) {
+     this.hideMenuOption();
+ }else{
+   this.showHiddenMenu();
+ }
   }
 
   ngAfterViewInit(): void {
@@ -68,6 +75,25 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
       }
     }
     this.changeLogoPosition();
+
+    if ( this.router.url == '/surveyView' && 
+    ((this.users.role == 'USERS' && this.users.surveyLength <= 3) ||
+    (this.users.currentPaneNumber ? this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile' : false))) {
+      if (document.getElementById('_home')) {
+        document.getElementById('_home').classList.add('header_menu_none');
+      }
+      if (document.getElementById('_account')) {
+        document.getElementById('_account').classList.add('header_menu_none');
+      }
+      if (document.getElementById('all_topic')) {
+        document.getElementById('all_topic').classList.add('header_menu_none');
+      }
+      if (document.getElementById('menu_option')) {
+        document.getElementById('menu_option').classList.add('header_menu_none');
+      }
+      this.headerResponsiveMenu();
+    }
+
   }
 
   ngOnInit(): void {
@@ -86,21 +112,6 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
       });
     });
 
-    if (this.users.role === 'USERS' && this.users.surveyLength <= 3 || (this.users.currentPaneNumber && this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile')) {
-      if (document.getElementById('_home')) {
-        document.getElementById('_home').classList.add('header_menu_none');
-      }
-      if (document.getElementById('_account')) {
-        document.getElementById('_account').classList.add('header_menu_none');
-      }
-      if (document.getElementById('all_topic')) {
-        document.getElementById('all_topic').classList.add('header_menu_none');
-      }
-      if (document.getElementById('menu_option')) {
-        document.getElementById('menu_option').classList.add('header_menu_none');
-      }
-      this.headerResponsiveMenu();
-    }
     this.hideResponsiveMenu();
 
     this.onlineEvent = fromEvent(window, 'online');
