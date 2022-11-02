@@ -1,4 +1,4 @@
-<section class="space-top" #panel>
+<section class="space-top" #panel style="margin-top: 6em !important;">
   <!-------------------------------- First Slider -------------------------------------------------->
   <div class="container-fluid"
     *ngIf="users.currentPaneNumber.currentPane!=null">
@@ -91,8 +91,8 @@
                     <ng-container *ngIf="users.currentPaneNumber.currentPane.paneCode == 'bl_UseDrPower'">
                       <div id="useDrPower">
                         <h3 class="survey-heading-color"> Application Preview.</h3>
-                        <img src="/assets/images/drPowerHogs.png" class="" alt="dr power Energy hogs">
-                        <img src="/assets/images/drPowerRecommendation.png" alt=" dr power recommendations">
+                        <img src="assets/images/drPowerHogs.png" class="" alt="dr power Energy hogs">
+                        <img src="assets/images/drPowerRecommendation.png" alt=" dr power recommendations">
 
                         <p>Click to use
                           <a href="#" type="button" class="" id="drPowerSwitch" (click)="authenticateToDrPower($event)">Dr.

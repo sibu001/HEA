@@ -108,8 +108,8 @@ div.energy_analytic > p > span {
 
 div.factoid > p {
   font-size: 16px !important;
-  margin-bottom: 20px !important;
-  margin-top: 20px !important;
+  /* margin-bottom: 20px !important;
+  margin-top: 20px !important; */
   color: #4550a1 !important;
   line-height: 22px !important;
   font-weight: 500 !important;
