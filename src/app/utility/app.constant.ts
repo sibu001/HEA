@@ -138,7 +138,7 @@ export class AppConstant {
     public static classicVesionRedirectURLsandbox = 'https://sandbox.hea.com/hea-web/login.do';
 
     public static readonly DR_POWER_URL_LOCAL: string = 'http://localhost:4201/#/redirection';
-    public static readonly DR_POWER_URL_SANDBOX: string = 'http://localhost:4201/#/redirection';
+    public static readonly DR_POWER_URL_SANDBOX: string = 'https://drpower.hea.com:9443/#/redirection';
     public static readonly DR_POWER_URL_LIVE: string = 'https://drpower.hea.com/#/redirection';
   
 }
