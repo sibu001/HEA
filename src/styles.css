@@ -2313,3 +2313,10 @@ mat-paginator{
     margin : 0px 40px;
  }   
 }
+
+@media(max-width: 500px){
+  .form-padding{
+    padding-left: 20px  !important;
+    padding-right: 20px !important;
+  }
+}

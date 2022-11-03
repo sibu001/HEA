@@ -1,5 +1,5 @@
 
-<div class="mb-60"> 
+<div class="mb-100"> 
     <div class="row">
         <div class="col-md-4" *ngIf='isSearch'>
             <div class="form-group" style="margin-top: 11px;">
@@ -267,7 +267,7 @@
         </mat-table>
         <div *ngIf='(dataSource===undefined || dataSource===null) && !showInput '
             class="row">
-            <div class='col-sm-12 col-xs-12 z2 p-absolute' style='text-align: center;'>
+            <div class='col-sm-12 col-xs-12 z2 p-absolute no-record-found' style='text-align: center;'>
                 <h5 style="margin-top: 20px" >No records found.</h5>
             </div>
         </div>
@@ -308,8 +308,9 @@
             </form>
         </div>
         <div class="row p-inherit">
-            <div class="col-sm-6 col-xs-12 removePadding p-inherit">
+            <div class="col-sm-6 col-xs-12 removePadding p-inherit" >
                 <mat-paginator disableRipple="true" *ngIf="isPaginate" #paginator
+                [ngStyle]="{'margin-top' : !dataSource && !showInput ? '30px' : '10px' }"
                     style-paginator hidePageSize
                     [length]="totalLength" [pageSize]="pageSize"
                     [pageIndex]="pageIndexNumber"
@@ -319,21 +320,27 @@
                 </mat-paginator>
             </div>
             <div *ngIf="!isHideAdd" class="col-sm-12 col-xs-12 fixed-add-button"
-                style="text-align:right;">
+                style="text-align:right;"
+                [ngStyle]="{'margin-top': !dataSource && !showInput ? '45px' : '25px'}"
+                >
                 <button class="btn btn-primary z3" type="button"
                     (click)="onAddEvent($event)">Add</button>
             </div>
     
             <div *ngIf="showAddRowButton && !showInput " class="col-sm-6 col-xs-12
                 fixed-add-button "
-                style="text-align:right; ">
+                style="text-align:right; "
+                [ngStyle]="{'margin-top': !dataSource && !showInput ? '45px' : '25px'}"
+                >
                 <button class="btn btn-primary z3" type="button"
                     (click)="onAddRowEvent()">Add Row</button>
             </div>
             <div *ngIf="showAddInputButton && !showRowInput" class="col-sm-6
                 col-xs-12
                 fixed-add-button "
-                style="text-align:right;">
+                style="text-align:right;"
+                [ngStyle]="{'margin-top': !dataSource && !showInput ? '45px' : '25px'}"
+                >
                 <button class="btn btn-primary z3" type="button"
                     (click)="onAddNewRowEvent()">Add</button>
             </div>

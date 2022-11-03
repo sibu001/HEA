@@ -6,7 +6,8 @@
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Pane</span>
         </p>
-        <form [formGroup]="paneForm" class="form-group form-padding">
+        <form [formGroup]="paneForm" class="form-group">
+        <div class="form-padding">
           <div class="row borderTop borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -170,6 +171,7 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
+        </div>
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">

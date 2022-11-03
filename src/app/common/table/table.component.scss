@@ -266,15 +266,12 @@ mat-header-cell:last-of-type {
 }
 
 .fixed-add-button {
-  position: inherit;
+  position: absolute;
 }
-@media (min-width: 200px) and (max-width: 992px) {  
   .fixed-add-button {
-    position: absolute;
-    margin: 25px 0px;
     left : 0px;
   }
-}
+
 
 .mat-column-serialNumber {
   flex: none;
@@ -318,8 +315,8 @@ tr.example-element-row:not(.example-expanded-row):active {
   position: absolute;
 }
 
-.mb-60{
-  margin-bottom: 60px;
+.mb-100{
+  margin-bottom: 100px;
 }
 
 .z1{
@@ -333,7 +330,7 @@ tr.example-element-row:not(.example-expanded-row):active {
 .z2{
   z-index: 2;
 }
-
+N
 .z3{
   z-index: 3;
 }
