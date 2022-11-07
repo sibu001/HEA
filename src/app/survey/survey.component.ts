@@ -105,15 +105,35 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         scrollbarPosition : "inside"
       });
 
-      // setTimeout(
-      //   () =>{
-          // $('#chartRender>div').mCustomScrollbar(
-          //   { axis:"x",
-          //     theme:"dark",
-          //     scrollbarPosition : "inside"
-          //   });
-      //   },2000
-      // )
+      if(this.users.currentPaneNumber.currentPane.paneCode == 'bl_UseDrPower'){
+        const linkToDrPower1 = document.getElementById("drPowerRedirection1")
+        const linkToDrPower2 = document.getElementById("drPowerRedirection2")
+
+        const authenticateToDrPower = (event: any) =>{
+          event.preventDefault();    
+          document.getElementById('loader').classList.add('loading');
+          this.loginService.performGet('oauth2/accessToken')
+          .subscribe(
+            (response : any) =>{
+              document.getElementById('loader').classList.remove('loading');
+              const responseData = response.data;
+              console.log(response);
+              window.open(`${AppConstant.DR_POWER_URL_SANDBOX}?access_token=${responseData.access_token}&error_url=${location.href}`,'_blank');
+            }, (error) =>{
+                console.error(error);
+                this.scrollTop();
+                this.inputErrorMessage = error.error.errorMessage;
+                document.getElementById('loader').classList.remove('loading');
+              }
+          )
+        }
+
+        if(linkToDrPower1 || linkToDrPower2){
+          linkToDrPower1.onclick = authenticateToDrPower;
+          linkToDrPower2.onclick = authenticateToDrPower;
+        }
+
+      }
   }
   
   disableNextPrevButtonCheck(event){
@@ -1221,25 +1241,4 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
   }
-
-
-  authenticateToDrPower(event: any){
-    event.preventDefault();    
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performGet('oauth2/accessToken')
-    .subscribe(
-      (response : any) =>{
-        document.getElementById('loader').classList.remove('loading');
-        const responseData = response.data;
-        console.log(response);
-        window.open(`${AppConstant.DR_POWER_URL_SANDBOX}?access_token=${responseData.access_token}&error_url=${location.href}`,'_blank');
-      }, (error) =>{
-          console.error(error);
-          this.scrollTop();
-          this.inputErrorMessage = error.error.errorMessage;
-          document.getElementById('loader').classList.remove('loading');
-        }
-    )
-  }
-
 }
