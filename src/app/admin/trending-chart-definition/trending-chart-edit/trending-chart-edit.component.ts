@@ -25,6 +25,8 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
     totalElements: 0
   };
   chartDataSource: any;
+  chartFooter : any;
+  chartHeader : any;
   paneData = TableColumnData.PANE_DATA;
   inputData = TableColumnData.INPUT_TYPE_DATA;
   colorData = TableColumnData.COLOR_DATA;
@@ -156,6 +158,7 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.chartForm.controls; }
+  get form() { return this.chartForm.value; }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

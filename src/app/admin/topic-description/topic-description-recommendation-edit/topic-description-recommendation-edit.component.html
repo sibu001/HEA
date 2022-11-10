@@ -140,8 +140,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Html Template:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmlTextTemplate && ( !form.htmlTextTemplate || !form.htmlTextTemplate.trim())" (click)="htmlTextTemplate = !htmlTextTemplate" >
-              <ejs-richtexteditor  *ngIf="htmlTextTemplate || ( form.htmlTextTemplate && form.htmlTextTemplate.trim())" [toolbarSettings]='tools' formControlName='htmlTextTemplate' id='htmlTextTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmlTextTemplate && ( !f.htmlTextTemplate || !f.htmlTextTemplate.trim())" (click)="htmlTextTemplate = !htmlTextTemplate" >
+              <ejs-richtexteditor  *ngIf="htmlTextTemplate || ( f.htmlTextTemplate && f.htmlTextTemplate.trim())" [toolbarSettings]='tools' formControlName='htmlTextTemplate' id='htmlTextTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
@@ -150,8 +150,8 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Instruction HTML template:	
             </div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!instructionTemplate && ( !form.instructionTemplate || !form.instructionTemplate.trim())" (click)="instructionTemplate = !instructionTemplate" >
-              <ejs-richtexteditor *ngIf="instructionTemplate || ( form.instructionTemplate && form.instructionTemplate.trim())" [toolbarSettings]='tools' formControlName='instructionTemplate' id='instructionTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!instructionTemplate && ( !f.instructionTemplate || !f.instructionTemplate.trim())" (click)="instructionTemplate = !instructionTemplate" >
+              <ejs-richtexteditor *ngIf="instructionTemplate || ( f.instructionTemplate && f.instructionTemplate.trim())" [toolbarSettings]='tools' formControlName='instructionTemplate' id='instructionTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>

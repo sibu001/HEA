@@ -40,6 +40,9 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
   topicVariablesKeys: TABLECOLUMN[];
   disableNextButtonTopicVariable = false;
   lookupRecommendation = [];
+  htmTopMenuTemplate;
+  htmRightTopTemplate;
+  htmRightBottomTemplate;
   public lookUpValues;
   public dataSource: any;
   public totalElement = 0;

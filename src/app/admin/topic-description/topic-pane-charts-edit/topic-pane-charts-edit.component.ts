@@ -30,6 +30,8 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   topicDescriptionId : any;
   paneId : any;
   chartDataSource: any;
+  chartHeader : any;
+  chartFooter : any;
   paneData = TableColumnData.PANE_DATA;
   inputData = TableColumnData.INPUT_TYPE_DATA;
   colorData = [];
@@ -267,6 +269,8 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.chartForm.controls; }
+
+  get form() { return this.chartForm.value; }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
