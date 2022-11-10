@@ -17,7 +17,7 @@ import {
 import { CommonHEAModule } from 'src/app/common/common.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TrendingChartEditComponent } from './trending-chart-edit/trending-chart-edit.component';
-import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
+import { RichTextEditorModule, ToolbarService, LinkService, ImageService, HtmlEditorService } from '@syncfusion/ej2-angular-richtexteditor';
 
 @NgModule({
   imports: [
@@ -33,6 +33,8 @@ import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
     TrendingChartDefinitionEditComponent,
     TrendingChartDefinitionSeriesComponent,
     TrendingChartEditComponent
-  ]
+  ],
+  providers: [HtmlEditorService, ImageService, LinkService, ToolbarService]
+
 })
 export class TrendingChartDefinitionModule { }

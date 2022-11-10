@@ -13,7 +13,6 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   selector: 'app-trending-chart-edit',
   templateUrl: './trending-chart-edit.component.html',
   styleUrls: ['./trending-chart-edit.component.css'],
-  providers: [HtmlEditorService, ImageService, LinkService, ToolbarService]
 })
 export class TrendingChartEditComponent implements OnInit, OnDestroy {
 

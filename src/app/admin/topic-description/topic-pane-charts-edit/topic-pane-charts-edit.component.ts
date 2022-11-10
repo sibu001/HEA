@@ -16,8 +16,6 @@ import { TopicService } from 'src/app/store/topic-state-management/service/topic
   selector: 'app-topic-pane-charts-edit',
   templateUrl: './topic-pane-charts-edit.component.html',
   styleUrls: ['./topic-pane-charts-edit.component.css'],
-  providers: [ToolbarService, LinkService, ImageService, HtmlEditorService]
-
 })
 export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
 

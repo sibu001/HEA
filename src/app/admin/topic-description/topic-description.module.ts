@@ -11,7 +11,7 @@ import { NgxsModule } from '@ngxs/store';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
-import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
+import { LinkService, RichTextEditorModule, ToolbarService, ImageService, HtmlEditorService } from '@syncfusion/ej2-angular-richtexteditor';
 import { TopicDescriptionPaneComponent } from './topic-description-pane/topic-description-pane.component';
 import { TopicDescriptionRecommendationEditComponent } from './topic-description-recommendation-edit/topic-description-recommendation-edit.component';
 import { TopicDescriptionVariableEditComponent } from './topic-description-variable-edit/topic-description-variable-edit.component';
@@ -52,7 +52,9 @@ import { TopicDescriptionPaneCopyComponent } from './topic-description-pane-copy
     TopicPaneReportsEditComponent,
     TopicDescriptionEditCopyComponent,
     TopicDescriptionPaneCopyComponent],
-  providers: [SystemService, TopicService, LoginService,DatePipe, UtilityService, { provide: MAT_DIALOG_DATA, useValue: {} }],
-  entryComponents: [TopicDescriptionEditCopyComponent,TopicDescriptionPaneCopyComponent]
+  providers: [SystemService, TopicService, LoginService, DatePipe, UtilityService
+    , ToolbarService, LinkService, ImageService, HtmlEditorService
+    , { provide: MAT_DIALOG_DATA, useValue: {} }],
+  entryComponents: [TopicDescriptionEditCopyComponent, TopicDescriptionPaneCopyComponent]
 })
 export class TopicDescriptionModule { }

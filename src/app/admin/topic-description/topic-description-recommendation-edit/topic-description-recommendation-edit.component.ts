@@ -16,7 +16,6 @@ import { AppConstant } from 'src/app/utility/app.constant';
   selector: 'app-topic-description-recommendation-edit',
   templateUrl: './topic-description-recommendation-edit.component.html',
   styleUrls: ['./topic-description-recommendation-edit.component.css'],
-  providers: [ToolbarService, LinkService, ImageService, HtmlEditorService]
 })
 export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDestroy {
 

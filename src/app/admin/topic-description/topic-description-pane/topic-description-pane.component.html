@@ -6,7 +6,8 @@
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Pane</span>
         </p>
-        <form [formGroup]="paneForm" class="form-group">
+      <div class="form-group">
+        <form [formGroup]="paneForm">
         <div class="form-padding">
           <div class="row borderTop borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
@@ -80,7 +81,8 @@
           <div *ngIf='!f.hideSection.value || (id && surveyDescriptionId)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page Header:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmHeaderTemplate' id='htmHeaderTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmHeaderTemplate && ( !form.htmHeaderTemplate || !form.htmHeaderTemplate.trim())" (click)="htmHeaderTemplate = !htmHeaderTemplate" >
+              <ejs-richtexteditor *ngIf="htmHeaderTemplate || ( form.htmHeaderTemplate && form.htmHeaderTemplate.trim())"  [toolbarSettings]='tools' formControlName='htmHeaderTemplate' id='htmHeaderTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
@@ -88,57 +90,64 @@
           <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page Text:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmPageTextTemplate' id='htmPageTextTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmPageTextTemplate && ( !form.htmPageTextTemplate || !form.htmPageTextTemplate.trim())" (click)="htmPageTextTemplate = !htmPageTextTemplate" >
+              <ejs-richtexteditor *ngIf="htmPageTextTemplate || ( form.htmPageTextTemplate && form.htmPageTextTemplate.trim())" [toolbarSettings]='tools' formControlName='htmPageTextTemplate' id='htmPageTextTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
           <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page Footer:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmFooterTemplate' id='htmFooterTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmFooterTemplate && ( !form.htmFooterTemplate || !form.htmFooterTemplate.trim())" (click)="htmFooterTemplate = !htmFooterTemplate" >
+              <ejs-richtexteditor *ngIf="htmFooterTemplate || ( form.htmFooterTemplate && form.htmFooterTemplate.trim())" [toolbarSettings]='tools' formControlName='htmFooterTemplate' id='htmFooterTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
           <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Factoid:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmFactoidTemplate' id='htmFactoidTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmFactoidTemplate && ( !form.htmFactoidTemplate || !form.htmFactoidTemplate.trim())" (click)="htmFactoidTemplate = !htmFactoidTemplate" >
+              <ejs-richtexteditor *ngIf="htmFactoidTemplate || ( form.htmFactoidTemplate && form.htmFactoidTemplate.trim())" [toolbarSettings]='tools' formControlName='htmFactoidTemplate' id='htmFactoidTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
           <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pending Messages:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmPendingMessageTemplate' id='htmPendingMessageTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmPendingMessageTemplate && ( !form.htmPendingMessageTemplate || !form.htmPendingMessageTemplate.trim())" (click)="htmPendingMessageTemplate = !htmPendingMessageTemplate" >
+              <ejs-richtexteditor *ngIf="htmPendingMessageTemplate || ( form.htmPendingMessageTemplate && form.htmPendingMessageTemplate.trim())" [toolbarSettings]='tools' formControlName='htmPendingMessageTemplate' id='htmPendingMessageTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
           <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Top Menu:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmTopMenuTemplate' id='htmTopMenuTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmTopMenuTemplate && ( !form.htmTopMenuTemplate || !form.htmTopMenuTemplate.trim())" (click)="htmTopMenuTemplate = !htmTopMenuTemplate" >
+              <ejs-richtexteditor *ngIf="htmTopMenuTemplate || ( form.htmTopMenuTemplate && form.htmTopMenuTemplate.trim())" [toolbarSettings]='tools' formControlName='htmTopMenuTemplate' id='htmTopMenuTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
           <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Right Menu Top Part:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmRightTopTemplate' id='htmRightTopTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmRightTopTemplate && ( !form.htmRightTopTemplate || !form.htmRightTopTemplate.trim())" (click)="htmRightTopTemplate = !htmRightTopTemplate" >
+              <ejs-richtexteditor *ngIf="htmRightTopTemplate || ( form.htmRightTopTemplate && form.htmRightTopTemplate.trim())" [toolbarSettings]='tools' formControlName='htmRightTopTemplate' id='htmRightTopTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
           <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Right Menu Bottom Part:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmRightBottomTemplate'
-                id='htmRightBottomTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmRightBottomTemplate && ( !form.htmRightBottomTemplate || !form.htmRightBottomTemplate.trim())" (click)="htmRightBottomTemplate = !htmRightBottomTemplate" >
+              <ejs-richtexteditor *ngIf="htmRightBottomTemplate || ( form.htmRightBottomTemplate && form.htmRightBottomTemplate.trim())" [toolbarSettings]='tools' formControlName='htmRightBottomTemplate' id='htmRightBottomTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
           <div *ngIf='!f.hideSection.value || (id == undefined)' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pane Help:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools' formControlName='htmHelpTemplate' id='htmHelpTemplate'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmHelpTemplate && ( !form.htmHelpTemplate || !form.htmHelpTemplate.trim())" (click)="htmHelpTemplate = !htmHelpTemplate" >
+              <ejs-richtexteditor *ngIf="htmHelpTemplate || ( form.htmHelpTemplate && form.htmHelpTemplate.trim())" [toolbarSettings]='tools' formControlName='htmHelpTemplate' id='htmHelpTemplate'>
               </ejs-richtexteditor>
             </div>
           </div>
@@ -172,6 +181,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
         </div>
+      </form>
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
@@ -247,7 +257,7 @@
             </div>
             <!-- </div> -->
           </div>
-        </form>
+      </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar [showDataFields]='true' [showTopicVariableFields]='true' [showMethod]='true'></app-sidebar>

@@ -654,8 +654,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart Header:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools'
-                formControlName='chartHeader' id='chartHeader'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!chartHeader && ( !form.chartHeader || !form.chartHeader.trim())" (click)="chartHeader = !chartHeader" >
+              <ejs-richtexteditor *ngIf="chartHeader || ( form.chartHeader && form.chartHeader.trim())" [toolbarSettings]='tools' formControlName='chartHeader' id='chartHeader'>
               </ejs-richtexteditor>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -663,8 +663,8 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart Footer:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <ejs-richtexteditor [toolbarSettings]='tools'
-                formControlName='chartFooter' id='chartFooter'>
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!chartFooter && ( !form.chartFooter || !form.chartFooter.trim())" (click)="chartFooter = !chartFooter" >
+              <ejs-richtexteditor *ngIf="chartFooter || ( form.chartFooter && form.chartFooter.trim())" [toolbarSettings]='tools' formControlName='chartFooter' id='chartFooter'>
               </ejs-richtexteditor>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>

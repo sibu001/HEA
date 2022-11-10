@@ -2320,3 +2320,7 @@ mat-paginator{
     padding-right: 20px !important;
   }
 }
+
+img[src="assets/images/ico_html.png"]{
+  width: 30px;
+}

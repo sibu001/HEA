@@ -28,7 +28,6 @@ import { UtilityService } from 'src/app/services/utility.service';
   selector: 'app-topic-description-edit',
   templateUrl: './topic-description-edit.component.html',
   styleUrls: ['./topic-description-edit.component.css'],
-  providers: [ToolbarService, LinkService, ImageService, HtmlEditorService]
 })
 export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
 
@@ -67,7 +66,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       'LowerCase', 'UpperCase', '|',
       'Formats', 'Alignments', '|', 'OrderedList', 'UnorderedList', '|',
       'Indent', 'Outdent', '|', 'CreateLink',
-      'Image', '|', 'ClearFormat', 'Print', 'SourceCode', '|', 'FullScreen',
+      'Image', '|', 'ClearFormat', 'Print', 'SourceCode', '|', 'fullScreen',
       {
         tooltipText: 'Select Style',
         undo: true,
@@ -594,6 +593,10 @@ getSuggestionListForFilterForTopicVariable(event){
       } else {
         this.topicVariableTableData.pageIndex =  this.topicVariableTableData.pageIndex -1;
     }}  
+  }
+
+  get form(){
+    return this.topicForm.value;
   }
 
   addTopicPanes(): any {      

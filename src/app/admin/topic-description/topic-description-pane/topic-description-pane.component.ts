@@ -21,7 +21,6 @@ import { filter } from 'rxjs/operators';
   selector: 'app-topic-description-pane',
   templateUrl: './topic-description-pane.component.html',
   styleUrls: ['./topic-description-pane.component.css'],
-  providers: [ToolbarService, LinkService, ImageService, HtmlEditorService]
 })
 export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
@@ -107,6 +106,11 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       this.loadPaneReportByPaneId();
       this.loadAllPaneCharts();
     }
+    this.scrollTop();
+  }
+
+  scrollTop() {
+    window.scroll(0, 0);
   }
 
   loadNextPaneList(){
@@ -289,6 +293,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getSelectedPaneById(){
     this.subscriptions.add(
       this.topicService.getSelectedTopicPaneById()
+      .pipe(filter( data => data && data.id == this.id))
       .subscribe(
         next => {
           this.paneData = next;
@@ -368,6 +373,10 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+
+  get form(){
+    return this.paneForm.value;
   }
 
 }
