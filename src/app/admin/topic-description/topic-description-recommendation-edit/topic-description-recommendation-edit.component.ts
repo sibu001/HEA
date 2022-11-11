@@ -24,6 +24,7 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   recommendationKeys: TABLECOLUMN[];
   recommendationLeakTypeList = [];
   actionTypeList = [];
+  htmlTextTemplate : any;
   recommendationLeakObject;
   priceCalculationType: any = TableColumnData.PRICE_CALCULATION_TYPE;
   imageList = [];
