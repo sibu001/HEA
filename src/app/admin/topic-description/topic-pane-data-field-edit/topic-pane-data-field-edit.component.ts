@@ -11,6 +11,7 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-topic-pane-data-field-edit',
@@ -91,7 +92,7 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   }
 
   loadPanesForTopicDescription(){
-    this.topicService.loadPaneListByTopicDescriptionId(this.topicDescriptionId);
+    this.topicService.loadPaneListByTopicDescriptionId(this.topicDescriptionId, new HttpParams());
   }
 
   getPanesForTopicDescripition(){

@@ -591,12 +591,12 @@ export class TopicManagementState {
     
     @Action(LoadPaneListByTopicDescriptionId)
     loadPaneListByTopicDescriptionId(ctx: StateContext<TopicManagementModel>, action: LoadPaneListByTopicDescriptionId): Actions {
-        const paneList = ctx.getState().paneList;
-        if( paneList && paneList[0] && paneList[0].surveyDescriptionId == action.id)
-            return null;
+        // const paneList = ctx.getState().paneList;
+        // if(paneList && paneList[0] && paneList[0].surveyDescriptionId == action.id)
+        //     return null;
             
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id + '/' + AppConstant.pane)
+        return this.loginService.performGetWithParams(AppConstant.topicDescription + '/' + action.id + '/' + AppConstant.pane, action.params)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

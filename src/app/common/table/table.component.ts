@@ -300,7 +300,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // DataSource defaults to lowercase matches
     this.page.search = filterValue;
-    this.changePageEvent.emit(this.page);
+    this.suggestionListEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
   }
 

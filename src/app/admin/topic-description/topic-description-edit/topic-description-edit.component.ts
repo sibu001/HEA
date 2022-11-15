@@ -32,7 +32,7 @@ import { UtilityService } from 'src/app/services/utility.service';
 export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
 
   id: any;
-  pageSize = Number.parseInt(AppConstant.pageSize);
+  pageSize = Number.parseInt(AppConstant.pageSize)
   topicForm: FormGroup;
   public keys: TABLECOLUMN[];
   topicPaneKeys: TABLECOLUMN[];
@@ -41,16 +41,22 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
   disableNextButtonTopicVariable = false;
   lookupRecommendation = [];
   htmTopMenuTemplate;
+  disableNextButtonRecommendatonLeaks = false;
+  disableNextButtonTopicPane = false;
   htmRightTopTemplate;
   htmRightBottomTemplate;
   public lookUpValues;
+  public recommendationLeakTableData = {
+    content : [],
+    totalElements: Number.MAX_SAFE_INTEGER,
+    pageIndex : 0
+  }
   public dataSource: any;
   public totalElement = 0;
   public topicTableData = {
     content: [],
     totalElements: 0,
   };
-  allTopicPane = []
   topicVariableDataList = [];
   recommendationsList =[];
   public topicVariableTableData = {
@@ -86,10 +92,17 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
   public selectionListCustomerGroup : Array<any> = [];
   public selectionCustomerGroupList : Array<any> = [];
   recommendationLeakData = [];
+  disableNextButtonRecommendationUnique = false;
+  public recommendtaionLeakAndUniqueData ={
+    dataSource : [],
+    totalElement : Number.MAX_SAFE_INTEGER,
+    pageIndex : 0
+  }
+
   public topicPane = {
     dataSource : [],
-    totalElement : 0,
-    index : 0
+    totalElement : Number.MAX_SAFE_INTEGER,
+    pageIndex : 0
   }
   public topicDescriptionData : any;
 
@@ -134,14 +147,14 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       if(this.id){
         this.getTopicDescription();
         this.getTopicPanesById();
-        this.loadTopicPanesById();
+        this.topicPanePageChangeEvent(undefined);
         this.getRecommendationsLeakAndUnique();
         this.getCustomerGroupById();
         this.getTopicVariableDataFromStore();
         this.loadTopicDescription();
         this.loadCustomerGroupById();
         this.topicVariablesPageChangeEvent(undefined);
-        this.loadRecommendationsLeakAndUnique();
+        this.pageChangeEventForRecommendationLeaksAndUnique(undefined);
       }
   }
 
@@ -213,33 +226,51 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     )
   }
 
-  loadTopicPanesById(){
-    this.topicService.loadPaneListByTopicDescriptionId(this.id);
+  topicPanePageChangeEvent(event : any){
+    if(event) this.topicPane.pageIndex = event.pageIndex;
+
+    let params = new HttpParams();
+    params = params.append('sortOrderAsc', 'true');
+    params = params.append('sortField','orderNumber');
+    params = params.append('pageSize',this.pageSize+"");
+
+    if(event != undefined){
+      params = params.append('startRow',(event.pageSize * event.pageIndex) + '');
+      document.getElementById("topicPaneList").scrollIntoView();
+    }else {
+      params = params.append('startRow','0');
+    }
+
+    this.loadTopicPanesById(params);
+
+  }
+
+  loadTopicPanesById(params){
+    this.topicService.loadPaneListByTopicDescriptionId(this.id,params);
   }
 
   getTopicPanesById(){
     this.subscriptions.add(
       this.topicService.getPaneListByTopicDescriptionId()
-      .pipe(skipWhile((item: any) => !item))
+      .pipe(filter((item: any) => item))
       .subscribe((dataList : any) => {
       if(dataList){
-        this.allTopicPane = [...dataList];
-        this.topicPane.dataSource = this.allTopicPane.slice(0,this.pageSize);   
-        this.topicPane.totalElement = this.allTopicPane.length;
-        this.topicPane.index = 0;
+        if(dataList.length == this.pageSize){
+          this.topicPane.dataSource = [...dataList];
+          this.disableNextButtonTopicPane = false;
+        } else {
+          this.disableNextButtonTopicPane = true;
+          if(dataList.length > 0){
+            this.topicPane.dataSource  = [...dataList];
+          } else {
+            this.topicPane.pageIndex = this.topicPane.pageIndex -1;
+        }}  
       }
-        // this.setForm(this.topicDescriptionData);
     },(error : any)  => {
       console.log("some error has occurred.");
       console.error(error);
     })
     )
-  }
-
-  topicPanePagination(event){
-      const pageIndex = event.pageIndex;
-      this.topicPane.dataSource = this.allTopicPane.slice(pageIndex*this.pageSize,pageIndex*this.pageSize + this.pageSize);
-      this.topicPane.index = pageIndex;
   }
 
   setForm(event: any) {
@@ -270,15 +301,6 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     });
   }
 
-  getSelectedPaneID(){
-    for(let topic of this.allTopicPane){
-      if(topic.id == this.topicDescriptionData.firstPaneId){
-       return topic.id;
-      }
-   }
-  }
-
-
 selectNextPermanentTopic(){
   let index ;
   for(let i = 1; i < this.nextPermanentTopic.length ; i++) {
@@ -303,18 +325,53 @@ getPermanentTopicListFromStore(){
   }));
 }
 
-loadRecommendationsLeakAndUnique(){
-  this.systemService.loadRecommendationsLeakAndUnique(this.id);
+
+pageChangeEventForRecommendationLeaksAndUnique(event){
+
+  if(event) this.recommendtaionLeakAndUniqueData.pageIndex = event.pageIndex;
+
+  let params = new HttpParams();
+  params = params.append('pageSize',this.pageSize+'');
+  params = params.append('sortOrderAsc', 'true');
+  params = params.append('sortField','recommendationId');
+  if(event != undefined){
+    params = params.append('startRow',(event.pageIndex * event.pageSize) + '');
+    document.getElementById("recommendationList").scrollIntoView();
+  }else 
+    params = params.append('startRow','0');
+  
+  this.loadRecommendationsLeakAndUnique(params)
+}
+
+loadRecommendationsLeakAndUnique(params){
+  this.systemService.loadRecommendationsLeakAndUnique(this.id,params);
 }
 
 getRecommendationsLeakAndUnique(){
   this.subscriptions.add(
     this.systemService.getRecommendatonLeakAndUnique()
-    .pipe(skipWhile((data)=> !data))
+    .pipe(filter((data)=> data))
     .subscribe(
       data =>{
         this.recommendationLeakData = data;
         this.leaksRecommendationTakeBackTypeSubject.next("getRecommendationsLeakAndUnique");
+        
+        if(data.length == this.pageSize){
+          this.recommendtaionLeakAndUniqueData.dataSource = data;
+          this.disableNextButtonRecommendationUnique = false;
+          this.leaksRecommendationTakeBackTypeSubject.next("getRecommendationsLeakAndUnique");
+  
+        }else{
+          this.disableNextButtonRecommendationUnique = true;  
+          if(data.length > 0){
+            this.recommendtaionLeakAndUniqueData.dataSource = data;
+            this.leaksRecommendationTakeBackTypeSubject.next("getRecommendationsLeakAndUnique");
+
+          }else{
+            this.recommendtaionLeakAndUniqueData.pageIndex = this.recommendtaionLeakAndUniqueData.pageIndex -1;
+          }
+
+        }
       }, error => {
         console.error(error);
       }
@@ -346,7 +403,7 @@ private setLookUpTypeInRecommendationAndLeaks(){
     this.leaksRecommendationTakeBackTypeSubject
     .subscribe(
       data =>{
-        this.transformRecommendationData([...this.recommendationLeakData])
+        this.transformRecommendationData([...this.recommendtaionLeakAndUniqueData.dataSource])
       }, error =>{ console.log(error); }
     )
   )
@@ -360,7 +417,7 @@ private transformRecommendationData(src){
         return element;
       }
     )
-  this.recommendationsList = src;
+  this.recommendtaionLeakAndUniqueData.dataSource = src;
 }
 
 getSuggestionListForFilterForTopicPane(event){
@@ -535,13 +592,15 @@ getSuggestionListForFilterForTopicVariable(event){
 
 
   topicVariablesPageChangeEvent(event){
+    if(event) this.topicVariableTableData.pageIndex = event.pageIndex;
     let params = new HttpParams();
     params = params.append('pageSize',this.pageSize+"");
-    params = params.append('sortOrderAsc`', 'true');
+    params = params.append('sortOrderAsc', 'true');
     params = params.append('sortField','field');
-    if(event != undefined)
-      params = params.append('startRow',event.pageIndex);
-    else 
+    if(event != undefined){
+      params = params.append('startRow',(event.pageIndex * event.pageSize) + '');
+      document.getElementById("topicVarables").scrollIntoView();
+    }else 
       params = params.append('startRow','0');
       
     this.loadTopicVariable(params);
@@ -569,7 +628,6 @@ getSuggestionListForFilterForTopicVariable(event){
   }
 
   addRemoveCustomerGroup(event : any){
-    // console.log(event);
     if(event.isCheckedCheckbox == true)
       this.systemService.addCustomerGroupToList(this.id,event.id)
     else if(event.isCheckedCheckbox == false)
@@ -591,7 +649,6 @@ getSuggestionListForFilterForTopicVariable(event){
     } else {
       this.disableNextButtonTopicVariable = true;
       if(this.topicVariableDataList.length > 0){
-        // this.topicVariableDataList = [...this.topicVariableDataList];
         this.topicVariableTableData.content = [...this.topicVariableDataList];
       } else {
         this.topicVariableTableData.pageIndex =  this.topicVariableTableData.pageIndex -1;

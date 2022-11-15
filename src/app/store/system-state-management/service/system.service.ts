@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -197,8 +198,8 @@ export class SystemService {
     return this.store.dispatch(new GetCustomerGroupByIdAction(id));
   }
 
-  loadRecommendationsLeakAndUnique(id : number){
-    return this.store.dispatch(new RecommendationsLeakAndUniqueAction(id))
+  loadRecommendationsLeakAndUnique(id : number, params : HttpParams): Observable<SystemManagementState>{
+    return this.store.dispatch(new RecommendationsLeakAndUniqueAction(id,params))
   }
 
   saveCustomerGroup(customerGroup: any): Observable<SystemManagementState> {

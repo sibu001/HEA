@@ -248,13 +248,13 @@
             </app-table>
           </div>
 
-          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+          <div id="topicPaneList" class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Panes </span></p>
             <app-table [keys]="topicPaneKeys" [isPaginate]="true"
               [pageSize]="pageSize" 
-              [pageIndex]="topicPane.index"
+              [pageIndex]="topicPane.pageIndex"
               [isSearch]="true" [data]="topicPane.dataSource"
               [totalElement]="topicPane.totalElement"
               (addEvent)='addTopicPanes()'
@@ -262,29 +262,33 @@
               [showSuggestionList]='true'
               (suggestionListEvent)='getSuggestionListForFilterForTopicPane($event)'
               [disableLastButton]='true'
-              (changePageEvent)='topicPanePagination($event)'
+              [disableNextButton]='disableNextButtonTopicPane'
+              (changePageEvent)='topicPanePageChangeEvent($event)'
               [suggestionList]='suggestionListTopicVariables'>
             </app-table>
           </div>
 
-          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+          <div id="recommendationList" class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Recommendations, Leaks,Unique </span></p>
             <app-table [keys]="recommendationKeys"
               [isPaginate]="true"
               [disableLastButton]='true'
-              [data]="recommendationsList"
+              [disableNextButton]="disableNextButtonRecommendationUnique"
+              [data]="recommendtaionLeakAndUniqueData.dataSource"
               [pageSize]="pageSize"
+              [pageIndex]="recommendtaionLeakAndUniqueData.pageIndex"
               [isSearch]="false" [data]="dataSource"
-              [totalElement]="topicTableData.totalElements"
+              [totalElement]="recommendtaionLeakAndUniqueData.totalElement"
               (addEvent)='addRecommendationLeaks()'
+              (changePageEvent)='pageChangeEventForRecommendationLeaksAndUnique($event)'
               (goToEditEvent)='goToEditRecommendationLeaks($event)'
               >
             </app-table>
           </div>
 
-          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+          <div id="topicVarables" class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic Variables </span></p>

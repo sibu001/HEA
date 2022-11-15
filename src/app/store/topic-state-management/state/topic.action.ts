@@ -1,3 +1,5 @@
+import { HttpParams } from "@angular/common/http";
+
 export enum TopicActionTypes {
     GET_TOPIC_DESCRIPTION_LIST = 'Get All Topic Description List',
     GET_TOPIC_DESCRIPTION_BY_ID = 'Get Topic Description By Id',
@@ -131,7 +133,7 @@ export class GetPaidServiceListAction {
 
 export class LoadPaneListByTopicDescriptionId{
     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_TOPIC_DESCRIPTION_BY_PANE_ID;
-    constructor(readonly id : number){}
+    constructor(readonly id : number, readonly params : HttpParams){}
 }
 
 export class SaveDataFieldByPaneIdAction{

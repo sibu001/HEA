@@ -1,3 +1,5 @@
+import { HttpParams } from "@angular/common/http";
+
 export enum SystemActionTypes {
     GET_CUSTOMER_GROUP_LIST = 'Get All Customer Group List',
     GET_CUSTOMER_GROUP_BY_ID = 'Get Customer Group By Id',
@@ -82,7 +84,7 @@ export class UpdateCustomerGroupAction {
 
 export class RecommendationsLeakAndUniqueAction{
     static readonly type : SystemActionTypes = SystemActionTypes.RECOMMENDATION_LEAK_UNIQUE;
-    constructor(readonly id : number){}
+    constructor(readonly id : number, readonly params : HttpParams){}
 }
 
 export class SaveCustomerGroupAction {

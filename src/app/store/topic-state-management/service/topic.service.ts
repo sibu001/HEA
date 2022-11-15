@@ -16,6 +16,7 @@ import {
 } from '../state/topic.action';
 import { TopicManagementState } from '../state/topic.state';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { HttpParams } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -141,8 +142,8 @@ export class TopicService {
     return this.store.dispatch(new GetPaidServiceListAction());
   }
 
-  loadPaneListByTopicDescriptionId(id : number){
-    return this.store.dispatch(new LoadPaneListByTopicDescriptionId(id))
+  loadPaneListByTopicDescriptionId(id : number, params : HttpParams ){
+    return this.store.dispatch(new LoadPaneListByTopicDescriptionId(id,params))
   }
 
   getPaneListByTopicDescriptionId(){

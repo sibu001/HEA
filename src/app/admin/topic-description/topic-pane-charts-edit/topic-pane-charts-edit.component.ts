@@ -162,7 +162,6 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
       .pipe(skipWhile((item: any) => item == undefined))
       .subscribe(
         data =>{
-          console.log(data);
           if(data) this.colorData = data;
         }, error =>{
           console.error(error);
@@ -181,7 +180,6 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
       .pipe(skipWhile((item: any) => item == undefined))
       .subscribe(
         data =>{
-          console.log(data);
           if(data) this.fontStyleList = data;
         },error =>{
           console.error(error);
@@ -199,10 +197,9 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
       this.topicService.getAllPossibleFontFamilyNames()
       .pipe(skipWhile((item: any) => item == undefined))
       .subscribe(data =>{
-        console.log(data);
         if(data) this.fontData = data;
       }, error =>{
-        console.log(error);
+        console.error(error);
       })
     )
   }
@@ -216,7 +213,6 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     .pipe(skipWhile((item: any) => !item))
     .subscribe(
       data=>{
-        console.log(data);
         if(data) this.chartTypeList = data
       }, error =>{
         console.error(error);
@@ -240,7 +236,7 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   }
 
   back(): any {
-    this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescription : this.topicDescriptionId }})
+    this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId }})
   }
 
   save(): any {

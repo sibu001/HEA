@@ -1186,11 +1186,11 @@ export class SystemManagementState {
     recommendationsLeakAndUniqueAction(ctx: StateContext<SystemManagementModel>, action: RecommendationsLeakAndUniqueAction) {
         document.getElementById('loader').classList.add('loading')
 
-           const recommendationList = ctx.getState().recommendationList;
-            if(recommendationList && recommendationList[0] && recommendationList[0].surveyDescriptionId == action.id )
-                return null;
+        //    const recommendationList = ctx.getState().recommendationList;
+        //     if(recommendationList && recommendationList[0] && recommendationList[0].surveyDescriptionId == action.id )
+        //         return null;
 
-        return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id + '/' + 'recommendations')
+        return this.loginService.performGetWithParams(AppConstant.topicDescription + '/' + action.id + '/' + 'recommendations',action.params)
             .subscribe(
                 response => {
                     document.getElementById('loader').classList.remove('loading');
