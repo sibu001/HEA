@@ -137,6 +137,11 @@ export class TopicPaneDataBlockEditComponent implements OnInit, OnDestroy {
     )
   }
 
+
+  addDataField(){
+    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit']);
+  }
+
   get f() { return this.variableForm.controls; }
 
   ngOnDestroy(): void {

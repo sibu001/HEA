@@ -320,23 +320,23 @@
                 Copy
               </button>
             </div>
-            <div  *ngIf="id !== undefined" class="col-sm-2 col-md-2 col-lg-3 col-xs-6 display-inline-button-large display-responsive-large">
+            <div  *ngIf="id !== undefined" class="col-sm-3 col-md-3 col-lg-3 col-xs-6 display-inline-button-large display-responsive-large">
               <label for="isRerunTopic" class="label-margin-bottom">
                 <input type="checkbox" formControlName='isRerunTopic'
                   id='isRerunTopic' style="float :left">
                   Require users to rerun topic
               </label>
             </div>
-            <div *ngIf="id !== undefined"  class="col-sm-2 col-md-2 col-lg-2 col-xs-6 display-inline-button-large1 display-responsive-large">
+            <div *ngIf="id !== undefined"  class="col-sm-3 col-md-3 col-lg-2 col-xs-6 display-inline-button-large1 display-responsive-large">
               <button type="button" class="btn btn-primary"
                 (click)="ReInitTopic()" style="float :right">
                 Reinit topics
               </button>
             </div>
-            <div *ngIf="id !== undefined" class="col-sm-2 col-md-2 col-lg-1 col-xs-6 display-responsive-large button-text-align">
+            <div *ngIf="id !== undefined" class="col-sm-2 col-md-2 col-lg-1 col-xs-8 display-responsive-large button-text-align">
               <button type="button" class="btn btn-primary" (click)="delete()" style="float :left">Delete</button>
             </div>
-            <div class="col-sm-12 col-md-2 col-lg-2 col-xs-6 div-margin-top display-responsive-large button-text-align button-text-align1">
+            <div class="col-sm-12 col-md-12 col-lg-2 col-xs-4 div-margin-top display-responsive-large button-text-align button-text-align1">
               <button type="button" class="btn btn-primary" (click)="save()" style="float :right">Save</button>
             </div>
           </div>

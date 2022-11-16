@@ -11,6 +11,7 @@ import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { skipWhile, skip, filter } from 'rxjs/operators';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-topic-description-recommendation-edit',
@@ -110,6 +111,11 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
       this.loadRelatedLeaksById();
       this.loadRelatedRecommendationList();
     }
+    this.scrollTop();
+  }
+
+  scrollTop(){
+    window.scrollTo(0,0);
   }
 
   setForm(event: any): any {
@@ -140,7 +146,7 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   }
 
   loadRecommendationsLeakAndUnique() {
-    this.systemService.loadRecommendationsLeakAndUnique(this.topicDescriptionId);
+    this.systemService.loadRecommendationsLeakAndUnique(this.topicDescriptionId,new HttpParams());
   }
 
   getRecommendationsLeakAndUnique() {

@@ -224,7 +224,11 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/topicDescription/topicPaneDataFieldEdit'], { queryParams: {} });
   }
   back(): any {
-    this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId }})
+    try{
+      this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId }})
+    }catch(err){
+      history.back();
+    }
   }
 
   loadDataFieldById(){
