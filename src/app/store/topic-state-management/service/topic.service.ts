@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -54,68 +54,68 @@ export class TopicService {
     return this.store.dispatch(new GetTopicDescriptionByIdAction(id));
   }
 
-  getLookUpCalculationPeriod() : Observable<TopicManagementState>{
+  getLookUpCalculationPeriod(): Observable<TopicManagementState> {
     return this.store.select(TopicManagementState.getCalculationPeriod)
   }
 
-  loadLookUpCalculationPeriod(type : string) : Observable<TopicManagementState>{
+  loadLookUpCalculationPeriod(type: string): Observable<TopicManagementState> {
     return this.store.dispatch(new LoadLookUpCalculationPeriodAction(type));
   }
 
-  loadSelectedTopicDescriptionVariable(surveyDescriptionId : string , id : string) : Observable<any>{
+  loadSelectedTopicDescriptionVariable(surveyDescriptionId: string, id: string): Observable<any> {
     return this.store.dispatch(new LoadSelectedTopicDescriptionVariableAction(id, surveyDescriptionId));
   }
 
-  getSeletedTopicDescriptionVariable(): Observable<TopicManagementState>{
+  getSeletedTopicDescriptionVariable(): Observable<TopicManagementState> {
     return this.store.select(TopicManagementState.getSelectedTopicVariable)
   }
 
-  getSelectedTopicPaneById(){
+  getSelectedTopicPaneById() {
     return this.store.select(TopicManagementState.getSelectedTopicPane)
   }
 
-  loadSelectedTopicPaneById(surveyDescriptionId,paneId) : Observable<any>{
-    return this.store.dispatch(new LoadTopicPaneVariableById(surveyDescriptionId,paneId))
+  loadSelectedTopicPaneById(surveyDescriptionId, paneId): Observable<any> {
+    return this.store.dispatch(new LoadTopicPaneVariableById(surveyDescriptionId, paneId))
   }
 
-  loadDataBlockById(id : number, paneId : number){
+  loadDataBlockById(id: number, paneId: number) {
     return this.store.dispatch(new LoadDataBlockById(id, paneId));
   }
 
-  getDataBlockByPaneId(){
+  getDataBlockByPaneId() {
     return this.store.select(TopicManagementState.getDataBlockByPaneId);
   }
 
-  LoadDataBlocksForPaneById(paneId : number){
+  LoadDataBlocksForPaneById(paneId: number) {
     return this.store.dispatch(new LoadDataBlockByPaneId(paneId))
-  } 
+  }
 
-  getDataBlockListByPaneId(){
+  getDataBlockListByPaneId() {
     return this.store.select(TopicManagementState.getDataBlockListByPaneId);
   }
 
-  loadDataFieldByPaneId(paneId : number){
+  loadDataFieldByPaneId(paneId: number) {
     return this.store.dispatch(new LoadDataFiledByPaneId(paneId))
   }
 
-  getDataFieldByPaneId(){
+  getDataFieldByPaneId() {
     return this.store.select(TopicManagementState.getDataFieldByPaneId);
   }
 
-  loadDataFieldById(id : number, paneId : number){
-    return this.store.dispatch(new LoadDataFieldById(id,paneId))
+  loadDataFieldById(id: number, paneId: number) {
+    return this.store.dispatch(new LoadDataFieldById(id, paneId))
   }
 
-  getDataFieldById(){
+  getDataFieldById() {
     return this.store.select(TopicManagementState.getDataFieldById)
   }
 
-  getTopicVariable() : Observable<any> {
+  getTopicVariable(): Observable<any> {
     return this.store.select(TopicManagementState.getTopicVariables);
   }
 
-  loadTopicVariables(id : number, params : any){
-      return this.store.dispatch(new LoadTopicVariablesAction(id, params))
+  loadTopicVariables(id: number, params: any) {
+    return this.store.dispatch(new LoadTopicVariablesAction(id, params))
   }
 
   saveTopicDescription(customer: any): Observable<TopicManagementState> {
@@ -142,179 +142,200 @@ export class TopicService {
     return this.store.dispatch(new GetPaidServiceListAction());
   }
 
-  loadPaneListByTopicDescriptionId(id : number, params : HttpParams ){
-    return this.store.dispatch(new LoadPaneListByTopicDescriptionId(id,params))
+  loadPaneListByTopicDescriptionId(id: number, params: HttpParams) {
+    return this.store.dispatch(new LoadPaneListByTopicDescriptionId(id, params))
   }
 
-  getPaneListByTopicDescriptionId(){
+  getPaneListByTopicDescriptionId() {
     return this.store.select(TopicManagementState.getPaneListByTopicDescriptionId)
   }
 
-  saveDataFiedlById(paneId : number, body : any){
-    return this.store.dispatch(new SaveDataFieldByPaneIdAction(paneId,body))
+  saveDataFiedlById(paneId: number, body: any) {
+    return this.store.dispatch(new SaveDataFieldByPaneIdAction(paneId, body))
   }
 
-  deleteDataFieldById(paneId : number , id : number){
-    return this.store.dispatch(new DeleteDataFieldByIdAction(paneId,id))
+  deleteDataFieldById(paneId: number, id: number) {
+    return this.store.dispatch(new DeleteDataFieldByIdAction(paneId, id))
   }
 
-  getLookUpValues(lookUpCode : string){
+  getLookUpValues(lookUpCode: string) {
     return this.loginService.performGet(AppConstant.lookup + '/' + lookUpCode + '/' + AppConstant.lookupValues)
   }
 
-  loadLookUpValuesByType(type : string){
+  loadLookUpValuesByType(type: string) {
     return this.store.dispatch(new LoadLookUpValueByType(type))
   }
 
-  getLookValueForCalculationType(){
+  getLookValueForCalculationType() {
     return this.store.select(TopicManagementState.getCalculationTypeLookUp)
   }
 
-  getLookValueForCalculationEvent(){
+  getLookValueForCalculationEvent() {
     return this.store.select(TopicManagementState.getCalculationEventLookUp)
   }
 
-  getLookValueForDataType(){
+  getLookValueForDataType() {
     return this.store.select(TopicManagementState.getDataTypeLookUp)
   }
 
-  getLookValueForInputType(){
+  getLookValueForInputType() {
     return this.store.select(TopicManagementState.getInputTypeLookUp)
   }
 
-  getLookValueForSource(){
+  getLookValueForSource() {
     return this.store.select(TopicManagementState.getSourceLookUp)
   }
 
-  getLookValueForTakeBackType(){
+  getLookValueForTakeBackType() {
     return this.store.select(TopicManagementState.getTakeBackTypeLookUp)
   }
 
-  getLookUpForActionType(){
+  getLookUpForActionType() {
     return this.store.select(TopicManagementState.getActionTypeLookUp)
   }
 
-  getLookUpForTakeBackImage(){
+  getLookUpForTakeBackImage() {
     return this.store.select(TopicManagementState.getTakeBackImageLookUp)
   }
 
-  getLookUpForTakeBackIcon(){
+  getLookUpForTakeBackIcon() {
     return this.store.select(TopicManagementState.getTakeBackIconLookUp)
   }
 
-  getLookUpForConservationCategory(){
+  getLookUpForConservationCategory() {
     return this.store.select(TopicManagementState.getConservationCategoryLookUp)
   }
 
-  getLookUpForVariablePeriod(){
+  getLookUpForVariablePeriod() {
     return this.store.select(TopicManagementState.getVariablePeriodTypeLookUp);
   }
 
-  getChartTypeLookUp(){
+  getChartTypeLookUp() {
     return this.store.select(TopicManagementState.getChartTypeLookUp);
   }
 
-  loadAllFieldValuesForDataField(paneId : number , dataFieldId : number){
+  loadAllFieldValuesForDataField(paneId: number, dataFieldId: number) {
     return this.store.dispatch(new LoadFieldValuesForDataField(paneId, dataFieldId));
   }
 
-  getFieldValuesForDataField(){
+  getFieldValuesForDataField() {
     return this.store.select(TopicManagementState.getFieldValueListForDataField);
   }
 
-  deleteFieldValuesForDataField(paneId : number , dataFieldId : number , id : number):Observable<TopicManagementState>{
-    return this.store.dispatch( new DeleteFieldValuesForDataField(paneId,dataFieldId,id))
+  deleteFieldValuesForDataField(paneId: number, dataFieldId: number, id: number): Observable<TopicManagementState> {
+    return this.store.dispatch(new DeleteFieldValuesForDataField(paneId, dataFieldId, id))
   }
 
-  saveDataFieldValue(body: any ,paneId : number , dataFieldId : number):Observable<TopicManagementState>{
+  saveDataFieldValue(body: any, paneId: number, dataFieldId: number): Observable<TopicManagementState> {
     return this.store.dispatch(new SaveFieldValuesForDataField(body, paneId, dataFieldId))
   }
 
-  loadAllPossibleColorsForCharts():Observable<TopicManagementState>{
+  loadAllPossibleColorsForCharts(): Observable<TopicManagementState> {
     return this.store.dispatch(new LoadAllPossibleColorForChartAction());
   }
 
-  getAllPossibleColorsForChart():Observable<TopicManagementState>{
+  getAllPossibleColorsForChart(): Observable<TopicManagementState> {
     return this.store.select(TopicManagementState.getAllPossibleColorsForChart);
   }
 
-  loadAllPossibleStyleForCharts():Observable<TopicManagementState>{
+  loadAllPossibleStyleForCharts(): Observable<TopicManagementState> {
     return this.store.dispatch(new LoadAllPossibleStyleForChartAction());
   }
 
-  getAllPossibleStyleForChart():Observable<TopicManagementState>{
+  getAllPossibleStyleForChart(): Observable<TopicManagementState> {
     return this.store.select(TopicManagementState.getAllPossibleStyleForChart);
   }
 
-  loadAllPossibleFontFamilyNames():Observable<TopicManagementState>{
+  loadAllPossibleFontFamilyNames(): Observable<TopicManagementState> {
     return this.store.dispatch(new LoadAllAvaliableFontFamiliesNamesForChartAction());
   }
 
-  getAllPossibleFontFamilyNames():Observable<TopicManagementState>{
+  getAllPossibleFontFamilyNames(): Observable<TopicManagementState> {
     return this.store.select(TopicManagementState.getAllPossibleFontFamilyNames);
   }
 
-  loadPanesForSelectionAsNext(surveyDescriptionId : number, paneId : number) : Observable<TopicManagementState>{
+  loadPanesForSelectionAsNext(surveyDescriptionId: number, paneId: number): Observable<TopicManagementState> {
     return this.store.dispatch(new LoadPanesForSelectionAsNext(surveyDescriptionId, paneId))
   }
 
-  getPanesForSelectionAsNext(): Observable<TopicManagementState>{
+  getPanesForSelectionAsNext(): Observable<TopicManagementState> {
     return this.store.select(TopicManagementState.getSelectionForPaneAsNext);
-  } 
+  }
 
-  loadPaneReportsByPaneId(paneId : number) : Observable<TopicManagementState> {
+  loadPaneReportsByPaneId(paneId: number): Observable<TopicManagementState> {
     return this.store.dispatch(new LoadPaneReportsByPaneId(paneId))
   }
 
-  getPaneReportByPaneId() : Observable<TopicManagementState> {
+  getPaneReportByPaneId(): Observable<TopicManagementState> {
     return this.store.select(TopicManagementState.getPaneReportsByPaneId);
   }
 
-  loadPaneReportById(paneId : number, id : number) : Observable<TopicManagementState> {
+  loadPaneReportById(paneId: number, id: number): Observable<TopicManagementState> {
     return this.store.dispatch(new LoadPaneReportById(paneId, id))
   }
 
-  getPaneReportById() : Observable<TopicManagementState>{
+  getPaneReportById(): Observable<TopicManagementState> {
     return this.store.select(TopicManagementState.getPaneReportById);
   }
 
-  saveNewPaneReport(paneId, body) : Observable<TopicManagementState>{
-    return this.store.dispatch(new SaveNewPaneReport(paneId,body))
+  saveNewPaneReport(paneId, body): Observable<TopicManagementState> {
+    return this.store.dispatch(new SaveNewPaneReport(paneId, body))
   }
 
-  SaveExistingPaneReport(paneId: number, body: any, id : number) : Observable<TopicManagementState>{
-    return this.store.dispatch(new SaveExistingPaneReportAction(paneId, body,id)); 
+  SaveExistingPaneReport(paneId: number, body: any, id: number): Observable<TopicManagementState> {
+    return this.store.dispatch(new SaveExistingPaneReportAction(paneId, body, id));
   }
 
-  deletePaneReportById(paneId : number, id : number) : Observable<TopicManagementState>{
-    return this.store.dispatch(new DeletePaneReportByIdAction(paneId,id));
+  deletePaneReportById(paneId: number, id: number): Observable<TopicManagementState> {
+    return this.store.dispatch(new DeletePaneReportByIdAction(paneId, id));
   }
 
-  LoadAllPaneChartByPaneId(paneId : number) : Observable<TopicManagementState>{
+  LoadAllPaneChartByPaneId(paneId: number): Observable<TopicManagementState> {
     return this.store.dispatch(new GetAppPaneChartByPaneIdAction(paneId));
   }
 
-  GetAllPaneChartByPaneId() : Observable<TopicManagementState>{
-    return this.store.select(TopicManagementState.getPaneChartListByPaneId) 
+  GetAllPaneChartByPaneId(): Observable<TopicManagementState> {
+    return this.store.select(TopicManagementState.getPaneChartListByPaneId)
   }
 
-  loadPaneChartById(paneId: number,id : number) : Observable<TopicManagementState> {
-    return this.store.dispatch(new LoadPaneChartByIdAction(paneId,id));
+  loadPaneChartById(paneId: number, id: number): Observable<TopicManagementState> {
+    return this.store.dispatch(new LoadPaneChartByIdAction(paneId, id));
   }
 
-  getPaneChartById() : Observable<TopicManagementState> {
+  getPaneChartById(): Observable<TopicManagementState> {
     return this.store.select(TopicManagementState.getPaneChart);
   }
 
-  deletePaneChart(paneId : number, chartId : number) : Observable<TopicManagementState> {
+  deletePaneChart(paneId: number, chartId: number): Observable<TopicManagementState> {
     return this.store.dispatch(new DeletePaneChartByIdAction(paneId, chartId));
   }
 
-  saveNewPaneChart(paneId: number,chartBody : any) : Observable<TopicManagementState> {
-    return this.store.dispatch(new SaveNewPaneChartAction(paneId,chartBody));
+  saveNewPaneChart(paneId: number, chartBody: any): Observable<TopicManagementState> {
+    return this.store.dispatch(new SaveNewPaneChartAction(paneId, chartBody));
   }
 
-  SaveExistingPaneChart(paneId: number , chartId : number, chartBody : any){
-    return this.store.dispatch(new SaveExistingPaneChartAction(paneId, chartId,chartBody))
+  SaveExistingPaneChart(paneId: number, chartId: number, chartBody: any) {
+    return this.store.dispatch(new SaveExistingPaneChartAction(paneId, chartId, chartBody))
   }
+
+  loadChartSerisesById(paneId: number, chartId: number, id: number) {
+    return this.store.dispatch(new LoadChartSeriesDefinationById(paneId, chartId, id));
+  }
+
+  getChartSeriesById(): Observable<TopicManagementState> {
+    return this.store.select(TopicManagementState.getChartSeries);
+  }
+
+  saveNewChartSeries(paneId: number, paneChartId: number, body: any) {
+    return this.store.dispatch(new SaveNewChartSeriesAction(paneId, paneChartId, body))
+  }
+
+  saveExistingChartSeries(paneId: number, paneChartId: number, id: number, body: any) {
+    return this.store.dispatch(new SaveExistingChartSeriesAction(paneId, paneChartId, id, body))
+  }
+
+  deleteChartSeries(paneId: number, chartId: number, id: number) {
+    return this.store.dispatch(new DeleteChartSeriesAction(paneId, chartId, id));
+  }
+
 }

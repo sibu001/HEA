@@ -29,7 +29,6 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   };
   topicDescriptionId : any;
   paneId : any;
-  chartDataSource: any;
   chartHeader : any;
   chartFooter : any;
   paneData = TableColumnData.PANE_DATA;
@@ -103,10 +102,10 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
       freeChartIncludeJSTemplate: [event !== undefined ? event.freeChartIncludeJSTemplate : ''],
       freeChartConfigurationJSTemplate: [event !== undefined ? event.freeChartConfigurationJSTemplate : ''],
       freeChartDivTemplate: [event !== undefined ? event.freeChartDivTemplate : ''],
-      chartType: [event !== undefined ? event.chartType : ''],
-      backgroundColor: [event !== undefined ? event.backgroundColor : ''],
+      chartType: [event !== undefined ? event.chartType : 'pie'],
+      backgroundColor: [event !== undefined ? event.backgroundColor : 'default'],
       borderVisible: [event !== undefined ? event.borderVisible : ''],
-      borderColor: [event !== undefined ? event.borderColor : ''],
+      borderColor: [event !== undefined ? event.borderColor : 'default'],
       tooltips: [event !== undefined ? event.tooltips : ''],
       width: [event !== undefined ? event.width : ''],
       height: [event !== undefined ? event.height : ''],
@@ -116,34 +115,34 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
       horizontalOrientation: [event !== undefined ? event.horizontalOrientation : ''],
       title: [event !== undefined ? event.title : ''],
       titleFontName: [event !== undefined ? event.titleFontName : ''],
-      titleFontStyle: [event !== undefined ? event.titleFontStyle : ''],
+      titleFontStyle: [event !== undefined ? event.titleFontStyle : '0'],
       titleFontSize: [event !== undefined ? event.titleFontSize : ''],
-      titleColor: [event !== undefined ? event.titleColor : ''],
+      titleColor: [event !== undefined ? event.titleColor : 'default'],
       showLegend: [event !== undefined ? event.showLegend : ''],
       legendFontName: [event !== undefined ? event.legendFontName : ''],
-      legendFontStyle: [event !== undefined ? event.legendFontStyle : ''],
+      legendFontStyle: [event !== undefined ? event.legendFontStyle : '0'],
       legendFontSize: [event !== undefined ? event.legendFontSize : ''],
       legendLocation: [event !== undefined ? event.legendLocation : ''],
       legendOutsideGrid: [event !== undefined ? event.legendLocation : ''],
       rangeLabel: [event !== undefined ? event.rangeLabel : ''],
       rangeLabelAngle: [event !== undefined ? event.rangeLabelAngle : ''],
       rangeFontName: [event !== undefined ? event.rangeFontName : ''],
-      rangeFontStyle: [event !== undefined ? event.rangeFontStyle : ''],
+      rangeFontStyle: [event !== undefined ? event.rangeFontStyle : '0'],
       rangeFontSize: [event !== undefined ? event.rangeFontSize : ''],
-      rangeColor: [event !== undefined ? event.rangeColor : ''],
+      rangeColor: [event !== undefined ? event.rangeColor : 'default'],
       rangeGridlineVisible: [event !== undefined ? event.rangeGridlineVisible : ''],
-      rangeGridlineColor: [event !== undefined ? event.rangeGridlineColor : ''],
+      rangeGridlineColor: [event !== undefined ? event.rangeGridlineColor : 'default'],
       rangeMax: [event !== undefined ? event.rangeMax : ''],
       rangeMin: [event !== undefined ? event.rangeMin : ''],
       roundToZero: [event !== undefined ? event.rangeMin : ''],
       domainLabel: [event !== undefined ? event.domainLabel : ''],
       domainLabelAngle: [event !== undefined ? event.domainLabelAngle : ''],
       domainFontName: [event !== undefined ? event.domainFontName : ''],
-      domainFontStyle: [event !== undefined ? event.domainFontStyle : ''],
+      domainFontStyle: [event !== undefined ? event.domainFontStyle : '0'],
       domainFontSize: [event !== undefined ? event.domainFontSize : ''],
-      domainColor: [event !== undefined ? event.domainColor : ''],
+      domainColor: [event !== undefined ? event.domainColor : 'default'],
       domainGridlineVisible: [event !== undefined ? event.domainGridlineVisible : ''],
-      domainGridlineColor: [event !== undefined ? event.domainGridlineColor : ''],
+      domainGridlineColor: [event !== undefined ? event.domainGridlineColor : 'default'],
       canvasHack: [event !== undefined ? event.canvasHack : ''],
       chartHeader: [event !== undefined ? event.chartHeader : ''],
       chartFooter: [event !== undefined ? event.chartFooter : ''],
@@ -230,13 +229,18 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     .subscribe(
       (response : any) =>{
         this.paneChartData = response.chart;
+        this.paneChartData.orderNumber = response.orderNumber;
         this.setForm(response.chart);
       }
     )
   }
 
   back(): any {
-    this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId }})
+    try{
+      this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId }})
+    }catch(e){
+      this.location.back(); 
+    }
   }
 
   save(): any {
@@ -252,9 +256,13 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     this.topicService.deletePaneChart(this.paneId,this.id);
   }
 
-  // recalculate() {
+  goToEditChartSeries(event : any): any {
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { paneId : this.paneId ,chartId : event.chartId , id : event.id} });
+  }
 
-  // }
+  addCharSeries(){
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { paneId : this.paneId } });
+  }
 
   saveRow() {
 

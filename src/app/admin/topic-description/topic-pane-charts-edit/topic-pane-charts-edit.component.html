@@ -336,7 +336,7 @@
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
+            <!-- <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
               class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Location:</div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -347,8 +347,8 @@
                 </select>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-            </div> 
-            <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
+            </div>  -->
+            <div *ngIf='f.toolType.value==="jqplot"  && f.showLegend.value'
               class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -495,7 +495,7 @@
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
   
-            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+            <!-- <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
               rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -505,7 +505,7 @@
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-         
+          -->
   
           <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
           rowPadding">
@@ -543,6 +543,16 @@
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+            ' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Domain Angle</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type='text' class="form-control form-control-sm"
+                formControlName="domainLabelAngle"
+                id="domainLabelAngle">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
             <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
               ' class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
@@ -636,8 +646,8 @@
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-  
-            <div class="row borderBottom rowPadding">
+
+            <div class="row borderBottom rowPadding" *ngIf='f.chartType.value=="pie"'>
               <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
             </div>
   
@@ -651,8 +661,9 @@
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-  
-            <div class="row borderBottom rowPadding">
+              
+
+            <div class="row borderBottom rowPadding" style="padding-top: 40px">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart Header:</div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!chartHeader && ( !form.chartHeader || !form.chartHeader.trim())" (click)="chartHeader = !chartHeader" >
@@ -686,45 +697,31 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Chart Series</span></p>
             <app-table [keys]="chartKeys" [isSearch]="false" [isDelete]=true
-              [data]="chartDataSource"
-              [totalElement]="chartData.totalElements" [isHideAdd]=true
-              [showAddRowButton]=true
+              [data]="paneChartData?.chartSeries" [isHideAdd]=false
+              (goToEditEvent)='goToEditChartSeries($event)'
+              (addEvent)='addCharSeries()'
               (saveRowEvent)="saveRow()">
             </app-table>
           </div>
 
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
-              </button>
+          <div class="row paddingTop">
+            <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
+              <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding
-              sidePadding">
-              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-0 sidePadding"
-                *ngIf="id === undefined || id === null">
-              </div>
-              <!-- <div class="col-sm-8 col-md-10 col-lg-9 col-xs-8 sidePadding"
-                *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float:
-                  right" (click)="recalculate()">
-                  Recalculate
-                </button>
-              </div> -->
-              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding"
-                *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float:
-                  right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding">
-                <button type="button" class="btn btn-primary" style="float:
-                  right" (click)="save()">
-                  Save
-                </button>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
+              <div class="row">
+                <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10 " style="text-align: end;"
+                  *ngIf="id!==undefined&&id!==null">
+                  <button type="button" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
+                </div>
+                <div [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id !== undefined && id !== null
+                , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id === undefined || id === null}"
+                  style="text-align:right; overflow:auto;">
+                  <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
+                </div>
               </div>
             </div>
+
           </div>
 
       </div>

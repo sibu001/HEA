@@ -374,7 +374,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   }
 
   goToEdit(event: any, col: any): any {
-    console.log(event + "     " + col);
 
     if( col.type == "inputField"){
       const data = this.dataSource.data.find( res => res.id == event.id);

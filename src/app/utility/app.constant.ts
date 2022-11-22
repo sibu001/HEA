@@ -27,8 +27,8 @@ export class AppConstant {
     public static validateNewPassword = 'users/validate/password';
     public static saveNewPassword = 'password';
     public static userCustomerGroups = 'userCustomerGroups';
-    public static lookupBaseURL = 'lookups/';
-    public static lookupValues = '/lookupValues';
+    public static lookupBaseURL = 'lookups';
+    public static lookupValues = 'lookupValues';
     public static themes = 'themes';
     public static mailDescription = 'mailDescriptions';
     public static mailConfiguration = 'mailConfigurations';
@@ -131,6 +131,7 @@ export class AppConstant {
     public static lookUpCodeForTakeBackIcon = 'TAKEBACK_ICON';
     public static lookUpCodeForActionType = 'ACTION_TYPE';
     public static lookUpCodeForConservationCategory = 'CONSERVATION_CATEGORY';
+    public static series = 'series'
     public static charts ='charts';
     public static possibleColors = 'possibleColors';
     public static possibleStyles = 'possibleStyles';

@@ -44,6 +44,10 @@ import {
     DeletePaneChartByIdAction,
     SaveNewPaneChartAction,
     SaveExistingPaneChartAction,
+    LoadChartSeriesDefinationById,
+    SaveNewChartSeriesAction,
+    SaveExistingChartSeriesAction,
+    DeleteChartSeriesAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -86,6 +90,7 @@ import { TopicManagementModel } from './topic.model';
         paneReport : undefined,
         paneChartList : undefined,
         paneChart: undefined,
+        paneChartSeriesDefination : undefined,
     }
 })
 
@@ -275,6 +280,11 @@ export class TopicManagementState {
         return state.paneChart;
     }
 
+    @Selector()
+    static getChartSeries(state : TopicManagementModel) : any{
+        return state.paneChartSeriesDefination;
+    }
+
     @Action(GetTopicDescriptionListAction)
     getAllTopicDescriptionList(ctx: StateContext<TopicManagementModel>, action: GetTopicDescriptionListAction): Actions {
         // const force: boolean = action.force || TopicManagementState.getTopicDescriptionList(ctx.getState()) === undefined;
@@ -329,7 +339,7 @@ export class TopicManagementState {
         // return;
         // }
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.lookupBaseURL + action.type + AppConstant.lookupValues)
+        return this.loginService.performGet(AppConstant.lookupBaseURL + '/' + action.type + '/' + AppConstant.lookupValues)
         .pipe(
             tap(
                 (response) => {
@@ -1005,5 +1015,76 @@ export class TopicManagementState {
                 }
             )
         )
+    }
+
+    @Action(LoadChartSeriesDefinationById)
+    loadChartSeriesDefinationById(ctx : StateContext<TopicManagementModel>, action: LoadChartSeriesDefinationById) : Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet( AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId  + '/' + AppConstant.series + '/' + action.id)
+        .pipe(
+            tap(
+                (response : any) =>{
+                    ctx.patchState({ paneChartSeriesDefination : response})
+                    document.getElementById('loader').classList.remove('loading');
+                }, (error : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }            
+            )
+        )
+        
+    }
+
+    @Action(SaveNewChartSeriesAction)
+    saveNewChartSeriesAction(ctx : StateContext<TopicManagementModel>, action: SaveNewChartSeriesAction) : Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost( AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId  + '/' + AppConstant.series,action.body)
+        .pipe(
+            tap(
+                (response : any) =>{
+                    ctx.patchState({ paneChartSeriesDefination : response})
+                    document.getElementById('loader').classList.remove('loading');
+                }, (error : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }            
+            )
+        )        
+    }
+
+    @Action(SaveExistingChartSeriesAction)
+    saveExistingChartSeriesAction(ctx : StateContext<TopicManagementModel>, action: SaveExistingChartSeriesAction) : Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPut( AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId  + '/' + AppConstant.series + '/' + action.id,action.body)
+        .pipe(
+            tap(
+                (response : any) =>{
+                    ctx.patchState({ paneChartSeriesDefination : response})
+                    document.getElementById('loader').classList.remove('loading');
+                }, (error : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }            
+            )
+        )
+        
+    }
+
+    @Action(DeleteChartSeriesAction)
+    deleteChartSeriesAction(ctx : StateContext<TopicManagementModel>, action: DeleteChartSeriesAction) : Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performDelete( AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId  + '/' + AppConstant.series + '/' + action.id)
+        .pipe(
+            tap(
+                (response : any) =>{
+                    ctx.patchState({ paneChartSeriesDefination : undefined})
+                    document.getElementById('loader').classList.remove('loading');
+                }, (error : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }            
+            )
+        )
+        
     }
 }
