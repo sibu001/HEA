@@ -118,7 +118,12 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               document.getElementById('loader').classList.remove('loading');
               const responseData = response.data;
               console.log(response);
-              window.open(`${AppConstant.DR_POWER_URL_SANDBOX}?access_token=${responseData.access_token}&error_url=${location.href}`,'_blank');
+              const popUp =  window.open(`${AppConstant.DR_POWER_URL_SANDBOX}?access_token=${responseData.access_token}&error_url=${location.href}`,'_blank');
+              try{
+                popUp.focus();
+              }catch(e){
+                alert(AppConstant.POPUP_BLOCK_MESSAGE);
+              }
             }, (error) =>{
                 console.error(error);
                 this.scrollTop();

@@ -142,4 +142,5 @@ export class AppConstant {
     public static readonly DR_POWER_URL_SANDBOX: string = 'https://drpower.hea.com:9443/#/redirection';
     public static readonly DR_POWER_URL_LIVE: string = 'https://drpower.hea.com/#/redirection';
   
+    public static readonly POPUP_BLOCK_MESSAGE: string = 'Popup blocked by default! Please Enable it in Settings.';
 }
