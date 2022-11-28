@@ -131,6 +131,8 @@ export class AppConstant {
     public static lookUpCodeForTakeBackIcon = 'TAKEBACK_ICON';
     public static lookUpCodeForActionType = 'ACTION_TYPE';
     public static lookUpCodeForConservationCategory = 'CONSERVATION_CATEGORY';
+    public static lookupCodeForChartSeriesQueryType='SERIES_QUERY_TYPE';
+    public static lookupCodeForSeriesColor = 'SERIES_COLOR';
     public static series = 'series'
     public static charts ='charts';
     public static possibleColors = 'possibleColors';

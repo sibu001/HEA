@@ -25,7 +25,9 @@ export interface TopicManagementModel {
     TAKEBACK_ICON : any;
     ACTION_TYPE : any;
     VARIABLE_PERIOD : any;
-    CONSERVATION_CATEGORY : any
+    CONSERVATION_CATEGORY : any;
+    SERIES_COLOR : any;
+    SERIES_QUERY_TYPE : any;
     fieldValueList : any;
     possibleColors : any;
     possibleStyle : any;

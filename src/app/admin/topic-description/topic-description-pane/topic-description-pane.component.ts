@@ -332,7 +332,6 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       (response : any) =>{
         this.chartData.content = response;
         this.chartDataSource = response;
-        console.log(" pane chart data :- " + response == undefined);
       }
     )
   }

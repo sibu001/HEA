@@ -91,6 +91,8 @@ import { TopicManagementModel } from './topic.model';
         paneChartList : undefined,
         paneChart: undefined,
         paneChartSeriesDefination : undefined,
+        SERIES_QUERY_TYPE : undefined,
+        SERIES_COLOR : undefined,
     }
 })
 
@@ -235,6 +237,16 @@ export class TopicManagementState {
         return state.CHART_TYPE;
     }
 
+    @Selector()
+    static getChartSeriesQueryLookup(state: TopicManagementModel): any {
+        return state.SERIES_QUERY_TYPE;
+    }
+
+    @Selector()
+    static getChartSeriesColorLookup(state: TopicManagementModel): any {
+        return state.SERIES_COLOR;
+    }
+    
     @Selector()
     static getFieldValueListForDataField(state: TopicManagementModel): any {
         return state.fieldValueList;
@@ -970,14 +982,21 @@ export class TopicManagementState {
         .performDelete(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts + '/' + action.chartId )
         .pipe(
             tap(
-                (reaponse : any) =>{
+                (response : any) =>{
                     document.getElementById('loader').classList.remove('loading');
+                    let paneChartList = ctx.getState().paneChartList;
+                    if(!paneChartList){
+                        paneChartList = [];
+                    }
+                    const index = paneChartList.findIndex((data)=> data.id == action.chartId);
+                    paneChartList.splice(index, 1);
+                    ctx.patchState({paneChartList : paneChartList});
                     ctx.patchState({paneChart : undefined})
                 }
-            ),(error : any) =>{
+            ,(error : any) =>{
                 document.getElementById('loader').classList.remove('loading');
                 this.utilityService.showErrorMessage(error.message);
-            }
+            })
         )
     }
 
@@ -990,6 +1009,13 @@ export class TopicManagementState {
             tap(
                 (response : any ) =>{
                     document.getElementById('loader').classList.remove('loading');
+                    let paneChartList = ctx.getState().paneChartList;
+                    if(!paneChartList){
+                        paneChartList = [];
+                    }
+                    paneChartList.push(response);
+                    paneChartList[paneChartList.length-1].chartCode = response.chart.chartCode;
+                    ctx.patchState({paneChartList : paneChartList});
                     ctx.patchState({paneChart : response});
                 }, (error : any) =>{
                     document.getElementById('loader').classList.remove('loading');
@@ -1008,6 +1034,14 @@ export class TopicManagementState {
             tap(
                 (response : any ) =>{   
                     document.getElementById('loader').classList.remove('loading');
+                    let paneChartList = ctx.getState().paneChartList;
+                    if(!paneChartList){
+                        paneChartList = [];
+                    }
+                    const index = paneChartList.findIndex((data)=> data.id == response.id);
+                    paneChartList[index] = response
+                    paneChartList[index].chartCode = response.chart.chartCode;
+                    ctx.patchState({paneChartList : paneChartList});
                     ctx.patchState({paneChart : response});
                 }, (error : any) =>{
                     document.getElementById('loader').classList.remove('loading');
@@ -1038,7 +1072,7 @@ export class TopicManagementState {
     @Action(SaveNewChartSeriesAction)
     saveNewChartSeriesAction(ctx : StateContext<TopicManagementModel>, action: SaveNewChartSeriesAction) : Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost( AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId  + '/' + AppConstant.series,action.body)
+        return this.loginService.performPost(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId + '/' + AppConstant.series)
         .pipe(
             tap(
                 (response : any) =>{

@@ -647,7 +647,7 @@
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
 
-            <div class="row borderBottom rowPadding" *ngIf='f.chartType.value=="pie"'>
+            <div class="row borderBottom rowPadding" *ngIf='f.toolType.value != "jschart"'>
               <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
             </div>
   
@@ -697,7 +697,7 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Chart Series</span></p>
             <app-table [keys]="chartKeys" [isSearch]="false" [isDelete]=true
-              [data]="paneChartData?.chartSeries" [isHideAdd]=false
+              [data]="paneChartData?.chart.chartSeries" [isHideAdd]=false
               (goToEditEvent)='goToEditChartSeries($event)'
               (addEvent)='addCharSeries()'
               (saveRowEvent)="saveRow()">

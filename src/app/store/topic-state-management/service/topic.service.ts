@@ -214,6 +214,14 @@ export class TopicService {
     return this.store.select(TopicManagementState.getChartTypeLookUp);
   }
 
+  getChartSeriesQueryColorLookUp(){
+    return this.store.select(TopicManagementState.getChartSeriesQueryLookup);
+  }
+
+  getChartColorLookUp(){
+    return this.store.select(TopicManagementState.getChartSeriesColorLookup);
+  }
+
   loadAllFieldValuesForDataField(paneId: number, dataFieldId: number) {
     return this.store.dispatch(new LoadFieldValuesForDataField(paneId, dataFieldId));
   }

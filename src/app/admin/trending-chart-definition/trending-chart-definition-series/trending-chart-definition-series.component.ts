@@ -7,6 +7,7 @@ import { filter } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -20,8 +21,9 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   private readonly subscriptions: Subscription = new Subscription();
   colorData = TableColumnData.COLOR_DATA;
   keys: TABLECOLUMN[] = TableColumnData.DATA_SET_KEYS;
-  seriesQueryTypeList: any[] = TableColumnData.SERIES_QUERY_TYPE;
+  seriesQueryTypeList: any[];
   paneId :number;
+  topicDescriptionId : Number ;
   chartSeriesData : any;
   chartId: number;
   data = {
@@ -37,14 +39,19 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.paneId = params['paneId'];
-      this.chartId = params['chartId'];
+      this.chartId = params['paneChartId'];
+      this.topicDescriptionId = params['topicDescriptionId'];
     });
   }
 
 
   ngOnInit() {
     this.setForm(undefined);
-    if(this.paneId && this.chartId){
+
+    this.getChartSeriesLookupValues();
+    this.loadChartSeriesLookupValues();
+
+    if(this.id){
       this.getChartSerisesById();
       this.loadChartSerisesById();
     }
@@ -56,9 +63,14 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
 
   getChartSerisesById() {
     this.topicService.getChartSeriesById()
-    .pipe(filter(data => this.paneId && this.chartId && data !== undefined))
+    .pipe(filter(data => data !== undefined))
     .subscribe(
-      response => {
+      (response : any) => {
+        this.router.navigate([], { 
+          relativeTo: this.activateRoute,
+          queryParams: {id : response.id , addRequest : null},
+          queryParamsHandling : 'merge'
+        })
         this.chartSeriesData = response;
         this.setForm(response);
       }
@@ -81,8 +93,8 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     this.chartForm = this.formBuilder.group({
       seriesCode: [event !== undefined ? event.seriesCode : '', Validators.required],
       seriesName: [event !== undefined ? event.seriesName : ''],
-      orderNumber: [event !== undefined ? event.orderNumber : 'jfreechart'],
-      seriesQueryType: [event !== undefined ? event.seriesQueryType : ''],
+      orderNumber: [event !== undefined ? event.orderNumber : ''],
+      seriesQueryType: [event !== undefined ? event.seriesQueryType : 'sql'],
       seriesQuery: [event !== undefined ? event.seriesQuery : ''],
       seriesColor: [event !== undefined ? ( event.seriesColor ? event.seriesColor : 'default') : 'default'],
       seriesStrokeWidth: [event !== undefined ? event.seriesStrokeWidth : ''],
@@ -101,18 +113,37 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
       const body = Object.assign(this.chartSeriesData,this.chartForm.value);
       this.topicService.saveExistingChartSeries(this.paneId,this.chartId,this.id,body);
     }else{
-      this.topicService.saveNewChartSeries(this.paneId,this.chartId,this.chartForm.value);
+      const body = Object.assign({},this.chartForm.value);
+      body.chartId = this.chartId;
+      body.field = body.seriesCode;
+      this.topicService.saveNewChartSeries(this.paneId,this.chartId,body)
+      .subscribe(res => { this.getChartSerisesById()});
     }
   }
 
   delete(): any {
-    this.topicService.deleteChartSeries(this.paneId,this.chartId,this.id);
-    this.setForm(undefined);
-    this.back();
+    this.topicService.deleteChartSeries(this.paneId,this.chartId,this.id)
+    .subscribe( (response) => {
+        this.setForm(undefined);
+        this.back(); } );
   }
 
   addChartDataSeries(){
   }
+
+  loadChartSeriesLookupValues(){
+    this.topicService.loadLookUpValuesByType(AppConstant.lookupCodeForChartSeriesQueryType);
+  }
+
+  getChartSeriesLookupValues(){
+    this.topicService.getChartSeriesQueryColorLookUp()
+    .subscribe(
+      (response) =>{
+        // console.log(response);
+        this.seriesQueryTypeList = response;
+      }
+    )
+  }  
 
   get f() { return this.chartForm.controls; }
 

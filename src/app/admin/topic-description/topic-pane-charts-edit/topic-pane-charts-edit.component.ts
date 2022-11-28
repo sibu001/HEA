@@ -76,7 +76,6 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-
     if(this.id){
       this.getPaneChartById();
       this.loadPaneChartById();
@@ -92,8 +91,14 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     this.loadAllPossibleStyle();
     this.loadLookUpChartType();
     this.chartKeys = TableColumnData.CHART_SERIES_FIELD_KEY;
+
+    this.scrolltop();
   }
   
+  scrolltop(){
+    window.scrollTo(0,0);
+  }
+
   setForm(event: any): any {
     this.chartForm = this.formBuilder.group({
       chartCode: [event !== undefined ? event.chartCode : '', Validators.required],
@@ -225,11 +230,16 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
 
   getPaneChartById(){
     this.topicService.getPaneChartById()
-    .pipe(filter(data => data != undefined))
+    .pipe(filter((data : any) => data != undefined))
     .subscribe(
       (response : any) =>{
-        this.paneChartData = response.chart;
-        this.paneChartData.orderNumber = response.orderNumber;
+          this.router.navigate([], { 
+            relativeTo: this.activateRoute,
+            queryParams: {id : response.id , addRequest : null},
+            queryParamsHandling : 'merge'
+          })
+        this.paneChartData = response;
+        response.chart.orderNumber = response.orderNumber;
         this.setForm(response.chart);
       }
     )
@@ -244,24 +254,38 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   }
 
   save(): any {
-    if(this.id){
-      this.topicService.saveNewPaneChart(this.paneId,this.chartForm.value);
+    if(!this.id){
+      this.paneChartData = {};
+      this.paneChartData.orderNumber = this.chartForm.value.orderNumber;
+      this.paneChartData.paneId = this.paneId;
+      this.paneChartData.chart = this.chartForm.value;
+      this.paneChartData.chart.orderNumber = undefined;
+      this.topicService.saveNewPaneChart(this.paneId,this.paneChartData)
+      .subscribe((res) =>{ this.getPaneChartById();});
     }else{
-      const paneChartData =  this.paneChartData;
-      const body = {paneChartData,...this.chartForm.value}
-      this.topicService.SaveExistingPaneChart(this.paneId,this.id,body)
+      var chartData =  this.paneChartData;
+      this.paneChartData.orderNumber = this.chartForm.value.orderNumber;
+      this.chartForm.value.orderNumber = undefined;
+      var chart =  this.paneChartData.chart;
+      this.paneChartData.chart = Object.assign(chart,this.chartForm.value);
+      this.topicService.SaveExistingPaneChart(this.paneId,this.id,this.paneChartData)
+      .subscribe((res) =>{ this.getPaneChartById();});
     }
+    this.scrolltop();
   }
   delete(): any {
-    this.topicService.deletePaneChart(this.paneId,this.id);
+    if(confirm('Are you sure you want to delete?')){
+      this.topicService.deletePaneChart(this.paneId,this.id)
+      .subscribe( (res) => { this.back() },(err) => { console.error(err)});
+    }
   }
 
   goToEditChartSeries(event : any): any {
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { paneId : this.paneId ,chartId : event.chartId , id : event.id} });
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { paneId : this.paneId ,paneChartId : event.chartId , id : event.id} });
   }
 
   addCharSeries(){
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { paneId : this.paneId } });
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { topicDescriptionId : this.topicDescriptionId , paneId : this.paneId , paneChartId : this.id } });
   }
 
   saveRow() {
