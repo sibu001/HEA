@@ -1657,8 +1657,8 @@ app-electricity-usage-list .mat-column-billingPeriod, app-electricity-charge-lis
 
 app-gas-charge .mat-column-year,app-gas-charge .mat-column-value ,
 app-electricity-usage-list .mat-column-year ,app-electricity-usage-list .mat-column-value
-app-electricity-charge-list .mat-column-year ,app-electricity-charge-list .mat-column-value
-{
+app-electricity-charge-list .mat-column-year ,app-electricity-charge-list .mat-column-value,
+app-topic-description-edit .mat-column-orderNumber{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 13% !important;
@@ -1694,7 +1694,8 @@ app-water-charge .mat-column-billingPeriod
 }
 
 app-water .mat-column-billingDate ,
-app-water-charge .mat-column-billingDate 
+app-water-charge .mat-column-billingDate,
+app-topic-description-edit .mat-column-lookupType 
 {
   word-wrap: break-word !important;
   white-space: unset !important;
@@ -1714,7 +1715,8 @@ app-water-charge .mat-column-billingDate
 app-water .mat-column-month,
 app-water-charge .mat-column-month,
 app-electricity-smart-meter-list .mat-column-day ,
-app-electricity-smart-meter-list .mat-column-value
+app-electricity-smart-meter-list .mat-column-value,
+app-topic-description-edit .mat-column-calculationPeriodActual
 {
   word-wrap: break-word !important;
   white-space: unset !important;
@@ -1731,7 +1733,8 @@ app-electricity-smart-meter-list .mat-column-value
   hyphens: auto;
 }
 
-app-electricity-smart-meter-list .mat-column-month{
+app-electricity-smart-meter-list .mat-column-month,
+app-topic-description-edit .mat-column-groupCode {
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 25% !important;
@@ -1858,6 +1861,39 @@ app-share-my-data-list .mat-column-city{
   -webkit-hyphens: auto;
   hyphens: auto;
 }
+
+app-topic-description-edit .mat-column-section {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 11% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
+app-topic-description-edit .mat-column-comments {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 55% !important;
+  width: 8% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  
+  word-break: break-word;
+  
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+
 
 app-survey p{
   font-size : 14px !important;

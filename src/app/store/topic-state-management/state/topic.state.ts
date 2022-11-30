@@ -623,7 +623,7 @@ export class TopicManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        paneList: response,
+                        paneList: TopicUtilityTransformer.convertPaneListDataForParentSectionLabel(response),
                     });
                 },
                     error => {
@@ -683,9 +683,9 @@ export class TopicManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    const currentState = ctx.getState();
                     // console.log("pre state :- " + JSON.stringify(state))
-                    state[action.type] = response
-                    ctx.setState(state);
+                    currentState[action.type] = response
                     // console.log("post state :- " + JSON.stringify(state))
                 },
                     error => {
@@ -1089,12 +1089,23 @@ export class TopicManagementState {
     @Action(SaveExistingChartSeriesAction)
     saveExistingChartSeriesAction(ctx : StateContext<TopicManagementModel>, action: SaveExistingChartSeriesAction) : Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut( AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId  + '/' + AppConstant.series + '/' + action.id,action.body)
+        return this.loginService.performPut(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId  + '/' + AppConstant.series + '/' + action.id)
         .pipe(
             tap(
                 (response : any) =>{
-                    ctx.patchState({ paneChartSeriesDefination : response})
                     document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({ paneChartSeriesDefination : response})
+                    const paneChart = ctx.getState();
+                    if(paneChart){
+                        // const chartSeries =  paneChart.chart.chartSeries.map(data =>{
+                        //     if(data.id == response.id){
+                        //         return response;
+                        //     }
+                        //     return data;
+                        // })
+                        // paneChart.chart.chartSeries = chartSeries;
+                        // ctx.patchState({paneChart : paneChart});
+                    }
                 }, (error : any) =>{
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showErrorMessage(error.message);

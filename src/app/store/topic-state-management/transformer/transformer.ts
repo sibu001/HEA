@@ -75,4 +75,20 @@ export class TopicUtilityTransformer {
             }
         )
     }
+
+    public static convertPaneListDataForParentSectionLabel(dataList : Array<any>){
+        return dataList.map(
+            data =>{
+                if(data.parentSection)
+                    data.parentSectionLabel = data.parentSection.label;
+
+                if(data.section)
+                    data.section = '*';
+                else
+                    data.section = '';
+
+                return data;
+            }
+        )
+    }
 }

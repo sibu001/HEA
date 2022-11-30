@@ -281,11 +281,11 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   }
 
   goToEditChartSeries(event : any): any {
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { paneId : this.paneId ,paneChartId : event.chartId , id : event.id} });
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { paneId : this.paneId ,chartId : this.id , id : event.id,topicDescriptionId : this.topicDescriptionId} });
   }
 
   addCharSeries(){
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { topicDescriptionId : this.topicDescriptionId , paneId : this.paneId , paneChartId : this.id } });
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { topicDescriptionId : this.topicDescriptionId , paneId : this.paneId , chartId : this.id } });
   }
 
   saveRow() {

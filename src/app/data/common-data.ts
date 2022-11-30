@@ -267,12 +267,12 @@ export class TableColumnData {
         { key: 'paneCode', isEdit: true, displayName: 'Pane Code' ,isUnderline: true },
         { key: 'label', isEdit: true, displayName: 'Label' },
         { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
-        { key: 'section', isEdit: true, displayName: 'Section' },
-        { key: 'isSection', isEdit: true, displayName: 'Is Section' }
+        { key: 'parentSectionLabel', isEdit: true, displayName: 'Section' },
+        { key: 'section', isEdit: true, displayName: 'Is Section' }
     ];
 
     static readonly RECOMMENDATION_KEY: Array<TABLECOLUMN> = [
-        { key: 'takebackCode', isEdit: true, displayName: 'Code' },
+        { key: 'takebackCode', isEdit: true, displayName: 'Csode' },
         { key: 'lookupType', isEdit: true, displayName: 'Type' },
         { key: 'takebackLabelTemplate', isEdit: true, displayName: 'Label' },
     ];

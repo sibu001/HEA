@@ -39,7 +39,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.paneId = params['paneId'];
-      this.chartId = params['paneChartId'];
+      this.chartId = params['chartId'];
       this.topicDescriptionId = params['topicDescriptionId'];
     });
   }
@@ -104,7 +104,11 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   saveRow(): any { }
 
   back(): any {
+    try{
+      this.router.navigate(['/admin/topicDescription/topicPaneChartEdit'], { queryParams: {id : this.chartId, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId}});
+    }catch(e){
     this.location.back();
+    }
   }
 
   save(): any {
