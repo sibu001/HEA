@@ -37,10 +37,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   globalM = 0;
   globalK = 0;
   paneblockRowErrorNotation = [];
-  private static readonly DR_POWER_URL_LOCAL: string = 'http://localhost:4201/#/redirection';
-  private static readonly DR_POWER_URL_SANDBOX: string = 'http://localhost:4201/#/redirection';
-  private static readonly DR_POWER_URL_LIVE: string = 'http://localhost:4201/#/redirection';
-
 
   subscriptons : Subscription = new Subscription();
   private slidermap = new Map();
@@ -118,7 +114,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               document.getElementById('loader').classList.remove('loading');
               const responseData = response.data;
               console.log(response);
-              const popUp =  window.open(`${AppConstant.DR_POWER_URL_SANDBOX}?access_token=${responseData.access_token}&error_url=${location.href}`,'_blank');
+              const popUp =  window.open(`${AppConstant.DR_POWER_REDIRECTION_URL}?access_token=${responseData.access_token}&error_url=${location.href}`,'_blank');
               try{
                 popUp.focus();
               }catch(e){

@@ -120,6 +120,7 @@ export class AppConstant {
     public static dataBlock = 'dataBlocks';
     public static dataField = 'dataFields';
     public static fieldValues = 'fieldValues'
+    public static parameters = 'parameters'
     public static lookUpCalculationPeriod = 'VARIABLE_PERIOD';
     public static lookUpCodeTakeBackValue = 'TAKEBACK_TYPE';
     public static lookUpCodeDataType = 'DATA_TYPE';
@@ -140,9 +141,15 @@ export class AppConstant {
     public static availableFontFamilyNames = 'availableFontFamilyNames';
     public static classicVesionRedirectURLsandbox = 'https://sandbox.hea.com/hea-web/login.do';
 
+    public static readonly SANDBOX_HOST_NAME = 'sandbox.hea.com'
+    public static readonly LIVE_HOST_NAME = 'www.hea.com';
+
     public static readonly DR_POWER_URL_LOCAL: string = 'http://localhost:4201/#/redirection';
     public static readonly DR_POWER_URL_SANDBOX: string = 'https://drpower.hea.com:9443/#/redirection';
     public static readonly DR_POWER_URL_LIVE: string = 'https://drpower.hea.com/#/redirection';
+
+    public static readonly DR_POWER_REDIRECTION_URL : String = 
+        (location.host ==  AppConstant.LIVE_HOST_NAME) ? AppConstant.DR_POWER_URL_LIVE :  AppConstant.DR_POWER_URL_SANDBOX;
   
     public static readonly POPUP_BLOCK_MESSAGE: string = 'Popup blocked by default! Please Enable it in Settings.';
 }
