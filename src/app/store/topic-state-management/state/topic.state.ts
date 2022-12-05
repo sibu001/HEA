@@ -48,6 +48,8 @@ import {
     SaveNewChartSeriesAction,
     SaveExistingChartSeriesAction,
     DeleteChartSeriesAction,
+    SaveNewOrExistingPaneChartParameter,
+    DeletePaneChartParameter,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -1089,7 +1091,7 @@ export class TopicManagementState {
     @Action(SaveExistingChartSeriesAction)
     saveExistingChartSeriesAction(ctx : StateContext<TopicManagementModel>, action: SaveExistingChartSeriesAction) : Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId  + '/' + AppConstant.series + '/' + action.id)
+        return this.loginService.performPost(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId + '/' + AppConstant.series)
         .pipe(
             tap(
                 (response : any) =>{
@@ -1132,4 +1134,70 @@ export class TopicManagementState {
         )
         
     }
+
+    @Action(SaveNewOrExistingPaneChartParameter)
+    saveNewOrExistingPaneChartParameter(ctx : StateContext<TopicManagementModel>, action: SaveNewOrExistingPaneChartParameter) : Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.body, AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts + '/' 
+        + action.paneChartId + '/' + AppConstant.series + '/' + action.chartSeriesId + '/' + AppConstant.parameters)
+        .pipe(
+            tap(
+                (response : any) =>{
+                    const paneChartSeriesDefination =  ctx.getState().paneChartSeriesDefination;
+                    if(paneChartSeriesDefination.chartParameters){
+                        paneChartSeriesDefination.chartParameters = [response];
+                    }else{
+                        if(action.body.id){
+                            const templist = paneChartSeriesDefination.chartParameters.map(
+                                (data) =>{
+                                    if(data.id == action.body.id){
+                                        return response;
+                                    }
+                                    return data;
+                                }
+                            );
+
+                            paneChartSeriesDefination.chartParameters = templist;
+                        }
+                    }
+                    ctx.patchState({ paneChartSeriesDefination : paneChartSeriesDefination});
+                    document.getElementById('loader').classList.remove('loading');
+                }, (error : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }            
+            )
+        )
+        
+    }
+
+    @Action(DeletePaneChartParameter)
+    deletePaneChartParameter(ctx : StateContext<TopicManagementModel>, action: DeletePaneChartParameter) : Actions{
+        document.getElementById('loader').classList.remove('loading')
+        return this.loginService.
+            performDelete(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts + '/' 
+            + action.paneChartId + '/' + AppConstant.series + '/' + action.chartSeriesId + '/' + AppConstant.parameters + '/' + action.chartParameterId)
+            .pipe(
+                tap((response) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    const paneChartSeriesDefination =  ctx.getState().paneChartSeriesDefination;
+                    const index =  paneChartSeriesDefination.chartParameters.findIndex(
+                        (data) =>{
+                            if (data.id = action.chartParameterId){
+                                return true;
+                            }
+                            return false;
+                        }
+                    )
+                    paneChartSeriesDefination.chartParameters = paneChartSeriesDefination.chartParameters.slice(index,1);
+                    ctx.patchState({paneChartSeriesDefination : paneChartSeriesDefination});
+                    
+                },((error) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.message);
+                }))
+            )
+    }
+
+
 }

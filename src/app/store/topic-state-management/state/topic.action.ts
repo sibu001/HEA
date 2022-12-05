@@ -42,7 +42,9 @@ export enum TopicActionTypes {
     LOAD_CHART_SERIES_DEFINATION_BY_ID = 'Load Series Definition By Id',
     SAVE_NEW_CHART_SERIES = 'Save New  Chart Series',
     SAVE_EXISTING_CHART_SERIES = 'Save Existing Chart Series',
-    DELETE_CHART_SERIES_BY_ID = 'Delete Chart Series By Id'
+    DELETE_CHART_SERIES_BY_ID = 'Delete Chart Series By Id',
+    SAVE_NEW_OR_EXISTING_PANE_CHART_PARAMETER = 'Save New Or Existing Pane Chart Parameter',
+    DELETE_PANE_CHART_PARAMETER = 'Delete Pane Chart Parameter',
 }
 export class GetTopicDescriptionListAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_LIST;
@@ -258,4 +260,14 @@ export class SaveExistingChartSeriesAction{
 export class DeleteChartSeriesAction{
     static readonly type : TopicActionTypes = TopicActionTypes.DELETE_CHART_SERIES_BY_ID;
     constructor(readonly paneId : number, readonly chartId : number,  readonly id : number ){}
+}
+
+export class SaveNewOrExistingPaneChartParameter{
+    static readonly type : TopicActionTypes = TopicActionTypes.SAVE_NEW_OR_EXISTING_PANE_CHART_PARAMETER;
+    constructor(readonly paneId : number, readonly paneChartId : number, readonly chartSeriesId : number, readonly body : any){}
+}
+
+export class DeletePaneChartParameter{
+    static readonly type : TopicActionTypes = TopicActionTypes.DELETE_PANE_CHART_PARAMETER;
+    constructor(readonly paneId : number, readonly paneChartId : number, readonly chartSeriesId : number, readonly chartParameterId : number){}
 }

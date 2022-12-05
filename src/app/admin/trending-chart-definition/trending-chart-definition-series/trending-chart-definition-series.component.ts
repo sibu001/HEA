@@ -24,8 +24,10 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   seriesQueryTypeList: any[];
   paneId :number;
   topicDescriptionId : Number ;
+  paneChartId : number;
   chartSeriesData : any;
   chartId: number;
+  toggleSaveButton: boolean = true;
   data = {
     content: [],
     totalElements: 0
@@ -41,6 +43,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
       this.paneId = params['paneId'];
       this.chartId = params['chartId'];
       this.topicDescriptionId = params['topicDescriptionId'];
+      this.paneChartId = params['paneChartId'];
     });
   }
 
@@ -100,12 +103,10 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
       seriesStrokeWidth: [event !== undefined ? event.seriesStrokeWidth : ''],
     });
   }
-
-  saveRow(): any { }
-
+  
   back(): any {
     try{
-      this.router.navigate(['/admin/topicDescription/topicPaneChartEdit'], { queryParams: {id : this.chartId, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId}});
+      this.router.navigate(['/admin/topicDescription/topicPaneChartEdit'], { queryParams: {id : this.paneChartId, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId}});
     }catch(e){
     this.location.back();
     }
@@ -143,11 +144,22 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     this.topicService.getChartSeriesQueryColorLookUp()
     .subscribe(
       (response) =>{
-        // console.log(response);
         this.seriesQueryTypeList = response;
       }
     )
-  }  
+  } 
+  
+  toggleSaveButtonEvent(): any {
+    this.toggleSaveButton = !this.toggleSaveButton;
+  }
+
+  savePaneChartParameters(event : any ){
+    // this.topicService.saveNewOrExistingPaneChartParamenter(this.paneId,this.chartId,this.id,event);
+  }
+
+  deletePaneChartParameters(event : any){
+    // this.topicService.deletePaneChartParameter(this.paneId,this.chartId,this.id,event.id);
+  }
 
   get f() { return this.chartForm.controls; }
 
