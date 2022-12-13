@@ -266,10 +266,10 @@ const ROUTES: Routes = [
       }
     ],
   },
-  // {
-  //   path: '**',
-  //   redirectTo: '/guest/404'
-  // }
+  {
+    path: '**',
+    redirectTo: '/'
+  }
 ];
 
 @NgModule({

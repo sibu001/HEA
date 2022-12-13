@@ -26,6 +26,7 @@ export class RedirectionComponent implements OnInit {
   private surveyCode : string;
   private subscriptions :Subscription = new Subscription();
   private users:Users;
+  private redirectedRoute : string;
 
   constructor(
     private router : Router,
@@ -40,6 +41,7 @@ export class RedirectionComponent implements OnInit {
           this.surveyId = params['surveyId'];
           this.paneCode = params['paneCode'];
           this.surveyCode = params['surveyCode'];
+          this.redirectedRoute = params['redirectedRoute'];
         }
       )
 
@@ -47,26 +49,31 @@ export class RedirectionComponent implements OnInit {
 
   ngOnInit() {
 
-    if(this.surveyCode && this.customerId && this.paneCode && this.surveyId ){
+    if(!this.customerId){
+      this.loginService.logout();
+    }
+    
+    if(!this.redirectedRoute && (!this.surveyCode || !this.surveyId || !this.paneCode ) ){
+      this.loginService.logout();
+    }
+
+    this.redirection();
+     
+  }
+
+  private redirection() {
 
       this.performOuthMe();
 
       this.subscriptions.add(this.loginService.performGet(AppConstant.customer + '/' + Number.parseInt(this.customerId)).
-      pipe(skipWhile((item: any) => !item))
-      .subscribe((customer: any) => {
-        this.users.outhMeResponse = customer;
-        this.users.theme = customer.customerGroup.theme;
-        this.users.recommendationStatusChange = true;
-        this.users = this.loginService.setUser(this.users);
-        // this.getAllSurvey();
-      }));
+        pipe(skipWhile((item: any) => !item))
+        .subscribe((customer: any) => {
+          this.users.outhMeResponse = customer;
+          this.users.theme = customer.customerGroup.theme;
+          this.users.recommendationStatusChange = true;
+          this.users = this.loginService.setUser(this.users);
+        }));
 
-
-
-    }else{
-      this.loginService.logout(); 
-    }
-     
   }
 
   goToTopicPage(surveyId, paneCode, surveyCode, index,customerId?:string) {
@@ -108,7 +115,14 @@ export class RedirectionComponent implements OnInit {
         this.users.surveyList = response.data;
         this.users.allSurveyCheck = false;
         this.users =  this.loginService.setUser(this.users);
-        this.goToTopicPage(this.surveyId,this.paneCode,this.surveyCode,0,this.customerId);
+        if(!this.redirectedRoute){
+          this.goToTopicPage(this.surveyId,this.paneCode,this.surveyCode,0,this.customerId);
+        }else if(this.users.role == 'ADMIN' && this.redirectedRoute){
+          this.router.navigate([this.redirectedRoute]);
+        }else{
+          this.router.navigate(['/']);
+        }
+        
       },
       error => {
         document.getElementById('loader').classList.remove('loading');
