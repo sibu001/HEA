@@ -72,6 +72,10 @@ export class RedirectionComponent implements OnInit {
           this.users.theme = customer.customerGroup.theme;
           this.users.recommendationStatusChange = true;
           this.users = this.loginService.setUser(this.users);
+        },
+        (error: any) =>{
+          console.log(error);
+          this.router.navigate(['/']);
         }));
 
   }
@@ -96,6 +100,7 @@ export class RedirectionComponent implements OnInit {
       errors => {
         console.log(errors);
         document.getElementById('loader').classList.remove('loading');
+        this.router.navigate(['/']);
       }
     );
   }
@@ -126,6 +131,7 @@ export class RedirectionComponent implements OnInit {
       },
       error => {
         document.getElementById('loader').classList.remove('loading');
+        this.router.navigate(['/']);
       }
     );
   }
@@ -147,6 +153,7 @@ export class RedirectionComponent implements OnInit {
         console.log(response);
         // this.errorMessage = response.error_description;
         document.getElementById('loader').classList.remove('loading');
+        this.router.navigate(['/']);
       }
     );
   }
@@ -198,6 +205,7 @@ export class RedirectionComponent implements OnInit {
           console.log(response);
           // this.errorMessage = response.error_description;
           document.getElementById('loader').classList.remove('loading');
+          this.router.navigate(['/']);
         }
       );
   }
@@ -229,6 +237,7 @@ export class RedirectionComponent implements OnInit {
           //   response.error.errorMessage +
           //   '<br>Your new account registration is in process.';
           document.getElementById('loader').classList.remove('loading');
+          this.router.navigate(['/']);
         }
       );
   }
