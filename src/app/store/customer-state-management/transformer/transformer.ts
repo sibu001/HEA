@@ -245,6 +245,7 @@ export class Transformer {
             }else  if (dataSourceObj.authorizationStatus === '2') {
                 dataSourceObj.authorizationStatus = 'Denied';
             }
+            
             dataSource.push(dataSourceObj);
         });
         return dataSource;

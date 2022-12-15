@@ -151,5 +151,5 @@ export class AppConstant {
     public static readonly DR_POWER_REDIRECTION_URL : String = 
         (location.host ==  AppConstant.LIVE_HOST_NAME) ? AppConstant.DR_POWER_URL_LIVE :  AppConstant.DR_POWER_URL_SANDBOX;
   
-    public static readonly POPUP_BLOCK_MESSAGE: string = 'Popup blocked by default! Please Enable it in Settings.';
+    public static readonly POPUP_BLOCK_MESSAGE: string = 'In Safari, disable popup blocking for hea.com in either address bar or settings for browser.';
 }

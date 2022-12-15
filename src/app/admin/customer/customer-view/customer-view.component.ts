@@ -130,6 +130,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   regex = '';
   charactersCount = 0;
   private readonly subscriptions: Subscription = new Subscription();
+  errorMessage: string;
   constructor(public dialog: MatDialog,
     private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
@@ -481,7 +482,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   openAddressOnGoogleMap() {
-    this.dialog.open(GoogleMapComponent, {
+      this.dialog.open(GoogleMapComponent, {
       width: '515px',
       height: '500px',
       data: {
@@ -490,6 +491,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       },
       disableClose: false
     });
+
   }
 
   loadUtilityCredential(customerId: any) {

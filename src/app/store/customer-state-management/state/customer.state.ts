@@ -506,7 +506,6 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Validate Successfully');
                     ctx.patchState({
                         validateCustomerData: response,
                     });

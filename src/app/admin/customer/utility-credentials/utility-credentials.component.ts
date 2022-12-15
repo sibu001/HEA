@@ -4,7 +4,7 @@ import { d } from '@angular/core/src/render3';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { AppUtility } from 'src/app/utility/app.utility';
@@ -43,14 +43,20 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   }
 
   ngOnInit() {
-    this.getOpenedUtiliyCredentialsById();
-    this.getOpenUtilityCredentials();
     this.setForm(undefined);
     this.findCredentialType(false, '');
     if (this.data.row !== undefined) {  
-      if(this.data.row.subscriptionId == null){
+
+      if(this.data.row.subscriptionId){
+        this.getUsgaePoints();
+        this.loadUsagePoints(this.data.row.credentialTypeCode, this.data.row.subscriptionId);
+      }
+
+      if(this.data.row.credentialTypeCode != 'smd'){
+        this.getOpenedUtiliyCredentialsById();
         this.customerService.openUtilityCredentialsById(this.data.customerId,this.data.row.id);
       }else{
+        this.getOpenUtilityCredentials();
         this.customerService.openUtilityCredentials(this.data.customerId, this.data.row.subscriptionId);
       }
     }
@@ -71,23 +77,25 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   }
 
   getOpenUtilityCredentials(){
-    this.subscriptions.add(this.customerService.getOpenedUtiliyCredentials().pipe(skipWhile((item: any) => item === undefined))
+    this.subscriptions.add(this.customerService.getOpenedUtiliyCredentials()
+    .pipe(filter((item: any) => item))
     .subscribe((response) => {
-      console.log("new response" + JSON.stringify(response));
       this.setForm(response);
       this.login = response.data.credential.login;
       this.credentialType = response.data.credential.credentialTypeCode;
-      if(this.login && this.login != '' && this.credentialType == 'smd')
-        this.getUsgaePoints(response.data);
       this.electricityInUse = response.data.credential.electricityInUse;
       this.heatingInUse = response.data.credential.heatingInUse;
     }));
   }
 
-  getUsgaePoints(event){
-    this.customerService.loadUsagePoints(event.credential.credentialTypeCode, event.credential.subscriptionId);
+  
+  loadUsagePoints(credentialTypeCode : string, subscriptionId : string){
+    this.customerService.loadUsagePoints(credentialTypeCode, subscriptionId);
+  }
+
+  getUsgaePoints(){
     this.subscriptions.add(this.customerService.getUsagePoints()
-    .pipe(skipWhile((item: any) => !item))
+    .pipe(filter((data: any) => data && data.subscriptionId == this.data.row.subscriptionId ))
     .subscribe(
       (usagePoints: any) => {
           this.usagePointsData = usagePoints;
@@ -142,7 +150,7 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
       heatingSignDate: [event !== undefined && selectedHeatingIndex ? AppUtility.getDateFromMilllis(selectedHeatingIndex.signDate) : ''],
       waterServiceId: [event !== undefined ? event.credential.waterServiceId : null],
       waterMeterId: [event !== undefined ? event.credential.waterMeterId : null],
-      waterSignDate: [event !== undefined ? event.credential.waterSignDate : null],
+      waterSignDate: [event !== undefined ? AppUtility.getDateFromMilllis(event.credential.waterSignDate) : null],
       subscriptionId: [event !== undefined ? event.subscriptionId : null],
       feedId: [event !== undefined ? event.feedId : null],
       houseNumber: [event !== undefined ? event.credential.houseNumber : null],
@@ -178,7 +186,7 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
       heatingSignDate: [event !== undefined && event.heatingSignDate !== null ? this.selectHeatingServiceId(event) : null],
       waterServiceId: [event !== undefined ? event.waterServiceId : null],
       waterMeterId: [event !== undefined ? event.waterMeterId : null],
-      waterSignDate: [event !== undefined ? event.waterSignDate : null],
+      waterSignDate: [event !== undefined ? AppUtility.getDateFromMilllis(event.waterSignDate) : null],
       subscriptionId: [event !== undefined ? event.subscriptionId : null],
       feedId: [event !== undefined ? event.feedId : null],
       houseNumber: [event !== undefined ? event.houseNumber : null],
@@ -239,8 +247,11 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   }
 
   validateCredentialData() {
-    this.subscriptions.add(this.customerService.validateUtilityCredentialData(this.data.customerId, this.data.row.id).pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(
+      this.customerService.validateUtilityCredentialData(this.data.customerId, this.data.row.id)
+      .pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
+          this.dialogRef.close(response);
       }));
   }
 
