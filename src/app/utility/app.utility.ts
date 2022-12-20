@@ -37,6 +37,9 @@ export class AppUtility {
     }
 
     static getDateFromMilllis(millisecond: any) {
+
+        if(!millisecond) return '';
+
         const date = new Date(millisecond)
         var d = AppUtility.getFormated(date.getMonth())
         +'/'+ AppUtility.getFormated(date.getDate())

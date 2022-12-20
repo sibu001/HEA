@@ -241,6 +241,16 @@ export class CustomerManagementState {
     }
 
     @Selector()
+    static getValidatedCredentialData(state : CustomerManagementModel) : any{
+        return state.validateCustomerData;
+    }
+
+    @Selector()
+    static getRescrapeCustomerUsage(state : CustomerManagementModel) : any{
+        return state.rescrapeCustomerUsage;
+    }
+
+    @Selector()
     static getValidateNewPassword(state: CustomerManagementModel): any {
         return state.validateNewPassword;
     }
@@ -482,18 +492,18 @@ export class CustomerManagementState {
 
     @Action(RescrapeCustomerBillsAction)
     rescrapeCustomerBills(ctx: StateContext<CustomerManagementModel>, action: RescrapeCustomerBillsAction): Actions {
-        // document.getElementById('loader').classList.add('loading');
+        document.getElementById('loader').classList.add('loading');
         return this.loginService.performPostWithParam('', AppConstant.customer + '/' + action.customerId + '/' + AppConstant.credentials + '/' + action.credentialId + '/' + AppConstant.meters + '/' + action.smartMeterId + '/' + AppConstant.rescrapeCustomerBills, action.params)
             .pipe(
                 tap((response: any) => {
-                    // document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Bills Rescrape  Successfully');
+                    document.getElementById('loader').classList.remove('loading');
+                    // this.utilityService.showSuccessMessage('Bills Rescrape  Successfully');
                     ctx.patchState({
                         rescrapeCustomerUsage: response,
                     });
                 },
                     error => {
-                        // document.getElementById('loader').classList.remove('loading');
+                        document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
                         ctx.dispatch(new CustomerError(error));
                     }));
@@ -513,7 +523,7 @@ export class CustomerManagementState {
                     error => {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
-                        ctx.dispatch(new CustomerError(error));
+                        // ctx.dispatch(new CustomerError(error));
                     }));
     }
 
@@ -640,6 +650,13 @@ export class CustomerManagementState {
 
     @Action(OpenUtilityCredentialsAction)
     getOpnedUtilityCredentialById(ctx: StateContext<CustomerManagementModel>, action: OpenUtilityCredentialsAction): Actions {
+
+        // const openedUtilityCredentialById = ctx.getState().openedUtilityCredentialById;
+        // if(openedUtilityCredentialById && openedUtilityCredentialById.credential.customerId == action.customerId
+        //     && openedUtilityCredentialById.credential.subscriptionId == action.subscriptionId) {
+        //         return null;
+        // }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet("customers/smd/" +action.customerId + "/" + action.subscriptionId)
             .pipe(
@@ -657,6 +674,7 @@ export class CustomerManagementState {
 
     @Action(OpenUtilityCredentialsByIdAction)
     getOpenUtilityCredentialsByIdAction(ctx: StateContext<CustomerManagementModel>, action: OpenUtilityCredentialsByIdAction): Actions {
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet("customers/" +action.customerId + "/credentials/" + action.credendtiaId)
             .pipe(

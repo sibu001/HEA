@@ -251,17 +251,37 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
       this.customerService.validateUtilityCredentialData(this.data.customerId, this.data.row.id)
       .pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-          this.dialogRef.close(response);
+          // this.dialogRef.close(response);
+          this.getValidatedCredentialData();
       }));
   }
 
+getValidatedCredentialData(){
+  this.customerService.getValidatedCredentialsData()
+  .subscribe((response: any) => {
+    this.dialogRef.close(response.data);
+  })
+}
+
+
   rescrapeCustomerUsage(updateOnly: boolean) {
+    if(!confirm('Are you sure? Old data (from /"DATE"/) will be forever deleted!'))
+      return;
+    
     const params = new HttpParams()
       .set('sendActivationLink', '' + this.data.activationMail)
       .set('updateOnly', '' + updateOnly);
     this.subscriptions.add(this.customerService.rescrapeCustomerUsage(this.data.customerId, this.data.row.id, params).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
+        this.getrescrapeCustomerUsage();
       }));
+  }
+
+  getrescrapeCustomerUsage(){
+    this.customerService.getRescrapeCustomerUsage()
+    .subscribe((response : any) => {
+      this.dialogRef.close(response.data);
+    })
   }
 
   settingServiceInUseValue(){

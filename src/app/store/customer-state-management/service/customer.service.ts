@@ -375,8 +375,16 @@ export class CustomerService {
     return this.store.dispatch(new RescrapeCustomerUsageAction(customerId, credentialId, params));
   }
 
+  getRescrapeCustomerUsage(){
+    return this.store.select(CustomerManagementState.getRescrapeCustomerUsage);
+  }
+
   validateUtilityCredentialData(customerId: any, credentialId: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new ValidateUtilityCredentialDataAction(customerId, credentialId));
+  }
+
+  getValidatedCredentialsData(): Observable<CustomerManagementState> {
+    return this.store.select(CustomerManagementState.getValidatedCredentialData);
   }
 
   loadPasswordValidationRule(): Observable<CustomerManagementState> {

@@ -539,6 +539,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loadUtilityCredential(this.id);
+        this.scrollTop();
+        if(result != 'OK'){
+         this.errorMessage = result; 
+        }
       }
     });
   }
