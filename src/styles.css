@@ -2360,3 +2360,16 @@ mat-paginator{
 img[src="assets/images/ico_html.png"]{
   width: 30px;
 }
+
+
+
+/* css for highlighter on the graph on mouse over event. */
+#overDiv font{
+  font-size: 15px;
+}
+
+#overDiv table{
+  border: 1px solid black;
+  background-color : white;
+  text-align: center;
+}

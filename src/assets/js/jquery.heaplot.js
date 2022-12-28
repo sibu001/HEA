@@ -602,11 +602,11 @@ function findTickIntervalBase(max, min, numTicks) {
 					}
 				}
 			);
-			$('#resizable2').bind('resizestop', function (event, ui) {
-				$('#' + chartSeasonalStackDiv).height($('#resizable2').height() * 0.96);
-				$('#' + chartSeasonalStackDiv).width($('#resizable2').width() * 0.96);
-				$.replot({ resetAxes: true });
-			});
+			// $('#resizable2').bind('resizestop', function (event, ui) {
+			// 	$('#' + chartSeasonalStackDiv).height($('#resizable2').height() * 0.96);
+			// 	$('#' + chartSeasonalStackDiv).width($('#resizable2').width() * 0.96);
+			// 	$.replot({ resetAxes: true });
+			// });
 		}
 
 		chartSeasonalPieDiv = typeof chartSeasonalPieDiv !== 'undefined' ? chartSeasonalPieDiv : 'chartSeasonalPie';

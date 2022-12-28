@@ -305,6 +305,7 @@ export class DashboardComponent implements OnInit {
     document.getElementById('loader').classList.add('loading');
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingHomeChart').subscribe(
       data => {
+        document.getElementById('loader').classList.remove('loading');
         const response = JSON.parse(JSON.stringify(data));
         this.trendingHomeChart = response.data;
         this.trendingHomeChartCopy = JSON.parse(JSON.stringify(this.trendingHomeChart));
@@ -352,13 +353,13 @@ export class DashboardComponent implements OnInit {
         console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
         setTimeout(function () {
           eval(response.data.chart.freeChartConfigurationJS);
-        }, 100);
+        }, 50);
         if (this.users.recommendationList != null && this.users.recommendationList.length > 0 && !this.users.recommendationStatusChange) {
           document.getElementById('loader').classList.remove('loading');
         }
         setTimeout(function () {
           $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
-        }, 100);
+        }, 80);
       },
       error => {
         document.getElementById('loader').classList.remove('loading');
@@ -425,15 +426,15 @@ export class DashboardComponent implements OnInit {
                self.globalM = 0;
                self.globalK = 0;
             }
-          }, 100);
+          }, 50);
           if (self.users.recommendationList != null && self.users.recommendationList.length > 0 && !self.users.recommendationStatusChange) {
             document.getElementById('loader').classList.remove('loading');
           }
           setTimeout(function () {
             $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
-          }, 100);
+          }, 50);
           i++;
-        }, 1000);
+        }, 20);
       }
     }
   }
