@@ -116,7 +116,7 @@ export class AppConstant {
     public static fixUsageHistoryData = 'fixUsageHistoryData';
     public static meters = 'meters';
     public static pageSize = '25';
-    public static debounceTime = 700;
+    public static debounceTime = 350;
     public static dataBlock = 'dataBlocks';
     public static dataField = 'dataFields';
     public static fieldValues = 'fieldValues'
@@ -152,4 +152,5 @@ export class AppConstant {
         (location.host ==  AppConstant.LIVE_HOST_NAME) ? AppConstant.DR_POWER_URL_LIVE :  AppConstant.DR_POWER_URL_SANDBOX;
   
     public static readonly POPUP_BLOCK_MESSAGE: string = 'In Safari, disable popup blocking for hea.com in either address bar or settings for browser.';
+    public static readonly POSSIBLE_LOST_PEROIOD = 'possibleLostPeriod';
 }

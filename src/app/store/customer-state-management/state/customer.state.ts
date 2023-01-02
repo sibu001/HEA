@@ -478,7 +478,6 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showSuccessMessage('Rescrape  Successfully');
                     ctx.patchState({
                         rescrapeCustomerUsage: response,
                     });

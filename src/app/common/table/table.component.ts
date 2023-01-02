@@ -216,7 +216,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     }
 
     if(!this.pageSize)
-    this.pageSize = 10;
+    this.pageSize = AppConstant.pageSize;
 
     this.setForm();
     if (this.isInlineEdit) {

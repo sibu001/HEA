@@ -41,12 +41,24 @@ export class AppUtility {
         if(!millisecond) return '';
 
         const date = new Date(millisecond)
-        var d = AppUtility.getFormated(date.getMonth())
+        var d = AppUtility.getFormated(date.getMonth() + 1)
         +'/'+ AppUtility.getFormated(date.getDate())
         +'/'+AppUtility.getFormated(date.getFullYear())
         +' '+AppUtility.getFormated(date.getHours()) + 
         ':' + AppUtility.getFormated(date.getMinutes()) + 
         ':' + AppUtility.getFormated(date.getSeconds());
+        return d;
+      }
+
+      static getDateOnlyFromMilllis(millisecond: any) {
+
+        if(!millisecond) return '';
+
+        const date = new Date(millisecond)
+        var d = AppUtility.getFormated(date.getMonth() + 1)
+        +'/'+ AppUtility.getFormated(date.getDate())
+        +'/'+AppUtility.getFormated(date.getFullYear());
+
         return d;
       }
 

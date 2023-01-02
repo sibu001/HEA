@@ -5,8 +5,11 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { filter, skipWhile } from 'rxjs/operators';
+import { LoginService } from 'src/app/services/login.service';
+import { UtilityService } from 'src/app/services/utility.service';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -27,12 +30,15 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   public removeOldBills: boolean = false;
   public heatingServiceIds: Array<any>;
   public electricServiceIds: Array<any>;
+  private lostDateFrom : string;
   public usagePointsData  = { oauthRefreshToken : "", authScope : ""};
   constructor(
     private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
     private readonly customerService: CustomerService,
     private readonly el: ElementRef,
+    private readonly loginServie : LoginService,
+    private readonly utilityService: UtilityService,
     public dialogRef: MatDialogRef<UtilityCredentialsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -45,6 +51,7 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   ngOnInit() {
     this.setForm(undefined);
     this.findCredentialType(false, '');
+    this.getDataLostDateForRescrape();
     if (this.data.row !== undefined) {  
 
       if(this.data.row.subscriptionId){
@@ -64,6 +71,7 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
 
   getOpenedUtiliyCredentialsById(){
     this.subscriptions.add(this.customerService.getOpenUtilityCredentialsById()
+    .pipe(filter(data => data && data.id == this.data.row.id && this.data.customerId == data.customerId))
     .subscribe(
       data =>{
         this.setFormStyle2(data);
@@ -78,7 +86,7 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
 
   getOpenUtilityCredentials(){
     this.subscriptions.add(this.customerService.getOpenedUtiliyCredentials()
-    .pipe(filter((item: any) => item))
+    .pipe(filter((item: any) => item && item.data && this.data.row.subscriptionId == item.data.subscriptionId))
     .subscribe((response) => {
       this.setForm(response);
       this.login = response.data.credential.login;
@@ -263,18 +271,35 @@ getValidatedCredentialData(){
   })
 }
 
+  getDataLostDateForRescrape(){
+    document.getElementById('loader').classList.add('loading');
+    this.loginServie.performGet(AppConstant.customer + '/' + this.data.customerId + '/' + AppConstant.POSSIBLE_LOST_PEROIOD)
+    .subscribe(
+      (response : any) =>{
+        document.getElementById('loader').classList.remove('loading');
+        this.lostDateFrom = response.data.lostDateFrom;
+      }, (error) =>{
+        console.error(error);
+        this.utilityService.showErrorMessage(error.message);
+      }
+    )
+  }
 
   rescrapeCustomerUsage(updateOnly: boolean) {
-    if(!confirm('Are you sure? Old data (from /"DATE"/) will be forever deleted!'))
+
+    if(!updateOnly) {
+      if(!confirm(`Are you sure? Old data (from ${AppUtility.getDateOnlyFromMilllis(this.lostDateFrom)}) will be forever deleted!`))
       return;
-    
+    }
+
     const params = new HttpParams()
       .set('sendActivationLink', '' + this.data.activationMail)
       .set('updateOnly', '' + updateOnly);
     this.subscriptions.add(this.customerService.rescrapeCustomerUsage(this.data.customerId, this.data.row.id, params).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-        this.getrescrapeCustomerUsage();
-      }));
+      this.getrescrapeCustomerUsage();
+    }));
+
   }
 
   getrescrapeCustomerUsage(){
@@ -330,6 +355,9 @@ getValidatedCredentialData(){
   }
 
   async rescrapeBills(smartMeter: string) {
+    
+    this.loginServie.performGet(AppConstant.customer + '/' +  this.data.customerId + '/' + AppConstant.POSSIBLE_LOST_PEROIOD)
+
     let smartMeterId;
     if (smartMeter == "Electric") {
       smartMeterId = this.data.row.electricityMeterId;

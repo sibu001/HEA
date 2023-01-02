@@ -22,7 +22,7 @@ import { CustomerService } from 'src/app/store/customer-state-management/service
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 import { AutoCompleteModule } from 'primeng/primeng';
-import { MatAutocompleteModule } from '@angular/material';
+import { MatAutocompleteModule, MatInputModule, MatOptionModule } from '@angular/material';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { AdministrativeManagementState } from 'src/app/store/administrative-state-management/state/administrative.state';
 
@@ -33,6 +33,8 @@ import { AdministrativeManagementState } from 'src/app/store/administrative-stat
     ReactiveFormsModule,
     FormsModule,
     MatAutocompleteModule,
+    MatOptionModule,
+    MatInputModule,
     AutoCompleteModule,
     NgxsModule.forRoot([
       SystemManagementState,
