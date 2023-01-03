@@ -31,6 +31,7 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   public heatingServiceIds: Array<any>;
   public electricServiceIds: Array<any>;
   private lostDateFrom : string;
+  public credentialsData : any;
   public usagePointsData  = { oauthRefreshToken : "", authScope : ""};
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -75,6 +76,7 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
     .subscribe(
       data =>{
         this.setFormStyle2(data);
+        this.credentialsData = data;
         if(data){
          this.login = data.login;
          this.credentialType = data.credentialTypeCode;
@@ -89,6 +91,7 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
     .pipe(filter((item: any) => item && item.data && this.data.row.subscriptionId == item.data.subscriptionId))
     .subscribe((response) => {
       this.setForm(response);
+      this.credentialsData = response.data.credential;
       this.login = response.data.credential.login;
       this.credentialType = response.data.credential.credentialTypeCode;
       this.electricityInUse = response.data.credential.electricityInUse;
@@ -326,6 +329,8 @@ getValidatedCredentialData(){
   save() {
     this.utilityCredentialForm.value.heatingSignDate = new Date(this.utilityCredentialForm.value.heatingSignDate).getTime(); 
     this.utilityCredentialForm.value.electricitySignDate = new Date(this.utilityCredentialForm.value.electricitySignDate).getTime(); 
+    this.utilityCredentialForm.value.waterSignDate = new Date(this.utilityCredentialForm.value.waterSignDate).getTime(); 
+
     this.settingServiceInUseValue();
 
     if (this.utilityCredentialForm.valid) {

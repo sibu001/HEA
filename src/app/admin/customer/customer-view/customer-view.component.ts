@@ -520,6 +520,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 //  }
 
   openUtilityCredential(event: any) {
+    this.errorMessage = undefined;
     if (!event) {
       event = {
         customerId: this.id,
@@ -540,7 +541,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       if (result) {
         this.loadUtilityCredential(this.id);
         this.scrollTop();
-        if(result != 'OK'){
+        if(result != 'OK' && result != true && result != false){
          this.errorMessage = result; 
         }
       }
