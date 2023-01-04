@@ -155,7 +155,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
     );
   }
 
-  selectedSuggestion(event){
+  selectedSuggestion(event,searchfor){
     console.log(event);
   }
 
