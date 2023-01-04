@@ -30,7 +30,8 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   public removeOldBills: boolean = false;
   public heatingServiceIds: Array<any>;
   public electricServiceIds: Array<any>;
-  private lostDateFrom : string;
+  public rescrapeMessage : string;
+  private lostDate : any;
   public credentialsData : any;
   public usagePointsData  = { oauthRefreshToken : "", authScope : ""};
   constructor(
@@ -285,7 +286,15 @@ getValidatedCredentialData(){
       .pipe(filter(data => data))
       .subscribe(
         data => {
-          this.lostDateFrom = data.date;
+          this.lostDate = data.date;
+
+          if(this.lostDate.lostDateFrom && this.lostDate.lostDateTo){
+            this.rescrapeMessage = `Are you sure? We will lose baseline period data from ${AppUtility.getDateOnlyFromMilllis(this.lostDate.lostDateFrom)} to ${AppUtility.getDateOnlyFromMilllis(this.lostDate.lostDateTo)}!`
+          }else if(AppUtility.getDateOnlyFromMilllis(this.lostDate.lostDateFrom)){
+            this.rescrapeMessage = `Are you sure? Old data (from ${AppUtility.getDateOnlyFromMilllis(this.lostDate.lostDateFrom)}) will be forever deleted!`
+          }else{
+            this.rescrapeMessage = `Are you sure? Old data older than PG&E will replace will be forever deleted!`
+          }
         }
       )
     )
@@ -308,7 +317,7 @@ getValidatedCredentialData(){
   rescrapeCustomerUsage(updateOnly: boolean) {
 
     if(!updateOnly) {
-      if(!confirm(`Are you sure? Old data (from ${AppUtility.getDateOnlyFromMilllis(this.lostDateFrom)}) will be forever deleted!`))
+      if(!confirm(this.rescrapeMessage))
       return;
     }
 

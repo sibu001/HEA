@@ -736,7 +736,7 @@ export class CustomerManagementState {
         .subscribe(
           (response : any) =>{
             document.getElementById('loader').classList.remove('loading');
-            const rescrapeData = {customerId : action.customerId, date : response.data.lostDateFrom};
+            const rescrapeData = {customerId : action.customerId, date : response.data};
             ctx.patchState({rescrapeDateData : rescrapeData});
           }, (error) =>{
             document.getElementById('loader').classList.remove('loading');
