@@ -38,7 +38,7 @@ export class AppUtility {
 
     static getDateFromMilllis(millisecond: any) {
 
-        if(!millisecond) return '';
+        if(millisecond == undefined || millisecond == undefined) return '';
 
         const date = new Date(millisecond)
         var d = AppUtility.getFormated(date.getMonth() + 1)
@@ -52,7 +52,7 @@ export class AppUtility {
 
       static getDateOnlyFromMilllis(millisecond: any) {
 
-        if(!millisecond) return '';
+        if(millisecond == undefined || millisecond == undefined) return '';
 
         const date = new Date(millisecond)
         var d = AppUtility.getFormated(date.getMonth() + 1)

@@ -40,4 +40,5 @@ export interface CustomerManagementModel {
     heatingRatePlan: any;
     weatherStation: any;
     error: Error;
+    rescrapeDateData : any;
 }

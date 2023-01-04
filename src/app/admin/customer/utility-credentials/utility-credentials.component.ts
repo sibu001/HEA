@@ -52,7 +52,8 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   ngOnInit() {
     this.setForm(undefined);
     this.findCredentialType(false, '');
-    this.getDataLostDateForRescrape();
+    this.getRescrapeDateForCustomer();
+    this.loadRescrapeDateForCustomer();
     if (this.data.row !== undefined) {  
 
       if(this.data.row.subscriptionId){
@@ -60,12 +61,12 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
         this.loadUsagePoints(this.data.row.credentialTypeCode, this.data.row.subscriptionId);
       }
 
-      if(this.data.row.credentialTypeCode != 'smd'){
-        this.getOpenedUtiliyCredentialsById();
-        this.customerService.openUtilityCredentialsById(this.data.customerId,this.data.row.id);
-      }else{
+      if(this.data.row.credentialTypeCode == 'smd' && this.data.row.subscriptionId){
         this.getOpenUtilityCredentials();
         this.customerService.openUtilityCredentials(this.data.customerId, this.data.row.subscriptionId);
+      }else{
+        this.getOpenedUtiliyCredentialsById();
+        this.customerService.openUtilityCredentialsById(this.data.customerId,this.data.row.id);
       }
     }
   }
@@ -274,19 +275,35 @@ getValidatedCredentialData(){
   })
 }
 
-  getDataLostDateForRescrape(){
-    document.getElementById('loader').classList.add('loading');
-    this.loginServie.performGet(AppConstant.customer + '/' + this.data.customerId + '/' + AppConstant.POSSIBLE_LOST_PEROIOD)
-    .subscribe(
-      (response : any) =>{
-        document.getElementById('loader').classList.remove('loading');
-        this.lostDateFrom = response.data.lostDateFrom;
-      }, (error) =>{
-        console.error(error);
-        this.utilityService.showErrorMessage(error.message);
-      }
+  loadRescrapeDateForCustomer(){
+    this.customerService.loadRescrapeDateForCustomer(this.data.customerId);
+  }
+
+  getRescrapeDateForCustomer(){
+    this.subscriptions.add(
+      this.customerService.getRescrapeDateForCustomer()
+      .pipe(filter(data => data))
+      .subscribe(
+        data => {
+          this.lostDateFrom = data.date;
+        }
+      )
     )
   }
+
+  // getDataLostDateForRescrape(){
+  //   document.getElementById('loader').classList.add('loading');
+  //   this.loginServie.performGet(AppConstant.customer + '/' + this.data.customerId + '/' + AppConstant.POSSIBLE_LOST_PEROIOD)
+  //   .subscribe(
+  //     (response : any) =>{
+  //       document.getElementById('loader').classList.remove('loading');
+  //       this.lostDateFrom = response.data.lostDateFrom;
+  //     }, (error) =>{
+  //       console.error(error);
+  //       this.utilityService.showErrorMessage(error.message);
+  //     }
+  //   )
+  // }
 
   rescrapeCustomerUsage(updateOnly: boolean) {
 
@@ -335,7 +352,11 @@ getValidatedCredentialData(){
 
     if (this.utilityCredentialForm.valid) {
       if (this.data.row && this.data.row.id) {
-        this.subscriptions.add(this.customerService.updateUtilityCredential(this.data.customerId, this.data.row.id, this.utilityCredentialForm.value).pipe(skipWhile((item: any) => !item))
+        const formBody  = {...this.utilityCredentialForm.value};
+        const requestPayload = Object.assign(this.credentialsData,formBody);
+        this.subscriptions.add(
+          this.customerService.updateUtilityCredential(this.data.customerId, this.data.row.id, requestPayload)
+          .pipe(skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.dialogRef.close(true);
           }));
@@ -360,8 +381,6 @@ getValidatedCredentialData(){
   }
 
   async rescrapeBills(smartMeter: string) {
-    
-    this.loginServie.performGet(AppConstant.customer + '/' +  this.data.customerId + '/' + AppConstant.POSSIBLE_LOST_PEROIOD)
 
     let smartMeterId;
     if (smartMeter == "Electric") {

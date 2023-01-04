@@ -67,7 +67,8 @@ export enum SystemActionTypes {
     CUSTOMER_ERROR = 'Customer Error',
     REORDER_CUSTOMER_BILLS = 'Reorder Customer Bills',
     OPENED_UTILIY_CREDENTIALS = 'Open Utility Credentials',
-    OPEN_UTILITY_CREDENTIAL_BY_ID = 'Open Utility Credentials by ID'
+    OPEN_UTILITY_CREDENTIAL_BY_ID = 'Open Utility Credentials by ID',
+    RESCRAPE_DATE_FOR_CUSTOMER = 'RESCRAPE DATE FOR CUSTOMER'
 }
 export class GetCustomerListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_LIST;
@@ -180,6 +181,11 @@ export class OpenUtilityCredentialsAction{
 export class UsagePointsAction{
     static readonly type : SystemActionTypes = SystemActionTypes.USAGE_POINTS; 
     constructor(readonly customerCredentialsCode : string , readonly subscriptionId : string){}
+}
+
+export class RescrapeDateForCustomerAction{
+    static readonly type : SystemActionTypes = SystemActionTypes.RESCRAPE_DATE_FOR_CUSTOMER;
+    constructor(readonly customerId : string){}
 }
 
 export class SaveUtilityCredentialAction {

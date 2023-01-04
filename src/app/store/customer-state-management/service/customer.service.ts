@@ -68,7 +68,8 @@ import {
   ValidateUtilityCredentialDataAction,
   OpenUtilityCredentialsAction,
   UsagePointsAction,
-  OpenUtilityCredentialsByIdAction
+  OpenUtilityCredentialsByIdAction,
+  RescrapeDateForCustomerAction
 } from '../state/customer.action';
 import { CustomerManagementState } from '../state/customer.state';
 
@@ -257,6 +258,14 @@ export class CustomerService {
 
   loadUsagePoints(credentialsCodeType : string, subscriptionId : string){
     return this.store.dispatch( new UsagePointsAction(credentialsCodeType,subscriptionId));
+  }
+
+  loadRescrapeDateForCustomer(customerId : string){
+    return this.store.dispatch( new RescrapeDateForCustomerAction(customerId));
+  }
+
+  getRescrapeDateForCustomer(){
+    return this.store.select(CustomerManagementState.getRescrapeDateForCustomer);
   }
 
   saveUtilityCredential(customerId: any, utilityCredential: any): Observable<CustomerManagementState> {

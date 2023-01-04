@@ -73,7 +73,8 @@ import {
     ValidateUtilityCredentialDataAction,
     OpenUtilityCredentialsAction,
     UsagePointsAction,
-    OpenUtilityCredentialsByIdAction
+    OpenUtilityCredentialsByIdAction,
+    RescrapeDateForCustomerAction
 } from './customer.action';
 import { CustomerManagementModel } from './customer.model';
 
@@ -121,7 +122,8 @@ import { CustomerManagementModel } from './customer.model';
         error: undefined,
         openedUtilityCredential : undefined,
         usagePoints : undefined,
-        openedUtilityCredentialById : undefined
+        openedUtilityCredentialById : undefined,
+        rescrapeDateData : undefined
     }
 })
 
@@ -182,12 +184,17 @@ export class CustomerManagementState {
 
     @Selector()
     static getOpenedUtiliyCredentialsById(state : CustomerManagementModel) : any{
-        return state.openedUtilityCredentialById;
+        return state.utilityCredential;
     }
 
     @Selector()
     static getCustomerEventList(state: CustomerManagementModel): any {
         return state.customerEventList;
+    }
+
+    @Selector()
+    static getRescrapeDateForCustomer(state: CustomerManagementModel): any {
+        return state.rescrapeDateData;
     }
 
     @Selector()
@@ -650,11 +657,10 @@ export class CustomerManagementState {
     @Action(OpenUtilityCredentialsAction)
     getOpnedUtilityCredentialById(ctx: StateContext<CustomerManagementModel>, action: OpenUtilityCredentialsAction): Actions {
 
-        // const openedUtilityCredentialById = ctx.getState().openedUtilityCredentialById;
-        // if(openedUtilityCredentialById && openedUtilityCredentialById.credential.customerId == action.customerId
-        //     && openedUtilityCredentialById.credential.subscriptionId == action.subscriptionId) {
-        //         return null;
-        // }
+        const openedUtilityCredential = ctx.getState().openedUtilityCredential;
+        if(openedUtilityCredential && openedUtilityCredential.data.subscriptionId == action.subscriptionId){
+            return;
+        }
 
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet("customers/smd/" +action.customerId + "/" + action.subscriptionId)
@@ -674,13 +680,18 @@ export class CustomerManagementState {
     @Action(OpenUtilityCredentialsByIdAction)
     getOpenUtilityCredentialsByIdAction(ctx: StateContext<CustomerManagementModel>, action: OpenUtilityCredentialsByIdAction): Actions {
 
+        const utilityCredential = ctx.getState().utilityCredential;
+        if(utilityCredential && utilityCredential.credentialId == action.credendtiaId){
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet("customers/" +action.customerId + "/credentials/" + action.credendtiaId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        openedUtilityCredentialById: response,
+                        utilityCredential: response,
                     });
                 },
                     error => {
@@ -691,6 +702,12 @@ export class CustomerManagementState {
 
     @Action(UsagePointsAction)
     loadUsagePointsAction(ctx :StateContext<CustomerManagementModel> , action : UsagePointsAction) : Actions{
+        
+        const usagePoints = ctx.getState().usagePoints;
+        if(usagePoints && usagePoints.subscriptionId == action.subscriptionId){
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet("usagePoints/" +action.customerCredentialsCode + "/" + action.subscriptionId)
             .pipe(
@@ -705,6 +722,30 @@ export class CustomerManagementState {
                         this.utilityService.showErrorMessage(error.message);
                     }));
     }
+
+    @Action(RescrapeDateForCustomerAction)
+    rescrapeDateForCustomerAction(ctx :StateContext<CustomerManagementModel> , action : RescrapeDateForCustomerAction) : Actions{
+        
+        const rescrapeDateData = ctx.getState().rescrapeDateData;
+        if( rescrapeDateData && rescrapeDateData.customerId == action.customerId){
+            return;
+        }
+
+        document.getElementById('loader').classList.add('loading');
+        return    this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.POSSIBLE_LOST_PEROIOD)
+        .subscribe(
+          (response : any) =>{
+            document.getElementById('loader').classList.remove('loading');
+            const rescrapeData = {customerId : action.customerId, date : response.data.lostDateFrom};
+            ctx.patchState({rescrapeDateData : rescrapeData});
+          }, (error) =>{
+            document.getElementById('loader').classList.remove('loading');
+            this.utilityService.showErrorMessage(error.message);
+          }
+        )
+        
+    }
+
 
     @Action(GetUtilityCredentialByIdAction)
     getUtilityCredentialById(ctx: StateContext<CustomerManagementModel>, action: GetUtilityCredentialByIdAction): Actions {
@@ -767,6 +808,11 @@ export class CustomerManagementState {
                     ctx.patchState({
                         utilityCredential: response,
                     });
+
+                    const customerSmdData = ctx.getState().openedUtilityCredential;
+                    if(customerSmdData && customerSmdData.data.credential.credentialId == action.id){
+                        customerSmdData.data.credential = response;   
+                    }
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
