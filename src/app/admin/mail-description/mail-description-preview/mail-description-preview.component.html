@@ -9,7 +9,8 @@
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Mail Preview </span>
         </p>
-        <form [formGroup]="contentForm" class="form-group form-padding">
+        <div class="form-group form-padding">
+        <form [formGroup]="contentForm" >
 
           <div class="row borderBottom borderTop rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Customer:</div>
@@ -23,8 +24,8 @@
                   <input type="text" class="form-control" matInput 
                formControlName='auditId' [matAutocomplete]="auditId"
                   (keyup)="findCustomerByAuditIdOrCustomerName('auditId')" >
-                  <mat-autocomplete #auditId="matAutocomplete" (optionSelected)="selectedSuggestion($event,'auditId')" >
-                    <mat-option *ngFor="let data of dataListForSuggestions" value="{{data.auditId}}">
+                  <mat-autocomplete #auditId="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                    <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
                       {{data.user.name}}
                     </mat-option>
                   </mat-autocomplete>
@@ -45,8 +46,8 @@
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                   <input type="text" matInput class='form-control form-control-sm'
                   (keyup)="findCustomerByAuditIdOrCustomerName('customerName')" formControlName="customerName" [matAutocomplete]="customerName">
-                    <mat-autocomplete #customerName="matAutocomplete" (optionSelected)="selectedSuggestion($event,'customerName')" >
-                      <mat-option *ngFor="let data of dataListForSuggestions" value="{{data.auditId}}">
+                    <mat-autocomplete #customerName="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                      <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
                         {{data.user.name}}
                       </mat-option>
                     </mat-autocomplete>
@@ -65,34 +66,35 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="mailDescriptionId" formControlName="mailDescriptionId" class='form-control'>
+              <select id="mailDescriptionId" formControlName="mailDescriptionId" class='form-control' (change)="mailTypeChange($event)">
                 <option *ngFor='let type of mailType' [value]="type.mailDescriptionId">{{type.mailName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
+        </form>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Execution Time (ms):</div>
             <!-- <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12"></div> -->
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">2</div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">{{mailPreviewData ? mailPreviewData.executionTime : 2}}</div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Unpaid Bills: false<br>
-              Opt Out Mail: false<br>
-              Mail Filter Condition: false
+              Unpaid Bills: {{mailPreviewData ? mailPreviewData.unpaidBills : false}}<br>
+              Opt Out Mail:  {{mailPreviewData ? mailPreviewData.optOutMail : false}}<br>
+              Mail Filter Condition:  {{mailPreviewData ? mailPreviewData.mailFilter : false}}
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              Period condition: false<br>
-              Stop Sending Rules: false<br>
-              Mail Description Group: false
+              Period condition:  {{mailPreviewData ? mailPreviewData.period : false}}<br>
+              Stop Sending Rules:  {{mailPreviewData ? mailPreviewData.stopSendingRules : false}}<br>
+              Mail Description Group:  {{mailPreviewData ? mailPreviewData.mailDescriptionGroupRule : false}}
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Subject:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">{{mailPreviewData ? mailPreviewData.mailSubject : ''}}
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -100,17 +102,16 @@
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <iframe id="ifrmMailContent" title="Mail Preview" class="form-control" style="height: 1500px; width: 100%; overflow:hidden;"
-                height="">
+              <iframe id="ifrmMailContent" title="Mail Preview"
+                class="form-control" style="height: 850px; width: 100%; overflow:hidden;" height="">
               </iframe>
             </div>
           </div>
 
           <div class="row rowPadding borderBottom">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <input type="checkbox" class="btn btn-primary">
+              <input type="checkbox" class="btn btn-primary" [(ngModel)]="showHTML" (change)="showHideHTML()">
               Show Html
-
             </div>
           </div>
 
@@ -128,11 +129,11 @@
                 </button>
               </div>
               <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 sidePadding">
-                <input type="text" class="form-control" formControlName="address" id="address">
+                <input type="text" class="form-control" id="address" [(ngModel)]="sentToMailAddress" >
               </div>
             </div>
           </div>
-        </form>
+        </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar></app-sidebar>

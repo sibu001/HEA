@@ -120,6 +120,8 @@ export class AdminFilter {
         page: null,
         formValue: null
     };
+
+    public mailPreview =  {}
 }
 
 export class UsageHistoryFilter {

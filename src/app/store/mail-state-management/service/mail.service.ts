@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -21,6 +22,7 @@ import {
   GetMailDescriptionByIdAction,
   GetMailDescriptionCountAction,
   GetMailDescriptionListAction,
+  GetMailPreviewByIdAction,
   MailDescriptionProcessAction,
   SaveContextVariableAction,
   SaveCustomerGroupMailPartAction,
@@ -187,5 +189,13 @@ export class MailService {
 
   deleteCustomerGroupMailPartById(id: number): Observable<MailManagementState> {
     return this.store.dispatch(new DeleteCustomerGroupMailPartByIdAction(id));
+  }
+
+  loadMailPreviewById(previewId : number, params : HttpParams){
+    return this.store.dispatch(new GetMailPreviewByIdAction(previewId,params));   
+  }
+
+  getMailPreviewById(){
+    return this.store.select(MailManagementState.getMailPreviewById);
   }
 }

@@ -1,3 +1,5 @@
+import { HttpParams } from "@angular/common/http";
+
 export enum MailActionTypes {
     GET_MAIL_DESCRIPTION_LIST = 'Get All MailDescription List',
     GET_MAIL_DESCRIPTION_COUNT = 'Get All MailDescription Count',
@@ -27,6 +29,7 @@ export enum MailActionTypes {
     SAVE_CUSTOMER_GROUP_MAIL_PART = 'Save Customer Group Mail Part',
     UPDATE_CUSTOMER_GROUP_MAIL_PART = 'Update Customer Group Mail Part',
     DELETE_CUSTOMER_GROUP_MAIL_PART_BY_ID = 'Delete Customer Group Mail Part By Id',
+    GET_MAIL_PREVIEW_BY_ID = 'Get Mail Preview By Id'
 }
 
 export class GetMailDescriptionListAction {
@@ -192,5 +195,11 @@ export class UpdateCustomerGroupMailPartAction {
 export class DeleteCustomerGroupMailPartByIdAction {
     static readonly type: MailActionTypes = MailActionTypes.DELETE_CUSTOMER_GROUP_MAIL_PART_BY_ID;
     constructor(readonly id: number) {
+    }
+}
+
+export class GetMailPreviewByIdAction {
+    static readonly type: MailActionTypes = MailActionTypes.GET_MAIL_PREVIEW_BY_ID;
+    constructor(readonly previewId: number,readonly params : HttpParams) {
     }
 }

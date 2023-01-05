@@ -31,6 +31,8 @@ export class AppConstant {
     public static lookupValues = 'lookupValues';
     public static themes = 'themes';
     public static mailDescription = 'mailDescriptions';
+    public static preview = 'preview';
+    public static sendPreview = 'sendPreview';
     public static mailConfiguration = 'mailConfigurations';
     public static mailDescriptionProcess = 'process';
     public static customerComparisonGroups = 'customerComparisonGroups';

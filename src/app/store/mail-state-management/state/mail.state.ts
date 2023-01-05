@@ -34,7 +34,8 @@ import {
     GetMailDescriptionCountAction,
     GenerateEmbedImageAction,
     MailDescriptionProcessAction,
-    GetMailConfigurationListAction
+    GetMailConfigurationListAction,
+    GetMailPreviewByIdAction
 } from './mail.action';
 import { MailManagementModel } from './mail.model';
 
@@ -56,7 +57,8 @@ import { MailManagementModel } from './mail.model';
         mailEmbedImage: undefined,
         customerGroupMailPartList: undefined,
         customerGroupMailPart: undefined,
-        customerGroupMailPartCount: undefined
+        customerGroupMailPartCount: undefined,
+        mailPreview : undefined
     }
 })
 
@@ -109,6 +111,11 @@ export class MailManagementState {
     @Selector()
     static getCustomerGroupMailPartById(state: MailManagementModel): any {
         return state.customerGroupMailPart;
+    }
+
+    @Selector()
+    static getMailPreviewById(state : MailManagementModel){
+        return state.mailPreview;
     }
 
 
@@ -595,6 +602,26 @@ export class MailManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
+    }
+
+    @Action(GetMailPreviewByIdAction)
+    getMailPreviewByIdAction(ctx : StateContext<MailManagementModel>, action :GetMailPreviewByIdAction){
+        document.getElementById('loader').classList.add('loading');
+        
+        return this.loginService.performGetWithParams(AppConstant.mailDescription + '/' + action.previewId + '/' + AppConstant.preview, action.params )
+        .pipe(
+            tap(
+                (response : any) =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        mailPreview : response.data
+                    });
+                }, error =>{
+                    document.getElementById('loader').classList.remove('loading');
+                    this.utilityService.showErrorMessage(error.error.message);
+                }
+            )
+        )
     }
 
 }

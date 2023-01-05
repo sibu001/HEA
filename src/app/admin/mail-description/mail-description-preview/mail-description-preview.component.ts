@@ -2,11 +2,12 @@ import { Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
+import { UtilityService } from 'src/app/services/utility.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { AppConstant } from 'src/app/utility/app.constant';
@@ -27,18 +28,30 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
   errorMessage: any;
   subject$ : Subject<any> = new Subject();
   dataListForSuggestions = [];
+  mailPreviewData : any;
+  showHTML : boolean = false;
+  sentToMailAddress : string = '';
+  currentSelectedCustomer : any;
+  adminFilter : any;
+  mailDescriptionId : number;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
     private readonly mailService: MailService,
     private readonly administrativeService: AdministrativeService,
     private readonly loginService: LoginService,
-    private readonly location: Location) {
+    private readonly utilityService: UtilityService,
+    private readonly location: Location,
+    private readonly router : Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.mailDescriptionId = this.id;
     });
+
+    this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
     this.users = this.loginService.getUser();
     this.customerList = this.users.searchUserList;
+
   }
 
 
@@ -50,6 +63,15 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
       this.loadMailDescriptionById();
     }
     this.findCustomer();
+    this.getMailPreviewById();
+
+    if(this.adminFilter.mailPreview && this.adminFilter.mailPreview.auditId){
+      this.setForm(this.adminFilter.mailPreview);
+      this.loadMailPreviewbyId(this.adminFilter.mailPreview.customerId);
+      this.currentSelectedCustomer = this.adminFilter.mailPreview;
+    }
+
+
   }
 
   scrollTop() {
@@ -61,7 +83,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.mailService.getMailDescriptionById().pipe(skipWhile((item: any) => !item))
       .subscribe((mailDescription: any) => {
         this.scrollTop();
-        this.setForm(mailDescription.data);
+        // this.setForm(mailDescription.data);
       }));
   }
 
@@ -73,16 +95,65 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
       }));
   }
 
+  loadMailPreviewbyId(customerId : string){
+
+    const params = new HttpParams()
+                  .append('customerId',customerId);
+
+    this.mailService.loadMailPreviewById(this.mailDescriptionId,params);
+  }
+
+  getMailPreviewById(){
+    const self = this;
+    this.subscriptions.add(
+      this.mailService.getMailPreviewById()
+      .pipe(filter(data => data))
+      .subscribe(
+        data =>{
+          self.mailPreviewData = data;
+          self.adminFilter.mailPreview = 
+                         { customerId : self.currentSelectedCustomer.customerId,
+                         auditId : self.currentSelectedCustomer.auditId,
+                         user : {name : self.currentSelectedCustomer.user.name, }}
+          localStorage.setItem('adminFilter',JSON.stringify(self.adminFilter));
+          self.showHideHTML();
+        }
+      )
+    )
+  }
+
+  mailTypeChange(mailDescriptionId){
+    this.mailDescriptionId = mailDescriptionId.target.value;            
+    this.router.navigate([],{
+      relativeTo: this.activateRoute,
+      queryParams: {id : this.mailDescriptionId},
+      queryParamsHandling : 'merge'
+    });
+    this.loadMailPreviewbyId(this.currentSelectedCustomer.customerId);
+  }
+
+
+  showHideHTML(){
+
+    if(!this.mailPreviewData)
+      return;
+
+    const mailContentFrame = document.getElementById('ifrmMailContent') as any;
+    if(this.showHTML){
+        mailContentFrame.contentDocument.body.textContent = this.mailPreviewData.mailContent;
+    }else{
+        mailContentFrame.contentDocument.body.innerHTML = this.mailPreviewData.mailContent;
+    }
+  }
+
   setForm(event: any) {
     this.contentForm = this.formBuilder.group({
       auditId: [event !== undefined && event.auditId ? event.auditId : ''],
-      customerName: [event !== undefined && event.customerName ? event.customerName : ''],
-      userId: [''],
-      mailDescriptionId: [event !== undefined ? event.mailDescriptionId : ''],
-      showHtml: [event !== undefined ? event.showHtml : ''],
-      address: [event !== undefined ? event.address : ''],
+      customerName: [event !== undefined && event.user.name ? event.user.name : ''],
+      mailDescriptionId: [this.mailDescriptionId],
     });
   }
+
   back() {
     this.location.back();
   }
@@ -145,7 +216,9 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) =>{
             this.dataListForSuggestions = response;
-            console.log(this.dataListForSuggestions);
+            if(this.dataListForSuggestions.length == 1){
+              this.selectedSuggestion(this.dataListForSuggestions[0]);
+            }
           }, error =>{
              console.log(error);
           }
@@ -155,15 +228,38 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
     );
   }
 
-  selectedSuggestion(event,searchfor){
-    console.log(event);
+  selectedSuggestion(event : any){
+      this.currentSelectedCustomer = event;
+      this.contentForm.get('customerName').setValue(this.currentSelectedCustomer.user.name)
+      this.contentForm.get('auditId').setValue(this.currentSelectedCustomer.auditId);
+      this.loadMailPreviewbyId(this.currentSelectedCustomer.customerId);
   }
 
   save(): any { }
 
   delete(): any { }
 
-  sendMailToAddress(): any { }
+  sendMailToAddress(): any { 
+
+    const params = new HttpParams()
+          .append('customerId',this.currentSelectedCustomer.customerId)
+          .append('sendTo',this.sentToMailAddress);
+
+    document.getElementById('loader').classList.add('loading');
+    this.subscriptions.add(
+      this.loginService.performPostWithParam
+      ({}, AppConstant.mailDescription + '/' + this.id +  '/' + AppConstant.sendPreview,params)
+      .subscribe(
+        (response) =>{
+          document.getElementById('loader').classList.remove('loading');
+          console.log(response);
+        }, error=>{
+          document.getElementById('loader').classList.remove('loading');
+          this.utilityService.showErrorMessage(error.error.message);
+        }
+      )
+    )
+  }
 
   get f() { return this.contentForm.controls; }
 

@@ -14,4 +14,5 @@ export interface MailManagementModel {
     customerGroupMailPartList: any;
     customerGroupMailPart: any;
     customerGroupMailPartCount: any;
+    mailPreview : any;
 }
