@@ -111,6 +111,8 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
           if(data.errorMessage){
               self.errorMessage = data.errorMessage;
               self.mailPreviewData = undefined;
+              const mailContentFrame = document.getElementById('ifrmMailContent') as any;
+              mailContentFrame.contentDocument.body.textContent = '';
               return;
           }
 

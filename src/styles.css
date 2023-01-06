@@ -2373,3 +2373,13 @@ img[src="assets/images/ico_html.png"]{
   background-color : white;
   text-align: center;
 }
+
+mat-dialog-container{
+  margin-top: 40px;
+}
+
+@media (min-width: 768px) and (max-width: 901px) {
+  mat-dialog-container{
+    margin-top: 50px;
+  }
+}

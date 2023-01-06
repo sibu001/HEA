@@ -102,3 +102,9 @@ input[type="file"]::-webkit-file-upload-button {
 input[type="file"] {
   text-align: left;
 }
+
+@media (max-width: 524px){
+  .push-padding{
+    padding-top: 15px;
+  }
+}

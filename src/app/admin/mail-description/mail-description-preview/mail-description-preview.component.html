@@ -120,19 +120,19 @@
           </div>
 
           <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            <div class="col-sm-3 col-md-3 col-lg-2 col-xs-12">
               <button type="button" class="btn btn-primary" (click)="back()">
                 Back
               </button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 sidePadding">
+            <div class="col-sm-10 col-md-9 col-lg-10 col-xs-12 push-padding">
+              <div class="col-xs-12 col-sm-7 col-md-7 col-lg-8 sidePadding">
                 <button type="button" class="btn btn-primary" *ngIf="id !== undefined && id !== null"
                   style="float: right" (click)="sendMailToAddress()">
                   Send Sample Message to address:
                 </button>
               </div>
-              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 sidePadding">
+              <div class="col-xs-12 col-sm-5 col-md-5 col-lg-4 sidePadding">
                 <input type="text" class="form-control" id="address" [(ngModel)]="sentToMailAddress" >
               </div>
             </div>
