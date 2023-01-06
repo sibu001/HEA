@@ -63,14 +63,11 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
       this.loadMailDescriptionById();
     }
     this.findCustomer();
+
+    this.setForm(this.adminFilter.mailPreview);
+    this.currentSelectedCustomer = this.adminFilter.mailPreview;
     this.getMailPreviewById();
-
-    if(this.adminFilter.mailPreview && this.adminFilter.mailPreview.auditId){
-      this.setForm(this.adminFilter.mailPreview);
-      this.loadMailPreviewbyId(this.adminFilter.mailPreview.customerId);
-      this.currentSelectedCustomer = this.adminFilter.mailPreview;
-    }
-
+    this.loadMailPreviewbyId(this.adminFilter.mailPreview.customerId);
 
   }
 
@@ -110,6 +107,15 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
       .pipe(filter(data => data))
       .subscribe(
         data =>{
+
+          if(data.errorMessage){
+              self.errorMessage = data.errorMessage;
+              self.mailPreviewData = undefined;
+              return;
+          }
+
+          this.errorMessage = undefined;
+
           self.mailPreviewData = data;
           self.adminFilter.mailPreview = 
                          { customerId : self.currentSelectedCustomer.customerId,
@@ -129,7 +135,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
       queryParams: {id : this.mailDescriptionId},
       queryParamsHandling : 'merge'
     });
-    this.loadMailPreviewbyId(this.currentSelectedCustomer.customerId);
+    this.loadMailPreviewbyId(this.currentSelectedCustomer? this.currentSelectedCustomer.customerId : '');
   }
 
 

@@ -121,7 +121,11 @@ export class AdminFilter {
         formValue: null
     };
 
-    public mailPreview =  {}
+    public mailPreview =  {
+        customerId : '',
+        auditId : '',
+        user : { name : ''}
+    }
 }
 
 export class UsageHistoryFilter {

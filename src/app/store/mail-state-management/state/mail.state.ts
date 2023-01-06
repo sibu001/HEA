@@ -618,7 +618,10 @@ export class MailManagementState {
                     });
                 }, error =>{
                     document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showErrorMessage(error.error.message);
+                    ctx.patchState({
+                        mailPreview : error.error
+                    });
+                    this.utilityService.showErrorMessage(error.error.errorMessage);
                 }
             )
         )

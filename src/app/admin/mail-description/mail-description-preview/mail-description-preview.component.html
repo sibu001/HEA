@@ -2,8 +2,12 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
-        <p class="error-message" *ngIf="errorMessage">
-          {{errorMessage?.error?.errorMessage}}
+        <p class="error-message" style="margin-top:15px;" *ngIf="errorMessage">
+          <!-- {{errorMessage}} -->
+          <ng-container *ngIf="errorMessage"><br>
+              System exception. Please contact support@hea.com for help.
+          </ng-container>
+          
         </p>
         <p class="messages">
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
