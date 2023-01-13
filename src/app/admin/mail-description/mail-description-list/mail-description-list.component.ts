@@ -1,3 +1,4 @@
+import { AppConstant } from 'src/app/utility/app.constant';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -113,7 +114,7 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
@@ -121,6 +122,7 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
       .set('subjectTemplate', (this.mailForm.value.subject !== null ? this.mailForm.value.subject : ''))
       .set('mailPeriod', (this.mailForm.value.mailPeriod !== null ? this.mailForm.value.mailPeriod : ''));
     this.findMailDescription(true, params);
+    this.scrollTop();
   }
 
   ngOnDestroy(): void {

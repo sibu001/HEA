@@ -2305,6 +2305,70 @@ app-customer-view .mat-column-description{
   }
 
 
+  app-mail-description-list .mat-column-id{
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 6% !important;
+    width: 6% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    
+    word-break: break-word;
+    
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;   
+    }
+    
+    app-mail-description-list .mat-column-mailPeriod{
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 9% !important;
+    width: 6% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    
+    word-break: break-word;
+    
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;   
+    }
+    
+    app-mail-description-list .mat-column-mailName{
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 20% !important;
+    width: 6% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    
+    word-break: break-word;
+    
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;   
+    }
+
+    app-mail-description-list .mat-column-totalProcessedTime{
+      word-wrap: break-word !important;
+      white-space: unset !important;
+      flex: 0 0 11% !important;
+      width: 6% !important;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      
+      word-break: break-word;
+      
+      -ms-hyphens: auto;
+      -moz-hyphens: auto;
+      -webkit-hyphens: auto;
+      hyphens: auto;   
+      }
+
 @media (max-width: 767px) {
   .survey.TH.text-right{
     text-align: left;

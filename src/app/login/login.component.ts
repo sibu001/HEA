@@ -68,25 +68,43 @@ export class LoginComponent implements OnInit, AfterViewInit{
   
   ngAfterViewInit(): void {
 
+    // for checking weather the session is expired of user and had to re-login to the applicaiton.
     if (this.users.outhMeResponse) {
-      if (this.loginService.getUser().role == "ADMIN")
-        this.router.navigate(['admin/customer']);
-      else{
-        if(this.users.lastVisitedURL == '/surveyView')
-          this.router.navigate(['surveyView']);
-        else
-          this.router.navigate(['/dashboard']);
-      }
-    } else {
-
-      this.router.navigate([''],{ 
-        relativeTo : this.route,
-        queryParams : { theme : 'MBL'},
-        queryParamsHandling : 'merge'
+      document.getElementById('loader').classList.add('loading');
+      this.loginService.performGetMultiPartData('oauth/me')
+        .subscribe(
+          response => {
+            document.getElementById('loader').classList.remove('loading');
+            if (this.loginService.getUser().role == "ADMIN")
+              this.router.navigate(['admin/customer']);
+            else {
+              if (this.users.lastVisitedURL == '/surveyView')
+                this.router.navigate(['surveyView']);
+              else
+                this.router.navigate(['/dashboard']);
+            }
+          }, error => {
+            this.router.navigate([''], {
+              relativeTo: this.route,
+              queryParams: { theme: 'MBL' },
+              queryParamsHandling: 'merge'
+            })
+  
+            this.fbConnect();
+            this.googleInitialize();
+  
+          }
+        );
+    }else{
+      this.router.navigate([''], {
+        relativeTo: this.route,
+        queryParams: { theme: 'MBL' },
+        queryParamsHandling: 'merge'
       })
 
       this.fbConnect();
       this.googleInitialize();
+
     }
   }
 
@@ -168,6 +186,8 @@ export class LoginComponent implements OnInit, AfterViewInit{
           } else {
             this.errorMessage = response.statusText;
           }
+          this.users.username = '';
+          this.users.password = '';
           document.getElementById('loader').classList.remove('loading');
         }
       )
