@@ -159,6 +159,10 @@ export class MailService {
     return this.store.dispatch(new GetCustomerGroupListByMailDescriptionIdAction(mailDescriptionId));
   }
 
+  getCustomerGroupListByMailDescriptionId(){
+    return this.store.select(MailManagementState.getCustomerGroupMailDescriptionId);
+  }
+
   assignCustomerGroupToMailDescription(mailDescriptionId: any, groupCode: any, params: any): Observable<MailManagementState> {
     return this.store.dispatch(new AssignCustomerGroupToMailDescriptionAction(mailDescriptionId, groupCode, params));
   }
@@ -198,4 +202,5 @@ export class MailService {
   getMailPreviewById(){
     return this.store.select(MailManagementState.getMailPreviewById);
   }
+
 }

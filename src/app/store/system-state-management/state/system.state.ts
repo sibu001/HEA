@@ -1111,6 +1111,12 @@ export class SystemManagementState {
     @Action(GetMailPeriodListAction)
     getAllMailPeriodList(ctx: StateContext<SystemManagementModel>, action: GetMailPeriodListAction): Actions {
         document.getElementById('loader').classList.add('loading');
+
+        const mailPeriod = ctx.getState().mailPeriod;
+        if(mailPeriod){
+            return null;
+        }
+
         return this.loginService.performGet(AppConstant.lookupValues + '/MAIL_PERIOD')
             .pipe(
                 tap((response: any) => {

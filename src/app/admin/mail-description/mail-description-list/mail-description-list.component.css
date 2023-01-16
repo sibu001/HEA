@@ -72,7 +72,7 @@ select {
   width: 100px;
 }
 
-::ng-deep .mail-description-table .mat-column-subjectTemplate{
+/* ::ng-deep .mail-description-table .mat-column-subjectTemplate{
   flex: none;
   width: 340px;
-}
+} */

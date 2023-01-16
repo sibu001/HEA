@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
@@ -50,7 +50,8 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.scrollTop();
-    this.loadScrapingPeriodList();
+    this.getMailPeriodList();
+    this.loadMailPeriodList();
     this.setUpForm(this.adminFilter.mailDescriptionFilter.formValue);
     this.search(this.adminFilter.mailDescriptionFilter.page, false);
   }
@@ -59,11 +60,19 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
     window.scroll(0, 0);
   }
 
-  loadScrapingPeriodList(): any {
-    this.systemService.loadScrapingPeriodList();
-    this.subscriptions.add(this.systemService.getScrapingPeriodList().pipe(skipWhile((item: any) => !item))
-      .subscribe((scrapingPeriodList: any) => {
-        this.periodData = scrapingPeriodList.data;
+
+  loadMailPeriodList(): any {
+    this.systemService.loadMailPeriodList();
+  }
+
+  getMailPeriodList(){
+    this.subscriptions.add(this.systemService.getMailPeriod()
+    .pipe(filter((item: any) => item))
+    .subscribe((mailPeriodList: any) => {
+      this.periodData = mailPeriodList.data;
+    },
+      error => {
+        // this.errorMessage = error;
       }));
   }
 

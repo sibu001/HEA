@@ -444,6 +444,7 @@
               <span class="messageName">Customer groups</span></p>
             <app-table [keys]="customerGroupKeys" [isPaginate]="false"
               [checkbox]=true [isHideAdd]=true
+              [hideMasterCheckBox]=true
               [isSearch]="false" [data]="customerGroupDataSource"
               [totalElement]="customerGroupData.totalElements"
               (checkBoxChangeEvent)="customerGroupCheckBoxChangeEvent($event)"

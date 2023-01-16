@@ -35,7 +35,7 @@ import {
     GenerateEmbedImageAction,
     MailDescriptionProcessAction,
     GetMailConfigurationListAction,
-    GetMailPreviewByIdAction
+    GetMailPreviewByIdAction,
 } from './mail.action';
 import { MailManagementModel } from './mail.model';
 
@@ -118,6 +118,10 @@ export class MailManagementState {
         return state.mailPreview;
     }
 
+    @Selector()
+    static getCustomerGroupMailDescriptionId(state: MailManagementModel){
+        return state.mailDescriptionCustomerGroupList;
+    }
 
     @Action(GetMailDescriptionListAction)
     getAllMailDescriptionList(ctx: StateContext<MailManagementModel>, action: GetMailDescriptionListAction): Actions {
@@ -626,5 +630,4 @@ export class MailManagementState {
             )
         )
     }
-
 }

@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
@@ -75,6 +75,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
 
   ngOnInit() {
     this.scrollTop();
+    this.getMailPeriodList();
     this.loadMailPeriodList();
     this.loadContentTypeList();
     this.loadMailConfigurationList();
@@ -82,6 +83,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
     if (this.id !== undefined) {
       this.mailService.loadMailDescriptionById(this.id);
       this.loadMailDescriptionById();
+      this.getCustomerMailGroupByMailDescriptionId();
       this.findUserCustomerGroup(this.id);
       this.loadMailContentPartList();
       this.loadContextVariableList();
@@ -97,13 +99,17 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
 
   loadMailPeriodList(): any {
     this.systemService.loadMailPeriodList();
-    this.subscriptions.add(this.systemService.getMailPeriod().pipe(skipWhile((item: any) => !item))
-      .subscribe((mailPeriodList: any) => {
-        this.periodData = mailPeriodList.data;
-      },
-        error => {
-          this.errorMessage = error;
-        }));
+  }
+
+  getMailPeriodList(){
+    this.subscriptions.add(this.systemService.getMailPeriod()
+    .pipe(filter((item: any) => item))
+    .subscribe((mailPeriodList: any) => {
+      this.periodData = mailPeriodList.data;
+    },
+      error => {
+        this.errorMessage = error;
+      }));
   }
 
   loadContentTypeList(): any {
@@ -187,7 +193,8 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
       .subscribe((mailDescription: any) => {
         this.scrollTop();
         if (this.isForce) {
-          this.findUserCustomerGroup(this.id);
+          this.getCustomerMailGroupByMailDescriptionId();
+          this.findUserCustomerGroup(mailDescription.data.id);
           this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': mailDescription.data.id } });
         }
         this.maxProcessedStack = mailDescription.data ? mailDescription.data.maxProcessedStack : null;
@@ -236,7 +243,6 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
-            this.id = response.data.id;
             this.loadMailDescriptionById();
           },
             error => {
@@ -250,17 +256,35 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
   }
 
   findUserCustomerGroup(mailDescriptionId: any) {
-    this.subscriptions.add(this.mailService.loadCustomerGroupListByMailDescriptionId(mailDescriptionId).pipe(skipWhile((item: any) => !item))
-      .subscribe((customerGroupList: any) => {
-        this.customerGroupList = customerGroupList.mailManagement.mailDescriptionCustomerGroupList.data;
-        customerGroupList.mailManagement.mailDescriptionCustomerGroupList.data.forEach(element => {
-          this.customerGroupSelectionList.push(element.customerGroup.groupCode);
-        });
-        this.loadCustomerGroup(false, '');
-      },
-        error => {
-          this.errorMessage = error;
-        }));
+     this.mailService.loadCustomerGroupListByMailDescriptionId(mailDescriptionId);
+
+    // this.subscriptions.add(this.mailService.loadCustomerGroupListByMailDescriptionId(mailDescriptionId).pipe(skipWhile((item: any) => !item))
+    //   .subscribe((customerGroupList: any) => {
+    //     this.customerGroupList = customerGroupList.mailManagement.mailDescriptionCustomerGroupList.data;
+    //     customerGroupList.mailManagement.mailDescriptionCustomerGroupList.data.forEach(element => {
+    //       this.customerGroupSelectionList.push(element.customerGroup.groupCode);
+    //     });
+    //     this.loadCustomerGroup(false, '');
+    //   },
+    //     error => {
+    //       this.errorMessage = error;
+    //     }));
+  }
+
+  getCustomerMailGroupByMailDescriptionId(){
+    this.subscriptions.add(
+      this.mailService.getCustomerGroupListByMailDescriptionId()
+      .pipe(filter(item => item ))
+      .subscribe(
+        response =>{
+          this.customerGroupList = response.data;
+          this.customerGroupList.forEach(element => {
+            this.customerGroupSelectionList.push(element.customerGroup.groupCode);
+          });
+          this.loadCustomerGroup(false, '');
+        }
+      )
+    )
   }
 
   loadCustomerGroup(force: boolean, filter: any) {
@@ -325,6 +349,9 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
   customerGroupCheckBoxChangeEvent(event: any) {
     this.selectedCustomerGroup = [...event];
     this.customerGroupCheckBox = event;
+
+    console.log(event);
+    
   }
 
   loadMailContentPartList() {
