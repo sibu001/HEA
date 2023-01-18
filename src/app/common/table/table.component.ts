@@ -359,13 +359,13 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
   checkBoxChangeOptional(event: any, row: any) {
     
-    // commented the code to work on customer-view component for table email-settings
-
+    // changed for customer-view  email settings tables and mail-descriptions topic groups table 
+    
     // const i = this.dataSource.data.findIndex((item: any) => item.groupCode === row.groupCode);
     // if (i !== -1) {
     //   this.dataSource.data[i].optional = event.checked; 
     // }
-    row.isCheckboxChecked = event.checked;
+    row.optional = event.checked;
     this.checkBoxChangeEvent.emit(row);
   }
 

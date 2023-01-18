@@ -48,7 +48,6 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
   isForce = false;
   userId: any;
   customerGroupCheckBox: any;
-  selectedCustomerGroup: any;
   updateCustomerGroup: any[] = [];
   customerGroupList: any = [];
   maxProcessedStack: any;
@@ -80,16 +79,15 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
     this.loadContentTypeList();
     this.loadMailConfigurationList();
     this.setForm(undefined);
+    this.getCustomerGroup();
+    this.loadCustomerGroup(false, '');
     if (this.id !== undefined) {
       this.mailService.loadMailDescriptionById(this.id);
       this.loadMailDescriptionById();
-      this.getCustomerMailGroupByMailDescriptionId();
-      this.findUserCustomerGroup(this.id);
+      this.getUserCustomerGroup();
       this.loadMailContentPartList();
       this.loadContextVariableList();
-    } else {
-      this.loadCustomerGroup(false, '');
-    }
+    } 
   }
 
 
@@ -143,6 +141,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
       periodDayRule: [event !== undefined ? event.periodDayRule : '', Validators.required],
       stopDays: [event !== undefined ? event.stopDays : ''],
       stopNumber: [event !== undefined ? event.stopNumber : ''],
+      systemMessage: [event !== undefined ? event.systemMessage : ''],
       stopPeriod: [event !== undefined ? event.stopPeriod : 'D', Validators.required],
       stopDateRule: [event !== undefined ? event.stopDateRule : ''],
       subjectTemplate: [event !== undefined ? event.subjectTemplate : '', Validators.required],
@@ -192,9 +191,8 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
     this.subscriptions.add(this.mailService.getMailDescriptionById().pipe(skipWhile((item: any) => !item))
       .subscribe((mailDescription: any) => {
         this.scrollTop();
+        this.findUserCustomerGroup(mailDescription.data.id);
         if (this.isForce) {
-          this.getCustomerMailGroupByMailDescriptionId();
-          this.findUserCustomerGroup(mailDescription.data.id);
           this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': mailDescription.data.id } });
         }
         this.maxProcessedStack = mailDescription.data ? mailDescription.data.maxProcessedStack : null;
@@ -229,7 +227,6 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
-            this.loadMailDescriptionById();
           },
             error => {
               this.errorMessage = error;
@@ -239,11 +236,11 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
         this.topicForm.value.maxProcessedTime = '';
         this.topicForm.value.lastProcessedTime = '';
         this.topicForm.value.lastMaxProcessedTime = '';
+        this.getUserCustomerGroup();
         this.subscriptions.add(this.mailService.saveMailDescription(this.topicForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
-            this.loadMailDescriptionById();
           },
             error => {
               this.errorMessage = error;
@@ -257,31 +254,16 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
 
   findUserCustomerGroup(mailDescriptionId: any) {
      this.mailService.loadCustomerGroupListByMailDescriptionId(mailDescriptionId);
-
-    // this.subscriptions.add(this.mailService.loadCustomerGroupListByMailDescriptionId(mailDescriptionId).pipe(skipWhile((item: any) => !item))
-    //   .subscribe((customerGroupList: any) => {
-    //     this.customerGroupList = customerGroupList.mailManagement.mailDescriptionCustomerGroupList.data;
-    //     customerGroupList.mailManagement.mailDescriptionCustomerGroupList.data.forEach(element => {
-    //       this.customerGroupSelectionList.push(element.customerGroup.groupCode);
-    //     });
-    //     this.loadCustomerGroup(false, '');
-    //   },
-    //     error => {
-    //       this.errorMessage = error;
-    //     }));
   }
 
-  getCustomerMailGroupByMailDescriptionId(){
+  getUserCustomerGroup(){
     this.subscriptions.add(
       this.mailService.getCustomerGroupListByMailDescriptionId()
-      .pipe(filter(item => item ))
+      .pipe(filter(item => item))
       .subscribe(
         response =>{
-          this.customerGroupList = response.data;
-          this.customerGroupList.forEach(element => {
-            this.customerGroupSelectionList.push(element.customerGroup.groupCode);
-          });
-          this.loadCustomerGroup(false, '');
+          this.customerGroupList = [...response.data];
+          this.setTopicGroupData();
         }
       )
     )
@@ -289,44 +271,88 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
 
   loadCustomerGroup(force: boolean, filter: any) {
     this.systemService.loadCustomerGroupList(force, filter);
-    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
+  }
+
+  getCustomerGroup(){
+    this.subscriptions.add(
+      this.systemService.getCustomerGroupList()
+      .pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
-        this.customerGroupData.content = [...customerGroupList];
-        this.customerGroupList.forEach(element => {
-          const i = this.customerGroupData.content.findIndex((item: any) => item.groupCode === element.customerGroup.groupCode);
-          if (i !== -1) {
-            this.customerGroupData.content[i].optional = element.optional;
-          }
-        });
-        this.customerGroupDataSource = [...this.customerGroupData.content];
-      },
-        error => {
-          this.errorMessage = error;
-        }));
+      this.customerGroupData.content = [...customerGroupList];
+      this.setTopicGroupData();
+    },
+      error => {
+        this.errorMessage = error;
+      }));
+  }
+
+  setTopicGroupData(){
+
+    this.customerGroupSelectionList = [];
+    this.customerGroupList.forEach(element => {
+      this.customerGroupSelectionList.push(element.customerGroup.groupCode);
+    });
+
+    // for making the optional field checked in table
+    this.customerGroupList.forEach(element => {
+      const i = this.customerGroupData.content.findIndex((item: any) => item.groupCode === element.customerGroup.groupCode);
+      if (i !== -1) {
+        this.customerGroupData.content[i].optional = element.optional;
+      }
+    });
+
+    this.customerGroupDataSource = [...this.customerGroupData.content];
   }
 
   checkCustomerGroup() {
-    for (let index = 0; index < this.customerGroupList.length; index++) {
-      const i = this.customerGroupCheckBox.findIndex((item: any) => (item.customerGroupId === this.customerGroupList[index].customerGroupId && item.optional !== this.customerGroupList[index].optional));
-      if (i !== -1) {
-        this.updateCustomerGroup.push(this.customerGroupCheckBox[i]);
-      }
-    }
+    
+    let removeCustomerGroup = [];
+    let addCustomerGroup = [];
+
+    // to get only newly selected customer group from the customer group list
+    let addCustomerGroupMap = new Map();
+    this.customerGroupList.forEach((item) =>{ addCustomerGroupMap.set(item.customerGroupId,item);});
+
     for (let index = 0; index < this.customerGroupCheckBox.length; index++) {
-      const element = this.customerGroupCheckBox[index];
-      const i = this.customerGroupList.findIndex((item: any) => item.customerGroupId === element.customerGroupId);
-      if (i !== -1) {
-        this.customerGroupList.splice(i, 1);
-        const j = this.selectedCustomerGroup.findIndex((item2: any) => item2.customerGroupId === element.customerGroupId);
-        if (j !== -1) {
-          this.selectedCustomerGroup.splice(j, 1);
+      if(this.customerGroupList.length  == 0){
+        addCustomerGroup = [...this.customerGroupCheckBox];
+        break;
+      }else{
+        const exists = addCustomerGroupMap.get(this.customerGroupCheckBox[index].customerGroupId); 
+        if(!exists 
+          || (exists.optional != this.customerGroupCheckBox[index].optional)){  // condition to check weather the optional checkbox has changed or not.
+          addCustomerGroup.push({...this.customerGroupCheckBox[index]});
         }
       }
     }
-    this.deleteCustomerGroupOfMailDescription(this.customerGroupList);
-    this.assignCustomerGroupToMailDescription(this.selectedCustomerGroup);
-    this.assignCustomerGroupToMailDescription(this.updateCustomerGroup);
-    // this.findUserCustomerGroup(this.id);
+
+    // to get only removed un-checked customer group from the seleceted-customer group list
+    let removeCustomerGroupMap = new Map();
+    this.customerGroupCheckBox.forEach((item) =>{ removeCustomerGroupMap.set(item.customerGroupId,item);});
+
+    for (let index = 0; index < this.customerGroupList.length; index++) {
+      if(this.customerGroupCheckBox.length == 0){
+        removeCustomerGroup = [...this.customerGroupList]
+        break;
+      }else{
+        const exists = removeCustomerGroupMap.get(this.customerGroupList[index].customerGroupId);
+          if(!exists){
+            removeCustomerGroup.push(this.customerGroupList[index]);
+            const ind = this.customerGroupDataSource.findIndex((data) => data.customerGroupId == this.customerGroupList[index].customerGroupId);
+            this.customerGroupDataSource[ind].optional = false;
+          }
+      }
+    }
+
+    this.customerGroupDataSource = 
+      this.customerGroupDataSource.map((data) => {
+        data.optional = false;
+        return data;
+    });
+
+    this.deleteCustomerGroupOfMailDescription(removeCustomerGroup);
+    this.assignCustomerGroupToMailDescription(addCustomerGroup);
+
   }
 
   assignCustomerGroupToMailDescription(customerGroupList: any) {
@@ -347,11 +373,11 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
   }
 
   customerGroupCheckBoxChangeEvent(event: any) {
-    this.selectedCustomerGroup = [...event];
-    this.customerGroupCheckBox = event;
 
-    console.log(event);
-    
+    if (!(event instanceof Array)){
+      return;
+    }
+    this.customerGroupCheckBox = event;
   }
 
   loadMailContentPartList() {

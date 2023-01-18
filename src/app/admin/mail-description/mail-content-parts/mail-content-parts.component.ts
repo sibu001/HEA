@@ -44,6 +44,7 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   isForce = false;
   errorMessage: any;
+  contentTemplate : any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly mailService: MailService,
@@ -145,7 +146,10 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
 
   generate() {
     const formData = new FormData();
-      formData.append('imageBody', this.fileObject);
+      if(!this.fileObject)
+        formData.append('imageUrl',this.contentForm.controls['imageUrl'].value)
+      else
+        formData.append('imageBody', this.fileObject);
 
     this.subscriptions.add(this.mailService.generateEmbedImage(this.id, this.contentId, formData, null).pipe(
       skipWhile((item: any) => !item))

@@ -134,3 +134,7 @@ p.help-text {
     text-align: end !important;
   }
 }
+
+p.help-text{
+  text-align : center !important;
+}

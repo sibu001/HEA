@@ -139,10 +139,11 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
 
     this.scrolltop();
     this.customerGroupList.length == 0 ? this.loadcustomerGroups() : '';
-    this.keys = TableColumnData.CUSTOMER_GROUP_KEY;
     this.topicPaneKeys = TableColumnData.TOPIC_PANE_KEY;
     this.recommendationKeys = TableColumnData.RECOMMENDATION_KEY;
     this.topicVariablesKeys = TableColumnData.TOPIC_VARIABLES_KEYS;
+    this.keys = TableColumnData.CUSTOMER_GROUP_KEY.slice(1);  // for removing optional key from the list
+
     
       if(this.id){
         this.getTopicDescription();

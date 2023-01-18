@@ -13,8 +13,8 @@
 
         <div class="field-p">
           <div class="row borderBottom rowPadding" *ngIf="id">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-1">Id:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-1 highlight-labels">Id:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10 ">
               {{id}}
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -37,7 +37,7 @@
             </div>
             <div class="row" id="help-icon-contain-responsive"
               class="help" *ngIf="hideHelp[0]">
-              <div class="col-sm-12 col-xs-12">
+              <div class="col-sm-12 col-md-8 col-md-offset-2">
                 <p class="help-text">We have different lists of users in our
                   system. Which group should this message be sent to?
                   <span class="hide-button"
@@ -48,7 +48,7 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Name:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Mail Name:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <input type="text" class="form-control" formControlName="mailName"
                 id="mailName">
@@ -62,7 +62,7 @@
             </div>
             <div class="row" id="help-icon-contain-responsive"
               class="help" *ngIf="hideHelp[1]">
-              <div class="col-sm-12 col-xs-12">
+              <div class="col-sm-12 col-md-8 col-md-offset-2">
                 <p class="help-text">An internal name for this message.
                   <span class="hide-button"
                     (click)="hideHelp[1]=!hideHelp[1]">hide</span>
@@ -71,7 +71,7 @@
             </div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail Filter:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Mail Filter:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <textarea class="form-control" formControlName="mailFilter"
                 id="mailFilter" rows="4" cols="5"></textarea>
@@ -85,7 +85,7 @@
             </div>
             <div class="row" id="help-icon-contain-responsive"
               class="help" *ngIf="hideHelp[2]">
-              <div class="col-sm-12 col-xs-12">
+              <div class="col-sm-12 col-md-8 col-md-offset-2">
                 <p class="help-text">A SpEL expression that determines when this
                   message is sent, and to which users. The return type is
                   boolean.
@@ -119,7 +119,7 @@
             </div>
             <div class="row" id="help-icon-contain-responsive"
               class="help" *ngIf="hideHelp[3]">
-              <div class="col-sm-12 col-xs-12">
+              <div class="col-sm-12 col-md-8 col-md-offset-2">
                 <p class="help-text">How often is this message sent.
                   <span class="hide-button"
                     (click)="hideHelp[3]=!hideHelp[3]">hide</span>
@@ -129,7 +129,7 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Intra-Period
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Intra-Period
               trigger:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <textarea class='form-control form-control-sm'
@@ -151,7 +151,7 @@
             </div>
             <div class="row" id="help-icon-contain-responsive"
               class="help" *ngIf="hideHelp[4]">
-              <div class="col-sm-12 col-xs-12">
+              <div class="col-sm-12 col-md-8 col-md-offset-2">
                 <p class="help-text">A SpEL expression that has to return an
                   integer. It specifies at which point within the defined period
                   the message will be triggered (which day of the week, or day
@@ -165,7 +165,7 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Stop sending after
               this many days:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <input type="text" class='form-control form-control-sm'
@@ -180,7 +180,7 @@
             </div>
             <div class="row" id="help-icon-contain-responsive"
               class="help" *ngIf="hideHelp[5]">
-              <div class="col-sm-12 col-xs-12">
+              <div class="col-sm-12 col-md-8 col-md-offset-2">
                 <p class="help-text">Optional. Specify the number of days
                   between the first and last copy of this message sent to each
                   user.
@@ -191,7 +191,7 @@
             </div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop sending after
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Stop sending after
               this many Messages:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <input type="text" class='form-control form-control-sm'
@@ -206,7 +206,7 @@
             </div>
             <div class="row" id="help-icon-contain-responsive"
               class="help" *ngIf="hideHelp[6]">
-              <div class="col-sm-12 col-xs-12">
+              <div class="col-sm-12 col-md-8 col-md-offset-2">
                 <p class="help-text">Optional. Specify the number of days
                   between the first and last copy of this message sent to each
                   user.
@@ -242,7 +242,7 @@
             </div>
             <div class="row" id="help-icon-contain-responsive"
               class="help" *ngIf="hideHelp[7]">
-              <div class="col-sm-12 col-xs-12">
+              <div class="col-sm-12 col-md-8 col-md-offset-2">
                 <p class="help-text">
                   <span class="hide-button"
                     (click)="hideHelp[7]=!hideHelp[7]">hide</span>
@@ -252,7 +252,7 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Stop Date Rule:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Stop Date Rule:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <textarea class='form-control form-control-sm'
                 formControlName="stopDateRule"
@@ -267,7 +267,7 @@
             </div>
             <div class="row" id="help-icon-contain-responsive"
               class="help" *ngIf="hideHelp[8]">
-              <div class="col-sm-12 col-xs-12">
+              <div class="col-sm-12 col-md-8 col-md-offset-2">
                 <p class="help-text">A SpEL expression such as
                   #convertToDate(#nvl(user.passwordChangeDate,
                   user.createdDate)).rollDaysForwards(60).
@@ -279,7 +279,7 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Subject Template:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Subject Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <textarea class='form-control form-control-sm'
                 formControlName="subjectTemplate"
@@ -308,7 +308,7 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Use Customer Group
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Use Customer Group
               Header:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="checkbox" formControlName="includeHeader"
@@ -317,7 +317,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Use Customer Group
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12  highlight-labels">Use Customer Group
               Footer:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="checkbox" formControlName="includeFooter"
@@ -326,7 +326,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">cc Energy Coach:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12  highlight-labels">cc Energy Coach:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="checkbox" formControlName="ccCoachUser"
                 id="ccCoachUser">
@@ -334,14 +334,14 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Active:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12  highlight-labels">Active:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="checkbox" formControlName="active" id="active">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Allow Force Send
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Allow Force Send
               for Admin:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="checkbox" formControlName="allowAdminForce"
@@ -350,7 +350,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Ignore Opt Out
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Ignore Opt Out
               mail flag:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="checkbox" formControlName="ignoreOptOutMail"
@@ -359,7 +359,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Calls:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Total Calls:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class='show-value'
                 formControlName="totalCalls" id="totalCalls" disabled>
@@ -367,7 +367,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Total Processed
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Total Processed
               Time:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class='show-value'
@@ -377,7 +377,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Processed
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Max Processed
               Time:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <input type="text" class='show-value formInput'
@@ -393,7 +393,7 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calls in the last
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Calls in the last
               session:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <input type="text" class='show-value'
@@ -402,7 +402,7 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Last Session Time:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Last Session Time:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <input type="text" class='show-value'
                 formControlName="lastProcessedTimeShow" id="lastProcessedTime"
@@ -411,7 +411,7 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Max Time for the
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Max Time for the
               last session:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <input type="text" class='show-value formInput'
@@ -425,13 +425,23 @@
           </div>
 
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Mail configuration:</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Mail configuration:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class='form-control form-control-sm'
                 formControlName="mailConfiguration" id="mailConfiguration">
                 <option *ngFor='let mailConfigurationObj of mailConfigurationList'
                   [value]="mailConfigurationObj.lookupValue">{{mailConfigurationObj.valueName}}</option>
               </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">
+              System Message:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="checkbox" formControlName="systemMessage"
+                id="systemMessage">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>

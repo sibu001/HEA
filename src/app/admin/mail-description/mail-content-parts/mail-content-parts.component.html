@@ -46,18 +46,15 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm' formControlName="contentTemplate"
                 id="contentTemplate" rows="12" cols="12"> </textarea>
-              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value' [toolbarSettings]='tools' formControlName='contentTemplate'
+                <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!f.disableHtmlEditor.value && !contentTemplate" (click)="contentTemplate = !contentTemplate" >
+              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value && contentTemplate' [toolbarSettings]='tools' formControlName='contentTemplate'
                 id='contentTemplate'>
               </ejs-richtexteditor>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-          </div>
-
-          <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" style ="padding : 15px;">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
           </div>
 
@@ -84,7 +81,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Generated embedded image:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12"  style="margin-bottom: 5px;">
               <input type="text" class='form-control form-control-sm' formControlName="embeddedImage"
-                id="embeddedImage">
+                id="embeddedImage" readonly>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <button type="button" class="btn btn-primary" (click)="generate()" style="text-align: end;">

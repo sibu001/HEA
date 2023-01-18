@@ -2369,6 +2369,33 @@ app-customer-view .mat-column-description{
       hyphens: auto;   
       }
 
+app-mail-description-edit .mat-column-groupCode{
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 20% !important;
+  width: 6% !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;   
+}
+
+app-mail-description-edit .mat-column-label{
+  word-wrap: break-word !important;
+ white-space: unset !important;
+ flex: 0 0 28% !important;
+ width: 6% !important;
+ overflow-wrap: break-word;
+ word-wrap: break-word;
+ word-break: break-word;
+ -ms-hyphens: auto;
+ -moz-hyphens: auto;
+ -webkit-hyphens: auto;
+ hyphens: auto;      
+}
 @media (max-width: 767px) {
   .survey.TH.text-right{
     text-align: left;
@@ -2446,4 +2473,8 @@ mat-dialog-container{
   mat-dialog-container{
     margin-top: 50px;
   }
+}
+
+.highlight-labels {
+  font-weight: 500;
 }

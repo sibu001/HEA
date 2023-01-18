@@ -1034,9 +1034,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   emailSettingsCheckBoxEvent(event : any){
     console.log(event);
-    if(event.isCheckboxChecked == false){
+    if(!event.optional){
       this.customerService.saveOptOut(this.id,event.mailDescriptionId);
-    }else if(event.isCheckboxChecked == true){
+    }else if(event.optional){
       this.customerService.deleteOptOut(this.id,event.mailDescriptionId);
     }
 
