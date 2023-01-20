@@ -208,9 +208,9 @@ hr {
   .row.waste {
     display: block !important;
   }
-  span.leak-help {
+  /* span.leak-help {
     display: none !important;
-  }
+  } */
   .col-lg-6.col-xs-9.leaksdata {
     padding-left: 15px;
   }

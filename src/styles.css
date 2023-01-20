@@ -1490,9 +1490,12 @@ table.jqplot-table-legend {
   font-weight: 600;
   font-size: 13px;
 }
-section.space-top {
-  margin-top: 5em !important;
-  margin-bottom: 1em;
+
+@media (min-width: 768px) {
+  section.space-top {
+    margin-top: 5em !important;
+    margin-bottom: 1em;
+  }
 }
 
 .row-loader-visibility{
@@ -2477,4 +2480,8 @@ mat-dialog-container{
 
 .highlight-labels {
   font-weight: 500;
+}
+
+leaklistview a, surveyRecommendationList a{
+  text-decoration: underline;
 }

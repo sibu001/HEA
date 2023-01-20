@@ -2,6 +2,10 @@ section.space-top {
   margin-top: 3em;
 }
 
+.Schedule, .Schedule1, .drought{
+   text-decoration: none;
+}
+
 @media (min-width: 768px) and (max-width: 1000px) {
   section.space-top {
     margin-top: 6em;
@@ -13,7 +17,7 @@ section.space-top {
 .backcolor {
   background-color: #fbfbfb;
   padding: 18px 19px 8px 19px;
-  margin-top: 5px;
+  /* margin-top: 5px; */
 }
 .select_next {
   font-size: 23px;
@@ -307,7 +311,7 @@ p.est {
   width: 5.333333% !important;
 }
 .col-sm-8.line {
-  border-bottom: 1px solid #c9c9c9;
+  border-bottom: 2px solid black;
   margin-bottom: 20px;
 }
 /* The container */
@@ -504,7 +508,7 @@ img.question {
 }
 hr.space_hr {
   margin-top: 10px;
-  margin-right: 20px;
+  margin-right: 50px;
   margin-left: 32px;
   margin-bottom: 20px;
 }
@@ -653,4 +657,9 @@ select {
   .leak-label {
     margin-left: 10px;
   }
+}
+
+.Recommendation_text{
+  padding-left: 10px !important;
+  padding-right: 10px;
 }

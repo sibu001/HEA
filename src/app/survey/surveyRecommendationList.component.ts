@@ -34,7 +34,17 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
   ngOnInit() { }
 
   ngAfterViewInit() {
+
+    const selectedRecommendation = document.querySelector('[href="#collapse' + this.users.recommendationNo +'"]');
+    if(!this.users.recommendationNo || !selectedRecommendation){
+      return ;
+    }
+
     $('#collapse' + this.users.recommendationNo).addClass('in');
+    document.querySelector('[href="#collapse' + this.users.recommendationNo +'"]').scrollIntoView();
+    setTimeout(() => {
+      window.scrollBy(0,-100);
+    },100);
   }
 
   back() {

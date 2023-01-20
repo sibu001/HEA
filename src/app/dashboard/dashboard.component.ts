@@ -179,17 +179,22 @@ export class DashboardComponent implements OnInit {
     );
   }
   getRecommendationList(recommendationList: any): void {
-    this.recommendationList = new Array;
-    let i = 0;
+
     for (let index = 0; index < recommendationList.length; index++) {
       if (recommendationList[index].parentLeakId !== null) {
-        i++;
-      }
-      if ((recommendationList[index].status === 'N' || recommendationList[index].status === 'L') && recommendationList[index].parentLeakId != null) {
         this.recommendationList.push(recommendationList[index]);
       }
     }
-    this.recommendationLength = i;
+    this.recommendationLength = this.recommendationList.length;
+
+    // this.recommendationList = [...recommendationList];
+    // this.recommendationLength = recommendationList.length;
+    // this.recommendationList = new Array;
+    // let i = 0;
+    //   if ((recommendationList[index].status === 'N' || recommendationList[index].status === 'L') && recommendationList[index].parentLeakId != null) {
+    //   }
+    // }
+    // this.recommendationLength = i;
   }
   getRecommendation() {
     document.getElementById('loader').classList.add('loading');

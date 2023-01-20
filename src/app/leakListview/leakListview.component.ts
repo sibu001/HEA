@@ -28,12 +28,11 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if(this.users.leakFocusId){
+    const leak = document.getElementById('leak' + this.users.leakFocusId);
+    if(this.users.leakFocusId && leak){
       try {
-        document.getElementById('leak' + this.users.leakFocusId).scrollIntoView();
-        setTimeout(() =>{
-          window.scrollTo(0,document.documentElement.scrollTop- 100);
-        },100)
+        leak.scrollIntoView();
+        window.scrollBy(0,-100);
       } catch (e) {
         console.error(e)
        }
@@ -52,10 +51,11 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
 
   getLeaksAndRecommendation() {
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/' + this.users.currentPaneNumber.survey.surveyId + '/leaks').subscribe(
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/recommendationsAndLeaks').subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
-        this.users.leakList = response.data;
+        this.users.leakList = response.data.leaks;
+        this.users.recommendationList = response.data.recommendations;
         this.users.isLeakChange = false;
         this.loginService.setUser(this.users);
         for (let i = 0; i < this.users.leakList.length; i++) {
@@ -70,7 +70,7 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
     );
   }
 
-  surveyRecommendationList(number) {
+  surveyRecommendationList(number,recommendationsListID) {
     this.users.recommendationNo = number;
     this.loginService.setUser(this.users);
     this.router.navigate(['/surveyRecommendationList']);

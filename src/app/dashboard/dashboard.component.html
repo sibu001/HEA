@@ -27,7 +27,7 @@
                                     {{users.leakList.length}} leaks</a>
                             </span> wasting
                             <span class="dollar">${{ leakPriceValueSum | number
-                                : '1.0-0' }}</span> per year
+                                : '1.2-2' }}</span> per year
                         </p>
                         <div class="row number">
                             <div class="containercss">
@@ -61,7 +61,8 @@
                         <ng-container *ngFor="let item of recommendationList |
                             sortgrid:'-priceValue';index as i">
                             <div class="row responsiveRecomendation" *ngIf="i<3">
-                                <div class="col-sm-1 col-xs-2 status-img">
+                                <div class="col-sm-4 col-xs-3 col-md-2 status-img"
+                                   style="text-align: right; padding-right:0px">
                                     <span *ngIf="item.status=='N'">
                                         <img
                                             src="assets/images/status-unchecked.png"
@@ -73,8 +74,18 @@
                                             alt="status"
                                             class="status-unchecked">
                                     </span>
+                                    <span *ngIf="item.status=='Y'">
+                                        <img src="assets/images/colorbox.png"
+                                            alt="status"
+                                            class="status-unchecked">
+                                    </span>
+                                    <span *ngIf="item.status=='D'">
+                                        <img src="assets/images/status-notapplicable.png"
+                                            alt="status"
+                                            class="status-unchecked">
+                                    </span>
                                 </div>
-                                <div class="col-sm-10 col-xs-10 sch">
+                                <div class="col-sm-8 col-xs-9 col-md-10 sch">
                                     <a class="Schedule"
                                         (click)="surveyRecommendationList(item.recommendationId)">{{item.recommendation.takebackLabel}}</a>
                                 </div>
@@ -166,6 +177,16 @@
                             </span>
                             <span *ngIf="item.status=='L'">
                                 <img src="assets/images/lightcheck.png"
+                                    alt="status"
+                                    class="status-unchecked">
+                            </span>
+                            <span *ngIf="item.status=='Y'">
+                                <img src="assets/images/colorbox.png"
+                                    alt="status"
+                                    class="status-unchecked">
+                            </span>
+                            <span *ngIf="item.status=='D'">
+                                <img src="assets/images/status-notapplicable.png"
                                     alt="status"
                                     class="status-unchecked">
                             </span>

@@ -54,7 +54,7 @@
                 <div class="panel panel-info">
                     <div class="panel-group" id="accordion">
                         <!-------------------- First ------------------------------------>
-                        <div class="panel panel-default" *ngFor="let item of recommendationList | sortgrid: sortingBy">
+                        <div id="{{'recommendation' + item.id}}"  class="panel panel-default" *ngFor="let item of recommendationList | sortgrid: sortingBy">
                             <div class="panel-heading collapsed" data-toggle="collapse" data-parent="#accordion" [attr.href]="'#collapse'+item.recommendationId"
                                 *ngIf="item.parentLeakId!=null">
                                 <div class="row">
@@ -62,7 +62,7 @@
                                         <img alt="icon" src="assets/images/triangledown.svg" class="fa fa-fw fa-caret-down fa_icon">
                                         <img alt="icon" src="assets/images/triangleright.svg" class="fa fa-fw fa-caret-right fa_icon">
                                     </div>
-                                    <div class="col-sm-1 col-xs-2 col-lg-1 status2" *ngIf="item.status=='N'">
+                                    <div class="col-sm-1 col-xs-2 col-lg-1 status2" *ngIf="item.status==null || item.status=='N'">
                                         <img alt="icon" src="assets/images/status-unchecked.png" class="status-unchecked">
                                     </div>
                                     <div class="col-sm-1 col-xs-2 col-lg-1 status2" *ngIf="item.status=='Y'">
@@ -74,21 +74,26 @@
                                     <div class="col-sm-1 col-xs-2 col-lg-1 status2" *ngIf="item.status=='D'">
                                         <img alt="icon" src="assets/images/status-notapplicable.png" class="status-unchecked" style="margin-left: -2px;">
                                     </div>
-                                    <div class="col-sm-8 col-xs-5 col-lg-8 status3">
+                                    <div class="col-sm-8 col-xs-6 col-lg-8 status3">
                                         <a class="Schedule" *ngIf="item.status!='Y'">{{item.recommendation.takebackLabel}}</a>
                                         <a class="Schedule1" *ngIf="item.status=='Y'">{{item.recommendation.takebackLabel}}</a>
                                     </div>
                                     <div class="col-sm-2 col-xs-3 col-lg-2">
-                                        <p class="dollar_num">${{item.priceValue | number:'0.0-0'}}</p>
-                                        <p class="help_img" *ngIf="item.recommendation.instruction!=null">
-                                            <a (click)="questionHelp(item.recommendation.instruction)">
-                                                <img alt="icon" src="assets/images/icon_help.svg" class="question">
-                                            </a>
-                                        </p>
-                                        <div class="help_img" *ngIf="item.recommendation.instruction==null">
-                                            <a>
-                                                <img alt="icon" src="assets/images/icon_help.svg" class="question" style="visibility: hidden;">
-                                            </a>
+                                        <div class="row">                                        <div class="col-xs-12 col-md-6">
+                                            <p class="dollar_num">${{item.priceValue | number:'0.0-0'}}</p>
+                                        </div>
+                                        <div class="col-xs-12 col-md-6">
+                                            <p class="help_img" *ngIf="item.recommendation.instruction!=null">
+                                                <a (click)="questionHelp(item.recommendation.instruction)">
+                                                    <img alt="icon" src="assets/images/icon_help.svg" class="question">
+                                                </a>
+                                            </p>
+                                            <div class="help_img" *ngIf="item.recommendation.instruction==null">
+                                                <a>
+                                                    <img alt="icon" src="assets/images/icon_help.svg" class="question" style="visibility: hidden;">
+                                                </a>
+                                            </div>
+                                        </div>
                                         </div>
                                     </div>
                                 </div>
@@ -120,7 +125,10 @@
                                                 <div class="form-group">
                                                     <select name="recommendation" class="form-control" [(ngModel)]="item.status" (change)="onChange(item.recommendationId,item.status,item.surveyId)"
                                                         style="width:207px;">
-                                                        <option value="N">I'm undecided</option>
+                                                        <option *ngIf="item.status == null; else elseOption" value="null">- Select One -</option>
+                                                        <ng-template #elseOption>
+                                                            <option value="N">I'm undecided</option>
+                                                        </ng-template>
                                                         <option value="Y">I did it</option>
                                                         <option value="L">I will do it later</option>
                                                         <option value="D">Not for me</option>
@@ -142,7 +150,7 @@
                                                 <div class="col-lg-10 col-sm-9 col-xs-10 high">
                                                     <p class="leak-label">
                                                         <a (click)="leakView(item.parentLeakId)" class="drought">{{item.leak.takebackLabel}}</a>
-                                                        <span class="mo">{{item.parentSurveyRecommendation.takebackValue | number:'0.0-0'}}{{item.leak.unit}}</span>
+                                                        <span class="mo">{{item.parentSurveyRecommendation.takebackValue | number:'0.0-0'}}{{" " + item.leak.unit}}</span>
                                                     </p>
                                                 </div>
                                             </div>
