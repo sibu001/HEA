@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
@@ -9,13 +9,14 @@ import { Filter } from '../models/filter';
   templateUrl: './mailArchiveView.component.html',
   styleUrls: ['./mailArchiveView.component.css']
 })
-export class mailArchiveViewComponent implements OnInit {
+export class mailArchiveViewComponent implements OnInit, AfterViewInit {
   urls = window.location.origin + 'surveyView';
   iframeHide: boolean;
   subject: string;
   sendDate: string;
   address: string;
   isBounced: string;
+  iframeHeight : string = '650px';
   wasOpened: string;
   users: Users = new Users();
   filter: Filter = new Filter();
@@ -26,6 +27,11 @@ export class mailArchiveViewComponent implements OnInit {
     this.address = this.users.mailDetail.sentTo;
     this.isBounced = this.users.mailDetail.inBouncedList ? '*' : '';
     this.wasOpened = this.users.mailDetail.wasOpened ? '*' : '';
+  }
+  ngAfterViewInit(): void {
+    const iFrame = document.getElementById('ifrmMailContent') as HTMLIFrameElement;
+    iFrame.contentDocument.body.innerHTML = this.users.mailContent;
+    this.iframeHeight = iFrame.contentWindow.document.body.scrollHeight + 20 + 'px';  
   }
 
   ngOnInit() {

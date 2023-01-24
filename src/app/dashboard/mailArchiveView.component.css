@@ -212,3 +212,15 @@ div.adminFeedback {
     min-width: 100%!important;
   }
 }
+
+hr{
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+label.control-label{
+  text-align: left;
+}
+.form-group{
+  margin-bottom: 5px;
+}

@@ -138,7 +138,7 @@ export class TrendingProfileViewComponent implements OnInit {
           this.colors = this.trendingProfile.color;
         } else {
           for (let i = 0; i < response.data.length; i++) {
-            if (response.data[i].unitTypes[0].used && response.data[i].unitTypes[1].used) {
+            if (response.data[i].resourceType == 'hhe') {
               this.typeNumber = i;
               this.typeName = response.data[i].resourceType;
               this.unitType = response.data[i].unitTypes;

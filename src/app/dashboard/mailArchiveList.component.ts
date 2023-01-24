@@ -59,7 +59,11 @@ export class MailArchiveListComponent implements OnInit {
           this.usageHistoryData.content = emailList;
         }else if (emailList.length == 0){
           this.disableNextButton = true;
-          this.pageIndex = this.pageIndex - 1;
+          if(this.pageIndex){
+            this.pageIndex = this.pageIndex - 1;
+          }else{
+            this.usageHistoryData.content = emailList;
+          }
         }
 
         document.getElementById('loader').classList.remove('loading');
@@ -122,7 +126,6 @@ export class MailArchiveListComponent implements OnInit {
     this.getMailList(params);
   }
   goToEditMailArchive(event: any) {
-    console.log(event);
     this.users.mailContent = event.content;
     this.users.mailDetail = event;
     this.loginService.setUser(this.users);

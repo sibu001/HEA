@@ -113,7 +113,7 @@
                 <hr class="small">
 
                 <div class="row">
-                    <div class="col-sm-9 month">
+                    <div class="col-sm-10 month">
                         <ng-container *ngFor="let dataList of
                             trendingData;index
                             as i">
@@ -134,7 +134,7 @@
                                     <p class="rolling small">{{dataList.explanation}}</p>
                                 </div>
                             </div>
-                            <hr class="gap">
+                            <hr *ngIf="i != trendingData.length-1" class="gap">
                         </ng-container>
                     </div>
                     <div class="col-sm-2"></div>
