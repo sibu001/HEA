@@ -478,7 +478,7 @@ export class DashboardComponent implements OnInit {
           for (const areaSeries of response.data[0].trendingCharts) {
             if (areaSeries.chart.freeChartConfigurationJS != null) {
               eval(areaSeries.chart.freeChartConfigurationJS);
-                if(i != 0) break;
+                // if(i != 0) break;
                 $('#trendingChart' + areaSeries.id + '>div .jqplot-target').click(function(event){
                   console.log('#trendingChart' + areaSeries.id + '>div .jqplot-target');
                   self.router.navigate(['/trendingPartsView'],{queryParams : {activeResource : areaSeries.resourceUse, unitType : areaSeries.unitType
