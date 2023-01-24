@@ -20,7 +20,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
     constructor(private readonly loginService: LoginService,
-                private readonly  : Router,
+                private readonly  router: Router,
                 private readonly httpCancelService: HttpCancelService) { }
 
     addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {

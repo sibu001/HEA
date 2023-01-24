@@ -2485,3 +2485,7 @@ mat-dialog-container{
 leaklistview a, surveyRecommendationList a{
   text-decoration: underline;
 }
+
+.visible-hidden{
+  visibility: hidden !important;
+}

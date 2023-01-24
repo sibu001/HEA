@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
+import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 declare var $: any;
 @Component({
   selector: 'trendingPartsView',
@@ -26,9 +27,22 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     unitType: 'cost',
     useTypes: 'all'
   };
-  constructor(private location: Location, private loginService: LoginService) {
+  constructor(private location: Location,
+    private loginService: LoginService,
+    private activatedRoute : ActivatedRoute) {
     this.users = this.loginService.getUser();
     this.getTrendingPartResource();
+    
+    this.activatedRoute.queryParams.subscribe(
+      (params: any) => {
+        if(params['activeResource'] && params['unitType'] && params['useTypes']){
+          this.trendingParts.activeResource = params['activeResource'];
+          this.trendingParts.unitType = params['unitType'];
+          this.trendingParts.useTypes = params['useTypes'];
+        }
+      }
+    )
+
   }
 
   ngOnInit() {

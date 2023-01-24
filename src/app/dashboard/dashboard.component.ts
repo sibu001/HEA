@@ -6,6 +6,7 @@ declare var $: any;
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
+import { filter, skipWhile } from 'rxjs/operators';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -359,6 +360,7 @@ export class DashboardComponent implements OnInit {
         setTimeout(function () {
           eval(response.data.chart.freeChartConfigurationJS);
         }, 50);
+        // this.getTrendingProfileChart(); // get data for trending chart
         if (this.users.recommendationList != null && this.users.recommendationList.length > 0 && !this.users.recommendationStatusChange) {
           document.getElementById('loader').classList.remove('loading');
         }
@@ -439,10 +441,30 @@ export class DashboardComponent implements OnInit {
             $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
           }, 50);
           i++;
+          // self.renderTrendingProfileChart();
         }, 20);
       }
     }
   }
+
+  renderTrendingProfileChart(){
+    const self = this;
+
+      for (const areaSeries of self.trendingParts[0].trendingCharts) {
+        if (areaSeries.chart.freeChartConfigurationJS != null) {
+
+          // let index = areaSeries.chart.freeChartConfigurationJS.indexOf('$.heaplot.monthlyBarChart(');
+          // let substr = areaSeries.chart.freeChartConfigurationJS.substring(index+32); // 32 is length of : $.heaplot.monthlyBarChart(
+          // let barChartId = substr.substring(0,substr.indexOf("'"));
+          // document.getElementById(barChartId).innerHTML = '';
+          setTimeout(function () {
+          eval(areaSeries.chart.freeChartConfigurationJS);
+        }, 300);
+
+        }
+      }
+  }
+
   getTrendingProfileChart() {
     document.getElementById('loader').classList.add('loading');
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingHome/trendingParts').subscribe(
@@ -450,14 +472,24 @@ export class DashboardComponent implements OnInit {
         const response = JSON.parse(JSON.stringify(data));
         this.trendingParts = response.data;
         console.log(response.data);
+        const self = this;
         setTimeout(function () {
+          let i = 0;
           for (const areaSeries of response.data[0].trendingCharts) {
             if (areaSeries.chart.freeChartConfigurationJS != null) {
               eval(areaSeries.chart.freeChartConfigurationJS);
+                if(i != 0) break;
+                $('#trendingChart' + areaSeries.id + '>div .jqplot-target').click(function(event){
+                  console.log('#trendingChart' + areaSeries.id + '>div .jqplot-target');
+                  self.router.navigate(['/trendingPartsView'],{queryParams : {activeResource : areaSeries.resourceUse, unitType : areaSeries.unitType
+                    , useTypes : areaSeries.useType}})
+                }).css('cursor', 'pointer');
+
             }
-          }
-          document.getElementById('loader').classList.remove('loading');
+            i++;
+          }                           
         }, 100);
+        document.getElementById('loader').classList.remove('loading');
       },
       error => {
         document.getElementById('loader').classList.remove('loading');

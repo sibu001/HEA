@@ -208,7 +208,7 @@
                     <div class="col-sm-12">
                         <!-- <ng-container *ngFor="let chartData of
                             trendingParts[0].trendingCharts"> -->
-                            <div *ngFor="let chartData of
+                            <div [id]="'trendingChart' + chartData.id"  *ngFor="let chartData of
                             trendingParts[0].trendingCharts" [innerHTML]="chartData.chart.freeChartDiv |
                                 safeHtml" class="dashboard_trend_chart"></div>
                         <!-- </ng-container> -->
