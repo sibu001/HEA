@@ -618,3 +618,48 @@ a.Schedule {
     justify-content:center;
   }
 }
+
+
+@media only screen and (min-width: 768px) {
+  #knowTopics{
+    left : 75px;
+    z-index: 2;
+  }
+}
+
+.help-hover{
+  background-color: white; 
+  border-radius: 10px; 
+}
+
+.demo1 {
+  background-color: #f3f0f0;
+  font-weight: 500;
+  padding: 15px 15px 15px 15px;
+  line-height: 1.4;
+  text-align: justify;
+  color: #000;
+  font-size: 16px;
+  margin-top: 12px;
+}
+
+.questionHelp {
+  line-height: 1.4;
+  background-color: #f3f0f0;
+  font-weight: 500;
+  padding: 15px 15px 15px 15px;
+  text-align: justify;
+  color: #000;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+span.hidebuttondemo{
+  color: #75ba18;
+  display: block;
+  text-align: right;
+  font-weight: 500;
+  margin-top: 3px;
+  cursor: pointer;
+  font-size: 16px;
+}

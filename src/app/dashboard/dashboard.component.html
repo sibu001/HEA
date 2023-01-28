@@ -95,9 +95,28 @@
                     <!-- next topic -->
                     <hr class="nextTopicHr">
                     <div class="nextTopic">
+                        <div style="text-align: right;">
+                            <a [routerLink]="['/topicshistory']" style="color: #75ba18"> all topics</a>
+                        </div>
                         <br>
                         <p class="resume_topic">Resume Next Topic
-                        </p>
+                            <img alt="icon" src="assets/images/icon_help.svg"
+                                style="width:30px;" (click)="helpHide=!helpHide">
+                        </p>  
+                          <div class="row" *ngIf="helpHide" style="box-sizing: border-box; padding: 17px;">
+                          <div class=" col-lg-12 col-md-12 col-sm-12 col-xs-12 demo1 helpText-align">
+                            <p class="">
+                                The different parts of our analysis are called "topics".  <br> 
+                                Some are educational, helping you better understand your home, while other topics help you look for "leaks" in different categories.  <br> 
+                                You'll need to finish the educational portion first and then you can choose which detailed topics to explore next.  <br> 
+                                Note that you can always logout and come back later. <br>  
+                                You can also flip through the pages quickly and then return to focus on the details by clicking on the "all topics" link.
+                            </p>
+                            <span class="hidebuttondemo"
+                            (click)="helpHide=!helpHide">hide</span>
+                          </div>
+                        </div>
+                        
                         <h4 class="title_topic">
                             <a class="anchorTag"
                                 (click)="surveyView(surveyCode,surveyId)">{{nextTopic}}</a>
@@ -116,19 +135,27 @@
                             *ngIf="users.role==='ADMIN'">
                             <div class="col-sm-4">Audit Id:</div>
                             <div class="col-sm-8">
-                                <input type="text"
-                                    class="form-control" id="auditId"
-                                    name="auditId"
-                                    [(ngModel)]="users.outhMeResponse.auditId">
+                                    <input type="text" class="form-control" matInput 
+                                    [matAutocomplete]="auditIdAutoComplete"
+                                    [ngModel]="customer.auditId" (keyup)="findCustomerByAuditIdOrCustomerName('auditId',$event.target.value)" >
+                                     <mat-autocomplete #auditIdAutoComplete="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                                       <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
+                                         {{data.user.name}}
+                                       </mat-option>
+                                     </mat-autocomplete>
                             </div>
                         </div>
                         <div class="row showInfo" *ngIf="users.role==='ADMIN'">
                             <div class="col-sm-4">Customer</div>
                             <div class="col-sm-8">
-                                <input type="text"
-                                    class="form-control" id="customer"
-                                    name="customer"
-                                    [(ngModel)]="users.outhMeResponse.user.name">
+                                    <input type="text" matInput class='form-control form-control-sm'
+                                    (keyup)="findCustomerByAuditIdOrCustomerName('customerName',$event.target.value)" [ngModel]="customer.user.name"
+                                    [matAutocomplete]="customerNameAutoComplete">
+                                      <mat-autocomplete #customerNameAutoComplete="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                                        <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
+                                          {{data.user.name}}
+                                        </mat-option>
+                                      </mat-autocomplete>
                             </div>
                         </div>
                         <ul class="demo">
@@ -212,6 +239,7 @@
                             trendingParts[0].trendingCharts" [innerHTML]="chartData.chart.freeChartDiv |
                                 safeHtml" class="dashboard_trend_chart"></div>
                         <!-- </ng-container> -->
+
                     </div>
                 </div>
                 <hr class="hr_space">

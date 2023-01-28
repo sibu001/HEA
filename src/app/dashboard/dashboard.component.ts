@@ -1,3 +1,4 @@
+import { CustomerService } from './../store/customer-state-management/service/customer.service';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Users } from 'src/app/models/user';
@@ -6,13 +7,17 @@ declare var $: any;
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
-import { filter, skipWhile } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
+import { Subject, Subscription } from 'rxjs';
+import { AppConstant } from '../utility/app.constant';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  helpHide : any;
   hides = true;
   count = 0;
   leakPriceValueSum = 0;
@@ -33,14 +38,22 @@ export class DashboardComponent implements OnInit {
   surveyId: number;
   trendingHomeChart: any;
   trendingHomeChartCopy: any;
-  trendingParts: any[] = [];
+  trendingParts: any[];
   users: Users = new Users();
   globalM = 0;
   globalK = 0;
+  customer : any;
+  subject$ : Subject<any> = new Subject();
+  private readonly subscriptions: Subscription = new Subscription();
+  public dataListForSuggestions = [];
+
   constructor(private router: Router,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private readonly customerService: CustomerService,
   ) {
     this.users = this.loginService.getUser();
+    this.customer = JSON.parse(JSON.stringify(this.users.outhMeResponse));
+
     this.count = 0;
     if (this.users.outhMeResponse === undefined) {
       this.loginService.logout();
@@ -49,6 +62,16 @@ export class DashboardComponent implements OnInit {
     if(this.users.role == 'USERS' && this.users.currentPaneNumber && this.users.currentPaneNumber.currentPane &&
      ( this.users.currentPaneNumber.currentPane.paneCode == 'prf_onHold' ||  this.users.surveyLength <= 3))
       this.router.navigate(['/surveyView']);
+
+    this.findCustomer();
+  }
+
+  ngOnInit() {
+
+    // for re-initialization after selecting different customer
+    this.trendingParts = [];
+    this.trendingHomeChart = undefined;
+    this.trendingHomeChartCopy = undefined;
 
     this.getNextSurvey();
     this.getTrendingHomeChart();
@@ -69,10 +92,7 @@ export class DashboardComponent implements OnInit {
         this.recommendationPriceValueSum = this.users.recommendationList[index].priceValue + this.recommendationPriceValueSum;
       }
       this.leakCalculation();
-    }
-  }
-
-  ngOnInit() {
+    } 
 
     document.getElementById('loader').classList.add('loading');
     /* for demonstration purposes only */
@@ -441,29 +461,12 @@ export class DashboardComponent implements OnInit {
             $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
           }, 50);
           i++;
-          // self.renderTrendingProfileChart();
-        }, 20);
+        }, 20);          // self.renderTrendingProfileChart();
+
       }
     }
   }
 
-  renderTrendingProfileChart(){
-    const self = this;
-
-      for (const areaSeries of self.trendingParts[0].trendingCharts) {
-        if (areaSeries.chart.freeChartConfigurationJS != null) {
-
-          // let index = areaSeries.chart.freeChartConfigurationJS.indexOf('$.heaplot.monthlyBarChart(');
-          // let substr = areaSeries.chart.freeChartConfigurationJS.substring(index+32); // 32 is length of : $.heaplot.monthlyBarChart(
-          // let barChartId = substr.substring(0,substr.indexOf("'"));
-          // document.getElementById(barChartId).innerHTML = '';
-          setTimeout(function () {
-          eval(areaSeries.chart.freeChartConfigurationJS);
-        }, 300);
-
-        }
-      }
-  }
 
   getTrendingProfileChart() {
     document.getElementById('loader').classList.add('loading');
@@ -471,22 +474,25 @@ export class DashboardComponent implements OnInit {
       data => {
         const response = JSON.parse(JSON.stringify(data));
         this.trendingParts = response.data;
-        console.log(response.data);
         const self = this;
         setTimeout(function () {
-          let i = 0;
           for (const areaSeries of response.data[0].trendingCharts) {
             if (areaSeries.chart.freeChartConfigurationJS != null) {
-              eval(areaSeries.chart.freeChartConfigurationJS);
-                // if(i != 0) break;
-                $('#trendingChart' + areaSeries.id + '>div .jqplot-target').click(function(event){
-                  console.log('#trendingChart' + areaSeries.id + '>div .jqplot-target');
-                  self.router.navigate(['/trendingPartsView'],{queryParams : {activeResource : areaSeries.resourceUse, unitType : areaSeries.unitType
-                    , useTypes : areaSeries.useType}})
-                }).css('cursor', 'pointer');
 
+            
+              // below line to romve '$.jqplot.config.enablePlugins=true' that create conflict with other chart(seasonal chart)
+              // and make data-highlight property not work well i.e.. making data-highlighter appears on corners. 
+              let freeChartConfigurationJS = areaSeries.chart.freeChartConfigurationJS;
+              const commentIndex = freeChartConfigurationJS.indexOf('$.jqplot.config.enablePlugins');
+              freeChartConfigurationJS = freeChartConfigurationJS.slice(0,commentIndex) + '//' + freeChartConfigurationJS.slice(commentIndex);
+              //
+
+              eval(freeChartConfigurationJS);
+                $('#trendingChart' + areaSeries.id + '>div .jqplot-target').click(function(event){
+                  // self.router.navigate(['/trendingPartsView'],{queryParams : {activeResource : areaSeries.resourceUse, unitType : areaSeries.unitType
+                  //   , useTypes : areaSeries.useType}})
+                }).css('cursor', 'pointer');
             }
-            i++;
           }                           
         }, 100);
         document.getElementById('loader').classList.remove('loading');
@@ -509,4 +515,86 @@ export class DashboardComponent implements OnInit {
   scrollTop() {
     window.scroll(0, 0);
   }
+
+  highlightHelp(){
+    document.getElementById('knowTopics').style.visibility = 'visible';
+  }
+
+  hidelightHelp(){
+    document.getElementById('knowTopics').style.visibility = 'hidden';
+  }
+
+  nextTopicHelpOnClick(){
+    const helpInfo = document.getElementById('knowTopics');
+    if(helpInfo.style.visibility == 'visible'){
+      helpInfo.style.visibility = 'hidden';
+    }else{
+      helpInfo.style.visibility = 'visible'; 
+    }
+  }
+
+
+  // search functionality for customer
+
+  findCustomerByAuditIdOrCustomerName(calledBy, value){
+   
+    let filters = new HttpParams();
+    
+    if(calledBy == 'auditId'){
+      filters = filters.set('auditId',value);
+      this.customer.user.name = '';
+    }else{
+      filters = filters.set('customerName',value);
+      this.customer.auditId = '';
+    }
+    filters = filters.set('useLike','true');
+
+    // if(value.length < 5)
+    //   return;
+
+    this.subject$.next(filters);
+
+  }
+
+  findCustomer(){
+    this.subscriptions.add(this.subject$
+      .pipe(
+       debounceTime(600)  
+      , distinctUntilChanged())
+      .subscribe(
+    (filters : any) =>{
+      this.loginService.performGetWithParams('findCustomers.do',filters)
+      .pipe(filter((item: any) => item))
+      .pipe(
+        debounceTime(600)  
+       , distinctUntilChanged())
+      .subscribe(
+        (response) =>{
+          this.dataListForSuggestions = response;
+          if(this.dataListForSuggestions.length == 1){
+            this.selectedSuggestion(this.dataListForSuggestions[0]);
+            this.dataListForSuggestions = [];
+          }
+
+        }, error =>{
+           console.log(error);
+        }
+      )
+    }
+    )
+  );
+}
+
+selectedSuggestion(event : any){
+  console.log(event);
+  this.customer = event;
+  this.users.outhMeResponse = this.customer;
+  this.users.theme = this.customer.customerGroup.theme;
+  this.users.recommendationStatusChange = true;
+  this.loginService.setUser(this.users);
+
+  this.ngOnInit();
+
+}
+
 }

@@ -16,6 +16,8 @@ import { SystemService } from '../store/system-state-management/service/system.s
 import { NgxsModule } from '@ngxs/store';
 import { SystemManagementState } from '../store/system-state-management/state/system.state';
 import { DatePipe } from '@angular/common';
+import { MatAutocompleteModule, MatInputModule, MatOptionModule } from '@angular/material';
+import { CustomerService } from '../store/customer-state-management/service/customer.service';
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -33,11 +35,14 @@ import { DatePipe } from '@angular/common';
         SurveyModule,
         CommonHEAModule,
         PipeModule,
+        MatAutocompleteModule,
+        MatOptionModule,
+        MatInputModule,
         NgxsModule.forRoot([
             SystemManagementState,
         ]),
     ],
-    providers: [SystemService, DatePipe],
+    providers: [SystemService, DatePipe,CustomerService],
     exports: [
 
     ]
