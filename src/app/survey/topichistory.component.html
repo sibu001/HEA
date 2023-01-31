@@ -12,15 +12,25 @@
                     <div class="col-sm-1"></div>
                     <div class="col-sm-2">Audit Id:</div>
                     <div class="col-sm-3">
-                        <input type="text"
-                            class="form-control" id="auditId" name="auditId"
-                            [(ngModel)]="users.outhMeResponse.auditId">
+                        <input type="text" class="form-control" matInput 
+                        [matAutocomplete]="auditIdAutoComplete"
+                        [ngModel]="customer.auditId" (keyup)="findCustomerByAuditIdOrCustomerName('auditId',$event.target.value)" >
+                         <mat-autocomplete #auditIdAutoComplete="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                           <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
+                             {{data.user.name}}
+                           </mat-option>
+                         </mat-autocomplete>
                     </div>
                     <div class="col-sm-2">Customer</div>
                     <div class="col-sm-3">
-                        <input type="text"
-                            class="form-control" id="customer" name="customer"
-                            [(ngModel)]="users.outhMeResponse.user.name">
+                        <input type="text" matInput class='form-control form-control-sm'
+                        (keyup)="findCustomerByAuditIdOrCustomerName('customerName',$event.target.value)" [ngModel]="customer.user.name"
+                        [matAutocomplete]="customerNameAutoComplete">
+                          <mat-autocomplete #customerNameAutoComplete="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                            <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
+                              {{data.user.name}}
+                            </mat-option>
+                          </mat-autocomplete>
                     </div>
                     <div class="col-sm-1"></div>
 

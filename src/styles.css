@@ -883,20 +883,25 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-.dashboard_trend_chart > div > :nth-child(2) {
+/* .dashboard_trend_chart > div > :nth-child(2) {
   width: 40% !important;
-}
+} */
 
 @media only screen and (min-width: 300px) and (max-width: 340px) {
   .dashboard_trend_chart > div {
-    margin-top: 18px;
+    margin-bottom : 50px !important;
     width: 300px!important;
+    float : none !important;
+    margin: auto;
   }
 }
 
 @media only screen and (min-width: 341px) and (max-width: 669px) {
   .dashboard_trend_chart > div {
-    margin-top: 18px;
+    margin-bottom : 50px !important;
+    float : none !important;
+    margin: auto;
+
   }
 }
 
@@ -2488,4 +2493,14 @@ leaklistview a, surveyRecommendationList a{
 
 .visible-hidden{
   visibility: hidden !important;
+}
+
+.trending-charts-redirection{
+  text-align: center;
+}
+
+@media (min-width: 768px){
+  .trending-charts-redirection{
+    display: none;
+  }
 }

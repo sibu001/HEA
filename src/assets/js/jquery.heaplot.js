@@ -1062,8 +1062,8 @@ function findTickIntervalBase(max, min, numTicks) {
 			seriesDefaults: {
 				renderer: $.jqplot.BarRenderer,
 				rendererOptions: {
-					barWidth: options.compact ? 30 : 50,
-					barPadding: options.compact ? 30 : -50,
+					barWidth: options.compact? 30: ( $(document).width() < 768 ? 30 : 50),
+					barPadding: options.compact? 30: ( $(document).width() < 768 ? 30 : 50),
 					barMargin: 0,
 					varyBarColor: true
 				},

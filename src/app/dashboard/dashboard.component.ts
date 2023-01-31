@@ -1,5 +1,6 @@
+import { AppUtility } from 'src/app/utility/app.utility';
 import { CustomerService } from './../store/customer-state-management/service/customer.service';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
@@ -42,7 +43,7 @@ export class DashboardComponent implements OnInit {
   users: Users = new Users();
   globalM = 0;
   globalK = 0;
-  customer : any;
+  customer : any = { user : { name : ''}, auditId : ''};
   subject$ : Subject<any> = new Subject();
   private readonly subscriptions: Subscription = new Subscription();
   public dataListForSuggestions = [];
@@ -294,8 +295,10 @@ export class DashboardComponent implements OnInit {
   }
 
   getMailList() {
+    const params = new HttpParams()
+      .append('systemMessage','false'); 
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/mails').subscribe(
+    this.loginService.performGetWithParams('customers/' + this.users.outhMeResponse.customerId + '/mails',params).subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
         this.users.customerMailList = response.data;
@@ -478,20 +481,35 @@ export class DashboardComponent implements OnInit {
         setTimeout(function () {
           for (const areaSeries of response.data[0].trendingCharts) {
             if (areaSeries.chart.freeChartConfigurationJS != null) {
-
-            
-              // below line to romve '$.jqplot.config.enablePlugins=true' that create conflict with other chart(seasonal chart)
-              // and make data-highlight property not work well i.e.. making data-highlighter appears on corners. 
-              let freeChartConfigurationJS = areaSeries.chart.freeChartConfigurationJS;
-              const commentIndex = freeChartConfigurationJS.indexOf('$.jqplot.config.enablePlugins');
-              freeChartConfigurationJS = freeChartConfigurationJS.slice(0,commentIndex) + '//' + freeChartConfigurationJS.slice(commentIndex);
-              //
-
+              let freeChartConfigurationJS = AppUtility.removeJqplotPlugins(areaSeries.chart.freeChartConfigurationJS);
               eval(freeChartConfigurationJS);
                 $('#trendingChart' + areaSeries.id + '>div .jqplot-target').click(function(event){
-                  // self.router.navigate(['/trendingPartsView'],{queryParams : {activeResource : areaSeries.resourceUse, unitType : areaSeries.unitType
-                  //   , useTypes : areaSeries.useType}})
+                  if($(document).width() <= 786) return;
+                  self.router.navigate(['/trendingPartsView'],{queryParams : {activeResource : areaSeries.resourceUse, unitType : areaSeries.unitType
+                    , useTypes : areaSeries.useType}})
                 }).css('cursor', 'pointer');
+
+              
+                // added anchor element to trendingParts for redirection to view details in small screen.
+                if($('#trendingChart' + areaSeries.id).text().trim().length != 0){
+                  const div = document.createElement('div');
+                  const para = document.createElement("a");
+                  const node = document.createTextNode("view chart details");
+                  para.classList.add('anchorTag');
+                  para.appendChild(node);
+                  para.setAttribute('id','anchor'+areaSeries.id);
+                  div.appendChild(para);
+                  div.classList.add('trending-charts-redirection')
+                  $('#trendingChart' + areaSeries.id + '>div:first-child>div:first-child').before(div);     
+                }
+
+                  $('#anchor'+areaSeries.id).click(
+                    function(event){
+                      self.router.navigate(['/trendingPartsView'],{queryParams : {activeResource : areaSeries.resourceUse, unitType : areaSeries.unitType
+                        , useTypes : areaSeries.useType}})
+                    }
+                  ).css('cursor', 'pointer');
+                //
             }
           }                           
         }, 100);
@@ -564,13 +582,9 @@ export class DashboardComponent implements OnInit {
       .subscribe(
     (filters : any) =>{
       this.loginService.performGetWithParams('findCustomers.do',filters)
-      .pipe(filter((item: any) => item))
-      .pipe(
-        debounceTime(600)  
-       , distinctUntilChanged())
       .subscribe(
         (response) =>{
-          this.dataListForSuggestions = response;
+          this.dataListForSuggestions = response.slice(0,100);
           if(this.dataListForSuggestions.length == 1){
             this.selectedSuggestion(this.dataListForSuggestions[0]);
             this.dataListForSuggestions = [];
@@ -586,7 +600,7 @@ export class DashboardComponent implements OnInit {
 }
 
 selectedSuggestion(event : any){
-  console.log(event);
+
   this.customer = event;
   this.users.outhMeResponse = this.customer;
   this.users.theme = this.customer.customerGroup.theme;

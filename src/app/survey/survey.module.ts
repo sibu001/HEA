@@ -11,6 +11,7 @@ import { SliderModule} from 'primeng/slider';
 import { MatSliderModule } from '@angular/material/slider';
 import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.component';
 import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule, MatInputModule, MatOptionModule } from '@angular/material';
 
 @NgModule({
     declarations: [
@@ -26,6 +27,9 @@ import { FormsModule } from '@angular/forms';
         CommonHEAModule,
         PipeModule,
         SliderModule,
+        MatAutocompleteModule,
+        MatOptionModule,
+        MatInputModule,
         MatSliderModule,
         FormsModule
     ],

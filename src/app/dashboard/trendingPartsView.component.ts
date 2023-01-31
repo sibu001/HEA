@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
+import { AppUtility } from '../utility/app.utility';
 declare var $: any;
 @Component({
   selector: 'trendingPartsView',
@@ -222,7 +223,9 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
         this.trendingData = response.data;
         for (const newData of response.data) {
           setTimeout(function () {
-            const F = new Function(newData.trendingCharts[0].chart.freeChartConfigurationJS);
+
+            let freeChartConfigurationJS = AppUtility.removeJqplotPlugins(newData.trendingCharts[0].chart.freeChartConfigurationJS);
+            const F = new Function(freeChartConfigurationJS);
             return (F());
             // eval(response.data[0].trendingCharts[0].chart.freeChartConfigurationJS);
           }, 1000);

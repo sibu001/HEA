@@ -65,4 +65,14 @@ export class AppUtility {
     private static getFormated(num){
         return num < 10 ? '0' + num : num;
     }
+
+    public static removeJqplotPlugins(freeChartConfigurationJS : string) : string{
+       
+        // below line to romve '$.jqplot.config.enablePlugins=true' that create conflict with other chart(seasonal chart)
+        // and make data-highlight property not work well i.e.. making data-highlighter appears on corners. 
+                
+        const commentIndex = freeChartConfigurationJS.indexOf('$.jqplot.config.enablePlugins');
+        freeChartConfigurationJS = freeChartConfigurationJS.slice(0,commentIndex) + '//' + freeChartConfigurationJS.slice(commentIndex);
+        return freeChartConfigurationJS;
+    }
 }

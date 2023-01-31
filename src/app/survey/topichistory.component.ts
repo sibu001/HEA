@@ -3,6 +3,9 @@ import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'topic-history',
@@ -12,9 +15,20 @@ import { Location } from '@angular/common';
 export class TopicHistoryComponent implements OnInit {
   hide = true;
   users: Users = new Users();
+  public customer : any = { user : { name : ''}, auditId : ''};
+  private readonly subscriptions: Subscription = new Subscription();
+  subject$ : Subject<any> = new Subject();
+  dataListForSuggestions = [];
 
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
+    this.customer = this.users.outhMeResponse;
+    this.findCustomer();
+  }
+
+  ngOnInit() {
+    let surveyCode;
+
     this.users.isSurvey = false;
     if (this.users.allSurveyCheck) {
       this.users.surveyList = new Array;
@@ -23,10 +37,7 @@ export class TopicHistoryComponent implements OnInit {
       this.users.allSurveyCheck = false;
       this.loginService.setUser(this.users);
     }
-  }
 
-  ngOnInit() {
-    let surveyCode;
     if (this.users.currentPaneNumber) {
       surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
       if (this.users.role === 'USERS' && (this.users.surveyLength <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false))) {
@@ -89,4 +100,63 @@ export class TopicHistoryComponent implements OnInit {
       this.router.navigate(['admin/customer']);
     }
   }
+
+    // search functionality for customer
+
+    findCustomerByAuditIdOrCustomerName(calledBy, value){
+   
+      let filters = new HttpParams();
+      
+      if(calledBy == 'auditId'){
+        filters = filters.set('auditId',value);
+        this.customer.user.name = '';
+      }else{
+        filters = filters.set('customerName',value);
+        this.customer.auditId = '';
+      }
+      filters = filters.set('useLike','true');
+  
+      this.subject$.next(filters);
+  
+    }
+  
+    findCustomer(){
+      this.subscriptions.add(this.subject$
+        .pipe(
+         debounceTime(600)  
+        , distinctUntilChanged())
+        .subscribe(
+      (filters : any) =>{
+        this.loginService.performGetWithParams('findCustomers.do',filters)
+        .subscribe(
+          (response) =>{
+            if(response)
+              this.dataListForSuggestions = response.slice(0,100);
+            if(this.dataListForSuggestions.length == 1){
+              this.selectedSuggestion(this.dataListForSuggestions[0]);
+              this.dataListForSuggestions = [];
+            }
+
+          }, error =>{
+             console.log(error);
+          }
+        )
+      }
+      )
+    );
+  }
+  
+  selectedSuggestion(event : any){
+  
+    this.customer = event;
+    this.users.outhMeResponse = this.customer;
+    this.users.theme = this.customer.customerGroup.theme;
+    this.users.recommendationStatusChange = true;
+    this.users.allSurveyCheck = true;
+    this.loginService.setUser(this.users);
+  
+    this.ngOnInit();
+  
+  }
+  
 }
