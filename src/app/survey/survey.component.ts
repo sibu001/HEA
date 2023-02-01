@@ -36,6 +36,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   changeSliderFlaf = false;
   globalM = 0;
   globalK = 0;
+  window = window;
   paneblockRowErrorNotation = [];
 
   subscriptons : Subscription = new Subscription();
@@ -280,8 +281,33 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
 
-        eval(paneCharts.chart.freeChartConfigurationJS);
-                if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
+
+      // added condition to regulate the bar width(on bar chart) on on the small screen
+      try{
+          if(paneCharts.chart.chartType == 'bar'){
+            const barWidthIndex = paneCharts.chart.freeChartConfigurationJS.indexOf('barWidth:');
+            const barStringIndex = paneCharts.chart.freeChartConfigurationJS.slice(barWidthIndex + 9);
+            const commaIndex =  barStringIndex.indexOf(',');
+            let barWidth = barStringIndex.slice(0,commaIndex);
+            if(window.outerWidth <= 500){
+              barWidth = 10;
+            }
+        
+            if(window.outerWidth > 500 && window.outerWidth <= 780){
+              barWidth = 14;
+            }
+    
+            paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.slice(0,barWidthIndex + 9) +
+              barWidth + barStringIndex.slice(commaIndex);
+              this.loginService.setUser(this.users);
+            }
+          }catch(e){
+            
+          }
+
+          eval(paneCharts.chart.freeChartConfigurationJS);
+
+          if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
           const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
           const news = scriptTag.replace('<script>', '');
           $('#content').bind(
