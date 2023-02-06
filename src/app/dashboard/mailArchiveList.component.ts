@@ -8,6 +8,7 @@ import { TABLECOLUMN } from '../interface/table-column.interface';
 import { TableColumnData } from '../data/common-data';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppConstant } from '../utility/app.constant';
+import { filter } from 'rxjs/operators';
 @Component({
   selector: 'mailArchiveList',
   templateUrl: './mailArchiveList.component.html',
@@ -46,11 +47,11 @@ export class MailArchiveListComponent implements OnInit {
 
   getMailList(params: any) {
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetWithParams('customers/' + this.users.outhMeResponse.customerId + '/mails', params).subscribe(
+    this.loginService.performGetWithParams('customers/' + this.users.outhMeResponse.customerId + '/mails', params)
+    .pipe(filter((data : any) => data))
+    .subscribe(
       data => {
-        // const response = JSON.parse(JSON.stringify(data));
-        console.warn(this.pageIndex)
-        const emailList = data.data;
+        const emailList = this.transformMailArchiveList(data);
         if(emailList.length == this.pageSize) {
           this.disableNextButton = false;
           this.usageHistoryData.content = emailList;

@@ -192,11 +192,11 @@
                             <tr>
                                 <th><h3 class="Account">Home Profile</h3></th>
                                 <th
-                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    >
                                     <h3 class="Account">Data
                                         from Zillow</h3></th>
                                 <th
-                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    >
                                     <h3 class="Account">User
                                         entered data</h3></th>
                                 <th
@@ -206,7 +206,7 @@
                             <tr>
                                 <td><p>Sqft</p></td>
                                 <td
-                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    >
                                     <p
                                         *ngIf="users.outhMeResponse.zillowConstructionSQFT!=null&&users.outhMeResponse.zillowConstructionSQFT!=undefined">{{users.outhMeResponse.zillowConstructionSQFT}}</p>
                                     <p
@@ -225,7 +225,7 @@
                             <tr>
                                 <td><p>Lot size (sqft)</p></td>
                                 <td
-                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    >
                                     <p
                                         *ngIf="users.outhMeResponse.zillowLotSize!=null&&users.outhMeResponse.zillowLotSize!=undefined">{{users.outhMeResponse.zillowLotSize}}</p>
                                     <p
@@ -233,9 +233,9 @@
                                 </td>
                                 <td>
                                     <p>{{users.outhMeResponse.lotSize}}
-                                        <a
+                                        <!-- <a
                                             *ngIf="users.outhMeResponse.zillowLotSize!=null&&users.outhMeResponse.zillowLotSize>0"
-                                            class="a_edit" (click)="edit(2)">Edit</a>
+                                            class="a_edit" (click)="edit(2)">Edit</a> -->
                                     </p>
                                 </td>
 
@@ -245,7 +245,7 @@
                             <tr>
                                 <td><p>Year built</p></td>
                                 <td
-                                    *ngIf="users?.outhMeResponse?.customerGroup?.groupCode=='TST'">
+                                    >
                                     <p
                                         *ngIf="users.outhMeResponse.zillowYearBuilt!=null&&users.outhMeResponse.zillowYearBuilt!=undefined">{{users.outhMeResponse.zillowYearBuilt}}</p>
                                     <p

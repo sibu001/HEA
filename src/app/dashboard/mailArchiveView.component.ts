@@ -32,6 +32,12 @@ export class mailArchiveViewComponent implements OnInit, AfterViewInit {
     const iFrame = document.getElementById('ifrmMailContent') as HTMLIFrameElement;
     iFrame.contentDocument.body.innerHTML = this.users.mailContent;
     this.iframeHeight = iFrame.contentWindow.document.body.scrollHeight + 20 + 'px';  
+
+    this.scrollTop();
+  }
+
+  scrollTop(){
+    window.scrollTo(0,0);
   }
 
   ngOnInit() {

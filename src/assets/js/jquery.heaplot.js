@@ -601,7 +601,15 @@ function findTickIntervalBase(max, min, numTicks) {
 						nd();
 					}
 				}
-			);
+			).bind('jqplotDataMouseOver', function (ev,seriesIndex, pointIndex, data) {
+				var seriesTotalValue = 0;
+					$.each(seriesData[seriesIndex], function (i, item) {
+						seriesTotalValue = seriesTotalValue + item[1];
+					});
+					var showSeriesTotalValue = _formatValueWithUnit(seriesTotalValue, 0, normData.unit);
+					overlib(showSeriesTotalValue, 10000, WIDTH, 50);
+				
+			});
 			// $('#resizable2').bind('resizestop', function (event, ui) {
 			// 	$('#' + chartSeasonalStackDiv).height($('#resizable2').height() * 0.96);
 			// 	$('#' + chartSeasonalStackDiv).width($('#resizable2').width() * 0.96);
@@ -656,7 +664,12 @@ function findTickIntervalBase(max, min, numTicks) {
 						nd();
 					}
 				}
-			);
+			).bind('jqplotDataMouseOver',
+			function (ev, seriesIndex, pointIndex, data) {
+				var pieTotalValue = parseInt($('#' + chartSeasonalPieDiv).attr('pieTotalValue'));
+				var showPieValue = _formatValueWithUnit((data[1] / pieTotalValue) * 100, 0, '%');
+				overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+			});
 		}
 
 		// Show the norming bar if either n1 or n2 specified
@@ -853,7 +866,13 @@ function findTickIntervalBase(max, min, numTicks) {
 						nd();
 					}
 				}
-			);
+			).bind('jqplotDataHighlight',
+			function (ev, seriesIndex, pointIndex, data) {
+				var pieTotalValue = parseInt($('#' + chartMonthPieDiv).attr('pieTotalValue'));
+				var showPieValue = _formatValueWithUnit((data[1] / pieTotalValue) * 100, 0, '%');
+				overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+			}
+		);
 		}
 
 		//scaleCanvas($('#' + chartSeasonalStackDiv));
@@ -1128,7 +1147,12 @@ function findTickIntervalBase(max, min, numTicks) {
 					nd();
 				}
 			}
-		);
+		).bind('jqplotDataMouseOver',
+		function (ev, seriesIndex, pointIndex, data) {
+			var showPieValue = _formatValueWithUnit(data[1], 0, dataUnit);
+			overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+		}
+	);
 
 		scaleCanvas($('#' + divName));
 	};

@@ -174,7 +174,7 @@
                 <div class="messages_top"
                     *ngIf="users.customerMailList!=null&&users.customerMailList!=undefined&&hideMsgs">
                     <p class="messages">You have
-                        {{users.customerMailList.length}} unread messages.
+                        {{totalUnreadMail}} unread messages.
                         <a class="view" [routerLink]="['/MailArchiveList']">View</a>
                         <span class="icon_wrong" (click)="hideMsg()"
                             style="cursor:pointer;">

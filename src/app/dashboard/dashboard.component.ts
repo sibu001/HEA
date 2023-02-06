@@ -43,6 +43,7 @@ export class DashboardComponent implements OnInit {
   users: Users = new Users();
   globalM = 0;
   globalK = 0;
+  public totalUnreadMail : number = 0;  
   customer : any = { user : { name : ''}, auditId : ''};
   subject$ : Subject<any> = new Subject();
   private readonly subscriptions: Subscription = new Subscription();
@@ -84,6 +85,8 @@ export class DashboardComponent implements OnInit {
     }
     if (this.users.customerMailList.length <= 0) {
       this.getMailList();
+    }else{
+      this.getUnreadMessageCount();
     }
     if (this.users.recommendationList.length <= 0 || this.users.recommendationStatusChange || this.users.leakList.length <= 0) {
       this.getLeaksAndRecommendation();
@@ -303,6 +306,7 @@ export class DashboardComponent implements OnInit {
         const response = JSON.parse(JSON.stringify(data));
         this.users.customerMailList = response.data;
         this.loginService.setUser(this.users);
+        this.getUnreadMessageCount();
       },
       error => {
         const response = JSON.parse(JSON.parse(JSON.stringify(error))._body);
@@ -311,6 +315,15 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+
+  getUnreadMessageCount(){
+    this.users.customerMailList.forEach(data =>{
+      if(!data.wasOpened){
+        this.totalUnreadMail++;
+      }
+    });
+  }
+
   surveyView(surveyCode, surveyId) {
     document.getElementById('loader').classList.add('loading');
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyCode + '/' + surveyId).subscribe(

@@ -43,18 +43,29 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   edit(number: any) {
     let surveyCode, surveyId, paneCode;
     if (number === 1) {
-      surveyCode = this.users.surveyList[1].surveyDescription.surveyCode;
-      surveyId = this.users.surveyList[1].surveyId;
-      paneCode = this.users.surveyList[1].panes[1].paneCode;
+      surveyCode = 'HomeProfile';
+      paneCode = 'prf_residenceData';
     } else if (number === 3) {
-      surveyCode = this.users.surveyList[1].surveyDescription.surveyCode;
-      surveyId = this.users.surveyList[1].surveyId;
-      paneCode = this.users.surveyList[1].panes[2].paneCode;
+      paneCode = 'prf_constuctionBuildYear';
+      surveyCode = 'HomeProfile';
     } else if (number === 2) {
       surveyCode = 'Water';
       surveyId = this.users.surveyList[8].surveyId;
       paneCode = 'w_Intro';
     }
+
+    surveyId = this.users.surveyList.find(data =>{
+      if(data.surveyDescription.surveyCode = surveyCode){
+        return data.panes.find(data1 =>{
+          if(data1.paneCode == paneCode){
+            return true;
+          }
+          return false;
+        })
+      }
+      return false;
+    }).surveyId;
+
     document.getElementById('loader').classList.add('loading');
     const object = {};
     this.subscriptions.add(this.loginService.performPostMultiPartData(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
@@ -117,6 +128,31 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
           this.users.outhMeResponse.user.customerViewConfigurationId = '-1';
         }
       }));
+  }
+
+  goToTopicPage(surveyId, paneCode, surveyCode, index,customerId?:string) {
+    document.getElementById('loader').classList.add('loading');
+    const object = {};
+    customerId = this.users && this.users.outhMeResponse && this.users.outhMeResponse.customerId ? this.users.outhMeResponse.customerId :customerId  
+    this.loginService.performPostMultiPartData(object, 'customers/' + customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
+      data => {
+        const response = JSON.parse(JSON.stringify(data));
+        console.log(response);
+        document.getElementById('loader').classList.remove('loading');
+        if (response.errorCode == null && response.errorMessage == null) {
+          this.users.currentPaneNumber = response.data;
+          this.users.paneNumber = index;
+          this.users.isDashboard = false;
+          this.loginService.setUser(this.users);
+          this.router.navigate(['surveyView']);
+        }
+
+      },
+      errors => {
+        console.log(errors);
+        document.getElementById('loader').classList.remove('loading');
+      }
+    );
   }
 
   cancel() {
