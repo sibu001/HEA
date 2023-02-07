@@ -3,9 +3,12 @@ import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
 import { SystemService } from '../store/system-state-management/service/system.service';
-import { skipWhile } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { map, skipWhile } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
 import { SubscriptionUtil } from '../utility/subscription-utility';
+import { CustomerService } from '../store/customer-state-management/service/customer.service';
+import { TableColumnData } from '../data/common-data';
+import { TABLECOLUMN } from '../interface/table-column.interface';
 declare var $: any;
 @Component({
   selector: 'accountDetail',
@@ -21,12 +24,38 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   users: Users = new Users();
   viewConfigurationList: any;
   public errorMessage: any;
+  emailData = {
+    content : [],
+    totalElements  : 0
+  }
+  optOutData = {
+    content : [],
+    totalElements  : 0
+  }
+  minPasswordLength : number = 8;
+  maxPasswordLength : number = 100;
+  pattern : '';
+  charactersCount : number;
+  regex : string;
+  private subject : Subject<any> = new Subject();
   private readonly subscriptions: Subscription = new Subscription();
+  public emailDataSource : Array<any>;
+  public id: number;
+  optOutKeys: Array<TABLECOLUMN> = TableColumnData.OPT_OUT_KEY;
+  emailKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_EMAIL_KEY;
+  public password: string;
+  public confirmPassword : string;
+  public userId : number;
+  public confirmPasswordMissMatch : boolean = false;
   constructor(
     private loginService: LoginService,
     private router: Router,
-    private readonly systemService: SystemService) {
+    private readonly systemService: SystemService,
+    private readonly customerService: CustomerService) {
     this.users = this.loginService.getUser();
+
+    this.id = this.users.outhMeResponse.id;
+    this.userId = this.users.outhMeResponse.userId;
 
     if (this.users.role === 'USERS') {
       this.getCustomerCredentials();
@@ -34,9 +63,19 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       this.users.outhMeResponse = { user: this.users.userData };
       this.loadCustomerViewConfiguration();
     }
+    this.getPasswordValidationRule();
   }
 
   ngOnInit() {
+
+    this.getOptOut();
+    this.loadOptOut();
+
+    this.loadAllEmailSettings();
+    this.getAllEmailSettings();
+
+    this.emailSettingsList();
+
     this.scrollTop();
   }
 
@@ -103,12 +142,16 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   }
 
   postCustomerData() {
+    if(!this.saveNewPassword()) return;
     document.getElementById('loader').classList.add('loading');
     this.subscriptions.add(this.loginService.performPut(this.users.outhMeResponse, 'customers/' + this.users.outhMeResponse.customerId).subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
         this.scrollTop();
         document.getElementById('loader').classList.remove('loading');
+        this.users.outhMeResponse = response;
+        this.loginService.setUser(this.users);
+        this.router.navigate(['dashboard']);
       },
       error => {
         console.log(JSON.parse(JSON.stringify(error)));
@@ -165,6 +208,127 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   scrollTop() {
     window.scroll(0, 0);
+  }
+
+  loadAllEmailSettings(){
+    this.customerService.loadEmailSettingList(this.id);
+  }
+
+  getAllEmailSettings(){
+    this.subscriptions.add(
+      this.customerService.getEmailSettingList()
+        .pipe(
+          skipWhile((item: any) => !item),
+          map((item) => item.filter((item2) => item2.mailDescription.active))
+        )
+        .subscribe((emailSetting: any) => {
+          this.emailData.content = emailSetting;
+          this.emailData.totalElements = emailSetting.length;
+          this.subject.next('emailSettings');
+        }));
+  }
+
+  loadOptOut() {
+    this.customerService.loadOptOutList(this.id);
+  }
+
+  getOptOut(){
+    this.subscriptions.add(this.customerService.getOptOutList().
+    pipe(
+      skipWhile((item: any) => !item),
+      map((item) => {
+        return item.filter((item2) => item2.mailDescription.active);
+      })
+    )
+    .subscribe((optOutList: any) => {
+      this.optOutData.content = optOutList;
+      this.optOutData.totalElements = optOutList.length;
+      this.subject.next('optOutList');
+    }));
+  }
+
+  emailSettingsList(){
+    this.subscriptions.add(
+      this.subject
+      .subscribe(
+        response =>{
+          if(this.emailData.content && this.optOutData.content){
+          for(let optOut of this.optOutData.content){
+            for(let emailData of this.emailData.content){
+              if(emailData.mailDescriptionId == optOut.mailDescriptionId){
+                emailData.active = false;
+                break;
+              }
+            }
+          }
+          this.emailDataSource = [...this.emailData.content];
+        }
+        }
+      )
+    )
+  }
+
+  deleteOptOut(event: any) {
+    this.customerService.deleteOptOut(this.id, event.mailDescriptionId);
+  }
+
+  emailSettingsCheckBoxEvent(event : any){
+    console.log(event);
+    if(!event.optional){
+      this.customerService.saveOptOut(this.id,event.mailDescriptionId);
+    }else if(event.optional){
+      this.customerService.deleteOptOut(this.id,event.mailDescriptionId);
+    }
+  }
+
+  isconfirmPasswordValid(confirmPassword){
+    if(confirmPassword != this.password){
+      this.confirmPasswordMissMatch = true;
+      return false
+    }
+
+    this.confirmPasswordMissMatch = false;
+    return true;
+  }
+
+  getPasswordValidationRule() {
+    this.customerService.loadPasswordValidationRule();
+    this.subscriptions.add(this.customerService.getPasswordValidationRule()
+    .pipe(skipWhile((item: any) => !item))
+      .subscribe((passwordValidationRule: any) => {
+        if (passwordValidationRule.data && passwordValidationRule.data.length > 0) {
+          this.maxPasswordLength = passwordValidationRule.data[0].maximumLength;
+          this.minPasswordLength = passwordValidationRule.data[0].minimumLength;
+          // if (passwordValidationRule.data.length > 1 && passwordValidationRule.data[1].rules.length > 0) {
+          //   this.pattern = passwordValidationRule.data[1].rules[0].validCharacters;
+          //   this.charactersCount = passwordValidationRule.data[1].rules[0].numberOfCharacters;
+          // }
+          // this.regex = '^.*(?=(?:.*?[' + this.pattern
+          //   .replace(']', '').concat('\\\]')
+          //   + ']){' + this.charactersCount + ',}).*$';
+        }
+      }));
+  }
+
+  saveNewPassword() {
+
+    if(!this.isconfirmPasswordValid(this.confirmPassword)){
+      this.scrollTop();
+      return false;
+    }
+
+    if(this.password){
+      const self = this;
+      setTimeout(() => {
+        self.subscriptions.add(self.customerService.setNewPassword(self.userId, self.password)
+        .pipe(skipWhile((item: any) => !item))
+        .subscribe((passwordValidation: any) => {
+          console.log(passwordValidation);
+        }));
+      },500);
+    }
+
+    return true;
   }
 
   ngOnDestroy(): void {

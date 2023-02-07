@@ -83,8 +83,13 @@
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="pwd">New password:</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <input type="password" class="form-control"
-                                        id="pwd">
+                                    <input type="password" class="form-control" 
+                                    [(ngModel)]="password" [pattern]='regex'
+                                    name="password">
+                                    <span class="error" *ngIf="password && (password.length < minPasswordLength || 
+                                    password.length < maxPasswordLength> maxPasswordLength)">
+                                        Password Min length {{minPasswordLength}} and Max length {{maxPasswordLength}}     
+                                    </span>
                                 </div>
                                 <div class="col-sm-4 col-xs-2">
                                     <img src="assets/images/icon_help.svg"
@@ -110,8 +115,14 @@
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="newPwd">New password (repeat):</label>
                                 <div class="col-sm-6 col-xs-7">
-                                    <input type="password" class="form-control"
-                                        id="newPwd">
+                                    <input type="password" class="form-control" 
+                                    [(ngModel)]="confirmPassword" 
+                                    (ngModelChange)="isconfirmPasswordValid($event)"  name="confirmPassword">
+                                    <div>
+                                        <span *ngIf="confirmPasswordMissMatch" class="error">
+                                            Password and repeat password must match
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group" *ngIf="users.role!='USERS'">
@@ -215,7 +226,7 @@
                                 <td>
                                     <p>{{users.outhMeResponse.constructionSQFT}}
                                         <a
-                                            *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0"
+                                            *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT!=undefined"
                                             class="a_edit" (click)="edit(1)">Edit</a>
                                     </p>
 
@@ -252,7 +263,7 @@
                                         *ngIf="users.outhMeResponse.zillowYearBuilt==null||users.outhMeResponse.zillowYearBuilt==undefined">-</p>
                                 </td>
                                 <td> <p>{{users.outhMeResponse.yearBuilt}}<a
-                                            *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT>0"
+                                            *ngIf="users.outhMeResponse.constructionSQFT!=null&&users.outhMeResponse.constructionSQFT!=undefined"
                                             class="a_edit" (click)="edit(3)">Edit</a>
                                     </p>
                                 </td>
@@ -312,6 +323,50 @@
                     <div class="col-sm-4 col-xs-5 button-responsive">
                         <img src="assets/images/facebook.png" alt="facebook">
                         <img src="assets/images/google2.jpg" alt="google">
+                    </div>
+                </div>
+
+                <div class="row" style="margin-top: 40px">
+                    <div class="col-sm-12">
+  
+                        <!-- Email Settings -->
+                        <div id="email-settings" *ngIf="emailDataSource && emailDataSource.length != 0">
+                          <div class="row marginTop">
+                            <div class="col-sm-12">
+                              <p class="Messages">
+                                <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Email
+                                  Settings</strong>
+                              </p>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-12">
+                              <app-table [keys]="emailKeys" [data]="emailDataSource" [isDelete]=false [isHideAdd]=true
+                                [totalElement]="emailDataSource.length" (checkBoxChangeEvent)="emailSettingsCheckBoxEvent($event)" >
+                              </app-table>
+                            </div>
+                          </div>
+                        </div>
+                
+                        <!-- Opt Out -->
+                        <ng-container *ngIf="optOutData.content && optOutData.content.length != 0">
+                        <div class="row marginTop">
+                          <div class="col-sm-12">
+                            <p class="Messages">
+                              <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Current
+                                Opt-outs</strong>
+                            </p>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-12">
+                            <app-table [keys]="optOutKeys" [data]="optOutData.content" [isDelete]=true [isHideAdd]=true
+                              [totalElement]="optOutData.totalElements" (deleteEvent)="deleteOptOut($event)">
+                            </app-table>
+                          </div>
+                        </div>
+                      </ng-container>
+              
                     </div>
                 </div>
                 <div class="row row-top-margin">

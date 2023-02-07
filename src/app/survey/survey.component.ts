@@ -532,6 +532,26 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
         this.loginService.setUser(this.users);
       }
+      let self = this;
+      // changing value of constructionSQFT if in users.outhMeResponse for displaying in account.
+      if( this.users.currentPaneNumber.currentPane.paneCode == 'prf_residenceData'){
+        dataObj.currentPaneAnswers.find(function(answer){
+          if(answer.field == "prf_floorSpace"){
+            self.users.outhMeResponse.constructionSQFT = answer.value;
+            return true;
+          }
+        });
+      }
+
+      // changing value of yearBuilt if in users.outhMeResponse for displaying in account.
+      if ( this.users.currentPaneNumber.currentPane.paneCode == "prf_constuctionBuildYear"){
+        dataObj.currentPaneAnswers.find(function(answer){
+          if(answer.field == "prf_YearConstruction"){
+            self.users.outhMeResponse.yearBuilt = answer.value;
+            return true;
+          }
+        });
+      }
 
       this.subscriptons.add(
         this.loginService.performPostMultiPartDataPost(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +

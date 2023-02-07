@@ -18,6 +18,7 @@ import { SystemManagementState } from '../store/system-state-management/state/sy
 import { DatePipe } from '@angular/common';
 import { MatAutocompleteModule, MatInputModule, MatOptionModule } from '@angular/material';
 import { CustomerService } from '../store/customer-state-management/service/customer.service';
+import { CustomerManagementState } from '../store/customer-state-management/state/customer.state';
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -40,6 +41,7 @@ import { CustomerService } from '../store/customer-state-management/service/cust
         MatInputModule,
         NgxsModule.forRoot([
             SystemManagementState,
+            CustomerManagementState
         ]),
     ],
     providers: [SystemService, DatePipe,CustomerService],
