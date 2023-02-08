@@ -87,7 +87,7 @@
                                     [(ngModel)]="password" [pattern]='regex'
                                     name="password">
                                     <span class="error" *ngIf="password && (password.length < minPasswordLength || 
-                                    password.length < maxPasswordLength> maxPasswordLength)">
+                                    password.length > maxPasswordLength )">
                                         Password Min length {{minPasswordLength}} and Max length {{maxPasswordLength}}     
                                     </span>
                                 </div>

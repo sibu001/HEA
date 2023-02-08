@@ -125,8 +125,25 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
             this.pageIndex = this.currentIndex -1;
           }}
           this.newFilterSearch = false;
+          this.checkForDisplayingUtilityAndSolarColumn();
     }));
   }
+
+  checkForDisplayingUtilityAndSolarColumn(){
+    const displayExtraColumn = this.dataSource.find(data =>{
+       if(data.pv)
+         return true;
+     });
+ 
+     if(displayExtraColumn){
+       this.keys = [...this.keys];
+       this.keys.push({ key: 'utility', isEdit: true, displayName: 'Utitility' });
+       this.keys.push({ key: 'utilityOrig', isEdit: true   , displayName: 'NEM' });
+       this.keys.push({ key: 'pv', isEdit: true, displayName: 'Solar' });
+     }else{
+       this.keys = TableColumnData.ELECTRICITY_KEYS;
+     }
+   }
 
   search(event: any, isSearch: boolean, forced ?: boolean): void {
     this.adminFilter.page = event;

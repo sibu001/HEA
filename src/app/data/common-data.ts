@@ -509,9 +509,6 @@ export class TableColumnData {
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
         { key: 'billingDate', isEdit: true, displayName: 'Billing Date', isDate: true },
         { key: 'value', isEdit: true, displayName: 'Total' },
-        // { key: 'utility', isEdit: true, displayName: 'Utitility' },
-        // { key: 'utilityOrig', isEdit: true   , displayName: 'NEM' },
-        // { key: 'pv', isEdit: true, displayName: 'Solar' },
     ];
 
     static readonly SMART_METER_KEYS: Array<TABLECOLUMN> = [

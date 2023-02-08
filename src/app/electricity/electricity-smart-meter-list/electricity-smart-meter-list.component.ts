@@ -33,7 +33,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
   dataListForSuggestions = [];
   selectedCustomer = null;
   selectionPrivilege : boolean  = false;
-  keys = TableColumnData.SMART_METER_KEYS;
+  keys = [...TableColumnData.SMART_METER_KEYS];
   newFilterSearch = false;
   pageSize = AppConstant.pageSize;
   constructor(private loginService: LoginService,
@@ -114,13 +114,42 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
           this.dataSource = [...this.usageHistoryData.content];
         } else {
           if(this.newFilterSearch)
-            this.dataSource = [...gasList.data];
+          this.dataSource = [...gasList.data];
           this.pageIndex = this.currentIndex -1;
         }}
+        this.checkForDisplayingUtilityAndSolarColumn();
         this.newFilterSearch = false;
   }));
 
   }
+
+  checkForDisplayingUtilityAndSolarColumn(){
+   const displayExtraColumn = this.dataSource.find(data =>{
+      if(data.pv)
+        return true;
+    });
+
+    if(displayExtraColumn){
+      this.dataSource = this.dataSource.map(data =>{
+        if(data.pv && data.value){
+          data.total = data.pv + data.value;
+        }else{
+          data.total = data.value;
+        }
+        data.total = data.total.toFixed(4);
+        return data;
+      });
+
+      this.keys = [...this.keys];
+      this.keys.pop();
+      this.keys.push({ key: 'total', isEdit: true, displayName: 'Total' });
+      this.keys.push({ key: 'value', isEdit: true, displayName: 'Utility' });
+      this.keys.push({ key: 'pv', isEdit: true, displayName: 'Solar' });
+    }else{
+      this.keys = TableColumnData.SMART_METER_KEYS;
+    }
+  }
+
 
   findSmartElectricityList(force: boolean, filter: any): void {
     this.adminFilter.formValue = this.electricitySmartMeterForm.value;

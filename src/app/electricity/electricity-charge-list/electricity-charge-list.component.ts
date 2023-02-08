@@ -118,9 +118,26 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
             this.dataSource = [...gasList.data];
           this.pageIndex = this.currentIndex -1;
         }}
+      this.checkForDisplayingUtilityAndSolarColumn();
       this.newFilterSearch = false;
       }));
   }
+
+  checkForDisplayingUtilityAndSolarColumn(){
+    const displayExtraColumn = this.dataSource.find(data =>{
+       if(data.pv)
+         return true;
+     });
+ 
+     if(displayExtraColumn){
+       this.keys = [...this.keys];
+       this.keys.push({ key: 'utility', isEdit: true, displayName: 'Utitility', isDolar : true });
+       this.keys.push({ key: 'utilityOrig', isEdit: true   , displayName: 'NEM', isDolar : true  });
+       this.keys.push({ key: 'pv', isEdit: true, displayName: 'Solar', isDolar : true  });
+     }else{
+       this.keys = TableColumnData.ELECTRICITY_CHARGE_KEYS;
+     }
+   }
 
   search(event: any, isSearch: boolean, forced ?: boolean): void {
     this.adminFilter.page = event;

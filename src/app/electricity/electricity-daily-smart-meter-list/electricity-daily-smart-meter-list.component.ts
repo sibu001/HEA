@@ -210,8 +210,36 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
           this.pageIndex = this.currentIndex -1;
         }}
         this.newFilterSearch = false;
+        this.checkForDisplayingUtilityAndSolarColumn();
       }));
   }
+
+  checkForDisplayingUtilityAndSolarColumn(){
+    const displayExtraColumn = this.dataSource.find(data =>{
+       if(data.pv)
+         return true;
+     });
+ 
+     if(displayExtraColumn){
+       this.dataSource = this.dataSource.map(data =>{
+         if(data.pv && data.value){
+           data.total = data.pv + data.value;
+         }else{
+           data.total = data.value;
+         }
+         data.total = data.total.toFixed(4);
+         return data;
+       });
+ 
+       this.keys = [...this.keys];
+       this.keys.pop();
+       this.keys.push({ key: 'total', isEdit: true, displayName: 'Total' });
+       this.keys.push({ key: 'value', isEdit: true, displayName: 'Utility' });
+       this.keys.push({ key: 'pv', isEdit: true, displayName: 'Solar' });
+     }else{
+       this.keys = TableColumnData.SMART_METER_DAILY_KEYS;
+     }
+   }
 
   search(event: any, isSearch: boolean , forced ?: boolean): void {
     this.adminFilter.page = event;
