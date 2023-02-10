@@ -53,29 +53,28 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     private readonly systemService: SystemService,
     private readonly customerService: CustomerService) {
     this.users = this.loginService.getUser();
-
-    this.id = this.users.outhMeResponse.id;
-    this.userId = this.users.outhMeResponse.userId;
-
-    if (this.users.role === 'USERS') {
-      this.getCustomerCredentials();
-    } else {
-      this.users.outhMeResponse = { user: this.users.userData };
-      this.loadCustomerViewConfiguration();
-    }
     this.getPasswordValidationRule();
   }
 
   ngOnInit() {
+    if (this.users.role === 'USERS') {
+      this.getCustomerCredentials();
+      this.id = this.users.outhMeResponse.id;
+      this.userId = this.users.outhMeResponse.userId;
 
-    this.getOptOut();
-    this.loadOptOut();
+      this.getOptOut();
+      this.loadOptOut();
+  
+      this.loadAllEmailSettings();
+      this.getAllEmailSettings();
+  
+      this.emailSettingsList();
 
-    this.loadAllEmailSettings();
-    this.getAllEmailSettings();
-
-    this.emailSettingsList();
-
+    } else {
+      this.users.outhMeResponse = { user: this.users.userData };
+      this.loadCustomerViewConfiguration();
+    }
+    
     this.scrollTop();
   }
 

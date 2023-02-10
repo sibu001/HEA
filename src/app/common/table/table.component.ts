@@ -125,6 +125,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   alterTable = false;
   subscriptions : Subscription = new Subscription();
   pushedDataArrayPerRow = new Array<any>();
+  showTableLoaderButton : boolean = false;
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   constructor(
     private ElByClassName: ElementRef,
@@ -229,6 +230,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
     
     if(changes['pushedData'] && changes['pushedData'].currentValue ) {
+      this.showTableLoaderButton = true;
       if( (this.pushedData && this.pushedData.dataFileList && this.pushedData.dataFileList.length ) ||
       this.pushedData.error ){
         this.alterTable = true;
@@ -426,8 +428,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     if(this.showRowLoader == true) {
         this.pushedData = [];
         this.alterTable = false;
-        let loaderDiv = buttonEvent.path[2].children[1];
-        buttonEvent.path[0].style = 'visibility : hidden';
+        this.showTableLoaderButton = false;
+        let loaderDiv = document.getElementById('loader1');
+        buttonEvent.target.style.visibility = 'hidden';
         loaderDiv.classList.add('row-loader-visibility');
     }
     this.buttonListEvent.emit(obj);

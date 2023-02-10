@@ -83,11 +83,11 @@ export class DashboardComponent implements OnInit {
     } else {
       this.getMyReport();
     }
-    if (this.users.customerMailList.length <= 0) {
+    // if (this.users.customerMailList.length <= 0) {
       this.getMailList();
-    }else{
-      this.getUnreadMessageCount();
-    }
+    // }else{
+    //   this.getUnreadMessageCount();
+    // }
     if (this.users.recommendationList.length <= 0 || this.users.recommendationStatusChange || this.users.leakList.length <= 0) {
       this.getLeaksAndRecommendation();
     } else {

@@ -123,7 +123,7 @@
                     *ngIf="col.type=='buttons' && !col.isAction">
                         <div #buttonElement class='inline-table btnPadding expandCheck' *ngFor='let button of
                             row[col.key]'>
-                            <button class='btn btn-primary' *ngIf="button.isShow" [ngClass]='{ "row-loader-visibility" : alterTable, "button-shrink" : showRowLoader }'
+                            <button class='btn btn-primary' *ngIf="button.isShow" [ngClass]='{ "row-loader-visibility" : showTableLoaderButton, "button-shrink" : showRowLoader }'
                                 (click)='onButtonEvent(button,col,row,$event)'>
                                 {{button.name}}
                             </button>

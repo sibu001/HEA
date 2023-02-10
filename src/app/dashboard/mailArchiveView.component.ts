@@ -1,3 +1,4 @@
+import { AppConstant } from './../utility/app.constant';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Users } from 'src/app/models/user';
@@ -34,6 +35,22 @@ export class mailArchiveViewComponent implements OnInit, AfterViewInit {
     this.iframeHeight = iFrame.contentWindow.document.body.scrollHeight + 20 + 'px';  
 
     this.scrollTop();
+
+    if(this.users.role == 'USERS' && (this.users.mailDetail.sentTo == this.users.outhMeResponse.user.email || 
+      this.users.mailDetail.sentTo == this.users.outhMeResponse.user.username ) && !this.wasOpened)
+      this.markedCurrentMailAsOpened();
+  }
+
+  markedCurrentMailAsOpened(){
+      this.loginService.performPost('',AppConstant.customer + '/' + this.users.mailDetail.customerId
+       + '/mails' + '/' + this.users.mailDetail.mailArchiveId+ '/markAsOpened')
+      .subscribe(
+        data =>{
+          console.log(data);
+        }, error =>{
+          console.log(error);
+        }
+      )
   }
 
   scrollTop(){

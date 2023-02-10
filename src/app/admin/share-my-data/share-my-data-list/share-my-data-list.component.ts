@@ -56,7 +56,10 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.usageHistoryService.getShareMyDataList().pipe(skipWhile((item: any) => !item))
     .subscribe((shareMyDataList: any) => {
       this.data.content = shareMyDataList;
-      this.dataSource = [...this.data.content];
+      this.dataSource = this.data.content.map((data)=>{
+        data.id= data.subscriptionId;
+        return data;
+      })
       this.processDataCustomer = [];
       }));
   }
@@ -86,7 +89,7 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
   shareMyDataProcesConsumerFilter(event) : HttpParams{
     return new HttpParams()
       .set('customerRef',event.subscriptionId)
-      .set('processAsNew', "" + (!event.optional && event.optional == false ? false : true) );
+      .set('processAsNew', "" + (!event.optional? false : true) );
   }
 
   buttonUpdateEvent(event){
@@ -134,7 +137,7 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
       if(this.selectionList.length != 0){
         this.selectionList.map(
           (item) =>{
-            inputList.push({ "customerRef" : item.subscriptionId , "processAsNew" : (!item.optional && item.optional == false ? false : true)})
+            inputList.push({ "customerRef" : item.subscriptionId , "processAsNew" : (!item.optional? false : true)})
           })}
 
     document.getElementById('loader1').classList.add('row-loader-visibility');
