@@ -224,3 +224,9 @@ label.control-label{
 .form-group{
   margin-bottom: 5px;
 }
+
+@media (max-width: 767px) {
+  .small-device-margin{
+    margin-bottom:40px;
+  }
+}

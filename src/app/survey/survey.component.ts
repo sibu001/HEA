@@ -472,17 +472,14 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       answers.value = answers.value + "";
     }
 
-    if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
-      this.gotToTopicHistory();
-    } else {
       if (this.users.currentPaneNumber.currentPaneAnswers.length > 0 || this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
         this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
       } else {
         this.nextPane(this.users.currentPaneNumber);
       }
       document.getElementById('loader').classList.add('loading');
-    }
   }
+  
   prev(id: any, paneNumber: any) {
     this.users.allSurveyCheck = true;
     this.chartHelpHide = false;
@@ -729,9 +726,15 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/nextPane').subscribe(
         data => {
           const response = JSON.parse(JSON.stringify(data));
-          this.getSessionPendingMessage();
           this.users.currentPaneNumber = response.data;
           this.loginService.setUser(this.users);
+
+          if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
+            this.gotToTopicHistory();
+            return;
+          }
+
+          this.getSessionPendingMessage();
           if (this.users.currentPaneNumber.currentPane != null) {
   
             if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
@@ -1210,8 +1213,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   showDilalogBox(event : any){
     const dialogRef = this.matDialog.open(SurveyDialogboxComponent, {
-      width: '70vw',
-      height: '70vh',
+      width: window.outerWidth > 425 ? '70vw' : '85vw',
+      height: window.outerWidth > 425 ? '65vw' : '70vh',
       data: JSON.parse(JSON.stringify(event)),
       disableClose: false
     });

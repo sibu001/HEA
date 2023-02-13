@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-sm-12">
-    <button (click)="cancle()" class="closeButton" cdkFocusInitial>
+    <button (click)="cancle()" class="closeButton" cdkFocusInitial style="margin-right: 20px">
       <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8pt" height="8pt"
         viewBox="0 0 8 8" version="1.1">
         <g id="surface1">
@@ -20,13 +20,13 @@
   </div>
 </div>
 <form #surveyForm="ngForm" >
-  <hr style="margin-bottom: 60px">
+  <hr style="margin-bottom: 30px">
   <div class="row center-ele">
     <div class="col-md-12">
       <ng-container *ngFor="let surveyAnswerValue of
       surveyAnswer.surveyAnswers; index as j">
         <div class="row rowPadding" *ngIf="surveyAnswerValue.dataField.userDisplay">
-          <div class="col-md-6 text-right">
+          <div class="col-md-6 col-xs-12 text-right">
             <div style="display: inline;" [innerHTML]="surveyAnswerValue.dataField.label"
             [ngClass]="{'error-fields-highlight' : surveyAnswerValue.dataField.required && surveyForm.form.status== 'INVALID' 
                         && surveyForm.submitted && (surveyAnswerValue.value == undefined 
@@ -37,7 +37,7 @@
               <span class="error-fields-highlight">*</span>
             </ng-container>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-4 col-xs-10">
             <div *ngIf="surveyAnswerValue.dataField.dataType=='datetime'&&surveyAnswerValue.dataField.inputType=='date'"
               class=" form-group">
               <p-calendar [name]="surveyAnswerValue.field" [id]="surveyAnswerValue.dataFieldId"
@@ -88,7 +88,7 @@
               </div>
             </div>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-2 col-xs-2">
             <div *ngIf="surveyAnswerValue.dataField.helpText!=null&&surveyAnswerValue.dataField.helpText.length>1">
               <img alt="icon" src="assets/images/icon_help.svg" class="question" id="help_btn"
                 (click)="surveyAnswerValue.helpHide=!surveyAnswerValue.helpHide">
@@ -110,11 +110,11 @@
     </div>
   </div>
 
-  <hr style="margin-top: 60px">
+  <hr style="margin-top: 30px">
   <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-7">
     </div>
-    <div class="col-md-2 col-xs-6 ">
+    <div class="col-md-2 col-xs-5 ">
       <button type="button" class="btn cancle-btn" (click)="cancle()"
         style="float: right; margin-right: -4px;">Cancel</button>
     </div>

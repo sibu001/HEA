@@ -2475,6 +2475,8 @@ img[src="assets/images/ico_html.png"]{
 
 mat-dialog-container{
   margin-top: 40px;
+  /* added padding for the slider issue in survey component in pop */
+  padding-right : 0px !important;  
 }
 
 @media (min-width: 768px) and (max-width: 901px) {

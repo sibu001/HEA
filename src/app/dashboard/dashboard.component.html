@@ -3,7 +3,7 @@
         <div class="row">
             <div class="messages_responsive"
                 *ngIf="users.customerMailList!=null&&users.customerMailList!=undefined&&hideMsgs">
-                <p class="messages">You have {{users.customerMailList.length}}
+                <p class="messages">You have {{totalUnreadMail}}
                     unread messages.
                     <a class="view" [routerLink]="['/MailArchiveList']">View</a>
                     <span class="icon_wrong" (click)="hideMsg()">
@@ -94,7 +94,7 @@
                     </div>
                     <!-- next topic -->
                     <hr class="nextTopicHr">
-                    <div class="nextTopic">
+                    <div class="nextTopic" style="margin: 5px;">
                         <div style="text-align: right;">
                             <a [routerLink]="['/topicshistory']" style="color: #75ba18"> all topics</a>
                         </div>
