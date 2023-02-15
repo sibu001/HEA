@@ -24,24 +24,32 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
   recommendationPriceValueSum = 0;
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
-    this.recommendationList = this.users.recommendationList;
-    if (this.recommendationList.length <= 0 || this.users.recommendationStatusChange) {
-      this.getRecommendation();
-    }
     this.getLeak();
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.recommendationList = this.users.recommendationList;
+   }
 
   ngAfterViewInit() {
+    if (this.recommendationList.length <= 0 || this.users.recommendationStatusChange) {
+      this.getRecommendation();
+    }else{
+      this.scrollToRecommendation();
+    }
+  }
 
+  scrollToRecommendation(){
     const selectedRecommendation = document.querySelector('[href="#collapse' + this.users.recommendationNo +'"]');
     if(!this.users.recommendationNo || !selectedRecommendation){
       return ;
     }
 
     $('#collapse' + this.users.recommendationNo).addClass('in');
-    document.querySelector('[href="#collapse' + this.users.recommendationNo +'"]').scrollIntoView();
+    const selectedDiv = document.querySelector('[href="#collapse' + this.users.recommendationNo +'"]');
+    selectedDiv.setAttribute('aria-expanded','true');
+    selectedDiv.classList.remove('collapsed');
+    selectedDiv.scrollIntoView();
     setTimeout(() => {
       window.scrollBy(0,-100);
     },100);
@@ -104,6 +112,8 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
       error => {
         document.getElementById('loader').classList.remove('loading');
         console.log(JSON.parse(JSON.stringify(error)));
+      },() =>{
+        setTimeout(() =>{ this.scrollToRecommendation(); },300);
       });
   }
 

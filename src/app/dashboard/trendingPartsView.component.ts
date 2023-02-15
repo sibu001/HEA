@@ -95,7 +95,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
         if (element.usedCost && element.usedUse) {
           element.color = '#76ba19';
         } else {
-          element.color = '';
+          element.color = '#9b9b9b';
         }
       }
     });
@@ -146,7 +146,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
               element.color = '#76ba19';
             } else {
               element.isActive = false;
-              element.color = '';
+              element.color = '#9b9b9b';
             }
           }
           switch (element.resourceType) {

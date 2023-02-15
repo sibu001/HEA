@@ -19,15 +19,21 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < this.users.leakList.length; i++) {
       this.users.leakList[i].flag = true;
     }
-    if (this.users.isLeakChange) {
-      this.getLeaksAndRecommendation();
-    }
+
   }
 
   ngOnInit() {
   }
 
   ngAfterViewInit() {
+    if (this.users.isLeakChange) {
+      this.getLeaksAndRecommendation();
+    }else{
+      this.scrollToLeak();
+    }
+  }
+
+  scrollToLeak(){
     const leak = document.getElementById('leak' + this.users.leakFocusId);
     if(this.users.leakFocusId && leak){
       try {
@@ -62,6 +68,7 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
           this.users.leakList[i].flag = true;
         }
         document.getElementById('loader').classList.remove('loading');
+        this.scrollToLeak();
       },
       error => {
         document.getElementById('loader').classList.remove('loading');

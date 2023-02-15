@@ -873,7 +873,7 @@
                             </p>
                           </td>
                           <td 
-                            *ngIf="currentPaneBlock?.surveyAnswerBlocks?.length>1">
+                            *ngIf="users.currentPaneNumber.currentPane.paneCode != 'pv_EditPVConfigs' || currentPaneBlock?.surveyAnswerBlocks?.length>1">
                             <p class="form-group trash-can-p-width">                                                                                                                                                                                                                                                                                                                            
                               <img alt="icon" style="max-width:21px; margin:auto;"
                               src="assets/images/trashcan.png"

@@ -68,12 +68,12 @@
                         <p class="trendsmall">Trends for</p>
                         <ng-container *ngFor="let resource of
                             users.trendingPartResource;index as i">
-                            <div *ngIf="resource.useTypesCost>0||resource.useTypesUse>0">
+                            <a *ngIf="resource.useTypesCost>0||resource.useTypesUse>0">
                                 <p
                                     class="Energy"
                                     [style.color]="resource.color"
                                     (click)="changeResource(resource.resourceType,resource.isActive)">{{resource.resourceTypeLabel}}</p>
-                            </div>
+                            </a>
                         </ng-container>
                     </div>
                     <div class="col-xs-6" style="text-align:right;">

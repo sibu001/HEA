@@ -1488,6 +1488,10 @@ table.jqplot-table-legend {
   .content{
     padding-left: 40px !important;
   }
+/* 
+  mat-dialog-container .content{
+    padding: 20px !important;
+  } */
 }
 
 .filterLabel {
@@ -2295,6 +2299,10 @@ table .ui-calendar .ui-calendar-button {
   cursor:pointer;
 }
 
+.cursor-none{
+  cursor:none;
+}
+
 app-customer-view .mat-column-note,
 app-customer-view .mat-column-description{
   word-wrap: break-word !important;
@@ -2505,4 +2513,17 @@ leaklistview a, surveyRecommendationList a{
   .trending-charts-redirection{
     display: none;
   }
+}
+
+.d-none{
+  display: none;
+}
+
+.d-inline-block{
+  display: inline-block;
+}
+
+
+trendingpartsview .trendingChartDiv>div{
+  height: auto !important;
 }
