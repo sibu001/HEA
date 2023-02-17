@@ -6,6 +6,7 @@ import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
 import { Location } from '@angular/common';
 import { AdminFilter, UsageHistoryFilter } from '../models/filter-object';
+import { AppUtility } from '../utility/app.utility';
 
 declare function mobilecheck() : boolean ;
 declare var FB: any;
@@ -248,7 +249,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
               break;
             }
           }
-          if (this.users.role === 'USERS') {
+          if (this.users.role === 'USERS') {  
             this.postGetCustomerData(userId, 'USERS');
           }
         },
@@ -256,11 +257,23 @@ export class LoginComponent implements OnInit, AfterViewInit{
           const response = JSON.parse(JSON.stringify(error));
           console.log(response);
           this.postGetCustomerData(userId, 'USERS');
+          this.getAllowedMenuListForUser();
           this.errorMessage = response.error_description;
           // document.getElementById('loader').classList.remove('loading');
         }
       );
   }
+
+  getAllowedMenuListForUser(){
+    this.loginService.performGet('/allowedMenuList')
+    .subscribe(
+      ( response)=>{
+          this.users.allowedMenuList = AppUtility.setAllowedMenuList(response.data);
+      }, (error) =>{
+        this.errorMessage = error.error_description;
+      })
+  }
+
   getUserById(userId: any) {
     this.loginService
       .performGetMultiPartData('users/' + userId)

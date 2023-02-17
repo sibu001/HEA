@@ -87,77 +87,7 @@
       </div>
       <div *ngIf="users.role==='USERS'" class="col-lg-3 col-md-3 col-sm-4
         rightColumn">
-        <div class="feedback">
-          <p class="Energy_anaiytic">
-            <img src="assets/images/dot03.gif" alt="dot" class="dot" />&nbsp;Powered by
-            Home Energy Analytics, Inc.
-          </p>
-          <p class="feedback">Send feedback to</p>
-          <p class="link_hea">
-            <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
-          </p>
-          <hr />
-          <ul class="leaks">
-            <li>
-              <a class="a_history" [routerLink]="['/topicshistory']">Topics
-                history</a>
-            </li>
-            <li>
-              <a class="a_history" [routerLink]="['/customerEventList']">Events
-                history</a>
-            </li>
-            <li>
-              <a class="a_history" [routerLink]="['/MailArchiveList']">Mail
-                archive</a>
-            </li>
-            <li>
-              <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
-            </li>
-            <li>
-              <div class="dropdown">
-                <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage
-                  history
-                </a>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                  <li role="presentation" style="padding-bottom: 5px">
-                    <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/gas/gasList']">Gas</a>
-                  </li>
-                  <li role="presentation" style="padding-bottom: 5px">
-                    <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/gas/gasChargeList']">Gas
-                      charge</a>
-                  </li>
-                  <li role="presentation" style="padding-bottom: 5px">
-                    <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/electricity/electricityUsageList']">Electricity</a>
-                  </li>
-                  <li role="presentation" style="padding-bottom: 5px">
-                    <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/electricity/electricityChargeList']">Electricity
-                      charge</a>
-                  </li>
-                  <li role="presentation" style="padding-bottom: 5px">
-                    <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/electricity/electricitySmartMeterList']">Electric
-                      smart meter</a>
-                  </li>
-                  <li role="presentation" style="padding-bottom: 5px">
-                    <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric
-                      Daily smart
-                      meter</a>
-                  </li>
-                  <li role="presentation" style="padding-bottom: 5px">
-                    <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/gas/gasSmartMeterList']">Gas smart
-                      meter</a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </div>
+        <app-user-sidebar></app-user-sidebar>
       </div>
     </div>
   </div>

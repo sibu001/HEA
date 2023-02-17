@@ -27,6 +27,7 @@ import { TopicService } from '../store/topic-state-management/service/topic.serv
 import { NgxsModule } from '@ngxs/store';
 import { TopicManagementState } from '../store/topic-state-management/state/topic.state';
 import { MatAutocompleteModule } from '@angular/material';
+import { UserSidebarComponent } from './user-sidebar/user-sidebar.component';
 @NgModule({
   imports: [
     CommonModule,
@@ -54,9 +55,9 @@ import { MatAutocompleteModule } from '@angular/material';
       TopicManagementState
     ]),
   ],
-  declarations: [TableComponent, GoogleMapComponent, SidebarComponent, RoundPipe, PasswordStrengthComponent],
+  declarations: [TableComponent, GoogleMapComponent, SidebarComponent, RoundPipe, PasswordStrengthComponent, UserSidebarComponent],
   entryComponents: [GoogleMapComponent],
-  exports: [TableComponent, SidebarComponent, RoundPipe, PasswordStrengthComponent],
+  exports: [TableComponent, SidebarComponent, RoundPipe, PasswordStrengthComponent,UserSidebarComponent],
   providers: [TopicService]
 })
 export class CommonHEAModule { }

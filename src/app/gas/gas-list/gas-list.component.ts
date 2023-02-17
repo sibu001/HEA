@@ -76,7 +76,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
   }
 
   setSelectionPrivilege(){
-    this.selectionPrivilege = this.users.role === 'ADMIN'  || this.users.role === 'STAFF';
+    this.selectionPrivilege = this.users.role != 'USERS';
   }
   
   sessionUtility(event){
@@ -241,7 +241,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-        .set('sortOrders[0].propertyName', ((event && event.sort &&  event.sort.active !== undefined ) && (event.sort.active = '') ? event.sort.active : 'year'))
+        .set('sortOrders[0].propertyName', ((event && event.sort && event.sort.active) ? event.sort.active : 'year'))
         .set('sortOrders[0].asc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
         .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
       .set('month', (this.gasForm.value.month !== null ? this.gasForm.value.month : ''));

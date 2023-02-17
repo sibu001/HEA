@@ -58,21 +58,21 @@ export class customerEventListComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    $(document).ready(function () {
-      $('#example').dataTable().fnDestroy();
-      setTimeout(function () {
-        $('#example').DataTable({
-          'responsive': true,
-          'pagingType': 'full',
-          'columnDefs': [{
-            'targets': [0], // column or columns numbers
-            'orderable': false, // set orderable for selected columns
-          }],
-          'retrieve': true
-        });
-        $('.dataTables_length').addClass('bs-select');
-      }, 1000);
-    });
+    // $(document).ready(function () {
+    //   $('#example').dataTable().fnDestroy();
+    //   setTimeout(function () {
+    //     $('#example').DataTable({
+    //       'responsive': true,
+    //       'pagingType': 'full',
+    //       'columnDefs': [{
+    //         'targets': [0], // column or columns numbers
+    //         'orderable': false, // set orderable for selected columns
+    //       }],
+    //       'retrieve': true
+    //     });
+    //     $('.dataTables_length').addClass('bs-select');
+    //   }, 1000);
+    // });
   }
 
   perFormGetList() {

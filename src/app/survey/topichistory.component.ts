@@ -19,10 +19,11 @@ export class TopicHistoryComponent implements OnInit {
   private readonly subscriptions: Subscription = new Subscription();
   subject$ : Subject<any> = new Subject();
   dataListForSuggestions = [];
-
+  public allowedMenuListforUser;
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
     this.customer = this.users.outhMeResponse;
+    this.allowedMenuListforUser = this.users.allowedMenuList;
     this.findCustomer();
   }
 

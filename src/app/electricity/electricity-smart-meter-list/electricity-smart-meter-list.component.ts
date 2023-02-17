@@ -73,7 +73,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
   }
 
   setSelectionPrivilege(){
-    this.selectionPrivilege = this.users.role === 'ADMIN'  || this.users.role === 'STAFF';
+    this.selectionPrivilege = this.users.role != 'USERS';
   }
 
    scrollTop() {

@@ -2051,7 +2051,9 @@ div.jqplot-xaxis-tick {
   display: none;
 }
 
-mailarchivelist .ui-calendar .ui-calendar-button,mailarchivelist .ui-calendar .ui-calendar-button {
+mailarchivelist .ui-calendar .ui-calendar-button,
+mailarchivelist .ui-calendar .ui-calendar-button,
+customereventlist .ui-calendar .ui-calendar-button {
   height: 30px !important
 }
 
@@ -2526,4 +2528,8 @@ leaklistview a, surveyRecommendationList a{
 
 trendingpartsview .trendingChartDiv>div{
   height: auto !important;
+}
+
+.rightColumn{
+  background-color: #ffffff00 !important;
 }

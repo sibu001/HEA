@@ -73,7 +73,7 @@ export class WaterSmartMeterComponent implements OnInit {
     }
 
     setSelectionPrivilege(){
-      this.selectionPrivilege = this.users.role === 'ADMIN'  || this.users.role === 'STAFF';
+      this.selectionPrivilege = this.users.role != 'USERS';    
     }
     
     sessionUtility(event){

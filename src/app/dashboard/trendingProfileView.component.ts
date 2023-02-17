@@ -104,11 +104,11 @@ export class TrendingProfileViewComponent implements OnInit {
 
   changeUnitType(number: any) {
     if (number === 0) {
-      this.trendingProfile.unitTypecolor1 = '#000';
-      this.trendingProfile.unitTypecolor2 = '#76ba19';
-    } else if (number === 1) {
       this.trendingProfile.unitTypecolor1 = '#76ba19';
       this.trendingProfile.unitTypecolor2 = '#000';
+    } else if (number === 1) {
+      this.trendingProfile.unitTypecolor1 = '#000';
+      this.trendingProfile.unitTypecolor2 = '#76ba19';
     }
     this.unitTypeNumber = number;
     this.resourceTypeNumber = 0;
@@ -168,8 +168,8 @@ export class TrendingProfileViewComponent implements OnInit {
               this.trendingProfile.unitType = this.unitType;
               this.trendingProfile.typeName = this.typeName;
               this.trendingProfile.typeNumber = this.typeNumber;
-              this.trendingProfile.unitTypecolor1 = '#000';
-              this.trendingProfile.unitTypecolor2 = '#76ba19';
+              this.trendingProfile.unitTypecolor1 = '#76ba19';
+              this.trendingProfile.unitTypecolor2 = '#000';
               this.trendingProfile.color = this.colors;
               this.trendingProfile.customerId = this.users.outhMeResponse.customerId;
               localStorage.setItem('trendingProfile', JSON.stringify(this.trendingProfile));

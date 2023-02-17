@@ -12,6 +12,7 @@ import { debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/oper
 import { HttpParams } from '@angular/common/http';
 import { Subject, Subscription } from 'rxjs';
 import { AppConstant } from '../utility/app.constant';
+import { UsageHistoryFilter } from '../models/filter-object';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -185,10 +186,18 @@ export class DashboardComponent implements OnInit {
       }
     );
   }
+  
+  async setUpValueInUsageHitoryFilter(customer){
+    let usageHistoryFilter = new UsageHistoryFilter();
+    usageHistoryFilter.formValue = { "auditId" : customer.auditId , "customerName" : customer.user.name };
+    localStorage.setItem('usageHistoryFilter',JSON.stringify(usageHistoryFilter));
+  }
+
   getNextSurvey() {
     document.getElementById('loader').classList.add('loading');
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/nextSurvey').subscribe(
       data => {
+        this.setUpValueInUsageHitoryFilter(this.users.outhMeResponse);
         const response = JSON.parse(JSON.stringify(data));
         if (response.data != null) {
           this.nextTopic = response.data.surveyDescription.label;

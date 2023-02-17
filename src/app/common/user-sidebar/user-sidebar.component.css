@@ -1,0 +1,103 @@
+
+  ul.leaks {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    padding-left: 30px;
+    padding-top: 0px;
+    cursor: pointer;
+    padding-bottom: 20px;
+  }
+  
+  .a_history {
+    color: #4550a1;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  p.Energy_anaiytic {
+    color: #000000;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 2em 0 0 0;
+    padding: 0 0 0 10px;
+  }
+  p.feedback {
+    color: #000000;
+    font-weight: bold;
+    font-size: 14px;
+    margin: 2em 0 0 0;
+    padding: 0 0 0 20px;
+  }
+  a.info_hea {
+    color: #990;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 0 0 0 23px;
+    cursor: pointer;
+  }
+  ul.leaks li {
+    padding-bottom: 14px;
+  }
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    .col-sm-9.topic_list {
+      padding-left: 0px !important;
+    }
+    .select_next {
+      padding-left: 10px !important;
+    }
+    p.accurate {
+      padding-left: 10px !important;
+    }
+    ul.leaks {
+      display: none;
+    }
+  }
+  .panel-default > .panel-heading {
+    background-color: #fff;
+  }
+
+  .dropdown-menu {
+    background-color: #fff;
+    border: 0px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0px 0px rgba(0, 0, 0, 0.175);
+  }
+
+
+  a#menu1 {
+    color: #4550a1;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .dropdown-menu > li > a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    line-height: 1.42857143;
+    white-space: nowrap;
+    color: #4550a1;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .dropdown-menu[_ngcontent-c2] > li[_ngcontent-c2] > a[_ngcontent-c2]:focus,
+  .dropdown-menu[_ngcontent-c2] > li[_ngcontent-c2] > a[_ngcontent-c2]:hover {
+    color: #4550a1;
+    text-decoration: underline;
+    background-color: #fff;
+  }
+
+  a:focus {
+    outline: 0px auto -webkit-focus-ring-color;
+    outline-offset: 0px;
+  }
+  a#menu1 {
+    color: #4550a1;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+.dropdown-menu > li > a:focus,
+.dropdown-menu > li > a:hover {
+  color: #4550a1;
+  text-decoration: none;
+  background-color: #fff;
+}

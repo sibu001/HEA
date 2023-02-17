@@ -1,3 +1,5 @@
+import { AllowedMenuList } from "./app.allowedMenuList";
+
 export class AppUtility {
 
     public static isEmptyString(str): boolean {
@@ -74,5 +76,67 @@ export class AppUtility {
         const commentIndex = freeChartConfigurationJS.indexOf('$.jqplot.config.enablePlugins');
         freeChartConfigurationJS = freeChartConfigurationJS.slice(0,commentIndex) + '//' + freeChartConfigurationJS.slice(commentIndex);
         return freeChartConfigurationJS;
+    }
+
+    public static setAllowedMenuList(allowedMenuList : Array<string>) : AllowedMenuList{
+  
+        const allowedMenus = new AllowedMenuList();
+    
+        for(let menu of allowedMenuList){
+            switch(menu){
+                case 'surveyHistoryList':{
+                    allowedMenus.TOPIC_HISTORY = true;
+                    break;
+                }
+
+                case 'customerEvents':{
+                    allowedMenus.EVENT_HISTORY = true;
+                    break;
+                }
+
+                case 'recommendations':{
+                    allowedMenus.RECOMMENDATIONS = true;
+                    break;
+                }
+
+                case 'mailArchiveList':{
+                    allowedMenus.MAIL_ARCHIVE = true;
+                    break;
+                }
+
+                case 'usageHistory.electricDaily':{
+                    allowedMenus.USAGE_HISTORY.ELECTRICITY_DAILY_SMART_METER = true;
+                    break;
+                }
+                case 'usageHistory.gasCharge':{
+                    allowedMenus.USAGE_HISTORY.GAS_CHARGE = true;
+                    break;
+                }
+                case 'usageHistory.electricity':{
+                    allowedMenus.USAGE_HISTORY.ELECTRICITY = true;
+                    break;
+                }
+                case 'usageHistory.gasDetail':{
+                    allowedMenus.USAGE_HISTORY.GAS_SMART_METER = true;
+                    break;
+                }
+                case 'usageHistory.electricDetail':{
+                    allowedMenus.USAGE_HISTORY.ELECTRICITY_SMART_METER = true;
+                    break;
+                }
+                case 'usageHistory.electricityCharge':{
+                    allowedMenus.USAGE_HISTORY.ELECTRICITY_CHARGE = true;
+                    break;
+                }
+
+                case 'usageHistory.gas':{
+                    allowedMenus.USAGE_HISTORY.GAS = true;
+                    break;
+                }
+            }
+
+        }
+
+        return allowedMenus;
     }
 }

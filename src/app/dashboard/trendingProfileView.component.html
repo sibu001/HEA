@@ -107,17 +107,17 @@
                                     class="title" [style.color]="colors.colors3"
                                     (click)="energyChange(resource.resourceType,i)">Water
                                 </p>
-                                <p *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='ghg'"
-                                    class="title" style="color: #929292">GHG
-                                </p>
-                                <p *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='water'"
-                                    class="title" style="color: #929292">Water
-                                </p>
                             </div>
+                            <p *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='ghg'"
+                                class="title" style="color: #929292">GHG
+                            </p>
+                            <p *ngIf="(resource.unitTypes[0].useTypes.length==0||resource.unitTypes[1].useTypes.length==0)&&resource.resourceType=='water'"
+                                class="title" style="color: #929292">Water
+                            </p>
                         </ng-container>
                     </div>
                     <div class="col-xs-4"></div>
-                    <div class="col-xs-4" style="text-align:right;">
+                    <div class="col-xs-2 col-xs-offset-2" style="text-align:right;">
                         <p class="trendsmall">Show</p>
                         <ng-container *ngFor="let unitTypes of unitType;index as j">
                             <p *ngIf="unitTypes.unitType=='cost'" class="Energy"

@@ -46,10 +46,10 @@ const ROUTES: Routes = [
         path: '',
         loadChildren: './leakListview/leakListview.module#leakListViewModule',
       },
-      {
-        path: '',
-        loadChildren: './usageHistory/usageHistory.module#UsageHistoryModule',
-      },
+      // {
+      //   path: '',
+      //   loadChildren: './usageHistory/usageHistory.module#UsageHistoryModule',
+      // },
       {
         path: 'electricity',
         loadChildren: './electricity/electricity.module#ElectricityModule'

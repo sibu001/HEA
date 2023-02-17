@@ -1,3 +1,5 @@
+import { AllowedMenuList } from "../utility/app.allowedMenuList";
+
 export class Users {
     public outhMeResponse: any;
     public customerResponse: any;
@@ -61,4 +63,5 @@ export class Users {
     public searchUserList: any[] = [];
     public isDashboard: boolean;
     public lastVisitedURL : string;
+    public allowedMenuList : AllowedMenuList;
 }
