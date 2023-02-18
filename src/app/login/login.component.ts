@@ -265,7 +265,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
   }
 
   getAllowedMenuListForUser(){
-    this.loginService.performGet('/allowedMenuList')
+    this.loginService.performGet('allowedMenuList')
     .subscribe(
       ( response)=>{
           this.users.allowedMenuList = AppUtility.setAllowedMenuList(response.data);
