@@ -218,7 +218,7 @@ p.Messages {
 }
 .form-control {
   border-radius: 0px;
-  height: 27px;
+  /* height: 27px; */
 }
 a.link {
   color: #000;
@@ -403,4 +403,26 @@ div.feedback {
 }
 th.th-sm.sorting {
   cursor: pointer;
+}
+
+.messageName {
+  margin-left: 4px;
+}
+
+p.messages{
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.heading {
+  font-size: 21px;
+  color: #000;
+  font-weight: 600;
+}
+
+input[type="file"][_ngcontent-c1]::-webkit-file-upload-button {
+  -webkit-appearance: none;
+  margin: 1px 1px 1px 1px;
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
 }

@@ -8,7 +8,10 @@ export class AllowedMenuList{
         ELECTRICITY : false,
         ELECTRICITY_CHARGE : false,
         ELECTRICITY_SMART_METER : false,
-        ELECTRICITY_DAILY_SMART_METER : false 
+        ELECTRICITY_DAILY_SMART_METER : false,
+        WATER : false,
+        WATER_CHARGE : false,
+        WATER_SMART_METER : false,
     };
     public RECOMMENDATIONS = false;
     public MAIL_ARCHIVE = false;

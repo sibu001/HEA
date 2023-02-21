@@ -33,7 +33,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
   dataListForSuggestions = [];
   selectedCustomer = null;
   selectionPrivilege : boolean  = false;
-  keys = [...TableColumnData.SMART_METER_KEYS];
+  keys = TableColumnData.SMART_METER_KEYS;
   newFilterSearch = false;
   pageSize = AppConstant.pageSize;
   constructor(private loginService: LoginService,
@@ -140,7 +140,7 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
         return data;
       });
 
-      this.keys = [...this.keys];
+      this.keys = [...TableColumnData.SMART_METER_KEYS];
       this.keys.pop();
       this.keys.push({ key: 'total', isEdit: true, displayName: 'Total' });
       this.keys.push({ key: 'value', isEdit: true, displayName: 'Utility' });

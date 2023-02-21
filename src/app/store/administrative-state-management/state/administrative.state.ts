@@ -577,11 +577,11 @@ export class AdministrativeManagementState {
 
     @Action(GetEventHistoryListAction)
     getAllEventHistoryList(ctx: StateContext<AdministrativeManagementModel>, action: GetEventHistoryListAction): Actions {
-        const force: boolean = action.force || AdministrativeManagementState.getEventHistoryList(ctx.getState()) === undefined;
-        let result: Actions;
-        if (force) {
+        // const force: boolean = action.force || AdministrativeManagementState.getEventHistoryList(ctx.getState()) === undefined;
+        // let result: Actions;
+        // if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.eventHistory, action.filter)
+            return this.loginService.performGetWithParams(AppConstant.eventHistory, action.filter)
                 .pipe(
                     tap((response: any) => {
                         const res = AdministrativeReportTransformer.transformEventHistoryTableData(response);
@@ -595,8 +595,8 @@ export class AdministrativeManagementState {
                             this.utilityService.showErrorMessage(error.message);
                             ctx.dispatch(new CustomerError(error));
                         }));
-        }
-        return result;
+        // }
+        // return result;
     }
 
     @Action(GetEventHistoryCountAction)
@@ -688,7 +688,9 @@ export class AdministrativeManagementState {
     @Action(UploadEventHistoryFileAction)
     uploadEventHistoryFile(ctx: StateContext<AdministrativeManagementModel>, action: UploadEventHistoryFileAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPostMultiPartFromData(action.fileBody, AppConstant.eventHistory + '/files')
+        const formData = new FormData();
+        formData.append('fileBody',action.fileBody);
+        return this.loginService.performPostMultiPartFromData(formData, AppConstant.eventHistory + '/files')
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');

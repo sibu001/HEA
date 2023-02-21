@@ -1890,10 +1890,11 @@ app-topic-description-edit .mat-column-section {
   hyphens: auto;
 }
 
-app-topic-description-edit .mat-column-comments {
+app-topic-description-edit .mat-column-comments,
+customereventlist .mat-column-eventName {
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 55% !important;
+  flex: 0 0 50% !important;
   width: 8% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -1905,7 +1906,6 @@ app-topic-description-edit .mat-column-comments {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
-
 
 app-survey p{
   font-size : 14px !important;
@@ -2052,8 +2052,8 @@ div.jqplot-xaxis-tick {
 }
 
 mailarchivelist .ui-calendar .ui-calendar-button,
-mailarchivelist .ui-calendar .ui-calendar-button,
-customereventlist .ui-calendar .ui-calendar-button {
+customereventlist .ui-calendar .ui-calendar-button,
+app-event-history-list .ui-calendar .ui-calendar-button{
   height: 30px !important
 }
 

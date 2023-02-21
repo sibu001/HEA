@@ -128,15 +128,25 @@ export class AppUtility {
                     allowedMenus.USAGE_HISTORY.ELECTRICITY_CHARGE = true;
                     break;
                 }
-
                 case 'usageHistory.gas':{
                     allowedMenus.USAGE_HISTORY.GAS = true;
+                    break;
+                }
+                case 'usageHistory.waterDetail':{
+                    allowedMenus.USAGE_HISTORY.WATER_SMART_METER = true;
+                    break;
+                }
+                case 'usageHistory.waterCharge':{
+                    allowedMenus.USAGE_HISTORY.WATER_CHARGE = true;
+                    break;
+                }
+                case 'usageHistory.water':{
+                    allowedMenus.USAGE_HISTORY.WATER = true;
                     break;
                 }
             }
 
         }
-
         return allowedMenus;
     }
 }

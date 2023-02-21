@@ -231,7 +231,7 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
          return data;
        });
  
-       this.keys = [...this.keys];
+       this.keys = [...TableColumnData.SMART_METER_DAILY_KEYS];
        this.keys.pop();
        this.keys.push({ key: 'total', isEdit: true, displayName: 'Total' });
        this.keys.push({ key: 'value', isEdit: true, displayName: 'Utility' });

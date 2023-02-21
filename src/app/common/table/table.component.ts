@@ -190,6 +190,13 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
       this.dataSource = new MatTableDataSource(this.data);
       this.dataSource.sort = this.sort;
       this.sort.disableClear = true;
+
+      setTimeout(()=>{
+        const matSortHeader = document.querySelector('mat-header-cell[aria-sort]');
+        if(matSortHeader){
+          matSortHeader.setAttribute('aria-sort','');
+        } },1000);
+
     }
     if (changes['keys'] && changes['keys'].currentValue) {
       this.keys = changes['keys'].currentValue;
@@ -309,6 +316,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   onChangePage(event?: PageEvent) {
     this.page.pageSize = event.pageSize;
     this.page.pageIndex = event.pageIndex;
+    // this.pageIndex = this.page.pageIndex;
     this.changePageEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
   }

@@ -17,7 +17,7 @@
               </p-calendar>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <span class="filterLabel">Audit Id:</span>
+              <span class="filterLabel" style="margin-left: 15px">Audit Id:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <input type="text" class="form-control" formControlName="auditId"
@@ -43,7 +43,7 @@
               </p-calendar>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
-              <span class="filterLabel">Customer Name:</span>
+              <span class="filterLabel" style="margin-left: 15px">Customer Name:</span>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <input type="text" class="form-control"
@@ -70,7 +70,7 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12" style="text-align:
               end;">
-              <button type="submit" class="btn btn-primary"
+              <button class="btn btn-primary"
                 (click)="uploadEventHistoryFile()">Upload</button>
             </div>
           </div>
@@ -80,6 +80,7 @@
                 (click)="search(undefined,true)">Show</button>
             </div>
           </div>
+        </form>
 
           <div class="paddingTop">
             <p class="messages">
@@ -88,6 +89,7 @@
                 {{totalElement | number:'1.0':'en-US'}})</span></p>
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
               [data]="dataSource"
+              [pageIndex]="pageIndex" [pageSize]="25"
               [totalElement]="reportData.totalElements"
               (changePageEvent)="search($event,false)"
               (addEvent)="addEventHistory()"
@@ -95,7 +97,6 @@
               class="event-history-table">
             </app-table>
           </div>
-        </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar></app-sidebar>

@@ -1,202 +1,148 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { LoginService } from 'src/app/services/login.service';
-import { Users } from 'src/app/models/user';
-import { Router } from '@angular/router';
-import { Filter } from '../models/filter';
-declare var $: any;
-declare var moment: any;
+import { DatePipe } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
+import { TableColumnData } from 'src/app/data/common-data';
+import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { AdminFilter } from 'src/app/models/filter-object';
+import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+
 @Component({
   selector: 'customerEventList',
   templateUrl: './customerEventList.component.html',
   styleUrls: ['./customerEventList.component.css']
 })
-export class customerEventListComponent implements OnInit, AfterViewInit {
-  errorMessage: any;
-  value: Date;
-  usesEventList: any[] = [];
-  usesEventNewList: any[] = [];
-  eventCode: string;
-  eventName: string;
-  startcheck: boolean;
-  endcheck: boolean;
-  startendcheck: boolean;
-  eventCodecheck: boolean;
-  eventNamecheck: boolean;
-  filter: Filter = new Filter();
-  users: Users = new Users();
-  startDate: Date = this.filter.startDate;
-  endDate: Date = this.filter.endDate;
-  constructor(private loginService: LoginService, private router: Router) {
-    this.users = this.loginService.getUser();
-    this.filter = JSON.parse(localStorage.getItem('filter'));
-    if (this.filter == null || this.filter === undefined) {
-      this.filter = new Filter();
+export class customerEventListComponent implements OnInit, OnDestroy {
+
+
+  id: any;
+  public keys: Array<TABLECOLUMN> = [];
+  public dataSource: any;
+  public totalElement = 0;
+  public fileObject: any;
+  public reportData = {
+    content: [{ 'test': 'test' }],
+    totalElements: 1,
+  };
+
+  topicForm: FormGroup;
+  public force = false;
+  public adminFilter: AdminFilter;
+  private readonly subscriptions: Subscription = new Subscription();
+  filter : any;
+  constructor(public fb: FormBuilder,
+    private readonly administrativeService: AdministrativeService,
+    private readonly router: Router,
+    private readonly datePipe: DatePipe,
+    private readonly activateRoute: ActivatedRoute) {
+    this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null || this.adminFilter.eventHistoryFilter === undefined) {
+      this.adminFilter = new AdminFilter();
     }
-    this.perFormGetList();
-    if (!this.filter.back) {
-      this.filter.startDate = null;
-      this.filter.endDate = null;
-      this.filter.eventCode = '';
-      this.filter.eventName = '';
-      localStorage.setItem('filter', JSON.stringify(this.filter));
-    } else {
-      this.startDate = this.filter.startDate;
-      this.endDate = this.filter.endDate;
-      this.eventCode = this.filter.eventCode;
-      this.eventName = this.filter.eventName;
-    }
+    this.activateRoute.queryParams.subscribe(params => {
+      this.force = params['force'];
+    });
   }
 
   ngOnInit() {
-    if (this.filter.back || ((this.startDate !== undefined && this.startDate != null) || (this.endDate !== undefined && this.endDate != null) ||
-      (this.filter.eventCode !== '' && this.filter.eventCode != null) || (this.filter.eventName !== '' && this.filter.eventName != null))) {
-      this.searchFilter();
-    } else {
-      this.filter = new Filter();
-      localStorage.removeItem('filter');
+    TableColumnData.EVENT_HISTORY_KEYS.shift();
+    this.keys = TableColumnData.EVENT_HISTORY_KEYS;
+    this.setUpForm(this.adminFilter.eventHistoryFilter.formValue);
+    this.search(this.adminFilter.eventHistoryFilter.page, true);
+    this.getEventHistoryListFromStore();
+    this.getEventHistoryDataCountFromStore();
+  }
+
+  addEventHistory(): any {
+    this.router.navigate(['customerEventView']);
+  }
+
+  goToEditEventHistory(event: any): any {
+    this.router.navigate(['customerEventView'], { queryParams: { customerEventId: event.id, customerId: event.customerId } });
+  }
+
+  setUpForm(event: any) {
+    this.topicForm = this.fb.group({
+      periodStart: [event && event.periodStart ? new Date(event.periodStart) : ''],
+      auditId: [event !== undefined && event !== null ? event.auditId : ''],
+      eventCode: [event !== undefined && event !== null ? event.eventCode : ''],
+      periodEnd: [event && event.periodEnd ? new Date(event.periodEnd) : ''],
+      customerName: [event !== undefined && event !== null ? event.customerName : ''],
+      eventName: [event !== undefined && event !== null ? event.eventName : ''],
+      eventFile: [event !== undefined && event !== null ? event.eventFile : ''],
+    });
+  }
+
+  findEventHistory(force: boolean, filter: any): void {
+    this.adminFilter.eventHistoryFilter.formValue = this.topicForm.value;
+    localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+    this.administrativeService.getEventHistoryCount(filter);
+  }
+
+  search(event: any, isSearch: boolean): void {
+    this.adminFilter.eventHistoryFilter.page = event;
+    let sortFiled = '';
+    if (event && event.sort.active === 'eventCode') {
+      sortFiled = 'customerEventType.eventCode';
+    } else if (event && event.sort.active === 'eventName') {
+      sortFiled = 'customerEventType.eventName';
+    } else if (event && event.sort.active) {
+      sortFiled = event.sort.active;
+    }
+    const params = new HttpParams()
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('sortField', (event && sortFiled !== undefined ? (sortFiled === 'customerName' ? 'customer.user.name' : sortFiled) : ''))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      .set('dateFrom', (this.topicForm.value.periodStart ? this.datePipe.transform(this.topicForm.value.periodStart, 'MM/dd/yyyy') : ''))
+      .set('customer.auditId', (this.topicForm.value.auditId !== null ? this.topicForm.value.auditId : ''))
+      .set('customerEventType.eventCode', (this.topicForm.value.eventCode !== null ? this.topicForm.value.eventCode : ''))
+      .set('dateTo', (this.topicForm.value.periodEnd ? this.datePipe.transform(this.topicForm.value.periodEnd, 'MM/dd/yyyy') : ''))
+      .set('customer.user.name', (this.topicForm.value.customerName !== null ? this.topicForm.value.customerName : ''))
+      .set('customerEventType.eventName', (this.topicForm.value.eventName !== null ? this.topicForm.value.eventName : ''))
+      .set('eventFile', (this.topicForm.value.eventFile !== null ? this.topicForm.value.eventFile : ''));
+
+      this.force = true;
+      this.filter = params;
+      if(isSearch) this.administrativeService.getEventHistoryCount(this.filter);
+      this.administrativeService.loadEventHistoryList(this.force, this.filter);
+  }
+
+  getEventHistoryDataCountFromStore(){
+    this.subscriptions.add( this.administrativeService.getEventHistoryCountSeletor()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((eventHistoryCount: any) => {
+        this.reportData.totalElements = eventHistoryCount;
+        this.totalElement = eventHistoryCount;
+      }));
+  }
+
+  getEventHistoryListFromStore(){
+    this.subscriptions.add(this.administrativeService.getEventHistoryList()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((eventHistoryList: any) => {
+      this.reportData.content = eventHistoryList;
+      this.dataSource = [...this.reportData.content];
+    }));
+  }
+
+  handleFileInput(file: any) {
+    this.fileObject = file[0];
+  }
+
+  uploadEventHistoryFile() {
+    if (this.fileObject) {
+      this.administrativeService.uploadEventHistoryFile(this.fileObject);
     }
   }
 
-  ngAfterViewInit() {
-    // $(document).ready(function () {
-    //   $('#example').dataTable().fnDestroy();
-    //   setTimeout(function () {
-    //     $('#example').DataTable({
-    //       'responsive': true,
-    //       'pagingType': 'full',
-    //       'columnDefs': [{
-    //         'targets': [0], // column or columns numbers
-    //         'orderable': false, // set orderable for selected columns
-    //       }],
-    //       'retrieve': true
-    //     });
-    //     $('.dataTables_length').addClass('bs-select');
-    //   }, 1000);
-    // });
-  }
-
-  perFormGetList() {
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/customerEvents').subscribe(
-      data => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(data));
-        this.usesEventList = new Array;
-        this.usesEventList = response.data;
-        this.users.userEventList = this.usesEventList;
-        this.searchFilter();
-      },
-      error => {
-        document.getElementById('loader').classList.remove('loading');
-        console.log(error);
-      }
-    );
-  }
-  customerEventView(customerEventDetail) {
-    this.users.customerEventDetail = customerEventDetail;
-    this.users.addEvent = false;
-    this.loginService.setUser(this.users);
-    this.router.navigate(['/customerEventView']);
-  }
-
-  addEvent() {
-    this.users.addEvent = true;
-    this.loginService.setUser(this.users);
-    this.router.navigate(['/customerEventView']);
-  }
-
-  searchFilter() {
-    this.usesEventNewList = new Array;
-    this.usesEventNewList = this.users.userEventList;
-    if ((this.startDate !== undefined && this.startDate != null) || (this.endDate !== undefined && this.endDate != null) || (this.filter.eventCode !== '' && this.filter.eventCode !== undefined) ||
-      (this.filter.eventName !== '' && this.filter.eventName !== undefined)) {
-      document.getElementById('loader').classList.add('loading');
-      this.usesEventList = [];
-      const startMilliseconds = new Date(this.startDate).getTime();
-      const endMilliseconds = new Date(this.endDate).getTime();
-      for (const eventList of this.usesEventNewList) {
-        this.startendcheck = true;
-        this.startcheck = true;
-        this.endcheck = true;
-        this.eventCodecheck = true;
-        this.eventNamecheck = true;
-        if (this.startDate !== undefined && this.endDate !== undefined) {
-          this.startendcheck = false;
-          if (eventList.eventDatetime >= startMilliseconds && eventList.eventDatetime <= endMilliseconds) {
-            this.startendcheck = true;
-          }
-        } else if (this.startDate !== undefined) {
-          this.startcheck = false;
-          if (eventList.eventDatetime >= startMilliseconds) {
-            this.startcheck = true;
-          }
-        } else if (this.endDate !== undefined) {
-          this.endcheck = false;
-          if (eventList.eventDatetime <= endMilliseconds) {
-            this.endcheck = true;
-          }
-        }
-
-        if (this.filter.eventCode !== '' && this.filter.eventCode !== undefined) {
-          this.eventCodecheck = false;
-          if (eventList.customerEventType.eventCode === this.filter.eventCode) {
-            this.eventCodecheck = true;
-          }
-        }
-        if (this.filter.eventName !== '' && this.filter.eventName !== undefined) {
-          this.eventNamecheck = false;
-          if (eventList.customerEventType.eventName === this.filter.eventName) {
-            this.eventNamecheck = true;
-          }
-        }
-
-        if ((this.startendcheck === true && this.startcheck === true && this.endcheck === true) && (this.eventCodecheck === true) && (this.eventNamecheck === true)) {
-          this.usesEventList.push(eventList);
-        }
-      }
-      this.startDate = this.startDate ? new Date(this.startDate) : null;
-      this.endDate = this.endDate ? new Date(this.endDate) : null;
-      this.filter.startDate = this.startDate;
-      this.filter.endDate = this.endDate;
-      localStorage.setItem('filter', JSON.stringify(this.filter));
-      if (!this.filter.back) {
-        $('#example').dataTable().fnDestroy();
-        $(document).ready(function () {
-          setTimeout(function () {
-            $('#example').DataTable({
-              'responsive': true,
-              'pagingType': 'full',
-              'columnDefs': [{
-                'targets': [0], // column or columns numbers
-                'orderable': false, // set orderable for selected columns
-              }],
-              'retrieve': true
-            });
-          }, 1000);
-        });
-      } else {
-        this.filter.back = false;
-        localStorage.setItem('filter', JSON.stringify(this.filter));
-      }
-      document.getElementById('loader').classList.remove('loading');
-    } else {
-      localStorage.setItem('filter', JSON.stringify(this.filter));
-      this.usesEventList = this.users.userEventList;
-      $('#example').dataTable().fnDestroy();
-      $(document).ready(function () {
-        setTimeout(function () {
-          $('#example').DataTable({
-            'responsive': true,
-            'pagingType': 'full',
-            'columnDefs': [{
-              'targets': [0], // column or columns numbers
-              'orderable': false, // set orderable for selected columns
-            }],
-            'retrieve': true
-          });
-        }, 1000);
-      });
-      document.getElementById('loader').classList.remove('loading');
-    }
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }
+

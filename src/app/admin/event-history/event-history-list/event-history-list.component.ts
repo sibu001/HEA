@@ -9,6 +9,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -25,10 +26,11 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   public totalElement = 0;
   public fileObject: any;
   public reportData = {
-    content: [{ 'test': 'test' }],
-    totalElements: 1,
+    content: [],
+    totalElements: 0,
   };
 
+  public pageIndex;
   topicForm: FormGroup;
   public force = false;
   public adminFilter: AdminFilter;
@@ -50,7 +52,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setUpForm(this.adminFilter.eventHistoryFilter.formValue);
-    this.search(this.adminFilter.eventHistoryFilter.page, false);
+    this.search(this.adminFilter.eventHistoryFilter.page, true);
     this.getEventHistoryListFromStore();
     this.getEventHistoryDataCountFromStore();
   }
@@ -76,11 +78,9 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   }
 
   findEventHistory(force: boolean, filter: any): void {
-    this.force = force;
-    this.filter = filter;
     this.adminFilter.eventHistoryFilter.formValue = this.topicForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.administrativeService.getEventHistoryCount(filter);
+    this.administrativeService.loadEventHistoryList(this.force, this.filter);
   }
 
   getEventHistoryDataCountFromStore(){
@@ -89,7 +89,6 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
     .subscribe((eventHistoryCount: any) => {
         this.reportData.totalElements = eventHistoryCount;
         this.totalElement = eventHistoryCount;
-        this.administrativeService.loadEventHistoryList(this.force, this.filter);
       }));
   }
 
@@ -112,12 +111,9 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
     } else if (event && event.sort.active) {
       sortFiled = event.sort.active;
     }
+    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-        (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('sortField', (event && sortFiled !== undefined ? (sortFiled === 'customerName' ? 'customer.user.name' : sortFiled) : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('dateFrom', (this.topicForm.value.periodStart ? this.datePipe.transform(this.topicForm.value.periodStart, 'MM/dd/yyyy') : ''))
       .set('customer.auditId', (this.topicForm.value.auditId !== null ? this.topicForm.value.auditId : ''))
       .set('customerEventType.eventCode', (this.topicForm.value.eventCode !== null ? this.topicForm.value.eventCode : ''))
@@ -125,8 +121,20 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
       .set('customer.user.name', (this.topicForm.value.customerName !== null ? this.topicForm.value.customerName : ''))
       .set('customerEventType.eventName', (this.topicForm.value.eventName !== null ? this.topicForm.value.eventName : ''))
       .set('eventFile', (this.topicForm.value.eventFile !== null ? this.topicForm.value.eventFile : ''));
-    this.findEventHistory(true, params);
+    
+      this.force = true;
+      this.filter = params;
+      if(isSearch) {
+        this.administrativeService.getEventHistoryCount(this.filter);
+      }
 
+      this.filter = this.filter
+        .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
+        .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+          (event.pageIndex * event.pageSize) + '' : '0'))
+        .set('sortField', (event && sortFiled !== undefined ? (sortFiled === 'customerName' ? 'customer.user.name' : sortFiled) : ''))
+        .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'));
+      this.findEventHistory(true, params);
   }
 
   handleFileInput(file: any) {
@@ -134,8 +142,12 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   }
 
   uploadEventHistoryFile() {
+
     if (this.fileObject) {
-      this.administrativeService.uploadEventHistoryFile(this.fileObject);
+      this.administrativeService.uploadEventHistoryFile(this.fileObject)
+      .subscribe(data => {
+        this.topicForm.patchValue({eventFile : ''});
+      })
     }
   }
 

@@ -136,7 +136,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
      });
  
      if(displayExtraColumn){
-       this.keys = [...this.keys];
+       this.keys = [...TableColumnData.ELECTRICITY_KEYS];
        this.keys.push({ key: 'utility', isEdit: true, displayName: 'Utitility' });
        this.keys.push({ key: 'utilityOrig', isEdit: true   , displayName: 'NEM' });
        this.keys.push({ key: 'pv', isEdit: true, displayName: 'Solar' });
