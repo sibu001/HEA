@@ -22,6 +22,7 @@ import { CustomerManagementState } from '../store/customer-state-management/stat
 import { AdministrativeManagementState } from '../store/administrative-state-management/state/administrative.state';
 import { SystemUtilityManagementState } from '../store/system-utility-state-management/state/system-utility.state';
 import { AdministrativeService } from '../store/administrative-state-management/service/administrative.service';
+import { SystemUtilityService } from '../store/system-utility-state-management/service/system-utility.service';
 @NgModule({
     declarations: [
         DashboardComponent,
@@ -49,7 +50,7 @@ import { AdministrativeService } from '../store/administrative-state-management/
             AdministrativeManagementState
         ]),
     ],
-    providers: [SystemService, DatePipe,CustomerService,AdministrativeService],
+    providers: [SystemService, DatePipe,CustomerService,AdministrativeService,SystemUtilityService],
     exports: [
 
     ]

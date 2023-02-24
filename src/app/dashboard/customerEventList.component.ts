@@ -10,6 +10,8 @@ import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+import { Users } from '../models/user';
+import { LoginService } from '../services/login.service';
 
 @Component({
   selector: 'customerEventList',
@@ -31,6 +33,7 @@ export class customerEventListComponent implements OnInit, OnDestroy {
 
   topicForm: FormGroup;
   public force = false;
+  public users : Users;
   public adminFilter: AdminFilter;
   private readonly subscriptions: Subscription = new Subscription();
   filter : any;
@@ -38,6 +41,7 @@ export class customerEventListComponent implements OnInit, OnDestroy {
     private readonly administrativeService: AdministrativeService,
     private readonly router: Router,
     private readonly datePipe: DatePipe,
+    private readonly loginService: LoginService,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
     if (this.adminFilter === undefined || this.adminFilter === null || this.adminFilter.eventHistoryFilter === undefined) {
@@ -49,16 +53,18 @@ export class customerEventListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    TableColumnData.EVENT_HISTORY_KEYS.shift();
-    this.keys = TableColumnData.EVENT_HISTORY_KEYS;
+    let keys = [...TableColumnData.EVENT_HISTORY_KEYS];
+    keys.shift();
+    this.keys = keys;
     this.setUpForm(this.adminFilter.eventHistoryFilter.formValue);
     this.search(this.adminFilter.eventHistoryFilter.page, true);
     this.getEventHistoryListFromStore();
     this.getEventHistoryDataCountFromStore();
+    this.users = this.loginService.getUser();
   }
 
   addEventHistory(): any {
-    this.router.navigate(['customerEventView']);
+    this.router.navigate(['customerEventView'],{ queryParams: { customerId: this.users.outhMeResponse.customerId, addRequest : true } });
   }
 
   goToEditEventHistory(event: any): any {

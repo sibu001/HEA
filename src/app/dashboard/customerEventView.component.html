@@ -1,263 +1,97 @@
 <section class="space-top">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-9">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <h3 class="Account">Customer Event</h3>
-                        <input #inp1 id="myInput" type="text" class="inputhide">
-                        <form class="form-horizontal" action="/action_page.php">
-                            <div class="form-group">
-                                <label class="control-label col-sm-3" id="label-font">Event Type:</label>
-                                <div class="col-sm-8">
-                                    <form class="form-tag">
-                                        <div class="form-group" style="height: 34px;">
-                                            <select name="pool/spa" class="form-control css"
-                                                [(ngModel)]="customerEventDetails.customerEventTypeId"
-                                                (change)="changeValue($event.target.value)" [disabled]="!modifyAllow">
-                                                <option *ngFor="let optionList of customerEventList"
-                                                    [value]="optionList.customerEventTypeId" class="options">
-                                                    {{optionList.eventName}}</option>
-                                            </select>&nbsp;
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-3" id="label-font">Event code:</label>
-                                <div class="col-sm-8">
-                                    <span>{{customerEventDetails.customerEventType.eventCode}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-3" id="label-font">Description:</label>
-                                <div class="col-sm-8">
-                                    <span>{{customerEventDetails.customerEventType.description}}</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-3" id="label-font">Event Date:</label>
-                                <div class="col-sm-8">
-                                    <p-calendar [disabled]="!modifyAllow" [(ngModel)]="creatDate" name="end"
-                                        [showIcon]="true" dateFormat="mm/dd/yy"></p-calendar>
-                                    <span class="event-date">(MM/dd/yyyy)</span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-sm-3" id="label-font">Additional Comments:</label>
-                                <div class="col-sm-8">
-                                    <div class="form-group">
-                                        <textarea class="form-control" rows="4" id="comment" name="textarea"
-                                            [(ngModel)]="customerEventDetails.description"
-                                            [readonly]="!modifyAllow"></textarea>
-                                    </div>
-                                </div>
-                            </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-9 col-lg-9">
+          <p class="messages">
+            <img alt="dot" class="pointer" src="assets/images/dot03.gif" class="dot">
+            <span class="messageName">Customer Event</span>
+          </p>
+          <form [formGroup]="eventForm" class="form-group form-padding">
+  
+            <div class="row borderBottom rowPadding"
+              formGroupName="customerEventType">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Event Type:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select class="form-control form-control-sm" id="eventCode"
+                  formControlName="eventCode" [attr.disabled]="eventData.modifyAllowed ? null : true"
+                  (change)="changeDropDownValue($event)">
+                  <option *ngFor='let eventType of eventTypeData'
+                    [value]="eventType.eventCode">{{eventType.eventName}}</option>
+                </select>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+  
+            <div class="row borderBottom rowPadding"
+              formGroupName="customerEventType">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Event Code:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm show-value"
+                  formControlName="eventCode"
+                  id="eventCode" disabled>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+  
+            <div class="row borderBottom rowPadding"
+              formGroupName="customerEventType">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Description:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <textarea class='form-control form-control-sm show-value
+                  text-area' cols=5 rows=4
+                  formControlName='description'
+                  id='additionalComments' disabled></textarea>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+  
+            <div class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Event Date:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <p-calendar formControlName='eventDatetime' dateFormat="mm/dd/yy"
+                  id='eventDatetime' showIcon=true showSeconds="true"
+                  showTime="true" [disabled]="eventData.modifyAllowed ? null : true"
+                  showButtonBar="true">
+                </p-calendar>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+  
+            <div class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Additional
+                Comments:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <textarea class='form-control form-control-sm' cols=30 rows=10
+                  formControlName='description' [attr.disabled]="eventData.modifyAllowed ? null : true"
+                  id='additionalComments' style="width: 559px; height: 95px;"></textarea>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+  
+            <div class="row rowPadding">
+              <div class="col-sm-6 col-md-6 col-lg-4 col-xs-6 ">
+                <button type="button" class="btn btn-primary m-button" (click)="back()">
+                  Back
+                </button>
+              </div>
 
-                        </form>
-                        <hr />
-                        <div class="row">
-                            <div class="col-sm-6 col-xs-3">
-                                <button class="btn btn-primary" type="button" (click)="back()">Back</button>
-                            </div>
-                            <div class="col-sm-6 col-xs-9" style="text-align:right;">
-                                <button *ngIf="!users.addEvent && modifyAllow" class="btn btn-primary" type="button"
-                                    (click)="deleteEvent(customerEventDetails.customerEventId)">Delete</button>&nbsp;
-                                <button *ngIf="!users.addEvent && modifyAllow" class="btn btn-primary" type="button"
-                                    (click)="saveEvent(customerEventDetails)">Save</button>
-                                <button *ngIf="users.addEvent && modifyAllow" class="btn btn-primary" type="button"
-                                    (click)="addEvent(customerEventDetails)">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                    <hr />
+              <div class="col-sm-3 col-md-3 col-lg-4 col-xs-6" >
+                  <button class="btn btn-primary m-button" style="float: right"
+                  *ngIf="eventData.modifyAllowed && customerEventId"
+                    (click)="delete()" >Delete</button>
                 </div>
+                <div class="col-sm-3 col-md-3 col-lg-4 col-xs-12" *ngIf="eventData.modifyAllowed || !customerEventId">
+                  <button type="button" class="btn btn-primary m-button" (click)="save()" style="float:right">
+                    Save
+                  </button>
+                </div>
+              <!-- </div> -->
             </div>
-            <div class="col-sm-3 rightColumn">
-                <p class="Energy_anaiytic">
-                    <img src="assets/images/dot03.gif" alt="dot" class="dot">&nbsp;Powered by Home Energy Analytics, Inc.</p>
-                <p class="feedback">Send feedback to</p>
-                <p class="link_hea">
-                    <a href = "mailto:info@hea.com" class="info_hea">info@hea.com</a>
-                </p>
-                <hr>
-                <ul class="leaks">
-                    <li>
-                        <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
-                    </li>
-                    <li>
-                        <a class="a_history" [routerLink]="['/customerEventList']">Events history</a>
-                    </li>
-                    <li>
-                        <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
-                    </li>
-                    <li>
-                        <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
-                    </li>
-                    <li>
-                        <div class="dropdown" style="    margin-left: 20px;">
-                            <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
-                            </a>
-                            <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasList']">Gas</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasChargeList']">Gas charge</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/electricity/electricityUsageList']">Electricity</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1"
-                                        [routerLink]="['/electricity/electricityChargeList']">Electricity charge</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1"
-                                        [routerLink]="['/electricity/electricitySmartMeterList']">Electric smart meter</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1"
-                                        [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric Daily smart meter</a>
-                                </li>
-                                <li role="presentation" style="padding-bottom: 5px;">
-                                    <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasSmartMeterList']">Gas smart
-                                        meter</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+          </form>
         </div>
+        <div class="col-md-3 .col-lg-3 col-sm-12">
+          <app-user-sidebar></app-user-sidebar>
+        </div>
+      </div>
     </div>
-</section>
-<style>
-    .Account {
-        font-size: 21px;
-        color: #000;
-        padding-left: 12px;
-        font-weight: 600;
-    }
-
-    div#helpiconcontainresponsive {
-        margin-top: 49px;
-        display: block;
-        margin-left: 0px;
-        margin-right: 0px;
-    }
-
-    .form-horizontal .control-label {
-        padding-top: 0px;
-        margin-bottom: 0;
-        text-align: left;
-    }
-
-    .a_history {
-        color: #4550a1;
-        font-weight: 600;
-        cursor: pointer;
-        margin-left: 20px;
-    }
-
-    img#help_btn1 {
-        width: 33px;
-        cursor: pointer;
-    }
-
-    p.demo1 {
-        background-color: #f9f9f9;
-        font-weight: 500;
-        padding: 15px 15px 15px 15px;
-        line-height: 1.4;
-        text-align: justify;
-        color: #000;
-        font-size: 16px;
-        margin-top: 12px;
-    }
-
-    span.hidebuttondemo {
-        color: #75ba18;
-        display: block;
-        text-align: right;
-        font-weight: 500;
-        margin-top: 3px;
-        cursor: pointer;
-        font-size: 16px;
-    }
-
-    .accountcss {
-        margin-top: 8px;
-    }
-
-    .form-horizontal .form-group {
-        margin-right: 0px;
-        margin-left: 0px;
-    }
-
-    .event-date {
-        margin-left: 33px;
-        font-size: 12px;
-    }
-
-    .rightColumn {
-        background-color: #fbfbfb;
-        padding: 0;
-        min-height: calc(100vh - 70px);
-        height: 100%;
-        position: absolute;
-        right: 0;
-    }
-
-
-    .btn-primary {
-        color: #fff;
-        background-color: #76ba19;
-        border-color: #76ba19;
-        padding: 6px 25px;
-        font-size: 14px;
-        font-family: 'Montserrat', sans-serif;
-        cursor: pointer;
-    }
-
-    label#label-font {
-        font-size: 19px;
-        color: #373737;
-        font-weight: 400;
-    }
-
-    .form-control.css {
-        font-weight: 500;
-        font-size: 19px;
-        color: #000;
-        height: 40px;
-    }
-    
-    select {
-        background: url(up_downArrow.png) no-repeat right;
-        -webkit-appearance: none;
-        padding-right: 30px;
-        background-position-x: 98%;
-    }
-
-    textarea.form-control {
-        height: auto;
-        font-weight: 500;
-        font-size: 19px !important;
-        color: #000;
-    }
-
-    @media only screen and (min-width: 320px) and (max-width: 767px) {
-        div#helpiconcontainresponsive {
-            margin-top: 42px;
-            display: block !important;
-            margin-left: 0px;
-            margin-right: 0px;
-        }
-
-        .rightColumn {
-            min-height: 100% !important;
-            position: unset !important;
-        }
-    }
-</style>
+  </section>

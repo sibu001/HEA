@@ -182,7 +182,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
       this.addDataObjectList = this.data;
       this.selection.clear();
       this.data = changes['data'].currentValue;
-      this.totalLength = this.totalElement;
+      // this.totalLength = this.totalElement;
       if (this.pageIndex !== undefined && this.pageIndex !== null) {
         this.pageIndexNumber = this.pageIndex;
       }
@@ -198,6 +198,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
         } },1000);
 
     }
+
+
     if (changes['keys'] && changes['keys'].currentValue) {
       this.keys = changes['keys'].currentValue;
       this.displayedColumns = this.keys.map((col) => col.key);

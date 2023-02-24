@@ -27,7 +27,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   public fileObject: any;
   public reportData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
 
   public pageIndex;
@@ -58,7 +58,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   }
 
   addEventHistory(): any {
-    this.router.navigate(['admin/eventHistory/eventHistoryEdit']);
+    this.router.navigate(['admin/eventHistory/eventHistoryEdit'], { queryParams: { addRequest : true } });
   }
 
   goToEditEventHistory(event: any): any {
@@ -98,6 +98,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
     .subscribe((eventHistoryList: any) => {
       this.reportData.content = eventHistoryList;
       this.dataSource = [...this.reportData.content];
+      this.reportData.totalElements = this.totalElement;
     }));
   }
 

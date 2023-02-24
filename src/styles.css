@@ -2053,7 +2053,8 @@ div.jqplot-xaxis-tick {
 
 mailarchivelist .ui-calendar .ui-calendar-button,
 customereventlist .ui-calendar .ui-calendar-button,
-app-event-history-list .ui-calendar .ui-calendar-button{
+app-event-history-list .ui-calendar .ui-calendar-button,
+.ui-calendar-button{
   height: 30px !important
 }
 

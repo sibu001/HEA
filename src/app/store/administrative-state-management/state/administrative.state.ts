@@ -619,13 +619,19 @@ export class AdministrativeManagementState {
 
     @Action(GetEventHistoryByIdAction)
     getEventHistoryById(ctx: StateContext<AdministrativeManagementModel>, action: GetEventHistoryByIdAction): Actions {
+        const eventHistory = ctx.getState().eventHistory;
+
+        if(eventHistory && eventHistory.customerEventId == action.customerEventId){
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.customer + '/' + action.customerId + '/' + AppConstant.eventHistory + '/' + action.customerEventId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        eventHistory: response,
+                        eventHistory: response.data,
                     });
                 },
                     error => {
@@ -641,7 +647,9 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage(response.message);
+                    ctx.patchState({
+                        eventHistory: undefined,
+                    });
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -658,7 +666,7 @@ export class AdministrativeManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        eventHistory: response,
+                        eventHistory: response.data,
                     });
                 },
                     error => {
@@ -676,7 +684,7 @@ export class AdministrativeManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        eventHistory: response,
+                        eventHistory: response.data,
                     });
                 },
                     error => {

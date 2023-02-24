@@ -420,7 +420,7 @@ p.messages{
   font-weight: 600;
 }
 
-input[type="file"][_ngcontent-c1]::-webkit-file-upload-button {
+input[type="file"]::-webkit-file-upload-button {
   -webkit-appearance: none;
   margin: 1px 1px 1px 1px;
   border: 1px solid #aaaaaa;

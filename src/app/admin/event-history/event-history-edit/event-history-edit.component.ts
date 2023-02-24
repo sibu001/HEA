@@ -2,8 +2,8 @@ import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
@@ -28,7 +28,11 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   customerData: any;
   userId: any;
   linkedPersonType: any;
+  dataListForSuggestions = [];
+  private subject$ : Subject<any>  = new Subject();
   private readonly subscriptions: Subscription = new Subscription();
+  addRequest: boolean = false;
+  eventData: any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly loginService: LoginService,
@@ -46,15 +50,43 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.customerEventId = params['customerEventId'];
       this.customerId = params['customerId'];
+      this.addRequest = params['addRequest'];
     });
+    this.findCustomer();
   }
 
   ngOnInit() {
-    this.loadCustomerEventType();
     this.setForm(undefined);
+    this.getEventHistoryById();
+    this.loadCustomerEventType();
+    this.getCustomerByCustomerId();
     if (this.customerEventId !== undefined && this.customerId !== undefined) {
       this.loadEventHistoryById();
+      this.loadCustomerByCustomerId();
     }
+
+  }
+
+  loadCustomerByCustomerId(){
+    this.customerService.loadCustomerById(this.customerId);
+  }
+
+  getCustomerByCustomerId(){
+    this.subscriptions.add(
+      this.customerService.getCustomerById()
+      .pipe(filter(data => data && this.customerId))
+      .subscribe(
+        data =>{
+          this.customerData = data;
+          this.eventForm.patchValue({ auditId : data.auditId , customerName : data.user.name });
+          this.router.navigate([], { 
+            relativeTo: this.activateRoute,
+            queryParams: {customerId : data.customerId },
+            queryParamsHandling : 'merge'
+          })
+        }
+      )
+    )
   }
 
   setForm(event: any) {
@@ -89,7 +121,8 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
         onlyOne: [event !== undefined ? event.customerEventType.onlyOne : null],
         shared: [event !== undefined ? event.customerEventType.shared : null],
       }),
-      user: [event && event.user ? event.user : null]
+      user: [event && event.user ? event.user : null],
+      createdBy: [event !== undefined ? event.createdBy : ''],
     });
   }
 
@@ -98,37 +131,13 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.eventTypeData = response;
-        if (this.eventTypeData.length > 0) {
+        if (!this.customerEventId) {
           const customerEventType: any = this.eventForm.controls.customerEventType;
           customerEventType.controls['eventCode'].setValue(this.eventTypeData[0].eventCode);
           customerEventType.controls['description'].setValue(this.eventTypeData[0].description);
           this.eventForm.controls['customerEventTypeId'].setValue(this.eventTypeData[0].customerEventTypeId);
         }
       }));
-  }
-
-  getCustomerList(url: any) {
-    this.subscriptions.add(this.administrativeService.loadCustomerList(url).pipe(skipWhile((item: any) => !item))
-      .subscribe((customerList: any) => {
-        this.customerList = customerList.administrativeManagement.customerList.list;
-      }));
-  }
-
-  handleAutoComplete(event: any): any {
-    this.users.searchUserList[0] = event.option.value;
-    this.loginService.setUser(this.users);
-    this.customerData = event.option.value;
-    this.eventForm.controls['auditId'].setValue(event.option.value.auditId);
-    this.eventForm.controls['customerName'].setValue(event.option.value.user.name);
-  }
-
-  search(event: any) {
-    const params = new HttpParams()
-      .set('filter.pageSize', '5')
-      .set('filter.startRow', '0')
-      .set('loadCustomers', 'true')
-      .set('filter.customerName', '%' + event);
-    this.getCustomerList(params);
   }
 
   changeDropDownValue(event: any) {
@@ -151,21 +160,24 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   }
 
   loadEventHistoryById() {
-    this.subscriptions.add(this.customerService.loadCustomerById(this.customerId).pipe(skipWhile((item: any) => !item))
-      .subscribe((customer: any) => {
-        this.customerData = customer.customerManagement.customer;
-        this.administrativeService.loadEventHistoryById(this.customerId, this.customerEventId);
-        this.subscriptions.add(this.administrativeService.getEventHistoryById().pipe(skipWhile((item: any) => !item))
-          .subscribe((eventHistory: any) => {
-            if (this.isForce) {
-              this.router.navigate(['admin/eventHistory/eventHistoryEdit'], { queryParams: { customerEventId: this.customerEventId, customerId: this.customerId } });
-            }
-            this.setForm(eventHistory.data);
-          }));
-      }));
-
+    this.administrativeService.loadEventHistoryById(this.customerId, this.customerEventId);
   }
 
+  getEventHistoryById(){
+    this.subscriptions.add(this.administrativeService.getEventHistoryById()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((eventHistory: any) => {
+      if(!this.addRequest)
+        this.eventData = eventHistory;
+      
+      if (this.isForce) {
+        this.customerId = eventHistory.customerId;
+        this.customerEventId = eventHistory.customerEventId;
+        this.router.navigate(['/admin/eventHistory/eventHistoryEdit'], { queryParams: { customerEventId: this.customerEventId, customerId: this.customerId } });
+      }
+      this.setForm(this.eventData);
+    }));
+  }
 
   back() {
     this.router.navigate(['admin/eventHistory/eventHistoryList'], { queryParams: { 'force': this.isForce } });
@@ -177,33 +189,87 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       }));
   }
 
-  save() {
-    if (this.eventForm.valid) {
-      this.eventForm.value.linkedPersonType = this.linkedPersonType;
-      this.eventForm.value.eventDatetime = this.eventForm.value.eventDatetime ? new Date(this.eventForm.value.eventDatetime).getTime() : '';
-      if (this.customerEventId !== null && this.customerEventId !== undefined) {
-        this.subscriptions.add(this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.customerEventId = response.administrativeManagement.eventHistory.data.id;
-            this.customerId = response.administrativeManagement.eventHistory.data.customerId;
-            this.isForce = true;
-            this.loadEventHistoryById();
-          }));
-      } else {
-        this.subscriptions.add(this.administrativeService.saveEventHistory(this.customerData.customerId, this.eventForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.customerEventId = response.administrativeManagement.eventHistory.data.id;
-            this.customerId = response.administrativeManagement.eventHistory.data.customerId;
-            this.isForce = true;
-            this.loadEventHistoryById();
-          }));
-      }
-    } else {
-      this.validateForm();
-    }
+  filterForCustomer(){
+    return new HttpParams()
+      .set('auditId',this.eventForm.value.auditId !== undefined ? this.eventForm.value.auditId : '')
+      .set('customerName',this.eventForm.value.customerName !== undefined ? this.eventForm.value.customerName :'')
+      .set('useLike','true')
   }
+
+  findCustomerByAuditIdOrCustomerName(calledBy){
+    let filters =  this.filterForCustomer();
+
+    if(calledBy == 'auditId'){
+      this.eventForm.patchValue({'customerName' : ''});
+      filters = filters.delete('customerName');
+    }else{
+      this.eventForm.patchValue({'auditId' : ''});
+      filters = filters.delete('auditId');
+    }
+    
+    filters = filters.set('useLike','true');
+    this.subject$.next(filters);
+  }
+
+  findCustomer(){
+    this.subscriptions.add(this.subject$
+      .pipe(
+       debounceTime(600)  
+      , distinctUntilChanged())
+      .subscribe(
+    (filters : any) =>{
+      this.loginService.performGetWithParams('findCustomers.do',filters)
+      .subscribe(
+        (response) =>{
+          this.dataListForSuggestions = response.slice(0,100);
+          if(this.dataListForSuggestions.length == 1){
+            this.selectedSuggestion(this.dataListForSuggestions[0]);
+            this.dataListForSuggestions = [];
+          }
+
+        }, error =>{
+           console.log(error);
+        }
+      )
+    }
+    )
+  );
+}
+
+selectedSuggestion(event : any){
+    this.eventForm.patchValue({ auditId : event.auditId , customerName : event.user.name});
+    this.customerEventId = undefined;
+    this.customerData = event;
+    this.customerId = event.customerId;
+    let params = {customerId : event.customerId};
+    if(!this.addRequest){
+      Object.defineProperty(params, 'customerEventId',{value : ''})
+    }
+    this.router.navigate([], { 
+      relativeTo: this.activateRoute,
+      queryParams: params,
+      queryParamsHandling : 'merge'
+    });
+}
+
+ 
+save() {
+  if (this.eventForm.valid) {
+    this.eventForm.value.linkedPersonType = this.linkedPersonType;
+    this.eventForm.value.eventDatetime = this.eventForm.value.eventDatetime ? new Date(this.eventForm.value.eventDatetime).getTime() : '';
+    this.isForce = true;
+    this.addRequest = false;
+    if (this.customerEventId) {
+      this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventForm.value);
+    } else {
+      this.eventForm.value.modifyAllowed = true;
+      this.administrativeService.saveEventHistory(this.customerId, this.eventForm.value);
+    }
+  } else {
+    this.validateForm();
+  }
+}
+
   get f() { return this.eventForm.controls; }
 
   ngOnDestroy(): void {

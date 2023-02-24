@@ -1,130 +1,191 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { LoginService } from 'src/app/services/login.service';
+import { HttpParams } from '@angular/common/http';
+import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { skipWhile } from 'rxjs/operators';
 import { Users } from 'src/app/models/user';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
-import { Filter } from '../models/filter';
+import { LoginService } from 'src/app/services/login.service';
+import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
   selector: 'customerEventView',
   templateUrl: './customerEventView.component.html',
-  styleUrls: ['../survey/topichistory.component.css']
+  styleUrls: ['./customerEventView.component.css']
 })
-export class customerEventViewComponent implements OnInit {
-  @ViewChild('inp1') inp1: ElementRef;
-  errorMessage: any;
-  value: Date;
-  customerEventList: any[] = [];
-  creatDate: Date;
-  endDate: Date;
-  customerEventDetails: any;
+export class customerEventViewComponent implements OnInit, OnDestroy {
   users: Users = new Users();
-  filter: Filter = new Filter();
-  modifyAllow = true;
-  constructor(private loginService: LoginService, private router: Router, private location: Location) {
+  customerEventId: any;
+  customerId: any;
+  customerList: any = [];
+  eventForm: FormGroup;
+  eventTypeData: Array<any>;
+  isForce = false;
+  customerData: any;
+  userId: any;
+  addRequest : boolean = false;
+  linkedPersonType: any;
+  eventData : any = { modifyAllowed : true };
+  private readonly subscriptions: Subscription = new Subscription();
+  constructor(
+    private readonly fb: FormBuilder,
+    private readonly loginService: LoginService,
+    private readonly administrativeService: AdministrativeService,
+    private readonly activateRoute: ActivatedRoute,
+    private readonly systemUtilityService: SystemUtilityService,
+    private readonly customerService: CustomerService,
+    private readonly router: Router,
+    private readonly el: ElementRef) {
     this.users = this.loginService.getUser();
-    this.perFormGetEventType();
-    if (!this.users.addEvent) {
-      this.customerEventDetails = this.users.customerEventDetail;
-    } else {
-      this.customerEventDetails = {};
-      this.customerEventDetails.customerEventType = {};
-      this.customerEventDetails.customerEventTypeId = 1;
-      this.creatDate = new Date();
+    this.customerList = this.users.searchUserList;
+    if (this.customerList.length > 0) {
+      this.customerData = this.customerList[0];
     }
+    this.activateRoute.queryParams.subscribe(params => {
+      this.customerEventId = params['customerEventId'];
+      this.customerId = params['customerId'];
+      this.addRequest = params['addRequest'];
+    });
   }
 
   ngOnInit() {
-    this.filter = JSON.parse(localStorage.getItem('filter'));
+    this.setForm(undefined);
+    this.getEventHistoryById();
+    if (this.customerEventId !== undefined && this.customerId !== undefined) {
+      this.loadEventHistoryById();
+    }
+    this.loadCustomerEventType();
     this.scrollTop();
   }
+
   scrollTop() {
     window.scroll(0, 0);
   }
-  perFormGetEventType() {
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('customerEventTypes').subscribe(
-      data => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(data));
-        this.customerEventList = response;
-        this.users.customerEventList = this.customerEventList;
-        if (!this.users.addEvent) {
-          this.modifyAllow = this.customerEventDetails.modifyAllowed;
-          this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime, 10));
-        } else {
-          this.customerEventDetails.modifyAllowed = true;
-          this.customerEventDetails.customerEventType = this.customerEventList[0];
 
-        }
-      },
-      error => {
-        document.getElementById('loader').classList.remove('loading');
-        console.log(error);
-
-      }
-    );
-  }
-
-  deleteEvent(customerEventId) {
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performDelete('customers/' + this.users.outhMeResponse.customerId + '/customerEvents/' + customerEventId).subscribe(
-      data => {
-        document.getElementById('loader').classList.remove('loading');
-        this.router.navigate(['/customerEventList']);
-      },
-      error => {
-        document.getElementById('loader').classList.remove('loading');
-        console.log(error);
-      }
-    );
-
-  }
-
-  saveEvent(customerEventDetails) {
-    customerEventDetails.user = this.users.outhMeResponse.user;
-    customerEventDetails.eventDatetime = this.creatDate.getTime();
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performPut(customerEventDetails, 'customers/' + this.users.outhMeResponse.customerId + '/customerEvents/' + customerEventDetails.customerEventId).subscribe(
-      data => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(data));
-        this.customerEventDetails = response.data;
-      },
-      error => {
-        document.getElementById('loader').classList.remove('loading');
-        console.log(error);
-
-      }
-    );
-  }
-  addEvent(customerEventDetails) {
-    customerEventDetails.eventDatetime = this.creatDate.getTime();
-    document.getElementById('loader').classList.add('loading');
-    this.loginService.performPostMultiPartDataPost(customerEventDetails, 'customers/' + this.users.outhMeResponse.customerId + '/customerEvents').subscribe(
-      data => {
-        document.getElementById('loader').classList.remove('loading');
-        const response = JSON.parse(JSON.stringify(data));
-        this.users.addEvent = false;
-        this.customerEventDetails = response.data;
-        this.creatDate = new Date(parseInt(this.customerEventDetails.eventDatetime, 10));
-      },
-      error => {
-        document.getElementById('loader').classList.remove('loading');
-        console.log(error);
-
-      }
-    );
-  }
-  back() {
-    if (this.filter == null) {
-      this.filter = new Filter;
+  setForm(event: any) {
+    let linkedPerson = 'Staff';
+    this.linkedPersonType = event && event.linkedPersonType ? event.linkedPersonType : null;
+    if (event && event.linkedPersonType === 1) {
+      linkedPerson = 'Customer';
+    } else if (event && event.linkedPersonType === 2) {
+      linkedPerson = 'Staff';
+    } else if (event && event.linkedPersonType === 3) {
+      linkedPerson = 'Partner';
     }
-    this.filter.back = true;
-    localStorage.setItem('filter', JSON.stringify(this.filter));
-    this.location.back();
+    this.eventForm = this.fb.group({
+      id: [event !== undefined ? event.id : null],
+      customerEventId: [event !== undefined ? event.customerEventId : null],
+      customerEventTypeId: [event !== undefined ? event.customerEventTypeId : null],
+      customerId: [event !== undefined ? event.customerId : ''],
+      eventDatetime: [event !== undefined ? new Date(event.eventDatetime) : new Date()],
+      description: [event !== undefined ? event.description : ''],
+      modifyAllowed: [event !== undefined ? event.modifyAllowed : ''],
+      linkedPersonType: [event !== undefined ? linkedPerson : ''],
+      linkedPersonName: [event !== undefined ? event.linkedPersonName : ''],
+      linkedUserId: [event !== undefined ? event.linkedUserId : ''],
+      customerEventType: this.fb.group({
+        id: [event !== undefined ? event.customerEventType.id : ''],
+        customerEventTypeId: [event !== undefined ? event.customerEventType.customerEventTypeId : ''],
+        description: [event !== undefined ? event.customerEventType.description : ''],
+        eventCode: [event !== undefined ? event.customerEventType.eventCode : ''],
+        eventName: [event !== undefined ? event.customerEventType.eventName : ''],
+        onlyOne: [event !== undefined ? event.customerEventType.onlyOne : null],
+        shared: [event !== undefined ? event.customerEventType.shared : null],
+      }),
+      user: [event && event.user ? event.user : null],
+      createdBy: [event !== undefined ? event.createdBy : ''],
+    });
   }
-  changeValue(customerEventTypeId) {
-    this.customerEventDetails.customerEventType = this.customerEventList[customerEventTypeId - 1];
+
+  loadCustomerEventType() {
+    this.systemUtilityService.loadCustomerEventTypeList(true, '');
+    this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.eventTypeData = response;
+          if (!this.customerEventId) {
+            const customerEventType: any = this.eventForm.controls.customerEventType;
+            customerEventType.controls['eventCode'].setValue(this.eventTypeData[0].eventCode);
+            customerEventType.controls['description'].setValue(this.eventTypeData[0].description);
+            this.eventForm.controls['customerEventTypeId'].setValue(this.eventTypeData[0].customerEventTypeId);
+          }
+      }));
   }
+
+  changeDropDownValue(event: any) {
+    const i = this.eventTypeData.findIndex((item: any) => item.eventCode === event.target.value);
+    if (i !== -1) {
+      const customerEventType: any = this.eventForm.controls.customerEventType;
+      customerEventType.controls['eventCode'].setValue(this.eventTypeData[i].eventCode);
+      customerEventType.controls['description'].setValue(this.eventTypeData[i].description);
+      this.eventForm.controls['customerEventTypeId'].setValue(this.eventTypeData[i].customerEventTypeId);
+    }
+  }
+  validateForm() {
+    for (const key of Object.keys(this.eventForm.controls)) {
+      if (this.eventForm.controls[key].invalid) {
+        const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
+        invalidControl.focus();
+        break;
+      }
+    }
+  }
+
+  loadEventHistoryById() {
+    this.administrativeService.loadEventHistoryById(this.customerId, this.customerEventId);
+  }
+
+  getEventHistoryById(){
+    this.subscriptions.add(this.administrativeService.getEventHistoryById()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((eventHistory: any) => {
+      if(!this.addRequest)
+        this.eventData = eventHistory;
+      
+      if (this.isForce) {
+        this.customerId = eventHistory.customerId;
+        this.customerEventId = eventHistory.customerEventId;
+        this.router.navigate(['customerEventView'], { queryParams: { customerEventId: this.customerEventId, customerId: this.customerId } });
+      }
+      this.setForm(this.eventData);
+    }));
+  }
+
+  back() {
+    this.router.navigate(['customerEventList'], { queryParams: { 'force': this.isForce } });
+  }
+  delete() {
+    this.subscriptions.add(
+      this.administrativeService.deleteEventHistoryById(this.customerId, this.customerEventId)
+      .pipe(skipWhile((item: any) => !item))
+      .subscribe((response: any) => {
+        this.router.navigate(['customerEventList'], { queryParams: { 'force': true } });
+      }));
+  }
+
+  save() {
+    if (this.eventForm.valid) {
+      this.eventForm.value.linkedPersonType = this.linkedPersonType;
+      this.eventForm.value.eventDatetime = this.eventForm.value.eventDatetime ? new Date(this.eventForm.value.eventDatetime).getTime() : '';
+      this.isForce = true;
+      this.addRequest = false;
+      if (this.customerEventId !== null && this.customerEventId !== undefined) {
+        this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventForm.value);
+      } else {
+        this.eventForm.value.modifyAllowed = true;
+        this.administrativeService.saveEventHistory(this.customerId, this.eventForm.value);
+      }
+    } else {
+      this.validateForm();
+    }
+  }
+
+  get f() { return this.eventForm.controls; }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+
 }

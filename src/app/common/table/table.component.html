@@ -312,7 +312,7 @@
                 <mat-paginator disableRipple="true" *ngIf="isPaginate" #paginator
                 [ngStyle]="{'margin-top' : !dataSource && !showInput ? '30px' : '10px' }"
                     style-paginator hidePageSize
-                    [length]="totalLength" [pageSize]="pageSize"
+                    [length]="totalElement" [pageSize]="pageSize"
                     [pageIndex]="pageIndexNumber"
                     (page)="onChangePage($event)" showFirstLastButtons
                     class="paginatorcss p-absolute z1"
