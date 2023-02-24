@@ -18,7 +18,7 @@
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                   <input type="text" class="form-control" matInput 
                formControlName='auditId' [matAutocomplete]="auditId"
-                  (keyup)="findCustomerByAuditIdOrCustomerName('auditId',$event.target.value)" >
+                  (keyup)="findCustomerByAuditIdOrCustomerName('auditId')" >
                   <mat-autocomplete #auditId="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
                     <mat-option *ngFor="let data of dataListForSuggestions" [value]="data">
                       {{data.user.name}}
@@ -35,7 +35,7 @@
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                   <input type="text" class="form-control" matInput 
                   [matAutocomplete]="auditIdAutoComplete"
-                  formControlName="customerName" (input)="findCustomerByAuditIdOrCustomerName('customerName',$event.target.value)" >
+                  formControlName="customerName" (input)="findCustomerByAuditIdOrCustomerName('customerName')" >
                    <mat-autocomplete #auditIdAutoComplete="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
                      <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
                        {{data.user.name}}
