@@ -30,6 +30,7 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
   linkedPersonType: any;
   eventData : any = { modifyAllowed : true };
   private readonly subscriptions: Subscription = new Subscription();
+  date: Date;
   constructor(
     private readonly fb: FormBuilder,
     private readonly loginService: LoginService,
@@ -39,6 +40,7 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
     private readonly customerService: CustomerService,
     private readonly router: Router,
     private readonly el: ElementRef) {
+    this.date = new Date();
     this.users = this.loginService.getUser();
     this.customerList = this.users.searchUserList;
     if (this.customerList.length > 0) {
@@ -49,10 +51,16 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
       this.customerId = params['customerId'];
       this.addRequest = params['addRequest'];
     });
+    this.setForm(undefined);
+    this.setTodayDate();
+  }
+
+  setTodayDate(){
+    setTimeout(()=> { this.eventForm.patchValue({eventDatetime : this.date}); }, 200);
   }
 
   ngOnInit() {
-    this.setForm(undefined);
+    
     this.getEventHistoryById();
     if (this.customerEventId !== undefined && this.customerId !== undefined) {
       this.loadEventHistoryById();
@@ -80,20 +88,20 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
       customerEventId: [event !== undefined ? event.customerEventId : null],
       customerEventTypeId: [event !== undefined ? event.customerEventTypeId : null],
       customerId: [event !== undefined ? event.customerId : ''],
-      eventDatetime: [event !== undefined ? new Date(event.eventDatetime) : new Date()],
+      eventDatetime: [event !== undefined ? new Date(event.eventDatetime) : this.date],
       description: [event !== undefined ? event.description : ''],
       modifyAllowed: [event !== undefined ? event.modifyAllowed : ''],
       linkedPersonType: [event !== undefined ? linkedPerson : ''],
       linkedPersonName: [event !== undefined ? event.linkedPersonName : ''],
       linkedUserId: [event !== undefined ? event.linkedUserId : ''],
       customerEventType: this.fb.group({
-        id: [event !== undefined ? event.customerEventType.id : ''],
-        customerEventTypeId: [event !== undefined ? event.customerEventType.customerEventTypeId : ''],
-        description: [event !== undefined ? event.customerEventType.description : ''],
-        eventCode: [event !== undefined ? event.customerEventType.eventCode : ''],
-        eventName: [event !== undefined ? event.customerEventType.eventName : ''],
-        onlyOne: [event !== undefined ? event.customerEventType.onlyOne : null],
-        shared: [event !== undefined ? event.customerEventType.shared : null],
+        customerEventTypeId: [event && event.customerEventType ? event.customerEventType.customerEventTypeId : ''],
+        description: [event && event.customerEventType ? event.customerEventType.description : ''],
+        eventCode: [event && event.customerEventType ? event.customerEventType.eventCode : ''],
+        eventName: [event && event.customerEventType ? event.customerEventType.eventName : ''],
+        onlyOne: [event && event.customerEventType ? event.customerEventType.onlyOne : null],
+        shared: [event && event.customerEventType ? event.customerEventType.shared : null],
+        id: [event && event.customerEventType ? event.customerEventType.id : ''],
       }),
       user: [event && event.user ? event.user : null],
       createdBy: [event !== undefined ? event.createdBy : ''],

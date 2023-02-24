@@ -33,6 +33,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   addRequest: boolean = false;
   eventData: any;
+  date: Date;
   constructor(
     private readonly fb: FormBuilder,
     private readonly loginService: LoginService,
@@ -53,10 +54,19 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       this.addRequest = params['addRequest'];
     });
     this.findCustomer();
+    this.setForm(undefined);
+    this.setTodayDate();
+  }
+  
+  setTodayDate(){
+    // setTimeout(()=> { this.eventForm.patchValue({eventDatetime : this.date}); }, 200);
+  }
+
+  scrollTop(){
+    window.scroll(0,0);
   }
 
   ngOnInit() {
-    this.setForm(undefined);
     this.getEventHistoryById();
     this.loadCustomerEventType();
     this.getCustomerByCustomerId();
@@ -64,7 +74,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       this.loadEventHistoryById();
       this.loadCustomerByCustomerId();
     }
-
+    this.scrollTop();
   }
 
   loadCustomerByCustomerId(){
@@ -106,7 +116,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       auditId: [this.customerData !== undefined ? this.customerData.auditId : '', Validators.required],
       customerName: [this.customerData !== undefined ? this.customerData.user.name : '', Validators.required],
       customerId: [event !== undefined ? event.customerId : ''],
-      eventDatetime: [event !== undefined ? new Date(event.eventDatetime) : new Date()],
+      eventDatetime: [event !== undefined ? '' : ''],
       description: [event !== undefined ? event.description : ''],
       modifyAllowed: [event !== undefined ? event.modifyAllowed : ''],
       linkedPersonType: [event !== undefined ? linkedPerson : ''],

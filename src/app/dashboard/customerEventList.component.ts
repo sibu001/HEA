@@ -61,6 +61,11 @@ export class customerEventListComponent implements OnInit, OnDestroy {
     this.getEventHistoryListFromStore();
     this.getEventHistoryDataCountFromStore();
     this.users = this.loginService.getUser();
+    this.scrollTop();
+  }
+
+  scrollTop(){
+    window.scroll(0,0);
   }
 
   addEventHistory(): any {

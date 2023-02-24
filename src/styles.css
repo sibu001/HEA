@@ -2534,3 +2534,14 @@ trendingpartsview .trendingChartDiv>div{
 .rightColumn{
   background-color: #ffffff00 !important;
 }
+
+@media (min-width: 1024px){
+  .ml-md-15{
+    margin-left: 15px;
+  }
+}
+
+div.ui-widget.ui-widget-content{
+  position: absolute;
+  margin-top: 30px;
+}

@@ -8,6 +8,7 @@ import { AppConstant } from '../utility/app.constant';
 import { fromEvent, Observable, Subscription } from 'rxjs';
 import { UtilityService } from '../services/utility.service';
 import { HttpParams } from '@angular/common/http';
+import { AllowedMenuList } from '../utility/app.allowedMenuList';
 declare var $: any;
 @Component({
   selector: 'app-headers',
@@ -30,7 +31,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   subscriptions: Subscription[] = [];
   connectionStatusMessage: string;
   connectionStatus: string;
-
+  allowedMenuListforUser : AllowedMenuList;
 
   constructor(private loginService: LoginService,
     private router: Router,
@@ -42,6 +43,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
         this.users.outhMeResponse.auditId + '&amp;typeform-embed=popup-drawer';
     }
     this.screenWidth = window.screen.width;
+    this.allowedMenuListforUser  = this.users.allowedMenuList;
   }
   ngDoCheck(): void {
 

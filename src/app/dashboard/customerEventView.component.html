@@ -51,7 +51,7 @@
                 <p-calendar formControlName='eventDatetime' dateFormat="mm/dd/yy"
                   id='eventDatetime' showIcon=true showSeconds="true"
                   showTime="true" [disabled]="eventData.modifyAllowed ? null : true"
-                  showButtonBar="true">
+                  showButtonBar="true" hideOnDateTimeSelect="true">
                 </p-calendar>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -63,29 +63,31 @@
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <textarea class='form-control form-control-sm' cols=30 rows=10
                   formControlName='description' [attr.disabled]="eventData.modifyAllowed ? null : true"
-                  id='additionalComments' style="width: 559px; height: 95px;"></textarea>
+                  id='additionalComments' style="height: 95px;"></textarea>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
   
             <div class="row rowPadding">
-              <div class="col-sm-6 col-md-6 col-lg-4 col-xs-6 ">
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6 ">
                 <button type="button" class="btn btn-primary m-button" (click)="back()">
                   Back
                 </button>
               </div>
-
-              <div class="col-sm-3 col-md-3 col-lg-4 col-xs-6" >
-                  <button class="btn btn-primary m-button" style="float: right"
-                  *ngIf="eventData.modifyAllowed && customerEventId"
-                    (click)="delete()" >Delete</button>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                    <button class="btn btn-primary m-button" style="float: right"
+                      *ngIf="customerEventId"
+                      (click)="delete()" >Delete</button>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                    <button type="button" class="btn btn-primary m-button" (click)="save()" style="float:right">
+                      Save
+                    </button>
+                  </div>
                 </div>
-                <div class="col-sm-3 col-md-3 col-lg-4 col-xs-12" *ngIf="eventData.modifyAllowed || !customerEventId">
-                  <button type="button" class="btn btn-primary m-button" (click)="save()" style="float:right">
-                    Save
-                  </button>
-                </div>
-              <!-- </div> -->
+              </div>
             </div>
           </form>
         </div>

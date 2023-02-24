@@ -222,46 +222,47 @@
                     <li id="menu_option2" *ngIf="users?.role!=='ADMIN'">
                         <div class="dropdown">
                             <a class="dropdown-toggle history_a" id="menu1"
+                            *ngIf="allowedMenuListforUser.USAGE_HISTORY"
                                 data-toggle="dropdown">Usage history
                             </a>
                             <ul class="dropdown-menu" role="menu"
                                 aria-labelledby="menu1">
                                 <li role="presentation" style="padding-bottom:
-                                    5px;">
+                                    5px;"  *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS">
                                     <a role="menuitem" tabindex="-1" (click)="back()"
                                         [routerLink]="['/gas/gasList']">Gas</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom:
-                                    5px;">
+                                    5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS_CHARGE">
                                     <a role="menuitem" tabindex="-1" (click)="back()"
                                         [routerLink]="['/gas/gasChargeList']">Gas
                                         charge</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom:
-                                    5px;">
+                                    5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY">
                                     <a role="menuitem" tabindex="-1" (click)="back()"
                                         [routerLink]="['/electricity/electricityUsageList']">Electricity</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom:
-                                    5px;">
+                                    5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY_CHARGE">
                                     <a role="menuitem" tabindex="-1" (click)="back()"
                                         [routerLink]="['/electricity/electricityChargeList']">Electricity
                                         charge</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom:
-                                    5px;">
+                                    5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY_SMART_METER">
                                     <a role="menuitem" tabindex="-1" (click)="back()"
                                         [routerLink]="['/electricity/electricitySmartMeterList']">Electric
                                         smart meter</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom:
-                                    5px;">
+                                    5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY_DAILY_SMART_METER">
                                     <a role="menuitem" tabindex="-1" (click)="back()"
                                         [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric
                                         Daily smart meter</a>
                                 </li>
                                 <li role="presentation" style="padding-bottom:
-                                    5px;">
+                                    5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS_SMART_METER">
                                     <a role="menuitem" tabindex="-1" (click)="back()"
                                         [routerLink]="['/gas/gasSmartMeterList']">Gas
                                         smart

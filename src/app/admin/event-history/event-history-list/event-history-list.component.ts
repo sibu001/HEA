@@ -55,6 +55,11 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
     this.search(this.adminFilter.eventHistoryFilter.page, true);
     this.getEventHistoryListFromStore();
     this.getEventHistoryDataCountFromStore();
+    this.scrollTop();
+  }
+
+  scrollTop(){
+    window.scroll(0,0);
   }
 
   addEventHistory(): any {
