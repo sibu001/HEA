@@ -52,7 +52,7 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
       this.addRequest = params['addRequest'];
     });
     this.setForm(undefined);
-    this.setTodayDate();
+  
   }
 
   setTodayDate(){
@@ -64,6 +64,8 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
     this.getEventHistoryById();
     if (this.customerEventId !== undefined && this.customerId !== undefined) {
       this.loadEventHistoryById();
+    }else{
+      this.setTodayDate();
     }
     this.loadCustomerEventType();
     this.scrollTop();
@@ -90,9 +92,6 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
       customerId: [event !== undefined ? event.customerId : ''],
       eventDatetime: [event !== undefined ? new Date(event.eventDatetime) : this.date],
       description: [event !== undefined ? event.description : ''],
-      modifyAllowed: [event !== undefined ? event.modifyAllowed : ''],
-      linkedPersonType: [event !== undefined ? linkedPerson : ''],
-      linkedPersonName: [event !== undefined ? event.linkedPersonName : ''],
       linkedUserId: [event !== undefined ? event.linkedUserId : ''],
       customerEventType: this.fb.group({
         customerEventTypeId: [event && event.customerEventType ? event.customerEventType.customerEventTypeId : ''],
@@ -103,7 +102,6 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
         shared: [event && event.customerEventType ? event.customerEventType.shared : null],
         id: [event && event.customerEventType ? event.customerEventType.id : ''],
       }),
-      user: [event && event.user ? event.user : null],
       createdBy: [event !== undefined ? event.createdBy : ''],
     });
   }
@@ -129,6 +127,7 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
       customerEventType.controls['eventCode'].setValue(this.eventTypeData[i].eventCode);
       customerEventType.controls['description'].setValue(this.eventTypeData[i].description);
       this.eventForm.controls['customerEventTypeId'].setValue(this.eventTypeData[i].customerEventTypeId);
+      this.eventData.customerEventType = this.eventTypeData[i];
     }
   }
   validateForm() {
@@ -180,7 +179,9 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
       this.isForce = true;
       this.addRequest = false;
       if (this.customerEventId !== null && this.customerEventId !== undefined) {
-        this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventForm.value);
+        let payload = {...this.eventForm.value};
+        Object.assign(this.eventData, payload);
+        this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventData);
       } else {
         this.eventForm.value.modifyAllowed = true;
         this.administrativeService.saveEventHistory(this.customerId, this.eventForm.value);

@@ -33,7 +33,8 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   private readonly subscriptions: Subscription = new Subscription();
   addRequest: boolean = false;
   eventData: any;
-  date: Date;
+  date: Date = new Date();
+  originalCustomerId: any;
   constructor(
     private readonly fb: FormBuilder,
     private readonly loginService: LoginService,
@@ -53,13 +54,13 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       this.customerId = params['customerId'];
       this.addRequest = params['addRequest'];
     });
+    this.originalCustomerId = this.customerId;
     this.findCustomer();
     this.setForm(undefined);
-    this.setTodayDate();
   }
   
   setTodayDate(){
-    // setTimeout(()=> { this.eventForm.patchValue({eventDatetime : this.date}); }, 200);
+    setTimeout(()=> { this.eventForm.patchValue({eventDatetime : this.date}); }, 200);
   }
 
   scrollTop(){
@@ -73,6 +74,8 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     if (this.customerEventId !== undefined && this.customerId !== undefined) {
       this.loadEventHistoryById();
       this.loadCustomerByCustomerId();
+    }else{
+      this.setTodayDate();
     }
     this.scrollTop();
   }
@@ -116,7 +119,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       auditId: [this.customerData !== undefined ? this.customerData.auditId : '', Validators.required],
       customerName: [this.customerData !== undefined ? this.customerData.user.name : '', Validators.required],
       customerId: [event !== undefined ? event.customerId : ''],
-      eventDatetime: [event !== undefined ? '' : ''],
+      eventDatetime: [event !== undefined ? new Date(event.eventDatetime) : this.date],
       description: [event !== undefined ? event.description : ''],
       modifyAllowed: [event !== undefined ? event.modifyAllowed : ''],
       linkedPersonType: [event !== undefined ? linkedPerson : ''],
@@ -157,6 +160,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       customerEventType.controls['eventCode'].setValue(this.eventTypeData[i].eventCode);
       customerEventType.controls['description'].setValue(this.eventTypeData[i].description);
       this.eventForm.controls['customerEventTypeId'].setValue(this.eventTypeData[i].customerEventTypeId);
+      // this.eventData.customerEventType = this.eventTypeData[i];
     }
   }
   validateForm() {
@@ -248,9 +252,9 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
 
 selectedSuggestion(event : any){
     this.eventForm.patchValue({ auditId : event.auditId , customerName : event.user.name});
-    this.customerEventId = undefined;
     this.customerData = event;
     this.customerId = event.customerId;
+    this.eventForm.patchValue({'customerId' : event.customerId });
     let params = {customerId : event.customerId};
     if(!this.addRequest){
       Object.defineProperty(params, 'customerEventId',{value : ''})
@@ -270,7 +274,18 @@ save() {
     this.isForce = true;
     this.addRequest = false;
     if (this.customerEventId) {
-      this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventForm.value);
+
+      // added if admin has changed the customer in the existing customer event.
+      if(this.originalCustomerId != this.customerId){
+        this.administrativeService.deleteEventHistoryById(this.customerId, this.customerEventId);
+        this.administrativeService.saveEventHistory(this.customerId, this.eventForm.value);
+        return;
+      }
+
+      let payload = {...this.eventForm.value};
+      Object.assign(this.eventData, payload);
+      this.eventData.auditId = undefined;
+      this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventData);
     } else {
       this.eventForm.value.modifyAllowed = true;
       this.administrativeService.saveEventHistory(this.customerId, this.eventForm.value);

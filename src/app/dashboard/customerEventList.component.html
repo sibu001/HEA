@@ -15,6 +15,7 @@
                   id='periodStart' showIcon=true
                   showButtonBar="true">
                 </p-calendar>
+                <div>(mm/dd/yyyy)</div>
               </div>
               <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
                 <!-- <span class="filterLabel">Audit Id:</span> -->
@@ -41,6 +42,7 @@
                   id='periodEnd' showIcon=true
                   showButtonBar="true">
                 </p-calendar>
+                <div>(mm/dd/yyyy)</div>
               </div>
               <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
                 <!-- <span class="filterLabel">Customer Name:</span> -->
@@ -87,7 +89,7 @@
                 <span class="messageName">Event list (Number of Records =
                   {{totalElement | number:'1.0':'en-US'}})</span></p>
               <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
-                [data]="dataSource"
+                [data]="dataSource" [pageSize]="25"
                 [totalElement]="reportData.totalElements"
                 (changePageEvent)="search($event,false)"
                 (addEvent)="addEventHistory()"

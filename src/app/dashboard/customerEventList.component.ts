@@ -12,6 +12,7 @@ import { AdministrativeService } from 'src/app/store/administrative-state-manage
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { Users } from '../models/user';
 import { LoginService } from '../services/login.service';
+import { AppConstant } from '../utility/app.constant';
 
 @Component({
   selector: 'customerEventList',
@@ -105,7 +106,7 @@ export class customerEventListComponent implements OnInit, OnDestroy {
       sortFiled = event.sort.active;
     }
     const params = new HttpParams()
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && sortFiled !== undefined ? (sortFiled === 'customerName' ? 'customer.user.name' : sortFiled) : ''))

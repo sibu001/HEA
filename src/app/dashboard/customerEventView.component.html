@@ -47,14 +47,16 @@
   
             <div class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Event Date:</div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <div class="col-sm-4 col-md-4 col-lg-3 col-xs-12">
                 <p-calendar formControlName='eventDatetime' dateFormat="mm/dd/yy"
                   id='eventDatetime' showIcon=true showSeconds="true"
                   showTime="true" [disabled]="eventData.modifyAllowed ? null : true"
                   showButtonBar="true" hideOnDateTimeSelect="true">
                 </p-calendar>
               </div>
-              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12" style="margin-top: 4px">
+                (mm/dd/yyyy)
+              </div>
             </div>
   
             <div class="row borderBottom rowPadding">
@@ -78,11 +80,13 @@
                 <div class="row">
                   <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                     <button class="btn btn-primary m-button" style="float: right"
-                      *ngIf="customerEventId"
+                      *ngIf="customerEventId && eventData.modifyAllowed"
                       (click)="delete()" >Delete</button>
                   </div>
                   <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                    <button type="button" class="btn btn-primary m-button" (click)="save()" style="float:right">
+                    <button type="button" class="btn btn-primary m-button"
+                      *ngIf="!customerEventId || (customerEventId && eventData.modifyAllowed)"
+                    (click)="save()" style="float:right">
                       Save
                     </button>
                   </div>
