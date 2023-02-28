@@ -36,7 +36,7 @@ export class customerEventListComponent implements OnInit, OnDestroy {
   public force = false;
   public users : Users;
   public adminFilter: AdminFilter;
-  appConstants : AppConstant ;
+  dateFormat : string = AppConstant.DATE_SELECTION_FORMAT;
   private readonly subscriptions: Subscription = new Subscription();
   filter : any;
   constructor(public fb: FormBuilder,
@@ -52,8 +52,6 @@ export class customerEventListComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.force = params['force'];
     });
-
-    this.appConstants = AppConstant;
   }
 
   ngOnInit() {

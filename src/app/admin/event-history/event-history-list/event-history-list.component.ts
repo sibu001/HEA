@@ -36,7 +36,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   public adminFilter: AdminFilter;
   private readonly subscriptions: Subscription = new Subscription();
   filter : any;
-  appConstants : AppConstant;
+  dateFormat : string = AppConstant.DATE_SELECTION_FORMAT;
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
     private readonly router: Router,
@@ -49,7 +49,6 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.force = params['force'];
     });
-    this.appConstants  = AppConstant;
   }
 
   ngOnInit() {

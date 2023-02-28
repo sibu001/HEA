@@ -30,7 +30,7 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
   addRequest : boolean = false;
   linkedPersonType: any;
   eventData : any = { modifyAllowed : true };
-  appConstants : AppConstant;
+  dateFormat : string = AppConstant.DATE_SELECTION_FORMAT;
   private readonly subscriptions: Subscription = new Subscription();
   date: Date;
   constructor(
@@ -54,7 +54,6 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
       this.addRequest = params['addRequest'];
     });
     this.setForm(undefined);
-    this.appConstants = AppConstant;
   }
 
   setTodayDate(){

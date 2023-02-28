@@ -30,7 +30,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   userId: any;
   linkedPersonType: any;
   dataListForSuggestions = [];
-  appConstants : AppConstant;
+  dateFormat : string = AppConstant.DATE_SELECTION_FORMAT;
   private subject$ : Subject<any>  = new Subject();
   private readonly subscriptions: Subscription = new Subscription();
   addRequest: boolean = false;
@@ -59,7 +59,6 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     this.originalCustomerId = this.customerId;
     this.findCustomer();
     this.setForm(undefined);
-    this.appConstants = AppConstant;
   }
   
   setTodayDate(){
