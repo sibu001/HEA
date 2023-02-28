@@ -19,7 +19,7 @@ export class MailArchiveListComponent implements OnInit {
   errorMessage: any;
   users: Users = new Users();
   pageSize = AppConstant.pageSize;
-  appConstants : AppConstant = AppConstant;
+  appConstants : AppConstant;
   pageIndex = 0;
   mailArchiveForm: FormGroup;
   public keys: Array<TABLECOLUMN> = TableColumnData.MAIL_ARCHIVE_KEY;
@@ -39,6 +39,8 @@ export class MailArchiveListComponent implements OnInit {
   ) {
     this.users = this.loginService.getUser();
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
+    
+    this.appConstants = AppConstant;
   }
   ngOnInit() {
     if(this.users.role == "ADMIN"){
