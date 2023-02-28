@@ -102,7 +102,7 @@ span.start {
   border-color: #76ba19;
   padding: 4px 23px 4px 23px;
   border-radius: 3px;
-  margin-bottom: 6%;
+  /* margin-bottom: 6%; */
 }
 .btn-primary.active.focus,
 .btn-primary.active:focus,
@@ -237,4 +237,12 @@ div.adminFeedback {
 ::ng-deep .mail-archive-table .mat-column-dateSent {
   flex: none;
   width: 120px;
+}
+
+.borderBottom{
+  padding: 10px 0px;
+}
+
+.form-group{
+  margin-bottom: 0px !important;
 }

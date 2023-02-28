@@ -9,6 +9,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 
@@ -29,6 +30,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   userId: any;
   linkedPersonType: any;
   dataListForSuggestions = [];
+  appConstants : AppConstant = AppConstant;
   private subject$ : Subject<any>  = new Subject();
   private readonly subscriptions: Subscription = new Subscription();
   addRequest: boolean = false;

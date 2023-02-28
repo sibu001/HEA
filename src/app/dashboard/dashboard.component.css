@@ -550,11 +550,11 @@ a.Schedule {
   margin-bottom: 8px;
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1092px) {
+/* @media only screen and (min-width: 768px) and (max-width: 1092px) {
   .responsive-header {
     margin-top: 35px;
   }
-}
+} */
 
 ::ng-deep #trendingHomeTrendsChartsEmpty {
   margin: 0px !important;

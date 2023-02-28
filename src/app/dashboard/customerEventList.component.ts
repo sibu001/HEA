@@ -36,6 +36,7 @@ export class customerEventListComponent implements OnInit, OnDestroy {
   public force = false;
   public users : Users;
   public adminFilter: AdminFilter;
+  appConstants : AppConstant = AppConstant;
   private readonly subscriptions: Subscription = new Subscription();
   filter : any;
   constructor(public fb: FormBuilder,

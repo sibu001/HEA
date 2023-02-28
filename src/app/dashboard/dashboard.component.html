@@ -133,8 +133,8 @@
                         <p class="Reports">My Reports</p>
                         <div class="row showInfo infoMargin"
                             *ngIf="users.role==='ADMIN'">
-                            <div class="col-sm-4">Audit Id:</div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-12 col-md-4 text-center">Audit Id:</div>
+                            <div class="col-sm-12 col-md-8">
                                     <input type="text" class="form-control" matInput 
                                     [matAutocomplete]="auditIdAutoComplete"
                                     [ngModel]="customer.auditId" (input)="findCustomerByAuditIdOrCustomerName('auditId',$event.target.value)" >
@@ -146,8 +146,8 @@
                             </div>
                         </div>
                         <div class="row showInfo" *ngIf="users.role==='ADMIN'">
-                            <div class="col-sm-4">Customer</div>
-                            <div class="col-sm-8">
+                            <div class="col-sm-12 col-md-4 text-center">Customer</div>
+                            <div class="col-sm-12 col-md-8">
                                     <input type="text" matInput class='form-control form-control-sm'
                                     (input)="findCustomerByAuditIdOrCustomerName('customerName',$event.target.value)" [ngModel]="customer.user.name"
                                     [matAutocomplete]="customerNameAutoComplete">

@@ -9,6 +9,7 @@ import { TableColumnData } from '../data/common-data';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppConstant } from '../utility/app.constant';
 import { filter } from 'rxjs/operators';
+import { AdminFilter } from '../models/filter-object';
 @Component({
   selector: 'mailArchiveList',
   templateUrl: './mailArchiveList.component.html',
@@ -18,6 +19,7 @@ export class MailArchiveListComponent implements OnInit {
   errorMessage: any;
   users: Users = new Users();
   pageSize = AppConstant.pageSize;
+  appConstants : AppConstant = AppConstant;
   pageIndex = 0;
   mailArchiveForm: FormGroup;
   public keys: Array<TABLECOLUMN> = TableColumnData.MAIL_ARCHIVE_KEY;
@@ -27,6 +29,7 @@ export class MailArchiveListComponent implements OnInit {
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
   };
+  adminFilter : AdminFilter;
 
   constructor(private location: Location,
     private router: Router,
@@ -35,9 +38,14 @@ export class MailArchiveListComponent implements OnInit {
     private loginService: LoginService
   ) {
     this.users = this.loginService.getUser();
+    this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
   }
   ngOnInit() {
-    this.setUpForm(undefined);
+    if(this.users.role == "ADMIN"){
+      this.setUpForm(this.adminFilter.mailArchiveList);
+    }else{
+      this.setUpForm(undefined);
+    }
     this.search(undefined, false);
   }
 
@@ -100,9 +108,9 @@ export class MailArchiveListComponent implements OnInit {
   }
   setUpForm(event: any) {
     this.mailArchiveForm = this.fb.group({
-      periodStart: [event !== undefined && event !== null ? new Date(event.periodStart) : ''],
-      subject: [event !== undefined && event !== null ? event.subject : ''],
-      periodEnd: [event !== undefined && event !== null ? new Date(event.periodEnd) : '']
+      periodStart: [event && event.periodStart  ? new Date(event.periodStart) : ''],
+      subject: [event && event.subject ? event.subject : ''],
+      periodEnd: [event && event.periodEnd ? new Date(event.periodEnd) : '']
     });
   }
 
@@ -123,7 +131,15 @@ export class MailArchiveListComponent implements OnInit {
         this.pageIndex = event.pageIndex;
       else
         this.pageIndex = 0;
-        
+       
+      if(this.users.role == "ADMIN"){
+        this.adminFilter.mailArchiveList = {
+          periodStart : this.mailArchiveForm.value.periodStart,
+          periodEnd : this.mailArchiveForm.value.periodEnd,
+          subject : this.mailArchiveForm.value.subject
+        }
+        localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
+      }
     this.getMailList(params);
   }
   goToEditMailArchive(event: any) {

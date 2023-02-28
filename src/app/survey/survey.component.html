@@ -827,6 +827,7 @@
                           <th id="pane_arrow" scope="col">
                             <p >
                               <img alt="icon" style="max-width:21px; margin:auto;"
+                                *ngIf="currentPaneBlock.surveyAnswerBlocks.length < currentPaneBlock.dataBlock.maxRows"
                                 src="assets/images/add.png"
                                 (click)="addDataBlockRow('first')">
                             </p>
@@ -872,10 +873,10 @@
                                 (click)="editDataBlockRow(i)">
                             </p>
                           </td>
-                          <td 
-                            *ngIf="users.currentPaneNumber.currentPane.paneCode != 'pv_EditPVConfigs' || currentPaneBlock?.surveyAnswerBlocks?.length>1">
+                          <td>
                             <p class="form-group trash-can-p-width">                                                                                                                                                                                                                                                                                                                            
                               <img alt="icon" style="max-width:21px; margin:auto;"
+                              *ngIf="currentPaneBlock.dataBlock.minRows < currentPaneBlock.surveyAnswerBlocks.length"
                               src="assets/images/trashcan.png"
                               (click)="deleteDataBlockRow(i)">
                             </p>
@@ -894,6 +895,7 @@
                               *ngIf="i==currentPaneBlock?.surveyAnswerBlocks[0]?.surveyAnswers?.length-1"
                               style="text-align: center;">
                               <img alt="icon" style="max-width:20px; margin:auto;"
+                              *ngIf="currentPaneBlock.surveyAnswerBlocks.length < currentPaneBlock.dataBlock.maxRows"
                                 src="assets/images/add.png"
                                 (click)="addDataBlockRow('last')">
                             </td>

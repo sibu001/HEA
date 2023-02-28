@@ -36,6 +36,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   public adminFilter: AdminFilter;
   private readonly subscriptions: Subscription = new Subscription();
   filter : any;
+  appConstants : AppConstant = AppConstant;
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
     private readonly router: Router,

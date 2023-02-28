@@ -2043,6 +2043,10 @@ div.jqplot-xaxis-tick {
   height: 40px;
 }
 
+app-survey-dialogbox .ui-calendar .ui-calendar-button:enabled {
+  height: 40px !important;
+}
+
 .ui-datepicker.ui-widget.ui-widget-content{
   top : 0px !important;  
 }
@@ -2544,4 +2548,21 @@ trendingpartsview .trendingChartDiv>div{
 div.ui-widget.ui-widget-content{
   position: absolute;
   margin-top: 30px;
+}
+
+@media screen and (min-width: 768px){
+  .padding-big-screen{
+      padding: 0px 25px;
+  }
+}
+
+@media screen and (max-width: 768px){
+  .padding-big-screen{
+      padding: 0px 10px;
+  }
+}
+
+app-sidebar>div, app-user-sidebar>div  {
+  height: auto !important;
+  background: #fbfbfb;
 }

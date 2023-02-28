@@ -126,6 +126,12 @@ export class AdminFilter {
         auditId : '',
         user : { name : ''}
     }
+
+    public mailArchiveList = {
+        periodStart : '',
+        subject : '',
+        periodEnd : '' 
+    }
 }
 
 export class UsageHistoryFilter {

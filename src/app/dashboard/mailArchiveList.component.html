@@ -2,77 +2,70 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-9 col-md-9 col-sm-8">
-                <p class="accurate">Mail archive</p>
-                <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <form class="form-horizontal"
-                            [formGroup]='mailArchiveForm'>
+                <div  class="padding-big-screen">
+                    <p class="accurate">Mail archive</p>
+                    <form class="form-horizontal" [formGroup]='mailArchiveForm'>
+                    <div class="row borderBottom">
+                        <div class="col-md-6 col-sm-12">
                             <div class="form-group">
-                                <p class="control-label col-lg-3 col-sm-4"
-                                    for="start">
+                                <p class="control-label col-lg-4 col-sm-4" for="start">
                                     Period start:
                                 </p>
                                 <div class="col-lg-5 col-sm-6">
-                                    <p-calendar name="start" [showIcon]="true"
-                                        dateFormat="mm/dd/yy"
+                                    <p-calendar name="start" [showIcon]="true" dateFormat="mm/dd/yy"
                                         formControlName='periodStart'></p-calendar>
+                                    <div>{{appConstants.DATE_SELECTION_FORMAT}}</div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
                             <div class="form-group">
-                                <p class="control-label col-lg-3 col-sm-4"
-                                    for="end">
-                                    Period end:
-                                </p>
-                                <div class="col-lg-5 col-sm-6">
-                                    <p-calendar formControlName='periodEnd'
-                                        name="end" [showIcon]="true"
-                                        dateFormat="mm/dd/yy"></p-calendar>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                        <form class="form-horizontal" [formGroup]='mailArchiveForm'>
-                            <div class="form-group">
-                                <p class="control-label col-lg-3 col-sm-4"
-                                    for="sub">
+                                <p class="control-label col-lg-3 col-sm-4" for="sub">
                                     Subject:
                                 </p>
-                                <div class="col-lg-5 col-sm-6">
-                                    <input type="text" class="form-control"
-                                        id="sub" formControlName='subject'
+                                <div class="col-lg-5 col-sm-6 ">
+                                    <input type="text" class="form-control" id="sub" formControlName='subject'
                                         name="subject">
                                 </div>
                             </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12" style="text-align:right;">
-                        <button type="submit" class="btn btn-primary"
-                            (click)="search(undefined,true)">Show</button>
+                    <div class="row borderBottom">
+                        <div class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <p class="control-label col-lg-4 col-sm-4" for="end">
+                                    Period end:
+                                </p>
+                                <div class="col-lg-5 col-sm-6">
+                                    <p-calendar formControlName='periodEnd' name="end" [showIcon]="true"
+                                        dateFormat="mm/dd/yy"></p-calendar>
+                                    <div>{{appConstants.DATE_SELECTION_FORMAT}}</div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-12" style="text-align:right; margin-top: 10px;">
+                            <button type="submit" class="btn btn-primary" (click)="search(undefined,true)">Show</button>
+                        </div>
+                    </div>
+                    </form>
                 </div>
                 <div class="row">
                     <div class="col-sm-12">
                         <p class="Messages">
                             <img src="assets/images/dot03.gif" class="dot" alt="dot" />&nbsp;Message
                         </p>
-                        <app-table [keys]="keys" [isPaginate]="true"
-                            [isHideAdd]=true [isSearch]="false"
-                            [disableNextButton]="disableNextButton"
-                            [disableLastButton]="true" [pageIndex]="pageIndex"
+                        <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false"
+                            [disableNextButton]="disableNextButton" [disableLastButton]="true" [pageIndex]="pageIndex"
                             [data]="this.usageHistoryData.content" [pageSize]="pageSize"
-                            [totalElement]="usageHistoryData.totalElements"
-                            (changePageEvent)="search($event,false)"
-                            (goToEditEvent)="goToEditMailArchive($event)"
-                            class='mail-archive-table'>
+                            [totalElement]="usageHistoryData.totalElements" (changePageEvent)="search($event,false)"
+                            (goToEditEvent)="goToEditMailArchive($event)" class='mail-archive-table'>
                         </app-table>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn"
-                *ngIf="users.role!=='ADMIN'">
+            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn" *ngIf="users.role!=='ADMIN'">
                 <div class="feedback">
                     <p class="energy_analytics">
                         Powered by Home Energy Analytics, Inc.</p>
@@ -83,68 +76,52 @@
                     <hr>
                     <ul class="leaks">
                         <li>
-                            <a class="a_history"
-                                [routerLink]="['/topicshistory']">Topics history</a>
+                            <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
                         </li>
                         <li>
-                            <a class="a_history"
-                                [routerLink]="['/customerEventList']">Events
+                            <a class="a_history" [routerLink]="['/customerEventList']">Events
                                 history</a>
                         </li>
                         <li>
-                            <a class="a_history"
-                                [routerLink]="['/MailArchiveList']">Mail archive</a>
+                            <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
                         </li>
                         <li>
-                            <a class="a_history"
-                                [routerLink]="['/surveyRecommendationList']">Recommendations</a>
+                            <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
                         </li>
                         <li>
                             <div class="dropdown">
-                                <a class="dropdown-toggle" id="menu1"
-                                    data-toggle="dropdown">Usage history
+                                <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
                                 </a>
-                                <ul class="dropdown-menu" role="menu"
-                                    aria-labelledby="menu1">
-                                    <li role="presentation"
-                                        style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/gas/gasList']">Gas</a>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasList']">Gas</a>
                                     </li>
-                                    <li role="presentation"
-                                        style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/gas/gasChargeList']">Gas
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasChargeList']">Gas
                                             charge</a>
                                     </li>
-                                    <li role="presentation"
-                                        style="padding-bottom: 5px;">
+                                    <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1"
                                             [routerLink]="['/electricity/electricityUsageList']">Electricity</a>
                                     </li>
-                                    <li role="presentation"
-                                        style="padding-bottom: 5px;">
+                                    <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1"
                                             [routerLink]="['/electricity/electricityChargeList']">Electricity
                                             charge</a>
                                     </li>
-                                    <li role="presentation"
-                                        style="padding-bottom: 5px;">
+                                    <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1"
                                             [routerLink]="['/electricity/electricitySmartMeterList']">Electric
                                             smart meter</a>
                                     </li>
-                                    <li role="presentation"
-                                        style="padding-bottom: 5px;">
+                                    <li role="presentation" style="padding-bottom: 5px;">
                                         <a role="menuitem" tabindex="-1"
                                             [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric
                                             Daily smart
                                             meter</a>
                                     </li>
-                                    <li role="presentation"
-                                        style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/gasSmartMeter']">Gas
+                                    <li role="presentation" style="padding-bottom: 5px;">
+                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas
                                             smart
                                             meter</a>
                                     </li>
@@ -154,8 +131,7 @@
                     </ul>
                 </div>
             </div>
-            <div class="col-sm-3 col-md-3 col-sm-4 rightColumn"
-                *ngIf="users.role==='ADMIN'">
+            <div class="col-sm-4 col-md-3 col-sm-4 rightColumn" *ngIf="users.role==='ADMIN'">
                 <div class="adminFeedback">
                     <app-sidebar></app-sidebar>
                 </div>

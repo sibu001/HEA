@@ -10,6 +10,7 @@ import { AdministrativeService } from 'src/app/store/administrative-state-manage
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+import { AppConstant } from '../utility/app.constant';
 
 @Component({
   selector: 'customerEventView',
@@ -29,6 +30,7 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
   addRequest : boolean = false;
   linkedPersonType: any;
   eventData : any = { modifyAllowed : true };
+  appConstants : AppConstant = AppConstant;
   private readonly subscriptions: Subscription = new Subscription();
   date: Date;
   constructor(

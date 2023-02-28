@@ -155,4 +155,6 @@ export class AppConstant {
   
     public static readonly POPUP_BLOCK_MESSAGE: string = 'In Safari, disable popup blocking for hea.com in either address bar or settings for browser.';
     public static readonly POSSIBLE_LOST_PEROIOD = 'possibleLostPeriod';
+    public static readonly DATE_SELECTION_FORMAT = '(MM/dd/yyyy)';
+
 }

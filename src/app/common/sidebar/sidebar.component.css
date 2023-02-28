@@ -55,11 +55,11 @@ section.space-top {
     margin-left: -20px;
   }
 }
-@media (min-width: 701px) and (max-width: 800px) {
+/* @media (min-width: 701px) and (max-width: 800px) {
   .sidebar-info {
     margin-left: -35px;
   }
-}
+} */
 @media (min-width: 801px) and (max-width: 991px) {
   .sidebar-info {
     margin-left: -45px;
