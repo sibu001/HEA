@@ -15,6 +15,10 @@ export class AppUtility {
         return true;
     }
 
+    public static scrollTop(){
+        window.scroll(0,0);
+    }
+
     public static convertMillisecondToTime(millisecond: any) {
         let dayValue: any = '';
         if (millisecond > 86400000) {

@@ -1,7 +1,7 @@
 <section class="space-top">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-9 col-md-9 col-sm-8">
+            <div class="col-lg-9 col-md-9 col-sm-12">
                 <div  class="padding-big-screen">
                     <p class="accurate">Mail archive</p>
                     <form class="form-horizontal" [formGroup]='mailArchiveForm'>
@@ -14,7 +14,7 @@
                                 <div class="col-lg-5 col-sm-6">
                                     <p-calendar name="start" [showIcon]="true" dateFormat="mm/dd/yy"
                                         formControlName='periodStart'></p-calendar>
-                                    <div>{{dateFormat}</div>
+                                    <div>{{dateFormat}}</div>
                                 </div>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                                 <div class="col-lg-5 col-sm-6">
                                     <p-calendar formControlName='periodEnd' name="end" [showIcon]="true"
                                         dateFormat="mm/dd/yy"></p-calendar>
-                                    <div>{{dateFormat}</div>
+                                    <div>{{dateFormat}}</div>
                                 </div>
                             </div>
                         </div>
@@ -65,73 +65,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-4 rightColumn" *ngIf="users.role!=='ADMIN'">
-                <div class="feedback">
-                    <p class="energy_analytics">
-                        Powered by Home Energy Analytics, Inc.</p>
-                    <p class="feedback">Send feedback to</p>
-                    <p class="link_hea">
-                        <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
-                    </p>
-                    <hr>
-                    <ul class="leaks">
-                        <li>
-                            <a class="a_history" [routerLink]="['/topicshistory']">Topics history</a>
-                        </li>
-                        <li>
-                            <a class="a_history" [routerLink]="['/customerEventList']">Events
-                                history</a>
-                        </li>
-                        <li>
-                            <a class="a_history" [routerLink]="['/MailArchiveList']">Mail archive</a>
-                        </li>
-                        <li>
-                            <a class="a_history" [routerLink]="['/surveyRecommendationList']">Recommendations</a>
-                        </li>
-                        <li>
-                            <div class="dropdown">
-                                <a class="dropdown-toggle" id="menu1" data-toggle="dropdown">Usage history
-                                </a>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasList']">Gas</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gas/gasChargeList']">Gas
-                                            charge</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricity/electricityUsageList']">Electricity</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricity/electricityChargeList']">Electricity
-                                            charge</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricity/electricitySmartMeterList']">Electric
-                                            smart meter</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1"
-                                            [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric
-                                            Daily smart
-                                            meter</a>
-                                    </li>
-                                    <li role="presentation" style="padding-bottom: 5px;">
-                                        <a role="menuitem" tabindex="-1" [routerLink]="['/gasSmartMeter']">Gas
-                                            smart
-                                            meter</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+            <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="users.role!=='ADMIN'">
+                <app-user-sidebar></app-user-sidebar>
             </div>
-            <div class="col-sm-4 col-md-3 col-sm-4 rightColumn" *ngIf="users.role==='ADMIN'">
+            <div class="col-sm-4 col-md-3 col-sm-12" *ngIf="users.role==='ADMIN'">
                 <div class="adminFeedback">
                     <app-sidebar></app-sidebar>
                 </div>

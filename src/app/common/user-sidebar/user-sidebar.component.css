@@ -1,3 +1,6 @@
+.app-user-sidebar{
+  background: #fbfbfb;
+}
 
   ul.leaks {
     list-style-type: none;
@@ -98,6 +101,13 @@
 .dropdown-menu > li > a:focus,
 .dropdown-menu > li > a:hover {
   color: #4550a1;
-  text-decoration: none;
-  background-color: #fff;
+  text-decoration: underline;
+  background-color: #fbfbfb;
+}
+
+.dropdown-menu{
+  background: #fbfbfb;
+  left: -30px;
+  width: 100%;
+  padding-left: 30px;
 }

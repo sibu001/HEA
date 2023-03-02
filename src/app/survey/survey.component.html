@@ -873,13 +873,24 @@
                                 (click)="editDataBlockRow(i)">
                             </p>
                           </td>
-                          <td>
-                            <p class="form-group trash-can-p-width">                                                                                                                                                                                                                                                                                                                            
+                          <td [ngStyle]="{'border-top' : i == 0 ? '2px solid #ddd' : '0px solid #ddd'}"> 
+                            <!-- "If allowTotalRemoving is true - is possible to remove records in any order (not only first or last records)."
+                                --------- added condtion for the above statement ---------   -->
+                            <ng-container *ngIf="currentPaneBlock.dataBlock.allowTotalRemoving;else  allowTotalRemovingfalse">
+                            <p class="form-group trash-can-p-width" *ngIf="currentPaneBlock.dataBlock.minRows < currentPaneBlock.surveyAnswerBlocks.length">
                               <img alt="icon" style="max-width:21px; margin:auto;"
-                              *ngIf="currentPaneBlock.dataBlock.minRows < currentPaneBlock.surveyAnswerBlocks.length"
                               src="assets/images/trashcan.png"
                               (click)="deleteDataBlockRow(i)">
                             </p>
+                            </ng-container>
+                            <ng-template #allowTotalRemovingfalse>
+                            <p class="form-group trash-can-p-width" *ngIf="(currentPaneBlock.dataBlock.minRows < currentPaneBlock.surveyAnswerBlocks.length 
+                            && (i == 0 || i == currentPaneBlock.surveyAnswerBlocks.length-1 ))">
+                              <img alt="icon" style="max-width:21px; margin:auto;"
+                              src="assets/images/trashcan.png"
+                              (click)="deleteDataBlockRow(i)">
+                            </p>
+                            </ng-template>
                           </td>
                         </tr>
                         <tr class="cursor-pointer">

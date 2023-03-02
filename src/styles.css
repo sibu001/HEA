@@ -652,14 +652,14 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
-@media only screen and (min-width: 351px) and (max-width: 375px) {
+@media only screen and (min-width: 351px) and (max-width: 414px) {
   .trendingProfileChart > div {
     width: 322px !important;
     height: 100% !important;
   }
   .trendingProfileChart > :nth-child(2) {
     width: 322px !important;
-    margin-top: 4em !important;
+    margin-top: 10em !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
     margin-left: 0px !important;
@@ -688,7 +688,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
     height: 100% !important;
   }
   .trendingProfileChart > :nth-child(2) {
-    margin-top: 4em !important;
+    margin-top: 10em !important;
     width: 345px !important;
   }
   div#trendingProfileChartTrends > :nth-child(2) {
@@ -2067,6 +2067,12 @@ app-event-history-list .ui-calendar .ui-calendar-button,
   top: 150px;
 }
 
+@media(max-width: 414px){
+  #trendingProfileChartTrends + div {
+    top: 220px;
+  }
+}
+
 #chartElectrificationIntro .jqplot-point-label{
   display: block;
 }
@@ -2565,4 +2571,13 @@ div.ui-widget.ui-widget-content{
 app-sidebar>div, app-user-sidebar>div  {
   height: auto !important;
   background: #fbfbfb;
+}
+
+.p-5{
+  padding: 5px;
+}
+
+
+.side-bar{
+  padding: 0px !important;
 }

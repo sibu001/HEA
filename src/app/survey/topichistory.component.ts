@@ -6,6 +6,7 @@ import { Location } from '@angular/common';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
+import { AppUtility } from '../utility/app.utility';
 
 @Component({
   selector: 'topic-history',
@@ -45,6 +46,7 @@ export class TopicHistoryComponent implements OnInit {
         this.router.navigate(['surveyView']);
       }
     }
+    AppUtility.scrollTop();
   }
 
 

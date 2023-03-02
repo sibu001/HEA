@@ -222,6 +222,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     this.isResponsive = false;
     this.users = this.loginService.getUser();
     if (routeNumber === 1) {
+      this.closeOpenedDialogBox();
       this.isResponsive = true;
       this.hideResponsiveMenu();
       return;

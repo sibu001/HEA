@@ -81,7 +81,7 @@
                         <label class="control-label col-sm-3 col-lg-3" for="email">username</label>
                         <div class="col-sm-8 col-lg-7">
                             <input type="email" class="form-control" id="email"
-                                placeholder="enter username"
+                                placeholder="enter username" autocomplete="off"
                                 name="email" [(ngModel)]="users.username"
                                 (keyup.enter)="login()">
                         </div>
@@ -93,7 +93,7 @@
                             <input [type]="show ? 'password':'text'" pInputText
                                 class="form-control" id="pwd"
                                 placeholder="enter password" name="pwd"
-                                [(ngModel)]="users.password"
+                                [(ngModel)]="users.password" autocomplete="off"
                                 (keyup.enter)="login()" #inp />
                             <div class="pll">
                                 <a (click)="toggleShow()" *ngIf="show">

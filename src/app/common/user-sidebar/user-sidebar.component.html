@@ -1,76 +1,78 @@
-<p class="Energy_anaiytic">
-  <img alt="icon" src="assets/images/dot03.gif" class="dot">&nbsp;Powered
-  by Home Energy Analytics, Inc.</p>
-<p class="feedback">Send feedback to</p>
-<p class="link_hea">
-  <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
-</p>
-<hr>
-<ul class="leaks">
-  <li *ngIf="allowedMenuListforUser.TOPIC_HISTORY">
-      <a class="a_history" [routerLink]="['/topicshistory']">Topics
-          history</a>
-  </li>
-  <li *ngIf="allowedMenuListforUser.EVENT_HISTORY">
-      <a class="a_history"
-          [routerLink]="['/customerEventList']">Events history</a>
-  </li>
-  <li *ngIf="allowedMenuListforUser.MAIL_ARCHIVE">
-      <a class="a_history"
-          [routerLink]="['/MailArchiveList']">Mail archive</a>
-  </li>
-  <li *ngIf="allowedMenuListforUser.RECOMMENDATIONS">
-      <a class="a_history"
-          [routerLink]="['/surveyRecommendationList']">Recommendations</a>
-  </li>
-  <li *ngIf="allowedMenuListforUser.USAGE_HISTORY">
-      <div class="dropdown">
-          <a class="dropdown-toggle" id="menu1"
-              data-toggle="dropdown">Usage history
-          </a>
-          <ul class="dropdown-menu" role="menu"
-              aria-labelledby="menu1">
-              <li role="presentation" style="padding-bottom:
-                  5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS">
-                  <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/gas/gasList']">Gas</a>
-              </li>
-              <li role="presentation" style="padding-bottom:
-                  5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS_CHARGE">
-                  <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/gas/gasChargeList']">Gas
-                      charge</a>
-              </li>
-              <li role="presentation" style="padding-bottom:
-                  5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY">
-                  <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/electricity/electricityUsageList']">Electricity</a>
-              </li>
-              <li role="presentation" style="padding-bottom:
-                  5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY_CHARGE">
-                  <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/electricity/electricityChargeList']">Electricity
-                      charge</a>
-              </li>
-              <li role="presentation" style="padding-bottom:
-                  5px;"  *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY_SMART_METER">
-                  <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/electricity/electricitySmartMeterList']">Electric
-                      smart meter</a>
-              </li>
-              <li role="presentation" style="padding-bottom:
-                  5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY_DAILY_SMART_METER">
-                  <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric
-                      Daily smart meter</a>
-              </li>
-              <li role="presentation" style="padding-bottom:
-                  5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS_SMART_METER">
-                  <a role="menuitem" tabindex="-1"
-                      [routerLink]="['/gas/gasSmartMeterList']">Gas
-                      smart meter</a>
-              </li>
-          </ul>
-      </div>
-  </li>
-</ul>
+<div class="app-user-sidebar">
+    <p class="Energy_anaiytic">
+        <img alt="icon" src="assets/images/dot03.gif" class="dot">&nbsp;Powered
+        by Home Energy Analytics, Inc.</p>
+      <p class="feedback">Send feedback to</p>
+      <p class="link_hea">
+        <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
+      </p>
+      <hr>
+      <ul class="leaks">
+        <li *ngIf="allowedMenuListforUser.TOPIC_HISTORY">
+            <a class="a_history" [routerLink]="['/topicshistory']">Topics
+                history</a>
+        </li>
+        <li *ngIf="allowedMenuListforUser.EVENT_HISTORY">
+            <a class="a_history"
+                [routerLink]="['/customerEventList']">Events history</a>
+        </li>
+        <li *ngIf="allowedMenuListforUser.MAIL_ARCHIVE">
+            <a class="a_history"
+                [routerLink]="['/MailArchiveList']">Mail archive</a>
+        </li>
+        <li *ngIf="allowedMenuListforUser.RECOMMENDATIONS">
+            <a class="a_history"
+                [routerLink]="['/surveyRecommendationList']">Recommendations</a>
+        </li>
+        <li *ngIf="allowedMenuListforUser.USAGE_HISTORY">
+            <div class="dropdown">
+                <a class="dropdown-toggle" id="menu1"
+                    data-toggle="dropdown">Usage history
+                </a>
+                <ul class="dropdown-menu" role="menu"
+                    aria-labelledby="menu1" id="usage-history-dropdown" >
+                    <li role="presentation" style="padding-bottom:
+                        5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS">
+                        <a role="menuitem" tabindex="-1"
+                            [routerLink]="['/gas/gasList']">Gas</a>
+                    </li>
+                    <li role="presentation" style="padding-bottom:
+                        5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS_CHARGE">
+                        <a role="menuitem" tabindex="-1"
+                            [routerLink]="['/gas/gasChargeList']">Gas
+                            charge</a>
+                    </li>
+                    <li role="presentation" style="padding-bottom:
+                        5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY">
+                        <a role="menuitem" tabindex="-1"
+                            [routerLink]="['/electricity/electricityUsageList']">Electricity</a>
+                    </li>
+                    <li role="presentation" style="padding-bottom:
+                        5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY_CHARGE">
+                        <a role="menuitem" tabindex="-1"
+                            [routerLink]="['/electricity/electricityChargeList']">Electricity
+                            charge</a>
+                    </li>
+                    <li role="presentation" style="padding-bottom:
+                        5px;"  *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY_SMART_METER">
+                        <a role="menuitem" tabindex="-1"
+                            [routerLink]="['/electricity/electricitySmartMeterList']">Electric
+                            smart meter</a>
+                    </li>
+                    <li role="presentation" style="padding-bottom:
+                        5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.ELECTRICITY_DAILY_SMART_METER">
+                        <a role="menuitem" tabindex="-1"
+                            [routerLink]="['/electricity/electricityDailySmartMeterList']">Electric
+                            Daily smart meter</a>
+                    </li>
+                    <li role="presentation" style="padding-bottom:
+                        5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS_SMART_METER">
+                        <a role="menuitem" tabindex="-1"
+                            [routerLink]="['/gas/gasSmartMeterList']">Gas
+                            smart meter</a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+      </ul>
+</div>

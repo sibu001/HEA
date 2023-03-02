@@ -1,7 +1,7 @@
 <section class="space-top">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-9 col-md-9 col-sm-8">
+      <div class="col-lg-9 col-md-9 col-sm-12">
         <h4 class="text-danger" *ngIf='selectedCustomer==null && users.role!=="USERS" ' >Customer selection is mandatory.</h4>
         <p class="accurate">Electricity Daily Smart Meter</p>
         <form class="form-horizontal" [formGroup]='electricityDailySmartMeterForm'>
@@ -93,7 +93,7 @@
       <div *ngIf="users.role!=='USERS'" class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar></app-sidebar>
       </div>
-      <div *ngIf="users.role==='USERS'" class="col-lg-3 col-md-3 col-sm-4 rightColumn">
+      <div *ngIf="users.role==='USERS'" class="col-lg-3 col-md-3 col-sm-12">
         <app-user-sidebar></app-user-sidebar>
       </div>
     </div>
