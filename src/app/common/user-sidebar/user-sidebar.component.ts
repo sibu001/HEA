@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { AllowedMenuList } from 'src/app/utility/app.allowedMenuList';
@@ -12,6 +12,8 @@ export class UserSidebarComponent implements OnInit,AfterViewInit {
 
   users : Users = new Users();
   allowedMenuListforUser : AllowedMenuList;
+  @Input() showSideBarHeader : boolean = true;
+
   constructor(private readonly loginService: LoginService) {
    }
 

@@ -1,11 +1,13 @@
-<div class="app-user-sidebar">
-    <p class="Energy_anaiytic">
-        <img alt="icon" src="assets/images/dot03.gif" class="dot">&nbsp;Powered
-        by Home Energy Analytics, Inc.</p>
-      <p class="feedback">Send feedback to</p>
-      <p class="link_hea">
-        <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
-      </p>
+<div class="app-user-sidebar height-100vh">
+        <ng-container *ngIf="showSideBarHeader">
+            <p class="Energy_anaiytic">
+                <img alt="icon" src="assets/images/dot03.gif" class="dot">&nbsp;Powered
+                by Home Energy Analytics, Inc.</p>
+              <p class="feedback">Send feedback to</p>
+              <p class="link_hea">
+                <a href="mailto:info@hea.com" class="info_hea">info@hea.com</a>
+              </p>
+        </ng-container>
       <hr>
       <ul class="leaks">
         <li *ngIf="allowedMenuListforUser.TOPIC_HISTORY">
@@ -29,7 +31,7 @@
                 <a class="dropdown-toggle" id="menu1"
                     data-toggle="dropdown">Usage history
                 </a>
-                <ul class="dropdown-menu" role="menu"
+                <ul class="dropdown-menu usage-history-opt-width" role="menu"
                     aria-labelledby="menu1" id="usage-history-dropdown" >
                     <li role="presentation" style="padding-bottom:
                         5px;" *ngIf="allowedMenuListforUser.USAGE_HISTORY.GAS">

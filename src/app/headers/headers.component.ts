@@ -10,12 +10,61 @@ import { UtilityService } from '../services/utility.service';
 import { HttpParams } from '@angular/common/http';
 import { AllowedMenuList } from '../utility/app.allowedMenuList';
 declare var $: any;
+
+export interface RootObject {
+	userId: number;
+	id: number;
+	title: string;
+	completed: boolean;
+}
+
 @Component({
   selector: 'app-headers',
   templateUrl: './headers.component.html',
-  styleUrls: ['./headers.component.css']
+  styleUrls: ['./headers.component.css'],
+  
 })
 export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked,DoCheck {
+  
+  rootObject: Array<RootObject> = [
+    {
+      "userId": 1,
+      "id": 1,
+      "title": "delectus aut autem",
+      "completed": false
+    },
+    {
+      "userId": 1,
+      "id": 2,
+      "title": "quis ut nam facilis et officia qui",
+      "completed": false
+    },
+    {
+      "userId": 1,
+      "id": 3,
+      "title": "fugiat veniam minus",
+      "completed": false
+    },
+    {
+      "userId": 1,
+      "id": 4,
+      "title": "et porro tempora",
+      "completed": true
+    },
+    {
+      "userId": 1,
+      "id": 5,
+      "title": "laboriosam mollitia et enim quasi adipisci quia provident illum",
+      "completed": false
+    },
+    {
+      "userId": 1,
+      "id": 6,
+      "title": "qui ullam ratione quibusdam voluptatem quia omnis",
+      "completed": false
+    }
+  ];
+
   hides = true;
   hideLogo = true;
   float: string;
@@ -24,8 +73,8 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   iframeUrl: string;
   isResponsive = false;
   users: Users = new Users();
-  dialogRef: any;
-
+  dialogRef: any; 
+  testData : string = 'user test data';
   onlineEvent: Observable<Event>;
   offlineEvent: Observable<Event>;
   subscriptions: Subscription[] = [];

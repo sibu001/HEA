@@ -1614,9 +1614,9 @@ TABLE.survey th {
  }
 }
 
-app-survey a{
+/* app-survey a{
   text-decoration : underline;
-}
+} */
 
 .mat-column-serialNumber{
   width : 55px !important;   
