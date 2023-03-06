@@ -119,7 +119,7 @@
                                     [(ngModel)]="confirmPassword" 
                                     (ngModelChange)="isconfirmPasswordValid($event)"  name="confirmPassword">
                                     <div>
-                                        <span *ngIf="confirmPasswordMissMatch" class="error">
+                                        <span *ngIf="(confirmPassword != password ) || confirmPasswordMissMatch" class="error">
                                             Password and repeat password must match
                                         </span>
                                     </div>

@@ -43,8 +43,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   public id: number;
   optOutKeys: Array<TABLECOLUMN> = TableColumnData.OPT_OUT_KEY;
   emailKeys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_EMAIL_KEY;
-  public password: string;
-  public confirmPassword : string;
+  public password: string = '';
+  public confirmPassword : string = '';
   public userId : number;
   public confirmPasswordMissMatch : boolean = false;
   constructor(

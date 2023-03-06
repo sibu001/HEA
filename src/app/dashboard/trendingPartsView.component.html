@@ -125,7 +125,7 @@
                                     <div
                                         [innerHTML]="dataList.trendingCharts[0].chart.freeChartDiv
                                         | safeHtml"
-                                        class="trendingChartDiv"></div>
+                                        class="trendingChartDiv" [id]="'trendingChartDiv'+dataList.trendingPartId"></div>
                                 </div>
                             </div>
 

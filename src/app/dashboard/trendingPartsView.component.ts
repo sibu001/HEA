@@ -1,9 +1,10 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Renderer2, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { Location } from '@angular/common';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import { AppUtility } from '../utility/app.utility';
+import { HttpParams } from '@angular/common/http';
 declare var $: any;
 @Component({
   selector: 'trendingPartsView',
@@ -30,6 +31,8 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
   };
   constructor(private location: Location,
     private loginService: LoginService,
+    private renderer: Renderer2,
+    private elementRef: ElementRef,
     private activatedRoute : ActivatedRoute) {
     this.users = this.loginService.getUser();
     this.getTrendingPartResource();
@@ -50,6 +53,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+
   }
 
   back() {
@@ -222,10 +226,12 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
         const response = JSON.parse(JSON.stringify(data));
         this.trendingData = response.data;
         for (const newData of response.data) {
-          setTimeout(function () {
+          setTimeout(()=> {
 
             let freeChartConfigurationJS = AppUtility.removeJqplotPlugins(newData.trendingCharts[0].chart.freeChartConfigurationJS);
             const F = new Function(freeChartConfigurationJS);
+
+            this.eventListnerForGraphDateChange(newData.trendingPartId);
             return (F());
             // eval(response.data[0].trendingCharts[0].chart.freeChartConfigurationJS);
           }, 1000);
@@ -240,5 +246,63 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     );
     this.trendingParts.partLookupValue = useType;
     localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
+  }
+
+  private eventListnerForGraphDateChange(trendingPartsId : number){
+    
+    $('#trendingChartDiv' + trendingPartsId + ' a').click((event, trendingPartId=trendingPartsId )=>{
+      event.preventDefault();
+      const onClickfunction:string = event.target.getAttribute('onclick');
+
+      const fromDateIndex : number = onClickfunction.indexOf("fromDate').value='");
+      const toDateIndex: number = onClickfunction.indexOf("toDate').value='");
+
+      const fromDate : string = onClickfunction.slice(fromDateIndex+18,fromDateIndex+28);
+      const toDate : string = onClickfunction.slice(toDateIndex+16,toDateIndex+26);
+
+      this.getTrendingPartForDifferentDate(trendingPartId,fromDate,toDate);
+    });
+  
+  }
+
+
+  getTrendingPartForDifferentDate(trendingPartId : number, fromDate : string, toDate : string){
+
+    const params = new HttpParams()
+          .append('trendingPartId',trendingPartId + '')
+          .append('resourceUse',this.trendingParts.activeResource)
+          .append('fromDate',fromDate)
+          .append('toDate', toDate)
+          .append('unitType',this.trendingParts.unitType)
+          .append('useType',this.trendingParts.useTypes);
+
+    document.getElementById('loader').classList.add('loading');
+    
+    this.loginService
+      .performGetWithParams('customers/' + this.users.outhMeResponse.customerId + '/trendingParts/' + trendingPartId
+        ,params)
+      .subscribe(
+        (response) =>{
+
+          document.getElementById('loader').classList.remove('loading');
+          const newTrendingPartData = response.data;
+          const trendingPartsId = newTrendingPartData.trendingPartId;
+
+          const trendingPartIndex :number = this.trendingData.findIndex((data) => data.trendingPartId == trendingPartsId);
+          this.trendingData[trendingPartIndex] = newTrendingPartData;
+      
+          let freeChartConfigurationJS = AppUtility.removeJqplotPlugins(newTrendingPartData.trendingCharts[0].chart.freeChartConfigurationJS);
+          let func = new Function(freeChartConfigurationJS);
+          
+          setTimeout(()=> { 
+            this.eventListnerForGraphDateChange(trendingPartsId);
+            func();}
+          ,200);
+      
+        }, (error) =>{
+          document.getElementById('loader').classList.remove('loading');
+          console.error(error);
+        }
+      )
   }
 }
