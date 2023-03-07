@@ -5,6 +5,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import { AppUtility } from '../utility/app.utility';
 import { HttpParams } from '@angular/common/http';
+import { Element } from '@angular/compiler';
 declare var $: any;
 @Component({
   selector: 'trendingPartsView',
@@ -231,7 +232,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
             let freeChartConfigurationJS = AppUtility.removeJqplotPlugins(newData.trendingCharts[0].chart.freeChartConfigurationJS);
             const F = new Function(freeChartConfigurationJS);
 
-            this.eventListnerForGraphDateChange(newData.trendingPartId);
+            this.eventListnerForGraphDateChange(newData);
             return (F());
             // eval(response.data[0].trendingCharts[0].chart.freeChartConfigurationJS);
           }, 1000);
@@ -248,23 +249,20 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
   }
 
-  private eventListnerForGraphDateChange(trendingPartsId : number){
+  //  event added to change the date range on the bar graph
+  private eventListnerForGraphDateChange(trendingParts : any){
     
-    $('#trendingChartDiv' + trendingPartsId + ' a').click((event, trendingPartId=trendingPartsId )=>{
+    $('#trendingChartDiv' + trendingParts.trendingPartId + ' a').click((event, trendingPartId=trendingParts.trendingPartId )=>{
       event.preventDefault();
-      const onClickfunction:string = event.target.getAttribute('onclick');
 
-      const fromDateIndex : number = onClickfunction.indexOf("fromDate').value='");
-      const toDateIndex: number = onClickfunction.indexOf("toDate').value='");
-
-      const fromDate : string = onClickfunction.slice(fromDateIndex+18,fromDateIndex+28);
-      const toDate : string = onClickfunction.slice(toDateIndex+16,toDateIndex+26);
+      const fromDate : string = (document.getElementById(trendingPartId +'_fromDate') as HTMLInputElement).value;
+      const toDate : string = (document.getElementById(trendingPartId +'_toDate') as HTMLInputElement).value;
 
       this.getTrendingPartForDifferentDate(trendingPartId,fromDate,toDate);
+
     });
   
   }
-
 
   getTrendingPartForDifferentDate(trendingPartId : number, fromDate : string, toDate : string){
 
@@ -295,7 +293,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
           let func = new Function(freeChartConfigurationJS);
           
           setTimeout(()=> { 
-            this.eventListnerForGraphDateChange(trendingPartsId);
+            this.eventListnerForGraphDateChange(newTrendingPartData);
             func();}
           ,200);
       

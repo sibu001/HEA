@@ -15,8 +15,8 @@ export class AppUtility {
         return true;
     }
 
-    public static scrollTop(){
-        window.scroll(0,0);
+    public static scrollTop(x:number =0, y:number=0){
+        window.scroll(x,y);
     }
 
     public static convertMillisecondToTime(millisecond: any) {

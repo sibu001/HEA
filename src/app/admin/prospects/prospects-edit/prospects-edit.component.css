@@ -47,3 +47,16 @@
     box-shadow: none;
     background-color: #ffff
   }
+
+  .error-background{
+    background-color: #ebccd1;
+  }
+
+  input[disabled]{
+    cursor: default;
+  }
+
+  button{
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }

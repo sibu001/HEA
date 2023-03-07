@@ -117,6 +117,8 @@
                         <ng-container *ngFor="let dataList of
                             trendingData;index
                             as i">
+                            <input [id]="dataList.trendingPartId +'_fromDate'" [name]="'trendingParts[' + i + '].fromDate'" type="hidden" value="">
+                            <input [id]="dataList.trendingPartId +'_toDate'" [name]="'trendingParts[' + i  +'].toDate'" type="hidden" value="">
                             <h3 class="select_next">{{dataList.label}}</h3>
                             <p class="rolling responsive">{{dataList.explanation}}</p>
                             <br>

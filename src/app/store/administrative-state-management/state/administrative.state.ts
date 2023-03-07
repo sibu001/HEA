@@ -509,6 +509,12 @@ export class AdministrativeManagementState {
 
     @Action(GetProspectsByIdAction)
     getProspectsById(ctx: StateContext<AdministrativeManagementModel>, action: GetProspectsByIdAction): Actions {
+
+        const prospects = ctx.getState().prospects;
+        if(prospects && prospects.id == action.id){
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet("registrations" + '/' + action.id)
             .pipe(
@@ -531,7 +537,9 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage(response.message);
+                    ctx.patchState({
+                        prospects : undefined
+                    })
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -564,7 +572,6 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // // this.utilityService.showSuccessMessage('Updated Successfully');4
                     ctx.patchState({
                         prospects: response,
                     });

@@ -11,6 +11,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { ProspectsEditComponent } from '../prospects-edit/prospects-edit.component';
 
@@ -56,7 +57,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
 
   addProspects(event: any) {
     const dialogRef = this.dialog.open(ProspectsEditComponent, {
-      width: '70vw',
+      width: '75vw',
       height: '70vh',
       data: event,
       disableClose: false
@@ -92,6 +93,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
       this.prospectsData.totalElements = prospectsList.totalSize;
       this.prospectsData.pageIndex = parseInt(prospectsList.startOfCurrentPage/Number.parseInt(this.pageSize) + "");
       this.dataSource = this.prospectsData.content;
+      AppUtility.scrollTop(0,500);
     }));
   }
 
@@ -113,8 +115,13 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   }
 
   deleteProspectsById(){
-      if(this.selectedProspectListIds === undefined)
-          this.selectedProspectListIds = '';
+
+    if(!confirm('Are you sure you want to delete?')){
+      return;
+    }
+    
+    if(!this.selectedProspectListIds)
+      return;
 
       this.subscriptions.add(
         this.administrativeService.deleteProspectListByIds(this.selectedProspectListIds)
@@ -130,13 +137,16 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
 
   downlodCSV(){
 
-    let param =  this.createParamsForRequest(undefined,true,true);
+    let param =  this.createParamsForRequest(undefined,true,false);
+    document.getElementById('loader').classList.add('loading');
     param =  param.delete('pageSize');
     param =  param.append('pageSize','');
     this.subscriptions.add(
       this.loginService.performGetForBlob('registrations/csv',param)
         .subscribe(
-          ((response: any) =>{
+          (response: any) =>{
+            document.getElementById('loader').classList.remove('loading');
+
             let fileName = response.headers.get('Content-Disposition').split(';')[1].split('=')[1]; 
             let blob: Blob = response.body as Blob;
             let a = document.createElement('a');
@@ -144,7 +154,9 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
             a.href = window.URL.createObjectURL(blob);
             a.click();
               
-          }))
+          }, (error)=>{
+            console.error(error);
+          } )
     ); 
   }
 

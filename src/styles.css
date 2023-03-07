@@ -306,7 +306,7 @@ div.factoid > div > p {
   .trendingChartDiv > div > div {
     width: 300px !important;
   }
-  .trendingChartDiv > div > :nth-child(1) > :nth-child(2) {
+  .trendingChartDiv > div:nth-child(1) > :nth-child(1) > :nth-child(2) {
     width: 250px !important;
   }
   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) > :nth-child(1) {
@@ -336,7 +336,7 @@ div.factoid > div > p {
   .trendingChartDiv > div > div {
     width: 320px !important;
   }
-  .trendingChartDiv > div > :nth-child(1) > :nth-child(2) {
+  .trendingChartDiv > div:nth-child(1) > :nth-child(1) > :nth-child(2) {
     width: 280px !important;
   }
   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) > :nth-child(1) {
@@ -366,7 +366,7 @@ div.factoid > div > p {
   .trendingChartDiv > div > div {
     width: 370px !important;
   }
-  .trendingChartDiv > div > :nth-child(1) > :nth-child(2) {
+  .trendingChartDiv > div:nth-child(1) > :nth-child(1) > :nth-child(2) {
     width: 345px !important;
   }
   .trendingChartDiv > div > :nth-child(1) > :nth-child(2) > :nth-child(1) {
@@ -2497,7 +2497,8 @@ img[src="assets/images/ico_html.png"]{
 mat-dialog-container{
   margin-top: 40px;
   /* added padding for the slider issue in survey component in pop */
-  padding-right : 0px !important;  
+  padding-right : 0px !important;
+  padding-left: 0px !important;  
 }
 
 @media (min-width: 768px) and (max-width: 901px) {
