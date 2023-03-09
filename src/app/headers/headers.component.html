@@ -182,12 +182,12 @@
                                 class="icon_size">&nbsp;&nbsp;<span
                                 class="menu">Account</span></a>
                     </li>
-                    <li id="all_topic1" *ngIf="users?.role!=='ADMIN'">
+                    <!-- <li id="all_topic1" *ngIf="users?.role!=='USERS'">
                         <a class="main-menu" (click)="hide(4)">
                             <img alt="icon" src="assets/images/menu_icon_admin.svg"
                                 class="icon_size">&nbsp;&nbsp;<span
                                 class="menu">Topics</span></a>
-                    </li>
+                    </li> -->
                     <li id="_classic1">
                         <a class="main-menu"  (click)="users?.role=='USERS'? hide(9) : hide(10)">
                             <img alt="icon" src="assets/images/menu_icon_home.svg"
@@ -219,7 +219,7 @@
                             <a class="history_a" (click)="hide(8)">Recommendations</a>
                         </li>
                     </div>
-                    <li id="menu_option2" *ngIf="users?.role!=='ADMIN'">
+                    <li id="menu_option2" *ngIf="users?.role=='USERS'">
                         <div class="dropdown">
                             <a class="dropdown-toggle history_a" id="menu1"
                             *ngIf="allowedMenuListforUser.USAGE_HISTORY"

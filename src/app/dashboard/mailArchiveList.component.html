@@ -65,10 +65,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="users.role!=='ADMIN'">
+            <div class="col-lg-3 col-md-3 col-sm-12" *ngIf="users.role=='USERS'">
                 <app-user-sidebar></app-user-sidebar>
             </div>
-            <div class="col-sm-4 col-md-3 col-sm-12" *ngIf="users.role==='ADMIN'">
+            <div class="col-sm-4 col-md-3 col-sm-12" *ngIf="users.role!=='USERS'">
                 <div class="adminFeedback">
                     <app-sidebar></app-sidebar>
                 </div>

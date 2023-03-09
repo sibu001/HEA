@@ -2,6 +2,7 @@ import { AllowedMenuList } from "./app.allowedMenuList";
 
 export class AppUtility {
 
+    public static isnavBarCollapsed = false;
     public static isEmptyString(str): boolean {
         return (!str || 0 === str.length);
     }

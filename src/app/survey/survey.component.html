@@ -1807,8 +1807,8 @@
         </div> 
         <div
           *ngIf="users.currentPaneNumber.survey.surveyDescription.showRightMenu">
-          <app-user-sidebar [showSideBarHeader]="false" class="leaks" *ngIf="users.role!=='ADMIN'"></app-user-sidebar>
-          <app-sidebar *ngIf="users.role==='ADMIN'"></app-sidebar>
+          <app-user-sidebar [showSideBarHeader]="false" class="leaks" *ngIf="users.role=='USERS'"></app-user-sidebar>
+          <app-sidebar [showSideBarHeader]="false" *ngIf="users.role!=='USERS'"></app-sidebar>
         </div>
       </div>
     </div>

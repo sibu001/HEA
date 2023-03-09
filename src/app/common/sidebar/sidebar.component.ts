@@ -27,6 +27,7 @@ export class SidebarComponent implements OnInit {
     private readonly topicService: TopicService,
     private readonly loginService: LoginService 
   ) { }
+  @Input() showSideBarHeader : boolean = true;
 
   ngOnInit() {
     this.loadMethodList();

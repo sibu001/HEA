@@ -1,5 +1,6 @@
 <div class='container-fluid'>
   <div *ngIf='!showDataFields && !showMethod && !showTopicVariableFields'>
+    <ng-container *ngIf="showSideBarHeader">
     <div class="row sidebar-heading-row">
       <div class="col-xs-12 col-sm-12 sidebar-heading-div sidebar-info">
         <p class='info'>
@@ -15,6 +16,7 @@
     <p class='feedback'>
       Use the menu below to navigate to the appropriate administrative function.
     </p>
+  </ng-container>
   </div>
   <div *ngIf="showDataFields && topicVariableField.length>0" [class.overflow]='topicVariableField.length>0'>
     <p class='info'>

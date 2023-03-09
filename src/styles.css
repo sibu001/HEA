@@ -2582,3 +2582,8 @@ app-sidebar>div, app-user-sidebar>div  {
 .side-bar{
   padding: 0px !important;
 }
+
+.adminFeedback{
+  height: auto !important;
+  padding-bottom: 20px;
+}

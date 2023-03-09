@@ -9,6 +9,7 @@ import { fromEvent, Observable, Subscription } from 'rxjs';
 import { UtilityService } from '../services/utility.service';
 import { HttpParams } from '@angular/common/http';
 import { AllowedMenuList } from '../utility/app.allowedMenuList';
+import { AppUtility } from '../utility/app.utility';
 declare var $: any;
 
 export interface RootObject {
@@ -106,6 +107,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
       this.headerResponsiveMenu();
     }
 
+    this.hideResponsiveMenu();
   }
 
   ngOnInit(): void {
@@ -124,7 +126,6 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
       });
     });
 
-    this.hideResponsiveMenu();
 
     this.onlineEvent = fromEvent(window, 'online');
     this.offlineEvent = fromEvent(window, 'offline');
@@ -199,13 +200,13 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   hideResponsiveMenu(): void {
     if (this.isResponsive) {
       let surveyCode;
-      if (!this.users.currentPaneNumber) {
+      if (this.users.currentPaneNumber) {
         surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
       }
       if (this.users.surveyLength <= 3 || (this.users.currentPaneNumber ? surveyCode === 'Profile' : false)) {
         setTimeout(() => {
           this.headerResponsiveMenu();
-        }, 300);
+        }, 30);
       }
     }
   }
@@ -385,7 +386,11 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   onResize(event: any): void {
     if (window.innerWidth >= 767) {
       this.isResponsive = false;
+      AppUtility.isnavBarCollapsed = false;
+    }else{
+      AppUtility.isnavBarCollapsed = true;
     }
+    
     this.changeLogoPosition();
 
   }

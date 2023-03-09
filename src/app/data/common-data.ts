@@ -348,6 +348,7 @@ export class TableColumnData {
     ];
 
     static readonly TOPIC_KEYS: Array<TABLECOLUMN> = [
+        { key: 'serialNumber', isEdit: true, displayName: '#', isUnderline: true },
         { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true , isSurvey :true  },
         { key: 'user', isEdit: true, displayName: 'User'  , isSurvey :true },
         { key: 'group', isEdit: true, displayName: 'Group' , isSurvey :true  },

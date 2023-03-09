@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
@@ -37,6 +37,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   public force = false;
   prospectsForm: FormGroup;
   pageSize = AppConstant.pageSize;
+  @ViewChild('tableHeading') tableHeading: ElementRef;
   constructor(public fb: FormBuilder,
     public dialog: MatDialog,
     private readonly administrativeService: AdministrativeService,
@@ -93,7 +94,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
       this.prospectsData.totalElements = prospectsList.totalSize;
       this.prospectsData.pageIndex = parseInt(prospectsList.startOfCurrentPage/Number.parseInt(this.pageSize) + "");
       this.dataSource = this.prospectsData.content;
-      AppUtility.scrollTop(0,500);
+      this.tableHeading.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'});
     }));
   }
 

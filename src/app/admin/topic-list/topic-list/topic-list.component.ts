@@ -171,7 +171,10 @@ export class TopicListComponent implements OnInit, OnDestroy {
       this.topicData.content = topicList.list;
       this.topicData.totalElements = topicList.totalSize;
       this.totalElement = topicList.total = topicList.totalSize;
-      this.dataSource = this.topicData.content;
+      this.dataSource = this.topicData.content.map((data,index) =>{
+        data.serialNumber = index +1;
+        return data;
+      });
     }));
   }
 
