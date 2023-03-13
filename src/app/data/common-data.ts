@@ -348,17 +348,17 @@ export class TableColumnData {
     ];
 
     static readonly TOPIC_KEYS: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', isEdit: true, displayName: '#', isUnderline: true },
-        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true , isSurvey :true  },
-        { key: 'user', isEdit: true, displayName: 'User'  , isSurvey :true },
-        { key: 'group', isEdit: true, displayName: 'Group' , isSurvey :true  },
-        { key: 'startDate', sort: 'startDate', isEdit: true, displayName: 'Start Date', isDate: true , isSurvey :true },
-        { key: 'modifiedDate', sort: 'modifiedDate', isEdit: true, displayName: 'Modified Date' , isDate: true  , isSurvey :true},
-        { key: 'completedDate', sort: 'completedDate', isEdit: true, displayName: 'Completed Date', isDate: true , isSurvey :true},
+        // { key: 'serialNumber',sort: 'label', showSerailNumber : true, displayName: '#', isUnderline: true },
+        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true  },
+        { key: 'user', isEdit: true, displayName: 'User'  },
+        { key: 'group', isEdit: true, displayName: 'Group'  },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Start Date', isDate: true , isSurvey :true },
+        { key: 'updatedDate', sort: 'updatedDate', isEdit: true, displayName: 'Modified Date' , isDate: true  , isSurvey :true},
+        { key: 'finishedDate', sort: 'finishedDate', isEdit: true, displayName: 'Completed Date', isDate: true , isSurvey :true},
     ];
 
     static readonly ADMIN_REPORT_KEYS: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'serialNumber', displayName: '#' },
         { key: 'reportName', sort: 'reportLabel', isEdit: true, displayName: 'Report Name', isUnderline: true },
         { key: 'reportLabel', sort: 'reportLabel', isEdit: true, displayName: 'Report Label' },
         { key: 'reportType', isEdit: true, displayName: 'Report Type' },

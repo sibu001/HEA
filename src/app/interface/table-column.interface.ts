@@ -16,4 +16,5 @@ export interface TABLECOLUMN {
     isId?: boolean;
     isSurvey?: boolean;
     isDolar ?: boolean;
+    showSerailNumber ?:boolean;
 }

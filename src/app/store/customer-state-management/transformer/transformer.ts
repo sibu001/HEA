@@ -65,19 +65,19 @@ export class Transformer {
     static transformCustomerTableKey(viewType: number, data: any): any {
         let key: Array<any> = [];
         const dataKey: Array<any> = [];
-        key.push({
-            key: 'serialNumber',
-            displayName: '#',
-            isUnderline: true
-        });
+        // key.push({
+        //     key: 'serialNumber',
+        //     displayName: '#',
+        //     isUnderline: true
+        // });
         if (viewType === -1) {
             key = [
-                {
-                    key: 'serialNumber',
-                    displayName: '#',
-                    isEdit: true,
-                    isUnderline: true
-                },
+                // {
+                //     key: 'serialNumber',
+                //     displayName: '#',
+                //     isEdit: true,
+                //     isUnderline: true
+                // },
                 {
                     key: 'auditId',
                     displayName: 'Audit Id',

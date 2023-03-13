@@ -83,6 +83,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() showRowLoader = false;
   @Input() showPushedDataPerRow = false;
   @Input() hideMasterCheckBox = false;
+  @Input() addSerialNumber : boolean = false;
   @Output() singleSelectedRow : EventEmitter<any> = new EventEmitter();
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
   @Output() changeActionMenuItem: EventEmitter<any> = new EventEmitter();
@@ -203,6 +204,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     if (changes['keys'] && changes['keys'].currentValue) {
       this.keys = changes['keys'].currentValue;
       this.displayedColumns = this.keys.map((col) => col.key);
+      if(this.addSerialNumber){
+        this.displayedColumns.unshift('srNo.');
+      }
       if (this.checkbox) {
         this.displayedColumns.unshift('select');
       }                                                        
@@ -325,8 +329,8 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
   sortData(event?: Sort) {
     this.page.sort = event;
-    this.page.pageIndex = 0;
-    this.pageIndex = this.pageIndexNumber = 0;
+    // this.page.pageIndex = 0;
+    // this.pageIndex = this.pageIndexNumber = 0;
     this.page.pageSize = this.pageSize;
     this.changePageEvent.emit(this.page);
   }

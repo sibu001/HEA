@@ -1,7 +1,7 @@
 import { Users } from './../../../models/user';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -41,6 +41,8 @@ export class TopicListComponent implements OnInit, OnDestroy {
   public customerGroupList = new Array();
   public customerPlaces = new Array();
   private users : Users = new Users();
+  public pageIndex : number = 0;
+  @ViewChild('tableHeading') public tableHeading : ElementRef; 
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
@@ -172,28 +174,49 @@ export class TopicListComponent implements OnInit, OnDestroy {
       this.topicData.totalElements = topicList.totalSize;
       this.totalElement = topicList.total = topicList.totalSize;
       this.dataSource = this.topicData.content.map((data,index) =>{
-        data.serialNumber = index +1;
+        data.user = data.user.name;
+        data.group = data.customer.customerGroup.groupName;
+        data.label = data.surveyDescription.label;
         return data;
       });
+      this.tableHeading.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'});
     }));
-  }
+  }  
 
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.topicFilter.page = event;
-    const params = new HttpParams()
+
+    if(!event){
+      event = this.adminFilter.topicFilter.page;
+      event.pageIndex = this.pageIndex;
+    }else{
+      const sort = this.adminFilter.topicFilter.page.sort;
+      this.adminFilter.topicFilter.page = event;
+      this.adminFilter.topicFilter.page.sort = sort;
+      this.pageIndex = event.pageIndex;
+    }
+
+    let params = new HttpParams()
       .set('disableTotalSize', 'false')
-      .set('homeowner', 'false')
+      // .set('homeowner', 'false')
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('label', (this.topicForm.value.label !== null ? this.topicForm.value.label : ''))
-      .set('CustomerName', (this.topicForm.value.CustomerName !== null ? this.topicForm.value.user : ''))
+      .set('user.name', (this.topicForm.value.CustomerName !== null ? this.topicForm.value.user : ''))
       .set('customer.customerGroupId', (this.topicForm.value.customerGroup !== null ? this.topicForm.value.customerGroup : ''))
       .set('customer.placeCode', (this.topicForm.value.customerPlace !== null ? this.topicForm.value.customerPlace : ''));
 
+    if(event && event.sort && event.sort.active){
+
+      if(event.sort.active == 'label'){
+        event.sort.active = 'surveyDescription.label'
+      }
+
+      params = params
+        .set('sortOrders[0].propertyName', (event && event.sort.active !== undefined ? event.sort.active : ''))
+        .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      }
     this.findTopic(true, params);
   }
 

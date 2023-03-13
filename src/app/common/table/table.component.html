@@ -45,6 +45,18 @@
                     </mat-checkbox>
                 </mat-cell>
             </ng-container>
+
+            <ng-container matColumnDef="srNo." >
+                <mat-header-cell *matHeaderCellDef>
+                    <div class="serail-number-style" > #</div>    
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row; let colIndex = dataIndex" style="display: grid;">
+                    <div>
+                        {{ paginator.pageIndex * paginator.pageSize + (colIndex + 1) }}
+                    </div>
+                </mat-cell>
+            </ng-container>
+
             <ng-container *ngFor="let col of keys; let colIndex= index"
                 matColumnDef="{{col.key}}">
                 <mat-header-cell *matHeaderCellDef [mat-sort-header]="col.key" 
@@ -345,7 +357,7 @@
                     (click)="onAddNewRowEvent()">Add</button>
             </div>
         </div>
-        <div class="row">
+        <div class="row" style="margin-top: 60px">
             <div *ngIf="showCSVExportButton" class="col-sm-3 col-xs-3 tableImage">
                 <a (click)="exporter.exportTable('csv')">Export To CSV</a>
             </div>

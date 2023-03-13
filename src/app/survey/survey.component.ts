@@ -612,8 +612,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPane != null) {
       if (currentPaneCode === this.users.currentPaneNumber.currentPane.paneCode) {
-        this.utilityService.showErrorMessage("Request Failed Please Retry.");
-        // this.gotToTopicHistory();
+        // this.utilityService.showErrorMessage("Request Failed Please Retry.");
+        history.back();
       } else {
         if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks &&
           (this.users.surveyLength !== 3 || !this.users.currentPaneNumber.firstPage || this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'LeaksIntro')) {

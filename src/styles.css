@@ -2152,7 +2152,8 @@ app-customer-view .mat-column-utilityInUse{
   hyphens: auto;
 }
 
-app-customer-view .mat-column-heatingInUse{
+app-customer-view .mat-column-heatingInUse,
+.mat-column-srNo- {
    word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 6% !important;

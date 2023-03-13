@@ -46,7 +46,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     totalElements: 0,
   };
   pageIndex: any;
-  isCheckBox: boolean;
+  isCheckBox: boolean = false;
   public fileObject: any;
 
   pageSize = AppConstant.pageSize;
@@ -208,7 +208,10 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       }
     }
     if ((Number(this.searchForm.controls['customerView'].value)) === null || (Number(this.searchForm.controls['customerView'].value)) === -1) {
-      this.isCheckBox = true;
+      // this.isCheckBox = true;
+      if(this.users.role == "ADMIN"){
+        this.isCheckBox = true;
+      }
       params = new HttpParams()
         .set('filter.disableTotalSize', 'false')
         .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)

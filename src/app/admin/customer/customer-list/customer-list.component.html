@@ -165,7 +165,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <app-table [keys]="keys" [isPaginate]="true" [checkbox]="isCheckBox" [isSearch]="false"
-                            [showCSVExportButton]='showCSVExportButton' [data]="dataSource"
+                            [showCSVExportButton]='showCSVExportButton' [data]="dataSource" [addSerialNumber]="true"
                             [totalElement]="CustomerData.totalElements" [pageIndex]="pageIndex" [pageSize]="pageSize"
                             (changePageEvent)="findCustomer($event,false)" (goToEditEvent)="goToEditCustomer($event)"
                             (imageEvent)='onImageClickEvent($event)' (checkBoxChangeEvent)="checkBoxChangeEvent($event)"

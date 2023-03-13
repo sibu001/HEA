@@ -37,7 +37,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Customer Place:</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12" #tableHeading>
               <select class="form-control" formControlName="customerPlace" id="customerPlace">
                 <option value="" selected=""></option>
                 <option *ngFor="let place of customerPlaces" [value]="place.id" >{{place.placeName}}</option>
@@ -51,13 +51,14 @@
             </div>
           </div>
 
-          <div class="paddingTop">
+          <div class="paddingTop" #tableHeading>
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Topic list (Number of Records =
                 {{totalElement}})</span>
             </p>
-            <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false" [data]="dataSource" [pageSize]="pageSize"
+            <app-table  [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false"
+             [data]="dataSource" [pageSize]="pageSize" [addSerialNumber]="true"
               [totalElement]="topicData.totalElements" (changePageEvent)="search($event,false)" (goToEditEvent)="showSurveys($event)">
             </app-table>
           </div>
