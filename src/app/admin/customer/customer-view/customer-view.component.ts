@@ -363,6 +363,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       hasGasDetail: [event !== undefined ? event.hasGasDetail : ''],
       excludeFromReports: [event !== undefined ? event.excludeFromReports : ''],
       ngHeatingModel: [event !== undefined ? event.ngHeatingModel : null],
+      allowElModelChange: [event !== undefined ? event.allowElModelChange : null],
+      allowNgModelChange: [event !== undefined ? event.allowNgModelChange : null],
       elCoolingModel: [event !== undefined ? event.elCoolingModel : null],
       elHeatingModel: [event !== undefined ? event.elHeatingModel : ''],
       modelChangedBy: [event !== undefined ? event.modelChangedBy : ''],

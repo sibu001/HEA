@@ -92,6 +92,17 @@ export class LoginService {
         return httpOptions;
     }
 
+    getHttpParamsOptionsForCSV(parameter: HttpParams) {
+        const httpOptions = {
+            headers: new HttpHeaders({
+                "accept" : "application/csv;charset=UTF-8",
+                'Content-Type': 'application/json'
+            }), withCredentials: true,
+            params: parameter
+        };
+        return httpOptions;
+    }
+
     getOptionsForm(parameter?: HttpParams) {
         const httpOptions = {
             headers: new HttpHeaders({
@@ -170,8 +181,11 @@ export class LoginService {
         const url = this.getFormattedUrl(endpoint);
         return this.http.post(url, JSON.stringify(object), this.getOptions());
     }
-    performPostWithParam(object: any, endpoint: any, params: any): any {
+    performPostWithParam(object: any, endpoint: any, params: any , requestForCSV?: boolean): any {
         const url = this.getFormattedUrl(endpoint);
+        if(requestForCSV){
+            return this.http.post(url, JSON.stringify(object), this.getHttpParamsOptionsForCSV(params));
+        }
         return this.http.post(url, JSON.stringify(object), this.getHttpParamsOptions(params));
     }
     performPostMultiPart(endpoint: any): any {

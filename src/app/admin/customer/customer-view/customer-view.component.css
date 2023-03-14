@@ -112,3 +112,7 @@ label{
   font-family: "Roboto", sans-serif !important;
   font-weight: initial !important;
 }
+
+input[disabled], select[disabled]{
+  cursor: default;
+}

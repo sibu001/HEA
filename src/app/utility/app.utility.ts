@@ -154,4 +154,14 @@ export class AppUtility {
         }
         return allowedMenus;
     }
+
+    public static createAndDownlodCSVFile(fileData: string[]) {    
+
+        const blob = new Blob(fileData, { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'file.csv');
+        a.click();
+    }
 }

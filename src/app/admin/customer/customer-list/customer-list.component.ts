@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
@@ -16,6 +16,7 @@ import { Transformer } from 'src/app/store/customer-state-management/transformer
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { AddFileComponent } from '../add-file/add-file.component';
 import { CustomerEventTypeComponent } from '../customer-event-type/customer-event-type.component';
@@ -57,6 +58,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     customerFile: ['', Validators.required]
   });
   public placeList: any = [];
+  @ViewChild('tableheadingScroll') public tableheading: ElementRef;
   constructor(private fb: FormBuilder,
     private readonly router: Router,
     private readonly systemService: SystemService,
@@ -174,6 +176,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         this.CustomerData.content = customerValue.list;
         this.CustomerData.totalElements = customerValue.totalSize;
         this.dataSource = [...this.CustomerData.content];
+        this.tableheading.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'})
       }));
   }
 
@@ -186,9 +189,10 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         this.CustomerData.content = customerValue.list;
         this.CustomerData.totalElements = customerValue.totalSize;
         this.dataSource = [...this.CustomerData.content];
+        this.tableheading.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'})
       }));
   }
-  getFilterUrl(event: any, isSearch: boolean): any {
+  getFilterUrl(event: any, isSearch: boolean, isForExportAsCSV?: boolean): any {
     this.customerView = this.searchForm.controls.customerView.value !== undefined && this.searchForm.controls.customerView.value !== null ? this.searchForm.controls.customerView.value : '-1';
     let params: HttpParams;
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
@@ -207,7 +211,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
           break;
       }
     }
-    if ((Number(this.searchForm.controls['customerView'].value)) === null || (Number(this.searchForm.controls['customerView'].value)) === -1) {
+    if (((Number(this.searchForm.controls['customerView'].value)) === null || (Number(this.searchForm.controls['customerView'].value)) === -1)
+          || isForExportAsCSV) {
       // this.isCheckBox = true;
       if(this.users.role == "ADMIN"){
         this.isCheckBox = true;
@@ -234,6 +239,10 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('filter.credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
         .set('filter.coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
         .set('filter.credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
+
+        if(isForExportAsCSV){
+          params = params.delete('filter.pageSize');
+        }
     } else {
       this.isCheckBox = false;
       params = new HttpParams()
@@ -401,5 +410,22 @@ export class CustomerListComponent implements OnInit, OnDestroy {
     if (this.fileUploadForm.valid) {
       this.customerService.saveCustomerUsingFile(this.fileObject);
     }
+  }
+
+  exportDataAsCSV(event){
+    event.preventDefault();
+    document.getElementById('loader').classList.add('loading');
+    AppUtility.scrollTop();
+    const params = this.getFilterUrl(this.adminFilter.customerFilter.page, false, true);
+    this.loginService.performPostWithParam({},'downloadCustomersCSV.do',params,true)
+    .subscribe(
+      response =>{
+        document.getElementById('loader').classList.remove('loading');
+      }, error =>{
+        document.getElementById('loader').classList.remove('loading');
+        const fileData =  error.error.text;
+        AppUtility.createAndDownlodCSVFile([fileData]);
+      }
+    )
   }
 }

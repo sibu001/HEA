@@ -47,7 +47,7 @@
             </ng-container>
 
             <ng-container matColumnDef="srNo." >
-                <mat-header-cell *matHeaderCellDef>
+                <mat-header-cell *matHeaderCellDef class="text-nowrap">
                     <div class="serail-number-style" > #</div>    
                 </mat-header-cell>
                 <mat-cell *matCellDef="let row; let colIndex = dataIndex" style="display: grid;">
@@ -358,9 +358,9 @@
             </div>
         </div>
         <div class="row" style="margin-top: 60px">
-            <div *ngIf="showCSVExportButton" class="col-sm-3 col-xs-3 tableImage">
+            <!-- <div *ngIf="showCSVExportButton" class="col-sm-3 col-xs-3 tableImage">
                 <a (click)="exporter.exportTable('csv')">Export To CSV</a>
-            </div>
+            </div> -->
             <div *ngIf="showDeleteButton" class="col-sm-2 col-xs-3">
                 <button class="btn btn-primary" type="button"
                     (click)="onDeleteEvent($event)">Delete</button>

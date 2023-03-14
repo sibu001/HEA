@@ -249,35 +249,43 @@
                   Cooling and Heating Model Selection
                 </p>
               </strong>
-              <em>
+              <!-- <em>
                 <span>
                   Note: if model changed, admin email will be sent after
                   recalculations completed
                 </span>
-              </em>
+              </em> -->
             </div>
           </div>
           <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Electricity Model:
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <select class="form-control form-control-sm" id="elCoolingModel" formControlName="elCoolingModel">
                 <option *ngFor="let group of electricModelList" [value]="group.key">
                   {{group.value}}</option>
               </select>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <input type="checkbox" name="allowElModelChange" id="allowElModelChange" formControlName="allowElModelChange">
+                Allow system to change model
             </div>
           </div>
           <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Natural Gas Heating Model:
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <select class="form-control form-control-sm" id="ngHeatingModel" formControlName="ngHeatingModel">
                 <option *ngFor="let group of naturalGasHeatingModelList" [value]="group.key">
                   {{group.value}}</option>
               </select>
             </div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              <input type="checkbox" name="allowNgModelChange" id="allowNgModelChange" formControlName="allowNgModelChange">
+              Allow system to change model
+          </div>
           </div>
           <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
