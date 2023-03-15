@@ -222,10 +222,10 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
  
      if(displayExtraColumn){
        this.dataSource = this.dataSource.map(data =>{
-         if(data.pv && data.value){
-           data.total = data.pv + data.value;
+         if(data.pv && data.utility){
+           data.total = data.pv + data.utility;
          }else{
-           data.total = data.value;
+           data.total = data.utility;
          }
          data.total = data.total.toFixed(4);
          return data;
@@ -234,7 +234,7 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
        this.keys = [...TableColumnData.SMART_METER_DAILY_KEYS];
        this.keys.pop();
        this.keys.push({ key: 'total', isEdit: true, displayName: 'Total' });
-       this.keys.push({ key: 'value', isEdit: true, displayName: 'Utility' });
+       this.keys.push({ key: 'utility', isEdit: true, displayName: 'Utility' });
        this.keys.push({ key: 'pv', isEdit: true, displayName: 'Solar' });
      }else{
        this.keys = TableColumnData.SMART_METER_DAILY_KEYS;

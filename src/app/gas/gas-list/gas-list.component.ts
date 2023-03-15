@@ -201,6 +201,13 @@ export class GasListComponent implements OnInit ,OnDestroy{
     this.usageHistoryService.getGasList().pipe(
       skipWhile((item: any) => !item),
       ).subscribe((gasList: any) => {
+
+          gasList.data = gasList.data.map((data)=>{
+            if(data.dummy || data.merge || data.split)
+                data[AppConstant.ASTRIC] = "*";
+            return data;
+          });
+
           if(gasList.data.length == AppConstant.pageSize){
             this.totalElements = this.usageHistoryData.totalElements;
             this.usageHistoryData.content = gasList.data;
@@ -255,7 +262,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
   get f() { return this.gasForm.controls; }
 
   showPopUp(event: any): any {
-    if (this.users.role !== 'USERS') {
+    if (this.users.role == 'ADMIN') {
       const dialogRef = this.dialog.open(GasUsagePopupComponent, {
         width: '70vw',
         height: '70vh',

@@ -157,4 +157,6 @@ export class AppConstant {
     public static readonly POSSIBLE_LOST_PEROIOD = 'possibleLostPeriod';
     public static readonly DATE_SELECTION_FORMAT = '(MM/dd/yyyy)';
 
+    public static readonly ASTRIC = 'astric';
+
 }

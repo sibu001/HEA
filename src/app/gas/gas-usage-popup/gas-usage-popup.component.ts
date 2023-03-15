@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -8,6 +8,7 @@ import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -15,7 +16,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   templateUrl: './gas-usage-popup.component.html',
   styleUrls: ['./gas-usage-popup.component.css']
 })
-export class GasUsagePopupComponent implements OnInit ,OnDestroy {
+export class GasUsagePopupComponent implements OnInit ,AfterViewInit, OnDestroy {
   usageModelObj = [];
   @Output() onModelSave = new EventEmitter<any>();
   private readonly subscriptions: Subscription = new Subscription();
@@ -37,6 +38,9 @@ export class GasUsagePopupComponent implements OnInit ,OnDestroy {
     private usageHistoryService: UsageHistoryService
   ) {
 
+  }
+  ngAfterViewInit(): void {
+    AppUtility.formatUsageHistoryDialogbox();
   }
 
   ngOnInit() {
@@ -68,6 +72,7 @@ export class GasUsagePopupComponent implements OnInit ,OnDestroy {
       source : [event !== undefined ? event.source : ''],
       split : [event !== undefined ? event.split : false],
       merge : [event !== undefined ? event.merge : false],
+      dummy : [event !== undefined ? event.dummy : false],
       monthUpdated : [event !== undefined ? event.monthUpdated: false],
       billingDate : [event !== undefined ? new Date(event.billingDate).toISOString().substring(0,10) : ''],
       startDate : [event !== undefined ? new Date(event.startDate).toISOString().substring(0,10) : ''],
@@ -79,6 +84,7 @@ export class GasUsagePopupComponent implements OnInit ,OnDestroy {
   }
 
   onNoClick() {
+    this.ngOnDestroy();
     this.dialogRef.close(this.refresh);
   }
 
@@ -95,7 +101,6 @@ export class GasUsagePopupComponent implements OnInit ,OnDestroy {
     var formobject =  this.convetObjectForRequest(this.gasForm.value);
     var requestObject = { ...this.dataObject,...formobject};
     requestObject.forceStore =  requestObject.forceStore == null ? true : false;
-    console.log(formobject);
     if(this.gasForm.valid) {
       let value = JSON.stringify(requestObject);
       console.log(value);

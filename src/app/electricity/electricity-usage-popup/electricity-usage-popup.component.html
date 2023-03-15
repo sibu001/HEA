@@ -1,14 +1,35 @@
     <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="closeDialogBox()">&times;</button>
+      <!-- <button type="button" class="close" data-dismiss="modal" aria-hidden="true" (click)="closeDialogBox()">&times;</button> -->
+      <button (click)="onNoClick()" class="closeButton" cdkFocusInitial>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink" width="8pt" height="8pt"
+          viewBox="0 0 8 8" version="1.1">
+          <g id="surface1">
+            <path
+              style="stroke:none;fill-rule:nonzero;fill:#76ba19;fill-opacity:1;"
+              d="M 0.109375 0.644531 C -0.0351562 0.5 -0.0351562 0.257812 0.109375
+              0.109375 C 0.257812 -0.0351562 0.492188 -0.0351562 0.644531 0.109375
+              L 3.84375 3.3125 L 7.050781 0.109375 C 7.195312 -0.0351562 7.4375
+              -0.0351562 7.578125 0.109375 C 7.726562 0.257812 7.726562 0.5
+              7.578125 0.644531 L 4.378906 3.84375 L 7.578125 7.050781 C 7.726562
+              7.195312 7.726562 7.433594 7.578125 7.585938 C 7.433594 7.726562
+              7.195312 7.726562 7.050781 7.585938 L 3.84375 4.378906 L 0.644531
+              7.585938 C 0.492188 7.726562 0.257812 7.726562 0.109375 7.585938 C
+              -0.0351562 7.433594 -0.0351562 7.195312 0.109375 7.050781 L 3.3125
+              3.84375 Z M 0.109375 0.644531" />
+            </g>
+          </svg>
+        </button>
     </div>
     <div class="modal-body">
       <div class="table-responsive">
         <table class="table table-sm" data-source="data-source" [mfData]="dataObject"
           #mf="mfDataTable" summary="electricityUsage">
-          <tr style="display: none;">
+          <!-- <tr style="display: none;">
             <th id="t1"></th>
             <th id="t2"></th>
-          </tr>
+          </tr> -->
           <tr>
             <td> <strong>Year:</strong> </td>
             <td> <input type="text" class="inp" id="year" name="Year" [(ngModel)]="usageModelObj.year"></td>
@@ -66,6 +87,10 @@
           </tr>
           <tr>
             <td></td>
+            <td><input type="checkbox" class="inp" name="Merged" [(ngModel)]="usageModelObj.dummy">Automatic Bill</td>
+          </tr>
+          <tr>
+            <td></td>
             <td><input type="checkbox" class="inp" name="Party3" [(ngModel)]="usageModelObj.party3">3 party</td>
           </tr>
           <tr>
@@ -110,10 +135,10 @@
     <div class="modal-footer">
          <div class="row">
         <div class="col-md-8">
-          <button type="button" class="btn btn-default" data-dismiss="modal" (click)="save()">Save</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="save()">Save</button>
         </div>
         <div class="col-md-4">
-          <button type="button" class="btn btn-default" data-dismiss="modal" (click)="deleteGasDetails()">Delete</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteGasDetails()">Delete</button>
         </div>
       </div>
     </div>

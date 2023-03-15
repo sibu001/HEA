@@ -164,4 +164,18 @@ export class AppUtility {
         a.setAttribute('download', 'file.csv');
         a.click();
     }
+
+    public static formatUsageHistoryDialogbox(){
+        const trList = document.getElementsByTagName('tr');
+        
+        let tr : Element;
+        for(let i = 0; tr = trList[i], i < trList.length; i++){
+            tr.classList.add('row');
+            tr.children[0].classList.add('col-sm-4');
+            tr.children[1].classList.add('col-sm-3');
+            const newTrElement : Element = document.createElement('td');
+            newTrElement.classList.add('col-sm-5')
+            tr.appendChild(newTrElement);
+        }
+    }
 }

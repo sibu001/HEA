@@ -102,6 +102,13 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
     this.subscriptions.add(this.usageHistoryService.getElectricityList().pipe(skipWhile((item: any) => !item))
     .subscribe(
     (gasList: any) => {
+
+      gasList.data = gasList.data.map((data)=>{
+        if(data.dummy || data.merge || data.split)
+            data[AppConstant.ASTRIC] = "*";
+        return data;
+      });
+
       if(gasList.data.length == AppConstant.pageSize){
         this.usageHistoryData.content = gasList.data;
         this.totalElements = this.usageHistoryData.totalElements;
@@ -268,7 +275,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   }
 
   showPopUp(event: any): any {
-    if (this.users.role !== 'USERS') {
+    if (this.users.role == 'ADMIN') {
       const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
         width: '70vw',
         height: '70vh',

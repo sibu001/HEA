@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, Inject, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, Inject, OnDestroy, AfterViewInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { GasUsagePopupComponent } from 'src/app/gas/gas-usage-popup/gas-usage-popup.component';
 import { Users } from 'src/app/models/user';
@@ -8,6 +8,7 @@ import { skipWhile } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 
 @Component({
@@ -15,8 +16,14 @@ import { AppConstant } from 'src/app/utility/app.constant';
   templateUrl: './electricity-usage-popup.component.html',
   styleUrls: ['./electricity-usage-popup.component.css']
 })
-export class ElectricityUsagePopupComponent implements OnInit , OnDestroy{
-  @Input() usageModelObj: any;
+export class ElectricityUsagePopupComponent implements OnInit , OnDestroy, AfterViewInit {
+  @Input() usageModelObj: any = { "createdBy": "", "createdDate": "", "updatedBy": null, "updatedDate": null,
+    "usageHistoryId": "", "userId": "", "year": "", "month": "",  "day": "", "hour": null,  "type": "",
+    "value": "", "billingDate": "", "startDate": "","endDate": "", "startDateOrig": "", "endDateOrig": "",
+    "source": "", "split": false,"merge": false,"dummy": true,"monthUpdated": false,"checked": false,"forceStore": null,
+    "utilityOrig": "","utility": "","utilGen": "","pv": "","party3": "","id": ""
+  };
+
   @Output() onModelSave = new EventEmitter<any>();
   usageModelObj2: any;
   users: Users = new Users();
@@ -31,6 +38,10 @@ export class ElectricityUsagePopupComponent implements OnInit , OnDestroy{
     public dialogRef: MatDialogRef<GasUsagePopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
+
+  ngAfterViewInit(): void {
+    AppUtility.formatUsageHistoryDialogbox();
+  }
 
   ngOnInit() {
     this.findUserUsageHistoryData()
@@ -58,11 +69,11 @@ export class ElectricityUsagePopupComponent implements OnInit , OnDestroy{
   }
 
   convetObjectForRequest(object){
-    object.billingDate = new Date(object.billingDate).toISOString();
-    object.startDate = new Date(object.startDate).toISOString();
-    object.endDate = new Date(object.endDate).toISOString();
-    object.startDateOrig = new Date(object.startDateOrig).toISOString();
-    object.endDateOrig = new Date(object.endDateOrig).toISOString();
+    object.billingDate = new Date(object.billingDate).getTime();
+    object.startDate = new Date(object.startDate).getTime();
+    object.endDate = new Date(object.endDate).getTime();
+    object.startDateOrig = new Date(object.startDateOrig).getTime();
+    object.endDateOrig = new Date(object.endDateOrig).getTime();
     return object;
   }
 
@@ -79,14 +90,14 @@ export class ElectricityUsagePopupComponent implements OnInit , OnDestroy{
         .subscribe(
           (response: any) => {
             this.refresh = true;
-            this.closeDialogBox();
+            this.onNoClick();
           }
         )
       )
   }
 
-  closeDialogBox(){
-    this.dialogRef.close();
+  onNoClick(){
+    this.dialogRef.close(this.refresh);
   }
 
   deleteGasDetails(){
@@ -96,7 +107,7 @@ export class ElectricityUsagePopupComponent implements OnInit , OnDestroy{
       .subscribe(
         (response : any) =>{
           this.refresh = true;
-          this.closeDialogBox();
+          this.onNoClick();
         }
       )
     )

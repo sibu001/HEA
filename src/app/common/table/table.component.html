@@ -72,7 +72,8 @@
                 [class.mat-cell-underline]='col.isUnderline'
                     *matCellDef="let
                     row" style="display: grid;" >
-                    <div *ngIf="col.type!='image' && col.isDate && !col.isAction">
+                    <!-- added click event for gas-list popup dialog box -->
+                    <div *ngIf="col.type!='image' && col.isDate && !col.isAction" (click)='goToEdit(row,col);'>
                         {{ (col.isSurvey ? row.createdDate : row[col.key])|date:'mediumDate' : 'PST'}}</div>
                     <div id='1' *ngIf="col.type==='alert' && !col.isAction">
                         <div class="redAlert" *ngIf="row[col.key]===10">

@@ -9,3 +9,11 @@
   background-color: #ffff;
   outLine : none
 }
+
+.btn-primary{
+  color: #fff ;
+  background-color: #76ba19;
+  border-color: #76ba19;
+  padding: 4px 23px;
+  border-radius: 3px;
+}

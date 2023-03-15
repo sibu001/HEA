@@ -108,6 +108,13 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
     this.subscriptions.add(this.usageHistoryService.getElectricityList().pipe(skipWhile((item: any) => !item))
     .subscribe(
       (gasList: any) => {
+
+        gasList.data = gasList.data.map((data)=>{
+          if(data.dummy || data.merge || data.split)
+              data[AppConstant.ASTRIC] = "*";
+          return data;
+        });
+
         if(gasList.data.length == AppConstant.pageSize){
           this.usageHistoryData.content = gasList.data;
           this.totalElements = this.usageHistoryData.totalElements;
@@ -214,7 +221,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   filterForElectricityList(force: boolean, filter: any){
     this.adminFilter.formValue = this.electricityForm.value;
     let userId = null;
-    if(this.selectionPrivilege){
+    if(this.users.role == 'ADMIN'){
       if(this.electricityForm.value.auditId != '' || this.electricityForm.value.customerName != '' || this.selectedCustomer != null )
         this.findSelectedCustomer(force, filter);
     } else {

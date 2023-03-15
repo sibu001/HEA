@@ -1,4 +1,5 @@
 import { TABLECOLUMN } from '../interface/table-column.interface';
+import { AppConstant } from '../utility/app.constant';
 
 export class TableColumnData {
     static readonly PROGRAM_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
@@ -479,6 +480,7 @@ export class TableColumnData {
     ];
 
     static readonly GAS_KEYS: Array<TABLECOLUMN> = [
+        { key : AppConstant.ASTRIC , isEdit : true, displayName : ''},
         { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
@@ -487,6 +489,7 @@ export class TableColumnData {
     ];
 
     static readonly GAS_CHARGE_KEYS: Array<TABLECOLUMN> = [
+        { key : AppConstant.ASTRIC , isEdit : true, displayName : ''},
         { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
@@ -496,6 +499,7 @@ export class TableColumnData {
 
 
     static readonly ELECTRICITY_CHARGE_KEYS: Array<TABLECOLUMN> = [
+        { key : AppConstant.ASTRIC , isEdit : true, displayName : ''},
         { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
@@ -505,6 +509,7 @@ export class TableColumnData {
     ];
 
     static readonly ELECTRICITY_KEYS: Array<TABLECOLUMN> = [
+        { key : AppConstant.ASTRIC , isEdit : true, displayName : ''},
         { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },
         { key: 'month', sort: 'month', isEdit: true, displayName: 'Month' },
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
