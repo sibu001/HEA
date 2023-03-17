@@ -116,3 +116,9 @@ label{
 input[disabled], select[disabled]{
   cursor: default;
 }
+
+input[formcontrolname="coachUserId"]{
+  border: none !important;
+  box-shadow: none !important;
+  background-color: #ffff !important;
+}

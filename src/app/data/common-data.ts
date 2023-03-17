@@ -955,6 +955,7 @@ export class TableColumnData {
     ];
 
     static readonly UI_VERSION: any[] = [
+        { key: null, value: '-'},
         { key: 'V1', value: 'classic version' },
         { key: 'V2', value: 'The new responsive version' },
     ];

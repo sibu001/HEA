@@ -4,7 +4,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { AdminFilter } from 'src/app/models/filter-object';
@@ -57,6 +57,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   public fileUploadForm: FormGroup = this.fb.group({
     customerFile: ['', Validators.required]
   });
+  public viewAttributes;
+  public sqlOrder;
   public placeList: any = [];
   @ViewChild('tableheadingScroll') public tableheading: ElementRef;
   constructor(private fb: FormBuilder,
@@ -107,6 +109,10 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       .subscribe((coachUserList: any) => {
         this.coachUserList = coachUserList.list;
       }));
+    this.sqlOrder = this.adminFilter.customerFilter.sqlOrder;
+    if(!this.sqlOrder){
+      this.sqlOrder = "false";
+    }
     this.findCustomer(this.adminFilter.customerFilter.page, false);
   }
 
@@ -125,6 +131,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   findCustomer(event: Page, isSearch: boolean) {
     this.adminFilter.customerFilter.formValue = this.searchForm.value;
     this.adminFilter.customerFilter.page = event;
+    this.adminFilter.customerFilter.sqlOrder = this.checkForSQLOrder(event);
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     if (isSearch) {
       event = JSON.parse(localStorage.getItem('customerFilterEvent'));
@@ -142,6 +149,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   getViewConfigurationList(url: any) {
     this.subscriptions.add(this.customerService.loadCustomerViewConfigurationList(Number(this.searchForm.controls['customerView'].value), url).pipe(skipWhile((item: any) => !item))
       .subscribe((customerList1: any) => {
+        this.viewAttributes = customerList1.customerManagement.customerViewConfigurationList.data.viewAttributes;
         const tableValue = Transformer.transformCustomerTableKey(Number(this.searchForm.controls['customerView'].value), customerList1.customerManagement.customerViewConfigurationList);
         this.keys = tableValue.key;
         const customerValue = Transformer.transformCustomerTableData(customerList1.customerManagement.customerViewConfigurationList, Number(this.searchForm.controls['customerView'].value), tableValue.dataKey);
@@ -192,6 +200,25 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         this.tableheading.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'})
       }));
   }
+
+  checkForSQLOrder(event) : String{
+    if(event && event.sort.active && this.viewAttributes){
+      const attributeConfiguration =  this.viewAttributes.find((data)=>{
+        if(data.definition == event.sort.active){
+            return true;
+        }
+        return false;
+      });
+      if(attributeConfiguration.attributeType == "V"){
+        this.sqlOrder = "true";
+      }else if(attributeConfiguration.attributeType == "C"){
+        this.sqlOrder = "false";
+      }
+      
+    }
+    return this.sqlOrder;
+  }
+
   getFilterUrl(event: any, isSearch: boolean, isForExportAsCSV?: boolean): any {
     this.customerView = this.searchForm.controls.customerView.value !== undefined && this.searchForm.controls.customerView.value !== null ? this.searchForm.controls.customerView.value : '-1';
     let params: HttpParams;
@@ -251,8 +278,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
           (event.pageIndex * event.pageSize) + '' : '0'))
         .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-        // .set('sqlOrder', 'true')
-        // .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
+        .set('sqlOrder', this.sqlOrder)
+        .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'))
         .set('auditId', (this.searchForm.controls['auditId'].value !== null ? this.searchForm.controls['auditId'].value : ''))
         .set('customerGroupId', (this.searchForm.controls['customerGroup'].value !== null ? this.searchForm.controls['customerGroup'].value : ''))
         .set('customerName', (this.searchForm.controls['customerName'].value !== null ? this.searchForm.controls['customerName'].value : ''))
@@ -266,14 +293,14 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
         .set('coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
         .set('credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
-      if (event && event.sort.active !== undefined) {
-        const index = this.keys.findIndex((item: any) => (item.definition === event.sort.active && item.attributeType === 'V'));
-        if (index !== -1) {
-          params = params.append('sqlOrder', 'true');
-        } else {
-          params = params.append('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'));
-        }
-      }
+      // if (event && event.sort.active !== undefined) {
+      //   const index = this.keys.findIndex((item: any) => (item.definition === event.sort.active && item.attributeType === 'V'));
+      //   if (index !== -1) {
+      //     params = params.append('sqlOrder', 'true');
+      //   } else {
+      //     params = params.append('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : 'ASC'));
+      //   }
+      // }
     }
 
     return params;
@@ -427,5 +454,9 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         AppUtility.createAndDownlodCSVFile([fileData]);
       }
     )
+  }
+
+  showDeletButton() : boolean{
+      return this.users.role == "ADMIN" && (Number(this.searchForm.controls['customerView'].value)) == -1;
   }
 }

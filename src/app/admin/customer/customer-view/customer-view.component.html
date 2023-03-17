@@ -66,12 +66,17 @@
               Energy Coach:
             </div>
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-9">
-              <select class="form-control form-control-sm" id="coachUserId"
+              <ng-container *ngIf="users.role=='ADMIN'; else CoachAccess">
+                <select class="form-control form-control-sm" id="coachUserId"
                 (change)="changeDropDownValue($event,'coachUser')" formControlName="coachUserId">
                 <option value=null selected="selected">Unassigned</option>
                 <option *ngFor="let group of coachUserList" [value]="group.id">
                   {{group.name}}</option>
               </select>
+              </ng-container>
+              <ng-template #CoachAccess>
+                <input type="text" class="form-control form-control-sm" disabled #CoachAccess formControlName="coachUserId" >
+              </ng-template>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3">
               {{energyCoach}}
@@ -418,33 +423,35 @@
                 formControlName="eligibleStartDate">
             </div>
           </div>
-          <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Most recent cache update:
+          <ng-container *ngIf="users.role=='ADMIN'">
+            <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Most recent cache update:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm show-value" id="vacaCalculationDate"
+                  formControlName="vacaCalculationDate" disabled>
+              </div>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm show-value" id="vacaCalculationDate"
-                formControlName="vacaCalculationDate" disabled>
+            <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Most recent analysis update:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm show-value" id="lastMonthlyCalc"
+                  formControlName="lastMonthlyCalc" disabled>
+              </div>
             </div>
-          </div>
-          <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Most recent analysis update:
+            <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined" formGroupName="user">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Most recent utility data collection:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm show-value" id="lastSuccessfulUtilityReadDate"
+                  formControlName="lastSuccessfulUtilityReadDate" disabled>
+              </div>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm show-value" id="lastMonthlyCalc"
-                formControlName="lastMonthlyCalc" disabled>
-            </div>
-          </div>
-          <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined" formGroupName="user">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Most recent utility data collection:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm show-value" id="lastSuccessfulUtilityReadDate"
-                formControlName="lastSuccessfulUtilityReadDate" disabled>
-            </div>
-          </div>
+          </ng-container>
           <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
 

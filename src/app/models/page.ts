@@ -6,9 +6,10 @@ export class Page {
     public length: number;
     public pageSize = 10;
     public pageIndex = 0;
+    public sqlOrder = 'false'
     public sort: Sort = {
         active: '',
-        direction: 'asc'
+        direction: 'asc',
     };
     public search = '';
 }

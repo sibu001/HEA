@@ -174,7 +174,7 @@
 
                     </div>
                 </div>
-                <div *ngIf="searchForm.controls['customerView'].value != -1" class="row" style="position: absolute; bottom: 50px;">
+                <div *ngIf="searchForm.controls['customerView'].value != -1" class="row">
                     <div class="col-sm-12">
                         <a (click)="exportDataAsCSV($event)" >Export To CSV</a>
                     </div>
@@ -182,7 +182,7 @@
                 <form [formGroup]='fileUploadForm' *ngIf="customerView==-1">
                     <div class="row bottom-button">
                         <div class='col-sm-2 col-xs-3 responsive-desktop'>
-                            <button type="submit" class="btn
+                            <button type="submit" *ngIf="showDeletButton()" class="btn 
                                 btn-primary" (click)="batchDelete()">Delete</button>
                         </div>
                         <div class='col-sm-5 col-xs-5' style="text-align:right">
@@ -200,7 +200,7 @@
                     </div>
                     <div class="row responsive-tab">
                         <div class='col-sm-2 col-xs-6'>
-                            <button type="submit" class="btn
+                            <button type="submit" *ngIf="showDeletButton()" class="btn
                                 btn-primary" (click)="batchDelete()">Delete</button>
                         </div>
                         <div class='col-sm-2 col-xs-6' style='text-align: right;'>

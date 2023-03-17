@@ -22,6 +22,8 @@ import { SystemUtilityService } from 'src/app/store/system-utility-state-managem
 import { UsageHistoryFilter } from 'src/app/models/filter-object';
 import { CustomValidator } from 'src/app/utility/custom-validators';
 import * as moment from 'moment';
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -128,6 +130,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   maxLength = 100;
   pattern = '';
   regex = '';
+  users : Users = new Users();
   charactersCount = 0;
   private readonly subscriptions: Subscription = new Subscription();
   errorMessage: string;
@@ -140,6 +143,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly location: Location,
     private readonly router: Router,
     private datePipe: DatePipe,
+    private readonly loginService : LoginService,
     private readonly el: ElementRef) {
       this.setForm(undefined);
     this.getPasswordValidationRule();
@@ -152,6 +156,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
+    this.users = this.loginService.getUser();
+
     this.findPlace(true, '');
     this.loadCustomerGroup();
     if (this.id !== undefined) {
@@ -301,6 +307,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   // }
 
   setForm(event: any) {
+    console.log("is user not an admin " + this.users.role =='ADMIN');
     this.customerForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
       customerId: [event !== undefined ? event.customerId : ''],
@@ -379,7 +386,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       viewedHomepage: [event !== undefined ? event.viewedHomepage : ''],
       stopJob: [event !== undefined ? event.stopJob : ''],
       allowUIVersion: [event !== undefined ? event.allowUIVersion : ''],
-      uiVersion: [event !== undefined && event.uiVersion ? event.uiVersion : 'V1'],
+      uiVersion: [event !== undefined && event.uiVersion ? event.uiVersion : 'null'],
       programGroup: [event !== undefined ? event.programGroup : null],
       coachUser: [event !== undefined ? event.coachUser : null],
       registrationDate: [event !== undefined ? (this.datePipe.transform(event.registrationDate, 'MM/dd/yyyy h:mm:ss')) : null],
@@ -427,6 +434,13 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       repeatedActivationMail: [false],
       stationId: [this.weatherStation]
     });
+    this.disableOptionIfNotAdmin();
+  }
+
+  disableOptionIfNotAdmin(){
+    if( this.users.role && this.users.role!='ADMIN'){
+      this.customerForm.controls['coachUserId'].disable();
+    }
   }
 
   get eligibleStartDate() {
@@ -486,7 +500,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   openAddressOnGoogleMap() {
       this.dialog.open(GoogleMapComponent, {
       width: '515px',
-      height: '500px',
+      height: '550px',
       data: {
         lat: this.customerForm.value.latitude,
         lng: this.customerForm.value.longitude
