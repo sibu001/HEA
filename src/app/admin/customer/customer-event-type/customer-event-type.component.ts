@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-customer-event-type',
@@ -113,6 +114,7 @@ export class CustomerEventTypeComponent implements OnInit {
   changeEventCode(event: any) {
     const i = this.customerEventTypeList.findIndex((item: any) => item.eventCode === event.target.value);
     if (i !== -1) {
+      this.eventDescription = this.customerEventTypeList[i].description;
       this.customerEventTypeForm.controls['eventCode'].setValue(this.customerEventTypeList[i].eventCode);
       this.customerEventTypeForm.controls['eventDescription'].setValue(this.customerEventTypeList[i].description);
       this.customerEventTypeForm.controls['customerEventTypeId'].setValue(this.customerEventTypeList[i].customerEventTypeId);
@@ -122,6 +124,7 @@ export class CustomerEventTypeComponent implements OnInit {
     this.eventCode = event !== undefined && event.customerEventType ? event.customerEventType.eventCode : '';
     this.eventDescription = event !== undefined && event.customerEventType ? event.customerEventType.description : '';
     this.author = event !== undefined && event.linkedPersonName ? event.linkedPersonName : this.author;
+    this.authorType = event !== undefined && event.linkedPersonType ? AppUtility.getLinkedPersonByType(event.linkedPersonType) : '';
     this.customerEventTypeForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
       customerEventTypeId: [event !== undefined && event.customerEventTypeId !== undefined ? event.customerEventTypeId : '', Validators.required],

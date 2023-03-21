@@ -39,7 +39,7 @@
             <select class="form-control form-control-sm padded-control"
               id="customerAlertTypeId"
               formControlName="customerAlertTypeId">
-              <option value="" selected="selected"></option>
+              <!-- <option value="" selected="selected"></option> -->
               <option *ngFor="let customerAlert of customerAlertTypes"
                 [value]="customerAlert.customerAlertTypeId">{{customerAlert.alertName}}
               </option>
@@ -59,7 +59,7 @@
             <select class="form-control form-control-sm padded-control"
               id="alertLevel"
               formControlName="alertLevel">
-              <option value="" selected="selected"></option>
+              <!-- <option value="" selected="selected"></option> -->
               <option *ngFor="let level of alertLevels"
                 [value]="level.alertLevel">{{level.alertName}}
               </option>

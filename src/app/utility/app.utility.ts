@@ -178,4 +178,15 @@ export class AppUtility {
             tr.appendChild(newTrElement);
         }
     }
+
+    public static getLinkedPersonByType(linkedPersonType : number) : string{
+
+        if(linkedPersonType == 1){
+            return "Customer";
+        }else if(linkedPersonType == 2){
+            return "Staff";
+        }else if(linkedPersonType == 3){
+            return "Partner";
+        }
+    }
 }

@@ -75,8 +75,8 @@ export class LoginComponent implements OnInit, AfterViewInit{
       this.loginService.performGetMultiPartData('oauth/me')
         .subscribe(
           response => {
-            document.getElementById('loader').classList.remove('loading');
-            if (this.loginService.getUser().role == "ADMIN")
+            // document.getElementById('loader').classList.remove('loading');
+            if (this.loginService.getUser().role != "USERS")
               this.router.navigate(['admin/customer']);
             else {
               if (this.users.lastVisitedURL == '/surveyView')

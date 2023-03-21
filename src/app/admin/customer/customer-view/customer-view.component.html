@@ -16,7 +16,6 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="customerGroupId"
                 (change)="changeDropDownValue($event,'customerGroup')" formControlName="customerGroupId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let group of customerGroupList" [value]="group.customerGroupId">
                   {{group.groupName}}</option>
               </select>
@@ -65,21 +64,16 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Energy Coach:
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-9">
-              <ng-container *ngIf="users.role=='ADMIN'; else CoachAccess">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-9"  *ngIf="users.role=='ADMIN'" >
                 <select class="form-control form-control-sm" id="coachUserId"
                 (change)="changeDropDownValue($event,'coachUser')" formControlName="coachUserId">
                 <option value=null selected="selected">Unassigned</option>
                 <option *ngFor="let group of coachUserList" [value]="group.id">
                   {{group.name}}</option>
               </select>
-              </ng-container>
-              <ng-template #CoachAccess>
-                <input type="text" class="form-control form-control-sm" disabled #CoachAccess formControlName="coachUserId" >
-              </ng-template>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3">
-              {{energyCoach}}
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3" style="height: 34px">
+              <label> {{energyCoach}} </label>
             </div>
           </div>
           <div class="row borderBottom w100 rowPadding" formGroupName="user">
@@ -367,7 +361,7 @@
           <div class="row borderBottom w100 rowPadding">
             <p style="padding: inherit;"></p>
           </div>
-          <div class="row borderBottom w100 rowPadding">
+          <div class="row borderBottom w100 rowPadding" *ngIf="isUserAdmin()">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -482,13 +476,13 @@
               </select>
             </div>
           </div>
-          <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined&&customerGroupCode!=='RYPL'">
+          <div class="row borderBottom w100 rowPadding" *ngIf="(id!=undefined&&customerGroupCode!=='RYPL') && (electricityRatePlan && heatingRatePlan)">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Rate Plan:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              {{electricityRatePlan?.code}} &nbsp; Since Date: {{electricityRatePlan?.startDate | date:'MM/dd/yyyy'}},
-              {{heatingRatePlan?.code}} ,{{heatingRatePlan?.name}} &nbsp; Since Date: {{heatingRatePlan?.startDate |
+              {{electricityRatePlan?.code}} &nbsp; Since Date: {{electricityRatePlan?.startDate | date:'MM/dd/yyyy'}}
+              ,{{heatingRatePlan?.name}} &nbsp; Since Date: {{heatingRatePlan?.startDate |
               date:'MM/dd/yyyy'}}
             </div>
           </div>
@@ -545,8 +539,8 @@
           </div>
           <div class="row">
             <div class="col-sm-12">
-              <app-table [keys]="credentialsKeys" [data]="credentialsDataSource" [isDelete]=true
-                [totalElement]="credentialsData.totalElements" (goToEditEvent)="editUtility($event)"
+              <app-table [keys]="credentialsKeys" [data]="credentialsDataSource" [isDelete]="isUserAdmin()" [isHideAdd]="!isUserAdmin()"
+                [totalElement]="credentialsData.totalElements" (goToEditEvent)="editUtility($event)" 
                 (addEvent)='openUtilityCredential(undefined)' (imageEvent)='openUtilityCredential($event)'
                 (deleteEvent)="deleteUtilityCredential($event)" class="rowSize">
               </app-table>
@@ -697,7 +691,7 @@
               btn-primary" (click)="cancel()">Cancel</button>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
-              <button type="button" class="btn btn-primary" (click)="delete()" *ngIf="id!=undefined">Delete</button>
+              <button type="button" class="btn btn-primary" (click)="delete()" *ngIf="id!=undefined && isUserAdmin()">Delete</button>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
               <button type="submit" class="btn btn-primary" (click)="save()"

@@ -180,6 +180,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         self.getHeatingPlanRate(self.id);
       },200)
     }
+    this.scrollTop();
   }
 
   scrollTop() {
@@ -191,6 +192,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
       .subscribe((placeList: any) => {
         this.placeCode = placeList;
+        if(!this.id) {
+          this.customerForm.get('placeCode').setValue(this.placeCode[0].id);
+          this.customerForm.get('place').setValue(this.placeCode[0]);
+        }
       }));
   }
 
@@ -217,6 +222,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.customerGroupCode = customer.customerGroup.groupCode;
         if (customer.coachUser) {
           this.energyCoach = customer.coachUser.name;
+        }else{
+          this.energyCoach = "";
         }
         if (customer) {
           this.scrollTop();
@@ -267,6 +274,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
         this.customerGroupList = customerGroupList;
+        if(!this.id){
+          this.customerForm.get('customerGroupId').patchValue(this.customerGroupList[0].customerGroupId);
+          this.customerForm.get('customerGroup').setValue(this.customerGroupList[0]);
+        } 
       }));
     this.subscriptions.add(this.systemService.getCoachUserList().pipe(skipWhile((item: any) => !item))
       .subscribe((coachUserList: any) => {
@@ -307,7 +318,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   // }
 
   setForm(event: any) {
-    console.log("is user not an admin " + this.users.role =='ADMIN');
     this.customerForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
       customerId: [event !== undefined ? event.customerId : ''],
@@ -443,6 +453,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  isUserAdmin() : boolean{
+    return this.users.role == 'ADMIN';
+  }
+
   get eligibleStartDate() {
     return this.customerForm.get('eligibleStartDate');
   }
@@ -519,6 +533,11 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       }));
   }
   editUtility(event: any) {
+
+    if(!this.isUserAdmin()){
+      return;
+    }
+
     console.log("this is " + JSON.stringify(event));
     const obj = {
       row: event
@@ -536,6 +555,11 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 //  }
 
   openUtilityCredential(event: any) {
+   
+    if(!this.isUserAdmin()){
+      return;
+    }
+
     this.errorMessage = undefined;
     if (!event) {
       event = {
@@ -1020,12 +1044,22 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     Object.keys(formGroup.controls).forEach(field => {
       const control = formGroup.get(field);
       if (control instanceof FormControl) {
+
+        if(control.invalid){
+          this.scrollToInvalidField(field);
+        }
+
         control.markAsTouched({ onlySelf: true });
       } else if (control instanceof FormGroup) {
         this.validateAllFormFields(control);
       }
     });
   }
+
+  scrollToInvalidField(fieldName){
+    document.querySelector('[formControlName=' + fieldName + ']').scrollIntoView();
+  }
+
   get f() { return this.customerForm.controls; }
   get p() {
     const passwordForm: any = this.customerForm.controls.passwordForm;
