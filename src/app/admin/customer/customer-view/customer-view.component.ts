@@ -301,6 +301,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         programGroupList =>{
           if (programGroupList && programGroupList.length != 0 ) {
             this.isProgramGroup = true;
+            this.customerForm.get('programGroupId').setValue("");
           }else{
             this.isProgramGroup= false;
           }
@@ -324,7 +325,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       customerGroupId: [event !== undefined ? event.customerGroupId : 1],
       programGroupId: [event !== undefined ? event.programGroupId : ''],
       userId: [event !== undefined ? event.userId : ''],
-      coachUserId: [event !== undefined ? event.coachUserId : ''],
+      coachUserId: [event !== undefined && event.coachUserId ? event.coachUserId : ''],
       auditId: [event !== undefined ? event.auditId : ''],
       activationDate: [event !== undefined ? (this.datePipe.transform(event.activationDate, 'MM/dd/yyyy h:mm:ss')) : ''],
       staffPermission: [event !== undefined ? event.staffPermission : true],
@@ -396,7 +397,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       viewedHomepage: [event !== undefined ? event.viewedHomepage : ''],
       stopJob: [event !== undefined ? event.stopJob : ''],
       allowUIVersion: [event !== undefined ? event.allowUIVersion : ''],
-      uiVersion: [event !== undefined && event.uiVersion ? event.uiVersion : 'null'],
+      uiVersion: [event !== undefined && event.uiVersion ? event.uiVersion : ''],
       programGroup: [event !== undefined ? event.programGroup : null],
       coachUser: [event !== undefined ? event.coachUser : null],
       registrationDate: [event !== undefined ? (this.datePipe.transform(event.registrationDate, 'MM/dd/yyyy h:mm:ss')) : null],
@@ -425,15 +426,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         id: [event !== undefined ? event.user.id : ''],
       }),
       customerGroup: [event !== undefined ? event.customerGroup : {}],
-      place: this.formBuilder.group({
-        place: [event !== undefined ? event.place.place : ''],
-        placeName: [event !== undefined ? event.place.placeName : ''],
-        stationId: [event !== undefined ? event.place.stationId : ''],
-        timezone: [event !== undefined ? event.place.timezone : ''],
-        latitude: [event !== undefined ? event.place.latitude : ''],
-        longitude: [event !== undefined ? event.place.longitude : ''],
-        id: [event !== undefined ? event.place.id : ''],
-      }),
+      place: [event !== undefined ? event.place : {}],
       passwordForm: this.formBuilder.group(
         {
           password: ['',[Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]],
@@ -1002,12 +995,16 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
             this.router.navigate(['/admin/customer']);
           }));
       } else {
+        const requestBody = this.customerForm.value;
+        if(!requestBody.user.username){
+          requestBody.user.username = requestBody.user.name;
+        }
         this.subscriptions.add(this.customerService.saveCustomer(this.customerForm.value).pipe(skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.isForce = true;
             this.scrollTop();
             this.loadCustomerById();
-            this.router.navigate(['/admin/customer']);
+            // this.router.navigate(['/admin/customer']);
           }));
       }
     } else {

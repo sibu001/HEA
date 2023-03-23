@@ -44,9 +44,10 @@
         <div class="row">
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
-              [data]="dataSource"
+              [data]="dataSource" [pageIndex]="pageIndex"
               [totalElement]="programGroupData.totalElements"
-              (changePageEvent)="search($event,true)"
+              (changePageEvent)="search($event,true)" [pageSize]="pageSize"
+              [disableNextButton]="disableNextButton" [disableLastButton]="true"
               (goToEditEvent)="gotoEditProgramGroup($event)"
               (addEvent)="addProgramGroup()">
             </app-table>

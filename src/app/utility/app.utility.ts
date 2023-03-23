@@ -1,3 +1,4 @@
+import { PaginateModel } from "../interface/paginate-model";
 import { AllowedMenuList } from "./app.allowedMenuList";
 
 export class AppUtility {
@@ -188,5 +189,33 @@ export class AppUtility {
         }else if(linkedPersonType == 3){
             return "Partner";
         }
+    }
+
+    //  utility method for pagination , if no pagination-data(example pageSize,totalElement etc...) is returned by rest service.
+    //  ***** Note disable the last button in the table component(eg.. [disableLastButton]='true') if use this method for pagination purpose.
+    // and use the attribute used in componentRef(in below method) in the component to control the pagination (for example see place-list.component.ts).
+    public static paginateData(data : PaginateModel, componentRef){
+
+        let { dataList, dataSource, pageSize, pageIndex, currentIndex, disableNextButton, newFilterSearch} = data;
+
+        if(dataList.length == pageSize){
+            dataSource = [...dataList];
+            pageIndex = currentIndex;
+            disableNextButton = false;
+          } else {
+            disableNextButton = true;
+            if(dataList.length > 0){
+              dataSource = [...dataList];
+            } else {
+            if(newFilterSearch)
+                dataSource = [...dataList];
+            pageIndex = currentIndex -1;
+          }}  
+          newFilterSearch = false;
+
+        componentRef.dataSource = dataSource; 
+        componentRef.pageIndex = pageIndex;
+        componentRef.disableNextButton = disableNextButton;
+        componentRef.newFilterSearch = newFilterSearch;
     }
 }

@@ -398,7 +398,7 @@ export class CustomerManagementState {
                     error => {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.error.errorMessage);
-                        ctx.dispatch(new CustomerError(error));
+                        // ctx.dispatch(new CustomerError(error));
                     }));
     }
 

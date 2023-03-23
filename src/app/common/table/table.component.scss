@@ -430,10 +430,10 @@ N
   hyphens: auto;
 }
 
-.mat-column-place{
-          word-wrap: break-word !important;
+.mat-column-place, .mat-column-placeName{
+  word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 10% !important;
+  flex: 0 0 24%;
   width: 8% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -570,19 +570,6 @@ N
 
   -ms-hyphens: auto;
   -moz-hyphens: auto;
-  -webkit-hyphens: auto;
-  hyphens: auto;
-}
-
-.mat-column-place[_ngcontent-c2] {
-  word-wrap: break-word !important;
-  white-space: unset !important;
-  flex: 0 0 10% !important;
-  width: 8% !important;
-  overflow-wrap: break-word;
-  word-wrap: break-word;
-  word-break: break-word;
-  -ms-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
 }

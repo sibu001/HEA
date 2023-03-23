@@ -3,6 +3,7 @@ import { AppConstant } from '../utility/app.constant';
 
 export class TableColumnData {
     static readonly PROGRAM_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
+        { key: 'id', isEdit: true, displayName: 'Record Id', sort: 'id' },
         { key: 'programCode', isEdit: true, displayName: 'Program Code', sort: 'programCode', isUnderline: true },
         { key: 'programName', isEdit: true, displayName: 'Program Name', sort: 'programName' },
     ];
@@ -955,7 +956,7 @@ export class TableColumnData {
     ];
 
     static readonly UI_VERSION: any[] = [
-        { key: null, value: '-'},
+        { key: '', value: '-'},
         { key: 'V1', value: 'classic version' },
         { key: 'V2', value: 'The new responsive version' },
     ];

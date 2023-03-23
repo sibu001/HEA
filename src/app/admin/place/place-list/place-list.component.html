@@ -33,8 +33,9 @@
         <p class="Messages">
           <img src='assets/images/dot03.gif' alt="dot" class='dot'>
           <span class="messageName">Places</span></p>
-        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-          [totalElement]="placeData.totalElements" (changePageEvent)="search($event)"
+        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [disableNextButton]="disableNextButton"
+          [totalElement]="placeData.totalElements" (changePageEvent)="search($event)" [disableLastButton]='true'
+          [pageSize]="pageSize" [pageIndex]="pageIndex"
           (goToEditEvent)="goToEditPlace($event)" (addEvent)='addPlace()' [sortStateData]="sortData"></app-table>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">

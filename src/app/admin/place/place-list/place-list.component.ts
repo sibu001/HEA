@@ -7,6 +7,8 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -19,13 +21,18 @@ export class PlaceListComponent implements OnInit, OnDestroy {
   public dataSource: any;
   public placeData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
 
   placeForm: FormGroup = this.fb.group({
     placeName: [''],
     zipCode: ['']
   });
+  public pageSize = Number('10');
+  public currentIndex : number = 0;
+  public pageIndex : number = 0;
+  public newFilterSearch : boolean = false;
+  public disableNextButton : boolean = false;
   public force = false;
   public sortData: any;
   private readonly subscriptions: Subscription = new Subscription();
@@ -44,7 +51,8 @@ export class PlaceListComponent implements OnInit, OnDestroy {
       active: 'placeName',
       direction: 'asc'
     };
-    this.findPlace(this.force, null);
+    // this.findPlace(this.force, null);
+    this.search(undefined);
   }
 
   findPlace(force: boolean, filter: HttpParams): any {
@@ -63,10 +71,22 @@ export class PlaceListComponent implements OnInit, OnDestroy {
               }
               placeListData.push(customerGroupObj);
             });
-            this.placeData.content = placeListData;
-            this.dataSource = [...this.placeData.content];
+            this.performPagination(placeListData);
           }));
       }));
+  }
+
+
+  performPagination(dataList: any){
+
+  const obj = AppUtility.paginateData(
+     { dataList : dataList ,
+      dataSource : this.dataSource,
+      pageSize :this.pageSize, 
+      pageIndex : this.pageIndex, 
+      currentIndex : this.currentIndex,
+      disableNextButton : this.disableNextButton,
+      newFilterSearch :this.newFilterSearch}, this)
   }
 
 
@@ -83,13 +103,22 @@ export class PlaceListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any): void {
+
+    if(event)
+      this.currentIndex = event.pageIndex;
+    else{
+      this.currentIndex = 0;
+      this.newFilterSearch = true;
+    }
+
     const params = new HttpParams()
-      .set('startRow', '0')
+      .set('startRow', event && event.pageIndex ? (event.pageIndex* this.pageSize) + '' : '0')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('useLikeSearch', 'true')
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('placeName', (this.placeForm.value.placeName !== null ? this.placeForm.value.placeName : ''))
-      .set('zipCode', (this.placeForm.value.zipCode !== null ? this.placeForm.value.zipCode : ''));
+      .set('zipCode', (this.placeForm.value.zipCode !== null ? this.placeForm.value.zipCode : ''))
+      .set('pageSize',this.pageSize.toString())
     this.findPlace(true, params);
   }
 

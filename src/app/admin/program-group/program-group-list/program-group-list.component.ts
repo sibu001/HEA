@@ -7,6 +7,8 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -21,13 +23,19 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
   public force = false;
   public programGroupData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
+  public pageSize = Number('10');
+  public currentIndex : number = 0;
+  public pageIndex : number = 0;
+  public newFilterSearch : boolean = false;
+  public disableNextButton : boolean = false;
   private readonly subscriptions: Subscription = new Subscription();
   programGroupForm = this.fb.group({
     programCode: [''],
     programName: ['']
   });
+  public disablNextButton : boolean = false;
   constructor(public fb: FormBuilder,
     private readonly systemService: SystemService,
     private readonly router: Router,
@@ -50,19 +58,42 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
     this.systemService.loadProgramGroupsList(force, filter);
     this.subscriptions.add(this.systemService.getProgramGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((programGroupList: any) => {
-        this.programGroupData.content = programGroupList;
-        this.dataSource = [...this.programGroupData.content];
+        // this.programGroupData.content = programGroupList;
+        // this.dataSource = [...this.programGroupData.content];
+        this.performPagination(programGroupList);
       }));
   }
 
+  performPagination(dataList: any){
+
+    const obj = AppUtility.paginateData(
+       { dataList : dataList ,
+        dataSource : this.dataSource,
+        pageSize :this.pageSize, 
+        pageIndex : this.pageIndex, 
+        currentIndex : this.currentIndex,
+        disableNextButton : this.disableNextButton,
+        newFilterSearch :this.newFilterSearch}, this)
+    }
+
+
   search(event: any, force: boolean): void {
+
+    if(event)
+      this.currentIndex = event.pageIndex;
+    else{
+      this.currentIndex = 0;
+      this.newFilterSearch = true;
+    }
+
     const params = new HttpParams()
-      .set('startRow', '0')
-      .set('useLikeSearch', 'true')
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
-      .set('programCode', (this.programGroupForm.value.programCode !== null ? this.programGroupForm.value.programCode : ''))
-      .set('programName', (this.programGroupForm.value.programName !== null ? this.programGroupForm.value.programName : ''));
+    .set('startRow', event && event.pageIndex ? (event.pageIndex* this.pageSize) + '' : '0')
+    .set('useLikeSearch', 'true')
+    .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+    .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+    .set('programCode', (this.programGroupForm.value.programCode !== null ? this.programGroupForm.value.programCode : ''))
+    .set('programName', (this.programGroupForm.value.programName !== null ? this.programGroupForm.value.programName : ''))
+    .set('pageSize',this.pageSize.toString());
     this.findProgramGroup(params, force);
   }
 

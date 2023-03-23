@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -38,6 +39,7 @@ export class RoleEditComponent implements OnInit, OnDestroy {
     if (this.roleCode) {
       this.loadRoleById();
     }
+    AppUtility.scrollTop();
   }
 
   loadRoleById() {

@@ -1845,7 +1845,10 @@ app-water-smart-meter .mat-column-value
   hyphens: auto;
 }
 
-app-water-smart-meter .mat-column-month{
+app-water-smart-meter .mat-column-month,
+app-role-list .mat-column-roleCode, 
+app-role-list .mat-column-permanent
+{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 25% !important; 
@@ -1874,7 +1877,8 @@ app-share-my-data-list .mat-column-city{
   hyphens: auto;
 }
 
-app-topic-description-edit .mat-column-section {
+app-topic-description-edit .mat-column-section,
+app-customer-list .mat-column-place {
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 11% !important;
@@ -2202,7 +2206,8 @@ app-customer-view .mat-column-active{
   hyphens: auto;
 }
 
-app-customer-view #email-settings .mat-column-active{
+app-customer-view #email-settings .mat-column-active,
+app-program-group-list .mat-column-id{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 12% !important;
@@ -2413,7 +2418,8 @@ app-mail-description-edit .mat-column-groupCode{
   hyphens: auto;   
 }
 
-app-mail-description-edit .mat-column-label{
+app-mail-description-edit .mat-column-label,
+app-program-group-list .mat-column-programCode{
   word-wrap: break-word !important;
  white-space: unset !important;
  flex: 0 0 28% !important;

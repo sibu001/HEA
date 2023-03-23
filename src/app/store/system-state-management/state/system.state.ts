@@ -293,7 +293,8 @@ export class SystemManagementState {
     @Action(GetCustomerGroupListAction)
     getAllCustomerGroup(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupListAction): Actions {
         // const force: boolean = action.force || SystemManagementState.getCustomerGroupList(ctx.getState()) === undefined;
-        const force = ctx.getState().customerGroupList === undefined;
+        // const force = ctx.getState().customerGroupList ;
+        const force = true;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
