@@ -405,6 +405,10 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetZipCodeListAction(placeCode, filter));
   }
 
+  getZipCodeList() : Observable<any>{
+    return this.store.select(SystemUtilityManagementState.getZipCodeList);
+  }
+
   saveZipCode(placeCode: any, zipCode: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new SaveZipCodeAction(placeCode, zipCode));
   }

@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
@@ -44,12 +44,15 @@ export class RoleEditComponent implements OnInit, OnDestroy {
 
   loadRoleById() {
     this.systemService.loadRoleById(this.roleCode);
-    this.subscriptions.add(this.systemService.getRoleById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemService.getRoleById().pipe(filter((item: any) => {
+      console.log(item);
+      return item && item.id == this.roleCode;
+    }))
       .subscribe((role: any) => {
         if (this.isForce) {
           this.router.navigate(['admin/role/roleEdit'], { queryParams: { 'roleCode': role.roleCode } });
         }
-        this.setForm(role.data);
+        this.setForm(role);
       }, error => {
         console.log(error);
       }));

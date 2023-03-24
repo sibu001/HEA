@@ -10,7 +10,8 @@ import { AppConstant } from '../utility/app.constant';
 import { Router } from '@angular/router';
 import { Users } from '../models/user';
 import { HttpCancelService } from './httpcancel.service';
-import { map, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil, tap, } from 'rxjs/operators';
+import { AppUtility } from '../utility/app.utility';
 
 
 @Injectable()
@@ -18,6 +19,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
 
     isRefreshingToken = false;
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+    public totalApiCalls: number = 0;
 
     constructor(private readonly loginService: LoginService,
                 private readonly  router: Router,
@@ -27,9 +29,26 @@ export class AuthorizationInterceptor implements HttpInterceptor {
         return req;
     }
 
+
+    public showLoaderOrNot() {
+        if(this.totalApiCalls > 0){
+            this.totalApiCalls--;
+        }
+       
+        if(this.totalApiCalls == 0){
+            AppUtility.removeLoader();
+        }
+    }
+
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        return next.handle(this.addToken(req, this.loginService.getUser().token)).do((event: HttpEvent<any>) => {
+        this.totalApiCalls++;
+        AppUtility.showLoader();
+
+        return next.handle(this.addToken(req, this.loginService.getUser().token)).pipe(
+            filter((data: any) => data),
+            tap((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
+                this.showLoaderOrNot();
                 const response = <HttpResponseBase>event;
                 if(response.url == AppConstant.classicVesionRedirectURLsandbox){
                     this.loginService.logout();
@@ -38,6 +57,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             }
         }, (error: any) => {
             if (error instanceof HttpErrorResponse) {
+                this.showLoaderOrNot();
                 switch ((<HttpErrorResponse>error).status) {
                     case 400:
                         return ;
@@ -49,7 +69,7 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             } else {
                 return throwError(error);
             }
-        });
+        }));
 
     }
     handle302Error() {

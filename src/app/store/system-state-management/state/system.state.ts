@@ -850,7 +850,7 @@ export class SystemManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        role: response,
+                        role: response.data,
                     });
                 },
                     error => {
@@ -885,7 +885,7 @@ export class SystemManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        role: response,
+                        role: response.data,
                     });
                 },
                     error => {
@@ -903,7 +903,7 @@ export class SystemManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        role: response,
+                        role: response.data,
                     });
                 },
                     error => {

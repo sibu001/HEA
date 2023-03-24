@@ -25,7 +25,7 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
   };
-  public pageSize = Number('10');
+  public pageSize = Number(AppConstant.pageSize);
   public currentIndex : number = 0;
   public pageIndex : number = 0;
   public newFilterSearch : boolean = false;
@@ -47,7 +47,7 @@ export class ProgramGroupListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.scrollTop();
-    this.search(undefined, this.force);
+    this.search(undefined, true);
   }
 
   scrollTop() {

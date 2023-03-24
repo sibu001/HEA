@@ -28,7 +28,7 @@ export class PlaceListComponent implements OnInit, OnDestroy {
     placeName: [''],
     zipCode: ['']
   });
-  public pageSize = Number('10');
+  public pageSize = Number(AppConstant.pageSize);
   public currentIndex : number = 0;
   public pageIndex : number = 0;
   public newFilterSearch : boolean = false;

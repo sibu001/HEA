@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
@@ -49,7 +49,8 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
       }));
   }
   loadProgramGroupById() {
-    this.subscriptions.add(this.systemService.getProgramGroupById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemService.getProgramGroupById()
+      .pipe(filter((item: any) =>item && item.id == this.id))
       .subscribe((programGroup: any) => {
         if (this.isForce) {
           this.router.navigate(['admin/program/programGroupEdit'], { queryParams: { 'id': programGroup.id } });
@@ -59,7 +60,7 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
   }
   setForm(event: any) {
     this.programGroupForm = this.formBuilder.group({
-      id: [event !== undefined ? event.id : ''],
+      id: [{value : event !== undefined ? event.id : '', disabled : true}],
       programCode: [event !== undefined ? event.programCode : '', Validators.required],
       programName: [event !== undefined ? event.programName : '', Validators.required],
       inCustomerEventTypeId: [event !== undefined ? event.inCustomerEventTypeId : ''],
@@ -134,4 +135,7 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 
+  get programGroupId(){
+    return this.programGroupForm.get('id').value;
+  }
 }

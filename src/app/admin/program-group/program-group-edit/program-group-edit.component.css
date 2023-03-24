@@ -27,3 +27,10 @@ p.messages {
 .mb-button {
   margin-bottom: 5px;
 }
+
+input[disabled]{
+  cursor: default;
+  border: none;
+  box-shadow: none;
+  background-color: #ffff
+}

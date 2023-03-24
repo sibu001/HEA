@@ -9,6 +9,15 @@
         </p>
         <form [formGroup]="programGroupForm" class="form-group
           form-padding">
+          <div class="row borderTop rowPadding" *ngIf="programGroupId">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Record Id
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="id" formControlName="id">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
           <div class="row borderTop borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Program code

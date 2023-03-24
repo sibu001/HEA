@@ -218,4 +218,13 @@ export class AppUtility {
         componentRef.disableNextButton = disableNextButton;
         componentRef.newFilterSearch = newFilterSearch;
     }
+
+
+    public static showLoader(){
+        document.getElementById('global-loader').classList.add('loading');
+    }
+
+    public static removeLoader(){
+        document.getElementById('global-loader').classList.remove('loading');
+    }
 }
