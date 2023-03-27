@@ -4,25 +4,23 @@
       <div class="col-sm-12 col-md-9 col-lg-9 admin-content">
         <p class="heading">Customer Event Types</p>
         <form [formGroup]="customerGroupForm" class="form-group">
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
+          <div class="row rowPadding borderBottom ">
+
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Event code</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <input type="text" formControlName="eventCode"
                 class="form-control" />
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Event name</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <input type="text" formControlName="eventName"
                 class="form-control" />
             </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
+
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12 show-button">
@@ -42,7 +40,7 @@
         <div class="row rowPadding">
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
-              [data]="dataSource"
+              [data]="dataSource" [pageSize]="pageSize"
               [totalElement]="customerEventTypeData.totalElements"
               (changePageEvent)="search($event,false)"
               (goToEditEvent)="goToEditEventEventType($event)"

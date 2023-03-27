@@ -44,6 +44,21 @@ export class SystemUtilityTransformer {
                 dataSourceObject.optOutMail = '';
             }
 
+            if (element.availableToCoaches) {
+                dataSourceObject.availableToCoaches = '*';
+                dataSourceObject.availableToCoachesValue = element.availableToCoaches;
+            } else {
+                dataSourceObject.availableToCoaches = '';
+            }
+
+            if (element.periodEvent) {
+                dataSourceObject.periodEvent = '*';
+                dataSourceObject.periodEventValue = element.periodEvent;
+            } else {
+                dataSourceObject.periodEvent = '';
+            }
+
+
 
             dataSourceList.push(dataSourceObject);
         });

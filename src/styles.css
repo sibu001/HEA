@@ -2595,6 +2595,10 @@ app-sidebar>div, app-user-sidebar>div  {
   padding-bottom: 20px;
 }
 
+app-customer-group-edit  .mat-column-place, app-customer-group-edit .mat-column-placeName{
+  flex : auto !important;
+}
+
 app-gas-usage-popup input[type="text"],
 app-gas-usage-popup input[type="date"],
 app-electricity-usage-popup input[type="text"],

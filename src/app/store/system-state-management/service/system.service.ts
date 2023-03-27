@@ -62,7 +62,6 @@ import {
   DeleteRelatedRecommendationAction,
   RemoveCustomerGroupList,
   SaveCustomerGoupToList,
-  LoadProgramGroupByCustomerGroup,
   LoadSelectedTopicGroupListAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
@@ -410,9 +409,9 @@ export class SystemService {
     return this.store.select(SystemManagementState.getrelatedLeaksById);
   }
 
-  loadCustomerProgramGroupList(customerGroupId : number){
-    return this.store.dispatch(new LoadProgramGroupByCustomerGroup(customerGroupId))
-  }
+  // loadCustomerProgramGroupList(customerGroupId : number){
+  //   return this.store.dispatch(new LoadProgramGroupByCustomerGroup(customerGroupId))
+  // }
 
   getCustomerProgramGroupList(){
     return this.store.select(SystemManagementState.getCustomerProgramGroupList);

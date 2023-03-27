@@ -141,10 +141,10 @@ export class GetProgramGroupListAction {
     }
 }
 
-export class LoadProgramGroupByCustomerGroup{
-    static readonly type: SystemActionTypes = SystemActionTypes.GET_PROGRAM_GROUP_BY_CUSTOMER_GROUP_ID
-    constructor(readonly customerGroupId: Number){}
-}
+// export class LoadProgramGroupByCustomerGroup{
+//     static readonly type: SystemActionTypes = SystemActionTypes.GET_PROGRAM_GROUP_BY_CUSTOMER_GROUP_ID
+//     constructor(readonly customerGroupId: Number){}
+// }
 
 export class GetProgramGroupByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_PROGRAM_GROUP_BY_ID;

@@ -62,10 +62,6 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     this.loadMailDescriptionList();
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
-      if (this.id) {
-        this.findPlaceListByCustomerGroupId();
-        this.findProgramGroupListByCustomerGroupId();
-      }
     });
   }
 
@@ -75,6 +71,8 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     if (this.id !== undefined) {
       this.systemService.loadCustomerGroupById(Number(this.id));
       this.loadCustomerGroupById();
+      this.findPlaceListByCustomerGroupId();
+      this.findProgramGroupListByCustomerGroupId();
     }
     if (!this.id) {
       this.findProgramGroup();

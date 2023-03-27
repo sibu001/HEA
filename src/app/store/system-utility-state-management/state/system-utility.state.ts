@@ -331,7 +331,8 @@ export class SystemUtilityManagementState {
 
     @Action(GetCustomerEventTypeListAction)
     getAllCustomerEventType(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerEventTypeListAction): Actions {
-        const force: boolean = SystemUtilityManagementState.getCustomerEventTypeList(ctx.getState()) === undefined;
+        const force = true;
+        // const force: boolean = SystemUtilityManagementState.getCustomerEventTypeList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');

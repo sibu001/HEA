@@ -3,27 +3,33 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9 admin-content">
         <p class="heading">Customer Groups</p>
-        <form [formGroup]="customerGroupForm" class="form-group">
-          <div class="row">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+        <form [formGroup]="customerGroupForm">
+          <div class="row form-group">
+            <div class="col-xs-12 col-sm-6 borderBottom rowPadding">
+            <div class="row">
+            <!-- <div class="col-sm-1 col-x-12"></div> -->
+            <div class="col-sm-4 col-xs-12">
               <span class="filterLabel">Group code</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-8 col-xs-12">
               <input type="text" formControlName="groupCode"
                 class="form-control" />
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+          </div>
+          </div>
+          <div class="col-xs-12 col-sm-6 borderBottom rowPadding">
+            <div class="row">
+            <!-- <div class="col-sm-1 col-x-12"></div> -->
+            <div class="col-sm-4 col-xs-12">
               <span class="filterLabel">Group name</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-8 col-xs-12">
               <input type="text" formControlName="groupName"
                 class="form-control" />
             </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
           </div>
+          </div>
+        </div>
           <div class="row">
             <div class="col-sm-12 show-button">
               <button type="submit" class="btn btn-primary"
@@ -46,6 +52,8 @@
               [data]="dataSource"
               [totalElement]="customerGroupData.totalElements"
               (changePageEvent)="search($event)"
+              [pageSize]="pageSize" [pageIndex]="pageIndex"
+              [disableLastButton]="true" [disableNextButton]="disableNextButton"
               (goToEditEvent)="goToEditEventGroup($event)"
               (addEvent)="addCustomerGroup()">
             </app-table>

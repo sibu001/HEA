@@ -7,6 +7,8 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -20,12 +22,19 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
   public force = false;
   public customerGroupData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER
   };
   customerGroupForm = this.fb.group({
     groupCode: [''],
     groupName: ['']
   });
+
+  public pageSize : number = Number(AppConstant.pageSize);
+  public pageIndex : number = 0;
+  public currentIndex : number = 0;
+  public disableNextButton : boolean = false;
+  public newFilterSearch : boolean = true;
+
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly systemService: SystemService,
@@ -38,7 +47,8 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.scrollTop();
-    this.findCustomerGroup(this.force, '');
+    this.search(undefined);
+    // this.findCustomerGroup(this.force, '');
   }
   scrollTop() {
     window.scroll(0, 0);
@@ -47,12 +57,32 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
     this.systemService.loadCustomerGroupList(force, filter);
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
-        this.customerGroupData.content = customerGroupList;
-        this.dataSource = [...this.customerGroupData.content];
+        this.performPagination(customerGroupList);
+
       }));
   }
 
+  performPagination(dataList: any){
+
+    const obj = AppUtility.paginateData(
+       { dataList : dataList ,
+        dataSource : this.dataSource,
+        pageSize :this.pageSize, 
+        pageIndex : this.pageIndex, 
+        currentIndex : this.currentIndex,
+        disableNextButton : this.disableNextButton,
+        newFilterSearch :this.newFilterSearch}, this);
+  }
+
   search(event: any): void {
+
+    if(event)
+      this.currentIndex = event.pageIndex;
+    else{
+      this.currentIndex = 0;
+      this.newFilterSearch = true;
+    }
+
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
         (event.pageIndex * event.pageSize) + '' : '0'))
@@ -60,7 +90,8 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('groupCode', (this.customerGroupForm.value.groupCode !== null ? this.customerGroupForm.value.groupCode : ''))
-      .set('groupName', (this.customerGroupForm.value.groupName !== null ? this.customerGroupForm.value.groupName : ''));
+      .set('groupName', (this.customerGroupForm.value.groupName !== null ? this.customerGroupForm.value.groupName : ''))
+      .set ('pageSize', this.pageSize.toString())
     this.findCustomerGroup(true, params);
   }
 

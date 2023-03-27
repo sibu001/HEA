@@ -7,6 +7,7 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -17,6 +18,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class CustomerEventListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_EVENT_TYPE_COLUMN_DATA;
   public dataSource: any;
+  public pageSize : number = Number(AppConstant.pageSize);
   force = false;
   public customerEventTypeData = {
     content: [],
@@ -38,22 +40,29 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.scrollTop();
-    this.search(undefined, false);
+    this.search(undefined, true);
+    this.GetCustomerEventTypeList();  
   }
   scrollTop() {
     window.scroll(0, 0);
   }
 
-  findCustomerEventType(force: boolean, filter: any): void {
+  findCustomerEventTypeCount(force: boolean, filter: any): void {
     this.subscriptions.add(this.systemUtilityService.loadCustomerEventTypeCount(filter).pipe(skipWhile((item: any) => !item))
       .subscribe((customerEventTypeCount: any) => {
         this.customerEventTypeData.totalElements = customerEventTypeCount.systemUtilityManagement.customerEventTypeCount;
-        this.systemUtilityService.loadCustomerEventTypeList(force, filter);
-        this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
-          .subscribe((credentialTypeList: any) => {
-            this.customerEventTypeData.content = credentialTypeList;
-            this.dataSource = [...this.customerEventTypeData.content];
-          }));
+      }));
+  }
+
+  loadCustomerEventTypeList(force: boolean, filter: any){
+    this.systemUtilityService.loadCustomerEventTypeList(force, filter);
+  }
+
+  GetCustomerEventTypeList(){
+    this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
+      .subscribe((credentialTypeList: any) => {
+        this.customerEventTypeData.content = credentialTypeList;
+        this.dataSource = [...this.customerEventTypeData.content];
       }));
   }
 
@@ -73,12 +82,15 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
       .set('useLikeSearch', 'true')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('eventCode', (this.customerGroupForm.value.eventCode !== null ? this.customerGroupForm.value.eventCode : ''))
       .set('eventName', (this.customerGroupForm.value.eventName !== null ? this.customerGroupForm.value.eventName : ''));
-    this.findCustomerEventType(true, params);
+   
+    if(isSearch) this.findCustomerEventTypeCount(true, params);
+
+    this.loadCustomerEventTypeList(true,params);
   }
 }

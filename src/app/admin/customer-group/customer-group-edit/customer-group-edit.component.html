@@ -64,7 +64,6 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="theme" formControlName="theme">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let themeObject of themeList" [value]="themeObject.itemValue">{{themeObject.itemLabel}}
                 </option>
               </select>
@@ -126,7 +125,6 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="scrapingUtility" formControlName="scrapingUtility">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let scrapingUtilityObject of
                   scrapingUtilityList" [value]="scrapingUtilityObject.lookupValue">{{scrapingUtilityObject.valueName}}
                 </option>
@@ -140,7 +138,6 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="scrapingPeriod" formControlName="scrapingPeriod">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let scrapingPeriodObject of scrapingPeriodList"
                   [value]="scrapingPeriodObject.lookupValue">{{scrapingPeriodObject.valueName}}</option>
               </select>
@@ -163,7 +160,6 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="mailDescriptionId" formControlName="mailDescriptionId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
                   mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
                   {{mailDescriptionObject.mailName}}</option>
@@ -178,7 +174,6 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="repeatedMailDescriptionId"
                 formControlName="repeatedMailDescriptionId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
                   mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
                   {{mailDescriptionObject.mailName}}</option>
@@ -193,7 +188,6 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="spamTestMailDescriptionId"
                 formControlName="spamTestMailDescriptionId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
                   mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
                   {{mailDescriptionObject.mailName}}</option>
@@ -208,7 +202,6 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="forgotPwdMailDescriptionId"
                 formControlName="forgotPwdMailDescriptionId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
                   mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
                   {{mailDescriptionObject.mailName}}</option>
@@ -223,7 +216,6 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="newRecommendationMailDescriptionId"
                 formControlName="newRecommendationMailDescriptionId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
                   mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
                   {{mailDescriptionObject.mailName}}</option>
@@ -238,7 +230,6 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="mailChangedMailDescriptionId"
                 formControlName="mailChangedMailDescriptionId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
                   mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
                   {{mailDescriptionObject.mailName}}</option>
@@ -253,7 +244,6 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="registrationErrorMailDescriptionId"
                 formControlName="registrationErrorMailDescriptionId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let mailDescriptionObject of
                   mailDescriptionList" [value]="mailDescriptionObject.mailDescriptionId">
                   {{mailDescriptionObject.mailName}}</option>
@@ -268,7 +258,6 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="customerRegistrationViewId"
                 formControlName="customerRegistrationViewId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let jsPageObject of jsPageList" [value]="jsPageObject.jsPageId">{{jsPageObject.name}}
                 </option>
               </select>
@@ -282,7 +271,6 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="customerRegistrationSuccessViewId"
                 formControlName="customerRegistrationSuccessViewId">
-                <option value="" selected="selected"></option>
                 <option *ngFor="let jsPageObject of jsPageList" [value]="jsPageObject.jsPageId">{{jsPageObject.name}}
                 </option>
               </select>
