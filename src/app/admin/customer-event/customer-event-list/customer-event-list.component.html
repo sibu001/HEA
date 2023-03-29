@@ -41,6 +41,7 @@
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
               [data]="dataSource" [pageSize]="pageSize"
+              [pageIndex]="currentPageIndex"
               [totalElement]="customerEventTypeData.totalElements"
               (changePageEvent)="search($event,false)"
               (goToEditEvent)="goToEditEventEventType($event)"

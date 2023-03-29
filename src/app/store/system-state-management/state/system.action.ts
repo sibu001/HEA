@@ -22,6 +22,7 @@ export enum SystemActionTypes {
     SAVE_PROGRAM_GROUP = 'Save Program Group',
     DELETE_PROGRAM_GROUP_BY_ID = 'Delete Program Group By Id',
     GET_CUSTOMER_ALERT_TYPE_LIST = 'Get All Customer AlertType List',
+    GET_CUSTOMER_ALERT_TYPE_LIST_COUNT = 'Get All Customer AlertType List Count',
     GET_CUSTOMER_ALERT_TYPE_BY_ID = 'Get Customer AlertType By Id',
     UPDATE_CUSTOMER_ALERT_TYPE = 'Update Customer AlertType',
     SAVE_CUSTOMER_ALERT_TYPE = 'Save Customer AlertType',
@@ -172,6 +173,12 @@ export class DeleteProgramGroupByIdAction {
 
 export class GetCustomerAlertTypeListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_ALERT_TYPE_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetCustomerAlertTypeListCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_ALERT_TYPE_LIST_COUNT;
     constructor(readonly force: boolean, readonly filter: any) {
     }
 }

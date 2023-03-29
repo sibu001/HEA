@@ -2157,7 +2157,8 @@ app-customer-view .mat-column-utilityInUse{
 }
 
 app-customer-view .mat-column-heatingInUse,
-.mat-column-srNo- {
+.mat-column-srNo- ,
+app-customer-event-list .mat-column-indexCode{
    word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 6% !important;
@@ -2419,7 +2420,8 @@ app-mail-description-edit .mat-column-groupCode{
 }
 
 app-mail-description-edit .mat-column-label,
-app-program-group-list .mat-column-programCode{
+app-program-group-list .mat-column-programCode,
+app-customer-event-list .mat-column-eventName{
   word-wrap: break-word !important;
  white-space: unset !important;
  flex: 0 0 28% !important;

@@ -67,7 +67,8 @@ import {
     DeleteRelatedLeakAction,
     SaveCustomerGoupToList,
     RemoveCustomerGroupList,
-    LoadSelectedTopicGroupListAction
+    LoadSelectedTopicGroupListAction,
+    GetCustomerAlertTypeListCountAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -82,6 +83,7 @@ import { SystemManagementModel } from './system.model';
         programGroupList: undefined,
         programGroup: undefined,
         customerAlertTypeList: undefined,
+        customerAlertTypeListCount : 0,
         customerAlertType: undefined,
         credentialTypeList: undefined,
         credentialType: undefined,
@@ -156,6 +158,11 @@ export class SystemManagementState {
     @Selector()
     static getCustomerAlertTypeList(state: SystemManagementModel): any {
         return state.customerAlertTypeList;
+    }
+
+    @Selector()
+    static getCustomerAlertTypeListCount(state: SystemManagementModel): any {
+        return state.customerAlertTypeListCount;
     }
 
     @Selector()
@@ -592,11 +599,9 @@ export class SystemManagementState {
 
     @Action(GetCustomerAlertTypeListAction)
     getAllCustomerAlertType(ctx: StateContext<SystemManagementModel>, action: GetCustomerAlertTypeListAction): Actions {
-        const force = ctx.getState().customerAlertTypeList;
-
-        // const force: boolean = action.force || SystemManagementState.getCustomerAlertTypeList(ctx.getState()) === undefined;
+        const force = true;
         let result: Actions;
-        if (force == undefined) {
+        if (force) {
             document.getElementById('loader').classList.add('loading');
             result = this.loginService.performGetWithParams(AppConstant.customerAlertTypes, action.filter)
                 .pipe(
@@ -604,6 +609,28 @@ export class SystemManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
                             customerAlertTypeList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.error.errorMessage);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetCustomerAlertTypeListCountAction)
+    getCustomerAlertTypeListCountAction(ctx: StateContext<SystemManagementModel>, action: GetCustomerAlertTypeListCountAction): Actions {
+        const force = true;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.customerAlertTypes + '/count', action.filter)
+                .pipe(
+                    tap((response: number) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            customerAlertTypeListCount: response,
                         });
                     },
                         error => {

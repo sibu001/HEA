@@ -5,7 +5,7 @@ export interface SystemUtilityManagementModel {
     customerEventType: any;
     customerEventTypeCount: any;
     customerComparisonGroupList: any;
-    customerComparisonGroupCount: any;
+    customerComparisonGroupCount: number;
     customerComparisonGroup: any;
     customerComparisonGroupDescription: any;
     customerComparisonGroupCustomer: any;

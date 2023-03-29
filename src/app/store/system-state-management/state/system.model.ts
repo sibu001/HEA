@@ -7,6 +7,7 @@ export interface SystemManagementModel {
     programGroupList: any;
     programGroup: any;
     customerAlertTypeList: any;
+    customerAlertTypeListCount : number;
     customerAlertType: any;
     credentialTypeList: any;
     credentialType: any;

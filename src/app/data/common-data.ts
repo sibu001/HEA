@@ -117,12 +117,14 @@ export class TableColumnData {
 
 
     static readonly CUSTOMER_EVENT_TYPE_COLUMN_DATA: Array<TABLECOLUMN> = [
+        { isEdit: true, displayName: '#', key: 'indexCode' },
         { isEdit: true, displayName: 'Event Code', key: 'eventCode', sort: 'eventCode', isUnderline: true },
         { isEdit: true, displayName: 'Event Name', key: 'eventName', sort: 'eventName' },
         { isEdit: true, displayName: 'Shared', key: 'shared', sort: 'shared' },
         { isEdit: true, displayName: 'Avaliable to coaches', key: 'availableToCoaches', sort: 'availableToCoaches' },
         { isEdit: true, displayName: 'Only One', key: 'onlyOne', sort: 'onlyOne' },
-        { isEdit: true, displayName: 'Period Event', key: 'periodEvent', sort: 'periodEvent' }
+        { isEdit: true, displayName: 'Period Event', key: 'periodEvent', sort: 'periodEvent' },
+  
     ];
 
     static readonly CUSTOMER_COMPARISON_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [

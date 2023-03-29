@@ -62,7 +62,8 @@ import {
   DeleteRelatedRecommendationAction,
   RemoveCustomerGroupList,
   SaveCustomerGoupToList,
-  LoadSelectedTopicGroupListAction
+  LoadSelectedTopicGroupListAction,
+  GetCustomerAlertTypeListCountAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -263,6 +264,15 @@ export class SystemService {
 
   loadGetCustomerAlertTypeList(force: boolean, filter: any): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCustomerAlertTypeListAction(force, filter));
+  }
+
+
+  loadGetCustomerAlertTypeListCount(force: boolean, filter: any): Observable<SystemManagementState> {
+    return this.store.dispatch(new GetCustomerAlertTypeListCountAction(force, filter));
+  }
+
+  getGetCustomerAlertTypeListCount() : Observable<any>{
+    return this.store.select(SystemManagementState.getCustomerAlertTypeListCount);
   }
 
   loadCustomerAlertTypeById(id: number): Observable<SystemManagementState> {

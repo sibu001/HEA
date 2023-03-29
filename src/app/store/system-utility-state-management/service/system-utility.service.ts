@@ -184,6 +184,10 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetCustomerEventTypeCountAction(filter));
   }
 
+  getCustomerEventTypeCount(){
+    return this.store.select(SystemUtilityManagementState.getCustomerEventTypeCount);
+  }
+
   loadCustomerEventTypeById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetCustomerEventTypeByIdAction(id));
   }
@@ -210,6 +214,10 @@ export class SystemUtilityService {
 
   loadCustomerComparisonGroupById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetCustomerComparisonGroupByIdAction(id));
+  }
+
+  getCustomerComparisonGroupCount() : Observable<number> {
+    return this.store.select(SystemUtilityManagementState.getCustomerComparisonGroupCount)
   }
 
   saveCustomerComparisonGroup(customerComparisonGroup: any): Observable<SystemUtilityManagementState> {

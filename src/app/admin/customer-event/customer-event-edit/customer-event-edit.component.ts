@@ -15,6 +15,7 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
   id: any;
   eventForm: FormGroup;
   isForce = false;
+  customerEventListPageIndex : number = 0;
   errorMessage: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
@@ -24,6 +25,9 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      if(params['listIndex']){
+        this.customerEventListPageIndex = params['listIndex'];
+      }
     });
   }
 
@@ -60,12 +64,14 @@ export class CustomerEventEditComponent implements OnInit, OnDestroy {
       eventName: [event !== undefined ? event.eventName : '', Validators.required],
       description: [event !== undefined ? event.description : ''],
       shared: [event !== undefined ? event.shared : false],
+      availableToCoaches: [event !== undefined ? event.availableToCoaches : false],
+      periodEvent: [event !== undefined ? event.periodEvent : false],
       onlyOne: [event !== undefined ? event.onlyOne : false],
     });
   }
 
   back() {
-    this.router.navigate(['admin/customerEvent/customerEventTypeList'], { queryParams: { 'force': this.isForce } });
+    this.router.navigate(['admin/customerEvent/customerEventTypeList'], { queryParams: { 'force': this.isForce, 'listIndex' : this.customerEventListPageIndex } });
   }
   delete() {
     if (confirm('Are you sure you want to delete?')) {

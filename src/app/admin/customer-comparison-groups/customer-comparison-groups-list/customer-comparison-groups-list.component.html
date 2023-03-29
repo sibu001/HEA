@@ -6,12 +6,10 @@
         <form [formGroup]="customerComparisonGroupForm" class="form-group
           form-padding">
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Comparison code</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <select id="comparisonCode" formControlName="comparisonCode"
                 class="form-control">
                 <option value="" selected="selected"></option>
@@ -23,20 +21,16 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Group Name</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <input type="text" formControlName="groupName"
                 class="form-control" />
             </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
           </div>
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Weather Station</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <select id="weatherStationId" class='form-control form-control-sm'
                 formControlName="weatherStationId">
                 <option value="" selected="selected"></option>
@@ -49,14 +43,12 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Home Size</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <select id="homeSize" formControlName="homeSize"
                 class="form-control form-control-sm">
                 <option value="" selected="selected"></option>
                 <option *ngFor="let size of houseSizeData" [value]="size.lookupValue">{{size.valueName}}</option>
               </select>
-            </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
           </div>
           <div class="row rowPadding">
@@ -77,9 +69,9 @@
         <div class="row">
           <div class="col-sm-12">
             <app-table [isHideAdd]="true" [keys]="keys" [isPaginate]="true"
-              [isSearch]="false" [data]="dataSource" [pageIndex]="pageIndex"
+              [isSearch]="false" [data]="dataSource"  
               [totalElement]="customerComparisonGroupData.totalElements"
-              (changePageEvent)="search($event,false)"
+              (changePageEvent)="search($event,false)" [pageSize]="pageSize"
               (goToEditEvent)="gotoEditCustomerComparisonGroup($event)"
               class="customer-comparison-table">
             </app-table>

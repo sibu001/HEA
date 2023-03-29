@@ -135,6 +135,17 @@ export class SystemUtilityManagementState {
     }
 
     @Selector()
+    static getCustomerEventTypeCount(state: SystemUtilityManagementModel): any {
+        return state.customerEventTypeCount;
+    }
+
+
+    @Selector()
+    static getCustomerComparisonGroupCount(state: SystemUtilityManagementModel): any {
+        return state.customerComparisonGroupCount;
+    }
+
+    @Selector()
     static getCustomerEventTypeById(state: SystemUtilityManagementModel): any {
         return state.customerEventType;
     }
