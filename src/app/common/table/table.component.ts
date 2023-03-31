@@ -64,7 +64,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() isSearch = false;
   @Input() isDelete = false;
   @Input() isPaginate = false;
-  @Input() modifyIndexColumn = false;
   @Input() isHideAdd = false;
   @Input() showDeleteButton = false;
   // @Input() showCSVExportButton = false;

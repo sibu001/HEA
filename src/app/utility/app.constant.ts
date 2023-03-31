@@ -118,7 +118,7 @@ export class AppConstant {
     public static fixUsageHistoryData = 'fixUsageHistoryData';
     public static meters = 'meters';
     public static pageSize = '25';
-    public static debounceTime = 350;
+    public static debounceTime = 500;
     public static dataBlock = 'dataBlocks';
     public static dataField = 'dataFields';
     public static fieldValues = 'fieldValues'
@@ -158,5 +158,8 @@ export class AppConstant {
     public static readonly DATE_SELECTION_FORMAT = '(MM/dd/yyyy)';
 
     public static readonly ASTRIC = 'astric';
+    public static readonly SHOW_NO_LOADER = 'show-no-loader';
+    public static readonly ASC = 'asc';
+    public static readonly DESC = 'desc';
 
 }

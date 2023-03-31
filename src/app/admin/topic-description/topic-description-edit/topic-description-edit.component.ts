@@ -13,7 +13,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
-import { debounceTime, distinctUntilChanged, skipWhile, map, skip, filter } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, skipWhile, map, skip, filter, switchMap } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { templateJitUrl } from '@angular/compiler';
 import { LoginService } from 'src/app/services/login.service';
@@ -22,6 +22,7 @@ import { HttpParams } from '@angular/common/http';
 import { MatDialog } from '@angular/material';
 import { TopicDescriptionEditCopyComponent } from '../topic-description-edit-copy/topic-description-edit-copy.component';
 import { UtilityService } from 'src/app/services/utility.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 
 @Component({
@@ -105,6 +106,8 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     pageIndex : 0
   }
   public topicDescriptionData : any;
+  private suggestionTopicVariableSubjest$ : Subject<any> = new Subject();
+  private suggestionTopicPaneSubjest$ : Subject<any> = new Subject();
 
   constructor(
     private dialog : MatDialog,
@@ -144,7 +147,9 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     this.topicVariablesKeys = TableColumnData.TOPIC_VARIABLES_KEYS;
     this.keys = TableColumnData.CUSTOMER_GROUP_KEY.slice(1);  // for removing optional key from the list
 
-    
+    this.subscriptionSuggestionListForFilterForTopicPane();
+    this.subscriptionSuggestionListForFilterForTopicVariable();
+
       if(this.id){
         this.getTopicDescription();
         this.getTopicPanesById();
@@ -422,12 +427,17 @@ private transformRecommendationData(src){
 }
 
 getSuggestionListForFilterForTopicPane(event){
+  this.suggestionTopicPaneSubjest$.next(event);
+}
+
+subscriptionSuggestionListForFilterForTopicPane(){
+  const params : HttpParams = AppUtility.addNoLoaderParam(new HttpParams());
+
   this.subscriptions.add(
-    this.loginService.performGet(AppConstant.findDataFieldVariables + '?field=' + event.search)
-    .pipe(
-      distinctUntilChanged(),
-      debounceTime(AppConstant.debounceTime)
-    ).subscribe(
+    this.suggestionTopicPaneSubjest$
+    .pipe(debounceTime(AppConstant.debounceTime))
+    .switchMap(event => this.loginService.performGetWithParams(AppConstant.findDataFieldVariables + '?field=' + event.search,params))
+    .subscribe(
       (response) =>{
         let formatedList = [];
         if(response){
@@ -447,12 +457,18 @@ getSuggestionListForFilterForTopicPane(event){
 } 
 
 getSuggestionListForFilterForTopicVariable(event){
+  this.suggestionTopicVariableSubjest$.next(event);
+}
+
+subscriptionSuggestionListForFilterForTopicVariable(){
+  
+  const params : HttpParams = AppUtility.addNoLoaderParam(new HttpParams());
+
     this.subscriptions.add(
-      this.loginService.performGet(AppConstant.findTopicDescriptionVariables + '?field=' + event.search)
-      .pipe(
-        distinctUntilChanged(),
-        debounceTime(AppConstant.debounceTime)
-      ).subscribe(
+      this.suggestionTopicVariableSubjest$
+      .pipe(debounceTime(AppConstant.debounceTime))
+      .switchMap(event => this.loginService.performGetWithParams(AppConstant.findTopicDescriptionVariables + '?field=' + event.search,params))
+      .subscribe(
         (response) =>{
           let formatedList = [];
           if(response){

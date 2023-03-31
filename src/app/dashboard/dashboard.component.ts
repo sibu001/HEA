@@ -1,6 +1,6 @@
 import { AppUtility } from 'src/app/utility/app.utility';
 import { CustomerService } from './../store/customer-state-management/service/customer.service';
-import { AfterViewInit, Component, HostListener, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
@@ -13,12 +13,13 @@ import { HttpParams } from '@angular/common/http';
 import { Subject, Subscription } from 'rxjs';
 import { AppConstant } from '../utility/app.constant';
 import { UsageHistoryFilter } from '../models/filter-object';
+import { SubscriptionUtil } from '../utility/subscription-utility';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   helpHide : any;
   hides = true;
   count = 0;
@@ -67,6 +68,11 @@ export class DashboardComponent implements OnInit {
       this.router.navigate(['/surveyView']);
 
     this.findCustomer();
+  }
+
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 
   ngOnInit() {
@@ -587,10 +593,9 @@ export class DashboardComponent implements OnInit {
       filters = filters.set('customerName',value);
       this.customer.auditId = '';
     }
-    filters = filters.set('useLike','true');
 
-    // if(value.length < 5)
-    //   return;
+    filters = AppUtility.addNoLoaderParam(filters);
+    filters = filters.set('useLike','true');
 
     this.subject$.next(filters);
 
@@ -599,13 +604,12 @@ export class DashboardComponent implements OnInit {
   findCustomer(){
     this.subscriptions.add(this.subject$
       .pipe(
-       debounceTime(600)  
+       debounceTime(AppConstant.debounceTime)  
       , distinctUntilChanged())
-      .subscribe(
-    (filters : any) =>{
-      this.loginService.performGetWithParams('findCustomers.do',filters)
+      .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
       .subscribe(
         (response) =>{
+          if(!response) return null;
           this.dataListForSuggestions = response.slice(0,100);
           if(this.dataListForSuggestions.length == 1){
             this.selectedSuggestion(this.dataListForSuggestions[0]);
@@ -615,10 +619,7 @@ export class DashboardComponent implements OnInit {
         }, error =>{
            console.log(error);
         }
-      )
-    }
-    )
-  );
+      ))
 }
 
 selectedSuggestion(event : any){

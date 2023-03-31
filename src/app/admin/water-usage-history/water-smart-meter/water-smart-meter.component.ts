@@ -13,6 +13,7 @@ import { UsageHistoryService } from 'src/app/store/usage-history-state-managemen
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, skipWhile } from 'rxjs/operators';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-water-smart-meter',
@@ -106,6 +107,8 @@ export class WaterSmartMeterComponent implements OnInit {
       }else{
         filters = filters.delete('auditId');
       }
+
+      filters = AppUtility.addNoLoaderParam(filters);
       this.subject$.next(filters);
     }
   
@@ -121,21 +124,15 @@ export class WaterSmartMeterComponent implements OnInit {
         .pipe(
          debounceTime(AppConstant.debounceTime)  
         , distinctUntilChanged())
-        .subscribe(
-      (filters : any) =>{
-        this.loginService.performGetWithParams('findCustomers.do',filters)
-        .pipe(skipWhile((item: any) => !item))
+        .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
         .subscribe(
           (response) =>{
             this.dataListForSuggestions = response;
           }, error =>{
              console.log(error);
           }
-        )
-      }
-      )
-    );
-  }
+        ));
+    }
 
   findSelectedCustomer(force,filter){
     document.getElementById('loader').classList.add('loading');

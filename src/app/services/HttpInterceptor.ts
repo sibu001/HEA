@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse, HttpResponseBase } from '@angular/common/http';
+import { HttpEvent, HttpInterceptor, HttpHandler, HttpRequest, HttpResponse, HttpErrorResponse, HttpResponseBase, HttpParams } from '@angular/common/http';
 import { LoginService } from '../services/login.service';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/filter';
@@ -40,11 +40,23 @@ export class AuthorizationInterceptor implements HttpInterceptor {
         }
     }
 
-    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        this.totalApiCalls++;
-        AppUtility.showLoader();
+    
+    public checkShowLoaderParam( req : HttpRequest<any>) : HttpRequest<any> {
+        if(!req.params.get(AppConstant.SHOW_NO_LOADER)){
+            this.totalApiCalls++;
+            AppUtility.showLoader();
+        }else{
+            const params : HttpParams = req.params.delete(AppConstant.SHOW_NO_LOADER);
+            return req.clone({params : params});
+        }
+        return null;
+    }
 
-        return next.handle(this.addToken(req, this.loginService.getUser().token)).pipe(
+    intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    
+        let modifiedRequest : HttpRequest<any> = this.checkShowLoaderParam(req);
+
+        return next.handle(this.addToken((modifiedRequest ? modifiedRequest : req), this.loginService.getUser().token)).pipe(
             filter((data: any) => data),
             tap((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {

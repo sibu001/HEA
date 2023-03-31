@@ -128,7 +128,6 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_COMPARISON_GROUP_COLUMN_DATA: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', isEdit: true, displayName: '#' },
         { isEdit: true, displayName: 'Comparison Code', key: 'comparisonCode', sort: 'comparisonCode' },
         { isEdit: true, displayName: 'Group Name', key: 'groupName', sort: 'groupName', isUnderline: true },
         { isEdit: true, displayName: 'Order', key: 'orderNumber', sort: 'orderNumber' },

@@ -10,6 +10,7 @@ import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { ElectricityUsagePopupComponent } from '../electricity-usage-popup/electricity-usage-popup.component';
 declare var $: any;
@@ -111,6 +112,8 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
     }else{
       filters = filters.delete('auditId');
     }
+
+    filters = AppUtility.addNoLoaderParam(filters);
     this.subject$.next(filters);
  }
 
@@ -119,21 +122,15 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
       .pipe(
        debounceTime(AppConstant.debounceTime)  
       , distinctUntilChanged())
-      .subscribe(
-    (filters : any) =>{
-      this.loginService.performGetWithParams('findCustomers.do',filters)
-      .pipe(skipWhile((item: any) => !item))
+      .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
       .subscribe(
         (response) =>{
           this.dataListForSuggestions = response;
         }, error =>{
            console.log(error);
         }
-      )
-    }
-    )
-  );
-}
+      ));
+  }
 
   findSelectedCustomer(force,filter){
     document.getElementById('loader').classList.add('loading');

@@ -15,6 +15,7 @@ import { UsageHistoryService } from 'src/app/store/usage-history-state-managemen
 import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { GasUsagePopupComponent } from '../gas-usage-popup/gas-usage-popup.component';
+import { AppUtility } from 'src/app/utility/app.utility';
 declare var $: any;
 
 @Component({
@@ -117,6 +118,8 @@ export class GasListComponent implements OnInit ,OnDestroy{
     }else{
       filters = filters.delete('auditId');
     }
+    
+    filters = AppUtility.addNoLoaderParam(filters);
     this.subject$.next(filters);
   }
 
@@ -126,21 +129,16 @@ export class GasListComponent implements OnInit ,OnDestroy{
         .pipe(
          debounceTime(AppConstant.debounceTime)  
         , distinctUntilChanged())
-        .subscribe(
-      (filters : any) =>{
-        this.loginService.performGetWithParams('findCustomers.do',filters)
-        .pipe(skipWhile((item: any) => !item))
+        .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
         .subscribe(
           (response) =>{
             this.dataListForSuggestions = response;
           }, error =>{
              console.log(error);
           }
-        )
-      }
-      )
-    );
-  }
+        ))
+    }
+  
 
 
   findSelectedCustomer(force,filter){

@@ -51,7 +51,7 @@
                     <div class="serail-number-style" > #</div>    
                 </mat-header-cell>
                 <mat-cell *matCellDef="let row; let colIndex = dataIndex" style="display: grid;">
-                    <div *ngIf="!modifyIndexColumn">
+                    <div *ngIf="paginator">
                         {{ paginator.pageIndex * paginator.pageSize + (colIndex + 1) }}
                     </div>
                 </mat-cell>

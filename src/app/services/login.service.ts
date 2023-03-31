@@ -4,6 +4,7 @@ import { AppUtility } from 'src/app/utility/app.utility';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
+import { Observable } from 'rxjs';
 @Injectable()
 export class LoginService {
     private users: Users;
@@ -173,6 +174,9 @@ export class LoginService {
         }
     }
 
+    customerSuggestionListRequest(filters : HttpParams) : Observable<any>{
+        return this.performGetWithParams('findCustomers.do',filters);
+    }
 
     getFormattedUrl(endpoint: any): any {
         return environment.webBaseUrl + endpoint;
@@ -230,7 +234,7 @@ export class LoginService {
         const url = this.getFormattedUrl(endPoint);
         return this.http.get(url, this.getOptions());
     }
-    performGetWithParams(endPoint: any, params?: HttpParams): any {
+    performGetWithParams(endPoint: any, params?: HttpParams): Observable<any> {
         const url = this.getFormattedUrl(endPoint);
         return this.http.get(url, this.getHttpParamsOptions(params));
     }

@@ -1,5 +1,8 @@
+import { HttpParams } from "@angular/common/http";
+import { ElementRef } from "@angular/core";
 import { PaginateModel } from "../interface/paginate-model";
 import { AllowedMenuList } from "./app.allowedMenuList";
+import { AppConstant } from "./app.constant";
 
 export class AppUtility {
 
@@ -226,5 +229,14 @@ export class AppUtility {
 
     public static removeLoader(){
         document.getElementById('global-loader').classList.remove('loading');
+    }
+
+    public static scrollToTableTop(tableScrollPoint : ElementRef): void{
+        tableScrollPoint.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'});
+    }
+
+    // method to restrict loader to show on screen.
+    public static addNoLoaderParam(params : HttpParams) : HttpParams{
+        return params.set(AppConstant.SHOW_NO_LOADER,true.toString());
     }
 }

@@ -10,6 +10,7 @@ import { AdministrativeService } from 'src/app/store/administrative-state-manage
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 
@@ -224,6 +225,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     }
     
     filters = filters.set('useLike','true');
+    filters = AppUtility.addNoLoaderParam(filters);
     this.subject$.next(filters);
   }
 
@@ -232,9 +234,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       .pipe(
        debounceTime(600)  
       , distinctUntilChanged())
-      .subscribe(
-    (filters : any) =>{
-      this.loginService.performGetWithParams('findCustomers.do',filters)
+      .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
       .subscribe(
         (response) =>{
           this.dataListForSuggestions = response.slice(0,100);
@@ -246,11 +246,8 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
         }, error =>{
            console.log(error);
         }
-      )
-    }
-    )
-  );
-}
+      ));
+  }
 
 selectedSuggestion(event : any){
     this.eventForm.patchValue({ auditId : event.auditId , customerName : event.user.name});

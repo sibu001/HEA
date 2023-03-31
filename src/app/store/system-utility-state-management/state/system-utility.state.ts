@@ -480,7 +480,7 @@ export class SystemUtilityManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        customerComparisonGroupCount: response,
+                        customerComparisonGroupCount: Number(response),
                     });
                 },
                     error => {

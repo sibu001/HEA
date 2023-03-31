@@ -11,6 +11,7 @@ import { UtilityService } from 'src/app/services/utility.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -201,7 +202,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
   findCustomerByAuditIdOrCustomerName(calledBy){
     let filters =  this.filterForCustomer();
     
-    if(filters.get('auditId').length < 5 && filters.get('customerName').length < 5)
+    if(filters.get('auditId').length < 4 && filters.get('customerName').length < 4)
       return null;
     
     if(calledBy == 'auditId'){
@@ -209,6 +210,8 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
     }else{
       filters = filters.delete('auditId');
     }
+
+    filters = AppUtility.addNoLoaderParam(filters);
     this.subject$.next(filters);
   }
 
@@ -217,10 +220,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
         .pipe(
          debounceTime(AppConstant.debounceTime)  
         , distinctUntilChanged())
-        .subscribe(
-      (filters : any) =>{
-        this.loginService.performGetWithParams('findCustomers.do',filters)
-        .pipe(filter((item: any) => item))
+        .switchMap(filters => this.loginService.customerSuggestionListRequest(filters))
         .subscribe(
           (response) =>{
             this.dataListForSuggestions = response;
@@ -230,10 +230,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
           }, error =>{
              console.log(error);
           }
-        )
-      }
-      )
-    );
+        ));
   }
 
   selectedSuggestion(event : any){

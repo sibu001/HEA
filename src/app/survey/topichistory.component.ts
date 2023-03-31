@@ -7,6 +7,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { AppUtility } from '../utility/app.utility';
+import { AppConstant } from '../utility/app.constant';
 
 @Component({
   selector: 'topic-history',
@@ -118,7 +119,8 @@ export class TopicHistoryComponent implements OnInit {
         this.customer.auditId = '';
       }
       filters = filters.set('useLike','true');
-  
+
+      filters = AppUtility.addNoLoaderParam(filters)
       this.subject$.next(filters);
   
     }
@@ -126,11 +128,9 @@ export class TopicHistoryComponent implements OnInit {
     findCustomer(){
       this.subscriptions.add(this.subject$
         .pipe(
-         debounceTime(600)  
+         debounceTime(AppConstant.debounceTime)  
         , distinctUntilChanged())
-        .subscribe(
-      (filters : any) =>{
-        this.loginService.performGetWithParams('findCustomers.do',filters)
+        .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
         .subscribe(
           (response) =>{
             if(response)
@@ -139,14 +139,10 @@ export class TopicHistoryComponent implements OnInit {
               this.selectedSuggestion(this.dataListForSuggestions[0]);
               this.dataListForSuggestions = [];
             }
-
           }, error =>{
              console.log(error);
           }
-        )
-      }
-      )
-    );
+        ));
   }
   
   selectedSuggestion(event : any){

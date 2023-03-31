@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
@@ -10,6 +10,7 @@ import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -21,11 +22,11 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
 
   public keys: Array<TABLECOLUMN> = TableColumnData.CUSTOMER_COMPARISON_GROUP_COLUMN_DATA;
   public dataSource: any;
-  public pageIndex: any;
   public weatherStationIds: Array<any>;
   public houseSizeData: Array<any>;
   public comparisonCodeDropdownData: Array<any>;
-  public pageSize : number = Number(AppConstant.pageSize);
+  public pageSize : number = Number('30');
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   public customerComparisonGroupData = {
     content: [],
     totalElements: 0,
@@ -110,7 +111,7 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
     this.subscriptions.add(
       this.systemUtilityService.getCustomerComparisonGroupCount()
       .subscribe(
-        data =>{
+        (data) =>{
           this.customerComparisonGroupData.totalElements = data;
         }));
   }
@@ -124,12 +125,9 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
     this.subscriptions.add(this.systemUtilityService.getCustomerComparisonGroupList()
     .pipe(skipWhile((item: any) => !item))
     .subscribe((customerComparisonGroupList: any) => {
+      AppUtility.scrollToTableTop(this.tableScrollPoint);
       this.customerComparisonGroupData.content = customerComparisonGroupList;
       this.dataSource = [...this.customerComparisonGroupData.content];
-
-      if(this.dataSource.length == 0) {
-        this.customerComparisonGroupData.totalElements = 0;
-      }
     }));
   }
 
@@ -149,16 +147,13 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('useLikeSearch', 'true')
-      .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase() : ''))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction == AppConstant.ASC ? 'true' : 'false') : ''))
       .set('comparisonCode', (this.customerComparisonGroupForm.value.comparisonCode !== null ? this.customerComparisonGroupForm.value.comparisonCode : ''))
       .set('groupName', (this.customerComparisonGroupForm.value.groupName !== null ? this.customerComparisonGroupForm.value.groupName : ''))
       .set('weatherStationId', (this.customerComparisonGroupForm.value.weatherStationId !== null ? this.customerComparisonGroupForm.value.weatherStationId : ''))
       .set('homeSize', (this.customerComparisonGroupForm.value.homeSize !== null ? this.customerComparisonGroupForm.value.homeSize : ''));
-    // this.findCustomerComparisonGroup(true, params);
 
-    if(isSearch){
-      this.loadCustomerComparisionGroupCount(params);
-    }
+    this.loadCustomerComparisionGroupCount(params);
     this.loadComparisonGroupData(true,params);
   }
 

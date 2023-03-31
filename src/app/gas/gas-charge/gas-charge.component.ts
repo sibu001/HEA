@@ -11,6 +11,7 @@ import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { GasUsagePopupComponent } from '../gas-usage-popup/gas-usage-popup.component';
 @Component({
@@ -239,25 +240,19 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
     this.subscriptions.add(this.subject$
       .pipe(
        debounceTime(AppConstant.debounceTime)  
-      , distinctUntilChanged())
-      .subscribe(
-    (filters : any) =>{
-      this.loginService.performGetWithParams('findCustomers.do',filters)
-      .pipe(skipWhile((item: any) => !item))
-      .subscribe(
+      ,distinctUntilChanged())
+    .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
+    .subscribe(
         (response) =>{
           this.dataListForSuggestions = response;
         }, error =>{
            console.log(error);
         }
-      )
-    }
-    )
-  );
+    ));
 }
 
   findCustomerByAuditIdOrCustomerName(calledBy){
-    let filters =  this.filterForCustomer();
+    let filters : HttpParams =  this.filterForCustomer();
     
     if(filters.get('auditId').length < 5 && filters.get('customerName').length < 5)
       return null;
@@ -267,6 +262,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
     }else{
       filters = filters.delete('auditId');
     }
+    filters = AppUtility.addNoLoaderParam(filters);
     this.subject$.next(filters);
   }
 
