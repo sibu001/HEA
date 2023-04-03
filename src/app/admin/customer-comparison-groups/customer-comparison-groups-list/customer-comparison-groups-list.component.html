@@ -70,7 +70,7 @@
           <div class="col-sm-12">
             <app-table [isHideAdd]="true" [keys]="keys" [isPaginate]="true"
               [addSerialNumber]="true" [isSearch]="false" [data]="dataSource" 
-              [totalElement]="customerComparisonGroupData.totalElements"
+              [totalElement]="customerComparisonGroupData.totalElements" [pageIndex]="pageIndex"
               (changePageEvent)="search($event,false)" [pageSize]="pageSize"
               (goToEditEvent)="gotoEditCustomerComparisonGroup($event)"
               class="customer-comparison-table">

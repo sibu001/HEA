@@ -55,6 +55,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private loginService: LoginService,
     private readonly customerService: CustomerService,
   ) {
+    AppUtility.removeLoader();
     this.users = this.loginService.getUser();
     this.customer = JSON.parse(JSON.stringify(this.users.outhMeResponse));
 

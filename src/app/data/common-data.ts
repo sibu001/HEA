@@ -578,6 +578,13 @@ export class TableColumnData {
         { id: 0, value: 'Active (0)' },
         { id: 90, value: 'Blocked (90)' },
     ];
+    static readonly NOT_ONLY_ELECTRICITY_TO_HEAT_DATA: Array<any> = [
+        { key: '' , value: null},
+        { key: 'Y', value: 'Answer: Yes' },
+        { key: 'N', value: 'Answer: No' },
+        { key: 'U', value: 'Not answered'},
+    ];
+
     static readonly YES_NO_DATA: Array<any> = [
         { key: 'Y', value: 'Yes' },
         { key: 'N', value: 'No' }

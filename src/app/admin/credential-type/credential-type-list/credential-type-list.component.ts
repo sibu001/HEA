@@ -3,10 +3,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -18,9 +20,16 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.CREDENTIAL_TYPE_COLUMN_DATA;
   public dataSource: any;
   public force = false;
+
+  public pageSize : number = Number(AppConstant.pageSize);
+  public pageIndex : number = 0;
+  public currentIndex : number = 0;
+  public disableNextButton : boolean = false;
+  public newFilterSearch : boolean = true;
+
   public credentialTypeData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
   credentialTypeForm = this.fb.group({
     credentialType: [''],
@@ -37,8 +46,10 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getCredentialTypes();
+    this.search(undefined);
     this.scrollTop();
-    this.findCredentialType(this.force, '');
+
   }
 
   scrollTop() {
@@ -47,11 +58,25 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
 
   findCredentialType(force: boolean, filter: any): void {
     this.systemService.loadCredentialTypeList(force, filter);
-    this.subscriptions.add(this.systemService.getCredentialTypeList().pipe(skipWhile((item: any) => !item))
+  }
+  
+  getCredentialTypes(){
+    this.subscriptions.add(this.systemService.getCredentialTypeList().pipe(filter((item: any) => item))
       .subscribe((credentialTypeList: any) => {
-        this.credentialTypeData.content = credentialTypeList;
-        this.dataSource = [...this.credentialTypeData.content];
+        this.performPagination(credentialTypeList);
       }));
+  }
+
+  performPagination(dataList: any){
+
+    const obj = AppUtility.paginateData(
+       { dataList : dataList ,
+        dataSource : this.dataSource,
+        pageSize :this.pageSize, 
+        pageIndex : this.pageIndex, 
+        currentIndex : this.currentIndex,
+        disableNextButton : this.disableNextButton,
+        newFilterSearch :this.newFilterSearch}, this);
   }
 
   gotoEditCredentialType(event: any): void {
@@ -59,9 +84,18 @@ export class CredentialTypeListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any): void {
+
+    if(event)
+      this.currentIndex = event.pageIndex;
+    else{
+      this.currentIndex = 0;
+      this.newFilterSearch = true;
+    }
+
     const params = new HttpParams()
-      .set('startRow', '0')
-      .set('useLikeSearch', 'true')
+    .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
+    .set('startRow', (event && event.pageIndex !== undefined && event.pageSize  ?
+      (event.pageIndex * event.pageSize) + '' : '0'))      .set('useLikeSearch', 'true')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('credentialType', (this.credentialTypeForm.value.credentialType !== null ? this.credentialTypeForm.value.credentialType : ''))

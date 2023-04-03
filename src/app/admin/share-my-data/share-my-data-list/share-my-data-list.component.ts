@@ -8,6 +8,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { LoginService } from 'src/app/services/login.service';
 import { UsageHistoryService } from 'src/app/store/usage-history-state-management/service/usage-history.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -93,7 +94,7 @@ export class ShareMyDataListComponent implements OnInit, OnDestroy {
   }
 
   buttonUpdateEvent(event){
-    const httpsParams = this.shareMyDataProcesConsumerFilter(event.row);
+    const httpsParams = AppUtility.addNoLoaderParam(this.shareMyDataProcesConsumerFilter(event.row));
     this.shareMyDataProcessCustomer(httpsParams);
   }
 

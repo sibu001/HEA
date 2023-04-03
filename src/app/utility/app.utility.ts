@@ -209,6 +209,7 @@ export class AppUtility {
             disableNextButton = true;
             if(dataList.length > 0){
               dataSource = [...dataList];
+              pageIndex = currentIndex;
             } else {
             if(newFilterSearch)
                 dataSource = [...dataList];

@@ -21,6 +21,15 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
   public weatherStationIds: Array<any>;
   public comparisonCodeDropdownData: Array<any>;
   public yesNoData: Array<any> = TableColumnData.YES_NO_DATA;
+  public notOnlyElectricityToHeatVariant : Array<any> = [
+    { key : '' , value : ''},
+    { key : 'Y' , value : 'Answer: Yes'},
+    { key : 'N' , value : 'Answer: No'},
+    { key : 'U' , value : 'Not answered'},
+    { key : 'Y_N' , value : 'Group by answered'},
+    { key : 'Y_N_U' , value : 'Group by all variants'},
+
+  ];
   public errorMessage: any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
@@ -84,6 +93,7 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
       water: [event !== undefined ? event.water : ''],
       hasElecHeating: [event !== undefined ? event.hasElecHeating : ''],
       hasEV: [event !== undefined ? event.hasEV : ''],
+      notOnlyElectricityToHeatVariant: [''],
       hasLotSize: [event !== undefined ? event.hasLotSize : ''],
     });
   }
@@ -126,7 +136,8 @@ export class CustomerComparisonGroupsBatchAddComponent implements OnInit, OnDest
       .set('water', this.customerComparisonGroupForm.value.water)
       .set('hasElecHeating', this.customerComparisonGroupForm.value.hasElecHeating)
       .set('hasEV', this.customerComparisonGroupForm.value.hasEV)
-      .set('hasLotSize', this.customerComparisonGroupForm.value.hasLotSize);
+      .set('hasLotSize', this.customerComparisonGroupForm.value.hasLotSize)
+      .set('notOnlyElectricityToHeatVariant',this.customerComparisonGroupForm.value.notOnlyElectricityToHeatVariant);
     return params;
   }
 

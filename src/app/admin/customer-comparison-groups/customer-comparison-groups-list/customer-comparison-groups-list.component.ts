@@ -33,6 +33,7 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
   };
   public adminFilter: AdminFilter;
   public force = false;
+  public pageIndex : number = 0;
   customerComparisonGroupForm = this.fb.group({
     comparisonCode: [''],
     groupName: [''],
@@ -49,9 +50,9 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
       this.force = params['force'];
     });
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
-    if (this.adminFilter || this.adminFilter.customerComparisonGroup) {
-      this.adminFilter = new AdminFilter();
-    }
+    // if (this.adminFilter || this.adminFilter.customerComparisonGroup) {
+    //   this.adminFilter = new AdminFilter();
+    // }
   }
 
   ngOnInit() {
@@ -141,6 +142,10 @@ export class CustomerComparisonGroupsListComponent implements OnInit, OnDestroy 
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.customerComparisonGroup.page = event;
+    this.adminFilter.customerComparisonGroup.formValue = this.customerComparisonGroupForm.value;
+    if(event) this.pageIndex = event.pageIndex;
+    else this.pageIndex = 0;
+
     const params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?

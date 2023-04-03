@@ -51,7 +51,7 @@ p.messages {
   display: block;
 }
 
-@media (min-width: 100px) and (max-width: 456px) {
+@media (min-width: 100px) and (max-width: 574px) {
   .responsive-mobile{
     display: block;
   }

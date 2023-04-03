@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -40,14 +40,16 @@ export class CredentialTypeEditComponent implements OnInit, OnDestroy {
   }
 
   loadCredentialTypeById() {
-    this.subscriptions.add(this.systemService.getCredentialTypeById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemService.getCredentialTypeById().pipe(filter((item: any) => item))
       .subscribe((credentialType: any) => {
         if (this.isForce) {
           this.router.navigate(['admin/credential-type/credentialTypeEdit'], { queryParams: { 'id': credentialType.id } });
         }
+        this.scrollTop();
         this.setForm(credentialType);
       }));
   }
+
   setForm(event: any) {
     this.credentialTypeForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
@@ -80,19 +82,15 @@ export class CredentialTypeEditComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.systemService.updateCredentialType(this.credentialTypeForm.value.credentialType, this.credentialTypeForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            this.isForce = true;
-            this.scrollTop();
-            this.loadCredentialTypeById();
           }));
       } else {
         this.subscriptions.add(this.systemService.saveCredentialType(this.credentialTypeForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            this.scrollTop();
-            this.isForce = true;
             this.loadCredentialTypeById();
           }));
       }
+      this.isForce = true;
     } else {
       this.validateForm();
     }

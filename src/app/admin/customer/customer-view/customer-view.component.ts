@@ -24,6 +24,7 @@ import { CustomValidator } from 'src/app/utility/custom-validators';
 import * as moment from 'moment';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -145,6 +146,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     private datePipe: DatePipe,
     private readonly loginService : LoginService,
     private readonly el: ElementRef) {
+    AppUtility.removeLoader();
       this.setForm(undefined);
     this.getPasswordValidationRule();
     this.activateRoute.queryParams.subscribe(params => {

@@ -284,6 +284,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
           this.users.userData = response;
           this.users.name = response.name;
           this.loginService.setUser(this.users);
+          AppUtility.showLoader();
           this.router.navigate(['admin/customer']);
         },
         (error) => {
@@ -368,7 +369,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
           const response = JSON.parse(JSON.stringify(data));
           if (response.errorMessage == null) {
 
-
+            AppUtility.showLoader();
             if(response.data.currentPane){
               this.users.currentPaneNumber = response.data;
               this.users = this.loginService.setUser(this.users);

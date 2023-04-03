@@ -26,6 +26,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
   public houseTypeData: Array<any>;
   public occupancyData: Array<any>;
   public yesNoData: Array<any> = TableColumnData.YES_NO_DATA;
+  public notOnlyElectricityToHeatData : Array<any> = TableColumnData.NOT_ONLY_ELECTRICITY_TO_HEAT_DATA;
   public lotSizeData: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
   public errorMessage: any;
@@ -155,6 +156,7 @@ export class CustomerComparisonGroupsAddComponent implements OnInit, OnDestroy {
       lotSize: [event !== undefined ? event.lotSize : ''],
       note: [event !== undefined ? event.note : ''],
       numOfCustomers: [event !== undefined ? event.numOfCustomers : ''],
+      notOnlyElectricityToHeat : [ event !== undefined ? event.notOnlyElectricityToHeat : ''],
       updatedBy: [event !== undefined ? event.updatedBy : ''],
       updatedDate: [event !== undefined ? this.datePipe.transform(event.updatedDate, 'yyyy-MM-dd HH:mm:ss', 'PST') : ''],
     });

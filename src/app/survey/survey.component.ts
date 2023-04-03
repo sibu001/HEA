@@ -8,6 +8,7 @@ import { SubscriptionUtil } from '../utility/subscription-utility';
 import { MatDialog } from '@angular/material';
 import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.component';
 import { AppConstant } from '../utility/app.constant';
+import { AppUtility } from '../utility/app.utility';
 
 declare var $: any;
 @Component({
@@ -46,6 +47,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private utilityService: UtilityService,
     private matDialog : MatDialog
     ) {
+    AppUtility.removeLoader();
     this.users = this.loginService.getUser();
 
     if (this.users.currentPaneNumber.currentPane == null || this.users.currentPaneNumber.currentPane == undefined) {
