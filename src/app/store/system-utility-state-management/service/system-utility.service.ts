@@ -256,6 +256,10 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetFactorCountAction(filter));
   }
 
+  getFactorCount() : Observable<number>{
+    return this.store.select(SystemUtilityManagementState.getFactorListCount);
+  }
+
   loadFactorById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetFactorByIdAction(id));
   }

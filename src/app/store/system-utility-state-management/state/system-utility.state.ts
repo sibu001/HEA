@@ -146,6 +146,11 @@ export class SystemUtilityManagementState {
     }
 
     @Selector()
+    static getFactorListCount(state: SystemUtilityManagementModel): any {
+        return state.factorCount;
+    }
+
+    @Selector()
     static getCustomerEventTypeById(state: SystemUtilityManagementModel): any {
         return state.customerEventType;
     }
@@ -712,7 +717,7 @@ export class SystemUtilityManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.errorMessage);
                     }));
     }
 
@@ -730,7 +735,7 @@ export class SystemUtilityManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.errorMessage);
                     }));
     }
 

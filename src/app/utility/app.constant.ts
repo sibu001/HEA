@@ -117,7 +117,7 @@ export class AppConstant {
     public static homeEnergyProfileInfo = 'Don\'t stop! The next few pages will help us and you figure out how to save on your energy bill!';
     public static fixUsageHistoryData = 'fixUsageHistoryData';
     public static meters = 'meters';
-    public static pageSize = '25';
+    public static pageSize = '30';
     public static debounceTime = 500;
     public static dataBlock = 'dataBlocks';
     public static dataField = 'dataFields';

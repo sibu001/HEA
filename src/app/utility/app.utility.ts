@@ -233,6 +233,7 @@ export class AppUtility {
     }
 
     public static scrollToTableTop(tableScrollPoint : ElementRef): void{
+        if(tableScrollPoint) return;
         tableScrollPoint.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'});
     }
 

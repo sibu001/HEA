@@ -137,7 +137,7 @@ export class TableColumnData {
     ];
 
     static readonly FACTOR_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        // { key: 'serialNumber', isEdit: true, displayName: '#' },
         { key: 'factorCode', sort: 'factorCode', isEdit: true, displayName: 'Factor Code', isUnderline: true },
         { key: 'place', sort: 'place', isEdit: true, displayName: 'Place' },
         { key: 'year', sort: 'year', isEdit: true, displayName: 'Year' },

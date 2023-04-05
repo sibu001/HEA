@@ -7,6 +7,7 @@ import { skipWhile } from 'rxjs/operators';
 import { UtilityService } from 'src/app/services/utility.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -48,8 +49,10 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     this.findPlace(true, '');
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.getFactorById();
       this.loadFactorById();
     }
+    AppUtility.scrollTop();
   }
 
   loadComparisonCode() {
@@ -121,7 +124,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
             console.log('error');
           }));
       } else {
-        this.subscriptions.add(this.systemUtilityService.recalculateFactor(this.id, null).pipe(skipWhile((item: any) => !item))
+        this.subscriptions.add(this.systemUtilityService.recalculateFactor(this.id, null)
           .subscribe((factor: any) => {
             this.loadFactorById();
           }, error => {
@@ -130,19 +133,24 @@ export class FactorEditComponent implements OnInit, OnDestroy {
       }
     } else {
       this.validateAllFormFields(this.factorForm);
+      AppUtility.scrollTop();
       this.utilityService.showErrorMessage('id to load is required for loading');
     }
   }
 
   loadFactorById() {
     this.systemUtilityService.loadFactorById(this.id);
+  }
+
+  getFactorById() {
     this.subscriptions.add(this.systemUtilityService.getFactorById().pipe(skipWhile((item: any) => !item))
-      .subscribe((factor: any) => {
-        if (this.isForce) {
-          this.router.navigate(['admin/factor/factorEdit'], { queryParams: { 'id': factor.id } });
-        }
-        this.setForm(factor);
-      }));
+    .subscribe((factor: any) => {
+      AppUtility.scrollTop();
+      if (this.isForce) {
+        this.router.navigate(['admin/factor/factorEdit'], { queryParams: { 'id': factor.id } });
+      }
+      this.setForm(factor);
+    }));
   }
 
   back() {
@@ -164,22 +172,17 @@ export class FactorEditComponent implements OnInit, OnDestroy {
 
   save() {
     if (this.factorForm.valid) {
+      this.isForce = true;
+
       if (this.id !== null && this.id !== undefined) {
         this.factorForm.value.calculationDate = null;
-        this.subscriptions.add(this.systemUtilityService.updateFactor(this.id, this.factorForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.loadFactorById();
-          }));
+        this.systemUtilityService.updateFactor(this.id, this.factorForm.value);
       } else {
-        this.subscriptions.add(this.systemUtilityService.saveFactor(this.factorForm.value).pipe(
+        this.systemUtilityService.saveFactor(this.factorForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
-            this.id = response.id;
-            this.isForce = true;
-            this.loadFactorById();
-          }));
+            this.getFactorById();
+          });
       }
     } else {
       this.validateAllFormFields(this.factorForm);

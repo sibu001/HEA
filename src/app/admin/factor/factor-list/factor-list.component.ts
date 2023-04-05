@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,8 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -27,10 +29,12 @@ export class FactorListComponent implements OnInit, OnDestroy {
     totalElements: 0,
   };
   public placeData: Array<any>;
+  public pageSize : number = Number(AppConstant.pageSize);
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
   public adminFilter: AdminFilter;
   factorForm: FormGroup;
+
   constructor(public fb: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly router: Router,
@@ -45,7 +49,10 @@ export class FactorListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    AppUtility.scrollTop();
     this.findPlace(true, '');
+    this.getFactorCount();
+    this.getFactorListData();
     this.setUpForm(this.adminFilter.factorFilter.formValue);
     this.search(this.adminFilter.factorFilter.page, false);
   }
@@ -77,19 +84,33 @@ export class FactorListComponent implements OnInit, OnDestroy {
     });
   }
 
-  findFactor(force: boolean, filter: any): void {
+  loadFactorsCount(force: boolean, filter: any): void {
     this.adminFilter.factorFilter.formValue = this.factorForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.systemUtilityService.loadFactorCount(filter).pipe(skipWhile((item: any) => !item))
-      .subscribe((factorListCount: any) => {
-        this.factorData.totalElements = factorListCount.systemUtilityManagement.factorCount;
-        this.totalElement = factorListCount.systemUtilityManagement.factorCount;
-        this.systemUtilityService.loadFactorList(force, filter);
-        this.subscriptions.add(this.systemUtilityService.getFactorList().pipe(skipWhile((item: any) => !item))
-          .subscribe((factorList: any) => {
-            this.factorData.content = factorList;
-            this.dataSource = [...this.factorData.content];
-          }));
+    this.systemUtilityService.loadFactorCount(filter);
+  }
+
+  getFactorCount(){
+    this.subscriptions.add(this.systemUtilityService.getFactorCount()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((factorListCount: number) => {
+      this.factorData.totalElements = factorListCount;
+      this.totalElement = factorListCount;
+      if(factorListCount <= this.pageSize){
+        this.pageIndex = 0;
+      }
+    }));
+  }
+
+  loadFactorListData(force: boolean, filter: any){
+    this.systemUtilityService.loadFactorList(force, filter);
+  }
+
+  getFactorListData(){
+    this.subscriptions.add(this.systemUtilityService.getFactorList().pipe(skipWhile((item: any) => !item))
+      .subscribe((factorList: any) => {
+        this.factorData.content = factorList;
+        this.dataSource = [...this.factorData.content];
       }));
   }
 
@@ -98,7 +119,7 @@ export class FactorListComponent implements OnInit, OnDestroy {
     this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
@@ -109,8 +130,10 @@ export class FactorListComponent implements OnInit, OnDestroy {
       .set('active', (this.factorForm.value.isActive !== null ? this.factorForm.value.isActive : ''))
       .set('year', (this.factorForm.value.year !== null ? this.factorForm.value.year : ''))
       .set('factorName', (this.factorForm.value.factorName !== null ? this.factorForm.value.factorName : ''));
-    this.findFactor(true, params);
-  }
+
+      this.loadFactorListData(true,params);
+      this.loadFactorsCount(isSearch,params);
+    }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }

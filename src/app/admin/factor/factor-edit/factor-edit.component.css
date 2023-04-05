@@ -57,3 +57,11 @@ select {
    
   }
 } */
+
+input[disabled]{
+  cursor: default;
+}
+
+input[type="checkbox"]:checked {
+  background-color: blue;
+}

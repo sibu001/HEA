@@ -1650,7 +1650,8 @@ app-gas-list .mat-column-year ,app-gas-list .mat-column-month ,app-gas-list .mat
 }
 
 app-gas-list .mat-column-billingPeriod , app-gas-charge .mat-column-billingPeriod,
-app-electricity-usage-list .mat-column-billingPeriod, app-electricity-charge-list .mat-column-billingPeriod 
+app-electricity-usage-list .mat-column-billingPeriod, app-electricity-charge-list .mat-column-billingPeriod,
+app-factor-list .mat-column-factorName
 {
   word-wrap: break-word !important;
   white-space: unset !important;
@@ -2274,7 +2275,8 @@ word-break: break-word;
 hyphens: auto;   
 }
  
-app-customer-view .mat-column-linkedPersonName{
+app-customer-view .mat-column-linkedPersonName,
+app-factor-list .mat-column-place{
 word-wrap: break-word !important;
 white-space: unset !important;
 flex: 0 0 18% !important;
@@ -2389,7 +2391,8 @@ app-customer-view .mat-column-description{
     hyphens: auto;   
     }
 
-    app-mail-description-list .mat-column-totalProcessedTime{
+    app-mail-description-list .mat-column-totalProcessedTime,
+    app-factor-list .mat-column-year{
       word-wrap: break-word !important;
       white-space: unset !important;
       flex: 0 0 11% !important;
@@ -2620,3 +2623,7 @@ app-electricity-usage-popup input[type="date"] {
   transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 }
 
+/* added to scroll padding so that nav-bar can cut off while scrolling thorugh javascript. */
+*{
+  scroll-padding: 90px;
+}
