@@ -16,8 +16,14 @@
                   AuditId:
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                  <input type="text" class='form-control form-control-sm'
-                    formControlName="auditId" id="auditId">
+                  <input type="text" class="form-control" matInput 
+                  formControlName='auditId' [matAutocomplete]="auditId"
+                  (keyup)="findCustomerByAuditIdOrCustomerName('auditId')" >
+                  <mat-autocomplete #auditId="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                    <mat-option *ngFor="let data of dataListForSuggestions" [value]="data">
+                      {{data.user.name}}
+                    </mat-option>
+                  </mat-autocomplete>
                   <div *ngIf="f.auditId.invalid && (f.auditId.dirty ||
                     f.auditId.touched)">
                     <span class="error" *ngIf="f.auditId.errors.required">
@@ -33,16 +39,14 @@
                   Customer Name:
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                  <input type="text" matInput class='form-control form-control-sm'
-                    (input)="search($event.target.value)"
-                    formControlName="customerName"
-                    [matAutocomplete]="auto">
-                  <mat-autocomplete #auto="matAutocomplete"
-                    (optionSelected)=handleAutoComplete($event)>
-                    <mat-option *ngFor="let option of customerList"
-                      [value]="option">{{
-                      option.user.name }}</mat-option>
-                  </mat-autocomplete>
+                  <input type="text" class="form-control" matInput 
+                  [matAutocomplete]="auditIdAutoComplete"
+                  formControlName="customerName" (input)="findCustomerByAuditIdOrCustomerName('customerName')" >
+                   <mat-autocomplete #auditIdAutoComplete="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                     <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
+                       {{data.user.name}}
+                     </mat-option>
+                   </mat-autocomplete>
                   <div *ngIf="f.customerName.invalid && (f.customerName.dirty ||
                     f.customerName.touched)">
                     <span class="error" *ngIf="f.customerName.errors.required">
@@ -105,7 +109,7 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Result:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class='form-control' formControlName='result'></textarea>
+              <textarea class='form-control' readonly formControlName='result'></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>

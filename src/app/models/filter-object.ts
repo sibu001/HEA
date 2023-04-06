@@ -140,3 +140,9 @@ export class UsageHistoryFilter {
     totalElement : number
     recentUsageHistory : string
 }
+
+export class ScriptDebugConsoleData{
+    script : string;
+    scriptType : string;
+    topicDescription : string;
+}

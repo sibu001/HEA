@@ -4,6 +4,7 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { ScriptDebugConsoleData } from 'src/app/models/filter-object';
 import { UtilityService } from 'src/app/services/utility.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
@@ -24,6 +25,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   public calculationType: Array<any>;
   public periodData: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
+  scriptDebugConsoleData : ScriptDebugConsoleData = new ScriptDebugConsoleData();
   isForce = false;
   userId: any;
   constructor(
@@ -40,6 +42,12 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
+
+    this.scriptDebugConsoleData =  AppUtility.getScriptDebugConsoleData();
+    if(!this.scriptDebugConsoleData){
+      this.scriptDebugConsoleData = new ScriptDebugConsoleData();
+    }
+
   }
 
   ngOnInit() {
@@ -91,7 +99,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
       factorName: [event !== undefined ? event.factorName : ''],
       sourceUrl: [event !== undefined ? event.sourceUrl : ''],
       calculationType: [event !== undefined ? event.calculationType : ''],
-      calculationRule: [event !== undefined ? event.calculationRule : ''],
+      calculation: [event !== undefined ? event.calculation : ''],
       calculationPeriod: [event !== undefined ? event.calculationPeriod : ''],
       calculationDate: [event !== undefined ? (this.datePipe.transform(event.calculationDate, 'MM/dd/yyyy HH:mm:ss', 'PST')) : null],
       active: [event !== undefined ? event.active : ''],
@@ -110,7 +118,14 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   }
 
   goToDebug() {
+    this.setScriptDebugConsoleData();
     this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { key: 'factor' } });
+  }
+
+  setScriptDebugConsoleData(){
+    this.scriptDebugConsoleData.script = this.factorForm.value.calculation;
+    this.scriptDebugConsoleData.scriptType = this.factorForm.value.calculationType;
+    AppUtility.setScriptDebugConsoleData(this.scriptDebugConsoleData);
   }
 
   recalculate() {
@@ -176,7 +191,10 @@ export class FactorEditComponent implements OnInit, OnDestroy {
 
       if (this.id !== null && this.id !== undefined) {
         this.factorForm.value.calculationDate = null;
-        this.systemUtilityService.updateFactor(this.id, this.factorForm.value);
+        this.systemUtilityService.updateFactor(this.id, this.factorForm.value)
+        .subscribe(response =>{
+          this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': this.isForce } });
+        })
       } else {
         this.systemUtilityService.saveFactor(this.factorForm.value).pipe(
           skipWhile((item: any) => !item))

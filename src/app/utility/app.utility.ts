@@ -1,6 +1,7 @@
 import { HttpParams } from "@angular/common/http";
 import { ElementRef } from "@angular/core";
 import { PaginateModel } from "../interface/paginate-model";
+import { ScriptDebugConsoleData } from "../models/filter-object";
 import { AllowedMenuList } from "./app.allowedMenuList";
 import { AppConstant } from "./app.constant";
 
@@ -240,5 +241,13 @@ export class AppUtility {
     // method to restrict loader to show on screen.
     public static addNoLoaderParam(params : HttpParams) : HttpParams{
         return params.set(AppConstant.SHOW_NO_LOADER,true.toString());
+    }
+
+    public static getScriptDebugConsoleData() : ScriptDebugConsoleData{
+        return JSON.parse(localStorage.getItem('scriptDebugConsoleData')) as ScriptDebugConsoleData;
+    }
+
+    public static setScriptDebugConsoleData(scriptDebugConsoleData : ScriptDebugConsoleData) : void{
+        localStorage.setItem('scriptDebugConsoleData', JSON.stringify(scriptDebugConsoleData));
     }
 }

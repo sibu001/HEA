@@ -3,15 +3,17 @@ import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { ScriptDebugConsoleData } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -42,7 +44,10 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     lint: true,
   };
   topicDescriptionData: Array<any>;
+  scriptDebugConsoleData : ScriptDebugConsoleData;
+  private subject$ : Subject<any>  = new Subject();
   private readonly subscriptions: Subscription = new Subscription();
+  dataListForSuggestions = [];
   constructor(private readonly formBuilder: FormBuilder,
     private readonly topicService: TopicService,
     private readonly loginService: LoginService,
@@ -60,10 +65,16 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.key = params['key'];
-      if (this.key && this.key === 'factor') {
+      if (this.key === 'factor') {
         this.isTrue = false;
       }
     });
+
+    this.scriptDebugConsoleData =  AppUtility.getScriptDebugConsoleData();
+    if(!this.scriptDebugConsoleData){
+      this.scriptDebugConsoleData = new ScriptDebugConsoleData();
+    }
+    this.findCustomer();
   }
 
   ngOnInit() {
@@ -75,6 +86,16 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     if (this.id !== undefined) {
       this.loadBatchScriptById();
     }
+
+    if(this.key == 'factor'){
+    }
+  }
+
+  setScriptDebugConsoleData(){
+    this.debugForm.patchValue(
+      {'script' : this.scriptDebugConsoleData.script ,
+       'scriptType' : this.scriptDebugConsoleData.scriptType
+      });
   }
 
   getCustomerList(url: any) {
@@ -197,6 +218,55 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     this.location.back();
   }
   get f() { return this.debugForm.controls; }
+
+
+  filterForCustomer(){
+    return new HttpParams()
+      .set('auditId',this.debugForm.value.auditId !== undefined ? this.debugForm.value.auditId : '')
+      .set('customerName',this.debugForm.value.customerName !== undefined ? this.debugForm.value.customerName :'')
+      .set('useLike','true')
+  }
+
+  findCustomerByAuditIdOrCustomerName(calledBy){
+    let filters =  this.filterForCustomer();
+
+    if(calledBy == 'auditId'){
+      this.debugForm.patchValue({'customerName' : ''});
+      filters = filters.delete('customerName');
+    }else{
+      this.debugForm.patchValue({'auditId' : ''});
+      filters = filters.delete('auditId');
+    }
+    
+    filters = filters.set('useLike','true');
+    filters = AppUtility.addNoLoaderParam(filters);
+    this.subject$.next(filters);
+  }
+
+  findCustomer(){
+    this.subscriptions.add(this.subject$
+      .pipe(
+       debounceTime(600)  
+      , distinctUntilChanged())
+      .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
+      .subscribe(
+        (response) =>{
+          this.dataListForSuggestions = response.slice(0,100);
+          if(this.dataListForSuggestions.length == 1){
+            this.selectedSuggestion(this.dataListForSuggestions[0]);
+            this.dataListForSuggestions = [];
+          }
+        }, error =>{
+           console.log(error);
+        }
+      ));
+  }
+
+  selectedSuggestion(event){
+    this.debugForm.patchValue({ auditId : event.auditId , customerName : event.user.name});
+    this.customerData = event;
+    this.debugForm.patchValue({'customerId' : event.customerId });
+  }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

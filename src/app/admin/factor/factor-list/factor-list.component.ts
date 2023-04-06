@@ -2,8 +2,8 @@ import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { combineLatest, Observable, of, Subscription } from 'rxjs';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
@@ -28,7 +28,7 @@ export class FactorListComponent implements OnInit, OnDestroy {
     content: [],
     totalElements: 0,
   };
-  public placeData: Array<any>;
+  public placeData: Array<any> = [];
   public pageSize : number = Number(AppConstant.pageSize);
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
@@ -52,9 +52,10 @@ export class FactorListComponent implements OnInit, OnDestroy {
     AppUtility.scrollTop();
     this.findPlace(true, '');
     this.getFactorCount();
-    this.getFactorListData();
+    // this.getFactorListData();
     this.setUpForm(this.adminFilter.factorFilter.formValue);
     this.search(this.adminFilter.factorFilter.page, false);
+    this.replacePlaceCodeToPlaceValue();
   }
 
   goToEditFactor(event: any): any {
@@ -67,12 +68,7 @@ export class FactorListComponent implements OnInit, OnDestroy {
 
   findPlace(force: boolean, filter: string): any {
     this.systemUtilityService.loadPlaceList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
-      .subscribe((placeList: any) => {
-        this.placeData = placeList;
-      }));
   }
-
 
   setUpForm(event: any) {
     this.factorForm = this.fb.group({
@@ -106,10 +102,38 @@ export class FactorListComponent implements OnInit, OnDestroy {
     this.systemUtilityService.loadFactorList(force, filter);
   }
 
-  getFactorListData(){
-    this.subscriptions.add(this.systemUtilityService.getFactorList().pipe(skipWhile((item: any) => !item))
-      .subscribe((factorList: any) => {
-        this.factorData.content = factorList;
+  // getFactorListData(){
+  //   this.subscriptions.add(this.systemUtilityService.getFactorList().pipe(skipWhile((item: any) => !item))
+  //     .subscribe((factorList: any) => {
+  //       this.factorData.content = factorList;
+  //       this.dataSource = [...this.factorData.content];
+  //     }));
+  // }
+
+
+
+  replacePlaceCodeToPlaceValue(){
+
+    const placeList$ : Observable<any> = this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item));
+    const dataList$ : Observable<any> = this.systemUtilityService.getFactorList().pipe(skipWhile((item: any) => !item));
+    
+    this.subscriptions.add(combineLatest([dataList$,placeList$])
+      .pipe(filter( ([dataSource, placeList] : Array<any>) => dataSource && placeList ))
+      .subscribe(
+        ([dataSource, placeList] : Array<any>) =>{
+        this.placeData = placeList;
+
+        dataSource = dataSource.map(
+          (data) =>{
+            const selectedPlace = placeList.find(place => data.place == place.place);
+
+            if(!selectedPlace) return data;
+
+            data.place = selectedPlace.placeName;
+            return data;
+          });
+
+        this.factorData.content = dataSource;
         this.dataSource = [...this.factorData.content];
       }));
   }
