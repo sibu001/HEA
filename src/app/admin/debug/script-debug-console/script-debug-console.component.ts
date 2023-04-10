@@ -4,7 +4,7 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, skipWhile } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, skip, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { ScriptDebugConsoleData } from 'src/app/models/filter-object';
 import { Users } from 'src/app/models/user';
@@ -23,12 +23,12 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 })
 export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
 
-  id: any;
+  // id: any;
   key: any;
   isTrue = true;
   debugForm: FormGroup;
   customerList: any = [];
-  customerData: any;
+  // customerData: any;
   users: Users = new Users();
   calculationTypeList: any[] = [];
   scriptDebugEventList: any[] = TableColumnData.SCRIPT_DEBUG_EVENT;
@@ -58,12 +58,11 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     private readonly el: ElementRef,
     private readonly location: Location) {
     this.users = this.loginService.getUser();
-    this.customerList = this.users.searchUserList;
-    if (this.customerList.length > 0) {
-      this.customerData = this.customerList[0];
-    }
+    // this.customerList = this.users.searchUserList;
+    // if (this.customerList.length > 0) {
+    //   this.customerData = this.customerList[0];
+    // }
     this.activateRoute.queryParams.subscribe(params => {
-      this.id = params['id'];
       this.key = params['key'];
       if (this.key === 'factor') {
         this.isTrue = false;
@@ -71,30 +70,30 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     });
 
     this.scriptDebugConsoleData =  AppUtility.getScriptDebugConsoleData();
-    if(!this.scriptDebugConsoleData){
-      this.scriptDebugConsoleData = new ScriptDebugConsoleData();
-    }
     this.findCustomer();
   }
 
   ngOnInit() {
     this.scrollTop();
-    this.getPaidServiceId();
     this.loadCalculationTypeList();
-    this.loadTopicDescription();
+    this.getScriptResult();
     this.setForm(undefined);
-    if (this.id !== undefined) {
-      this.loadBatchScriptById();
-    }
+    // if (this.id !== undefined) {
+    //   this.loadBatchScriptById();
+    // }
 
-    if(this.key == 'factor'){
+    if(true){
+      this.loadPaidServices();
+      this.getPaidServices();
+      this.loadTopicDescription();
     }
   }
 
   setScriptDebugConsoleData(){
     this.debugForm.patchValue(
       {'script' : this.scriptDebugConsoleData.script ,
-       'scriptType' : this.scriptDebugConsoleData.scriptType
+       'scriptType' : this.scriptDebugConsoleData.scriptType,
+       'surveyDescriptionId' : this.scriptDebugConsoleData.surveyDescriptionId
       });
   }
 
@@ -117,24 +116,6 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
       }));
   }
 
-  handleAutoComplete(event: any): any {
-    this.users.searchUserList[0] = event.option.value;
-    this.loginService.setUser(this.users);
-    this.debugForm.controls['auditId'].setValue(event.option.value.auditId);
-    this.debugForm.controls['customerName'].setValue(event.option.value.user.name);
-    this.debugForm.controls['userId'].setValue(event.option.value.user.id);
-  }
-
-  search(event: any) {
-    const params = new HttpParams()
-      .set('filter.pageSize', '5')
-      .set('filter.startRow', '0')
-      .set('loadCustomers', 'true')
-      .set('filter.customerName', '%' + event);
-    this.getCustomerList(params);
-  }
-
-
   loadTopicDescription() {
     this.topicService.loadTopicDescriptionList(true, '');
     this.subscriptions.add(this.topicService.getTopicDescriptionList().pipe(skipWhile((item: any) => !item))
@@ -143,68 +124,103 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
       }));
   }
 
-  loadBatchScriptById() {
-    this.systemMeasurementService.loadScriptBatchById(Number(this.id));
-    this.subscriptions.add(this.systemMeasurementService.getScriptBatchById().pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.setForm(response);
-      }));
-  }
+  // loadBatchScriptById() {
+  //   this.systemMeasurementService.loadScriptBatchById(Number(this.id));
+  //   this.subscriptions.add(this.systemMeasurementService.getScriptBatchById().pipe(skipWhile((item: any) => !item))
+  //     .subscribe((response: any) => {
+  //       this.setForm(response);
+  //     }));
+  // }
 
+
+  //  check comment 'https://xp-dev.com/trac/HEA/ticket/2063#comment:478' to understand the working of the componenet.
   setForm(event: any) {
     this.debugForm = this.formBuilder.group({
-      auditId: [this.customerData !== undefined ? this.customerData.auditId : ''],
-      customerName: [this.customerData !== undefined ? this.customerData.user.name : ''],
-      userId: [this.customerData !== undefined ? this.customerData.user.id : ''],
-      surveyDescriptionId: [event !== undefined ? event.surveyDescriptionId : ''],
-      scriptType: [event !== undefined ? event.calculationType : 'spel'],
-      script: [event !== undefined ? event.calculation : ''],
-      batchScriptId: [event !== undefined ? event.batchScriptId : ''],
-      paidServiceId: [''],
+      auditId: [this.scriptDebugConsoleData.auditId],
+      customerName: [this.scriptDebugConsoleData.customerName],
+      userId: [this.scriptDebugConsoleData.userId],
+      contextType : [this.key],
+      surveyDescriptionId: [ this.scriptDebugConsoleData.surveyDescriptionId ? this.scriptDebugConsoleData.surveyDescriptionId : '33' ],
+      scriptType: [this.scriptDebugConsoleData.scriptType],
+      script: [this.scriptDebugConsoleData.script],
+      batchScriptId: [this.scriptDebugConsoleData.batchScriptId],
+      // paidServiceId: [this.scriptDebugConsoleData.paidServiceId],
       billingDate: [''],
-      factorId: [''],
+      factorId: [this.scriptDebugConsoleData.factorId],
       event: ['VALIDATE'],
-      result: [event !== undefined ? event.result : ''],
       disableValueCache: [false],
+      result: [''],
       executionTime: [''],
       resultType: [''],
       contextPreparationTime: ['']
     });
-    if (this.isTrue) {
-      this.debugForm.controls.auditId.setValidators([Validators.required]);
-      this.debugForm.controls.auditId.setValidators([Validators.required]);
-      this.debugForm.controls.auditId.setValidators([Validators.required]);
-      this.debugForm.updateValueAndValidity();
-    }
+    // if (this.isTrue) {
+    //   this.debugForm.controls.auditId.setValidators([Validators.required]);
+    //   this.debugForm.controls.auditId.setValidators([Validators.required]);
+    //   this.debugForm.controls.auditId.setValidators([Validators.required]);
+    //   this.debugForm.updateValueAndValidity();
+    // }
   }
 
   changeTheme(event: any): any {
     this.codeMirrorOptions.theme = event.target.value;
   }
 
-  getPaidServiceId() {
-    this.subscriptions.add(this.topicService.loadPaidServiceList().pipe(
-      skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        console.log(response.topicManagement.paidServiceList);
-      }));
+  loadPaidServices() {
+   this.topicService.loadPaidServiceList();
+  }
+
+  getPaidServices(){
+    this.topicService.getPaidServiceList()
+    .pipe(filter(data => data))
+    .subscribe(
+      data =>{
+        console.log(data);
+      }
+    )
   }
 
   executeDebug() {
-    if (this.debugForm.valid) {
-      this.subscriptions.add(this.topicService.scriptDebug(this.debugForm.value).pipe(
-        skipWhile((item: any) => !item))
-        .subscribe((response: any) => {
-          console.log(response.topicManagement.scriptDebug);
-          this.debugForm.controls['result'].setValue(response.topicManagement.scriptDebug.result);
-          this.debugForm.controls['executionTime'].setValue(response.topicManagement.scriptDebug.executionTime);
-          this.debugForm.controls['resultType'].setValue(response.topicManagement.scriptDebug.resultType);
-        }));
 
-    } else {
-      this.validateForm();
-    }
+    this.saveScriptConsoleDataToLocalStorage();
+    // if (this.debugForm.valid) {
+      this.topicService.scriptDebug(this.debugFromValue);
+    // } else {
+    //   this.validateForm();
+    // }
   }
+
+  saveScriptConsoleDataToLocalStorage(){
+    this.scriptDebugConsoleData.customerName = this.debugFromValue.customerName;
+    this.scriptDebugConsoleData.auditId = this.debugFromValue.auditId;
+    this.scriptDebugConsoleData.script = this.debugFromValue.script;
+    this.scriptDebugConsoleData.scriptType = this.debugFromValue.scriptType;
+    this.scriptDebugConsoleData.event = this.debugFromValue.event;
+    this.scriptDebugConsoleData.userId = this.debugFromValue.userId;
+
+    AppUtility.setScriptDebugConsoleData(this.scriptDebugConsoleData);
+  }
+
+  get debugFromValue(){
+    return this.debugForm.value;
+  }
+
+
+  getScriptResult(){
+    this.subscriptions.add(
+      this.topicService.getScriptDebug()
+      .pipe(skip(1),filter((data) => data))
+      .subscribe(
+        scriptDebug =>{
+          this.debugForm.controls['result'].setValue( scriptDebug.result);
+          this.debugForm.controls['executionTime'].setValue( scriptDebug.executionTime);
+          this.debugForm.controls['resultType'].setValue( scriptDebug.resultType);
+          this.debugForm.controls['contextPreparationTime'].setValue( scriptDebug.contextPreparationTime);
+        }
+      )
+    )
+  }
+
   validateForm() {
     for (const key of Object.keys(this.debugForm.controls)) {
       if (this.debugForm.controls[key].invalid) {
@@ -249,6 +265,7 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
        debounceTime(600)  
       , distinctUntilChanged())
       .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
+      .filter(data => data)
       .subscribe(
         (response) =>{
           this.dataListForSuggestions = response.slice(0,100);
@@ -264,8 +281,7 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
 
   selectedSuggestion(event){
     this.debugForm.patchValue({ auditId : event.auditId , customerName : event.user.name});
-    this.customerData = event;
-    this.debugForm.patchValue({'customerId' : event.customerId });
+    this.debugForm.patchValue({'userId' : event.userId });
   }
 
   ngOnDestroy(): void {

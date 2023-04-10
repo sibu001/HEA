@@ -142,7 +142,17 @@ export class UsageHistoryFilter {
 }
 
 export class ScriptDebugConsoleData{
-    script : string;
-    scriptType : string;
-    topicDescription : string;
+    customerName : string;
+    auditId : string;
+	batchScriptId: number;
+	billingDate: string;
+	contextType: string;
+	disableValueCache: boolean;
+	event: string;
+	factorId: number;
+	paidServiceId: number;
+	script: string;
+	scriptType: string;
+	surveyDescriptionId: number;
+	userId: number;
 }

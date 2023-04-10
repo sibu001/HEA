@@ -244,7 +244,10 @@ export class AppUtility {
     }
 
     public static getScriptDebugConsoleData() : ScriptDebugConsoleData{
-        return JSON.parse(localStorage.getItem('scriptDebugConsoleData')) as ScriptDebugConsoleData;
+        const scriptDebugConsoleData : ScriptDebugConsoleData
+                = JSON.parse(localStorage.getItem('scriptDebugConsoleData')) as ScriptDebugConsoleData;
+        
+        return scriptDebugConsoleData ? scriptDebugConsoleData : new ScriptDebugConsoleData(); 
     }
 
     public static setScriptDebugConsoleData(scriptDebugConsoleData : ScriptDebugConsoleData) : void{

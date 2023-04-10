@@ -61,3 +61,7 @@ select {
     width: 96%;
   }
 }
+
+input[disabled]{
+  cursor: default;
+}

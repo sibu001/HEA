@@ -5,9 +5,11 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { ScriptDebugConsoleData } from 'src/app/models/filter-object';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -45,6 +47,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   isForce = false;
   topicData: any;
   private readonly subscriptions: Subscription = new Subscription();
+  scriptDebugConsoleData : ScriptDebugConsoleData;
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemMeasurementService: SystemMeasurementService,
     private readonly activateRoute: ActivatedRoute,
@@ -55,6 +58,8 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
+  
+    this.scriptDebugConsoleData = AppUtility.getScriptDebugConsoleData();
   }
 
   ngOnInit() {
@@ -121,10 +126,16 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
 
   goToDebug() {
-    this.subscriptions.add(this.systemService.setDebugConsoleData(this.batchScriptForm.value).pipe(skipWhile((item: any) => !item))
-      .subscribe((response: any) => {
-        this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { id: this.id } });
-      }));
+    this.setScriptDebugConsoleData();
+    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { batchScriptId: this.id , key : 'batch' } });
+  }
+
+  setScriptDebugConsoleData(){
+    this.scriptDebugConsoleData.batchScriptId = this.id;
+    this.scriptDebugConsoleData.script = this.batchScriptForm.value.calculation;
+    this.scriptDebugConsoleData.scriptType = this.batchScriptForm.value.calculationType;
+    this.scriptDebugConsoleData.surveyDescriptionId = this.batchScriptForm.value.surveyDescriptionId;
+    AppUtility.setScriptDebugConsoleData(this.scriptDebugConsoleData); 
   }
 
   runNow() {

@@ -25,7 +25,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   public calculationType: Array<any>;
   public periodData: Array<any>;
   private readonly subscriptions: Subscription = new Subscription();
-  scriptDebugConsoleData : ScriptDebugConsoleData = new ScriptDebugConsoleData();
+  scriptDebugConsoleData : ScriptDebugConsoleData;
   isForce = false;
   userId: any;
   constructor(
@@ -44,10 +44,6 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     });
 
     this.scriptDebugConsoleData =  AppUtility.getScriptDebugConsoleData();
-    if(!this.scriptDebugConsoleData){
-      this.scriptDebugConsoleData = new ScriptDebugConsoleData();
-    }
-
   }
 
   ngOnInit() {
@@ -125,6 +121,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
   setScriptDebugConsoleData(){
     this.scriptDebugConsoleData.script = this.factorForm.value.calculation;
     this.scriptDebugConsoleData.scriptType = this.factorForm.value.calculationType;
+    this.scriptDebugConsoleData.factorId = this.id;
     AppUtility.setScriptDebugConsoleData(this.scriptDebugConsoleData);
   }
 
