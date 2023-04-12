@@ -13,6 +13,7 @@ import { AdministrativeService } from 'src/app/store/administrative-state-manage
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -64,7 +65,7 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     // }
     this.activateRoute.queryParams.subscribe(params => {
       this.key = params['key'];
-      if (this.key === 'factor') {
+      if (this.key == AppConstant.contextTypeFactor) {
         this.isTrue = false;
       }
     });
@@ -82,9 +83,9 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
     //   this.loadBatchScriptById();
     // }
 
-    if(true){
-      this.loadPaidServices();
-      this.getPaidServices();
+    if(this.isTrue){
+      // this.loadPaidServices();
+      // this.getPaidServices();
       this.loadTopicDescription();
     }
   }
@@ -136,17 +137,17 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
   //  check comment 'https://xp-dev.com/trac/HEA/ticket/2063#comment:478' to understand the working of the componenet.
   setForm(event: any) {
     this.debugForm = this.formBuilder.group({
-      auditId: [this.scriptDebugConsoleData.auditId],
-      customerName: [this.scriptDebugConsoleData.customerName],
-      userId: [this.scriptDebugConsoleData.userId],
-      contextType : [this.key],
-      surveyDescriptionId: [ this.scriptDebugConsoleData.surveyDescriptionId ? this.scriptDebugConsoleData.surveyDescriptionId : '33' ],
-      scriptType: [this.scriptDebugConsoleData.scriptType],
-      script: [this.scriptDebugConsoleData.script],
-      batchScriptId: [this.scriptDebugConsoleData.batchScriptId],
+      auditId: [this.key ? this.scriptDebugConsoleData.auditId : ''],
+      customerName: [this.key ? this.scriptDebugConsoleData.customerName : ''],
+      userId: [this.key ? this.scriptDebugConsoleData.userId : ''],
+      contextType : [this.key ? this.key : AppConstant.contextTypeSurvey],
+      surveyDescriptionId: [this.key ?  this.scriptDebugConsoleData.surveyDescriptionId : ''],
+      scriptType: [this.key ? this.scriptDebugConsoleData.scriptType : ''],
+      script: [this.key ? this.scriptDebugConsoleData.script: ''],
+      batchScriptId: [this.key ? this.scriptDebugConsoleData.batchScriptId: ''],
       // paidServiceId: [this.scriptDebugConsoleData.paidServiceId],
       billingDate: [''],
-      factorId: [this.scriptDebugConsoleData.factorId],
+      factorId: [this.key ? this.scriptDebugConsoleData.factorId: ''],
       event: ['VALIDATE'],
       disableValueCache: [false],
       result: [''],
@@ -154,40 +155,40 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
       resultType: [''],
       contextPreparationTime: ['']
     });
-    // if (this.isTrue) {
-    //   this.debugForm.controls.auditId.setValidators([Validators.required]);
-    //   this.debugForm.controls.auditId.setValidators([Validators.required]);
-    //   this.debugForm.controls.auditId.setValidators([Validators.required]);
-    //   this.debugForm.updateValueAndValidity();
-    // }
+    if (this.isTrue) {
+      this.debugForm.controls.auditId.setValidators([Validators.required]);
+      this.debugForm.controls.surveyDescriptionId.setValidators([Validators.required]);
+      this.debugForm.updateValueAndValidity();
+    }
   }
 
   changeTheme(event: any): any {
     this.codeMirrorOptions.theme = event.target.value;
   }
 
-  loadPaidServices() {
-   this.topicService.loadPaidServiceList();
-  }
+  // loadPaidServices() {
+  //  this.topicService.loadPaidServiceList();
+  // }
 
-  getPaidServices(){
-    this.topicService.getPaidServiceList()
-    .pipe(filter(data => data))
-    .subscribe(
-      data =>{
-        console.log(data);
-      }
-    )
-  }
+  // getPaidServices(){
+  //   this.topicService.getPaidServiceList()
+  //   .pipe(filter(data => data))
+  //   .subscribe(
+  //     data =>{
+  //       console.log(data);
+  //     }
+  //   )
+  // }
 
   executeDebug() {
 
+    if ((this.key == AppConstant.contextTypeSurvey || !this.key) && !this.debugForm.valid) {
+      this.validateForm();
+      return;
+    }
+
     this.saveScriptConsoleDataToLocalStorage();
-    // if (this.debugForm.valid) {
-      this.topicService.scriptDebug(this.debugFromValue);
-    // } else {
-    //   this.validateForm();
-    // }
+    this.topicService.scriptDebug(this.debugFromValue);
   }
 
   saveScriptConsoleDataToLocalStorage(){
@@ -216,6 +217,7 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
           this.debugForm.controls['executionTime'].setValue( scriptDebug.executionTime);
           this.debugForm.controls['resultType'].setValue( scriptDebug.resultType);
           this.debugForm.controls['contextPreparationTime'].setValue( scriptDebug.contextPreparationTime);
+          AppUtility.scrollTop();
         }
       )
     )

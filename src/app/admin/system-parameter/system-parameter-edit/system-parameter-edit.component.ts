@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -16,6 +17,7 @@ export class SystemParameterEditComponent implements OnInit, OnDestroy {
 
   id: any;
   systemParameterForm: FormGroup;
+  systemParameterFormStatus : string = 'NOT_SUBMMITED';
   formatType: any[] = TableColumnData.FORMAT_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
   isForce = false;
@@ -36,6 +38,7 @@ export class SystemParameterEditComponent implements OnInit, OnDestroy {
       this.systemUtilityService.loadSystemParameterById(this.id);
       this.loadSystemParameterById();
     }
+    AppUtility.scrollTop();
   }
 
   setForm(event: any) {
@@ -57,6 +60,7 @@ export class SystemParameterEditComponent implements OnInit, OnDestroy {
           this.router.navigate(['admin/systemParameter/systemParameterEdit'], { queryParams: { 'id': systemParameter.id } });
         }
         this.setForm(systemParameter);
+        AppUtility.scrollTop();
       }));
   }
 
@@ -71,21 +75,16 @@ export class SystemParameterEditComponent implements OnInit, OnDestroy {
   }
 
   save() {
+
+    this.systemParameterFormStatus = 'SUBMMITED';
     if (this.systemParameterForm.valid) {
+      this.isForce = true;
+
       if (this.id !== null && this.id !== undefined) {
-        this.subscriptions.add(this.systemUtilityService.updateSystemParameter(this.id, this.systemParameterForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.loadSystemParameterById();
-          }));
+        this.systemUtilityService.updateSystemParameter(this.id, this.systemParameterForm.value);
       } else {
-        this.subscriptions.add(this.systemUtilityService.saveSystemParameter(this.systemParameterForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.loadSystemParameterById();
-          }));
+        this.systemUtilityService.saveSystemParameter(this.systemParameterForm.value)
+        this.loadSystemParameterById();
       }
     } else {
       this.validateAllFormFields(this.systemParameterForm);

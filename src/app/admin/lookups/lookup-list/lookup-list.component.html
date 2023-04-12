@@ -6,7 +6,7 @@
           Search Options (use "%" as wildcard in searches)
         </p>
         <form [formGroup]='lookupForm'>
-          <div class="row rowPadding">
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
@@ -34,13 +34,13 @@
             </div>
           </div>
         </form>
-        <p class="messages">
+        <p #tableScrollPoint  class="messages">
           <img src='assets/images/dot03.gif' alt="dot" class='dot'>
           <span class="messageName">Lookups (Number of Records =
             {{totalElement}})</span></p>
-        <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
-          [data]="dataSource"
-          [totalElement]="lookupData.totalElements"
+        <app-table  [keys]="keys" [isPaginate]="true" [isSearch]="false"
+          [data]="dataSource" [pageSize]="pageSize" [addSerialNumber]="true"
+          [totalElement]="lookupData.totalElements" [pageIndex]="pageIndex"
           (changePageEvent)="search($event,false)"
           (goToEditEvent)="goToEditLookup($event)" (addEvent)='addLookup()'>
         </app-table>

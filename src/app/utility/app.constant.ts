@@ -162,4 +162,7 @@ export class AppConstant {
     public static readonly ASC = 'asc';
     public static readonly DESC = 'desc';
 
+    public static readonly contextTypeSurvey = 'survey';
+    public static readonly contextTypeBatch = 'batch';
+    public static readonly contextTypeFactor = 'factor';
 }

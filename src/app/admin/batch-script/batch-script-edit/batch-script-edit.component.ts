@@ -9,6 +9,7 @@ import { ScriptDebugConsoleData } from 'src/app/models/filter-object';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -126,8 +127,16 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
 
   goToDebug() {
+
+    // https://xp-dev.com/trac/HEA/ticket/2063#comment:478 see for understanding
     this.setScriptDebugConsoleData();
-    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { batchScriptId: this.id , key : 'batch' } });
+    const queryParams : any = { batchScriptId: this.id };
+    if(this.batchScriptForm.value.surveyDescriptionId){
+      queryParams.key= AppConstant.contextTypeSurvey;
+    }else{
+      queryParams.key=AppConstant.contextTypeBatch;
+    }
+    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: queryParams });
   }
 
   setScriptDebugConsoleData(){

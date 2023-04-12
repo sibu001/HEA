@@ -297,6 +297,10 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetLoadLookupCountAction(filter));
   }
 
+  getgetLookUpCount() : Observable<SystemUtilityManagementState> {
+    return this.store.select(SystemUtilityManagementState.getLookUpCount);
+  }
+
   loadLookupById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetLookupByIdAction(id));
   }
@@ -316,6 +320,11 @@ export class SystemUtilityService {
   loadLookupValueList(force: boolean, filter: any, lookupCode: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetLookupValueListAction(force, filter, lookupCode));
   }
+
+  getLookUpValueList() : Observable<any>{
+    return this.store.select(SystemUtilityManagementState.getLookUpValueList);
+  }
+  
 
   loadLookupValueById(id: number, lookupCode: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetLookupValueByIdAction(id, lookupCode));
@@ -339,6 +348,10 @@ export class SystemUtilityService {
 
   loadSystemParameterCount(filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetSystemParameterCountAction(filter));
+  }
+
+  getSystemParameterCount() : Observable<number> {
+    return this.store.select(SystemUtilityManagementState.getSystemParameterCount)
   }
 
   loadSystemParameterById(id: number): Observable<SystemUtilityManagementState> {

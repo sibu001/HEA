@@ -8,6 +8,7 @@ import { ScriptDebugConsoleData } from 'src/app/models/filter-object';
 import { UtilityService } from 'src/app/services/utility.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -115,7 +116,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
 
   goToDebug() {
     this.setScriptDebugConsoleData();
-    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { key: 'factor' } });
+    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { key: AppConstant.contextTypeBatch } });
   }
 
   setScriptDebugConsoleData(){

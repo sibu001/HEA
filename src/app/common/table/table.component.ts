@@ -330,7 +330,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   sortData(event?: Sort) {
     this.page.sort = event;
     // this.page.pageIndex = 0;
-    // this.pageIndex = this.pageIndexNumber = 0;
+    this.page.pageIndex = this.pageIndex;
     this.page.pageSize = this.pageSize;
     this.changePageEvent.emit(this.page);
   }

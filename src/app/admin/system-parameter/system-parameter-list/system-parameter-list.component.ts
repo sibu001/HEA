@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,8 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -21,6 +23,9 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.SYSTEM_PARAMETER_KEYS;
   public dataSource: any;
   public totalElement = 0;
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
+  public pageSize : number = Number(AppConstant.pageSize);
+  public pageIndex : number = 0;
   public systemParameterData = {
     content: [],
     totalElements: 0,
@@ -43,6 +48,8 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.getSystemParameter();
+    this.getSystemParameterCount();
     this.setUpForm(this.adminFilter.systemParameterFilter.formValue);
     this.search(this.adminFilter.systemParameterFilter.page, false);
   }
@@ -62,35 +69,50 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
     });
   }
 
-  findSystemParameter(force: boolean, filter: any): void {
+  loadSystemParameterCount(force: boolean, filter: any): void {
     this.adminFilter.systemParameterFilter.formValue = this.systemParameterForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.systemUtilityService.loadSystemParameterCount(filter).pipe(skipWhile((item: any) => !item))
-      .subscribe((systemParameterCount: any) => {
-        this.systemParameterData.totalElements = systemParameterCount.systemUtilityManagement.systemParameterCount;
-        this.totalElement = systemParameterCount.systemUtilityManagement.systemParameterCount;
-        this.systemUtilityService.loadSystemParameterList(force, filter);
-        this.subscriptions.add(this.systemUtilityService.getSystemParameterList().pipe(skipWhile((item: any) => !item))
-          .subscribe((systemParameterList: any) => {
-            this.systemParameterData.content = systemParameterList;
-            this.dataSource = [...this.systemParameterData.content];
-          }));
-      }));
+    this.systemUtilityService.loadSystemParameterCount(filter);
+  }
+
+  getSystemParameterCount(){
+    this.subscriptions.add(this.systemUtilityService.getSystemParameterCount().pipe(skipWhile((item: any) => !item))
+    .subscribe((systemParameterCount: any) => {
+      this.systemParameterData.totalElements = systemParameterCount;
+      this.totalElement = systemParameterCount;
+    }));
+  }
+
+  loadSystemParameter(force: boolean, filter: any): void {
+    this.systemUtilityService.loadSystemParameterList(force, filter);
+  }
+
+  getSystemParameter(){
+    this.subscriptions.add(this.systemUtilityService.getSystemParameterList().pipe(skipWhile((item: any) => !item))
+    .subscribe((systemParameterList: any) => {
+      this.systemParameterData.content = systemParameterList;
+      this.dataSource = [...this.systemParameterData.content];
+      setTimeout(() => AppUtility.scrollToTableTop(this.tableScrollPoint));
+    }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.systemParameterFilter.page = event;
+    if(event) this.pageIndex = event.pageIndex;
+
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      .set('sortOrders[0].propertyName', (event && event.sort.active ? event.sort.active : 'paramCode'))
+      .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction == 'asc' ? 'true' : 'false') : 'true'))
       .set('paramCode', '')
       .set('paramValue', (this.systemParameterForm.value.paramValue !== null && this.systemParameterForm.value.paramValue !== undefined ? this.systemParameterForm.value.paramValue : ''))
       .set('description', (this.systemParameterForm.value.description !== null ? this.systemParameterForm.value.description : ''));
-    this.findSystemParameter(true, params);
+    
+  this.loadSystemParameter(true, params);
+  this.loadSystemParameterCount(true, params);
   }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

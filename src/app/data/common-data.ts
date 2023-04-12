@@ -165,8 +165,8 @@ export class TableColumnData {
     static readonly SYSTEM_PARAMETER_KEYS: Array<TABLECOLUMN> = [
         { key: 'paramCode', sort: 'paramCode', isEdit: true, displayName: 'Parameter Code', isUnderline: true },
         { key: 'description', sort: 'description', isEdit: true, displayName: 'Description' },
-        { key: 'paramValue', sort: 'paramValue', isEdit: true, displayName: 'Parameter Value' },
-        { key: 'format', sort: 'format', isEdit: true, displayName: 'Format' },
+        { key: 'paramValue', isEdit: true, displayName: 'Parameter Value' },
+        { key: 'format', isEdit: true, displayName: 'Format' },
     ];
 
     static readonly WEATHER_STATION_KEYS: Array<TABLECOLUMN> = [
@@ -175,7 +175,7 @@ export class TableColumnData {
     ];
 
     static readonly LOGS_KEYS: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        // { key: 'serialNumber', isEdit: true, displayName: '#' },
         { key: 'username', sort: 'username', isEdit: true, displayName: 'Username' },
         { key: 'recordType', sort: 'recordType', isEdit: true, displayName: 'Record Type' },
         { key: 'comment', sort: 'comment', isEdit: true, displayName: 'Comment' },

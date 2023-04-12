@@ -591,7 +591,7 @@ export class TopicManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 

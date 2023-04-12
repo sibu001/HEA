@@ -139,6 +139,15 @@ export class SystemUtilityManagementState {
         return state.customerEventTypeCount;
     }
 
+    @Selector()
+    static getLookUpCount(state: SystemUtilityManagementModel): any {
+        return state.lookupCount;
+    }
+
+    @Selector()
+    static getLookUpValueList(state : SystemUtilityManagementModel): SystemUtilityManagementModel{
+        return state.lookupValueList;
+    }
 
     @Selector()
     static getCustomerComparisonGroupCount(state: SystemUtilityManagementModel): any {
@@ -253,6 +262,11 @@ export class SystemUtilityManagementState {
     @Selector()
     static getTimeZoneList(state: SystemUtilityManagementModel): any {
         return state.timeZoneList;
+    }
+
+    @Selector()
+    static getSystemParameterCount(state: SystemUtilityManagementModel): number {
+        return state.systemParameterCount;
     }
 
     @Action(GetPlaceListAction)
@@ -840,6 +854,7 @@ export class SystemUtilityManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
                         lookup: response,
+                        lookupValueList : response.values
                     });
                 },
                     error => {
@@ -873,6 +888,7 @@ export class SystemUtilityManagementState {
                     //  this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         lookup: response,
+                        lookupValueList : response.value 
                     });
                 },
                     error => {
@@ -891,6 +907,7 @@ export class SystemUtilityManagementState {
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         lookup: response,
+                        lookupValueList : response.value 
                     });
                 },
                     error => {
@@ -946,7 +963,17 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage('Deleted Successfully');
+                    let lookupValueList : any = ctx.getState().lookupValueList;
+                    if(!lookupValueList) lookupValueList = [];
+                    const newLookupValueList = lookupValueList.filter(
+                        (lookupValue : any) => {
+                            return lookupValue.id != action.id;
+                        });
+
+                    ctx.patchState({
+                        lookupValueList: [...newLookupValueList]
+                    })
+
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -962,8 +989,12 @@ export class SystemUtilityManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     //  this.utilityService.showSuccessMessage('Save Successfully');
+                    let lookupValueList = ctx.getState().lookupValueList
+                    if(!lookupValueList) lookupValueList = [];
+                    lookupValueList.push(response); 
                     ctx.patchState({
                         lookupValue: response,
+                        lookupValueList: [...lookupValueList]
                     });
                 },
                     error => {
@@ -982,6 +1013,7 @@ export class SystemUtilityManagementState {
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         lookupValue: response,
+                        lookupValueList : response.values
                     });
                 },
                     error => {
