@@ -253,4 +253,15 @@ export class AppUtility {
     public static setScriptDebugConsoleData(scriptDebugConsoleData : ScriptDebugConsoleData) : void{
         localStorage.setItem('scriptDebugConsoleData', JSON.stringify(scriptDebugConsoleData));
     }
+
+    public static isAddIsLikeSearchParam(formValues : any) : string{
+
+        const ValueArray : Array<any> = Object.values(formValues);
+        for(const value of ValueArray){
+            if(value.toString().includes('%'))
+            return 'true';
+        }
+
+        return 'false';
+    }
 }

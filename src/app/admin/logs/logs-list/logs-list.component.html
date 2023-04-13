@@ -61,9 +61,14 @@
               <input type="text" class="form-control" formControlName='comment'
                 id='comment'>
             </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <span class="filterLabel">Audit Id:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+              <input type="text" class="form-control" formControlName='auditId'
+                id='auditId'>
+            </div>
+            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
           </div>
 
@@ -74,7 +79,7 @@
             </div>
           </div>
         </form>
-        <div class="paddingTop">
+        <div class="paddingTop" #tableScrollPoint>
           <p class="messages">
             <img src='assets/images/dot03.gif' alt="dot" class='dot'>
             <span class="messageName">Logs (Number of Records =
@@ -82,7 +87,8 @@
             </span></p>
           <app-table [isHideAdd]=true [keys]="keys" [isPaginate]="true"
             [isSearch]="false" [data]="dataSource" [pageIndex]="pageIndex"
-            [totalElement]="logsData.totalElements"
+            [addSerialNumber]="true" [pageSize]="pageSize" [pageIndex]="pageIndex"
+            [totalElement]="logsData.totalElements" (goToEditEvent)="editLogs($event)"
             (changePageEvent)="search($event,false)">
           </app-table>
         </div>

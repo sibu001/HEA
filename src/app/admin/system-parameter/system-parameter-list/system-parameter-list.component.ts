@@ -99,6 +99,7 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
   search(event: any, isSearch: boolean): void {
     this.adminFilter.systemParameterFilter.page = event;
     if(event) this.pageIndex = event.pageIndex;
+    else this.pageIndex = 0;
 
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
@@ -107,7 +108,6 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortOrders[0].propertyName', (event && event.sort.active ? event.sort.active : 'paramCode'))
       .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction == 'asc' ? 'true' : 'false') : 'true'))
-      .set('paramCode', '')
       .set('paramValue', (this.systemParameterForm.value.paramValue !== null && this.systemParameterForm.value.paramValue !== undefined ? this.systemParameterForm.value.paramValue : ''))
       .set('description', (this.systemParameterForm.value.description !== null ? this.systemParameterForm.value.description : ''));
     

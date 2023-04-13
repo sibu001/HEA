@@ -205,6 +205,11 @@ export class SystemUtilityManagementState {
     }
 
     @Selector()
+    static getLogsCount(state : SystemUtilityManagementModel): number {
+        return state.logCount;
+    }
+
+    @Selector()
     static getLookupValueList(state: SystemUtilityManagementModel): any {
         return state.logList;
     }

@@ -377,6 +377,10 @@ export class SystemUtilityService {
   loadLogsCount(filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetLogsCountAction(filter));
   }
+  
+  getLogListCount() : Observable<number>{
+    return this.store.select(SystemUtilityManagementState.getLogsCount);
+  }
 
   loadWeatherStationList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetWeatherStationListAction(force, filter));

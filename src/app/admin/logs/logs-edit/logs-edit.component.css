@@ -1,0 +1,35 @@
+.disableInput {
+    border: none;
+    box-shadow: none;
+    background-color: #ffff
+}
+
+.borderTop {
+    border-top: 1px solid #ddd;
+}
+
+.borderBottom {
+    border-bottom: 1px solid #ddd;
+}
+
+.rowPadding {
+    padding: 5px;
+}
+
+.form-padding {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #76ba19;
+    border-color: #76ba19;
+    padding: 4px 23px;
+    border-radius: 3px;
+}
+
+.cancel-btn{
+    float : right;
+    margin-top: 10px;
+}

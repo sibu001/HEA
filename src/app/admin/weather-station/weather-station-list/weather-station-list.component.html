@@ -6,7 +6,7 @@
           Weather Stations
         </p>
         <form [formGroup]='weatherStationForm'>
-          <div class="row rowPadding">
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
@@ -34,13 +34,13 @@
             </div>
           </div>
         </form>
-        <div class="paddingTop">
+        <div class="paddingTop" #tableScrollPoint>
           <p class="messages">
             <img src='assets/images/dot03.gif' alt="dot" class='dot'>
             <span class="messageName">Weather Station List</span></p>
           <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
-            [data]="dataSource"
-            [totalElement]="weatherStationData.totalElements"
+            [data]="dataSource" [disableLastButton]="true" [pageSize]="pageSize" [pageIndex]="pageIndex"
+            [totalElement]="weatherStationData.totalElements" [disableNextButton]="disableNextButton"
             (changePageEvent)="search($event,false)"
             (goToEditEvent)="goToEditWeatherStation($event)"
             (addEvent)='addWeatherStation()'>

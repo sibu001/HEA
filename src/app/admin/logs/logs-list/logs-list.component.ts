@@ -1,14 +1,18 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+import { LogsEditComponent } from '../logs-edit/logs-edit.component';
 
 @Component({
   selector: 'app-logs-list',
@@ -28,10 +32,13 @@ export class LogsListComponent implements OnInit, OnDestroy {
     totalElements: 0,
   };
   logsForm: FormGroup;
+  public pageSize : number = Number(AppConstant.pageSize);
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
   public adminFilter: AdminFilter;
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   constructor(public fb: FormBuilder,
+    public dialog: MatDialog,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
@@ -46,6 +53,8 @@ export class LogsListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setUpForm(this.adminFilter.logFilter.formValue);
     this.search(this.adminFilter.logFilter.page, false);
+    this.getLogList();
+    this.getLogListCout();
   }
 
   setUpForm(event: any) {
@@ -55,41 +64,75 @@ export class LogsListComponent implements OnInit, OnDestroy {
       entity: [event !== undefined && event !== null ? event.entity : ''],
       entityReference: [event !== undefined && event !== null ? event.entityReference : ''],
       comment: [event !== undefined && event !== null ? event.comment : ''],
+      auditId: ['']
     });
   }
 
-  findLogs(force: boolean, filter: any): void {
+  loadLogListCount(force: boolean, filter: any): void {
     this.adminFilter.logFilter.formValue = this.logsForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.systemUtilityService.loadLogsCount(filter).pipe(skipWhile((item: any) => !item))
-      .subscribe((logsCount: any) => {
-        this.logsData.totalElements = logsCount.systemUtilityManagement.logCount;
-        this.totalElement = logsCount.systemUtilityManagement.logCount;
-        this.systemUtilityService.loadLogsList(force, filter);
-        this.subscriptions.add(this.systemUtilityService.getLogsList().pipe(skipWhile((item: any) => !item))
-          .subscribe((logsList: any) => {
-            this.logsData.content = logsList;
-            this.dataSource = [...this.logsData.content];
-          }));
-      }));
+    this.systemUtilityService.loadLogsCount(filter);
+  }
+
+  getLogListCout(){
+    this.subscriptions.add(
+      this.systemUtilityService.getLogListCount()
+      .subscribe(
+          (logListCount) =>{
+            this.logsData.totalElements = logListCount;
+            this.totalElement = logListCount;
+          }
+      )
+    )
+  }
+
+  loadLogList(force: boolean, filter: any){
+    this.systemUtilityService.loadLogsList(force, filter);
+  }
+  
+  getLogList(){
+    this.subscriptions.add(this.systemUtilityService.getLogsList().pipe(skipWhile((item: any) => !item))
+    .subscribe((logsList: any) => {
+      this.logsData.content = logsList;
+      this.dataSource = [...this.logsData.content];
+      setTimeout(()=> AppUtility.scrollToTableTop(this.tableScrollPoint));
+    }));
+  }
+
+  editLogs(event: any){
+    const dialogRef = this.dialog.open(LogsEditComponent, {
+      width: '60vw',
+      height: '60vh',
+      data: event,
+      disableClose: false
+    });
+
+    dialogRef.afterClosed()
+    .subscribe(result => {
+    
+    });
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.logFilter.page = event;
-    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-      Number(event.pageIndex) + '' : 0);
+    if(event) this.pageIndex = event.pageIndex;
+    else this.pageIndex = 0;
+
     const params = new HttpParams()
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('username', (this.logsForm.value.username !== null ? this.logsForm.value.username : ''))
+      .set('auditId', (this.logsForm.value.auditId !== null ? this.logsForm.value.auditId : ''))
       .set('recordType', (this.logsForm.value.recordType !== null ? this.logsForm.value.recordType : ''))
       .set('entity', (this.logsForm.value.entity !== null ? this.logsForm.value.entity : ''))
+      .set('useLikeSearch', AppUtility.isAddIsLikeSearchParam(this.logsForm.value))
       .set('entityReference', (this.logsForm.value.entityReference !== null ? this.logsForm.value.entityReference : ''))
       .set('comment', (this.logsForm.value.recordType !== null ? this.logsForm.value.comment : ''));
-    this.findLogs(true, params);
+    this.loadLogListCount(true, params);
+    this.loadLogList(true, params);
   }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

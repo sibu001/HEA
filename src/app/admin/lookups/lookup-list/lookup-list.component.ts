@@ -106,6 +106,7 @@ export class LookupListComponent implements OnInit, OnDestroy, AfterContentInit 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.lookupFilter.page = event;
     if(event) this.pageIndex = event.pageIndex;
+    else this.pageIndex = 0;
 
     const params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())

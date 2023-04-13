@@ -1,13 +1,17 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { E } from '@angular/core/src/render3';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
+import { TableComponent } from 'src/app/common/table/table.component';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -21,14 +25,20 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.WEATHER_STATION_KEYS;
   public dataSource: any;
   public totalElement = 0;
+  public currentIndex : number = 0;
+  public newFilterSearch : boolean ;
   public weatherStationData = {
     content: [],
-    totalElements: 0,
+    totalElements: Number.MAX_SAFE_INTEGER,
   };
   weatherStationForm: FormGroup;
+  disableNextButton : boolean = false;
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
   public adminFilter: AdminFilter;
+  public pageSize : number = Number(AppConstant.pageSize);
+  public pageIndex : number = 0;
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   constructor(public fb: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
     private readonly router: Router,
@@ -45,6 +55,7 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setUpForm(this.adminFilter.weatherStationFilter.formValue);
     this.search(this.adminFilter.weatherStationFilter.page, false);
+    this.getWeatherStationList();
   }
 
   goToEditWeatherStation(event: any): any {
@@ -66,19 +77,46 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
     this.adminFilter.weatherStationFilter.formValue = this.weatherStationForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
     this.systemUtilityService.loadWeatherStationList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
-      .subscribe((weatherStationList: any) => {
-        this.weatherStationData.content = weatherStationList;
-        this.weatherStationData.totalElements = weatherStationList.totalSize;
-        this.dataSource = [...this.weatherStationData.content];
-      }));
   }
+
+  getWeatherStationList(){
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationList()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((weatherStationList: any) => {
+      this.performPagination(weatherStationList);
+      AppUtility.scrollToTableTop(this.tableScrollPoint);
+    }));
+  }
+
+  performPagination(dataList: any){
+
+    const obj = AppUtility.paginateData(
+       { dataList : dataList ,
+        dataSource : this.dataSource,
+        pageSize :this.pageSize, 
+        pageIndex : this.pageIndex, 
+        currentIndex : this.currentIndex,
+        disableNextButton : this.disableNextButton,
+        newFilterSearch :this.newFilterSearch}, this);
+  }
+
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.weatherStationFilter.page = event;
+
+    if(event)
+      this.currentIndex = event.pageIndex;
+    else{
+      this.currentIndex = 0;
+      this.newFilterSearch = true;
+    }
+
+
     const params = new HttpParams()
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('pageSize',this.pageSize.toString())
+      .set('useLikeSearch','true')
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
