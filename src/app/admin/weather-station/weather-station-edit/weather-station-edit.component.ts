@@ -2,8 +2,9 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -33,6 +34,7 @@ export class WeatherStationEditComponent implements OnInit, OnDestroy {
       this.systemUtilityService.loadWeatherStationById(this.id);
       this.loadWeatherStationById();
     }
+    AppUtility.scrollTop();
   }
 
 
@@ -45,7 +47,12 @@ export class WeatherStationEditComponent implements OnInit, OnDestroy {
   }
 
   loadWeatherStationById() {
-    this.subscriptions.add(this.systemUtilityService.getWeatherStationById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemUtilityService.getWeatherStationById()
+    .pipe(filter((item: any) => {
+      console.log(item)
+      console.log("this.id : " + this.id);
+      return item && (this.id == item.id || this.isForce );
+    }))
       .subscribe((weatherStation: any) => {
         if (this.isForce) {
           this.router.navigate(['admin/weatherStation/weatherStationEdit'], { queryParams: { 'id': weatherStation.id } });
@@ -57,10 +64,12 @@ export class WeatherStationEditComponent implements OnInit, OnDestroy {
   back() {
     this.router.navigate(['admin/weatherStation/weatherStationList'], { queryParams: { 'force': this.isForce } });
   }
+  
   delete() {
     this.subscriptions.add(this.systemUtilityService.deleteWeatherStationById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-        this.router.navigate(['admin/weatherStation/weatherStationList'], { queryParams: { 'force': true } });
+        this.isForce= true;
+        this.router.navigate(['admin/weatherStation/weatherStationList'], { queryParams: { 'force': this.isForce } });
       }));
   }
 
@@ -68,20 +77,12 @@ export class WeatherStationEditComponent implements OnInit, OnDestroy {
     if (this.stationForm.valid) {
       if (this.id !== null && this.id !== undefined) {
         this.id = this.stationForm.value.stationId;
-        this.subscriptions.add(this.systemUtilityService.updateWeatherStation(this.id, this.stationForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.loadWeatherStationById();
-          }));
+          this.systemUtilityService.updateWeatherStation(this.id, this.stationForm.value);
       } else {
-        this.subscriptions.add(this.systemUtilityService.saveWeatherStation(this.stationForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.loadWeatherStationById();
-          }));
+        this.systemUtilityService.saveWeatherStation(this.stationForm.value)
+        this.loadWeatherStationById();
       }
+      this.isForce = true;
     } else {
       this.validateAllFormFields(this.stationForm);
     }

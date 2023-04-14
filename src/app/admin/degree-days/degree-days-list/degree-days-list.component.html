@@ -9,22 +9,19 @@
               style="text-align:right">
               <span>Upload file from www.degreedays.net for selected place:</span>
             </div>
-            <div class='col-sm-3 col-md-3 col-lg-3 col-xs-6'>
+            <div class='col-sm-4 col-md-4 col-lg-4 col-xs-6'>
               <input type="file" class="custom-file-input" style='font-size:
-                smaller;text-align:right'
+                smaller;text-align:right;width:100%;'
                 name="degreeDaysFile" id="degreeDaysFile" formControlName='degreeDaysFile' (change)="handleFileInput($event.target.files)">
-            </div>
-            <div class='col-sm-1 col-lg-1 col-md-1 col-xs-0' style='text-align:
-              right;'>
             </div>
           </div>
           <div class="row rowPadding borderBottom">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
+            <!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div> -->
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Station Id:</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select formControlName="stationId" id="stationId"
                 class="form-control">
                 <option value="" selected='selected'></option>
@@ -32,57 +29,59 @@
                   [value]="station.stationId">{{station.stationNameForLabel}}</option>
               </select>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-0">
-            </div>
+            <!-- <div class="col-sm-6 col-md-6 col-lg-6 col-xs-0">
+            </div> -->
           </div>
           <div class="row rowPadding borderBottom">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
+            <!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div> -->
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Date from:</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <p-calendar formControlName='valueDateFrom' dateFormat="mm/dd/yy"
                 id='valueDateFrom' showIcon=true
                 showButtonBar="true">
               </p-calendar>
+              <p>{{dateFormat}}</p>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Type:</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <select id="type" class="form-control" formControlName="type">
                 <option value="" selected="selected"></option>
                 <option value="HDD">HDD</option>
                 <option value="CDD">CDD</option>
               </select>
             </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
+            <!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div> -->
           </div>
           <div class="row rowPadding borderBottom">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
+            <!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div> -->
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Date to:</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <p-calendar formControlName='valueDateTo' id="valueDateTo"
                 dateFormat="mm/dd/yy" showIcon=true
                 showButtonBar="true"></p-calendar>
+              <p>{{dateFormat}}</p>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Base temperature:</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <select id="baseTemp" class="form-control"
                 formControlName="base">
                 <option value=""></option>
                 <option *ngFor='let temp of baseTemp' [value]="temp.key">{{temp.value}}</option>
               </select>
             </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-            </div>
+            <!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+            </div> -->
           </div>
           <div class="row rowPadding">
             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-7" style="text-align: end;margin-top: 10px;">

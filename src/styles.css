@@ -1896,7 +1896,8 @@ app-customer-list .mat-column-place {
 }
 
 app-topic-description-edit .mat-column-comments,
-customereventlist .mat-column-eventName {
+customereventlist .mat-column-eventName,
+app-logs-list .mat-column-comment {
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 50% !important;
@@ -2326,8 +2327,7 @@ table .ui-calendar .ui-calendar-button {
 }
 
 app-customer-view .mat-column-note,
-app-customer-view .mat-column-description,
-app-logs-list .mat-column-comment{
+app-customer-view .mat-column-description{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 40% !important;
@@ -2341,6 +2341,7 @@ app-logs-list .mat-column-comment{
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;   
+
   }
 
 
@@ -2394,7 +2395,8 @@ app-logs-list .mat-column-comment{
 
     app-mail-description-list .mat-column-totalProcessedTime,
     app-factor-list .mat-column-year,
-    app-logs-list .mat-column-recordType{
+    app-logs-list .mat-column-recordType,
+    app-logs-list .mat-column-logDate {
       word-wrap: break-word !important;
       white-space: unset !important;
       flex: 0 0 11% !important;

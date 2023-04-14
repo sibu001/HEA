@@ -34,7 +34,7 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
   weatherStationForm: FormGroup;
   disableNextButton : boolean = false;
   private readonly subscriptions: Subscription = new Subscription();
-  public force = false;
+  public force = true;
   public adminFilter: AdminFilter;
   public pageSize : number = Number(AppConstant.pageSize);
   public pageIndex : number = 0;
@@ -48,7 +48,7 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
       this.adminFilter = new AdminFilter();
     }
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = params['force'] == "true";
     });
   }
 
@@ -123,7 +123,7 @@ export class WeatherStationListComponent implements OnInit, OnDestroy {
       .set('stationId', '')
       .set('stationId', (this.weatherStationForm.value.stationId !== null ? this.weatherStationForm.value.stationId : ''))
       .set('stationName', (this.weatherStationForm.value.stationName !== null ? this.weatherStationForm.value.stationName : ''));
-    this.findWeatherStation(true, params);
+    this.findWeatherStation(this.force, params);
   }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

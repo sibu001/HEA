@@ -174,6 +174,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
         ).subscribe((response : any) =>{
             this.applyFilter(this.inputSuggestionField.nativeElement.value);}))
     }
+
+    this.disableLastButtonF();
+    this.disableNextButtonF();
   }
 
   ngOnChanges(changes: SimpleChanges) {

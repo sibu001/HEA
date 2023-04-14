@@ -21,7 +21,7 @@
     </div>
 
     <div class="example-container mat-elevation-z0 table-wrapper">
-        <mat-table [dataSource]="dataSource" matTableExporter multiTemplateDataRows style="table-layout: auto !important; width: auto !important;"
+        <mat-table [dataSource]="dataSource" matTableExporter multiTemplateDataRows
             #exporter="matTableExporter" matSort (matSortChange)="sortData($event)" [matSortDirection]='sortOrder'
             class="table">
             <ng-container matColumnDef="select">

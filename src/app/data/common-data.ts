@@ -178,8 +178,8 @@ export class TableColumnData {
         // { key: 'serialNumber', isEdit: true, displayName: '#' },
         { key: 'username', sort: 'username', isEdit: true, displayName: 'Username' },
         { key: 'recordType', sort: 'recordType', isEdit: true, displayName: 'Record Type' },
-        { key: 'comment', sort: 'comment', isEdit: true, displayName: 'Comment' },
-        { key: 'entity', sort: 'entity', isEdit: true, displayName: 'Entity' },
+        { key: 'comment', sort: 'comment', isEdit: true, displayName: 'Comment / Entity' },
+        // { key: 'entity', sort: 'entity', isEdit: true, displayName: 'Entity' },
         { key: 'logDate', sort: 'logDate', isEdit: true, displayName: 'Log Date' }
     ];
 

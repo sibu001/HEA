@@ -9,6 +9,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -18,6 +19,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 })
 export class DegreeDaysListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.DEGREE_DAY_KEY;
+  public dateFormat : string = AppConstant.DATE_SELECTION_FORMAT;
   public dataSource: any;
   public fileObject: any;
   public pageIndex: any;

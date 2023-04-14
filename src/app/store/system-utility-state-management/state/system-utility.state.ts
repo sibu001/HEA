@@ -1178,7 +1178,7 @@ export class SystemUtilityManagementState {
 
     @Action(GetWeatherStationListAction)
     getAllWeatherStationList(ctx: StateContext<SystemUtilityManagementModel>, action: GetWeatherStationListAction): Actions {
-        const force: boolean = action.force || SystemUtilityManagementState.getWeatherStationList(ctx.getState()) === undefined;
+        const force: boolean = action.force || !ctx.getState().weatherStationList;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -1201,6 +1201,11 @@ export class SystemUtilityManagementState {
 
     @Action(GetWeatherStationByIdAction)
     getWeatherStationById(ctx: StateContext<SystemUtilityManagementModel>, action: GetWeatherStationByIdAction): Actions {
+        
+        const weatherStation = ctx.getState().weatherStation;
+        if(weatherStation && weatherStation.id == action.id) 
+            return null;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.weatherStation + '/' + action.id)
             .pipe(
