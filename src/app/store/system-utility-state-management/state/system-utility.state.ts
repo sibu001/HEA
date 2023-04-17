@@ -235,6 +235,11 @@ export class SystemUtilityManagementState {
     }
 
     @Selector()
+    static getdegreeDaysCount(state: SystemUtilityManagementModel): any {
+        return state.degreeDaysCount;
+    }
+
+    @Selector()
     static getDegreeDaysById(state: SystemUtilityManagementModel): any {
         return state.logs;
     }
@@ -1274,8 +1279,9 @@ export class SystemUtilityManagementState {
 
     @Action(GetDegreeDaysListAction)
     getAllDegreeDaysList(ctx: StateContext<SystemUtilityManagementModel>, action: GetDegreeDaysListAction): Actions {
-        const force: boolean = action.force || SystemUtilityManagementState.getDegreeDaysList(ctx.getState()) === undefined;
+        const force: boolean = action.force || !ctx.getState().degreeDaysList;
         let result: Actions;
+        
         if (force) {
             document.getElementById('loader').classList.add('loading');
             result = this.loginService.performGetWithParams(AppConstant.degreeDays, action.filter)
@@ -1297,6 +1303,10 @@ export class SystemUtilityManagementState {
 
     @Action(GetDegreeDaysCountAction)
     getDegreeDaysCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetDegreeDaysCountAction): Actions {
+        
+        const force : boolean = action.force || !ctx.getState().degreeDaysCount;
+        if(!force) return null;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGetWithParams(AppConstant.degreeDays + '/count', action.filter)
             .pipe(

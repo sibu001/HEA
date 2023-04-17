@@ -4,14 +4,13 @@
       <div class="col-sm-12 col-md-9 col-lg-9 content admin-content">
         <p class="heading">Degree Days</p>
         <form [formGroup]="degreeDayForm" class="form-group form-margin">
-          <div class="row rowPadding borderBottom">
-            <div class='col-sm-8 col-md-8 col-lg-8 col-xs-6'
-              style="text-align:right">
-              <span>Upload file from www.degreedays.net for selected place:</span>
+          <div class="row rowPadding borderBottom ">
+            <div class='col-sm-8 col-md-8 col-lg-8 col-xs-6'>
+              <span class="file-upload">Upload file from www.degreedays.net for selected place:</span>
             </div>
             <div class='col-sm-4 col-md-4 col-lg-4 col-xs-6'>
-              <input type="file" class="custom-file-input" style='font-size:
-                smaller;text-align:right;width:100%;'
+              <input type="file" class="custom-file-input file-upload" style='font-size:
+                smaller;width:100%;'
                 name="degreeDaysFile" id="degreeDaysFile" formControlName='degreeDaysFile' (change)="handleFileInput($event.target.files)">
             </div>
           </div>
@@ -38,17 +37,17 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Date from:</span>
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <p-calendar formControlName='valueDateFrom' dateFormat="mm/dd/yy"
                 id='valueDateFrom' showIcon=true
                 showButtonBar="true">
               </p-calendar>
-              <p>{{dateFormat}}</p>
+              <div class="date-format">{{dateFormat}}</div >
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Type:</span>
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <select id="type" class="form-control" formControlName="type">
                 <option value="" selected="selected"></option>
                 <option value="HDD">HDD</option>
@@ -64,16 +63,16 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Date to:</span>
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <p-calendar formControlName='valueDateTo' id="valueDateTo"
                 dateFormat="mm/dd/yy" showIcon=true
                 showButtonBar="true"></p-calendar>
-              <p>{{dateFormat}}</p>
+              <div class="date-format">{{dateFormat}}</div >
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Base temperature:</span>
             </div>
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <select id="baseTemp" class="form-control"
                 formControlName="base">
                 <option value=""></option>
@@ -86,7 +85,7 @@
           <div class="row rowPadding">
             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-7" style="text-align: end;margin-top: 10px;">
                 <button type="submit" class="btn btn-primary"
-                  (click)="search(undefined,true)">Show</button>
+                  (click)="search(undefined,false)">Show</button>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-5" style="text-align: end;margin-top: 10px;">
                 <button type="submit" class="btn btn-primary"
@@ -94,7 +93,7 @@
             </div>
           </div>
         </form>
-        <div class="row rowPadding">
+        <div class="row rowPadding" #tableScrollPoint>
           <div class="col-sm-12">
             <p class="messages">
               <img alt="dot" src="assets/images/dot03.gif" class="dot pointer">
@@ -106,6 +105,7 @@
         <div class="row rowPadding">
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
+              [pageSize]="pageSize" [addSerialNumber]="true"
               [data]="dataSource" [pageIndex]="pageIndex"
               [totalElement]="degreeDayData.totalElements"
               (changePageEvent)="search($event,false)" [isHideAdd]=true>

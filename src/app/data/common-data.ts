@@ -184,12 +184,12 @@ export class TableColumnData {
     ];
 
     static readonly DEGREE_DAY_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        // { key: 'serialNumber', isEdit: true, displayName: '#' },
         { key: 'stationId', sort: 'stationId', isEdit: true, displayName: 'Station ID' },
         { key: 'type', sort: 'type', isEdit: true, displayName: 'Type' },
         { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Date', isDate: true },
         { key: 'base', sort: 'base', isEdit: true, displayName: 'Base Temprature' },
-        { key: 'value', sort: 'value', isEdit: true, displayName: 'Degree Days' },
+        { key: 'value', isEdit: true, displayName: 'Degree Days' },
     ];
 
     static readonly CIMIS_STATION_KEY: Array<TABLECOLUMN> = [

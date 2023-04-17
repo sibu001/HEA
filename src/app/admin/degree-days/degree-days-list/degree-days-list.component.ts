@@ -1,15 +1,16 @@
 import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -20,18 +21,21 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class DegreeDaysListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = TableColumnData.DEGREE_DAY_KEY;
   public dateFormat : string = AppConstant.DATE_SELECTION_FORMAT;
+
   public dataSource: any;
   public fileObject: any;
-  public pageIndex: any;
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
+  public pageIndex: number = 0;
   public totalElement = 0;
   public degreeDayData = {
     content: [],
     totalElements: 0,
   };
   degreeDayForm: FormGroup;
-  public force = false;
+  public force : boolean = false;
   public adminFilter: AdminFilter;
   public stationIds: Array<any>;
+  public pageSize : number = Number(AppConstant.pageSize);
   public baseTemp: Array<any> = TableColumnData.BASE_TEMPERATURE;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
@@ -43,15 +47,17 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
       this.adminFilter = new AdminFilter();
     }
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean( params['force']);
     });
   }
 
 
   ngOnInit() {
-    this.findWeatherStation(true, '');
+    this.findWeatherStation(this.force, '');
+    this.getDegreeDaysList();
+    this.getDegressDaysCount();
     this.setUpForm(this.adminFilter.degreeDaysFilter.formValue);
-    this.search(this.adminFilter.degreeDaysFilter.page, false);
+    this.search(this.adminFilter.degreeDaysFilter.page, true);
   }
 
   findWeatherStation(force: boolean, filter: any): void {
@@ -73,28 +79,44 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
     });
   }
 
-  findDegreeDays(force: boolean, filter: any): void {
+  loadDegreeDaysCount(force: boolean, filter: any): void {
     this.adminFilter.degreeDaysFilter.formValue = this.degreeDayForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.systemUtilityService.loadDegreeDaysCount(filter).pipe(skipWhile((item: any) => !item))
-      .subscribe((degreeDaysListCount: any) => {
-        this.degreeDayData.totalElements = degreeDaysListCount.systemUtilityManagement.degreeDaysCount;
-        this.totalElement = degreeDaysListCount.systemUtilityManagement.degreeDaysCount;
-        this.systemUtilityService.loadDegreeDaysList(force, filter);
-        this.subscriptions.add(this.systemUtilityService.getDegreeDaysList().pipe(skipWhile((item: any) => !item))
-          .subscribe((degreeDaysList: any) => {
-            this.degreeDayData.content = degreeDaysList;
-            this.dataSource = [...this.degreeDayData.content];
-          }));
+    this.systemUtilityService.loadDegreeDaysCount(force, filter)
+  }
+
+  getDegressDaysCount(){
+    this.subscriptions.add(
+      this.systemUtilityService.getDegreeDaysCount()
+      .subscribe(
+        (degreeDaysCount) =>{
+          this.degreeDayData.totalElements = degreeDaysCount;
+          this.totalElement = degreeDaysCount;
       }));
+
+  }
+
+  loadDegreeDaysList(force: boolean, filter: any): void {
+    this.systemUtilityService.loadDegreeDaysList(force, filter);
+  }
+
+  getDegreeDaysList(){
+    this.subscriptions.add(this.systemUtilityService.getDegreeDaysList()
+    .pipe(filter((item: any) => item))
+    .subscribe((degreeDaysList: any) => {
+      this.degreeDayData.content = degreeDaysList;
+      this.dataSource = [...this.degreeDayData.content];
+      setTimeout(()=> AppUtility.scrollToTableTop(this.tableScrollPoint));
+    }));
   }
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.degreeDaysFilter.page = event;
-    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-      Number(event.pageIndex) + '' : 0);
+    if(event) this.pageIndex = event.pageIndex;
+    else this.pageIndex = 0;
+
     const params = new HttpParams()
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
@@ -104,7 +126,9 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
       .set('type', (this.degreeDayForm.value.type !== null ? this.degreeDayForm.value.type : ''))
       .set('valueDateTo', (this.degreeDayForm.value.valueDateTo ? this.datePipe.transform(this.degreeDayForm.value.valueDateTo, 'MM/dd/yyyy') : ''))
       .set('base', (this.degreeDayForm.value.base !== null ? this.degreeDayForm.value.base : ''));
-    this.findDegreeDays(true, params);
+   
+    this.loadDegreeDaysCount(!isSearch ? true : this.force, params);
+    this.loadDegreeDaysList(!isSearch ? true : this.force,params);
   }
 
   handleFileInput(file: any): void {
@@ -112,8 +136,10 @@ export class DegreeDaysListComponent implements OnInit, OnDestroy {
   }
 
   upload(): void {
-    if (this.degreeDayForm.value.degreeDaysFile) {
-      this.systemUtilityService.saveDegreeDaysUsingFile(this.fileObject);
+    if (this.degreeDayForm.value.degreeDaysFile && this.fileObject) {
+      const formData = new FormData();
+      formData.append('fileBody',this.fileObject);
+      this.systemUtilityService.saveDegreeDaysUsingFile(formData);
     }
   }
 

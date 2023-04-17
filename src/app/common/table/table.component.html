@@ -74,7 +74,7 @@
                     row" style="display: grid;" >
                     <!-- added click event for gas-list popup dialog box -->
                     <div *ngIf="col.type!='image' && col.isDate && !col.isAction" (click)='goToEdit(row,col);'>
-                        {{ (col.isSurvey ? row.createdDate : row[col.key])|date:'mediumDate' : 'PST'}}</div>
+                        {{ (col.isSurvey ? row.createdDate : row[col.key])|date:'MM/dd/yyyy' : 'PST'}}</div>
                     <div id='1' *ngIf="col.type==='alert' && !col.isAction">
                         <div class="redAlert" *ngIf="row[col.key]===10">
                             <p id="alertCircle"></p>

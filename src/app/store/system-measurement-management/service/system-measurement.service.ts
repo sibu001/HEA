@@ -101,14 +101,18 @@ export class SystemMeasurementService {
     return this.store.dispatch(new GetCimisStationListAction(force, filter));
   }
 
-  loadCimisStationCount(filter: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new GetCimisStationCountAction(filter));
+  loadCimisStationCount(force : boolean, filter: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetCimisStationCountAction(force,filter));
   }
 
   loadCimisStationById(id: number): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new GetCimisStationByIdAction(id));
   }
 
+  getCimisStationCount() : Observable<number> {
+    return this.store.select(SystemMeasurementManagementState.getCimisStationCount)
+  }
+  
   saveCimisStation(logs: any): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new SaveCimisStationAction(logs));
   }

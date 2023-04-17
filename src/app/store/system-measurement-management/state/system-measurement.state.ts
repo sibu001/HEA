@@ -81,6 +81,11 @@ export class SystemMeasurementManagementState {
     }
 
     @Selector()
+    static getCimisStationCount(state : SystemMeasurementModel): number {
+        return state.cimisStationCount;
+    }
+
+    @Selector()
     static getCimisStationById(state: SystemMeasurementModel): any {
         return state.cimisStation;
     }
@@ -137,7 +142,7 @@ export class SystemMeasurementManagementState {
 
     @Action(GetCimisStationListAction)
     getAllCimisStationList(ctx: StateContext<SystemMeasurementModel>, action: GetCimisStationListAction): Actions {
-        const force: boolean = action.force || SystemMeasurementManagementState.getCimisStationList(ctx.getState()) === undefined;
+        const force: boolean = action.force || !ctx.getState().cimisStationList;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -160,6 +165,10 @@ export class SystemMeasurementManagementState {
 
     @Action(GetCimisStationCountAction)
     getCimisStationCount(ctx: StateContext<SystemMeasurementModel>, action: GetCimisStationCountAction): Actions {
+        
+        const force = action.force || !ctx.getState().cimisStationCount;
+        if (!force) return null;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGetWithParams(AppConstant.cimisStation + '/count', action.filter)
             .pipe(

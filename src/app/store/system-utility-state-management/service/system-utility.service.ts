@@ -406,8 +406,12 @@ export class SystemUtilityService {
     return this.store.dispatch(new GetDegreeDaysListAction(force, filter));
   }
 
-  loadDegreeDaysCount(filter: any): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetDegreeDaysCountAction(filter));
+  loadDegreeDaysCount(force : boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetDegreeDaysCountAction(force,filter));
+  }
+
+  getDegreeDaysCount() : Observable<number> {
+    return this.store.select(SystemUtilityManagementState.getdegreeDaysCount);
   }
 
   loadDegreeDaysById(id: number): Observable<SystemUtilityManagementState> {

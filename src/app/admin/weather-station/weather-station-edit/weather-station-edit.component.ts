@@ -49,8 +49,6 @@ export class WeatherStationEditComponent implements OnInit, OnDestroy {
   loadWeatherStationById() {
     this.subscriptions.add(this.systemUtilityService.getWeatherStationById()
     .pipe(filter((item: any) => {
-      console.log(item)
-      console.log("this.id : " + this.id);
       return item && (this.id == item.id || this.isForce );
     }))
       .subscribe((weatherStation: any) => {

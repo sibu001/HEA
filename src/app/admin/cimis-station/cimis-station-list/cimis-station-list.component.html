@@ -6,8 +6,8 @@
           {{errorMessage?.error?.errorMessage}}
         </p>
         <p class="heading">CIMIS Stations</p>
-        <form [formGroup]="stationForm" class="form-group">
-          <div class="row sidePadding rowPadding">
+        <form [formGroup]="stationForm" class="form-group ">
+          <div class="row sidePadding rowPadding borderBottom">
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Station Number:</span>
             </div>
@@ -38,7 +38,7 @@
             </div>
           </div>
         </form>
-        <div class="row">
+        <div class="row" #tableScrollPoint>
           <div class="col-sm-12">
             <p class="messages">
               <img src="assets/images/dot03.gif" alt="dot" class="dot pointer">
@@ -51,7 +51,7 @@
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
               [data]="dataSource"
               [totalElement]="stationData.totalElements" [pageIndex]="pageIndex"
-              (changePageEvent)="search($event,false)"
+              (changePageEvent)="search($event,true)"
               (goToEditEvent)="goToEditCimisStation($event)"
               (addEvent)="addCimisStation()">
             </app-table>

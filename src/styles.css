@@ -1671,7 +1671,10 @@ app-factor-list .mat-column-factorName
 app-gas-charge .mat-column-year,app-gas-charge .mat-column-value ,
 app-electricity-usage-list .mat-column-year ,app-electricity-usage-list .mat-column-value
 app-electricity-charge-list .mat-column-year ,app-electricity-charge-list .mat-column-value,
-app-topic-description-edit .mat-column-orderNumber{
+app-topic-description-edit .mat-column-orderNumber,
+app-degree-days-list .mat-column-createdDate,
+app-degree-days-list .mat-column-value,
+app-degree-days-list .mat-column-type{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 13% !important;

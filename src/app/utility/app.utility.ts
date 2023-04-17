@@ -264,4 +264,8 @@ export class AppUtility {
 
         return 'false';
     }
+
+    public static forceParamToBoolean(forceParam : string) : boolean{
+        return forceParam == 'true'
+    }
 }

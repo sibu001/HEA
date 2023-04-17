@@ -90,3 +90,14 @@ input[type="file"] {
 ::ng-deep .ui-calendar.ui-calendar-w-btn input{
   width: 100%!important;
 }
+
+.date-format{
+  display: inline-block;
+  margin-left : 50px
+}
+
+@media (min-width: 768px) {
+  .file-upload{
+    float: right;
+  }  
+}

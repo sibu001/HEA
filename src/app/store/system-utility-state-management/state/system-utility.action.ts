@@ -399,7 +399,7 @@ export class GetDegreeDaysListAction {
 
 export class GetDegreeDaysCountAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_DEGREE_DAYS_COUNT;
-    constructor(readonly filter: any) {
+    constructor(readonly force: boolean , readonly filter: any) {
     }
 }
 

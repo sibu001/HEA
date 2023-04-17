@@ -49,7 +49,7 @@ export class GetCimisStationListAction {
 
 export class GetCimisStationCountAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_CIMIS_STATION_COUNT;
-    constructor(readonly filter: any) {
+    constructor(readonly force: boolean, readonly filter: any) {
     }
 }
 
