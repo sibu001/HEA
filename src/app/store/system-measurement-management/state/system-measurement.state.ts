@@ -96,6 +96,11 @@ export class SystemMeasurementManagementState {
     }
 
     @Selector()
+    static getCimisMeasurementCount(state: SystemMeasurementModel): any {
+        return state.cimisMeasurementCount;
+    }
+
+    @Selector()
     static getCimisMeasurementById(state: SystemMeasurementModel): any {
         return state.cimisMeasurementList;
     }
@@ -103,6 +108,11 @@ export class SystemMeasurementManagementState {
     @Selector()
     static getScriptBatchList(state: SystemMeasurementModel): any {
         return state.scriptBatchList;
+    }
+
+    @Selector()
+    static getScriptBatchCount(state: SystemMeasurementModel): any {
+        return state.scriptBatchCount;
     }
 
     @Selector()
@@ -186,6 +196,12 @@ export class SystemMeasurementManagementState {
 
     @Action(GetCimisStationByIdAction)
     getCimisStationById(ctx: StateContext<SystemMeasurementModel>, action: GetCimisStationByIdAction): Actions {
+
+        const cimisStation : any = ctx.getState().cimisStation;
+        const force : boolean = !cimisStation || cimisStation.id != action.id;
+
+        if(!force) return null;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.cimisStation + '/' + action.id)
             .pipe(
@@ -208,6 +224,9 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        cimisStation: undefined,
+                    });
                     // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
@@ -254,7 +273,7 @@ export class SystemMeasurementManagementState {
 
     @Action(GetCimisMeasurementListAction)
     getAllCimisMeasurementList(ctx: StateContext<SystemMeasurementModel>, action: GetCimisMeasurementListAction): Actions {
-        const force: boolean = action.force || SystemMeasurementManagementState.getCimisMeasurementList(ctx.getState()) === undefined;
+        const force: boolean = action.force || ctx.getState().cimisMeasurementList == undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -277,6 +296,11 @@ export class SystemMeasurementManagementState {
 
     @Action(GetCimisMeasurementCountAction)
     getCimisMeasurementCount(ctx: StateContext<SystemMeasurementModel>, action: GetCimisMeasurementCountAction): Actions {
+        const force: boolean = action.force || ctx.getState().cimisMeasurementList == undefined;
+        let result: Actions;
+
+        if(!force) return null;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGetWithParams(AppConstant.cimisMeasurement + '/count', action.filter)
             .pipe(
@@ -362,7 +386,7 @@ export class SystemMeasurementManagementState {
 
     @Action(GetScriptBatchListAction)
     getAllScriptBatchList(ctx: StateContext<SystemMeasurementModel>, action: GetScriptBatchListAction): Actions {
-        const force: boolean = action.force || SystemMeasurementManagementState.getScriptBatchList(ctx.getState()) === undefined;
+        const force: boolean = action.force || ctx.getState().scriptBatchList === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -385,6 +409,9 @@ export class SystemMeasurementManagementState {
 
     @Action(GetScriptBatchCountAction)
     getScriptBatchCount(ctx: StateContext<SystemMeasurementModel>, action: GetScriptBatchCountAction): Actions {
+        const force: boolean = action.force || ctx.getState().scriptBatchList === undefined;
+        if(!force) return null;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGetWithParams(AppConstant.scriptBatch + '/count', action.filter)
             .pipe(

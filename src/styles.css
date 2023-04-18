@@ -1347,6 +1347,7 @@ table.jqplot-table-legend {
 }
 
 .error-message {
+  margin-top: 5px;
   color: red;
 }
 
@@ -1882,7 +1883,8 @@ app-share-my-data-list .mat-column-city{
 }
 
 app-topic-description-edit .mat-column-section,
-app-customer-list .mat-column-place {
+app-customer-list .mat-column-place,
+app-batch-script-list .mat-column-batchPeriod{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 11% !important;
@@ -2280,7 +2282,8 @@ hyphens: auto;
 }
  
 app-customer-view .mat-column-linkedPersonName,
-app-factor-list .mat-column-place{
+app-factor-list .mat-column-place,
+app-batch-script-list .mat-column-lastExecutionTime{
 word-wrap: break-word !important;
 white-space: unset !important;
 flex: 0 0 18% !important;
@@ -2300,7 +2303,8 @@ app-customer-event-type .ui-calendar .ui-calendar-button:enabled{
   height: 29px !important;
 }
 
-app-customer-view .mat-column-mailDescriptionId{
+app-customer-view .mat-column-mailDescriptionId,
+app-batch-script-list .mat-column-periodDay{
 word-wrap: break-word !important;
 white-space: unset !important;
 flex: 0 0 14% !important;
@@ -2633,4 +2637,9 @@ app-electricity-usage-popup input[type="date"] {
 /* added to scroll padding so that nav-bar can cut off while scrolling thorugh javascript. */
 *{
   scroll-padding: 90px;
+}
+
+.date-format{
+  display: inline-block;
+  margin-left : 50px
 }

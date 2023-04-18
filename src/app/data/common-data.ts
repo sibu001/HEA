@@ -199,7 +199,7 @@ export class TableColumnData {
     ];
 
     static readonly CIMIS_MEASUREMENTS_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        // { key: 'serialNumber', isEdit: true, displayName: '#' },
         { key: 'stationNbr', sort: 'stationNbr', isEdit: true, displayName: 'Station Number' },
         { key: 'cmDateTime', sort: 'cmDateTime', isEdit: true, displayName: 'Date' },
         { key: 'hour', sort: 'hour', isEdit: true, displayName: 'Hour' },
@@ -207,7 +207,7 @@ export class TableColumnData {
     ];
 
     static readonly BATCH_SCRIPT_KEY: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        // { key: 'serialNumber', isEdit: true, displayName: '#' },
         { key: 'batchName', sort: 'batchName', isEdit: true, displayName: 'Batch name', isUnderline: true },
         { key: 'batchPeriod', sort: 'batchPeriod', isEdit: true, displayName: 'Period', isUnderline: true },
         { key: 'periodDay', sort: 'periodDay', isEdit: true, displayName: 'Period day' },

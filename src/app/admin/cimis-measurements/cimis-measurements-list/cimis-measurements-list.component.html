@@ -28,8 +28,9 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <p-calendar formControlName='cmDateTimeFrom' id="cmDateTimeFrom"
-                dateFormat="mm/dd/yy" showIcon=true
+              [dateFormat]="dateFormat" showIcon=true
                 showButtonBar="true"></p-calendar>
+                <div class="date-format" >{{dateSelectionFormat}}</div>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0">
             </div>
@@ -42,10 +43,12 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <p-calendar formControlName='cmDateTimeTo' id="cmDateTimeTo"
-                dateFormat="mm/dd/yy" showIcon=true
+                [dateFormat]="dateFormat" showIcon=true
                 showButtonBar="true"></p-calendar>
+                <div class="date-format" >{{dateSelectionFormat}}</div>
             </div>
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0">
+              <!-- <div style="margin-left: 50px;" >{{dateSelectionFormat}}</div> -->
             </div>
           </div>
           <div class="row rowPadding">
@@ -55,7 +58,7 @@
             </div>
           </div>
         </form>
-        <div class="row">
+        <div class="row" #tableScrollPoint>
           <div class="col-sm-12">
             <p class="messages">
               <img src="assets/images/dot03.gif" alt="dot" class="dot pointer">
@@ -69,8 +72,9 @@
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
               [data]="dataSource" [isHideAdd]=true [pageIndex]="pageIndex"
+              [pageSize]="pageSize" [addSerialNumber]="true"
               [totalElement]="measurementsData.totalElements"
-              (changePageEvent)="search($event, false)">
+              (changePageEvent)="search($event, true)">
             </app-table>
 
           </div>

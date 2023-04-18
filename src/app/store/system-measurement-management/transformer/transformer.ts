@@ -44,17 +44,17 @@ export class SystemMeasurementUtilityTransformer {
 
     static transformCimisMeasurementTableData(src: any, filter: any): any {
         const dataSourceList: any = [];
-        let index = 1;
-        if (filter && filter.get('startRow')) {
-            index = Number(filter.get('startRow')) + 1;
-        }
+        // let index = 1;
+        // if (filter && filter.get('startRow')) {
+        //     index = Number(filter.get('startRow')) + 1;
+        // }
         src.forEach(element => {
             let dataSourceObject: any = {};
             dataSourceObject = element;
-            dataSourceObject.serialNumber = index;
+            // dataSourceObject.serialNumber = index;
             dataSourceObject.cmDateTime = element.cmDateTime ? new DatePipe('en-US').transform(new Date(element.cmDateTime), 'MM/dd/yyyy') : '';
             dataSourceObject.irradiance = element.irradiance + ' Ly/day';
-            index++;
+            // index++;
             dataSourceList.push(dataSourceObject);
         });
         return dataSourceList;
@@ -73,14 +73,14 @@ export class SystemMeasurementUtilityTransformer {
 
     static transformBatchScriptTableData(src: any, filter: any): any {
         const dataSourceList: any = [];
-        let index = 1;
-        if (filter && filter.get('startRow')) {
-            index = Number(filter.get('startRow')) + 1;
-        }
+        // let index = 1;
+        // if (filter && filter.get('startRow')) {
+        //     index = Number(filter.get('startRow')) + 1;
+        // }
         src.forEach(element => {
             let dataSourceObject: any = {};
             dataSourceObject = element;
-            dataSourceObject.serialNumber = index;
+            // dataSourceObject.serialNumber = index;
             dataSourceObject.lastExecutionTime = element.lastExecutionTime ? new DatePipe('en-US').transform(new Date(element.lastExecutionTime), 'MM/dd/yyyy h:mm:ss') : '';
             switch (element.batchPeriod) {
                 case 'D':
@@ -104,7 +104,7 @@ export class SystemMeasurementUtilityTransformer {
                 default:
                     break;
             }
-            index++;
+            // index++;
             dataSourceList.push(dataSourceObject);
         });
         return dataSourceList;

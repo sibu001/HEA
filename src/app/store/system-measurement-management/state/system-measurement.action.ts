@@ -85,7 +85,7 @@ export class GetCimisMeasurementListAction {
 
 export class GetCimisMeasurementCountAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_CIMIS_MEASUREMENT_COUNT;
-    constructor(readonly filter: any) {
+    constructor(readonly force: boolean , readonly filter: any) {
     }
 }
 
@@ -122,7 +122,7 @@ export class GetScriptBatchListAction {
 
 export class GetScriptBatchCountAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_SCRIPT_BATCH_COUNT;
-    constructor(readonly filter: any) {
+    constructor(readonly force: boolean, readonly filter: any) {
     }
 }
 

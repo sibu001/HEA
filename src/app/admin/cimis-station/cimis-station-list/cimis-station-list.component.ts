@@ -107,7 +107,7 @@ export class CimisStationListComponent implements OnInit, OnDestroy {
     
     const params = new HttpParams()
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
-      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('useLikeSearch', 'true')

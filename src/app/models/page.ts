@@ -6,6 +6,7 @@ export class Page {
     public length: number;
     public pageSize = 10;
     public pageIndex = 0;
+    public sortRequest : boolean = false;
     public sqlOrder = 'false'
     public sort: Sort = {
         active: '',

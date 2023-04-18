@@ -129,8 +129,12 @@ export class SystemMeasurementService {
     return this.store.dispatch(new GetCimisMeasurementListAction(force, filter));
   }
 
-  loadCimisMeasurementCount(filter: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new GetCimisMeasurementCountAction(filter));
+  loadCimisMeasurementCount(force : boolean, filter: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetCimisMeasurementCountAction(force,filter));
+  }
+
+  getCimisMeasurementCount() : Observable<number> {
+    return this.store.select(SystemMeasurementManagementState.getCimisMeasurementCount);
   }
 
   loadCimisMeasurementById(id: number): Observable<SystemMeasurementManagementState> {
@@ -153,8 +157,12 @@ export class SystemMeasurementService {
     return this.store.dispatch(new GetScriptBatchListAction(force, filter));
   }
 
-  loadScriptBatchCount(filter: any): Observable<SystemMeasurementManagementState> {
-    return this.store.dispatch(new GetScriptBatchCountAction(filter));
+  loadScriptBatchCount(force : boolean ,filter: any): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetScriptBatchCountAction(force,filter));
+  }
+
+  getScriptBatchCount() : Observable<number>{
+    return this.store.select(SystemMeasurementManagementState.getScriptBatchCount);
   }
 
   loadScriptBatchById(id: number): Observable<SystemMeasurementManagementState> {

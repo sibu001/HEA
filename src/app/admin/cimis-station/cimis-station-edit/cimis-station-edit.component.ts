@@ -2,8 +2,9 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -17,6 +18,7 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   id: any;
   isForce = false;
   public errorMessage: any;
+  private cimisStationData :any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemMeasurementService: SystemMeasurementService,
@@ -31,8 +33,10 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setForm(undefined);
     if (this.id !== undefined) {
+      this.systemMeasurementService.loadCimisStationById(this.id);
       this.loadCimisStationById();
     }
+    AppUtility.scrollTop();
   }
   setForm(event: any) {
     this.cimisStationForm = this.formBuilder.group({
@@ -52,12 +56,14 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   }
 
   loadCimisStationById() {
-    this.systemMeasurementService.loadCimisStationById(this.id);
-    this.subscriptions.add(this.systemMeasurementService.getCimisStationById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemMeasurementService.getCimisStationById()
+    .pipe(filter((item: any) => item && (item.id == this.id || this.isForce)))
       .subscribe((cimisStation: any) => {
         if (this.isForce) {
           this.router.navigate(['admin/cimisStation/cimisStationEdit'], { queryParams: { 'id': cimisStation.id } });
         }
+
+        this.cimisStationData = cimisStation;
         this.setForm(cimisStation);
       },
         error => {
@@ -70,34 +76,28 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
       .subscribe((response: any) => {
         this.router.navigate(['admin/cimisStation/cimisStationList'], { queryParams: { 'force': true } });
       },
-        error => {
-          this.errorMessage = error;
-        }));
+      error => {
+        this.errorMessage = error;
+      }));
   }
 
   save() {
     if (this.cimisStationForm.valid) {
       if (this.id !== null && this.id !== undefined) {
-        this.subscriptions.add(this.systemMeasurementService.updateCimisStation(this.id, this.cimisStationForm.value).pipe(
+        const requestPayload = {...this.cimisStationData, ...this.cimisStationForm.value }
+        this.systemMeasurementService.updateCimisStation(this.id, requestPayload).pipe(
           skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.loadCimisStationById();
-          },
-            error => {
-              this.errorMessage = error;
-            }));
+          .subscribe((response: any) => {},
+            error => { this.errorMessage = error; AppUtility.scrollTop(); });
       } else {
-        this.subscriptions.add(this.systemMeasurementService.saveCimisStation(this.cimisStationForm.value).pipe(
+        this.systemMeasurementService.saveCimisStation(this.cimisStationForm.value).pipe(
           skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
+          .subscribe((response: any) => { 
             this.loadCimisStationById();
           },
-            error => {
-              this.errorMessage = error;
-            }));
+            error => { this.errorMessage = error; AppUtility.scrollTop(); });
       }
+      this.isForce = true;
     } else {
       this.validateForm();
     }
@@ -105,9 +105,10 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   validateForm() {
     for (const key of Object.keys(this.cimisStationForm.controls)) {
       if (this.cimisStationForm.controls[key].invalid) {
+        this.cimisStationForm.controls[key].markAsTouched();
         const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
         invalidControl.focus();
-        break;
+        // break;
       }
     }
   }

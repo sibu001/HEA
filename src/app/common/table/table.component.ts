@@ -326,6 +326,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     this.page.pageSize = event.pageSize;
     this.page.pageIndex = event.pageIndex;
     // this.pageIndex = this.page.pageIndex;
+    this.page.sortRequest = false;
     this.changePageEvent.emit(this.page);
     this.changeDetectorRefs.detectChanges();
   }
@@ -335,6 +336,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     // this.page.pageIndex = 0;
     this.page.pageIndex = this.pageIndex;
     this.page.pageSize = this.pageSize;
+    this.page.sortRequest = true;
     this.changePageEvent.emit(this.page);
   }
 
