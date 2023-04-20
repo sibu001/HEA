@@ -1,5 +1,6 @@
 import { HttpParams } from "@angular/common/http";
 import { ElementRef } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
 import { PaginateModel } from "../interface/paginate-model";
 import { ScriptDebugConsoleData } from "../models/filter-object";
 import { AllowedMenuList } from "./app.allowedMenuList";
@@ -73,6 +74,32 @@ export class AppUtility {
 
         return d;
       }
+
+    public static isDateValid(date : string) : boolean {
+        // const validDateRegex = /^\d{2}\/\d{2}\/\d{4}\s\d{2}:\d{2}:\d{2}$/;
+        const validDateRegex = /^(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])\/\d{4}(?:\s([01][0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])?$/;
+        
+        if (!date.match(validDateRegex)) {
+          return false ;
+        }
+    
+        return true;
+    }
+
+    public static inputFieldNumberValidator(control: FormControl) : any {
+        return new Promise((resolve) => {
+            const inputValue = control.value;
+            // Use a regular expression to check if the input value contains only numbers
+            const validNumberRegex = /^[0-9]*$/;
+        
+            if (!inputValue.match(validNumberRegex)) {
+              resolve({ notANumber : true });
+            } else {
+              resolve(null); // Resolve with null if the input value is valid
+            }
+          });
+      }
+
 
     private static getFormated(num){
         return num < 10 ? '0' + num : num;
@@ -267,5 +294,15 @@ export class AppUtility {
 
     public static forceParamToBoolean(forceParam : string) : boolean{
         return forceParam == 'true'
+    }
+
+    public static validateAndHighlightReactiveFrom(formGroup : FormGroup){
+        for (const key of Object.keys(formGroup.controls)) {
+            if (formGroup.controls[key].invalid) {
+            formGroup.controls[key].markAsTouched();
+            const invalidControl = document.querySelector('[formControlName="' + key + '"]') as HTMLInputElement;
+            invalidControl.focus();
+            }
+        }
     }
 }

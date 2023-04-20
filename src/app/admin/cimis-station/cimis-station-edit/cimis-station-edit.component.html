@@ -21,13 +21,13 @@
               Station Number:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm" id="stationNbr" formControlName="stationNbr" />
-              <div *ngIf="f.stationNbr.invalid && (f.stationNbr.dirty ||
+              <input type="text" class="form-control form-control-sm" id="stationNbr" formControlName="stationNbr" readonly />
+              <!-- <div *ngIf="f.stationNbr.invalid && (f.stationNbr.dirty ||
                 f.stationNbr.touched)">
                 <span class="error" *ngIf="f.stationNbr.errors.required">
                   Station Number is required.
                 </span>
-              </div>
+              </div> -->
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -101,6 +101,9 @@
                 <span class="error" *ngIf="f.elevation.errors.required">
                   Elevation is required.
                 </span>
+                <span class="error" *ngIf="f.elevation.errors.notANumber">
+                  Accpets only numeric data.
+                </span>
               </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -131,6 +134,9 @@
                 <span class="error" *ngIf="f.latitude.errors.required">
                   Latitude is required.
                 </span>
+                <span class="error" *ngIf="f.latitude.errors.notANumber">
+                  Accpets only numeric data.
+                </span>
               </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -146,6 +152,44 @@
                 <span class="error" *ngIf="f.longitude.errors.required">
                   Longitude is required.
                 </span>
+                <span class="error" *ngIf="f.longitude.errors.notANumber">
+                  Accpets only numeric data.
+                </span>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Connect date:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="longitude" formControlName="connectDate" />
+              <div *ngIf="f.connectDate.invalid && (f.connectDate.dirty ||
+                f.connectDate.touched)">
+                <span class="error" *ngIf="f.connectDate.errors.required">
+                  Connect date is required.
+                </span>
+              </div>
+              <div class="error" *ngIf="!isConnectDateVaild">
+                Date must be in format {{dateFormat}}
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              Disconnect date:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm" id="longitude" formControlName="disconnectDate" />
+              <div *ngIf="f.disconnectDate.invalid && (f.disconnectDate.dirty ||
+                f.disconnectDate.touched)">
+                <span class="error" *ngIf="f.disconnectDate.errors.required">
+                  Disconnect date is required.
+                </span>
+              </div>
+              <div class="error" *ngIf="!isDisconnectDateVaild">
+                Date must be in format {{dateFormat}}
               </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -175,6 +219,12 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <textarea class="form-control textarea_scroll" rows="3" id="zipCodes" name="zipCodes"
                 formControlName="zipCodes"></textarea>
+                <div *ngIf="f.zipCodes.invalid && (f.zipCodes.dirty ||
+                f.zipCodes.touched)">
+                <span class="error" *ngIf="f.zipCodes.errors.required">
+                  Zip codes are required.
+                </span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>

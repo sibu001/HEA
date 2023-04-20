@@ -189,8 +189,12 @@ export class SystemMeasurementService {
     return this.store.dispatch(new ExecuteScriptBatchResultAction(id));
   }
 
-  getScriptBatchGroup(id: number): Observable<SystemMeasurementManagementState> {
+  loadScriptBatchGroup(id: number): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new GetScriptBatchGroupAction(id));
+  }
+
+  getScriptBatchGroup() : Observable<any>{
+    return this.store.select(SystemMeasurementManagementState.getScriptBatchGroupList);
   }
 
   saveScriptBatchGroup(id: number, customerGroupId: any): Observable<SystemMeasurementManagementState> {

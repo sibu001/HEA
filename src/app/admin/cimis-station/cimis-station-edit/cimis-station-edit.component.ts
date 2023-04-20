@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, skipWhile } from 'rxjs/operators';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -17,6 +18,7 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   cimisStationForm: FormGroup;
   id: any;
   isForce = false;
+  public dateFormat : string = AppConstant.DATE_SELECTION_INPUT_FIELD;
   public errorMessage: any;
   private cimisStationData :any;
   private readonly subscriptions: Subscription = new Subscription();
@@ -40,18 +42,20 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   }
   setForm(event: any) {
     this.cimisStationForm = this.formBuilder.group({
-      stationNbr: [event !== undefined ? event.stationNbr : '', Validators.required],
+      stationNbr: [event !== undefined ? event.stationNbr : ''],
       name: [event !== undefined ? event.name : '', Validators.required],
       county: [event !== undefined ? event.county : '', Validators.required],
       city: [event !== undefined ? event.city : '', Validators.required],
       regionalOffice: [event !== undefined ? event.regionalOffice : '', Validators.required],
-      elevation: [event !== undefined ? event.elevation : '', Validators.required],
+      elevation: [event !== undefined ? event.elevation : '', Validators.required, AppUtility.inputFieldNumberValidator],
       groundCover: [event !== undefined ? event.groundCover : '', Validators.required],
-      latitude: [event !== undefined ? event.latitude : '', Validators.required],
-      longitude: [event !== undefined ? event.longitude : '', Validators.required],
-      isActive: [event !== undefined ? event.isActive : ''],
-      isEtoStation: [event !== undefined ? event.isEtoStation : ''],
-      zipCodes: [event !== undefined ? event.zipCodes : '']
+      latitude: [event !== undefined ? event.latitude : '', Validators.required, AppUtility.inputFieldNumberValidator],
+      longitude: [event !== undefined ? event.longitude : '', Validators.required, AppUtility.inputFieldNumberValidator],
+      connectDate: [event !== undefined ? AppUtility.getDateFromMilllis(event.connectDate) : '', Validators.required],
+      disconnectDate: [event !== undefined ? AppUtility.getDateFromMilllis(event.disconnectDate) : '', Validators.required],
+      isActive: [event !== undefined ? event.isActive : false],
+      isEtoStation: [event !== undefined ? event.isEtoStation : false],
+      zipCodes: [event !== undefined ? event.zipCodes : '', Validators.required]
     });
   }
 
@@ -81,16 +85,31 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
       }));
   }
 
+  isConnectDateVaild : boolean = true;
+  isDisconnectDateVaild : boolean = true;
+
   save() {
     if (this.cimisStationForm.valid) {
+
+      this.isConnectDateVaild = AppUtility.isDateValid(this.cimisStationForm.value.connectDate);
+      this.isDisconnectDateVaild = AppUtility.isDateValid(this.cimisStationForm.value.disconnectDate);
+
+      if(!this.isConnectDateVaild || !this.isDisconnectDateVaild){
+        return;
+      }
+
+      const updatedFormValue = { ...this.cimisStationForm.value,
+      connectDate : new Date(this.cimisStationForm.value.connectDate).getTime(),
+      disconnectDate : new Date(this.cimisStationForm.value.disconnectDate).getTime()};
+
       if (this.id !== null && this.id !== undefined) {
-        const requestPayload = {...this.cimisStationData, ...this.cimisStationForm.value }
+        const requestPayload = {...this.cimisStationData, ...updatedFormValue }
         this.systemMeasurementService.updateCimisStation(this.id, requestPayload).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {},
             error => { this.errorMessage = error; AppUtility.scrollTop(); });
       } else {
-        this.systemMeasurementService.saveCimisStation(this.cimisStationForm.value).pipe(
+        this.systemMeasurementService.saveCimisStation(updatedFormValue).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => { 
             this.loadCimisStationById();

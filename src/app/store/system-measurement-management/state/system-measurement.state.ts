@@ -4,6 +4,7 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { SystemService } from '../../system-state-management/service/system.service';
 import { SystemMeasurementUtilityTransformer } from '../transformer/transformer';
 import {
     DeleteAlertMessageByIdAction,
@@ -118,6 +119,12 @@ export class SystemMeasurementManagementState {
     @Selector()
     static getScriptBatchById(state: SystemMeasurementModel): any {
         return state.scriptBatch;
+    }
+
+
+    @Selector()
+    static getScriptBatchGroupList(state: SystemMeasurementModel): any {
+        return state.scriptBatchGroup;
     }
 
     @Selector()
@@ -429,6 +436,12 @@ export class SystemMeasurementManagementState {
 
     @Action(GetScriptBatchByIdAction)
     getScriptBatchById(ctx: StateContext<SystemMeasurementModel>, action: GetScriptBatchByIdAction): Actions {
+
+        const scriptBatch = ctx.getState().scriptBatch;
+        if(scriptBatch && scriptBatch.batchScriptId == action.id){
+            return null;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.scriptBatch + '/' + action.id)
             .pipe(
@@ -451,6 +464,9 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        scriptBatch : undefined
+                    })
                     // this.utilityService.showSuccessMessage(response.message);
                 },
                     error => {
@@ -527,6 +543,12 @@ export class SystemMeasurementManagementState {
 
     @Action(GetScriptBatchGroupAction)
     getScriptBatchGroup(ctx: StateContext<SystemMeasurementModel>, action: GetScriptBatchGroupAction): Actions {
+
+        const scriptBatchGroup = ctx.getState().scriptBatchGroup;
+        if(scriptBatchGroup && scriptBatchGroup[0] && scriptBatchGroup[0].batchScriptId == action.id ){
+            return null;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.scriptBatch + '/' + action.id + '/batchScriptGroups')
             .pipe(
@@ -550,6 +572,11 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    const scriptBatch = ctx.getState().scriptBatch;
+                    response.batchScript = scriptBatch;
+                    const scriptBatchGroup = ctx.getState().scriptBatchGroup
+                    scriptBatchGroup.push(response);
+                    ctx.patchState({ scriptBatchGroup :[...scriptBatchGroup] });
                     // this.utilityService.showSuccessMessage('Save Successfully');
                 },
                     error => {
@@ -565,6 +592,13 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    let scriptBatchGroup = ctx.getState().scriptBatchGroup;
+                    scriptBatchGroup = scriptBatchGroup.filter((data) => data.customerGroupId != response.customerGroupId );
+
+                    ctx.patchState({
+                        scriptBatchGroup : [...scriptBatchGroup]
+                    });
+
                     // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {

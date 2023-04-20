@@ -298,9 +298,7 @@ export class SystemManagementState {
 
     @Action(GetCustomerGroupListAction)
     getAllCustomerGroup(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupListAction): Actions {
-        // const force: boolean = action.force || SystemManagementState.getCustomerGroupList(ctx.getState()) === undefined;
-        // const force = ctx.getState().customerGroupList ;
-        const force = true;
+        const force: boolean = action.force || !ctx.getState().customerGroupList;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -920,6 +918,10 @@ export class SystemManagementState {
 
     @Action(GetLookupValueBatchPeriodListAction)
     getAllBatchPeriodList(ctx: StateContext<SystemManagementModel>, action: GetLookupValueBatchPeriodListAction): Actions {
+
+        const force : boolean = ctx.getState().batchPeriod == undefined;
+        if(!force) return null; 
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.lookupValues + '/BATCH_PERIOD')
             .pipe(

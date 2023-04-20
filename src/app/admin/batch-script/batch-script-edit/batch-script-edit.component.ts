@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { ScriptDebugConsoleData } from 'src/app/models/filter-object';
@@ -66,13 +66,16 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.loadBatchPeriodList();
     this.loadCalculationTypeList();
-    this.loadTopicDescription();
+    this.getCustomerGroupTableData();
+    this.loadCustomerGroup(false,'');
     this.setForm(undefined);
     if (this.id !== undefined) {
-      this.findBatchCustomerGroup(this.id);
+      this.loadTopicDescription();
+      this.loadBatchScriptGroup(this.id);
       this.systemMeasurementService.loadScriptBatchById(Number(this.id));
       this.loadBatchScriptById();
     }
+    AppUtility.scrollTop();
   }
 
   loadBatchPeriodList(): any {
@@ -82,6 +85,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
         this.periodData = batchPeriodList.data;
       }));
   }
+
   loadCalculationTypeList(): any {
     this.systemService.loadCalculationTypeList();
     this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
@@ -99,21 +103,25 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
 
   loadBatchScriptById() {
-    this.subscriptions.add(this.systemMeasurementService.getScriptBatchById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemMeasurementService.getScriptBatchById()
+    .pipe(filter((item: any) => item && (this.id == item.id || this.isForce)))
       .subscribe((response: any) => {
         if (this.isForce) {
           this.router.navigate(['admin/batchScript/batchScriptEdit'], { queryParams: { 'id': response.id } });
         }
         this.setForm(response);
+        this.id = response.id;
+        AppUtility.scrollTop();
       }));
   }
+
   setForm(event: any) {
     this.batchScriptForm = this.formBuilder.group({
       batchName: [event !== undefined ? event.batchName : ''],
-      batchPeriod: [event !== undefined ? event.batchPeriod : '', Validators.required],
+      batchPeriod: [event !== undefined ? event.batchPeriod : 'D', Validators.required],
       periodDay: [event !== undefined ? event.periodDay : '', Validators.required],
       forEachCustomer: [event !== undefined ? event.forEachCustomer : ''],
-      calculationType: [event !== undefined ? event.calculationType : ''],
+      calculationType: [event !== undefined ? event.calculationType : 'javascript'],
       batchFilter: [event !== undefined ? event.batchFilter : ''],
       surveyDescriptionId: [event !== undefined ? event.surveyDescriptionId : ''],
       calculation: [event !== undefined ? event.calculation : ''],
@@ -122,6 +130,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
       resultHeader: [event !== undefined ? event.resultHeader : ''],
     });
   }
+
   back() {
     this.router.navigate(['admin/batchScript/batchScriptList'], { queryParams: { 'force': this.isForce } });
   }
@@ -162,27 +171,28 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
     if (this.batchScriptForm.valid) {
       if (this.id !== null && this.id !== undefined) {
         this.checkTopicGroup();
-        this.subscriptions.add(this.systemMeasurementService.updateScriptBatch(this.id, this.batchScriptForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.loadBatchScriptById();
-          }));
+          this.systemMeasurementService.updateScriptBatch(this.id, this.batchScriptForm.value)
+          // this.isForce = true;
       } else {
-        this.subscriptions.add(this.systemMeasurementService.saveScriptBatch(this.batchScriptForm.value).pipe(
-          skipWhile((item: any) => !item))
+        this.subscriptions.add(this.systemMeasurementService.saveScriptBatch(this.batchScriptForm.value)
+          .pipe(take(1))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.id = response.systemMeasurement.scriptBatch.id;
             this.loadBatchScriptById();
+            this.loadTopicDescription();
           }));
       }
     } else {
-      this.validateForm();
+      AppUtility.validateAndHighlightReactiveFrom(this.batchScriptForm);
+      // this.validateForm();
     }
   }
+
   validateForm() {
     for (const key of Object.keys(this.batchScriptForm.controls)) {
       if (this.batchScriptForm.controls[key].invalid) {
+        this.batchScriptForm.controls[key].markAsTouched();
         const invalidControl = this.el.nativeElement.querySelector('[formControlName="' + key + '"]');
         invalidControl.focus();
         break;
@@ -197,24 +207,41 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
 
   loadCustomerGroup(force: boolean, filter: any) {
     this.systemService.loadCustomerGroupList(force, filter);
-    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
-      .subscribe((customerGroupList: any) => {
+  }
+ 
+  loadBatchScriptGroup(batchId : any){
+   this.systemMeasurementService.loadScriptBatchGroup(batchId);
+  }
+
+  getCustomerGroupTableData(){
+    const batchScriptGroup$ : Observable<any> = this.systemMeasurementService.getScriptBatchGroup().filter((data) => ( data instanceof Array) && (data[0]? data[0].batchScriptId == this.id : true));
+    const customerGroupList$ : Observable<any> = this.systemService.getCustomerGroupList().filter(data => data != undefined);
+
+    this.subscriptions.add(
+      combineLatest([batchScriptGroup$,customerGroupList$ ])
+      .subscribe( ([scriptBatchGroup, customerGroupList ]) =>{
+
+        const seletedBatchScriptList : Array<any> = [];
+        this.topicGroupList = [...scriptBatchGroup];
+        scriptBatchGroup.forEach(element => {
+
+          if(!element.customerGroup){
+            const customerGroupIndex = this.topicDataSource.findIndex((data) => data.customerGroupId == element.customerGroupId);
+            element.customerGroup = this.topicDataSource[customerGroupIndex];
+            scriptBatchGroup = element.customerGroup;
+          }
+
+          seletedBatchScriptList.push(element.customerGroup.groupCode);
+        });
+
+        this.topicGroupSelectionList = seletedBatchScriptList;
+
         this.topicGroupData.content = customerGroupList;
         this.topicDataSource = [...this.topicGroupData.content];
       }));
-  }
 
-  findBatchCustomerGroup(batchId: any) {
-    this.subscriptions.add(this.systemMeasurementService.getScriptBatchGroup(batchId).pipe(skipWhile((item: any) => !item))
-      .subscribe((groupList: any) => {
-        this.topicGroupList = groupList.systemMeasurement.scriptBatchGroup;
-        groupList.systemMeasurement.scriptBatchGroup.forEach(element => {
-          this.topicGroupSelectionList.push(element.customerGroup.groupCode);
-        });
-        this.loadCustomerGroup(false, '');
-      }));
   }
-
+ 
   checkTopicGroup() {
     for (let index = 0; index < this.topicGroupCheckBox.length; index++) {
       const element = this.topicGroupCheckBox[index];
@@ -227,9 +254,9 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
         }
       }
     }
+
     this.deleteTopicGroupOfBatch(this.topicGroupList);
     this.assignTopicGroupToBatchScript(this.selectedTopicGroup);
-    this.findBatchCustomerGroup(this.id);
   }
   assignTopicGroupToBatchScript(topicGroupList: any) {
     if (topicGroupList) {

@@ -52,6 +52,7 @@ export class SystemJobsListComponent implements OnInit, OnDestroy {
       .subscribe((systemJobs: any) => {
         this.systemJobsData.content = systemJobs;
         this.dataSource = [...this.systemJobsData.content];
+        this.systemJobsData.totalElements = this.systemJobsData.content.length;
       }));
   }
 

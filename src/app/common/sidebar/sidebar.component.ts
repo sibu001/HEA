@@ -30,7 +30,7 @@ export class SidebarComponent implements OnInit {
   @Input() showSideBarHeader : boolean = true;
 
   ngOnInit() {
-    this.loadMethodList();
+    if(this.showMethod) this.loadMethodList();
     this.user = this.loginService.getUser();
     this.role = this.user.role;
   }

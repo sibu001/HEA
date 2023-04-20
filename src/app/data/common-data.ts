@@ -216,7 +216,7 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_GROUP_KEY: Array<TABLECOLUMN> = [
-        { key: 'optional', displayName: 'Optional', type: 'checkbox' },
+        // { key: 'optional', displayName: 'Optional', type: 'checkbox' },
         { key: 'groupCode', isEdit: true, displayName: 'Group Code' },
         { key: 'groupName', isEdit: true, displayName: 'Group Name' },
     ];
@@ -229,7 +229,7 @@ export class TableColumnData {
         { key: 'prevRunTime', isEdit: true, displayName: 'Last Runtime', },
         { key: 'nextFireTime', isEdit: true, displayName: 'Next fire time' },
         { key: 'state', isEdit: true, displayName: 'State' },
-        { key: 'buttonList', isEdit: true, displayName: '', type: 'buttons' },
+        // { key: 'buttonList', isEdit: true, displayName: '', type: 'buttons' },
     ];
 
     static readonly SYSTEM_THREAD_KEY: Array<TABLECOLUMN> = [
