@@ -7,14 +7,26 @@
         <div class="row">
           <div class="col-sm-12">
             <app-table [keys]="keys" [isPaginate]="false" [isSearch]="false"
-              [data]="dataSource" [isHideAdd]=true
+              [data]="dataSource" [isHideAdd]=true 
               [totalElement]="systemJobsData.totalElements"
               (changePageEvent)="search()" class="system-job"
               (buttonListEvent)="handleJob($event)">
             </app-table>
           </div>
         </div>
-        <div class='row rowPadding'>
+        <!-- <div class="row"> -->
+          <div class="row rowPadding">
+            <div class="col-xs-12 col-sm-2 col-md-2 col-lg-4">
+            </div>
+            <div class="col-xs-12 col-sm-10 col-md-10 col-lg-8" style="text-align:
+              end;">
+              <button type="button" class='btn btn-primary btn-margin' (click)="search()">Refresh</button>
+              <button type="button" class='btn btn-primary btn-margin' (click)='showThreadInfo()'>Show Thread Info</button>
+              <button type="button" class='btn btn-primary btn-margin' (click)='showShortThreadInfo()'>Show Short Thread Info</button>
+            </div>
+          </div>
+        <!-- </div> -->
+        <div class='row rowPadding operating-system-info'>
           <div class="col-xs-12 col-sm-6 col-md-7 col-lg-8">
             <div>Used memory: {{operatingSystemInfo?.usedMemory |
               number:'1.0':'en-US'}} MB</div>
@@ -27,16 +39,6 @@
             <div>Available Processors::
               {{operatingSystemInfo?.availableProcessors}}</div>
             <div>Average Loading: {{operatingSystemInfo?.loadAverage}}%</div>
-          </div>
-          <div class="col-xs-12 col-sm-6 col-md-5 col-lg-4 row rowPadding">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <button type="button" class='btn btn-primary' (click)="search()">Refresh</button>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" style="text-align:
-              end;">
-              <button type="button" class='btn btn-primary'
-                (click)='showThreadInfo()'>Show Thread Info</button>
-            </div>
           </div>
         </div>
       </div>

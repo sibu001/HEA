@@ -229,7 +229,7 @@ export class TableColumnData {
         { key: 'prevRunTime', isEdit: true, displayName: 'Last Runtime', },
         { key: 'nextFireTime', isEdit: true, displayName: 'Next fire time' },
         { key: 'state', isEdit: true, displayName: 'State' },
-        // { key: 'buttonList', isEdit: true, displayName: '', type: 'buttons' },
+        { key: 'buttonList', isEdit: true, displayName: '', type: 'buttons' },
     ];
 
     static readonly SYSTEM_THREAD_KEY: Array<TABLECOLUMN> = [
@@ -256,7 +256,7 @@ export class TableColumnData {
         { key: 'alertLevel', sort: 'alertLevel', isEdit: true, displayName: 'Alert Level' },
         { key: 'messageTemplate', sort: 'messageTemplate', isEdit: true, displayName: 'Message' },
         { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Created Date' },
-        { key: 'active', isEdit: true, displayName: 'Active', type: 'image' },
+        { key: 'active', isEdit: true, displayName: 'Active' },
     ];
 
     static readonly TOPIC_DESCRIPTION_KEY: Array<TABLECOLUMN> = [

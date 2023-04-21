@@ -43,7 +43,9 @@ import {
     InterruptSystemJobsAction,
     ResumeSystemJobsAction,
     PauseSystemJobsAction,
-    StartEC2InstanceAction
+    StartEC2InstanceAction,
+    ProcessScriptAction,
+    GetShortThreadInfoAction
 } from './system-measurement.action';
 import { SystemMeasurementModel } from './system-measurement.model';
 
@@ -67,6 +69,7 @@ import { SystemMeasurementModel } from './system-measurement.model';
         ec2InstanceList: undefined,
         alertMessageList: undefined,
         alertMessage: undefined,
+        shortThreadInfo : undefined,
         error: undefined
     }
 })
@@ -140,6 +143,11 @@ export class SystemMeasurementManagementState {
     @Selector()
     static getThreadInfo(state: SystemMeasurementModel): any {
         return state.threadInfo;
+    }
+
+    @Selector()
+    static getShortThreadInfo(state: SystemMeasurementModel): any {
+        return state.shortThreadInfo;
     }
 
     @Selector()
@@ -665,6 +673,26 @@ export class SystemMeasurementManagementState {
                     }));
     }
 
+    @Action(GetShortThreadInfoAction)
+    getShortThreadInfoAction(ctx: StateContext<SystemMeasurementModel>, action: GetShortThreadInfoAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.shortThreadInfo)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    const res = SystemMeasurementUtilityTransformer.transformThreadInfoTableData(response);
+                    ctx.patchState({
+                        shortThreadInfo: res,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+
+
     @Action(ExecuteSystemJobsAction)
     executeSystemJobs(ctx: StateContext<SystemMeasurementModel>, action: ExecuteSystemJobsAction): Actions {
         document.getElementById('loader').classList.add('loading');
@@ -780,7 +808,7 @@ export class SystemMeasurementManagementState {
 
     @Action(GetAlertMessageListAction)
     getAllAlertMessageList(ctx: StateContext<SystemMeasurementModel>, action: GetAlertMessageListAction): Actions {
-        const force: boolean = action.force || SystemMeasurementManagementState.getAlertMessageList(ctx.getState()) === undefined;
+        const force: boolean = action.force || !ctx.getState().alertMessageList;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');

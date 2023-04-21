@@ -157,7 +157,10 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
 
   runNow() {
-
+    this.subscriptions.add(
+      this.systemMeasurementService.processScriptBatch(this.id)
+      .pipe(take(1))
+      .subscribe((data) =>{ AppUtility.scrollTop();}));
   }
 
   delete() {

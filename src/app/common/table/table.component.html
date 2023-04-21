@@ -136,28 +136,32 @@
                     *ngIf="col.type=='buttons' && !col.isAction">
                         <div #buttonElement class='inline-table btnPadding expandCheck' *ngFor='let button of
                             row[col.key]'>
+                        <div>
                             <button class='btn btn-primary' *ngIf="button.isShow" [ngClass]='{ "row-loader-visibility" : showTableLoaderButton, "button-shrink" : showRowLoader }'
                                 (click)='onButtonEvent(button,col,row,$event)'>
                                 {{button.name}}
                             </button>
                         </div>
+                        </div>
                         <!-- loader for for on button click -->
    
 
-                        <div id="loader1" class="row-loader-div" >
-                            <img class="loaderimg center-block row-loader-props"
-                             alt="loader" src="./assets/images/loader.gif">
-                        </div>
-                    
-                        <ng-container *ngIf="!pushedData.error" >
-                            <div *ngFor="let data of pushedData.dataFileList">
-                                {{data}}
-                             </div>    
+                        <ng-container *ngIf="showRowLoader">
+                            <div id="loader1" class="row-loader-div" >
+                                <img class="loaderimg center-block row-loader-props"
+                                 alt="loader" src="./assets/images/loader.gif">
+                            </div>
+                        
+                            <ng-container *ngIf="!pushedData.error" >
+                                <div *ngFor="let data of pushedData.dataFileList">
+                                    {{data}}
+                                 </div>    
+                            </ng-container>
+    
+                             <div *ngIf="pushedData.error" style='color :#a94442;'>
+                                {{pushedData.error}}
+                             </div>
                         </ng-container>
-
-                         <div *ngIf="pushedData.error" style='color :#a94442;'>
-                            {{pushedData.error}}
-                         </div>
                     </div>
                     <div id='6' *ngIf="col.type=='link' && !col.isAction" >
                         <ng-container *ngFor='let link of col.links; let i = index'>

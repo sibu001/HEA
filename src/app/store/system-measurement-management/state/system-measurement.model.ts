@@ -13,6 +13,7 @@ export interface SystemMeasurementModel {
     systemJobs: any;
     operatingSystemInfo: any;
     threadInfo: any;
+    shortThreadInfo: any;
     ec2InstanceList: any;
     alertMessageList: any;
     alertMessage: any;

@@ -50,6 +50,7 @@ export class AppConstant {
     public static scriptBatch = 'batches';
     public static systemJobs = 'systemJobs';
     public static threadInfo = 'threadInfo.do';
+    public static shortThreadInfo = 'shortTthreadInfo.do';
     public static eC2Instance = 'ec2Servers';
     public static alertMessage = 'alertMessageTypes';
     public static topicDescription = 'surveyDescriptions';

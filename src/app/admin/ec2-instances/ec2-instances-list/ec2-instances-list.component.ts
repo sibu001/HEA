@@ -5,6 +5,7 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -35,6 +36,7 @@ export class Ec2InstancesListComponent implements OnInit, OnDestroy {
       .subscribe((ec2Instances: any) => {
         this.ec2InstancesData.content = ec2Instances;
         this.dataSource = [...this.ec2InstancesData.content];
+        AppUtility.scrollTop();
       }));
   }
 

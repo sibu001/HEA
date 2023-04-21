@@ -39,7 +39,8 @@ import {
   ResumeSystemJobsAction,
   InterruptSystemJobsAction,
   StartEC2InstanceAction,
-  StopEC2InstanceAction
+  StopEC2InstanceAction,
+  GetShortThreadInfoAction
 } from '../state/system-measurement.action';
 import { SystemMeasurementManagementState } from '../state/system-measurement.state';
 
@@ -231,6 +232,14 @@ export class SystemMeasurementService {
 
   loadThreadInfo(): Observable<SystemMeasurementManagementState> {
     return this.store.dispatch(new GetThreadInfoAction());
+  }
+
+  loadShortThreadInfo(): Observable<SystemMeasurementManagementState> {
+    return this.store.dispatch(new GetShortThreadInfoAction());
+  }
+
+  getShortThreadInfo() : Observable<SystemMeasurementManagementState>{
+    return this.store.select(SystemMeasurementManagementState.getShortThreadInfo)
   }
 
   loadEC2InstanceList(force: boolean, filter: any): Observable<SystemMeasurementManagementState> {

@@ -29,6 +29,7 @@ export enum SystemMeasurementActionTypes {
     PAUSE_SYSTEM_JOBS = 'Pause SystemJobs',
     RESUME_SYSTEM_JOBS = 'Resume SystemJobs',
     GET_THREAD_INFO = 'Get Thread Info',
+    GET_SHORT_THREAD_INFO = 'Get Short Thread Info',
     GET_OPERATING_SYSTEM_INFO = 'Get Operating System Info',
     DELETE_SYSTEM_JOBS_BY_ID = 'Delete SystemJobs By Id',
     GET_EC2_INSTANCE_LIST = 'Get All EC2Instance List',
@@ -89,6 +90,11 @@ export class GetCimisMeasurementCountAction {
     }
 }
 
+export class ProcessScriptAction{
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.DELETE_SCRIPT_BATCH_BY_ID;
+    constructor(readonly id: number) {
+    }
+}
 
 export class GetCimisMeasurementByIdAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_CIMIS_MEASUREMENT_BY_ID;
@@ -216,6 +222,10 @@ export class PauseSystemJobsAction {
 
 export class GetThreadInfoAction {
     static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_THREAD_INFO;
+}
+
+export class GetShortThreadInfoAction {
+    static readonly type: SystemMeasurementActionTypes = SystemMeasurementActionTypes.GET_SHORT_THREAD_INFO;
 }
 
 export class GetEC2InstanceListAction {

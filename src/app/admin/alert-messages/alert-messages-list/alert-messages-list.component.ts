@@ -1,14 +1,16 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { AlertMessagesEditComponent } from '../alert-messages-edit/alert-messages-edit.component';
 
@@ -29,20 +31,24 @@ export class AlertMessagesListComponent implements OnInit, OnDestroy {
   public alertMessagesForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
+  public pageIndex : number = 0;
+  public pageSize : number = Number(AppConstant.pageSize);
   public adminFilter: AdminFilter;
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   constructor(public formBuilder: FormBuilder,
     private readonly systemMeasurementService: SystemMeasurementService,
     private readonly router: Router,
     private readonly activateRoute: ActivatedRoute,
     public dialog: MatDialog) {
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
     });
   }
 
   ngOnInit() {
     this.setUpForm(undefined);
-    this.search(undefined);
+    this.search(undefined,false);
+    this.getAlertMessageList();
   }
 
   onAddAlertMessages(event: any) {
@@ -52,7 +58,7 @@ export class AlertMessagesListComponent implements OnInit, OnDestroy {
       data: event
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.search(undefined);
+      if(result) this.search(undefined,true);
     });
   }
 
@@ -66,23 +72,42 @@ export class AlertMessagesListComponent implements OnInit, OnDestroy {
 
   findAlertMessages(force: boolean, filter: any): void {
     this.systemMeasurementService.loadAlertMessageList(force, filter);
-    this.subscriptions.add(this.systemMeasurementService.getAlertMessageList().pipe(skipWhile((item: any) => !item))
-      .subscribe((alertMessageList: any) => {
-        this.alertMessagesData.content = alertMessageList.data.list;
-        this.alertMessagesData.totalElements = alertMessageList.data.totalSize;
-        this.dataSource = [...this.alertMessagesData.content];
-      }));
   }
 
-  search(event: any): void {
+  getAlertMessageList(){
+    this.subscriptions.add(this.systemMeasurementService.getAlertMessageList()
+    .pipe(filter((item: any) => item))
+    .subscribe((alertMessageList: any) => {
+      this.alertMessagesData.content = alertMessageList.data.list;
+      this.alertMessagesData.totalElements = alertMessageList.data.size;
+      this.dataSource = [...this.alertMessagesData.content];
+      AppUtility.scrollToTableTop(this.tableScrollPoint);
+    }));
+  }
+
+  search(event: any, isSearch : boolean): void {
+    
+    if(event) this.pageIndex = event.pageIndex;
+    else this.pageIndex = 0;
+    
     const params = new HttpParams()
-      .set('startRow', '0')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
+      (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('useLikeSearch', 'true')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase()  : 'ASC'))
       .set('target', (this.alertMessagesForm.value.target !== null ? this.alertMessagesForm.value.target : ''))
       .set('active', (this.alertMessagesForm.value.isActive !== null && this.alertMessagesForm.value.isActive !== undefined ? this.alertMessagesForm.value.isActive : ''))
       .set('alertType', (this.alertMessagesForm.value.alertType !== null ? this.alertMessagesForm.value.alertType : ''));
-    this.findAlertMessages(true, params);
+    // const params = new HttpParams()
+    // .set('startRow', '0')
+    // .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
+    // .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase()  : 'ASC'))
+    // .set('target', (this.alertMessagesForm.value.target !== null ? this.alertMessagesForm.value.target : ''))
+    // .set('active', (this.alertMessagesForm.value.isActive !== null && this.alertMessagesForm.value.isActive !== undefined ? this.alertMessagesForm.value.isActive : ''))
+    // .set('alertType', (this.alertMessagesForm.value.alertType !== null ? this.alertMessagesForm.value.alertType : ''));
+    this.findAlertMessages(isSearch ? true : this.force, params);
   }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
