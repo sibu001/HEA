@@ -25,8 +25,8 @@ export class CimisMeasurementsListComponent implements OnInit, OnDestroy {
   public dataSource: any;
   public pageIndex: any;
   public pageSize: number = Number(AppConstant.pageSize);  
-  private dateSelectionFormat : string = AppConstant.DATE_SELECTION_FORMAT;
-  private dateFormat : string = AppConstant.DATE_FORMAT;
+  public dateSelectionFormat : string = AppConstant.DATE_SELECTION_FORMAT;
+  public dateFormat : string = AppConstant.DATE_FORMAT;
   @ViewChild('tableScrollPoint') private tableScrollPoint : ElementRef;
   public totalElement = 0;
   public measurementsData = {
