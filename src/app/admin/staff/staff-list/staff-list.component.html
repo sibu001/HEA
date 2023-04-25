@@ -4,7 +4,7 @@
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="heading">Search Options (use "%" as wildcard in searches)</p>
         <form [formGroup]="staffForm" class="form-group">
-          <div class="row rowPadding">
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
               <span class="filterLabel">Username</span>
             </div>
@@ -36,25 +36,25 @@
             </div>
           </div>
         </form>
-        <div class="row">
+        <div class="row" #tableScrollPoint>          
           <div class="col-sm-12">
             <p class="messages">
               <img class="pointer" alt="dot" src="assets/images/dot03.gif"
-                class="dot">
+                class="dot pointer">
               <span class="messageName">Staff (Number of Records
                 =
-                {{staffData.totalElements}})</span>
+                {{staffData.totalElements | number:'1.0':'en-US' }})</span>
             </p>
           </div>
         </div>
         <div class="row">
           <div class="col-sm-12" style="position: relative;">
             <app-table [keys]="keys" [isPaginate]="true"
-              [isSearch]="false"
-              [data]="dataSource"
+              [isSearch]="false" [addSerialNumber]="true"
+              [data]="dataSource" [pageSize]="pageSize"
               [pageIndex]="pageIndex"
               [totalElement]="staffData.totalElements"
-              (changePageEvent)="search($event,false)"
+              (changePageEvent)="search($event,true)"
               (goToEditEvent)="goToEditStaff($event)"
               (addEvent)='addStaff()'
               class='staff-table'>

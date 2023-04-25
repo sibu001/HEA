@@ -831,13 +831,19 @@ export class SystemMeasurementManagementState {
 
     @Action(GetAlertMessageByIdAction)
     getAlertMessageById(ctx: StateContext<SystemMeasurementModel>, action: GetAlertMessageByIdAction): Actions {
+
+        const alertMessage = ctx.getState().alertMessage;
+        if(alertMessage && alertMessage.id == action.id){
+            return null;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.alertMessage + '/' + action.id)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        alertMessage: response,
+                        alertMessage: response.data
                     });
                 },
                     error => {
@@ -886,9 +892,8 @@ export class SystemMeasurementManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        alertMessage: response,
+                        alertMessage: response.data,
                     });
                 },
                     error => {

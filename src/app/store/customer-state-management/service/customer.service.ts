@@ -424,6 +424,10 @@ export class CustomerService {
     return this.store.dispatch(new GetRoleListByUserIdAction(force, userId));
   }
 
+  getRoleListByUserId() : Observable<CustomerManagementState>{
+    return this.store.select(CustomerManagementState.getRoleListByUserId)
+  }    
+
   assignRoleToUser(userId: any, roleCode: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new AssignRoleToUserAction(userId, roleCode));
   }

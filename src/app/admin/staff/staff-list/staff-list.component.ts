@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,6 +8,8 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -22,11 +24,13 @@ export class StaffListComponent implements OnInit, OnDestroy {
   public force = false;
   public pageIndex: any;
   public adminFilter: AdminFilter;
+  public pageSize : number = Number(AppConstant.pageSize);
   public staffData = {
     content: [],
     totalElements: 0,
   };
   staffForm: FormGroup;
+  @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly customerService: CustomerService,
@@ -37,7 +41,7 @@ export class StaffListComponent implements OnInit, OnDestroy {
       this.adminFilter = new AdminFilter();
     }
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
     });
   }
 
@@ -67,6 +71,7 @@ export class StaffListComponent implements OnInit, OnDestroy {
       this.staffData.content = staffList.list;
       this.staffData.totalElements = staffList.totalSize;
       this.dataSource = [...this.staffData.content];
+      setTimeout(()=> AppUtility.scrollToTableTop(this.tableScrollPoint)); 
     }));
   }
 
@@ -81,7 +86,7 @@ export class StaffListComponent implements OnInit, OnDestroy {
     const params = new HttpParams()
       .set('filter.disableTotalSize', 'false')
       .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
+      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
       .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
@@ -90,7 +95,7 @@ export class StaffListComponent implements OnInit, OnDestroy {
       .set('filter.name', (this.staffForm.value.name !== null ? this.staffForm.value.name : ''))
       .set('filter.username', (this.staffForm.value.userName !== null ? this.staffForm.value.userName : ''))
       .set('filter.status', (this.staffForm.value.status !== null ? this.staffForm.value.status : ''));
-    this.findStaff(true, params);
+    this.findStaff(isSearch ? true : this.force, params);
   }
 
   addStaff() {

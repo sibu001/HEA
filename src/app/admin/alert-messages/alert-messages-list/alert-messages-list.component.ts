@@ -43,17 +43,18 @@ export class AlertMessagesListComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.force = AppUtility.forceParamToBoolean(params['force']);
     });
+    this.adminFilter = AppUtility.checkForAdminFilter('alertMessageFilter');
   }
 
   ngOnInit() {
-    this.setUpForm(undefined);
-    this.search(undefined,false);
+    this.setUpForm(this.adminFilter.alertMessageFilter.formValue);
+    this.search(this.adminFilter.alertMessageFilter.page,false);
     this.getAlertMessageList();
   }
 
   onAddAlertMessages(event: any) {
     const dialogRef = this.dialog.open(AlertMessagesEditComponent, {
-      width: '50vw',
+      width: window.innerWidth > 768 ? '50vw' : '75vw',
       height: '75vh',
       data: event
     });
@@ -71,6 +72,8 @@ export class AlertMessagesListComponent implements OnInit, OnDestroy {
   }
 
   findAlertMessages(force: boolean, filter: any): void {
+    this.adminFilter.alertMessageFilter.formValue = this.alertMessagesForm.value;
+    AppUtility.saveAdminFilter(this.adminFilter);
     this.systemMeasurementService.loadAlertMessageList(force, filter);
   }
 
@@ -79,14 +82,14 @@ export class AlertMessagesListComponent implements OnInit, OnDestroy {
     .pipe(filter((item: any) => item))
     .subscribe((alertMessageList: any) => {
       this.alertMessagesData.content = alertMessageList.data.list;
-      this.alertMessagesData.totalElements = alertMessageList.data.size;
+      this.alertMessagesData.totalElements = alertMessageList.data.totalSize;
       this.dataSource = [...this.alertMessagesData.content];
-      AppUtility.scrollToTableTop(this.tableScrollPoint);
+      setTimeout(() => AppUtility.scrollToTableTop(this.tableScrollPoint));
     }));
   }
 
   search(event: any, isSearch : boolean): void {
-    
+    this.adminFilter.alertMessageFilter.page = event;
     if(event) this.pageIndex = event.pageIndex;
     else this.pageIndex = 0;
     
@@ -95,18 +98,12 @@ export class AlertMessagesListComponent implements OnInit, OnDestroy {
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
       (event.pageIndex * event.pageSize) + '' : '0'))
       .set('useLikeSearch', 'true')
+      .set('disableTotalSize','false')
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase()  : 'ASC'))
       .set('target', (this.alertMessagesForm.value.target !== null ? this.alertMessagesForm.value.target : ''))
       .set('active', (this.alertMessagesForm.value.isActive !== null && this.alertMessagesForm.value.isActive !== undefined ? this.alertMessagesForm.value.isActive : ''))
       .set('alertType', (this.alertMessagesForm.value.alertType !== null ? this.alertMessagesForm.value.alertType : ''));
-    // const params = new HttpParams()
-    // .set('startRow', '0')
-    // .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-    // .set('sortOrder', (event && event.sort.direction !== undefined ? event.sort.direction.toUpperCase()  : 'ASC'))
-    // .set('target', (this.alertMessagesForm.value.target !== null ? this.alertMessagesForm.value.target : ''))
-    // .set('active', (this.alertMessagesForm.value.isActive !== null && this.alertMessagesForm.value.isActive !== undefined ? this.alertMessagesForm.value.isActive : ''))
-    // .set('alertType', (this.alertMessagesForm.value.alertType !== null ? this.alertMessagesForm.value.alertType : ''));
     this.findAlertMessages(isSearch ? true : this.force, params);
   }
   ngOnDestroy(): void {

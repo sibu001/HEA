@@ -256,7 +256,7 @@ export class TableColumnData {
         { key: 'alertLevel', sort: 'alertLevel', isEdit: true, displayName: 'Alert Level' },
         { key: 'messageTemplate', sort: 'messageTemplate', isEdit: true, displayName: 'Message' },
         { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Created Date' },
-        { key: 'active', isEdit: true, displayName: 'Active' },
+        { key: 'active', isEdit: true, displayName: 'Active', type : 'image' },
     ];
 
     static readonly TOPIC_DESCRIPTION_KEY: Array<TABLECOLUMN> = [
@@ -333,12 +333,12 @@ export class TableColumnData {
     ];
 
     static readonly STAFF_TABLE_COLUMN: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', isEdit: true, displayName: '#' },
+        // { key: 'serialNumber', isEdit: true, displayName: '#' },
         { key: 'username', sort: 'username', isEdit: true, displayName: 'Username', isUnderline: true },
         { key: 'email', sort: 'email', isEdit: true, displayName: 'E-mail' },
         { key: 'status', isEdit: true, displayName: 'Status' },
         { key: 'name', sort: 'name', isEdit: true, displayName: 'Name' },
-        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Join Date', isDate: true },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Join Date', isDate: true, dataFormat: 'MMM dd,yyyy'},
     ];
 
     static readonly SURVEY_VERSION_SETTING_DATA: Array<any> = [

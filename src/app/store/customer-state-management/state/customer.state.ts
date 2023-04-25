@@ -4,6 +4,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { Transformer } from '../transformer/transformer';
 import {
     AssignRoleToUserAction,
@@ -160,6 +161,11 @@ export class CustomerManagementState {
     @Selector()
     static getStaffById(state: CustomerManagementModel): any {
         return state.staff;
+    }
+
+    @Selector()
+    static getRoleListByUserId(state: CustomerManagementModel): any {
+        return state.roleListByUserId.response;
     }
 
     @Selector()
@@ -544,7 +550,7 @@ export class CustomerManagementState {
 
     @Action(GetStaffListAction)
     getAllStaffList(ctx: StateContext<CustomerManagementModel>, action: GetStaffListAction): Actions {
-        const force: boolean = action.force || CustomerManagementState.getStaffList(ctx.getState()) === undefined;
+        const force: boolean = action.force || !ctx.getState().staffList ;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -568,6 +574,12 @@ export class CustomerManagementState {
 
     @Action(GetStaffByIdAction)
     getStaffById(ctx: StateContext<CustomerManagementModel>, action: GetStaffByIdAction): Actions {
+
+        const staff:any = ctx.getState().staff;
+        if(staff && staff.id == action.id ){
+            return null;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.users + '/' + action.id)
             .pipe(
@@ -1226,6 +1238,10 @@ export class CustomerManagementState {
 
     @Action(GetPasswordValidationRuleAction)
     getPasswordValidationRule(ctx: StateContext<CustomerManagementModel>, action: GetPasswordValidationRuleAction): Actions {
+        
+        const passwordValidationRule : any = ctx.getState().passwordValidationRule;
+        if(passwordValidationRule) return null;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.passwordValidationRule)
             .pipe(
@@ -1294,11 +1310,18 @@ export class CustomerManagementState {
 
     @Action(GetRoleListByUserIdAction)
     getAllRoleListByUserId(ctx: StateContext<CustomerManagementModel>, action: GetRoleListByUserIdAction): Actions {
+
+        const roleListByUserId : any = ctx.getState().roleListByUserId;
+        if(roleListByUserId && roleListByUserId.id == action.userId){
+            return null;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.users + '/' + action.userId + '/' + AppConstant.roles)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    response = AppUtility.addCustomIdentifierForReducer({ response : response}, action.userId);
                     ctx.patchState({
                         roleListByUserId: response,
                     });
@@ -1345,13 +1368,20 @@ export class CustomerManagementState {
 
     @Action(GetUserCustomerGroupListAction)
     getAllUserCustomerGroupList(ctx: StateContext<CustomerManagementModel>, action: GetUserCustomerGroupListAction): Actions {
+
+        const userCustomerGroupList : any = ctx.getState().userCustomerGroupList;
+        if(userCustomerGroupList && userCustomerGroupList.id == action.userId){
+            return null;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.users + '/' + action.userId + '/' + AppConstant.userCustomerGroups)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    response.data = AppUtility.addCustomIdentifierForReducer(response.data,action.userId);
                     ctx.patchState({
-                        userCustomerGroupList: response,
+                        userCustomerGroupList: response.data,
                     });
                 },
                     error => {

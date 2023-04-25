@@ -2643,3 +2643,8 @@ app-electricity-usage-popup input[type="date"] {
   display: inline-block;
   margin-left : 50px
 }
+
+.btn.btn-danger{
+  background-color: #d9534f !important;
+  border-color: #d9534f !important;
+}

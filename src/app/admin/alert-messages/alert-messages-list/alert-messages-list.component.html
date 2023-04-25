@@ -48,7 +48,7 @@
           {{alertMessagesData.totalElements}})</p>
         <div class="row">
           <div class="col-sm-12">
-            <app-table [keys]="keys" [isPaginate]="true"
+            <app-table [keys]="keys" [isPaginate]="true" [pageSize]="pageSize"
               [isSearch]="false" [data]="dataSource" [pageIndex]="pageIndex"
               [totalElement]="alertMessagesData.totalElements"
               (changePageEvent)="search($event,true)"

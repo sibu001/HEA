@@ -30,3 +30,7 @@ section.space-top {
   .mb-button{
     margin-bottom: 5px;
   }
+
+  input[disabled]{
+    cursor: default;
+  }

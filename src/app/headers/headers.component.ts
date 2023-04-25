@@ -10,7 +10,9 @@ import { UtilityService } from '../services/utility.service';
 import { HttpParams } from '@angular/common/http';
 import { AllowedMenuList } from '../utility/app.allowedMenuList';
 import { AppUtility } from '../utility/app.utility';
+
 declare var $: any;
+declare var initPendingMessages : any;
 
 export interface RootObject {
 	userId: number;
@@ -56,6 +58,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     this.screenWidth = window.screen.width;
     this.allowedMenuListforUser  = this.users.allowedMenuList;
   }
+
   ngDoCheck(): void {
 
     // if(this.users.role == 'USERS' && this.router.url == '/surveyView'){
@@ -111,6 +114,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   }
 
   ngOnInit(): void {
+    initPendingMessages(this.users.userId,{});
     /* for demonstration purposes only */
     $('.navbar-toggle').click(function () {
       if ($(this).hasClass('collapsed')) {
@@ -142,7 +146,6 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
       console.log('Offline...');
       this.utilityService.showErrorMessage(this.connectionStatusMessage);
     }));
-
   }
 
   showHiddenMenu(){

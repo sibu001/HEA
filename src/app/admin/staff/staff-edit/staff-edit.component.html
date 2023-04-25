@@ -189,7 +189,7 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
               <select class="form-control form-control-sm" id="customerViewConfigurationId"
                 formControlName="customerViewConfigurationId" value='-1'>
-                <option value="-1">Standard</option>
+                <option value='null'>Standard</option>
                 <option *ngFor="let viewConfiguration of
                   viewConfigurationList" [value]="viewConfiguration.viewConfigurationId">
                   {{viewConfiguration.configurationName}}</option>
@@ -204,7 +204,7 @@
         <div class="row rowPadding form-group
           form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <app-table [keys]="keys" [checkbox]=true [data]="dataSource"
+            <app-table [keys]="keys" [checkbox]=true [data]="dataSource" [hideMasterCheckBox]="true"
               [totalElement]="rolesData.totalElements" (checkBoxChangeEvent)="roleCheckBoxChangeEvent($event)"
               id='roleCode' [selectionList]='roleSelectionList' [isHideAdd]="true"></app-table>
           </div>
@@ -212,11 +212,11 @@
 
         <p class='messages'>
           <img src='assets/images/dot03.gif' alt="dot" class='dot'>
-          <span class='messageName'>Customer groups</span></p>
+          <span class='messageName'>Topic groups</span></p>
         <div class="row rowPadding form-group
           form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <app-table [keys]="topicKeys" [isHideAdd]="true" [checkbox]=true [data]="topicDataSource"
+            <app-table [keys]="topicKeys" [isHideAdd]="true" [checkbox]=true [data]="topicDataSource" [hideMasterCheckBox]="true"
               (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)"  id='groupCode' [selectionList]='topicGroupSelectionList' [totalElement]="topicGroupData.totalElements">
             </app-table>
           </div>

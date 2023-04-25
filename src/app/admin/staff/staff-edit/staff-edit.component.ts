@@ -1,13 +1,14 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, skipWhile } from 'rxjs/operators';
 import { MustMatch } from 'src/app/common/password.validator';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -71,16 +72,18 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.setForm(undefined);
+    this.combineLatestResponseofRole();
+    this.combineLatestResponseOfCustomerGroup();
     this.loadCustomerViewConfiguration();
     this.getPasswordValidationRule();
-    this.setForm(undefined);
     if (this.id !== undefined) {
       this.customerService.loadStaffById(this.id);
       this.loadStaffById();
-    } else {
-      this.getAllRole();
-      this.loadCustomerGroup(false, '');
     }
+    this.getAllRole();
+    this.loadCustomerGroup(false, '');
+    AppUtility.scrollTop();
   }
 
   getPasswordValidationRule() {
@@ -104,32 +107,46 @@ export class StaffEditComponent implements OnInit, OnDestroy {
         console.log(passwordValidationRule);
       }));
   }
-  loadCustomerGroup(force: boolean, filter: any) {
-    this.systemService.loadCustomerGroupList(force, filter);
-    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
-      .subscribe((customerGroupList: any) => {
-        this.topicGroupData.content = customerGroupList;
-        this.topicDataSource = [...this.topicGroupData.content];
-      }));
-  }
+
   loadCustomerViewConfiguration() {
-    this.systemService.loadViewConfigurationList(true);
+    this.systemService.loadViewConfigurationList(false);
     this.subscriptions.add(this.systemService.getViewConfigurationList().pipe(skipWhile((item: any) => !item))
       .subscribe((viewConfigurationList: any) => {
         this.viewConfigurationList = viewConfigurationList;
       }));
   }
 
+  loadCustomerGroup(force: boolean, filter: any) {
+    this.systemService.loadCustomerGroupList(force, filter);
+  }
+
   findUserCustomerGroup(userId: any) {
-    this.topicGroupSelectionList = [];
-    this.subscriptions.add(this.customerService.loadUserCustomerGroupList(userId).pipe(skipWhile((item: any) => !item))
-      .subscribe((customerGroupList: any) => {
-        this.topicGroupList = customerGroupList.customerManagement.userCustomerGroupList.data.list;
-        customerGroupList.customerManagement.userCustomerGroupList.data.list.forEach(element => {
-          this.topicGroupSelectionList.push(element.groupCode);
-        });
-        this.loadCustomerGroup(false, '');
-      }));
+      this.customerService.loadUserCustomerGroupList(userId);
+  }
+
+  combineLatestResponseOfCustomerGroup(){
+    const customerGroup$ : Observable<any> = this.systemService.getCustomerGroupList().pipe(filter((item: any) => item));
+    const usercustomerGroup$ : Observable<any> = this.customerService.getUserCustomerGroupsList();
+
+    this.subscriptions.add(
+      combineLatest([customerGroup$, usercustomerGroup$])
+      .subscribe(
+        ([customerGroupList, userCustomerGroupList]) =>{
+
+          if(userCustomerGroupList){
+            this.topicGroupSelectionList = [];
+            this.topicGroupList = [...userCustomerGroupList.list];
+            this.topicGroupList.forEach(element => {
+              this.topicGroupSelectionList.push(element.groupCode);
+            });
+          }
+
+          if(customerGroupList){
+            this.topicGroupData.content = customerGroupList;
+            this.topicDataSource = [...this.topicGroupData.content];
+          }
+        })
+    )
   }
 
   loadStaffById() {
@@ -143,24 +160,38 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   getRoleListByUserId() {
-    this.roleSelectionList = [];
-    this.subscriptions.add(this.customerService.loadRoleListByUserId(true, this.id).pipe(skipWhile((item: any) => !item))
-      .subscribe((roleList: any) => {
-        this.roleList = roleList.customerManagement.roleListByUserId;
-        roleList.customerManagement.roleListByUserId.forEach(element => {
-          this.roleSelectionList.push(element.roleCode);
-        });
-        this.getAllRole();
-      }));
+    this.customerService.loadRoleListByUserId(true, this.id)
   }
 
   getAllRole(): any {
-    this.systemService.loadRoleList(true, this.userId);
-    this.subscriptions.add(this.systemService.getRoleList().pipe(skipWhile((item: any) => !item))
-      .subscribe((roleList: any) => {
-        this.rolesData.content = roleList.list;
-        this.dataSource = [...this.rolesData.content];
-      }));
+    this.systemService.loadRoleList(false, this.userId);
+  }
+
+  combineLatestResponseofRole(){
+    const roleListObservable$ : Observable<any> = this.systemService.getRoleList().pipe(filter((item: any) => item));
+    const userRoleListObservable$ : Observable<any> = this.customerService.getRoleListByUserId();
+
+    this.subscriptions.add(
+      combineLatest([roleListObservable$,userRoleListObservable$])
+      .subscribe(
+        ([roleList,userRoleList]) =>{
+
+          if(userRoleList){
+            this.roleSelectionList = [];
+            this.roleList = [...userRoleList];
+            this.roleList.forEach(element => {
+              this.roleSelectionList.push(element.roleCode);
+            });
+          }
+
+          if(roleList){
+            this.rolesData.content = roleList.list;
+            this.dataSource = [...this.rolesData.content];
+          }
+        }
+      )
+    )
+    
   }
 
   setForm(event: any) {
@@ -178,7 +209,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       }, { validator: MustMatch('password', 'confirmPassword') }),
       passwordNeedChange: [event !== undefined ? event.passwordNeedChange : ''],
       passwordStrengthLevel: [event !== undefined ? event.passwordStrengthLevel : ''],
-      passwordChangeDate: [event !== undefined ? event.passwordChangeDate : ''],
+      passwordChangeDate: [event !== undefined ? AppUtility.getDateFromMilllis(event.passwordChangeDate) : ''],
       sendEmail: [event !== undefined ? event.sendEmail : ''],
       surveyVersionSetting: [event !== undefined ? event.surveyVersionSetting : ''],
       comments: [event !== undefined ? event.comments : ''],

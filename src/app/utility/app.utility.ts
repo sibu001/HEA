@@ -2,7 +2,7 @@ import { HttpParams } from "@angular/common/http";
 import { ElementRef } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { PaginateModel } from "../interface/paginate-model";
-import { ScriptDebugConsoleData } from "../models/filter-object";
+import { AdminFilter, ScriptDebugConsoleData } from "../models/filter-object";
 import { AllowedMenuList } from "./app.allowedMenuList";
 import { AppConstant } from "./app.constant";
 
@@ -266,7 +266,8 @@ export class AppUtility {
     }
 
     // method to restrict loader to show on screen.
-    public static addNoLoaderParam(params : HttpParams) : HttpParams{
+    public static addNoLoaderParam(params ?: HttpParams) : HttpParams{
+        if(!params) params = new HttpParams();
         return params.set(AppConstant.SHOW_NO_LOADER,true.toString());
     }
 
@@ -304,5 +305,23 @@ export class AppUtility {
             invalidControl.focus();
             }
         }
+    }
+
+    public static checkForAdminFilter(subFilter : string) : AdminFilter{
+        const adminFilter : AdminFilter = JSON.parse(localStorage.getItem('adminFilter'));
+        if (adminFilter === undefined || adminFilter === null || adminFilter[subFilter] === null) {
+          return new AdminFilter();
+        }
+
+        return adminFilter;
+    }
+
+    public static saveAdminFilter(adminFilter: AdminFilter) : void {
+        localStorage.setItem('adminFilter', JSON.stringify(adminFilter));
+    }
+
+    public static addCustomIdentifierForReducer(responseObject : any, lastRequestedId : any) : any{
+        responseObject.id = lastRequestedId;
+        return responseObject;
     }
 }

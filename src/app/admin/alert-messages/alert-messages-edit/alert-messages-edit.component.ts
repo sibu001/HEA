@@ -2,9 +2,12 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { LoginService } from 'src/app/services/login.service';
+import { UtilityService } from 'src/app/services/utility.service';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { SystemThreadInfoComponent } from '../../system-jobs/system-thread-info/system-thread-info.component';
 
@@ -24,7 +27,9 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
   constructor(public dialogRef: MatDialogRef<SystemThreadInfoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public readonly formBuilder: FormBuilder,
-    private readonly systemMeasurementService: SystemMeasurementService) { }
+    private readonly systemMeasurementService: SystemMeasurementService,
+    private readonly loginService: LoginService,
+    private readonly systemUtilityService : UtilityService) { }
 
   ngOnInit() {
     this.setForm(undefined);
@@ -40,10 +45,11 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
   }
 
 
-  loadAlertMessagesById() {
-    this.subscriptions.add(this.systemMeasurementService.getAlertMessageById().pipe(skipWhile((item: any) => !item))
+  loadAlertMessagesById() { 
+    this.subscriptions.add(this.systemMeasurementService.getAlertMessageById()
+    .pipe(filter((item: any) => item && item.id == this.data.id ))
       .subscribe((alertMessage: any) => {
-        this.setForm(alertMessage.data);
+        this.setForm(alertMessage);
       }));
   }
   setForm(event: any) {
@@ -65,6 +71,21 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
           this.dialogRef.close(true);
         }));
     }
+  }
+  
+  execute(){
+    this.subscriptions.add(
+      this.loginService.performPostWithParam({},`alertMessageTypes/${this.id}/processSingle`,AppUtility.addNoLoaderParam())
+      .subscribe(
+        (response) =>{
+          if(response.errorMessage){
+            this.systemUtilityService.showErrorMessage(response.errorMessage);
+          }
+        }, (error) =>{
+          this.systemUtilityService.showErrorMessage(error.error.errorMessage);
+        }
+      )
+    )
   }
 
   onSaveClick() {

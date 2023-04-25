@@ -12,6 +12,8 @@ import { CustomerManagementState } from 'src/app/store/customer-state-management
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
 import { SystemMeasurementManagementState } from 'src/app/store/system-measurement-management/state/system-measurement.state';
+import { LoginService } from 'src/app/services/login.service';
+import { UtilityService } from 'src/app/services/utility.service';
 
 @NgModule({
   imports: [
@@ -29,7 +31,7 @@ import { SystemMeasurementManagementState } from 'src/app/store/system-measureme
   ],
   declarations: [AlertMessagesListComponent, AlertMessagesEditComponent],
   entryComponents: [AlertMessagesEditComponent],
-  providers: [SystemMeasurementService]
+  providers: [SystemMeasurementService,LoginService,UtilityService]
 
 })
 export class AlertMessagesModule { }

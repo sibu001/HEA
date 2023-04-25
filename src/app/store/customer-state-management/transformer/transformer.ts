@@ -201,9 +201,9 @@ export class Transformer {
         const dataSource: any = {
             list: []
         };
-        let index = 1;
+        // let index = 1;
         if (filter && filter.get('startRow')) {
-            index = Number(filter.get('startRow')) + 1;
+            // index = Number(filter.get('startRow')) + 1;
         }
         src.list.forEach(element => {
             const dataSourceObj: any = element;
@@ -213,8 +213,8 @@ export class Transformer {
             } else if (element.status === 90) {
                 dataSourceObj.status = 'Blocked (90)';
             }
-            dataSourceObj.serialNumber = index;
-            index++;
+            // dataSourceObj.serialNumber = index;
+            // index++;
             dataSource.list.push(dataSourceObj);
         });
         dataSource.startRow = src.startRow;
