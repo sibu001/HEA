@@ -42,7 +42,7 @@ window['PendingMessages'] = window['PendingMessages'] || function(pendingMessage
 		$.ajax(
 		{
 			type: 'POST',
-			url: 'users/' + userId + '/pendingMessages',
+			url: '/hea-web/users/' + userId + '/pendingMessages',
 			success: function(data, textStatus) {},
 			contentType: "application/json",
 			dataType: 'json'

@@ -6,6 +6,8 @@ import { AdminFilter, ScriptDebugConsoleData } from "../models/filter-object";
 import { AllowedMenuList } from "./app.allowedMenuList";
 import { AppConstant } from "./app.constant";
 
+declare var initPendingMessages : any;
+
 export class AppUtility {
 
     public static isnavBarCollapsed = false;
@@ -323,5 +325,18 @@ export class AppUtility {
     public static addCustomIdentifierForReducer(responseObject : any, lastRequestedId : any) : any{
         responseObject.id = lastRequestedId;
         return responseObject;
+    }
+
+    public static initPendingMessagesService(userId : string){
+        initPendingMessages(userId,{});
+    }
+
+    public static multicastPendingMessages(userId : string){
+        const globalObject : any = window;
+        if(!globalObject.pendingMessages)
+            AppUtility.initPendingMessagesService(userId);
+        
+        globalObject.pendingMessagesClient.multicastPendingMessages(userId);
+        globalObject.pendingMessagesClient.subscribe(userId);
     }
 }
