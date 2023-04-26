@@ -557,6 +557,12 @@ export class TableColumnData {
         { key: 'permanentLink', isEdit: true, displayName: 'Permanent link', isUnderline: true }
     ];
 
+    static readonly EVENT_TYPE_RESTRICTION : Array<TABLECOLUMN> = [
+        { isEdit: true, displayName: 'Event Code', key: 'eventCode'},
+        { isEdit: true, displayName: 'Event Name', key: 'eventName'}
+    ]
+
+
     // JSON value data
     static readonly STATUS_DATA: Array<any> = [
         { id: 0, value: 'Active (0)' },
@@ -1162,5 +1168,6 @@ export class TableColumnData {
         { key: 'C', value: 'String' },
         { key: 'N', value: 'Number' },
     ];
+
 }
 

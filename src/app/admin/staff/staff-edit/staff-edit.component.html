@@ -222,6 +222,19 @@
           </div>
         </div>
 
+        <p class='messages'>
+          <img src='assets/images/dot03.gif' alt="dot" class='dot'>
+          <span class='messageName'>Event Types Restrictions</span></p>
+        <div class="row rowPadding form-group
+          form-padding">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <app-table [keys]="customerEventTypeData.tableKey" [isHideAdd]="true" [checkbox]=true [data]="customerEventTypeData.content" [hideMasterCheckBox]="true"
+              (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)"  id='customerEventType' [verticalScrollWidth]="350"
+              [selectionList]='customerEventTypeData.selectedElements' [totalElement]="customerEventTypeData.totalElements">
+            </app-table>
+          </div>
+        </div>
+
         <div class="row rowPadding paddingTop">
           <div class="col-sm-4 col-md-3 col-lg-6 col-xs-3">
             <button type="button" class="btn btn-primary mb-button" (click)="back()">Cancel</button>

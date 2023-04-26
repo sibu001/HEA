@@ -114,7 +114,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
 
   ngOnInit(): void {
     AppUtility.initPendingMessagesService(this.users.userId);
-    AppUtility.multicastPendingMessages(this.users.userId);
+    // AppUtility.multicastPendingMessages(this.users.userId);
     /* for demonstration purposes only */
     $('.navbar-toggle').click(function () {
       if ($(this).hasClass('collapsed')) {

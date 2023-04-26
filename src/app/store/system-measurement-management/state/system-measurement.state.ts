@@ -876,7 +876,7 @@ export class SystemMeasurementManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        alertMessage: response,
+                        alertMessage: response.data,
                     });
                 },
                     error => {

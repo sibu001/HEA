@@ -2,7 +2,7 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { filter, skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
@@ -20,6 +20,7 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
 
   public alertMessagesForm: FormGroup;
   public id: any;
+  public reloadAlertList : boolean = false;
   targetList: any[] = TableColumnData.TARGET;
   alertTypeList: any[] = TableColumnData.ALERT_TYPE;
   alertLevelList: any[] = TableColumnData.ALERT_LEVEL_TYPE;
@@ -41,13 +42,18 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
   }
 
   onNoClick() {
-    this.dialogRef.close(false);
+    this.dialogRef.close(this.reloadAlertList);
   }
 
 
   loadAlertMessagesById() { 
     this.subscriptions.add(this.systemMeasurementService.getAlertMessageById()
-    .pipe(filter((item: any) => item && item.id == this.data.id ))
+    .pipe(filter((item: any) => {
+
+      console.log("item.id : " + item.id);
+      console.log("this.data.id : "  + this.data.id);
+      return item && item.id == this.id;
+    } ))
       .subscribe((alertMessage: any) => {
         this.setForm(alertMessage);
       }));
@@ -73,7 +79,15 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
     }
   }
   
+  public requestToExecute : boolean = false;
   execute(){
+
+    if(!this.id){ 
+      this.requestToExecute = true;
+      this.onSaveClick();
+      return;
+    }
+
     this.subscriptions.add(
       this.loginService.performPostWithParam({},`alertMessageTypes/${this.id}/processSingle`,AppUtility.addNoLoaderParam())
       .subscribe(
@@ -92,14 +106,24 @@ export class AlertMessagesEditComponent implements OnInit, OnDestroy {
     if (this.alertMessagesForm.valid) {
       if (this.data.id !== null && this.data.id !== undefined) {
         this.subscriptions.add(this.systemMeasurementService.updateAlertMessage(this.data.id, this.alertMessagesForm.value).pipe(
+          take(1),
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
             this.dialogRef.close(true);
           }));
       } else {
         this.subscriptions.add(this.systemMeasurementService.saveAlertMessage(this.alertMessagesForm.value).pipe(
+          take(1),
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
+            if(this.requestToExecute){
+              this.requestToExecute = false;
+              this.id = response.systemMeasurement.alertMessage.id;
+              this.loadAlertMessagesById();
+              this.execute();
+              this.reloadAlertList = true;
+              return;
+            }
             this.dialogRef.close(true);
           }));
       }

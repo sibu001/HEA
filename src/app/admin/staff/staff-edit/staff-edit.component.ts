@@ -8,6 +8,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
@@ -37,6 +38,13 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     totalElements: 0,
   };
 
+  public customerEventTypeData = {
+    tableKey : TableColumnData.EVENT_TYPE_RESTRICTION,
+    content : [],
+    totalElements : 0,
+    selectedElements : []
+  }
+
   staffForm: FormGroup;
   isForce = false;
   userId: any;
@@ -59,6 +67,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     private readonly customerService: CustomerService,
     private readonly activateRoute: ActivatedRoute,
     private readonly router: Router,
+    private readonly systemUtilityService : SystemUtilityService,
     private readonly el: ElementRef) {
     const users = JSON.parse(localStorage.getItem('users'));
     this.userId = users.userId;
@@ -73,6 +82,8 @@ export class StaffEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setForm(undefined);
+    this.loadCustomerEventTypeList();
+    this.combineLatestCustomerEventTypeList();
     this.combineLatestResponseofRole();
     this.combineLatestResponseOfCustomerGroup();
     this.loadCustomerViewConfiguration();
@@ -259,7 +270,8 @@ export class StaffEditComponent implements OnInit, OnDestroy {
           }));
       }
     } else {
-      this.validateForm();
+      // this.validateForm();
+      AppUtility.validateAndHighlightReactiveFrom(this.staffForm);
     }
   }
 
@@ -375,6 +387,25 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   topicCheckBoxChangeEvent(event: any) {
     this.selectedTopicGroup = [...event];
     this.topicGroupCheckBox = event;
+  }
+
+  loadCustomerEventTypeList(){
+    this.systemUtilityService.loadCustomerEventTypeList(false, '');
+  }
+
+  combineLatestCustomerEventTypeList(){
+
+    const eventTypeData$ : Observable<any>= this.systemUtilityService.getCustomerEventTypeList().pipe(filter((item: any) => item));
+
+    this.subscriptions.add(
+      combineLatest([eventTypeData$])
+      .subscribe(
+        ([eventTypeData]) =>{
+            // console.log(eventTypeData);
+            this.customerEventTypeData.content = [...eventTypeData];
+            this.customerEventTypeData.totalElements = this.customerEventTypeData.content.length;
+        }));
+
   }
 
   get f() { return this.staffForm.controls; }

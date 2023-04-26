@@ -20,7 +20,9 @@
         </div>
     </div>
 
-    <div class="example-container mat-elevation-z0 table-wrapper">
+    <div class="example-container mat-elevation-z0 table-wrapper"
+        [ngClass]="{'verticalScroll': verticalScrollWidth}"
+        [ngStyle]="{'height': verticalScrollWidth ? (verticalScrollWidth + 'px') : 'auto'}">
         <mat-table [dataSource]="dataSource" matTableExporter multiTemplateDataRows
             #exporter="matTableExporter" matSort (matSortChange)="sortData($event)" [matSortDirection]='sortOrder'
             class="table">

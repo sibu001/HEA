@@ -2648,3 +2648,8 @@ app-electricity-usage-popup input[type="date"] {
   background-color: #d9534f !important;
   border-color: #d9534f !important;
 }
+
+mat-cell > div{
+  height: 100%;
+  width: 100%;
+}

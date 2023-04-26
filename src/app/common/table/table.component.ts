@@ -83,6 +83,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() showRowLoader = false;
   @Input() showPushedDataPerRow = false;
   @Input() hideMasterCheckBox = false;
+  @Input() verticalScrollWidth : string = undefined;
   @Input() addSerialNumber : boolean = false;
   @Output() singleSelectedRow : EventEmitter<any> = new EventEmitter();
   @Output() changePageEvent: EventEmitter<any> = new EventEmitter();
