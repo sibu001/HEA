@@ -85,7 +85,7 @@
               <input type="password" formControlName="password" class="form-control form-control-sm"
                 [pattern]='regex'>
                 <app-password-strength (passwordStrength)="passwordValid($event)" [passwordToCheck]="p.password.value"></app-password-strength>
-              <div *ngIf="p.password.invalid && (p.password.dirty ||
+              <div *ngIf="p.password.invalid && p.password.value && (p.password.dirty ||
                 p.password.touched)">
                 <span class="error" *ngIf="p.password.errors?.required">
                   Password is required.
@@ -229,7 +229,7 @@
           form-padding">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <app-table [keys]="customerEventTypeData.tableKey" [isHideAdd]="true" [checkbox]=true [data]="customerEventTypeData.content" [hideMasterCheckBox]="true"
-              (checkBoxChangeEvent)="topicCheckBoxChangeEvent($event)"  id='customerEventType' [verticalScrollWidth]="350"
+              (checkBoxChangeEvent)="customerEventTypeChangeEvent($event)"  id='customerEventTypeId' [verticalScrollWidth]="350"
               [selectionList]='customerEventTypeData.selectedElements' [totalElement]="customerEventTypeData.totalElements">
             </app-table>
           </div>
@@ -243,7 +243,7 @@
           <div class="row">
           <!-- <div > -->
             <div class="col-sm-8 col-md-9 col-lg-8 col-xs-12" style="text-align: end;" *ngIf="id!==undefined&&id!==null">
-              <input type="checkbox" >
+              <input type="checkbox" [(ngModel)]="permanentDelete" >
                 <label class="checkbox">Permanent delete</label>
                 &nbsp;
                 &nbsp;

@@ -17,14 +17,14 @@ import {
 } from '@angular/core';
 import { Page } from '../../models/page';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort, Sort } from '@angular/material/sort';
+import { MatSort, MatSortable, Sort, SortDirection } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { fromEvent, Subscription } from 'rxjs';
-import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, take } from 'rxjs/operators';
 import { AppConstant } from 'src/app/utility/app.constant';
 
 export interface UserData {
@@ -59,6 +59,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() id: any;
   @Input() sideBorder = false;
   @Input() sortOrder = 'asc';
+  @Input() defaultSortColumn : string = undefined;
   @Input() action = false;
   @Input() checkbox = false;
   @Input() isSearch = false;
@@ -166,6 +167,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   }
 
   ngAfterViewInit() {
+
+    if(this.defaultSortColumn && this.sortOrder){
+      this.sort.sort(({ id: this.defaultSortColumn, start: this.sortOrder}) as MatSortable);
+      this.dataSource.sort = this.sort;
+    }
 
     if(this.showSuggestionList == true){
       this.subscriptions.add(

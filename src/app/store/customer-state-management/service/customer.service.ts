@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -69,7 +70,8 @@ import {
   OpenUtilityCredentialsAction,
   UsagePointsAction,
   OpenUtilityCredentialsByIdAction,
-  RescrapeDateForCustomerAction
+  RescrapeDateForCustomerAction,
+  GetUserCustomerGroupListOfLoggedInUserAction
 } from '../state/customer.action';
 import { CustomerManagementState } from '../state/customer.state';
 
@@ -167,6 +169,10 @@ export class CustomerService {
   getUserCustomerGroupsList(): Observable<any> {
     return this.store.select(CustomerManagementState.getUserCustomerGroupList);
   }
+  
+  getUserCustomerGroupListOfLoggedInUser(): Observable<any> {
+    return this.store.select(CustomerManagementState.getUserCustomerGroupListOfLoggedInUser);
+  }
 
   getUsagePoints() : Observable<any>{
     return this.store.select(CustomerManagementState.getUsagePoints)
@@ -236,8 +242,8 @@ export class CustomerService {
     return this.store.dispatch(new UpdateStaffAction(id, staff));
   }
 
-  deleteStaffById(id: number): Observable<CustomerManagementState> {
-    return this.store.dispatch(new DeleteStaffByIdAction(id));
+  deleteStaffById(id: number, params : HttpParams): Observable<CustomerManagementState> {
+    return this.store.dispatch(new DeleteStaffByIdAction(id,params));
   }
 
   loadUtilityCredentialList(customerId: any): Observable<CustomerManagementState> {
@@ -439,6 +445,12 @@ export class CustomerService {
   loadUserCustomerGroupList(userId: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetUserCustomerGroupListAction(userId));
   }
+
+
+  loadUserCustomerGroupListOfLoggedInUser(userId: any): Observable<CustomerManagementState> {
+    return this.store.dispatch(new GetUserCustomerGroupListOfLoggedInUserAction(userId));
+  }
+
 
   loadUserCustomerGroupById(userId: any, customerGroupId: any): Observable<CustomerManagementState> {
     return this.store.dispatch(new GetUserCustomerGroupByIdAction(userId, customerGroupId));

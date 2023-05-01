@@ -4,12 +4,15 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SystemUtilityTransformer } from '../transformer/transformer';
 import {
+    AddEventTypeResctrictionToUserById,
     DeleteCustomerComparisonGroupByIdAction,
     DeleteCustomerComparisonGroupInBatchAction,
     DeleteCustomerEventTypeByIdAction,
     DeleteDegreeDaysByIdAction,
+    DeleteEventTypeResctrictionFromUserById,
     DeleteFactorByIdAction,
     DeleteLookupByIdAction,
     DeleteLookupValueByIdAction,
@@ -28,6 +31,7 @@ import {
     GetDegreeDaysByIdAction,
     GetDegreeDaysCountAction,
     GetDegreeDaysListAction,
+    GetEventTypeResctrictionForUserById,
     GetFactorByIdAction,
     GetFactorCountAction,
     GetFactorListAction,
@@ -80,6 +84,7 @@ import { SystemUtilityManagementModel } from './system-utility.model';
         placeList: undefined,
         place: undefined,
         customerEventTypeList: undefined,
+        custoemerEventTypeResctrictionForUserId : undefined,
         customerEventType: undefined,
         customerEventTypeCount: undefined,
         customerComparisonGroupList: undefined,
@@ -132,6 +137,11 @@ export class SystemUtilityManagementState {
     @Selector()
     static getCustomerEventTypeList(state: SystemUtilityManagementModel): any {
         return state.customerEventTypeList;
+    }
+
+    @Selector()
+    static getCustoemerEventTypeResctrictionForUserId(state : SystemUtilityManagementModel) : any {
+        return state.custoemerEventTypeResctrictionForUserId.response;
     }
 
     @Selector()
@@ -371,8 +381,7 @@ export class SystemUtilityManagementState {
 
     @Action(GetCustomerEventTypeListAction)
     getAllCustomerEventType(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerEventTypeListAction): Actions {
-        const force = true;
-        // const force: boolean = SystemUtilityManagementState.getCustomerEventTypeList(ctx.getState()) === undefined;
+        const force: boolean = action.force ||  SystemUtilityManagementState.getCustomerEventTypeList(ctx.getState()) === undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -392,6 +401,81 @@ export class SystemUtilityManagementState {
         }
         return result;
     }
+
+
+    @Action(GetEventTypeResctrictionForUserById)
+    getEventTypeResctrictionForUserById(ctx: StateContext<SystemUtilityManagementModel>, action: GetEventTypeResctrictionForUserById): Actions {
+        let force : boolean = true;
+        let result: Actions;
+        const custoemerEventTypeResctrictionForUserId = ctx.getState().custoemerEventTypeResctrictionForUserId;
+        if(custoemerEventTypeResctrictionForUserId && custoemerEventTypeResctrictionForUserId.id == action.userId)
+            force = false;
+
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.users + '/' + action.userId  + '/' + AppConstant.userCustomerEventTypes)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        const res = AppUtility.addCustomIdentifierForReducer({response : response.data},action.userId);
+                        ctx.patchState({
+                            custoemerEventTypeResctrictionForUserId: res,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.errorMessage);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(AddEventTypeResctrictionToUserById)
+    addEventTypeResctrictionToUserById(ctx: StateContext<SystemUtilityManagementModel>, action: AddEventTypeResctrictionToUserById): Actions {
+    return this.loginService.performPost({},AppConstant.users + '/' + action.userId  + '/' + AppConstant.userCustomerEventTypes + '/' + action.customerEventTypeId)
+        .pipe(
+            tap((response: any) => {
+
+                const custoemerEventTypeResctrictionForUserId = ctx.getState().custoemerEventTypeResctrictionForUserId;
+                custoemerEventTypeResctrictionForUserId.response.push(response.data.customerEventType);
+                ctx.patchState({
+                    custoemerEventTypeResctrictionForUserId: {...custoemerEventTypeResctrictionForUserId},
+                });
+            },
+                error => {
+                    this.utilityService.showErrorMessage(error.errorMessage);
+        }));
+
+    }
+
+    @Action(DeleteEventTypeResctrictionFromUserById)
+    deleteEventTypeResctrictionFromUserById(ctx: StateContext<SystemUtilityManagementModel>, action: DeleteEventTypeResctrictionFromUserById): Actions {
+    return this.loginService.performDelete(AppConstant.users + '/' + action.userId  + '/' + AppConstant.userCustomerEventTypes + '/' + action.customerEventTypeId)
+        .pipe(
+            tap((response: any) => {
+
+                if(response.data != 'OK'){
+                    this.utilityService.showErrorMessage(response.errorMessage);   
+                    return;
+                }
+
+                let custoemerEventTypeResctrictionForUserId = ctx.getState().custoemerEventTypeResctrictionForUserId;
+                custoemerEventTypeResctrictionForUserId.response = custoemerEventTypeResctrictionForUserId.response
+                        .filter((data) => data.customerEventTypeId != action.customerEventTypeId);
+
+                ctx.patchState({
+                    custoemerEventTypeResctrictionForUserId: {...custoemerEventTypeResctrictionForUserId},
+                });
+
+            },
+                error => {
+                    this.utilityService.showErrorMessage(error.errorMessage);
+        }));
+
+    }
+
+
+
     @Action(GetCustomerEventTypeCountAction)
     getCustomerEventTypeCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerEventTypeCountAction): Actions {
         document.getElementById('loader').classList.add('loading');

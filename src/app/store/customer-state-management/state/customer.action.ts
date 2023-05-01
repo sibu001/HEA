@@ -1,3 +1,5 @@
+import { HttpParams } from "@angular/common/http";
+
 export enum SystemActionTypes {
     GET_CUSTOMER_LIST = 'Get All Customer List',
     GET_CUSTOMER_VIEW_CONFIGURATION_LIST = 'Get All Customer view configuration List',
@@ -54,6 +56,7 @@ export enum SystemActionTypes {
     ASSIGN_ROLE_TO_USER_ID = 'Assign role To User',
     DELETE_USER_ROLE = 'Delete User Role',
     GET_USER_CUSTOMER_GROUP_LIST = 'Get All User Customer Group List',
+    GET_USER_CUSTOMER_GROUP_LIST_OF_LOGGED_IN_USERS = 'Get All User Customer Group List Of Logged in User',
     GET_USER_CUSTOMER_GROUP_BY_ID = 'Get User Customer Group By Id',
     SAVE_USER_CUSTOMER_GROUP = 'Save User Customer Group',
     DELETE_USER_CUSTOMER_GROUP = 'Delete User Customer Group',
@@ -150,7 +153,7 @@ export class UpdateStaffAction {
 
 export class DeleteStaffByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.DELETE_STAFF_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly id: number, readonly params: HttpParams) {
     }
 }
 
@@ -419,6 +422,13 @@ export class GetUserCustomerGroupListAction {
     constructor(readonly userId: any) {
     }
 }
+
+export class GetUserCustomerGroupListOfLoggedInUserAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_CUSTOMER_GROUP_LIST_OF_LOGGED_IN_USERS;
+    constructor(readonly userId: any) {
+    }
+}
+
 
 export class GetUserCustomerGroupByIdAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_CUSTOMER_GROUP_BY_ID;

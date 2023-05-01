@@ -75,7 +75,8 @@ import {
     OpenUtilityCredentialsAction,
     UsagePointsAction,
     OpenUtilityCredentialsByIdAction,
-    RescrapeDateForCustomerAction
+    RescrapeDateForCustomerAction,
+    GetUserCustomerGroupListOfLoggedInUserAction
 } from './customer.action';
 import { CustomerManagementModel } from './customer.model';
 
@@ -114,6 +115,7 @@ import { CustomerManagementModel } from './customer.model';
         validateNewPassword: undefined,
         roleListByUserId: undefined,
         userCustomerGroupList: undefined,
+        userCustomerGroupListOfLoggedInUser : undefined,
         userCustomerGroup: undefined,
         optOutList: undefined,
         optOut: undefined,
@@ -281,6 +283,11 @@ export class CustomerManagementState {
     @Selector()
     static getUserCustomerGroupList(state: CustomerManagementModel): any {
         return state.userCustomerGroupList;
+    }
+
+    @Selector()
+    static getUserCustomerGroupListOfLoggedInUser(state: CustomerManagementModel): any {
+        return state.userCustomerGroupListOfLoggedInUser;
     }
 
     @Selector()
@@ -598,7 +605,7 @@ export class CustomerManagementState {
     @Action(DeleteStaffByIdAction)
     deleteStaffById(ctx: StateContext<CustomerManagementModel>, action: DeleteStaffByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.users + '/' + action.id)
+        return this.loginService.performDeleteWithParams(AppConstant.users + '/' + action.id, action.params)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -624,7 +631,7 @@ export class CustomerManagementState {
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -1340,6 +1347,10 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    response = AppUtility.addCustomIdentifierForReducer({ response : response}, action.userId);
+                    ctx.patchState({
+                        roleListByUserId : response
+                    })
                     //  this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
@@ -1355,10 +1366,10 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage('Save Successfully');
-                    // ctx.patchState({
-                    //     role: response,
-                    // });
+                    response = AppUtility.addCustomIdentifierForReducer({ response : response}, action.userId);
+                    ctx.patchState({
+                        roleListByUserId : response
+                    })
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1382,6 +1393,30 @@ export class CustomerManagementState {
                     response.data = AppUtility.addCustomIdentifierForReducer(response.data,action.userId);
                     ctx.patchState({
                         userCustomerGroupList: response.data,
+                    });
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+    }
+
+    @Action(GetUserCustomerGroupListOfLoggedInUserAction)
+    getUserCustomerGroupListOfLoggedInUserAction(ctx: StateContext<CustomerManagementModel>, action: GetUserCustomerGroupListOfLoggedInUserAction): Actions {
+
+        const userCustomerGroupListOfLoggedInUser : any = ctx.getState().userCustomerGroupListOfLoggedInUser;
+        if(userCustomerGroupListOfLoggedInUser && userCustomerGroupListOfLoggedInUser.id == action.userId){
+            return null;
+        }
+
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performGet(AppConstant.users + '/' + action.userId + '/' + AppConstant.userCustomerGroups)
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+                    response.data = AppUtility.addCustomIdentifierForReducer(response.data,action.userId);
+                    ctx.patchState({
+                        userCustomerGroupListOfLoggedInUser: response.data,
                     });
                 },
                     error => {
@@ -1415,6 +1450,9 @@ export class CustomerManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     //  this.utilityService.showSuccessMessage('Deleted Successfully');
+                    const userCustomerGroupList = ctx.getState().userCustomerGroupList;
+                    userCustomerGroupList.list = userCustomerGroupList.list.filter((data) => data.customerGroupId != action.customerGroupId);
+                    ctx.patchState({ userCustomerGroupList : {...userCustomerGroupList}});
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1429,9 +1467,11 @@ export class CustomerManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    const userCustomerGroupList = ctx.getState().userCustomerGroupList;
+                    userCustomerGroupList.list.push(response.data.customerGroup);
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        userCustomerGroup: response,
+                        userCustomerGroupList : {...userCustomerGroupList},
                     });
                 },
                     error => {

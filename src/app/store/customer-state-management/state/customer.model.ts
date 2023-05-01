@@ -33,6 +33,7 @@ export interface CustomerManagementModel {
     setNewPassword: any;
     roleListByUserId: any;
     userCustomerGroupList: any;
+    userCustomerGroupListOfLoggedInUser : any;
     userCustomerGroup: any;
     optOutList: any;
     optOut: any;

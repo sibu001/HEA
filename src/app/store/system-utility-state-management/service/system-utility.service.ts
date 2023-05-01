@@ -66,7 +66,10 @@ import {
   GetDegreeDaysCountAction,
   SaveDegreeDaysUsingFileAction,
   GetLogsListAction,
-  GetLogsCountAction
+  GetLogsCountAction,
+  GetEventTypeResctrictionForUserById,
+  AddEventTypeResctrictionToUserById,
+  DeleteEventTypeResctrictionFromUserById
 } from '../state/system-utility.action';
 import { SystemUtilityManagementState } from '../state/system-utility.state';
 
@@ -178,6 +181,22 @@ export class SystemUtilityService {
 
   loadCustomerEventTypeList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetCustomerEventTypeListAction(force, filter));
+  }
+
+  loadEventTypeRestrictionsForUserById(force: boolean, userId: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetEventTypeResctrictionForUserById(force, userId));
+  }
+
+  addEventTypeRestrictionsToUserById(customerEventTypeId : number, userId: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new AddEventTypeResctrictionToUserById(customerEventTypeId, userId));
+  }
+
+  deleteEventTypeRestrictionsFromUserById(customerEventTypeId : number, userId: number): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new DeleteEventTypeResctrictionFromUserById(customerEventTypeId, userId));
+  }
+
+  getCustoemerEventTypeResctrictionForUserId() : Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getCustoemerEventTypeResctrictionForUserId)
   }
 
   loadCustomerEventTypeCount(filter: any): Observable<SystemUtilityManagementState> {

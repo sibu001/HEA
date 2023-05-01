@@ -301,6 +301,11 @@ export class AppUtility {
 
     public static validateAndHighlightReactiveFrom(formGroup : FormGroup){
         for (const key of Object.keys(formGroup.controls)) {
+            
+            // check for the nested form.
+            if(formGroup.controls[key] instanceof FormGroup)
+                AppUtility.validateAndHighlightReactiveFrom(formGroup.controls[key] as FormGroup);
+
             if (formGroup.controls[key].invalid) {
             formGroup.controls[key].markAsTouched();
             const invalidControl = document.querySelector('[formControlName="' + key + '"]') as HTMLInputElement;
@@ -322,7 +327,7 @@ export class AppUtility {
         localStorage.setItem('adminFilter', JSON.stringify(adminFilter));
     }
 
-    public static addCustomIdentifierForReducer(responseObject : any, lastRequestedId : any) : any{
+    public static addCustomIdentifierForReducer(responseObject : any, lastRequestedId : any) : {response : any, id : number}{
         responseObject.id = lastRequestedId;
         return responseObject;
     }

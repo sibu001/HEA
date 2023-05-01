@@ -14,6 +14,7 @@ export class AppConstant {
     public static zipCode = 'zipcodes';
     public static timezone = 'timezones';
     public static customerEventTypes = 'customerEventTypes';
+    public static userCustomerEventTypes = 'userCustomerEventTypes';
     public static sendMail = 'sendMailMessage.do';
     public static clearCustomerValueCache = 'clearValueCache';
     public static recalculateVariables = 'recalculateVariables';

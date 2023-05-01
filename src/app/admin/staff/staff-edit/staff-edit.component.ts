@@ -1,8 +1,9 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
-import { filter, skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { MustMatch } from 'src/app/common/password.validator';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
@@ -26,6 +27,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   public topicKeys: Array<TableColumnData> = TableColumnData.TOPIC_GROUP_COLUMN_DATA;
   public surveyVersionSettingList: Array<any> = TableColumnData.SURVEY_VERSION_SETTING_DATA;
   public viewConfigurationList: any;
+  public permanentDelete : boolean = false;
   public dataSource: any;
   public rolesData = {
     content: [],
@@ -42,19 +44,21 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     tableKey : TableColumnData.EVENT_TYPE_RESTRICTION,
     content : [],
     totalElements : 0,
-    selectedElements : []
+    selectedElements : [],
+    newlySelectedElements : [] 
   }
 
   staffForm: FormGroup;
   isForce = false;
+  public forcePreviousPageList : boolean = false;
   userId: any;
-  roleCheckBox: any;
-  topicGroupCheckBox: any;
-  roleList: any = [];
-  selectedRole: any;
-  selectedTopicGroup: any;
-  topicGroupList: any = [];
-  minLength = 12;
+  roleCheckBox: Array<any> = [];
+  topicGroupCheckBox: Array<any> = [];
+  roleList: Array<any> = [];
+  selectedRole: Array<any> = [];
+  selectedTopicGroup: Array<any> = [];
+  topicGroupList: Array<any> = [];
+  minLength = 8;
   maxLength = 100;
   pattern = '';
   regex = '';
@@ -82,13 +86,14 @@ export class StaffEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setForm(undefined);
-    this.loadCustomerEventTypeList();
     this.combineLatestCustomerEventTypeList();
     this.combineLatestResponseofRole();
     this.combineLatestResponseOfCustomerGroup();
     this.loadCustomerViewConfiguration();
     this.getPasswordValidationRule();
     if (this.id !== undefined) {
+      this.loadEventTypeRestrictionsForUserById();
+      this.loadCustomerEventTypeList();
       this.customerService.loadStaffById(this.id);
       this.loadStaffById();
     }
@@ -106,7 +111,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
           this.minLength = passwordValidationRule.data[0].minimumLength;
           if (passwordValidationRule.data.length > 1 && passwordValidationRule.data[1].rules.length > 0) {
             this.pattern = passwordValidationRule.data[1].rules[0].validCharacters;
-            this.charactersCount = passwordValidationRule.data[1].rules[0].numberOfCharacters;
+            this.charactersCount = passwordValidationRule.data[1].rules[0].numberOftopicGroupListCharacters;
           }
           this.regex = '^.*(?=(?:.*?[' + this.pattern
             .replace(']', '').concat('\\\]')
@@ -115,7 +120,6 @@ export class StaffEditComponent implements OnInit, OnDestroy {
           this.p.password.updateValueAndValidity();
           // this.setPasswordForm();
         }
-        console.log(passwordValidationRule);
       }));
   }
 
@@ -128,7 +132,10 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   loadCustomerGroup(force: boolean, filter: any) {
-    this.systemService.loadCustomerGroupList(force, filter);
+      if(this.userId != this.id)
+        this.customerService.loadUserCustomerGroupListOfLoggedInUser(this.userId)
+      else
+      this.systemService.loadCustomerGroupList(force, filter);    
   }
 
   findUserCustomerGroup(userId: any) {
@@ -136,7 +143,9 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   combineLatestResponseOfCustomerGroup(){
-    const customerGroup$ : Observable<any> = this.systemService.getCustomerGroupList().pipe(filter((item: any) => item));
+    const customerGroup$ : Observable<any> = this.userId != this.id ? this.customerService.getUserCustomerGroupListOfLoggedInUser().pipe(filter((item: any) => item)) 
+        : this.systemService.getCustomerGroupList().pipe(filter((item: any) => item));
+
     const usercustomerGroup$ : Observable<any> = this.customerService.getUserCustomerGroupsList();
 
     this.subscriptions.add(
@@ -144,29 +153,44 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       .subscribe(
         ([customerGroupList, userCustomerGroupList]) =>{
 
-          if(userCustomerGroupList){
-            this.topicGroupSelectionList = [];
+          const topicGroupSelectionList = [];
+
+          if(userCustomerGroupList && this.id){
             this.topicGroupList = [...userCustomerGroupList.list];
             this.topicGroupList.forEach(element => {
-              this.topicGroupSelectionList.push(element.groupCode);
+              topicGroupSelectionList.push(element.groupCode);
             });
+
+            this.topicGroupSelectionList = topicGroupSelectionList;
           }
 
           if(customerGroupList){
-            this.topicGroupData.content = customerGroupList;
-            this.topicDataSource = [...this.topicGroupData.content];
+
+            if(this.userId == this.id){
+              this.topicGroupData.content = customerGroupList;
+              this.topicDataSource = [...this.topicGroupData.content];
+            }else{
+              this.topicGroupData.content = customerGroupList.list;
+              this.topicDataSource = [...this.topicGroupData.content];
+            }
+
           }
+
         })
-    )
+    );
   }
 
   loadStaffById() {
-    this.subscriptions.add(this.customerService.getStaffById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.customerService.getStaffById()
+    .pipe(filter((item: any) => item && (this.isForce || this.id == item.id)))
       .subscribe((staff: any) => {
         if (this.isForce) {
           this.router.navigate(['admin/staff/staffEdit'], { queryParams: { 'id': staff.id } });
+          this.combineLatestCustomerEventTypeList();
+          this.isForce = false;
         }
         this.setForm(staff);
+        AppUtility.scrollTop();
       }));
   }
 
@@ -187,7 +211,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       .subscribe(
         ([roleList,userRoleList]) =>{
 
-          if(userRoleList){
+          if(userRoleList && this.id){
             this.roleSelectionList = [];
             this.roleList = [...userRoleList];
             this.roleList.forEach(element => {
@@ -214,8 +238,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       name: [event !== undefined ? event.name : ''],
       status: [event !== undefined ? event.status : 0],
       passwordForm: this.fb.group({
-        password: [event !== undefined && event.password1 ? event.password1 : '',
-        ],
+        password: [event !== undefined && event.password1 ? event.password1 : '' ],
         confirmPassword: [event !== undefined && event.password2 ? event.password2 : ''],
       }, { validator: MustMatch('password', 'confirmPassword') }),
       passwordNeedChange: [event !== undefined ? event.passwordNeedChange : ''],
@@ -227,14 +250,17 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       customerViewConfigurationId: [event !== undefined ? event.customerViewConfigurationId : ''],
       accessToUserPassword: [event !== undefined ? event.accessToUserPassword : ''],
     });
+
   }
 
   back() {
-    this.router.navigate(['admin/staff/staffList'], { queryParams: { 'force': this.isForce } });
+    this.router.navigate(['admin/staff/staffList'], { queryParams: { 'force': this.forcePreviousPageList } });
   }
+
   delete() {
     if (confirm('Are you sure you want to delete?')) {
-      this.subscriptions.add(this.customerService.deleteStaffById(this.id).pipe(skipWhile((item: any) => !item))
+      const params : HttpParams = new HttpParams().append('permanentDelete',this.permanentDelete.toString());
+      this.subscriptions.add(this.customerService.deleteStaffById(this.id,params).pipe(skipWhile((item: any) => !item))
         .subscribe((response: any) => {
           this.router.navigate(['admin/staff/staffList'], { queryParams: { 'force': true } });
         }));
@@ -246,26 +272,36 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       this.p.password.setValidators([Validators.required,
       Validators.minLength(this.minLength),
       Validators.maxLength(this.maxLength)]);
-      this.p.confirmPassword.setValidators([Validators.required]);
+      this.p.confirmPassword.setValidators({ validator: MustMatch('password', 'confirmPassword') });
+    }else{
+      this.p.password.clearValidators();
+      this.p.password.updateValueAndValidity();
     }
+
+
     if (this.p.password.value && this.p1.valid) {
       this.getValidateNewPassword(this.p.password.value);
     }
     if (this.staffForm.valid) {
       if (this.id !== null && this.id !== undefined) {
-        this.checkRole();
-        this.checkTopicGroup();
-        this.subscriptions.add(this.customerService.updateStaff(this.id, this.staffForm.value).pipe(
-          skipWhile((item: any) => !item))
+        this.saveAndUpdateNewRole();
+        this.saveAndUpdateNewTopicGroup();
+        this.getNewlySelectedAndRemovedCustomerEventTypeList();
+        this.subscriptions.add(this.customerService.updateStaff(this.id, this.staffForm.value)
+        .pipe(take(1))
           .subscribe((response: any) => {
-            this.isForce = true;
-            this.loadStaffById();
+            this.forcePreviousPageList = true;
           }));
       } else {
-        this.subscriptions.add(this.customerService.saveStaff(this.staffForm.value).pipe(
-          skipWhile((item: any) => !item))
+        this.subscriptions.add(this.customerService.saveStaff(this.staffForm.value)
+        .pipe(take(1))
           .subscribe((response: any) => {
             this.isForce = true;
+            this.forcePreviousPageList = true;
+            this.id = response.customerManagement.staff.id;
+            this.saveAndUpdateNewRole();
+            this.saveAndUpdateNewTopicGroup();
+            this.loadEventTypeRestrictionsForUserById();
             this.loadStaffById();
           }));
       }
@@ -311,17 +347,11 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   roleCheckBoxChangeEvent(event: any) {
-    const uniqList = this.returnUniq(event);
-    this.roleCheckBox = [];
-    this.selectedRole = [...uniqList];
-    this.roleCheckBox = uniqList;
+    this.selectedRole = [...event];
+    this.roleCheckBox = event;
   }
 
-  returnUniq(data: any) {
-    return data.filter((v, i) => data.findIndex(item => item.value === v.value) === i);
-  }
-
-  checkRole() {
+  saveAndUpdateNewRole() {
     for (let index = 0; index < this.roleCheckBox.length; index++) {
       const element = this.roleCheckBox[index];
       const i = this.roleList.findIndex((item: any) => item.roleCode === element.roleCode);
@@ -335,11 +365,6 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     }
     this.deleteRoleOfStaff(this.roleList);
     this.assignRoleToStaff(this.selectedRole);
-    this.roleList = [];
-    this.selectedRole = [];
-    this.roleCheckBox = [];
-    this.getAllRole();
-    this.getRoleListByUserId();
   }
   assignRoleToStaff(roleList: any) {
     roleList.forEach(element => {
@@ -353,7 +378,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  checkTopicGroup() {
+  saveAndUpdateNewTopicGroup() {
     for (let index = 0; index < this.topicGroupCheckBox.length; index++) {
       const element = this.topicGroupCheckBox[index];
       const i = this.topicGroupList.findIndex((item: any) => item.customerGroupId === element.customerGroupId);
@@ -367,11 +392,8 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     }
     this.deleteTopicGroupOfStaff(this.topicGroupList);
     this.assignTopicGroupToStaff(this.selectedTopicGroup);
-    this.topicGroupList = [];
-    this.selectedTopicGroup = [];
-    this.topicGroupCheckBox = [];
-    this.findUserCustomerGroup(this.id);
   }
+  
   assignTopicGroupToStaff(topicGroupList: any) {
     topicGroupList.forEach(element => {
       this.customerService.saveUserCustomerGroup(this.id, element.customerGroupId);
@@ -393,19 +415,79 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     this.systemUtilityService.loadCustomerEventTypeList(false, '');
   }
 
+  loadEventTypeRestrictionsForUserById(){
+    this.systemUtilityService.loadEventTypeRestrictionsForUserById(false,this.id);
+  }
+
   combineLatestCustomerEventTypeList(){
 
     const eventTypeData$ : Observable<any>= this.systemUtilityService.getCustomerEventTypeList().pipe(filter((item: any) => item));
+    const eventTypeRestrictionOfUserById$ : Observable<any> = this.systemUtilityService.getCustoemerEventTypeResctrictionForUserId();
 
     this.subscriptions.add(
-      combineLatest([eventTypeData$])
+      combineLatest([eventTypeData$,eventTypeRestrictionOfUserById$])
+      .pipe(filter(data => this.id))
       .subscribe(
-        ([eventTypeData]) =>{
-            // console.log(eventTypeData);
+        ([eventTypeData, eventTypeRestrictionOfUser]) =>{
+
+          if(eventTypeRestrictionOfUser && this.id){
+            console.log(eventTypeRestrictionOfUser);
+            let selectedCustomerEventTypesList : Array<any> = [...eventTypeRestrictionOfUser];
+            selectedCustomerEventTypesList = selectedCustomerEventTypesList.map(data => data.customerEventTypeId);
+            this.customerEventTypeData.selectedElements = selectedCustomerEventTypesList;
+          }
+
+          if(eventTypeData){
             this.customerEventTypeData.content = [...eventTypeData];
             this.customerEventTypeData.totalElements = this.customerEventTypeData.content.length;
-        }));
+          }
 
+      }));
+
+  }
+
+  customerEventTypeChangeEvent($event : any){
+    this.customerEventTypeData.newlySelectedElements = [...$event];
+  }
+
+  getNewlySelectedAndRemovedCustomerEventTypeList(){
+    
+    const newlySelectedElements : Array<any> = [];
+    const removedElements : Array<any> = [];
+
+    this.customerEventTypeData.selectedElements.forEach((data) =>{
+        const index = this.customerEventTypeData.newlySelectedElements.findIndex((element) => element.customerEventTypeId == data );
+        if(index == -1)  removedElements.push(data);
+    });
+
+    this.customerEventTypeData.newlySelectedElements.forEach((data) =>{
+      const index = this.customerEventTypeData.selectedElements.findIndex((elements) => elements == data.customerEventTypeId);
+      if(index == -1) newlySelectedElements.push(data.customerEventTypeId);
+    });
+
+    this.saveNewlySelectedCustomerEventGroups(newlySelectedElements);
+    this.removeCustomerEventTypes(removedElements);
+
+  }
+
+  saveNewlySelectedCustomerEventGroups(customerEventTypeList: Array<any>){
+    customerEventTypeList.forEach((customerEventTypeId) =>{
+      this.addEventTypeRestrictionsToUserById(customerEventTypeId);
+    })
+  }
+
+  removeCustomerEventTypes(customerEventTypeList : Array<any>){
+    customerEventTypeList.forEach((customerEventTypeId) =>{
+      this.deleteEventTypeRestrictionsFromUserById(customerEventTypeId);
+    })
+  }
+  
+  addEventTypeRestrictionsToUserById(customerEventTypeId : number){
+    this.systemUtilityService.addEventTypeRestrictionsToUserById(customerEventTypeId,this.id);
+  }
+
+  deleteEventTypeRestrictionsFromUserById(customerEventTypeId : number){
+    this.systemUtilityService.deleteEventTypeRestrictionsFromUserById(customerEventTypeId,this.id);
   }
 
   get f() { return this.staffForm.controls; }

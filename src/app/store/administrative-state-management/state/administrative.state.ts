@@ -477,7 +477,7 @@ export class AdministrativeManagementState {
                         response.list = SystemUtilityTransformer.transformCustomerEventTypeTableData(response.list);
                         response.list.forEach( (element) => { 
                         element.customer !== undefined && element.customer !== null ? element.customer.auditId !== undefined ? element.auditId =  element.customer.auditId : '' : ''
-                        element.coachUserName =  element.coachUser !== undefined && element.coachUser !== null ? element.coachUser.name : '';
+                        element.coachUserId =  element.coachUser !== undefined && element.coachUser !== null ? element.coachUser.name : '';
                     });
                         document.getElementById('loader').classList.remove('loading');
                         // const dataSource = Transformer.transformProspectsTableData(response, action.viewType);

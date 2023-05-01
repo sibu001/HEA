@@ -6,7 +6,7 @@ import { StaffListComponent } from './staff-list/staff-list.component';
 import { StaffEditComponent } from './staff-edit/staff-edit.component';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxsModule } from '@ngxs/store';
 import { CommonHEAModule } from 'src/app/common/common.module';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
@@ -20,6 +20,7 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     StaffRoutingModule,
     CommonHEAModule,
     ReactiveFormsModule,
+    FormsModule,
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,

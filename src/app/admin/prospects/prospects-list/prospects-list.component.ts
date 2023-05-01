@@ -45,7 +45,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
     private readonly activateRoute: ActivatedRoute,
     private readonly loginService: LoginService) {
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
     });
   }
 
@@ -94,12 +94,12 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
       this.prospectsData.totalElements = prospectsList.totalSize;
       this.prospectsData.pageIndex = parseInt(prospectsList.startOfCurrentPage/Number.parseInt(this.pageSize) + "");
       this.dataSource = this.prospectsData.content;
-      this.tableHeading.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'});
+      AppUtility.scrollToTableTop(this.tableHeading)
     }));
   }
 
   findCoachId() {
-    this.systemService.loadCoachUserList(true, '?filter.withRole=COACH');
+    this.systemService.loadCoachUserList(false, '?filter.withRole=COACH');
     this.subscriptions.add(this.systemService.getCoachUserList().pipe(skipWhile((item: any) => !item))
       .subscribe((coachUserList: any) => {
         this.coachIdList = coachUserList.list;
@@ -138,7 +138,7 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
 
   downlodCSV(){
 
-    let param =  this.createParamsForRequest(undefined,true,false);
+    let param =  this.createParamsForRequest(undefined);
     document.getElementById('loader').classList.add('loading');
     param =  param.delete('pageSize');
     param =  param.append('pageSize','');
@@ -162,30 +162,18 @@ export class ProspectsListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any, isSearch: boolean): void {
-    
-    let sortOrder = false;
-
-    if (event && event.sort.direction !== undefined) {
-      if (event.sort.direction === 'asc') {
-        sortOrder = true;
-      }
-    }
-
-    if(event && event.sort && event.sort.active == "coachUserName")
-      event.sort.active = "coachUserId";
-
-    const params = this.createParamsForRequest(event, isSearch,sortOrder);
-    this.findProspects(true, params);
+    const params = this.createParamsForRequest(event);
+    this.findProspects(isSearch, params);
   }
 
-  createParamsForRequest(event, isSearch , sortOrder){
+  createParamsForRequest(event){
     return new HttpParams()
     .set('disableTotalSize', 'false')
     .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
-    .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+    .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
       (event.pageIndex * event.pageSize) + '' : '0'))
     .set('sortOrders[0].propertyName', (event && event.sort.active != '' && event.sort.active !== undefined ? event.sort.active : 'createdDate'))
-    .set('sortOrders[0].asc', sortOrder + '')
+    .set('sortOrders[0].asc', (event && event.sort.direction == 'asc') ? 'true' : 'false')
     .set('field6Like', this.prospectsForm.value.page !== undefined ?  this.prospectsForm.value.page : '')
     .set('source', this.prospectsForm.value && this.prospectsForm.value.source !== undefined ? this.prospectsForm.value.source : '')
     .set('emailLike', this.prospectsForm.value && this.prospectsForm.value.email !== undefined ? this.prospectsForm.value.email : '')

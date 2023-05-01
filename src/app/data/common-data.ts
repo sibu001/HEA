@@ -392,8 +392,8 @@ export class TableColumnData {
         { key: 'name', sort: 'name', isEdit: true, displayName: 'Name' },
         { key: 'field6', sort: 'field6', isEdit: true, displayName: 'Page' },
         { key: 'email', sort: 'email', isEdit: true, displayName: 'Email' },
-        { key: 'coachUserName', sort: 'coachUserId', isEdit: true, displayName: 'CoachID' },
-        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Date', isDate: true },
+        { key: 'coachUserId', sort: 'coachUserId', isEdit: true, displayName: 'CoachID' },
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Date', isDate: true, dataFormat : 'MM/dd/yyyy hh:mm:ss' },
         { key: 'auditId' , isEdit: true, displayName: 'Audit ID'},
         { key: 'optOutMail', isEdit: true, displayName: 'OptOut	'}
     ];

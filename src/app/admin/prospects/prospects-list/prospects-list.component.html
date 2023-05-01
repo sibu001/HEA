@@ -71,7 +71,7 @@
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
               <input type="text" class="form-control" formControlName='auditId'>
             </div>
-            <div #tableHeading class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Subscription ID:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
@@ -86,12 +86,12 @@
             </div>
           </div>
         </form>
-        <p class="messages">
+        <p class="messages"  #tableHeading>
           <img src='assets/images/dot03.gif' alt="dot" class='dot'>
           <span class="messageName">Prospects (Number of Records = {{prospectsData?.totalElements}})</span></p>
         <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource" [checkbox]=true
-          [pageSize]="pageSize" 
-          [totalElement]="prospectsData.totalElements" (changePageEvent)="search($event,false)" [isHideAdd]="true"
+          [pageSize]="pageSize" [sortOrder]="'desc'" [defaultSortColumn]="'createdDate'"
+          [totalElement]="prospectsData.totalElements" (changePageEvent)="search($event,true)" [isHideAdd]="true"
           [pageIndex]="prospectsData.pageIndex"
           (goToEditEvent)="addProspects($event)" (checkBoxChangeEvent)="getAllSelectedProspects($event)">
         </app-table>

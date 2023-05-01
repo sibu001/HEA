@@ -87,7 +87,7 @@ export class StaffListComponent implements OnInit, OnDestroy {
       .set('filter.disableTotalSize', 'false')
       .set('filter.homeowner', 'false')
       .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))

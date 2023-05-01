@@ -5,6 +5,9 @@ export enum SystemActionTypes {
     SAVE_PLACE = 'Save Place',
     DELETE_PLACE_BY_ID = 'Delete Place By Id',
     GET_CUSTOMER_EVENT_TYPE_LIST = 'Get All Customer Event Type List',
+    GET_EVENT_TYPE_RESTRICTION_FOR_USER_BY_ID = 'Get Event Type Restriction for User By Id',
+    ADD_EVENT_TYPE_RESTRICTION_TO_USER_BY_ID = 'Get Event Type Restriction To User By Id',
+    DELETE_EVENT_TYPE_RESTRICTION_FROM_USER_BY_ID = 'Get Event Type Restriction From User By Id',
     GET_CUSTOMER_EVENT_TYPE_COUNT = 'Get Customer Event Type Count',
     GET_CUSTOMER_EVENT_TYPE_BY_ID = 'Get Customer Event Type By Id',
     UPDATE_CUSTOMER_EVENT_TYPE = 'Update Customer Event Type',
@@ -101,6 +104,24 @@ export class DeletePlaceByIdAction {
 export class GetCustomerEventTypeListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_EVENT_TYPE_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetEventTypeResctrictionForUserById {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_EVENT_TYPE_RESTRICTION_FOR_USER_BY_ID;
+    constructor(readonly force: boolean, readonly userId: number) {
+    }
+}
+
+export class AddEventTypeResctrictionToUserById {
+    static readonly type: SystemActionTypes = SystemActionTypes.ADD_EVENT_TYPE_RESTRICTION_TO_USER_BY_ID;
+    constructor(readonly customerEventTypeId : number, readonly userId: number) {
+    }
+}
+
+export class DeleteEventTypeResctrictionFromUserById {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_EVENT_TYPE_RESTRICTION_FROM_USER_BY_ID;
+    constructor(readonly customerEventTypeId : number, readonly userId: number) {
     }
 }
 
