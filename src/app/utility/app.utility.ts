@@ -264,7 +264,7 @@ export class AppUtility {
 
     public static scrollToTableTop(tableScrollPoint : ElementRef): void{
         if(!tableScrollPoint) return;
-        tableScrollPoint.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'});
+        setTimeout(()=>{ tableScrollPoint.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'}); },50);
     }
 
     // method to restrict loader to show on screen.
@@ -299,7 +299,8 @@ export class AppUtility {
         return forceParam == 'true'
     }
 
-    public static validateAndHighlightReactiveFrom(formGroup : FormGroup){
+    public static validateAndHighlightReactiveFrom(formGroup : FormGroup) : boolean{
+        let isFormValid : boolean = true;
         for (const key of Object.keys(formGroup.controls)) {
             
             // check for the nested form.
@@ -307,11 +308,13 @@ export class AppUtility {
                 AppUtility.validateAndHighlightReactiveFrom(formGroup.controls[key] as FormGroup);
 
             if (formGroup.controls[key].invalid) {
-            formGroup.controls[key].markAsTouched();
-            const invalidControl = document.querySelector('[formControlName="' + key + '"]') as HTMLInputElement;
-            invalidControl.focus();
+                isFormValid = false;
+                formGroup.controls[key].markAsTouched();
+                const invalidControl = document.querySelector('[formControlName="' + key + '"]') as HTMLInputElement;
+                invalidControl.focus();
             }
         }
+        return isFormValid;
     }
 
     public static checkForAdminFilter(subFilter : string) : AdminFilter{
@@ -343,5 +346,24 @@ export class AppUtility {
         
         globalObject.pendingMessagesClient.multicastPendingMessages(userId);
         globalObject.pendingMessagesClient.subscribe(userId);
+    }
+
+    //  get newlySelected and newly removed elements from checkbox table.
+    public static getNewlySelectedAndRemovedList(newlySelectedCheckbox : Array<any>, oldSelected : Array<any>, selectedElmentId : string) : {newlySelected: Array<any>, newlyRemoved: Array<any>}{
+
+        const newlySelectedElements : Array<any> = [];
+        const removedElements : Array<any> = [];
+    
+        oldSelected.forEach((data) =>{
+            const index = newlySelectedCheckbox.findIndex((element) => element[selectedElmentId] == data );
+            if(index == -1)  removedElements.push(data);
+        });
+    
+        newlySelectedCheckbox.forEach((data) =>{
+          const index = oldSelected.findIndex((elements) => elements == data[selectedElmentId]);
+          if(index == -1) newlySelectedElements.push(data[selectedElmentId]);
+        });
+        
+        return { newlySelected : newlySelectedElements , newlyRemoved : removedElements };
     }
 }

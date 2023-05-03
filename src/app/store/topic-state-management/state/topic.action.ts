@@ -2,6 +2,8 @@ import { HttpParams } from "@angular/common/http";
 
 export enum TopicActionTypes {
     GET_TOPIC_DESCRIPTION_LIST = 'Get All Topic Description List',
+    GET_ALL_POSSIBLE_TOPIC_DESCRIPTION_LIST = 'Get Complete Topic Description List',
+    GET_TOPIC_DESCRIPTION_LIST_COUNT = 'Get All Topic Description List Count',
     GET_TOPIC_DESCRIPTION_BY_ID = 'Get Topic Description By Id',
     SAVE_TOPIC_DESCRIPTION = 'Save Topic Description',
     UPDATE_TOPIC_DESCRIPTION = 'Update Topic Description',
@@ -48,6 +50,18 @@ export enum TopicActionTypes {
 }
 export class GetTopicDescriptionListAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetAllPossibleTopicDescriptionListAction {
+    static readonly type: TopicActionTypes = TopicActionTypes.GET_ALL_POSSIBLE_TOPIC_DESCRIPTION_LIST;
+    constructor(readonly force: boolean) {
+    }
+}
+
+export class GetTopicDescriptionListCountAction {
+    static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_LIST_COUNT;
     constructor(readonly force: boolean, readonly filter: any) {
     }
 }

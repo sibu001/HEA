@@ -167,12 +167,9 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   }
 
   ngAfterViewInit() {
-
-    if(this.defaultSortColumn && this.sortOrder){
-      this.sort.sort(({ id: this.defaultSortColumn, start: this.sortOrder}) as MatSortable);
-      this.dataSource.sort = this.sort;
-    }
-
+    this.sort.start = this.sortOrder as 'asc' | 'desc';
+    this.page.sort.direction = this.sortOrder as 'asc' | 'desc';
+    
     if(this.showSuggestionList == true){
       this.subscriptions.add(
         fromEvent(this.inputSuggestionField.nativeElement,'keyup')

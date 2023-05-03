@@ -50,13 +50,17 @@ import {
     DeleteChartSeriesAction,
     SaveNewOrExistingPaneChartParameter,
     DeletePaneChartParameter,
+    GetTopicDescriptionListCountAction,
+    GetAllPossibleTopicDescriptionListAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
 @State<TopicManagementModel>({
     name: 'topicManagement',
     defaults: {
+        allPossibletopicDescriptionList : undefined,
         topicDescriptionList: undefined,
+        topicDescriptionListCount : undefined,
         topicDescription: undefined,
         contextMethodList: undefined,
         scriptDebug: undefined,
@@ -106,6 +110,16 @@ export class TopicManagementState {
     @Selector()
     static getTopicDescriptionList(state: TopicManagementModel): any {
         return state.topicDescriptionList;
+    }
+
+    @Selector()
+    static getAllPossibletopicDescriptionList(state : TopicManagementModel) : any{
+        return state.allPossibletopicDescriptionList
+    }
+
+    @Selector()
+    static getTopicDescriptionListCount(state: TopicManagementModel): any {
+        return state.topicDescriptionListCount;
     }
 
     @Selector()
@@ -301,8 +315,8 @@ export class TopicManagementState {
 
     @Action(GetTopicDescriptionListAction)
     getAllTopicDescriptionList(ctx: StateContext<TopicManagementModel>, action: GetTopicDescriptionListAction): Actions {
-        // const force: boolean = action.force || TopicManagementState.getTopicDescriptionList(ctx.getState()) === undefined;
-        const force = ctx.getState().topicDescriptionList == undefined;
+        const force: boolean = action.force || TopicManagementState.getTopicDescriptionList(ctx.getState()) === undefined;
+        // const force = ctx.getState().topicDescriptionList == undefined;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -313,6 +327,51 @@ export class TopicManagementState {
                         const res = TopicUtilityTransformer.transformTopicDescriptionTableData(response);
                         ctx.patchState({
                             topicDescriptionList: res,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+
+    @Action(GetAllPossibleTopicDescriptionListAction)
+    getAllPossibleTopicDescriptionListAction(ctx: StateContext<TopicManagementModel>, action: GetAllPossibleTopicDescriptionListAction): Actions {
+        const force = action.force || ctx.getState().allPossibletopicDescriptionList == undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGet(AppConstant.topicDescription)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            allPossibletopicDescriptionList: response,
+                        });
+                    },
+                        error => {
+                            document.getElementById('loader').classList.remove('loading');
+                            this.utilityService.showErrorMessage(error.message);
+                        }));
+        }
+        return result;
+    }
+    
+
+    @Action(GetTopicDescriptionListCountAction)
+    getTopicDescriptionListCountAction(ctx: StateContext<TopicManagementModel>, action: GetTopicDescriptionListCountAction): Actions {
+        const force: boolean = action.force || TopicManagementState.getTopicDescriptionListCount(ctx.getState()) === undefined;
+        // const force = ctx.getState().topicDescriptionList == undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppConstant.topicDescription+'/count', action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        ctx.patchState({
+                            topicDescriptionListCount: response,
                         });
                     },
                         error => {

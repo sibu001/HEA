@@ -13,7 +13,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
-import { debounceTime, distinctUntilChanged, skipWhile, map, skip, filter, switchMap } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, skipWhile, map, skip, filter, switchMap, take } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { templateJitUrl } from '@angular/compiler';
 import { LoginService } from 'src/app/services/login.service';
@@ -33,6 +33,8 @@ import { AppUtility } from 'src/app/utility/app.utility';
 export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
 
   id: any;
+  addRequest: boolean = false;
+  forceRequestList : boolean = false;
   pageSize = Number.parseInt(AppConstant.pageSize)
   topicForm: FormGroup;
   public keys: TABLECOLUMN[];
@@ -121,6 +123,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     private readonly utilityService: UtilityService) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.addRequest = params['addRequest'];
     });
 
     this.setForm(undefined);
@@ -145,24 +148,30 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     this.topicPaneKeys = TableColumnData.TOPIC_PANE_KEY;
     this.recommendationKeys = TableColumnData.RECOMMENDATION_KEY;
     this.topicVariablesKeys = TableColumnData.TOPIC_VARIABLES_KEYS;
-    this.keys = TableColumnData.CUSTOMER_GROUP_KEY.slice(1);  // for removing optional key from the list
+    this.keys = TableColumnData.CUSTOMER_GROUP_KEY; 
 
     this.subscriptionSuggestionListForFilterForTopicPane();
     this.subscriptionSuggestionListForFilterForTopicVariable();
 
-      if(this.id){
-        this.getTopicDescription();
-        this.getTopicPanesById();
-        this.topicPanePageChangeEvent(undefined);
-        this.getRecommendationsLeakAndUnique();
-        this.getCustomerGroupById();
-        this.getTopicVariableDataFromStore();
-        this.loadTopicDescription();
-        this.loadCustomerGroupById();
-        this.topicVariablesPageChangeEvent(undefined);
-        this.pageChangeEventForRecommendationLeaksAndUnique(undefined);
-      }
+    this.loadWhenTopicDescriptionExists();
   }
+
+  loadWhenTopicDescriptionExists(){
+    if(this.id){
+      this.getTopicDescription();
+      this.getTopicPanesById();
+      this.topicPanePageChangeEvent(undefined);
+      this.getRecommendationsLeakAndUnique();
+      this.getCustomerGroupById();
+      this.getTopicVariableDataFromStore();
+      this.loadTopicDescription();
+      this.loadCustomerGroupById();
+      this.topicVariablesPageChangeEvent(undefined);
+      this.pageChangeEventForRecommendationLeaksAndUnique(undefined);
+    }
+  }
+
+  
 
   private loadTopicDescription() {
     this.topicService.loadTopicDescriptionById(this.id);
@@ -171,10 +180,12 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
   private getTopicDescription(){
     this.subscriptions.add(
     this.topicService.getTopicDescriptionById()
-    .pipe( filter(x => x !== undefined))
+    .pipe( filter((data) => data && (data.id == this.id || this.addRequest)))
     .subscribe((topicDescription: any) => {
+      this.id = topicDescription.id;
       this.topicDescriptionData = topicDescription;
       this.setForm(this.topicDescriptionData);
+      AppUtility.scrollTop();
     }));
   }
 
@@ -198,7 +209,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
      .subscribe((groupList : any) => {
         let testList = [];
         groupList.forEach((item: any) =>{
-          testList.push(item.customerGroup.groupCode);
+          testList.push(item.customerGroup.customerGroupId);
       })
       this.selectionCustomerGroupList = [...testList];
       },(error : any)  => {
@@ -318,12 +329,12 @@ selectNextPermanentTopic(){
 }
 
 loadPermanentTopicList(){
-  this.topicService.loadTopicDescriptionList(true, '');
+  this.topicService.loadAllPossibleTopicDescriptionList(false);
 }
 
 getPermanentTopicListFromStore(){
   this.subscriptions.add(
-  this.topicService.getTopicDescriptionList()
+  this.topicService.getAllPossibletopicDescriptionList()
   .pipe(filter((item: any) => item != undefined))
   .subscribe((topicDescriptionList: any) => {
       this.nextPermanentTopic = [...topicDescriptionList];
@@ -488,12 +499,11 @@ subscriptionSuggestionListForFilterForTopicVariable(){
 }
 
   topicCheckBoxChangeEvent(event: any) {
-  //   console.log(event);
-  //   this.selectionCustomerGroupList = [...event];
+
   }
 
   back(): any {
-    this.router.navigate(['/admin/topicDescription/topicDescriptionList']);
+    this.router.navigate(['/admin/topicDescription/topicDescriptionList'], { queryParams: {force : this.forceRequestList}});
   }
 
 
@@ -510,24 +520,61 @@ subscriptionSuggestionListForFilterForTopicVariable(){
     )
   }
 
-  save(): any { 
-    document.getElementById('loader').classList.add('loading');
-      const body = Object.assign(this.topicDescriptionData == undefined ?  {} : this.topicDescriptionData, this.topicForm.value);
+  save(): any {    
+    if(!AppUtility.validateAndHighlightReactiveFrom(this.topicForm)){
+      return ; // don't save incase form is invalid form.
+    }
+
+    const body = Object.assign(this.topicDescriptionData == undefined ?  {} : this.topicDescriptionData, this.topicForm.value);
+    // for updating old object.
+    if(this.id){
       this.subscriptions.add(
-        this.loginService.performPost(body,AppConstant.topicDescription)
+        this.topicService.updateTopicDescription(this.id, body)
+        .pipe(take(1))
         .subscribe(
-          next=>{
-           if(this.id){
-             this.ngOnInit();
-           }else{
-              this.back();
-           }
-          }, error =>{
-            document.getElementById('loader').classList.add('loading');
-            this.utilityService.showErrorMessage(error.error.errorMessage);
-          }
-        )
-      );
+          (response)=>{
+            this.forceRequestList = true;
+            this.saveNewlyAddedAndRemovedTopicGroup();
+        }));
+      return;
+    }
+
+    // for saving new object.
+    this.subscriptions.add(
+      this.topicService.saveTopicDescription(body)
+      .pipe(take(1))
+      .subscribe(
+        (response : any)=>{
+          this.forceRequestList = true;
+          this.saveNewlyAddedAndRemovedTopicGroup();
+          this.id = response.topicManagement.topicDescription.id;
+          this.router.navigate([], { 
+            relativeTo: this.activateRoute,
+            queryParams: {id : this.id  },
+            queryParamsHandling : 'merge'
+          });
+          this.getTopicDescription();
+          this.loadWhenTopicDescriptionExists();
+      }));
+  }
+
+  saveNewlyAddedAndRemovedTopicGroup(){
+    const {newlySelected, newlyRemoved } = AppUtility.getNewlySelectedAndRemovedList(this.selectionListCustomerGroup,this.selectionCustomerGroupList,'customerGroupId');
+
+    this.saveCustomerGroupsToTopicDescription(newlySelected);
+    this.removeCustomerGroupFromTopicDescription(newlyRemoved);
+  }
+
+  saveCustomerGroupsToTopicDescription(topicDescriptionList : Array<any>){
+    topicDescriptionList.forEach((item) => {
+      this.systemService.addCustomerGroupToList(this.id,item)
+    })
+  }
+
+  removeCustomerGroupFromTopicDescription(topicDescriptionList : Array<any>){
+    topicDescriptionList.forEach((item) => {
+      this.systemService.removeCustomerGroupToList(this.id,item)
+    })
   }
 
   delete(): any { 
@@ -538,6 +585,7 @@ subscriptionSuggestionListForFilterForTopicVariable(){
         next => {
           document.getElementById('loader').classList.add('loading');
           // this.router.navigate(['topicDescription']);
+          this.forceRequestList = true;
           this.back();
         }, error =>{
           this.utilityService.showErrorMessage(error.error.errorMessage);
@@ -644,12 +692,12 @@ subscriptionSuggestionListForFilterForTopicVariable(){
       )
   }
 
-  addRemoveCustomerGroup(event : any){
-    if(event.isCheckedCheckbox == true)
-      this.systemService.addCustomerGroupToList(this.id,event.id)
-    else if(event.isCheckedCheckbox == false)
-      this.systemService.removeCustomerGroupToList(this.id,event.id);
-  }
+  // addRemoveCustomerGroup(event : any){
+  //   if(event.isCheckedCheckbox == true)
+  //     this.systemService.addCustomerGroupToList(this.id,event.id)
+  //   else if(event.isCheckedCheckbox == false)
+  //     this.systemService.removeCustomerGroupToList(this.id,event.id);
+  // }
 
   setTopicDescriptionValues(){
 
@@ -674,6 +722,14 @@ subscriptionSuggestionListForFilterForTopicVariable(){
 
   get form(){
     return this.topicForm.value;
+  }
+
+  get formControl(){
+    return this.topicForm.controls;
+  }
+
+  highlightErrorField(formControlName : string) : boolean{
+    return this.formControl[formControlName].invalid && (this.formControl[formControlName].dirty || this.formControl[formControlName].touched);
   }
 
   addTopicPanes(): any {      

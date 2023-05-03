@@ -2,7 +2,7 @@ import { Component, ElementRef, Inject, OnDestroy, OnInit } from '@angular/core'
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { AppUtility } from 'src/app/utility/app.utility';
@@ -72,7 +72,7 @@ export class ProspectsEditComponent implements OnInit, OnDestroy {
   }
 
   getProspectsById(){
-    this.subscriptions.add(this.administrativeService.getProspectsById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.administrativeService.getProspectsById().pipe(filter((item: any) => item && this.id == item.id))
       .subscribe((prospects: any) => {
         this.setForm(prospects);
       }));

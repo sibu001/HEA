@@ -118,8 +118,8 @@ export class ScriptDebugConsoleComponent implements OnInit, OnDestroy {
   }
 
   loadTopicDescription() {
-    this.topicService.loadTopicDescriptionList(true, '');
-    this.subscriptions.add(this.topicService.getTopicDescriptionList().pipe(skipWhile((item: any) => !item))
+    this.topicService.loadAllPossibleTopicDescriptionList(false);
+    this.subscriptions.add(this.topicService.getAllPossibletopicDescriptionList().pipe(skipWhile((item: any) => !item))
       .subscribe((topicDescriptionList: any) => {
         this.topicDescriptionData = topicDescriptionList;
       }));

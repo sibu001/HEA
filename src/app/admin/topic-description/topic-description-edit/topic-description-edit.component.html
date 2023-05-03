@@ -14,14 +14,20 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm"
                 id="surveyCode" formControlName="surveyCode">
+                <div class="error-message" *ngIf="highlightErrorField('surveyCode')" >
+                  <span>Topic code is required.</span>
+                </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" >
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Display Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control"
                 formControlName="label" id="label">
+                <div class="error-message" *ngIf="highlightErrorField('label')" >
+                  <span>Display Label is required.</span>
+                </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -30,6 +36,9 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control"
                 formControlName="reportLabel" id="reportLabel">
+                <div class="error-message" *ngIf="highlightErrorField('reportLabel')" >
+                  <span>Report Label is required.</span>
+                </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -241,10 +250,8 @@
             <app-table [keys]="keys" [isPaginate]="false" [checkbox]=true
               [isHideAdd]=true [isSearch]="false"
               [data]="customerGroupList"  [hideMasterCheckBox]=true
-              [(selectionList)]='selectionCustomerGroupList' id = "groupCode"
-              (checkBoxChangeEvent)="selectionListCustomerGroup = ($event)"
-              (singleSelectedRow)='addRemoveCustomerGroup($event)'
-              >
+              [(selectionList)]='selectionCustomerGroupList' id = "customerGroupId"
+              (checkBoxChangeEvent)="selectionListCustomerGroup = ($event)">
             </app-table>
           </div>
 

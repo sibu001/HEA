@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Filter } from '../models/filter';
+import { AppUtility } from '../utility/app.utility';
 
 @Component({
   selector: 'mailArchiveView',
@@ -30,10 +31,11 @@ export class mailArchiveViewComponent implements OnInit, AfterViewInit {
     this.wasOpened = this.users.mailDetail.wasOpened ? '*' : '';
   }
   ngAfterViewInit(): void {
-    const iFrame = document.getElementById('ifrmMailContent') as HTMLIFrameElement;
-    iFrame.contentDocument.body.innerHTML = this.users.mailContent;
-    this.iframeHeight = iFrame.contentWindow.document.body.scrollHeight + 20 + 'px';  
-
+    setTimeout(()=>{
+      const iFrame = document.getElementById('ifrmMailContent') as HTMLIFrameElement;
+      iFrame.contentDocument.body.innerHTML = this.users.mailContent;
+      this.iframeHeight = iFrame.contentWindow.document.body.scrollHeight + 20 + 'px';
+    },100);
     this.scrollTop();
 
     if(this.users.role == 'USERS' && (this.users.mailDetail.sentTo == this.users.outhMeResponse.user.email || 
@@ -42,8 +44,8 @@ export class mailArchiveViewComponent implements OnInit, AfterViewInit {
   }
 
   markedCurrentMailAsOpened(){
-      this.loginService.performPost('',AppConstant.customer + '/' + this.users.mailDetail.customerId
-       + '/mails' + '/' + this.users.mailDetail.mailArchiveId+ '/markAsOpened')
+      this.loginService.performPostWithParam('',AppConstant.customer + '/' + this.users.mailDetail.customerId
+       + '/mails' + '/' + this.users.mailDetail.mailArchiveId+ '/markAsOpened',AppUtility.addNoLoaderParam())
       .subscribe(
         data =>{
           console.log(data);

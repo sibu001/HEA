@@ -804,7 +804,8 @@ export class SystemManagementState {
 
     @Action(GetCoachUserListAction)
     getAllCoachUser(ctx: StateContext<SystemManagementModel>, action: GetCoachUserListAction): Actions {
-        const force: boolean = action.force || SystemManagementState.getCoachUserList(ctx.getState()) !== undefined;
+        const force: boolean = action.force || SystemManagementState.getCoachUserList(ctx.getState()) === undefined;
+
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -1475,7 +1476,7 @@ export class SystemManagementState {
 
         const selectedTopicGroupList = ctx.getState().selectedTopicGroupList;
 
-        if(selectedTopicGroupList && action.id == selectedTopicGroupList[0].surveyDescriptionId){
+        if(selectedTopicGroupList && selectedTopicGroupList[0] && action.id == selectedTopicGroupList[0].surveyDescriptionId){
             return;
         }
 

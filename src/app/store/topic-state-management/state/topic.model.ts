@@ -1,5 +1,7 @@
 export interface TopicManagementModel {
     topicDescriptionList: any;
+    allPossibletopicDescriptionList: any;
+    topicDescriptionListCount: any;
     topicDescription: any;
     contextMethodList: any;
     scriptDebug: any;

@@ -81,8 +81,12 @@ export class StaffListComponent implements OnInit, OnDestroy {
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.staffFilter.page = event;
-    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-      Number(event.pageIndex) + '' : 0);
+    if(event) this.pageIndex = event.pageIndex;
+    else this.pageIndex = 0;
+
+    // this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+    //   Number(event.pageIndex) + '' : 0);
+    
     const params = new HttpParams()
       .set('filter.disableTotalSize', 'false')
       .set('filter.homeowner', 'false')

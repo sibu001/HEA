@@ -160,7 +160,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }
     for (let index = 0; index < this.users.leakList.length; index++) {
-      this.leakPriceValueSum = this.users.leakList[index].priceValue + this.leakPriceValueSum;
+      this.leakPriceValueSum = Math.floor(this.users.leakList[index].priceValue) + this.leakPriceValueSum;
     }
   }
   leakView(id) {

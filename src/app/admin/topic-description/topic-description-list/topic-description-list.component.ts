@@ -1,14 +1,16 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -20,7 +22,10 @@ export class TopicDescriptionListComponent implements OnInit, OnDestroy {
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.TOPIC_DESCRIPTION_KEY;
   public dataSource = [];
+  public pageSize : number = Number(AppConstant.pageSize);
+  public pageIndex : number = 0;
   public force = false;
+  @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef;
   public adminFilter: AdminFilter;
   public totalElement = 0;
   public topicData = {
@@ -41,15 +46,16 @@ export class TopicDescriptionListComponent implements OnInit, OnDestroy {
       this.adminFilter = new AdminFilter();
     }
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
     });
   }
 
   ngOnInit() {
     this.findCustomerGroup();
     this.setUpForm(this.adminFilter.topicDescriptionFilter.formValue);
-    this.search(this.adminFilter.topicDescriptionFilter.page, false);
+    this.search(this.adminFilter.topicDescriptionFilter.page, this.force);
     this.getDataFromStore();
+    this.getTopicDescriptionListCount();
   }
 
 
@@ -73,12 +79,28 @@ export class TopicDescriptionListComponent implements OnInit, OnDestroy {
     .pipe(skipWhile((item: any) => !item))
     .subscribe((topicDescriptionList: any) => {
       this.topicData.content = topicDescriptionList;
-      this.dataSource = [...this.topicData.content];
+      this.dataSource = [...this.topicData.content];  
+      AppUtility.scrollToTableTop(this.tableScrollPoint);
+    }));
+  }
+
+  loadTopicDescriptionListCount(force : boolean, filter : HttpParams){
+    this.topicService.loadTopicDescriptionListCount(force,filter);
+  }
+
+  getTopicDescriptionListCount(){
+    this.subscriptions.add(
+      this.topicService.getTopicDescriptionListCount()
+      .pipe(filter((data) => data != undefined))
+      .subscribe(
+        (data) =>{
+          this.totalElement = Number(data);
+          this.topicData.totalElements = this.totalElement;
     }));
   }
 
   findCustomerGroup() {
-    this.systemService.loadCustomerGroupList(true, '');
+    this.systemService.loadCustomerGroupList(false, '');
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
         this.customerGroupList = customerGroupList;
@@ -91,21 +113,26 @@ export class TopicDescriptionListComponent implements OnInit, OnDestroy {
 
   search(event: any, isSearch: boolean): void {
     this.adminFilter.topicDescriptionFilter.page = event;
-    // .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-    // .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-    //   (event.pageIndex * event.pageSize) + '' : '0'))
+    if(event) this.pageIndex = event.pageIndex;
+    else this.pageIndex = 0;
+
     const params = new HttpParams()
+    .set('pageSize', this.pageSize.toString())
+    .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
+      (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('label', (this.topicForm.value.topicLabel !== null ? this.topicForm.value.topicLabel : ''))
       .set('active', (this.topicForm.value.isActive !== null ? this.topicForm.value.isActive : ''))
       .set('customerGroupId', (this.topicForm.value.customerGroupId !== null ? this.topicForm.value.customerGroupId : ''))
       .set('field', (this.topicForm.value.searchContextVariable !== null ? this.topicForm.value.searchContextVariable : ''));
-    this.findTopicDescription(true, params);
+    
+    this.findTopicDescription(isSearch, params);
+    this.loadTopicDescriptionListCount(isSearch,params);
   }
 
   addTopicDescription() {
-    this.router.navigate(['admin/topicDescription/topicDescriptionEdit']);
+    this.router.navigate(['admin/topicDescription/topicDescriptionEdit'],{queryParams: { addRequest : true}});
   }
 
   ngOnDestroy(): void {

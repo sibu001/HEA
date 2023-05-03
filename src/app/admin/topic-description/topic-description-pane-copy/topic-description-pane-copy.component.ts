@@ -42,11 +42,11 @@ export class TopicDescriptionPaneCopyComponent implements OnInit {
   }
 
   findTopicDescription(force: boolean, filter: any): void {
-    this.topicService.loadTopicDescriptionList(force, filter);
+    this.topicService.loadAllPossibleTopicDescriptionList(force);
   }
 
   getDataFromStore(){
-    this.subscriptions.add(this.topicService.getTopicDescriptionList()
+    this.subscriptions.add(  this.topicService.getAllPossibletopicDescriptionList()
     .pipe(skipWhile((item: any) => !item))
     .subscribe((topicDescriptionList: any) => {
       this.topicDataSource = [...topicDescriptionList];

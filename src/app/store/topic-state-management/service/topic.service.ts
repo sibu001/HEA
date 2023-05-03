@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -29,6 +29,14 @@ export class TopicService {
   getTopicDescriptionList(): Observable<any> {
     return this.store.select(TopicManagementState.getTopicDescriptionList);
   }
+  
+  getAllPossibletopicDescriptionList(): Observable<any> {
+    return this.store.select(TopicManagementState.getAllPossibletopicDescriptionList);
+  }
+
+  getTopicDescriptionListCount() : Observable<number> {
+    return this.store.select(TopicManagementState.getTopicDescriptionListCount);
+  }
 
   getTopicDescriptionById(): Observable<any> {
     return this.store.select(TopicManagementState.getTopicDescriptionById);
@@ -48,6 +56,14 @@ export class TopicService {
 
   loadTopicDescriptionList(force: boolean, filter: any): Observable<TopicManagementState> {
     return this.store.dispatch(new GetTopicDescriptionListAction(force, filter));
+  }
+
+  loadAllPossibleTopicDescriptionList(force: boolean): Observable<TopicManagementState> {
+    return this.store.dispatch(new GetAllPossibleTopicDescriptionListAction(force));
+  }
+
+  loadTopicDescriptionListCount(force: boolean, filter: any): Observable<TopicManagementState> {
+    return this.store.dispatch(new GetTopicDescriptionListCountAction(force, filter));
   }
 
   loadTopicDescriptionById(id: number): Observable<TopicManagementState> {

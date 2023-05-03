@@ -451,22 +451,15 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   getNewlySelectedAndRemovedCustomerEventTypeList(){
-    
-    const newlySelectedElements : Array<any> = [];
-    const removedElements : Array<any> = [];
+  
+    const {newlySelected, newlyRemoved } = AppUtility.getNewlySelectedAndRemovedList(this.customerEventTypeData.newlySelectedElements,
+      this.customerEventTypeData.selectedElements,'customerEventTypeId');
 
-    this.customerEventTypeData.selectedElements.forEach((data) =>{
-        const index = this.customerEventTypeData.newlySelectedElements.findIndex((element) => element.customerEventTypeId == data );
-        if(index == -1)  removedElements.push(data);
-    });
+    console.log('selected ' + newlySelected);
+    console.log('removed ' + newlyRemoved);
 
-    this.customerEventTypeData.newlySelectedElements.forEach((data) =>{
-      const index = this.customerEventTypeData.selectedElements.findIndex((elements) => elements == data.customerEventTypeId);
-      if(index == -1) newlySelectedElements.push(data.customerEventTypeId);
-    });
-
-    this.saveNewlySelectedCustomerEventGroups(newlySelectedElements);
-    this.removeCustomerEventTypes(removedElements);
+    this.saveNewlySelectedCustomerEventGroups(newlySelected);
+    this.removeCustomerEventTypes(newlyRemoved);
 
   }
 
