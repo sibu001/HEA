@@ -5,6 +5,7 @@ export enum TopicActionTypes {
     GET_ALL_POSSIBLE_TOPIC_DESCRIPTION_LIST = 'Get Complete Topic Description List',
     GET_TOPIC_DESCRIPTION_LIST_COUNT = 'Get All Topic Description List Count',
     GET_TOPIC_DESCRIPTION_BY_ID = 'Get Topic Description By Id',
+    CREATE_COPY_TOPIC_DESCRIPTION_FROM_ID = 'Create Copy Topic Description From Id',
     SAVE_TOPIC_DESCRIPTION = 'Save Topic Description',
     UPDATE_TOPIC_DESCRIPTION = 'Update Topic Description',
     DELETE_TOPIC_DESCRIPTION_BY_ID = 'Delete Topic Description By Id',
@@ -35,7 +36,7 @@ export enum TopicActionTypes {
     LOAD_PANE_REPORT_ID = 'Load Pane Report By Id',
     SAVE_NEW_PANE_REPORT = 'Save New Pane Report',
     SAVE_EXISTING_PANE_REPORT = 'Save Existing Pane Report',
-    DELETE_PANE_REPORT_BY_ID = 'Delete Pane By Id',
+    DELETE_PANE_REPORT_BY_ID = 'Delete Pane Report By Id',
     GET_ALL_PANE_CHARTS_BY_ID = 'Get All Pane Chart By Pane Id',
     LOAD_PANE_CHART_BY_ID = 'Load Pane Chart By Id',
     DELETE_PANE_CHART_BY_ID = 'Delete Pane Chart By Id',
@@ -47,6 +48,10 @@ export enum TopicActionTypes {
     DELETE_CHART_SERIES_BY_ID = 'Delete Chart Series By Id',
     SAVE_NEW_OR_EXISTING_PANE_CHART_PARAMETER = 'Save New Or Existing Pane Chart Parameter',
     DELETE_PANE_CHART_PARAMETER = 'Delete Pane Chart Parameter',
+    SAVE_NEW_PANE = 'Save New Pane',
+    UPDATE_PANE_BY_ID = 'Update Pane By Id',
+    DELETE_PANE_BY_ID = 'Delete Pane By Id',
+    CREATE_COPY_PANE_BY_ID = 'Create Copy Pane By Id',
 }
 export class GetTopicDescriptionListAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_LIST;
@@ -69,6 +74,12 @@ export class GetTopicDescriptionListCountAction {
 export class GetTopicDescriptionByIdAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_BY_ID;
     constructor(readonly id: number) {
+    }
+}
+
+export class CopyCreateTopicDescriptionFromIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.CREATE_COPY_TOPIC_DESCRIPTION_FROM_ID;
+    constructor(readonly topicDescriptionId: number, readonly params : HttpParams) {
     }
 }
 
@@ -284,4 +295,25 @@ export class SaveNewOrExistingPaneChartParameter{
 export class DeletePaneChartParameter{
     static readonly type : TopicActionTypes = TopicActionTypes.DELETE_PANE_CHART_PARAMETER;
     constructor(readonly paneId : number, readonly paneChartId : number, readonly chartSeriesId : number, readonly chartParameterId : number){}
+}
+
+export class SaveNewPaneAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.SAVE_NEW_PANE;
+    constructor(readonly body : any,readonly surveyDescriptionId : number){}
+}
+
+
+export class UpdadePaneByIdAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.UPDATE_PANE_BY_ID;
+    constructor(readonly body : any,readonly surveyDescriptionId : number, readonly paneId : number){}
+}
+
+export class DeletePaneByIdAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.DELETE_PANE_BY_ID;
+    constructor(readonly surveyDescriptionId : number, readonly paneId : number){}
+}
+
+export class CreateCopyPaneByIdAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.CREATE_COPY_PANE_BY_ID;
+    constructor(readonly surveyDescriptionId : number, readonly paneId : number, readonly params : HttpParams){}
 }

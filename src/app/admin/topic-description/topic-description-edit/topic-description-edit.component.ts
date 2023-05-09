@@ -205,14 +205,14 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
 
     this.subscriptions.add(
       this.systemService.getSelectedTopicGroupList()
-      .pipe( filter( item => item != undefined))
+      .pipe( filter( (item: any) => item != undefined && item[0] && this.id == item[0].surveyDescriptionId))
      .subscribe((groupList : any) => {
         let testList = [];
         groupList.forEach((item: any) =>{
           testList.push(item.customerGroup.customerGroupId);
       })
-      this.selectionCustomerGroupList = [...testList];
-      },(error : any)  => {
+      setTimeout(() => this.selectionCustomerGroupList = [...testList], 100);
+    },(error : any)  => {
         console.log("some error has occurred.");
       }));
   }
@@ -269,7 +269,12 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
   getTopicPanesById(){
     this.subscriptions.add(
       this.topicService.getPaneListByTopicDescriptionId()
-      .pipe(filter((item: any) => item))
+      .pipe(filter((item: any) => {
+        if(item && item[0] && item[0].surveyDescriptionId == this.id){
+          return true;
+        }
+        this.disableNextButtonTopicPane = true;
+        return false;}))
       .subscribe((dataList : any) => {
       if(dataList){
         if(dataList.length == this.pageSize){
@@ -367,8 +372,13 @@ loadRecommendationsLeakAndUnique(params){
 getRecommendationsLeakAndUnique(){
   this.subscriptions.add(
     this.systemService.getRecommendatonLeakAndUnique()
-    .pipe(filter((data)=> data))
-    .subscribe(
+    .pipe(filter((item: any) => {
+      if(item && item[0] && item[0].surveyDescriptionId == this.id){
+        return true;
+      }
+      this.disableNextButtonRecommendationUnique = true;
+      return false;
+      })).subscribe(
       data =>{
         this.recommendationLeakData = data;
         this.leaksRecommendationTakeBackTypeSubject.next("getRecommendationsLeakAndUnique");
@@ -546,7 +556,6 @@ subscriptionSuggestionListForFilterForTopicVariable(){
       .subscribe(
         (response : any)=>{
           this.forceRequestList = true;
-          this.saveNewlyAddedAndRemovedTopicGroup();
           this.id = response.topicManagement.topicDescription.id;
           this.router.navigate([], { 
             relativeTo: this.activateRoute,
@@ -578,27 +587,19 @@ subscriptionSuggestionListForFilterForTopicVariable(){
   }
 
   delete(): any { 
-    document.getElementById('loader').classList.add('loading');
+
+    if(!confirm('Are you sure you want to delete?')) return;
+
     this.subscriptions.add(
-      this.loginService.performDelete(AppConstant.topicDescription + '/' + this.id)
-      .subscribe(
-        next => {
-          document.getElementById('loader').classList.add('loading');
-          // this.router.navigate(['topicDescription']);
-          this.forceRequestList = true;
-          this.back();
-        }, error =>{
-          this.utilityService.showErrorMessage(error.error.errorMessage);
-          console.error(error);
-        }
-      )
-    )
+      this.topicService.deleteTopicDescriptionById(this.id)
+      .pipe(take(1))
+      .subscribe((response: any) => {this.forceRequestList = true; this.back();}));
   }
 
   copy(): any {
     const dialogRef = this.dialog.open(TopicDescriptionEditCopyComponent, {
-      width: '50vw',
-      height: '50vh',
+      width: '40vw',
+      height: '35vh',
       disableClose: false
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -614,29 +615,28 @@ subscriptionSuggestionListForFilterForTopicVariable(){
     params = params.append('newSurveyCode',event.nextTopicCode);
     params = params.append('prefix',event.prefix);
     this.subscriptions.add(
-      this.loginService.performPostWithParam( {},AppConstant.topicDescription + '/' + this.id + '/copy',params)
+      this.topicService.CopyCreateTopicDescriptionFromId(this.id,params)
+      .pipe(take(1))
       .subscribe(
-        next =>{
-          document.getElementById('loader').classList.remove('loading');
-          this.topicDescriptionData = {...next}
-          this.id = next.id;
+        (response: any) => {
+          this.id = response.topicManagement.topicDescription.id ;
           this.router.navigate([], { 
             relativeTo: this.activateRoute,
-            queryParams: {id : next.id , addRequest : null},
+            queryParams: {id :  this.id , addRequest : null},
             queryParamsHandling : 'merge'
-          })
+          });
+          this.forceRequestList = true;
+          this.ngOnDestroy();
           this.ngOnInit();
-        }, error => {
-          console.log(error);
-          this.utilityService.showErrorMessage(error.error.errorMessage);
-          document.getElementById('loader').classList.remove('loading')
         }
-      )
-      )
+      ));
   }
 
 
   ReInitTopic(): any {
+
+    if(!confirm('Are you sure?')) return;
+
     let params = new HttpParams();
     let isRerunTopic = this.topicForm.value.isRerunTopic == false ? false : this.topicForm.value.isRerunTopic
     params = params.append('rerunSurvey',isRerunTopic);
@@ -645,8 +645,7 @@ subscriptionSuggestionListForFilterForTopicVariable(){
       this.loginService.performPostWithParam({}, AppConstant.topicDescription +  '/' + this.id  + '/reinitSurvey',params)
       .subscribe(
         data =>{
-          // document.getElementById('loader').classList.add('loading');
-          this.ngOnInit();
+          AppUtility.scrollTop();
         }, error =>{ 
           console.error(error);
           document.getElementById('loader').classList.remove('loading');
@@ -677,9 +676,14 @@ subscriptionSuggestionListForFilterForTopicVariable(){
 
    getTopicVariableDataFromStore(){
     this.subscriptions.add(this.topicService.getTopicVariable()
-      .pipe(
-        filter(x => x !== undefined)
-      ).subscribe(
+      .pipe(filter((item: any) => {
+        if(item && item[0] && item[0].surveyDescriptionId == this.id){
+          return true;
+        }
+        this.disableNextButtonTopicVariable = true;
+        return false;
+      }))
+      .subscribe(
         (response) =>{
           this.topicVariableDataList = [...response]
           if(!this.lookUpValues)
@@ -691,13 +695,6 @@ subscriptionSuggestionListForFilterForTopicVariable(){
       )
       )
   }
-
-  // addRemoveCustomerGroup(event : any){
-  //   if(event.isCheckedCheckbox == true)
-  //     this.systemService.addCustomerGroupToList(this.id,event.id)
-  //   else if(event.isCheckedCheckbox == false)
-  //     this.systemService.removeCustomerGroupToList(this.id,event.id);
-  // }
 
   setTopicDescriptionValues(){
 

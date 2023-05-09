@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-topic-description-edit-copy',
@@ -29,10 +30,22 @@ export class TopicDescriptionEditCopyComponent implements OnInit {
   }
 
   save() {
-    this.dialog.close(this.copyForm.value);
+    if( !AppUtility.validateAndHighlightReactiveFrom(this.copyForm)) 
+      return ;
+    
+      this.dialog.close(this.copyForm.value);
   }
   
   close(){
      this.dialog.close();
   }
+
+  get formControl(){
+    return this.copyForm.controls;
+  }
+
+  highlightErrorField(formControlName : string) : boolean{
+    return this.formControl[formControlName].invalid && (this.formControl[formControlName].dirty || this.formControl[formControlName].touched);
+  }
+  
 }

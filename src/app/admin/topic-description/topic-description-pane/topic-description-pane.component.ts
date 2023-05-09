@@ -15,7 +15,8 @@ import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { MatDialog } from '@angular/material';
 import { HttpParams } from '@angular/common/http';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-topic-description-pane',
@@ -27,6 +28,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   id: any;
   public paneForm: FormGroup;
   public paneData;
+  public addRequest : boolean = false;
   dataBlockKeys = TableColumnData.PANE_DATA_BLOCK_KEY;
   dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
   chartKeys = TableColumnData.PANE_CHART_KEYS;
@@ -93,20 +95,24 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setForm(undefined);
     if(this.id) {
-      this.getDataFieldForPane();
-      this.getDataBlockListForPane();
-      this.getNextPaneList();
-      this.getSelectedPaneById();
-      this.getPaneReportByPaneId();
-      this.getAllPaneCharts();
-      this.loadNextPaneList();
       this.loadPaneById();
-      this.loadDataBlockForPane();
-      this.loadDataFieldForPane();
-      this.loadPaneReportByPaneId();
-      this.loadAllPaneCharts();
+      this.loadWhenIdIsPresent();
     }
     this.scrollTop();
+  }
+
+  loadWhenIdIsPresent(){
+    this.getDataFieldForPane();
+    this.getSelectedPaneById();
+    this.getDataBlockListForPane();
+    this.getNextPaneList();
+    this.getPaneReportByPaneId();
+    this.getAllPaneCharts();
+    this.loadNextPaneList();
+    this.loadDataBlockForPane();
+    this.loadDataFieldForPane();
+    this.loadPaneReportByPaneId();
+    this.loadAllPaneCharts();
   }
 
   scrollTop() {
@@ -163,47 +169,60 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/topicDescription/topicDescriptionEdit'],{queryParams: {id: this.surveyDescriptionId}});
   }
 
-
   save() {
-    document.getElementById('loader').classList.add('loading')
+
+    if(!AppUtility.validateAndHighlightReactiveFrom(this.paneForm)){
+      return ; // don't save incase form is invalid form.
+    }
+    
     const body = Object.assign(this.paneData ? this.paneData : {}, this.paneForm.value);
-    body.surveyDescriptionId = this.surveyDescriptionId;
+
+    if(!this.id){
+      this.subscriptions.add(
+        this.topicService.saveNewPane(body, this.surveyDescriptionId)
+        .pipe(take(1))
+        .subscribe(
+          (response: any) => {
+            this.rerenderform();
+            this.addRequest = true;
+            this.id = response.topicManagement.topicPane.id;
+            this.router.navigate([], { 
+              relativeTo: this.activateRoute,
+              queryParams: {id : this.id},
+              queryParamsHandling : 'merge'
+            });
+
+            this.loadWhenIdIsPresent();
+
+          }));
+
+      return;
+    }
+
     this.subscriptions.add(
-      this.loginService.performPost(body,AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane)
+      this.topicService.UpdadePaneById(body,this.surveyDescriptionId,this.id)
+      .pipe(take(1))
       .subscribe(
-        next =>{
-          document.getElementById('loader').classList.remove('loading');
-          this.id = next.id;
-          this.router.navigate([], { 
-            relativeTo: this.activateRoute,
-            queryParams: {id : this.id},
-            queryParamsHandling : 'merge'
-          })
-          this.ngOnInit();
-        }, error => {
-          document.getElementById('loader').classList.remove('loading')
-          console.error(error);
-        }
-      )
-    )
+        (resposne) => {this.rerenderform();}
+        , AppUtility.errorFieldHighlighterCallBack
+      ));
+  }
+
+  reRenderFlag : boolean = true;
+  rerenderform(){
+    this.reRenderFlag = false
+    setTimeout(()=> this.reRenderFlag = true,);
   }
 
   delete() {
-    document.getElementById('loader').classList.add('loading')
-     this.subscriptions.add(
-       this.loginService
-       .performDelete(AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane + '/' + this.id)
-       .subscribe(
-          response =>{
-            document.getElementById('loader').classList.remove('loading')
-            this.back();
-          }, error =>{
-            document.getElementById('loader').classList.add('loading')
-            this.utilityService.showErrorMessage(error.error.errorMessage);
-            console.error(error);
-          }
-       )
-     )
+    
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
+    this.subscriptions.add(
+      this.topicService.deletePaneById(this.surveyDescriptionId,this.id)
+      .pipe(take(1))
+      .subscribe((response:any) => {AppUtility.scrollTop(); this.back();}));
+      
   }
 
   copy() {
@@ -231,25 +250,41 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     params = params.append('toSurveyDescriptionId', data.topicDescription);
 
     this.subscriptions.add(
-      this.loginService
-      .performPostWithParam({},AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane + '/' + this.id + '/copy' ,params)
+      this.topicService.createPaneCopyFromPaneId(this.surveyDescriptionId,this.id,params)
+      .pipe(take(1))
       .subscribe(
-        data =>{
-          document.getElementById('loader').classList.remove('loading');
-          this.id = data.id;
-            this.router.navigate([],{
-              relativeTo: this.activateRoute,
-              queryParams: {id : data.id},
-              queryParamsHandling : 'merge'
-            });
-            this.ngOnInit();
-        }, error =>{
-          document.getElementById('loader').classList.remove('loading');
-          this.utilityService.showErrorMessage(error.error.errorMessage)
-          console.log(error);
-        }
-      )
-    )
+        (response : any) =>{
+          this.id = response.topicManagement.topicPane.id;
+          this.router.navigate([],{
+            relativeTo: this.activateRoute,
+            queryParams: {id : this.id},
+            queryParamsHandling : 'merge'
+          });
+
+          this.ngOnDestroy();
+          this.loadWhenIdIsPresent();
+        }));
+
+    // this.subscriptions.add(
+    //   this.loginService
+    //   .performPostWithParam({},AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane + '/' + this.id + '/copy' ,params)
+    //   .subscribe(
+    //     data =>{
+    //       document.getElementById('loader').classList.remove('loading');
+    //       this.id = data.id;
+    //         this.router.navigate([],{
+    //           relativeTo: this.activateRoute,
+    //           queryParams: {id : data.id},
+    //           queryParamsHandling : 'merge'
+    //         });
+    //         this.ngOnInit();
+    //     }, error =>{
+    //       document.getElementById('loader').classList.remove('loading');
+    //       this.utilityService.showErrorMessage(error.error.errorMessage)
+    //       console.log(error);
+    //     }
+    //   )
+    // )
   }
 
   loadDataBlockForPane(){
@@ -293,11 +328,13 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getSelectedPaneById(){
     this.subscriptions.add(
       this.topicService.getSelectedTopicPaneById()
-      .pipe(filter( data => data && data.id == this.id))
+      .pipe(filter( data => data && (data.id == this.id || this.addRequest)))
       .subscribe(
         next => {
+          this.addRequest = false;
           this.paneData = next;
           this.setForm(next);
+          AppUtility.scrollTop();
         }, error => {
           console.error(error)
         }
@@ -376,6 +413,10 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
   get form(){
     return this.paneForm.value;
+  }
+
+  highlightErrorField(formControlName : string) : boolean{
+    return this.f[formControlName].invalid && (this.f[formControlName].dirty || this.f[formControlName].touched);
   }
 
 }

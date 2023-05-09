@@ -318,33 +318,24 @@
           </div>
 
           <div class="row rowPadding paddingTop">
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 display-inline-button-large display-responsive-large">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3">
               <button type="button" class="btn btn-primary" (click)="back()" style="float :left">Back</button>
             </div>
-            <div *ngIf="id !== undefined" class="col-sm-2 col-md-2 col-lg-2 col-xs-6 button-text-align display-responsive-large">
-              <button type="button" class="btn btn-primary"
-                (click)="copy()" style="float :right">
-                Copy
-              </button>
-            </div>
-            <div  *ngIf="id !== undefined" class="col-sm-3 col-md-3 col-lg-3 col-xs-6 display-inline-button-large display-responsive-large">
-              <label for="isRerunTopic" class="label-margin-bottom">
+            <div class="col-sm-10 col-md-10 col-lg-10 col-xs-9 right-buttons"> 
+              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+              <button type="button" *ngIf="id" class="btn btn-primary" (click)="delete()">Delete</button>
+              <button type="button" class="btn btn-primary" *ngIf="id"
+                (click)="ReInitTopic()"> Reinit topics </button>
+              <label for="isRerunTopic" class="label-margin-bottom" *ngIf="id">
                 <input type="checkbox" formControlName='isRerunTopic'
-                  id='isRerunTopic' style="float :left">
+                  id='isRerunTopic'>
                   Require users to rerun topic
               </label>
-            </div>
-            <div *ngIf="id !== undefined"  class="col-sm-3 col-md-3 col-lg-2 col-xs-6 display-inline-button-large1 display-responsive-large">
-              <button type="button" class="btn btn-primary"
-                (click)="ReInitTopic()" style="float :right">
-                Reinit topics
+              <button type="button" class="btn btn-primary" *ngIf="id"
+                (click)="copy()">
+                Copy
               </button>
-            </div>
-            <div *ngIf="id !== undefined" class="col-sm-2 col-md-2 col-lg-1 col-xs-8 display-responsive-large button-text-align">
-              <button type="button" class="btn btn-primary" (click)="delete()" style="float :left">Delete</button>
-            </div>
-            <div class="col-sm-12 col-md-12 col-lg-2 col-xs-4 div-margin-top display-responsive-large button-text-align button-text-align1">
-              <button type="button" class="btn btn-primary" (click)="save()" style="float :right">Save</button>
+
             </div>
           </div>
 

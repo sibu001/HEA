@@ -2653,3 +2653,9 @@ mat-cell > div{
   height: 100%;
   width: 100%;
 }
+
+.right-buttons *{
+  margin-left: 10px;
+  margin-bottom: 5px;
+  float : right;
+}

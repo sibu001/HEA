@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { s } from '@angular/core/src/render3';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-topic-description-pane-copy',
@@ -36,8 +37,8 @@ export class TopicDescriptionPaneCopyComponent implements OnInit {
   setForm(event){
     this.copyForm = this.formBuilder.group({
       topicDescription : [''],
-      paneCode :[''],
-      prefixDataField :['']
+      paneCode :['',Validators.required],
+      prefixDataField :['',Validators.required]
     })
   }
 
@@ -55,7 +56,12 @@ export class TopicDescriptionPaneCopyComponent implements OnInit {
   }
 
   save(){
-    this.dialogRef.close(this.copyForm.value);
+    if(AppUtility.validateAndHighlightReactiveFrom(this.copyForm))
+      this.dialogRef.close(this.copyForm.value);
+  }
+
+  highlightErrorField(formContorlName : string){
+    return AppUtility.showErrorMessageOnErrorField(this.copyForm.controls,formContorlName);
   }
 
   close(){

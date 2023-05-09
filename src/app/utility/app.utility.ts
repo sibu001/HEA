@@ -1,6 +1,6 @@
 import { HttpParams } from "@angular/common/http";
 import { ElementRef } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 import { PaginateModel } from "../interface/paginate-model";
 import { AdminFilter, ScriptDebugConsoleData } from "../models/filter-object";
 import { AllowedMenuList } from "./app.allowedMenuList";
@@ -317,6 +317,21 @@ export class AppUtility {
         return isFormValid;
     }
 
+    public static showErrorMessageOnErrorField(formControl : { [key: string]: AbstractControl; }, formControlName: string) : boolean{
+        return formControl[formControlName].invalid && (formControl[formControlName].dirty || formControl[formControlName].touched);
+    }
+
+    // Noter*** Re-render the form after the successfull save or update value 
+    // because without re-rendering will highlight the old invalid value which valid. 
+    // for example see topic-description-pane screen.
+    public static errorFieldHighlighterCallBack = async (errResposne : any) =>{
+        for(let error of errResposne.error.errors){
+            const errorfield = document.querySelector(`[formControlName="${error.field}"]`) as HTMLElement;
+            errorfield.focus();
+            errorfield.style.border = '1px solid red';
+          }
+    }
+
     public static checkForAdminFilter(subFilter : string) : AdminFilter{
         const adminFilter : AdminFilter = JSON.parse(localStorage.getItem('adminFilter'));
         if (adminFilter === undefined || adminFilter === null || adminFilter[subFilter] === null) {
@@ -366,4 +381,9 @@ export class AppUtility {
         
         return { newlySelected : newlySelectedElements , newlyRemoved : removedElements };
     }
+
+    public static deleteConfirmatonBox() : boolean{
+        return confirm('Are you sure you want to delete?');
+    }   
+
 }

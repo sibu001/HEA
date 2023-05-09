@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction, SaveNewPaneAction, UpdadePaneByIdAction, CopyCreateTopicDescriptionFromIdAction, DeletePaneByIdAction, CreateCopyPaneByIdAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -68,6 +68,10 @@ export class TopicService {
 
   loadTopicDescriptionById(id: number): Observable<TopicManagementState> {
     return this.store.dispatch(new GetTopicDescriptionByIdAction(id));
+  }
+
+  CopyCreateTopicDescriptionFromId(topicDescriptionId : number, params : HttpParams) : Observable<any>{
+    return this.store.dispatch( new CopyCreateTopicDescriptionFromIdAction(topicDescriptionId,params))
   }
 
   getLookUpCalculationPeriod(): Observable<TopicManagementState> {
@@ -370,4 +374,19 @@ export class TopicService {
     return this.store.dispatch(new DeletePaneChartParameter(paneId,paneChartId,chartSeriesId,chartParameterId));
   }
 
+  saveNewPane(body : any, surveyDescriptionId : number) : Observable<any>{
+    return this.store.dispatch(new SaveNewPaneAction(body,surveyDescriptionId))
+  }
+
+  UpdadePaneById(body : any,surveyDescriptionId : number, paneId : number) : Observable<any>{
+    return this.store.dispatch(new UpdadePaneByIdAction(body,surveyDescriptionId, paneId))
+  }
+
+  deletePaneById(topicDescriptionId : number, paneId : number) : Observable<any>{
+    return this.store.dispatch(new DeletePaneByIdAction(topicDescriptionId, paneId));
+  }
+
+  createPaneCopyFromPaneId(topicDescriptionId : number, paneId : number, params : HttpParams) : Observable<any>{
+    return this.store.dispatch(new CreateCopyPaneByIdAction(topicDescriptionId, paneId, params));
+  }
 }

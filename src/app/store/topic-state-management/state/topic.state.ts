@@ -52,6 +52,11 @@ import {
     DeletePaneChartParameter,
     GetTopicDescriptionListCountAction,
     GetAllPossibleTopicDescriptionListAction,
+    SaveNewPaneAction,
+    UpdadePaneByIdAction,
+    CopyCreateTopicDescriptionFromIdAction,
+    DeletePaneByIdAction,
+    CreateCopyPaneByIdAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -405,6 +410,18 @@ export class TopicManagementState {
                     }));
     }
 
+    @Action(CopyCreateTopicDescriptionFromIdAction)
+    copyCreateTopicDescriptionFromIdAction(ctx : StateContext<TopicManagementModel>, action : CopyCreateTopicDescriptionFromIdAction) : Actions {
+        return this.loginService.performPostWithParam( {},
+        AppConstant.topicDescription + '/' + action.topicDescriptionId + '/copy',action.params)
+        .pipe(
+            tap(
+                (response) =>{
+                    ctx.patchState({ topicDescription: response })
+                },this.errorCallbak
+            ));
+    }
+
     @Action(LoadLookUpCalculationPeriodAction)
     loadLookUpCalculationPeriodAction(ctx : StateContext<TopicManagementModel>, action: LoadLookUpCalculationPeriodAction) {
         // if(ctx.getState().calculationPeriod != undefined){
@@ -471,12 +488,9 @@ export class TopicManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage(response.message);
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
-                    }));
+                    ctx.patchState({ topicDescription : undefined});
+                }
+                ,this.errorCallbak));
     }
 
     @Action(SaveTopicDescriptionAction)
@@ -608,8 +622,20 @@ export class TopicManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
+                    let allPossibleTopicDescription = ctx.getState().allPossibletopicDescriptionList;
+                    if(allPossibleTopicDescription){
+                        allPossibleTopicDescription = allPossibleTopicDescription.map((data) =>{
+                            
+                            if(data.id == response.id){
+                                return response;
+                            }
+                            
+                            return data;
+                        });
+                    }
                     ctx.patchState({
                         topicDescription: response,
+                        allPossibletopicDescriptionList : allPossibleTopicDescription
                     });
                 },
                     error => {
@@ -1258,5 +1284,70 @@ export class TopicManagementState {
             )
     }
 
+    @Action(SaveNewPaneAction)
+    saveNewPane(ctx : StateContext<TopicManagementModel>, action : SaveNewPaneAction) : Actions {
+        let result : any = null;
+        
+        result = this.loginService.performPost(action.body,AppConstant.topicDescription + '/' + action.surveyDescriptionId + '/' + AppConstant.pane)
+        .pipe(
+            tap((response) =>{
+                ctx.patchState({
+                    topicPane : response
+                })
+            },this.errorCallbak)
+        )
+        return result;
+    }
+
+    @Action(UpdadePaneByIdAction)
+    UpdadePaneById(ctx : StateContext<TopicManagementModel>, action : UpdadePaneByIdAction) : Actions {
+     let result : any = null;
+        
+      result = this.loginService.performPut(action.body,AppConstant.topicDescription + '/' + action.surveyDescriptionId 
+        + '/' + AppConstant.pane + '/' + action.paneId)
+        .pipe(
+            tap((response) =>{
+                ctx.patchState({
+                    topicPane : response
+                })
+            },this.errorCallbak)
+        )
+        return result;
+    }
+
+    @Action(DeletePaneByIdAction)
+    deletePaneByIdAction(ctx : StateContext<TopicManagementModel>, action : DeletePaneByIdAction): Actions{
+        return this.loginService
+        .performDelete(AppConstant.topicDescription + '/' + action.surveyDescriptionId + '/' + AppConstant.pane + '/' + action.paneId)
+        .pipe(
+            tap(
+                (response) =>{
+                    ctx.patchState({ topicPane : undefined });
+                }, this.errorCallbak
+            ));
+    }
+
+
+    @Action(CreateCopyPaneByIdAction)
+    createCopyPaneByIdAction(ctx : StateContext<TopicManagementModel>, action : CreateCopyPaneByIdAction) : Actions {
+        return this.loginService
+        .performPostWithParam({},AppConstant.topicDescription + '/' + action.surveyDescriptionId + '/' + AppConstant.pane + '/' + action.paneId + '/copy' ,action.params)
+        .pipe(
+            tap(
+                (resposne) =>{
+                    ctx.patchState({topicPane : resposne})
+                }, this.errorCallbak
+            ));
+    }
+
+    errorCallbak = async (errorResponse : any) =>{
+    if(errorResponse.error.errors){
+        for(let error of errorResponse.error.errors){
+            this.utilityService.showErrorMessage(error.defaultMessage);
+        }
+        return;
+    }
+    this.utilityService.showErrorMessage(errorResponse.error.errorMessage);
+   }
 
 }
