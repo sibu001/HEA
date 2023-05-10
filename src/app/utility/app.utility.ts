@@ -386,4 +386,9 @@ export class AppUtility {
         return confirm('Are you sure you want to delete?');
     }   
 
+    // Note*** provide chunks in sequence
+    public static endPointGenerator(chunks : Array<string>): string{
+        return chunks.join('/');
+    }
+
 }

@@ -3,12 +3,14 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -42,16 +44,19 @@ export class TopicPaneDataBlockEditComponent implements OnInit, OnDestroy {
       this.topicDescriptionId = params['topicDescriptionId'];
     });
     this.setForm(undefined);
-    if(this.id){
-      this.getDataBlockById();
-      this.loadDataBlockById();
-    }
+
   }
 
 
   ngOnInit() {
     this.scrollTop();
     this.dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
+    if(this.id){
+      this.getDataBlockById();
+      this.loadDataBlockById();
+      this.loadDataFieldsofDataBlock();
+      this.getDataFieldsofDataBlock();
+    }
   }
 
   scrollTop() {
@@ -80,10 +85,12 @@ export class TopicPaneDataBlockEditComponent implements OnInit, OnDestroy {
   getDataBlockById(){
     this.subscriptions.add(
       this.topicService.getDataBlockByPaneId()
+      .pipe(filter(data => data && data.id == this.id))
       .subscribe(
         dataBlock => {
           this.dataBlockData = dataBlock;
           this.setForm(dataBlock);
+          AppUtility.scrollTop();
         }, error =>{
           console.error(error);
         }     
@@ -95,51 +102,69 @@ export class TopicPaneDataBlockEditComponent implements OnInit, OnDestroy {
   }
 
   save(): any {
-    document.getElementById('loader').classList.add('loading');
     const body = Object.assign(this.dataBlockData ? this.dataBlockData : {},this.variableForm.value)
+
+    if(this.id){
+      this.topicService.updateDataBlockById(body,this.paneId,this.id);
+      return ;
+    }
+
     this.subscriptions.add(
-      this.loginService.performPost(body,AppConstant.pane + '/' + this.paneId + '/' + AppConstant.dataBlock)
+      this.topicService.saveDataBlockByPaneId(body,this.paneId)
+      .pipe(take(1))
       .subscribe(
-        response =>{
-          document.getElementById('loader').classList.remove('loading');
-            this.id = response.id;
-            this.dataBlockData = response;
-            this.router.navigate([],
-              {
-                relativeTo: this.activateRoute,
-                queryParams: {id : response.id},
-                queryParamsHandling : 'merge'
-               });
-            this.ngOnInit();
-        }, error =>{
-          document.getElementById('loader').classList.remove('loading');
-          console.error(error);
-          this.utilityService.showErrorMessage(error.error.errorMessage);
+        (response) =>{
+          this.id =  response.topicManagement.dataBlock.id;
+          this.router.navigate([],
+            {
+              relativeTo: this.activateRoute,
+              queryParams: {id : this.id},
+              queryParamsHandling : 'merge'
+            });
+          this.getDataBlockById();
         }
-      )
-    )
+    ));    
 
   }
+
   delete(): any {
-    document.getElementById('loader').classList.add('loading');
+
+    if(!AppUtility.deleteConfirmatonBox())
+      return;
+
     this.subscriptions.add(
-      this.loginService.performDelete(
-        AppConstant.pane + '/' + this.paneId + '/' + AppConstant.dataBlock + '/' + this.dataBlockData.id)
-        .subscribe(
-          response => {
-            document.getElementById('loader').classList.remove('loading');
-            this.back();
-          }, error =>{
-            document.getElementById('loader').classList.remove('loading');
-            console.error(error);
-            this.utilityService.showErrorMessage(error.error.errorMessage);          }
-        )
-    )
+      this.topicService.deleteDataBlockById(this.paneId,this.id)
+      .pipe(take(1))
+      .subscribe(
+        (response) =>{
+          this.back();
+        }));
   }
+
+loadDataFieldsofDataBlock(){
+    this.topicService.loadDataFieldsByDataBlock(this.paneId,this.id);
+}
+
+getDataFieldsofDataBlock(){
+  this.subscriptions.add(
+    this.topicService.getDataBlockDataFields()
+    .pipe(filter(data => true))
+    .subscribe(
+      (response: any) => {
+        this.dataFieldDataSource = response;
+      }
+    ));
+}
 
 
   addDataField(){
     this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit']);
+  }
+
+  goToEditDataField($event : any){
+    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit']
+    , {queryParams : {id : this.id, dataBlockId : this.id, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId}})
+    console.log($event);
   }
 
   get f() { return this.variableForm.controls; }

@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction, SaveNewPaneAction, UpdadePaneByIdAction, CopyCreateTopicDescriptionFromIdAction, DeletePaneByIdAction, CreateCopyPaneByIdAction } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction, SaveNewPaneAction, UpdadePaneByIdAction, CopyCreateTopicDescriptionFromIdAction, DeletePaneByIdAction, CreateCopyPaneByIdAction, SaveDataBlockByPaneIdAction, UpdateDataBlockByPaneIdAction, DeleteDataBlockByIdAction, GetDataFieldsbyDataBlockAction, GetDataBlockDataFieldByIdAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -112,6 +112,34 @@ export class TopicService {
 
   getDataBlockListByPaneId() {
     return this.store.select(TopicManagementState.getDataBlockListByPaneId);
+  }
+  
+  saveDataBlockByPaneId(body : any, paneId : number){
+    return this.store.dispatch(new SaveDataBlockByPaneIdAction(body, paneId));
+  }
+
+  deleteDataBlockById(paneId : number, id : number) {
+    return this.store.dispatch(new DeleteDataBlockByIdAction(paneId, id));
+  }
+
+  loadDataFieldsByDataBlock(paneId : number, dataBlockId : number) : Observable<any>{
+    return this.store.dispatch(new GetDataFieldsbyDataBlockAction(paneId , dataBlockId));
+  }
+
+  getDataBlockDataFields() : Observable<any>{
+    return this.store.select(TopicManagementState.getDataBlockDataFields);
+  }
+
+  loadDataBlockDataFieldsById(paneId : number, dataBlockId : number, dataFieldId : number ) : Observable<any>{
+    return this.store.dispatch(new GetDataBlockDataFieldByIdAction(paneId,dataBlockId,dataFieldId));
+  }
+
+  getDataBlockDataFieldsById(){
+    return this.store.select(TopicManagementState.getDataBlockDataFieldById);
+  }
+
+  updateDataBlockById(body : any, paneId : number, id : number){
+    return this.store.dispatch(new UpdateDataBlockByPaneIdAction(body,id,paneId));
   }
 
   loadDataFieldByPaneId(paneId: number) {

@@ -18,7 +18,12 @@ export enum TopicActionTypes {
     LOAD_SELECTED_TOPIC_DESCRIPTION_VARIABLES = 'Load Selected Topic Description Variables',
     LOAD_TOPIC_PANE_BY_ID = "Load Topic Pane By Id",
     LOAD_DATA_BLOCK_BY_PANE_ID = 'Load Data Block By Pane Id',
+    UPDATE_DATA_BLOCK_BY_PANE_ID ='Update Data Block By Id',
+    SAVE_DATA_BLOCK_BY_PANE_ID ='Save Data Block By Id',
     LOAD_DATA_BLOCK_BY_ID = 'Load Data Block By Id',
+    DELETE_DATA_BLOCK_BY_ID = 'Delete Data Block By Id',
+    LOAD_DATA_FIELD_BY_DATA_BLOCK = 'Load Data Field By Data Block',
+    LOAD_DATA_BLOCK_DATA_FIELD_BY_ID = 'Load Data Block Data Field By Id',
     LOAD_DATA_FIELD_BY_PANE_ID = 'Load Data Field By Pane Id',
     LOAD_DATA_FIELD_BY_ID = 'Load Data Field By Id',
     LOAD_TOPIC_DESCRIPTION_BY_PANE_ID = 'Load Topic Description by Pane Id',
@@ -117,6 +122,31 @@ export class SaveTopicDescriptionAction {
 export class LoadDataBlockByPaneId{
     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_DATA_BLOCK_BY_PANE_ID;
     constructor(readonly paneId : number){}
+}
+
+export class SaveDataBlockByPaneIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.SAVE_DATA_BLOCK_BY_PANE_ID;
+    constructor(readonly body : any, readonly paneId : number){}
+}
+
+export class DeleteDataBlockByIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.DELETE_DATA_BLOCK_BY_ID;
+    constructor(readonly paneId : number, readonly id : number){}
+}
+
+export class GetDataFieldsbyDataBlockAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_DATA_FIELD_BY_DATA_BLOCK;
+    constructor(readonly paneId : number, readonly dataBlockId : number){}
+}
+
+export class GetDataBlockDataFieldByIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_DATA_BLOCK_DATA_FIELD_BY_ID;
+    constructor(readonly paneId : number, readonly dataBlockId : number, readonly dataFieldId : number){}
+}
+
+export class UpdateDataBlockByPaneIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.UPDATE_DATA_BLOCK_BY_PANE_ID;
+    constructor(readonly body : any, readonly id : number, readonly paneId : number){}
 }
 
 export class LoadDataFiledByPaneId{

@@ -24,6 +24,7 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   isBlockField: false;
   dataFieldForm: FormGroup;
   paneId : any;
+  dataBlockId : any;
   topicDescriptionId : any;
   dataFieldKeys = TableColumnData.PANE_DATA_FIELD_VALUES_KEY;
   dataFieldDataValue : any;
@@ -49,10 +50,12 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.dataBlockId = params['dataBlockId'];
       this.isBlockField = params['isBlockField'] !== undefined ? JSON.parse(params['isBlockField']) : false;
       this.paneId = params['paneId'];
       this.topicDescriptionId = params['topicDescriptionId']
     });
+    
     this.setForm(undefined);
     this.getLookUpDataType();
     this.getLookUpInputType();
@@ -77,6 +80,20 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
       this.loadDataFieldById();
       this.loadAllFieldValues();
     }
+  }
+
+  loadDataBlockDataField(){
+    this.topicService.loadDataBlockDataFieldsById(this.paneId,this.dataBlockId,this.id);
+  }
+
+  getDataBlockDataField(){
+    this.subscriptions.add(
+      this.topicService.getDataBlockDataFieldsById()
+      .pipe()
+      .subscribe(
+        (response) =>{
+          console.log(response);
+        }));
   }
 
   loadCalculationTypeList(): any {

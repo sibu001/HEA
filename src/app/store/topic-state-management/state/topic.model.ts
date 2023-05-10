@@ -13,6 +13,8 @@ export interface TopicManagementModel {
     topicPane : any;
     dataBlockList : any;
     dataBlock : any;
+    dataBlockDataFieldList : any;
+    dataBlockDataField : any
     dataFieldList : any;
     dataField : any;
     paneList : any;
