@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction, SaveNewPaneAction, UpdadePaneByIdAction, CopyCreateTopicDescriptionFromIdAction, DeletePaneByIdAction, CreateCopyPaneByIdAction, SaveDataBlockByPaneIdAction, UpdateDataBlockByPaneIdAction, DeleteDataBlockByIdAction, GetDataFieldsbyDataBlockAction, GetDataBlockDataFieldByIdAction } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction, SaveNewPaneAction, UpdadePaneByIdAction, CopyCreateTopicDescriptionFromIdAction, DeletePaneByIdAction, CreateCopyPaneByIdAction, SaveDataBlockByPaneIdAction, UpdateDataBlockByPaneIdAction, DeleteDataBlockByIdAction, GetDataFieldsbyDataBlockAction, GetDataBlockDataFieldByIdAction, SaveDataBlockDataFieldAction, UpdateDataBlockDataFieldByIdAction, UpdateDateFieldByPaneIdAction, DeleteDataBlockDataFieldByIdAction, GetDataBlockDataFieldFieldValues, SaveDataBlockDataFieldFieldValues, DeleteDataBlockDataFieldFieldValues } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -122,8 +122,8 @@ export class TopicService {
     return this.store.dispatch(new DeleteDataBlockByIdAction(paneId, id));
   }
 
-  loadDataFieldsByDataBlock(paneId : number, dataBlockId : number) : Observable<any>{
-    return this.store.dispatch(new GetDataFieldsbyDataBlockAction(paneId , dataBlockId));
+  loadDataFieldsByDataBlock(force : boolean, paneId : number, dataBlockId : number) : Observable<any>{
+    return this.store.dispatch(new GetDataFieldsbyDataBlockAction(force,paneId , dataBlockId));
   }
 
   getDataBlockDataFields() : Observable<any>{
@@ -138,8 +138,36 @@ export class TopicService {
     return this.store.select(TopicManagementState.getDataBlockDataFieldById);
   }
 
+  saveDataBlockDataField(paneId : number, dataBlockId : number, body : any ) : Observable<any> {
+    return this.store.dispatch(new SaveDataBlockDataFieldAction(paneId,dataBlockId,body));
+  }
+
+  updateDataBlockDataFieldById(paneId : number, dataBlockId : number , id : number, body : any ) : Observable<any>{
+    return this.store.dispatch(new UpdateDataBlockDataFieldByIdAction(paneId,dataBlockId,id,body));
+  }
+
+  deleteDataBlockDataFieldById(paneId : number, dataBlockId : number, id : number) : Observable<any> {
+    return this.store.dispatch(new DeleteDataBlockDataFieldByIdAction(paneId, dataBlockId, id));
+  }
+
   updateDataBlockById(body : any, paneId : number, id : number){
     return this.store.dispatch(new UpdateDataBlockByPaneIdAction(body,id,paneId));
+  }
+
+  loadDataBlockDataFieldFieldValues(paneId : number, dataBlockId : number, dataFieldId : number) : Observable<any>{
+    return this.store.dispatch(new GetDataBlockDataFieldFieldValues(paneId, dataBlockId, dataFieldId));
+  }
+
+  saveDataBlockDataFieldFieldValues(paneId : number, dataBlockId : number, dataFieldId : number, body : any) : Observable<any>{
+    return this.store.dispatch(new SaveDataBlockDataFieldFieldValues(paneId,dataBlockId, dataFieldId,body));
+  }
+  
+  deleteDataBlockDataFieldFieldValues(paneId : number, dataBlockId : number, dataFieldId : number, fieldValueId : number): Observable<any>{
+    return this.store.dispatch(new DeleteDataBlockDataFieldFieldValues(paneId, dataBlockId, dataFieldId, fieldValueId));
+  }
+
+  getDataBlockDataFieldFieldValues() : Observable<any>{ 
+    return this.store.select(TopicManagementState.getDataBlockDataFieldFieldValues)
   }
 
   loadDataFieldByPaneId(paneId: number) {
@@ -198,8 +226,12 @@ export class TopicService {
     return this.store.select(TopicManagementState.getPaneListByTopicDescriptionId)
   }
 
-  saveDataFiedlById(paneId: number, body: any) {
+  saveDataFiedlByPaneId(paneId: number, body: any) {
     return this.store.dispatch(new SaveDataFieldByPaneIdAction(paneId, body))
+  }
+
+  updateDataFieldByPaneId(paneId : number, id : number, body : any) : Observable<any> {
+    return this.store.dispatch(new UpdateDateFieldByPaneIdAction(paneId,id,body));
   }
 
   deleteDataFieldById(paneId: number, id: number) {

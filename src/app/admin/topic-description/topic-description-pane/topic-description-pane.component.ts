@@ -264,27 +264,6 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
           this.ngOnDestroy();
           this.loadWhenIdIsPresent();
         }));
-
-    // this.subscriptions.add(
-    //   this.loginService
-    //   .performPostWithParam({},AppConstant.topicDescription + '/' + this.surveyDescriptionId + '/' + AppConstant.pane + '/' + this.id + '/copy' ,params)
-    //   .subscribe(
-    //     data =>{
-    //       document.getElementById('loader').classList.remove('loading');
-    //       this.id = data.id;
-    //         this.router.navigate([],{
-    //           relativeTo: this.activateRoute,
-    //           queryParams: {id : data.id},
-    //           queryParamsHandling : 'merge'
-    //         });
-    //         this.ngOnInit();
-    //     }, error =>{
-    //       document.getElementById('loader').classList.remove('loading');
-    //       this.utilityService.showErrorMessage(error.error.errorMessage)
-    //       console.log(error);
-    //     }
-    //   )
-    // )
   }
 
   loadDataBlockForPane(){
@@ -296,7 +275,6 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       this.topicService.getDataBlockListByPaneId()
     .subscribe(
       response => {
-        console.log(response);
         this.dataBlockDataSource = response;
     }, error => {
       this.utilityService.showErrorMessage(error.error.errorMessage);
@@ -378,7 +356,9 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   }
 
   addDataField() {
-    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit'],{ queryParams: { paneId : this.id , topicDescriptionId : this.surveyDescriptionId}});
+    const queryParams = { paneId : this.id , topicDescriptionId : this.surveyDescriptionId }
+    queryParams[AppConstant.DATA_FIELD_EDIT_REQUEST] = AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE;
+    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit'],{ queryParams : queryParams});
   }
 
   addCharts() {
@@ -394,7 +374,9 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   }
 
   goToEditDataField(event) {
-    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit'], { queryParams: {id: event.id, paneId : this.id , topicDescriptionId : this.surveyDescriptionId} });
+    const queryParams = {id: event.id, paneId : this.id , topicDescriptionId : this.surveyDescriptionId}
+    queryParams[AppConstant.DATA_FIELD_EDIT_REQUEST] = AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE;
+    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit'], { queryParams: queryParams });
   }
 
   goToEditCharts( event : any) {

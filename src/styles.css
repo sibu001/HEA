@@ -2659,3 +2659,13 @@ mat-cell > div{
   margin-bottom: 5px;
   float : right;
 }
+
+.mx-5{
+  margin-top: 5px;
+  margin-bottom: 5xp;
+}
+
+.px-0{
+  padding-right: 0px;
+  padding-left: 0px;
+}

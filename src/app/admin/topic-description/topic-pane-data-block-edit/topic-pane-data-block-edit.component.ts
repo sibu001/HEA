@@ -22,6 +22,7 @@ export class TopicPaneDataBlockEditComponent implements OnInit, OnDestroy {
   id: any;
   paneId : any;
   topicDescriptionId : any;
+  force : boolean = false;
   dataBlockData: any;
   variableForm: FormGroup;
   dataFieldKeys: TABLECOLUMN[];
@@ -39,6 +40,7 @@ export class TopicPaneDataBlockEditComponent implements OnInit, OnDestroy {
     private readonly location: Location,
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
+      this.force = AppUtility.forceParamToBoolean(params['force']);
       this.id = params['id'];
       this.paneId = params['paneId'];
       this.topicDescriptionId = params['topicDescriptionId'];
@@ -102,6 +104,9 @@ export class TopicPaneDataBlockEditComponent implements OnInit, OnDestroy {
   }
 
   save(): any {
+
+    if(!AppUtility.validateAndHighlightReactiveFrom(this.variableForm)) return;
+
     const body = Object.assign(this.dataBlockData ? this.dataBlockData : {},this.variableForm.value)
 
     if(this.id){
@@ -142,7 +147,7 @@ export class TopicPaneDataBlockEditComponent implements OnInit, OnDestroy {
   }
 
 loadDataFieldsofDataBlock(){
-    this.topicService.loadDataFieldsByDataBlock(this.paneId,this.id);
+    this.topicService.loadDataFieldsByDataBlock(false,this.paneId,this.id);
 }
 
 getDataFieldsofDataBlock(){
@@ -156,15 +161,23 @@ getDataFieldsofDataBlock(){
     ));
 }
 
+highlightErrorField(formControlName : string) : boolean{
+  return AppUtility.showErrorMessageOnErrorField(this.f, formControlName);  
+}
 
   addDataField(){
-    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit']);
+    const queryParams = {dataBlockId : this.id, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId}
+    queryParams[AppConstant.DATA_FIELD_EDIT_REQUEST] = AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK;
+    this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit'],
+     {queryParams : queryParams})
+
   }
 
   goToEditDataField($event : any){
+    const queryParams = {id : $event.id, dataBlockId : this.id, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId};
+    queryParams[AppConstant.DATA_FIELD_EDIT_REQUEST] = AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK;
     this.router.navigate(['admin/topicDescription/topicPaneDataFieldEdit']
-    , {queryParams : {id : this.id, dataBlockId : this.id, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId}})
-    console.log($event);
+    , {queryParams : queryParams });
   }
 
   get f() { return this.variableForm.controls; }

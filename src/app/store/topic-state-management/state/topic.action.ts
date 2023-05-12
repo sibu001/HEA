@@ -19,15 +19,22 @@ export enum TopicActionTypes {
     LOAD_TOPIC_PANE_BY_ID = "Load Topic Pane By Id",
     LOAD_DATA_BLOCK_BY_PANE_ID = 'Load Data Block By Pane Id',
     UPDATE_DATA_BLOCK_BY_PANE_ID ='Update Data Block By Id',
+    DATA_BLOCK_DATA_FIELD_FIELD_VALUES_BY_DATA_FIELD_ID = 'Data Block Data Field Values By Data Field Id',
+    SAVE_DATA_BLOCK_DATA_FIELD_FIELD_VALUES_BY_DATA_FIELD_ID = 'Save Data Block Data Field Values By Data Field',
+    DELETE_DATA_BLOCK_DATA_FIELD_FIELD_VALUES_BY_DATA_FIELD_ID = 'Delete Data Block Data Field Values By Data Field',
     SAVE_DATA_BLOCK_BY_PANE_ID ='Save Data Block By Id',
     LOAD_DATA_BLOCK_BY_ID = 'Load Data Block By Id',
     DELETE_DATA_BLOCK_BY_ID = 'Delete Data Block By Id',
     LOAD_DATA_FIELD_BY_DATA_BLOCK = 'Load Data Field By Data Block',
     LOAD_DATA_BLOCK_DATA_FIELD_BY_ID = 'Load Data Block Data Field By Id',
+    SAVE_DATA_BLOCK_DATA_FIELD = 'Save Data Block Data Field',
+    UPDATE_DATA_BLOCK_DATA_FIELD_BY_ID = 'Update Data Block Data Field By Id',
+    DELETE_DATA_BLOCK_DATA_FIELD_BY_ID = 'Delete Data Block Data Field',
     LOAD_DATA_FIELD_BY_PANE_ID = 'Load Data Field By Pane Id',
     LOAD_DATA_FIELD_BY_ID = 'Load Data Field By Id',
     LOAD_TOPIC_DESCRIPTION_BY_PANE_ID = 'Load Topic Description by Pane Id',
-    SAVE_DATA_FIELD = 'Save Data Field',
+    SAVE_DATA_FIELD_BY_PANE = 'Save Data Field By Pane',
+    UPDATE_DATA_FIELD_BY_PANE_ID = 'Update Data Field By Pane Id',
     DELETE_DATA_FIELD_BY_ID = 'Delete Data Field',
     LOAD_LOOKUP_VALUE_BY_TYPE = 'Load Lookup Value By Type',
     LOAD_FIELD_VALUES_FOR_DATA_FIELD = 'Load Field Values For Data Field',
@@ -136,7 +143,7 @@ export class DeleteDataBlockByIdAction{
 
 export class GetDataFieldsbyDataBlockAction{
     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_DATA_FIELD_BY_DATA_BLOCK;
-    constructor(readonly paneId : number, readonly dataBlockId : number){}
+    constructor(readonly force : boolean, readonly paneId : number, readonly dataBlockId : number){}
 }
 
 export class GetDataBlockDataFieldByIdAction{
@@ -144,9 +151,39 @@ export class GetDataBlockDataFieldByIdAction{
     constructor(readonly paneId : number, readonly dataBlockId : number, readonly dataFieldId : number){}
 }
 
+export class SaveDataBlockDataFieldAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.SAVE_DATA_BLOCK_DATA_FIELD
+    constructor(readonly paneId : number, readonly dataBlockId : number, readonly body : any ) {}
+}
+
+export class UpdateDataBlockDataFieldByIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.UPDATE_DATA_BLOCK_DATA_FIELD_BY_ID
+    constructor(readonly paneId : number, readonly dataBlockId : number , readonly id : number, readonly body : any ) {}
+}
+
+export class DeleteDataBlockDataFieldByIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.DELETE_DATA_BLOCK_DATA_FIELD_BY_ID;
+    constructor(readonly paneId : number, readonly dataBlockId : number , readonly id : number) {}
+}
+
 export class UpdateDataBlockByPaneIdAction{
     static readonly type: TopicActionTypes = TopicActionTypes.UPDATE_DATA_BLOCK_BY_PANE_ID;
     constructor(readonly body : any, readonly id : number, readonly paneId : number){}
+}
+
+export class GetDataBlockDataFieldFieldValues{
+    static readonly type : TopicActionTypes = TopicActionTypes.DATA_BLOCK_DATA_FIELD_FIELD_VALUES_BY_DATA_FIELD_ID;
+    constructor(readonly paneId : number , readonly dataBlockId : number, readonly dataFieldId : number){}
+}
+
+export class SaveDataBlockDataFieldFieldValues{
+    static readonly type : TopicActionTypes = TopicActionTypes.SAVE_DATA_BLOCK_DATA_FIELD_FIELD_VALUES_BY_DATA_FIELD_ID;
+    constructor(readonly paneId : number , readonly dataBlockId : number, readonly dataFieldId : number, readonly body : any){}
+}
+
+export class DeleteDataBlockDataFieldFieldValues{
+    static readonly type : TopicActionTypes = TopicActionTypes.DELETE_DATA_BLOCK_DATA_FIELD_FIELD_VALUES_BY_DATA_FIELD_ID;
+    constructor(readonly paneId : number , readonly dataBlockId : number, readonly dataFieldId : number, readonly fieldValueId : number){}
 }
 
 export class LoadDataFiledByPaneId{
@@ -198,8 +235,13 @@ export class LoadPaneListByTopicDescriptionId{
 }
 
 export class SaveDataFieldByPaneIdAction{
-    static readonly type: TopicActionTypes = TopicActionTypes.SAVE_DATA_FIELD;
+    static readonly type: TopicActionTypes = TopicActionTypes.SAVE_DATA_FIELD_BY_PANE;
     constructor(readonly paneId : number, readonly body : any){}
+}
+
+export class UpdateDateFieldByPaneIdAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.UPDATE_DATA_FIELD_BY_PANE_ID;
+    constructor(readonly paneId : number, readonly id : number, readonly body : any){}
 }
 
 export class DeleteDataFieldByIdAction{

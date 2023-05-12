@@ -12,6 +12,9 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Block code:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" formControlName="blockCode" id="blockCode">
+              <div class="error-message" *ngIf="highlightErrorField('blockCode')" >
+                <span>Block code is required.</span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -27,6 +30,9 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" formControlName="label" id="label">
+              <div class="error-message" *ngIf="highlightErrorField('label')" >
+                <span>Label is required.</span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -34,6 +40,9 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" formControlName="reportLabel" id="reportLabel">
+              <div class="error-message" *ngIf="highlightErrorField('reportLabel')" >
+                <span>Report Label is required.</span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>

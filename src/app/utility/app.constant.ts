@@ -167,7 +167,18 @@ export class AppConstant {
     public static readonly ASC = 'asc';
     public static readonly DESC = 'desc';
 
+    // used for scriptDebugConsole.
     public static readonly contextTypeSurvey = 'survey';
     public static readonly contextTypeBatch = 'batch';
     public static readonly contextTypeFactor = 'factor';
+    // 
+
+    //  used for requestParams for data-field-edit screen.
+        // request param key :-
+    public static readonly DATA_FIELD_EDIT_REQUEST = 'requestFrom'
+
+       // request param values :-
+    public static readonly DATA_FIELD_EDIT_REQUEST_FROM_PANE = 'pane';
+    public static readonly DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK = 'dataBlock';
+    
 }

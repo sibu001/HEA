@@ -387,7 +387,7 @@ export class AppUtility {
     }   
 
     // Note*** provide chunks in sequence
-    public static endPointGenerator(chunks : Array<string>): string{
+    public static endPointGenerator(chunks : Array<string | number>): string{
         return chunks.join('/');
     }
 

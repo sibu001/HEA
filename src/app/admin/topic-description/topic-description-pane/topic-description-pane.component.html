@@ -202,7 +202,7 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Data Fields</span>
             </p>
-            <app-table [keys]="dataFieldKeys" [isPaginate]="true" [isSearch]="false" [data]="dataFieldDataSource"
+            <app-table [keys]="dataFieldKeys" [isPaginate]="false" [isSearch]="false" [data]="dataFieldDataSource"
               [totalElement]="dataFieldData.totalElements" (addEvent)='addDataField()'
               (goToEditEvent)='goToEditDataField($event)'>
             </app-table>
@@ -213,7 +213,7 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Charts</span>
             </p>
-            <app-table [keys]="chartKeys" [isPaginate]="true" [isSearch]="false" [data]="chartDataSource"
+            <app-table [keys]="chartKeys" [isPaginate]="false" [isSearch]="false" [data]="chartDataSource"
               [totalElement]="chartData.totalElements" (addEvent)='addCharts()' (goToEditEvent)='goToEditCharts($event)'>
             </app-table>
           </div>
@@ -223,7 +223,7 @@
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Reports</span>
             </p>
-            <app-table [keys]="reportKeys" [isPaginate]="true" [isSearch]="false" [data]="reportsDataSource"
+            <app-table [keys]="reportKeys" [isPaginate]="false" [isSearch]="false" [data]="reportsDataSource"
               [totalElement]="reportData.totalElements" (addEvent)='addReports()' (goToEditEvent)='goToEditReports($event)'>
             </app-table>
           </div>

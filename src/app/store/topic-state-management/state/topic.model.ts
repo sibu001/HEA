@@ -15,6 +15,7 @@ export interface TopicManagementModel {
     dataBlock : any;
     dataBlockDataFieldList : any;
     dataBlockDataField : any
+    dataBlockDataFieldFieldValues : any;
     dataFieldList : any;
     dataField : any;
     paneList : any;

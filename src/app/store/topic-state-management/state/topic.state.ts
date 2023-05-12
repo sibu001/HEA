@@ -63,6 +63,13 @@ import {
     DeleteDataBlockByIdAction,
     GetDataFieldsbyDataBlockAction,
     GetDataBlockDataFieldByIdAction,
+    SaveDataBlockDataFieldAction,
+    UpdateDataBlockDataFieldByIdAction,
+    UpdateDateFieldByPaneIdAction,
+    DeleteDataBlockDataFieldByIdAction,
+    GetDataBlockDataFieldFieldValues,
+    SaveDataBlockDataFieldFieldValues,
+    DeleteDataBlockDataFieldFieldValues,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -85,6 +92,7 @@ import { TopicManagementModel } from './topic.model';
         dataBlock : undefined,
         dataBlockDataFieldList : undefined,
         dataBlockDataField : undefined,
+        dataBlockDataFieldFieldValues :undefined,
         dataFieldList : undefined,
         dataField : undefined,
         paneList : undefined,
@@ -177,7 +185,7 @@ export class TopicManagementState {
 
     @Selector()
     static getDataBlockListByPaneId(state: TopicManagementModel): any {
-        return state.dataBlockList;
+        return state.dataBlockList.response;
     }
 
     @Selector()
@@ -193,6 +201,11 @@ export class TopicManagementState {
     @Selector()
     static getDataBlockDataFieldById(state : TopicManagementModel) : any{
         return state.dataBlockDataField;
+    }
+
+    @Selector()
+    static getDataBlockDataFieldFieldValues(state  : TopicManagementModel) : any{
+        return state.dataBlockDataFieldFieldValues.response;
     }
 
     @Selector()
@@ -531,7 +544,11 @@ export class TopicManagementState {
 
     @Action(LoadDataBlockByPaneId)
     loadDataBlockByPaneId(ctx: StateContext<TopicManagementModel>, action: LoadDataBlockByPaneId) : Actions{
-        // const dataBlockList = ctx.getState().dataBlockList;
+        const dataBlockList : any = ctx.getState().dataBlockList;
+        if(dataBlockList && dataBlockList.id == action.paneId){
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataBlock)
             .pipe(
@@ -539,7 +556,7 @@ export class TopicManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     response = TopicUtilityTransformer.transformDataBlocksTableData(response);
                     ctx.patchState({
-                        dataBlockList: response,
+                        dataBlockList: AppUtility.addCustomIdentifierForReducer({response : response}, action.paneId),
                     });
                 },
                     error => {
@@ -555,9 +572,73 @@ export class TopicManagementState {
         return this.loginService.performPut(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataBlock + '/' + action.id)
             .pipe(
                 tap((response) =>{
+                    const dataBlockList : any = ctx.getState().dataBlockList;
+                    if(dataBlockList){
+                        dataBlockList.response = dataBlockList.response.map((data)=>{
+                            if(data.id == action.id){
+                               return TopicUtilityTransformer.transformDataBlocksTableData([response])[0];
+                            }
+                            return data;
+                        });
+
+                        ctx.patchState({dataBlockList : {...dataBlockList}});
+                    }
                     ctx.patchState({dataBlock : response});
                 }, this.errorCallbak)
             );
+    }
+
+    @Action(GetDataBlockDataFieldFieldValues)
+    getDataBlockDataFieldFieldValues(ctx : StateContext<TopicManagementModel>, action : GetDataBlockDataFieldFieldValues) : Actions {
+        
+        const dataBlockDataFieldFieldValues : any = ctx.getState().dataBlockDataFieldFieldValues;
+        if(dataBlockDataFieldFieldValues && dataBlockDataFieldFieldValues.id == action.dataFieldId){
+            return;
+        }
+        
+        return this.loginService.performGet(AppUtility.endPointGenerator(
+            [AppConstant.pane,action.paneId,AppConstant.dataBlock,action.dataBlockId,AppConstant.dataField,action.dataFieldId,AppConstant.fieldValues]))
+            .pipe( tap((response) =>{
+                ctx.patchState({ dataBlockDataFieldFieldValues : AppUtility.addCustomIdentifierForReducer({response : response},action.dataFieldId)});
+            },this.errorCallbak))
+    }
+
+    @Action(SaveDataBlockDataFieldFieldValues)
+    saveDataBlockDataFieldFieldValues(ctx : StateContext<TopicManagementModel>, action : SaveDataBlockDataFieldFieldValues) : Actions {
+        return this.loginService.performPost(action.body,AppUtility.endPointGenerator(
+            [AppConstant.pane,action.paneId,AppConstant.dataBlock,action.dataBlockId,AppConstant.dataField,action.dataFieldId,AppConstant.fieldValues]))
+            .pipe( tap((response : any) =>{
+
+                const dataBlockDataFieldFieldValues : any = ctx.getState().dataBlockDataFieldFieldValues;
+                if(dataBlockDataFieldFieldValues){
+                    dataBlockDataFieldFieldValues.response.push(response);
+                    ctx.patchState({dataBlockDataFieldFieldValues : {...dataBlockDataFieldFieldValues}})
+                }
+
+                ctx.patchState({ 
+                    dataBlockDataFieldFieldValues: [...dataBlockDataFieldFieldValues]
+                })
+
+            },this.errorCallbak));
+    }
+
+    @Action(DeleteDataBlockDataFieldFieldValues)
+    deleteDataBlockDataFieldFieldValues(ctx : StateContext<TopicManagementModel>, action : DeleteDataBlockDataFieldFieldValues) : Actions {
+        return this.loginService.performDelete(AppUtility.endPointGenerator(
+            [AppConstant.pane,action.paneId,AppConstant.dataBlock,action.dataBlockId,AppConstant.dataField,action.dataFieldId,AppConstant.fieldValues,action.dataFieldId]))
+            .pipe( tap((response : any) =>{
+
+                if(response.data = 'OK'){
+                    let dataBlockDataFieldFieldValues = ctx.getState().dataBlockDataFieldFieldValues;
+                    if(dataBlockDataFieldFieldValues){
+                        dataBlockDataFieldFieldValues.response = dataBlockDataFieldFieldValues.response.filter( data => data.id != action.fieldValueId );
+                        ctx.patchState({ dataBlockDataFieldFieldValues: {...dataBlockDataFieldFieldValues}});
+                    }
+                }else{
+                    this.utilityService.showErrorMessage(response.errorMessage);
+                }
+
+            },this.errorCallbak));
     }
 
     @Action(SaveDataBlockByPaneIdAction)
@@ -565,6 +646,11 @@ export class TopicManagementState {
         return this.loginService.performPost(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataBlock)
         .pipe(
             tap((response) =>{
+                const dataBlockList : any = ctx.getState().dataBlockList;
+                if(dataBlockList){
+                    dataBlockList.response.push(TopicUtilityTransformer.transformDataBlocksTableData([response])[0]);
+                    ctx.patchState({dataBlockList : {...dataBlockList}});
+                }
                 ctx.patchState({dataBlock : response});
             }, this.errorCallbak)
         );
@@ -576,30 +662,47 @@ export class TopicManagementState {
         .pipe(
             tap(
                 (response) =>{
+                    const dataBlockList = ctx.getState().dataBlockList;
+                    if(dataBlockList){
+                        dataBlockList.response = dataBlockList.response.filter((data) => data.id != action.id);
+                        ctx.patchState({dataBlockList : {...dataBlockList}});
+                    }
                     ctx.patchState({ dataBlock: undefined})
-                }
-            )
-        )
+                }));
     }
 
     @Action(GetDataFieldsbyDataBlockAction)
     getDataFieldsbyDataBlockAction(ctx : StateContext<TopicManagementModel>, action : GetDataFieldsbyDataBlockAction) : Actions {
         
         const dataBlockDataFields : any = ctx.getState().dataBlockDataFieldList;
-        if(dataBlockDataFields && dataBlockDataFields.id == action.dataBlockId){
-            return;
-        }
-        
+
+        if( action.force || !dataBlockDataFields || dataBlockDataFields.id != action.dataBlockId)
         return this.loginService.performGet(AppUtility.endPointGenerator(
             [AppConstant.pane,action.paneId.toString(),AppConstant.dataBlock,action.dataBlockId.toString(),AppConstant.dataField]))
             .pipe(
                 tap((response) =>{
                     ctx.patchState({dataBlockDataFieldList : AppUtility.addCustomIdentifierForReducer({response : response },action.dataBlockId)});
                 },this.errorCallbak));
+
+        return;
     }
 
     @Action(GetDataBlockDataFieldByIdAction)
     getDataBlockDataFieldByIdAction(ctx : StateContext<TopicManagementModel>, action : GetDataBlockDataFieldByIdAction) :Actions {
+
+        const dataBlockDataFieldList : any = ctx.getState().dataBlockDataFieldList;
+        const dataBlockDataField : any = ctx.getState().dataBlockDataField;
+
+        if(dataBlockDataField && dataBlockDataField.id == action.dataFieldId){
+            return;
+        }
+
+        if(dataBlockDataFieldList && dataBlockDataFieldList.response.length){
+            const dataBlockDataField : any = dataBlockDataFieldList.response.find((data) => data.id == action.dataFieldId);
+            ctx.patchState({dataBlockDataField: dataBlockDataField});
+            return;
+        }
+
         return this.loginService.performGet(
             AppUtility.endPointGenerator([AppConstant.pane,action.paneId.toString(),AppConstant.dataBlock,
                 action.dataBlockId.toString(),AppConstant.dataField,action.dataFieldId.toString()]))
@@ -608,6 +711,59 @@ export class TopicManagementState {
                     ctx.patchState({dataBlockDataField : response});
                 }, this.errorCallbak
             ));
+    }
+
+    @Action(SaveDataBlockDataFieldAction)
+    saveDataBlockDataField(ctx : StateContext<TopicManagementModel> , action : SaveDataBlockDataFieldAction) : Actions {
+        return this.loginService.performPost(action.body,AppUtility
+            .endPointGenerator([AppConstant.pane,action.paneId,AppConstant.dataBlock,action.dataBlockId,AppConstant.dataField]))
+            .pipe(
+                tap((response : any) =>{
+                    const dataBlockDataFieldList : any = ctx.getState().dataBlockDataFieldList;
+                    if(dataBlockDataFieldList){
+                        dataBlockDataFieldList.response.push(response);
+                        ctx.patchState({dataBlockDataFieldList : {...dataBlockDataFieldList}});
+                    }
+
+                    ctx.patchState({dataBlockDataField : response});
+                },this.errorCallbak));
+    }
+
+    @Action(UpdateDataBlockDataFieldByIdAction)
+    updateDataBlockDataFieldById(ctx : StateContext<TopicManagementModel> , action : UpdateDataBlockDataFieldByIdAction) : Actions {
+        return this.loginService.performPut(action.body,AppUtility
+            .endPointGenerator([AppConstant.pane,action.paneId,AppConstant.dataBlock,action.dataBlockId,AppConstant.dataField,action.id]))
+            .pipe(
+                tap((response : any) =>{
+                    let dataBlockDataFieldList : any = ctx.getState().dataBlockDataFieldList;
+                    if(dataBlockDataFieldList){
+                        dataBlockDataFieldList.response = dataBlockDataFieldList.response.map((data)=>{
+                            if(data.id == response.id) return response;
+                            return data;
+                        });
+                        ctx.patchState({dataBlockDataFieldList : {...dataBlockDataFieldList}});
+                    }
+
+                    ctx.patchState({dataBlockDataField : response});
+                },this.errorCallbak));
+    }
+
+    @Action(DeleteDataBlockDataFieldByIdAction)
+    deleteDataBlockDataFieldByIdAction(ctx : StateContext<TopicManagementModel>, action : DeleteDataBlockDataFieldByIdAction) : Actions{
+    
+        return this.loginService.performDelete(AppUtility
+            .endPointGenerator([AppConstant.pane,action.paneId,AppConstant.dataBlock,action.dataBlockId,AppConstant.dataField,action.id]))
+            .pipe(
+                tap((response : any) =>{
+
+                    const dataBlockDataFieldList : any = ctx.getState().dataBlockDataFieldList;
+                    if(dataBlockDataFieldList && dataBlockDataFieldList.response.length){
+                        dataBlockDataFieldList.response = dataBlockDataFieldList.response.filter((data) => data.id != action.id);
+                        ctx.patchState({dataBlockDataFieldList: {...dataBlockDataFieldList}});
+                    }
+
+                    ctx.patchState({dataBlockDataField : undefined});
+                },this.errorCallbak));
     }
 
     @Action(LoadDataFiledByPaneId)
@@ -674,8 +830,16 @@ export class TopicManagementState {
 
     @Action(LoadDataBlockById)
     loadDataBlockById(ctx : StateContext<TopicManagementModel>, action: LoadDataBlockById){
-        const currentState = ctx.getState();
-        if(currentState.dataBlock && currentState.dataBlock.id == action.id) return null;
+
+        const dataBlock = ctx.getState().dataBlock;
+        if(dataBlock && dataBlock.id == action.id) return null;
+
+        const dataBlockList = ctx.getState().dataBlockList;
+        if(dataBlockList){
+            const data = dataBlockList.response.find((data) => data.id == action.id);
+            ctx.patchState({dataBlock : data});
+            return;
+        }
 
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataBlock + '/' + action.id)
@@ -692,6 +856,7 @@ export class TopicManagementState {
                         this.utilityService.showErrorMessage(error.message);
                     }));
     }
+
 
     @Action(UpdateTopicDescriptionAction)
     updateTopicDescription(ctx: StateContext<TopicManagementModel>, action: UpdateTopicDescriptionAction): Actions {
@@ -813,6 +978,17 @@ export class TopicManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.message);
                 }));
+    }
+
+    @Action(UpdateDateFieldByPaneIdAction)
+    updateDateFieldByPaneIdActio(ctx : StateContext<TopicManagementModel>, action : UpdateDateFieldByPaneIdAction) : Actions{
+        return this.loginService.performPut(action.body,
+            AppUtility.endPointGenerator([AppConstant.pane,action.paneId,AppConstant.dataField,action.id]))
+            .pipe(
+                tap((response) =>{
+                    ctx.patchState({dataField : response})
+                },this.errorCallbak));
+
     }
 
     @Action(DeleteDataFieldByIdAction)

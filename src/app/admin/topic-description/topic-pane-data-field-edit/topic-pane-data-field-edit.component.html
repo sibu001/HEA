@@ -12,10 +12,13 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Field code:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" formControlName="field" id="field">
+              <div class="error-message" *ngIf="highlightErrorField('field')" >
+                <span>Field code is required.</span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf='!isBlockField' class="row borderBottom rowPadding">
+          <div *ngIf='requestFrom == requestFromPane' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Pane:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="paneId" formControlName="paneId">
@@ -217,6 +220,17 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
+          <div *ngIf="requestFrom == requestFromDataBlock" class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label>
+                <input type='checkbox' formControlName="paneBlockDisplay" id="paneBlockDisplay">
+                Display in pane block
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
           <div *ngIf='f.userDisplay.value' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -241,7 +255,7 @@
           </div>
 
 
-          <div *ngIf='f.userDisplay.value' class="row borderBottom rowPadding">
+          <div *ngIf='f.userDisplay.value && requestFrom == requestFromPane' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label>
@@ -253,7 +267,7 @@
           </div>
 
 
-          <div *ngIf='f.userDisplay.value && f.nextRowAnswer.value == true'
+          <div *ngIf='f.userDisplay.value && f.nextRowAnswer.value == true && requestFrom == requestFromPane'
             class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Rows between question and answer:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -263,7 +277,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf='f.userDisplay.value '
+          <div *ngIf='f.userDisplay.value && requestFrom == requestFromPane'
             class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Rows Before Question:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -272,7 +286,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf='f.userDisplay.value '
+          <div *ngIf='f.userDisplay.value && requestFrom == requestFromPane'
             class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Rows After Answer:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -292,8 +306,10 @@
   
             <div class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Updated Date:</div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12"> 
-                <input type="text" class="form-control form-control-sm disableInput" formControlName="updatedDate" readOnly id="updatedDate">
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 mx-5">  
+                <ng-container *ngIf="dataFieldDataValue">
+                  {{ dataFieldDataValue.updatedDate | date : 'MM/dd/yyyy hh:mm:ss'}}
+                </ng-container>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
@@ -312,24 +328,16 @@
             </app-table>
           </div>
 
-          <div class="row rowPadding">
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 sidePadding" style="text-align: left !important;">
+          <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3 ">
               <button type="button" class="btn btn-primary" (click)="back()">
                 Back
               </button>
             </div>
-              <div class="col-sm-8 col-md-8 col-lg-8 col-xs-6 sidePadding" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="sidePadding"
-              [ngClass]="{'col-sm-2 col-md-2 col-lg-2 col-xs-12' : id, 'col-sm-10 col-md-10 col-lg-10 col-xs-6' : !id }" >
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
-                  Save
-                </button>
-              </div>
-            <!-- </div> -->
+            <div class="col-sm-10 col-md-10 col-lg-10 col-xs-9 right-buttons ">
+              <button type="button" class="btn btn-primary" (click)="save()">Save</button>
+              <button type="button" class="btn btn-primary" (click)="delete()">Delete</button>
+            </div>
           </div>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">

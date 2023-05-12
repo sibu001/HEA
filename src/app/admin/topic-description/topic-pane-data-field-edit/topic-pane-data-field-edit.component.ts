@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pipe, Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
@@ -12,6 +12,7 @@ import { TopicService } from 'src/app/store/topic-state-management/service/topic
 import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { HttpParams } from '@angular/common/http';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-topic-pane-data-field-edit',
@@ -21,9 +22,12 @@ import { HttpParams } from '@angular/common/http';
 export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
 
   id: any;
-  isBlockField: false;
+  requestFrom: string;
+  requestFromPane : string = AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE;
+  requestFromDataBlock : string = AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK;
   dataFieldForm: FormGroup;
   paneId : any;
+  force : boolean = false;
   dataBlockId : any;
   topicDescriptionId : any;
   dataFieldKeys = TableColumnData.PANE_DATA_FIELD_VALUES_KEY;
@@ -51,34 +55,48 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.dataBlockId = params['dataBlockId'];
-      this.isBlockField = params['isBlockField'] !== undefined ? JSON.parse(params['isBlockField']) : false;
+      this.requestFrom = params[AppConstant.DATA_FIELD_EDIT_REQUEST];
       this.paneId = params['paneId'];
       this.topicDescriptionId = params['topicDescriptionId']
     });
     
+  }
+
+  ngOnInit() {
     this.setForm(undefined);
     this.getLookUpDataType();
     this.getLookUpInputType();
     this.getLookUpSource();
     this.getCalculationTypeList();
     this.getLookUpCalculationEvent();
-    this.getPanesForTopicDescripition();
 
     this.loadLookUpInputType();
     this.loadLookUpDataType();
     this.loadLookUpSource();
     this.loadLookUpCalculationEvent();
-  }
 
-  ngOnInit() {
-    this.loadPanesForTopicDescription();
     this.loadCalculationTypeList();
-    this.getDataFieldById();
+
+    if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE){
+      this.getPanesForTopicDescripition();
+      this.loadPanesForTopicDescription();
+    }
+
 
     if(this.id){
-      this.getAllFieldValues();
-      this.loadDataFieldById();
-      this.loadAllFieldValues();
+      if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE){
+        this.loadDataFieldById();
+        this.getDataFieldById();
+        this.getAllFieldValues();
+        this.loadAllFieldValues();
+      }
+
+
+      if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK){
+        this.loadDataBlockDataField();
+        this.getDataBlockDataField();
+        this.loadDataBlockDataFieldFieldValues();
+      }
     }
   }
 
@@ -89,11 +107,12 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   getDataBlockDataField(){
     this.subscriptions.add(
       this.topicService.getDataBlockDataFieldsById()
-      .pipe()
+      .pipe(filter(data => data && data.id == this.id))
       .subscribe(
         (response) =>{
-          console.log(response);
-        }));
+          this.dataFieldDataValue = response;
+          this.setForm(response);
+      }));
   }
 
   loadCalculationTypeList(): any {
@@ -104,7 +123,8 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
     .subscribe((calculationTypeList: any) => {
       this.calculationTypeList = calculationTypeList.data;
-      this.dataFieldForm.patchValue({calculationType : this.calculationTypeList[1].lookupValue})
+      if(!this.dataFieldDataValue) 
+        this.dataFieldForm.patchValue({calculationType : this.calculationTypeList[1].lookupValue})
     }));
   }
 
@@ -136,7 +156,8 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     .subscribe(
       response =>{
         this.dataTypeList = response;
-        this.dataFieldForm.patchValue({dataType : this.dataTypeList[0].lookupValue})
+        if(!this.dataFieldDataValue) 
+          this.dataFieldForm.patchValue({dataType : this.dataTypeList[0].lookupValue})
       }, error =>{
         console.error(error);
       }
@@ -154,7 +175,8 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     .subscribe(
       response =>{
         this.inputTypeList = response;
-        this.dataFieldForm.patchValue({inputType : this.inputTypeList[0].lookupValue})
+        if(!this.dataFieldDataValue)
+          this.dataFieldForm.patchValue({inputType : this.inputTypeList[0].lookupValue})
       }, error =>{
         console.error(error);
       }
@@ -172,7 +194,9 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     .subscribe(
       response =>{
         this.sourceTypeList = response;
-        this.dataFieldForm.patchValue({source : this.sourceTypeList[0].lookupValue})
+        if(!this.dataFieldDataValue)
+          this.dataFieldForm.patchValue({source : this.sourceTypeList[0].lookupValue});
+        AppUtility.scrollTop();
       }, error =>{
         console.error(error);
       }
@@ -190,7 +214,8 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
       .subscribe(
         response =>{
           this.calculationEventList = response;
-          this.dataFieldForm.patchValue({calculationEvent : this.calculationEventList[0].lookupValue})
+          if(!this.dataFieldDataValue)
+            this.dataFieldForm.patchValue({calculationEvent : this.calculationEventList[0].lookupValue})
         }, error =>{
           console.error(error);
         }
@@ -201,10 +226,10 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   setForm(event: any): any {
     this.dataFieldForm = this.formBuilder.group({
       field: [event !== undefined ? event.field : '', Validators.required],
-      paneId: [event !== undefined ? event.paneId : this.paneId, Validators.required],
-      orderNumber: [event !== undefined ? event.orderNumber : ''],
-      label: [event !== undefined ? event.label : '', Validators.required],
-      reportLabel: [event !== undefined ? event.reportLabel : '', Validators.required],
+      paneId: [event !== undefined ? event.paneId : this.paneId],
+      orderNumber: [event !== undefined ? event.orderNumber : '10'],
+      label: [event !== undefined ? event.label : ''],
+      reportLabel: [event !== undefined ? event.reportLabel : ''],
       source: [event !== undefined ? event.source : ''],
       dataType: [event !== undefined ? event.dataType : ''],
       inputType: [event !== undefined ? event.inputType : ''],
@@ -222,15 +247,15 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
       unit: [event !== undefined ? event.unit : ''],
       helpText: [event !== undefined ? event.helpText : ''],
       comments: [event !== undefined ? event.comments : ''],
-      userDisplay: [event !== undefined ? event.userDisplay : ''],
+      userDisplay: [event !== undefined ? event.userDisplay : 'true'],
+      paneBlockDisplay: [event !== undefined ? event.paneBlockDisplay : ''],
       required: [event !== undefined ? event.required : ''],
       onChangeRefresh: [event !== undefined ? event.onChangeRefresh : ''],
       nextRowAnswer: [event !== undefined ? event.nextRowAnswer : ''],
       rowsBefore: [event !== undefined ? event.rowsBefore : ''], 
       rowsAfter: [event !== undefined ? event.rowsAfter : ''],
       rowsBetween: [event !== undefined ? event.rowsBetween : ''],
-      updatedBy: [event !== undefined ? (event.updatedBy ? event.updatedBy : event.createdBy ) : ''],
-      updatedDate: [event !== undefined ? this.datePipe.transform((event.updatedDate ? event.updatedDate : event.createdDate),'MM/dd/yyyy HH:mm:ss'): '']
+      updatedBy: [event !== undefined ? (event.updatedBy ? event.updatedBy : event.createdBy ) : '']
     });
   }
 
@@ -241,10 +266,10 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['/admin/topicDescription/topicPaneDataFieldEdit'], { queryParams: {} });
   }
   back(): any {
-    try{
-      this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId }})
-    }catch(err){
-      history.back();
+    if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE){
+      this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId, force : this.force }});
+    }else if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK){
+      this.router.navigate(['/admin/topicDescription/topicPaneDataBlockEdit'],{queryParams : { id : this.dataBlockId, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId,force : this.force}});
     }
   }
 
@@ -255,7 +280,7 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   getDataFieldById(){
     this.subscriptions.add(
       this.topicService.getDataFieldById()
-      .pipe(skipWhile((item: any) => !item))
+      .pipe(filter((item: any) => item && this.id == item.id))
       .subscribe(
         response =>{
           if(!this.id){
@@ -276,16 +301,85 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   }
 
   save(): any {
-    const body = {...this.dataFieldForm.value, ...this.dataFieldDataValue};
-    body.createdDate = undefined;
-    body.updatedDate = undefined;
-    this.topicService.saveDataFiedlById(this.paneId,body);
+
+    if(!AppUtility.validateAndHighlightReactiveFrom(this.dataFieldForm)) return;
+
+    // const body = {...this.dataFieldDataValue,...this.dataFieldForm.value,};
+    const body = Object.assign(this.dataFieldDataValue ? this.dataFieldDataValue : {}, this.dataFieldForm.value);
+
+    if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK){
+
+      if(this.id){
+        this.topicService.updateDataBlockDataFieldById(this.paneId,this.dataBlockId,this.id,body);
+        return;
+      }
+
+      body.createdDate = undefined;
+      body.updatedDate = undefined;
+  
+      this.subscriptions.add(
+        this.topicService.saveDataBlockDataField(this.paneId,this.dataBlockId,body)
+        .pipe(take(1))
+        .subscribe(
+          (response) =>{
+            this.id = response.topicManagement.dataBlockDataField.id;
+            this.force = true;
+            this.router.navigate([],{
+              relativeTo: this.activateRoute,
+              queryParams: {id : this.id},
+              queryParamsHandling : 'merge'
+            });
+            this.getDataBlockDataField();
+        }));
+
+      return;
+    }
+
+    if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE){
+
+      if(this.id){
+        this.topicService.updateDataFieldByPaneId(this.paneId,this.id,body);
+        return;
+      }
+
+      body.createdDate = undefined;
+      body.updatedDate = undefined;  
+
+      this.subscriptions.add(
+        this.topicService.saveDataFiedlByPaneId(this.paneId,body)
+        .pipe(take(1))
+        .subscribe(
+          (response) =>{
+            this.force = true;
+            this.id = response.topicManagement.dataBlockDataField.id;
+            this.router.navigate([],{
+              relativeTo: this.activateRoute,
+              queryParams: {id : this.id},
+              queryParamsHandling : 'merge'
+            });
+          this.getDataFieldById();
+        }));
+
+      return;
+    }
 
   }
 
   delete(): any {
-    this.topicService.deleteDataFieldById(this.paneId,this.id);
-    this.back();
+
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
+    if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE){
+      this.subscriptions.add(
+        this.topicService.deleteDataFieldById(this.paneId,this.id)
+        .pipe(take(1))
+        .subscribe( (response) => { this.force = true; this.back(); }));
+    }else if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK){
+      this.subscriptions.add(
+        this.topicService.deleteDataBlockDataFieldById(this.paneId,this.dataBlockId,this.id)
+        .pipe(take(1))
+        .subscribe( (response) => { this.force = true; this.back();}));
+    }
   }
 
   loadAllFieldValues(){
@@ -308,17 +402,38 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
     )
   }
 
+  loadDataBlockDataFieldFieldValues(){
+    this.topicService.loadDataBlockDataFieldFieldValues(this.paneId,this.dataBlockId,this.id);
+    this.subscriptions.add(
+      this.topicService.getDataBlockDataFieldFieldValues()
+      .pipe(filter(data => data))
+      .subscribe( (response) =>{
+        response.forEach((data,index) =>{
+          data.disabled = true;
+          data.index = index;
+        })
+        this.dataFieldData.content = [...response];
+      }));
+  }
+
   saveRow() {
 
   }
 
   deleteRow(event){
-    console.log(event);
-    this.topicService.deleteFieldValuesForDataField(this.paneId,this.id,event.id);
+    if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE){
+      this.topicService.deleteFieldValuesForDataField(this.paneId,this.id,event.id);
+    }else if( this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK){
+      this.topicService.deleteDataBlockDataFieldFieldValues(this.paneId,this.dataBlockId,this.id,event.id); 
+    }
   }
 
   addRowEvent(event){
-    this.topicService.saveDataFieldValue(event,this.paneId,this.id);
+    if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE){
+      this.topicService.saveDataFieldValue(event,this.paneId,this.id);
+    }else if( this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK){
+      this.topicService.saveDataBlockDataFieldFieldValues(this.paneId,this.dataBlockId,this.id,event);
+    }
   }
 
   goToDebug() {
@@ -326,6 +441,11 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.dataFieldForm.controls; }
+
+
+  highlightErrorField(formControlName : string) : boolean {
+    return AppUtility.showErrorMessageOnErrorField(this.f,formControlName);
+  }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
