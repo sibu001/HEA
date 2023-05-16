@@ -13,6 +13,7 @@ import { AppConstant } from 'src/app/utility/app.constant';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { HttpParams } from '@angular/common/http';
 import { AppUtility } from 'src/app/utility/app.utility';
+import { ScriptDebugConsoleData } from 'src/app/models/filter-object';
 
 @Component({
   selector: 'app-topic-pane-data-field-edit',
@@ -283,14 +284,6 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
       .pipe(filter((item: any) => item && this.id == item.id))
       .subscribe(
         response =>{
-          if(!this.id){
-            this.id = response.id;
-            this.router.navigate([],{
-              relativeTo: this.activateRoute,
-              queryParams: {id : this.id},
-              queryParamsHandling : 'merge'
-            })
-          }
           this.dataFieldDataValue = response;
           this.setForm(response);
         } , error =>{
@@ -304,7 +297,6 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
 
     if(!AppUtility.validateAndHighlightReactiveFrom(this.dataFieldForm)) return;
 
-    // const body = {...this.dataFieldDataValue,...this.dataFieldForm.value,};
     const body = Object.assign(this.dataFieldDataValue ? this.dataFieldDataValue : {}, this.dataFieldForm.value);
 
     if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK){
@@ -330,6 +322,7 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
               queryParamsHandling : 'merge'
             });
             this.getDataBlockDataField();
+            AppUtility.scrollTop();
         }));
 
       return;
@@ -351,13 +344,14 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
         .subscribe(
           (response) =>{
             this.force = true;
-            this.id = response.topicManagement.dataBlockDataField.id;
+            this.id = response.topicManagement.dataField.id;
             this.router.navigate([],{
               relativeTo: this.activateRoute,
               queryParams: {id : this.id},
               queryParamsHandling : 'merge'
             });
           this.getDataFieldById();
+          AppUtility.scrollTop();
         }));
 
       return;
@@ -395,11 +389,10 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
           data.disabled = true;
           data.index = index;
         })
-        this.dataFieldData.content = [...response];
+        this.dataFieldData.content = JSON.parse(JSON.stringify(response));
       }, error =>{
         console.error(error);
-      }
-    )
+      })
   }
 
   loadDataBlockDataFieldFieldValues(){
@@ -412,7 +405,7 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
           data.disabled = true;
           data.index = index;
         })
-        this.dataFieldData.content = [...response];
+        this.dataFieldData.content = JSON.parse(JSON.stringify(response));
       }));
   }
 
@@ -430,14 +423,33 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
 
   addRowEvent(event){
     if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE){
-      this.topicService.saveDataFieldValue(event,this.paneId,this.id);
+      // this.topicService.saveDataFieldValue(event,this.paneId,this.id);
+      this.subscriptions.add(
+        this.topicService.saveDataFieldValue(event,this.paneId,this.id)
+        .pipe(take(1))
+        .subscribe( (response) =>{},(error) =>{
+          this.dataFieldData.content = this.dataFieldData.content.slice(0,this.dataFieldData.content.length -1);
+        }));
+
     }else if( this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK){
-      this.topicService.saveDataBlockDataFieldFieldValues(this.paneId,this.dataBlockId,this.id,event);
+      this.subscriptions.add(
+        this.topicService.saveDataBlockDataFieldFieldValues(this.paneId,this.dataBlockId,this.id,event)
+        .pipe(take(1))
+        .subscribe( (response) =>{},(error) =>{
+          this.dataFieldData.content = this.dataFieldData.content.slice(0,this.dataFieldData.content.length -1);
+        }));
     }
   }
 
+  // for understanding see :- https://xp-dev.com/trac/HEA/ticket/2063#comment:478
   goToDebug() {
-    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: {} });
+
+    const scriptDebugConsoleData = new ScriptDebugConsoleData(); 
+    scriptDebugConsoleData.surveyDescriptionId = this.topicDescriptionId,
+    scriptDebugConsoleData.scriptType =this.dataFieldForm.value.calculationType,
+    AppUtility.setScriptDebugConsoleData(scriptDebugConsoleData);
+
+    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { 'key' : AppConstant.contextTypeSurvey} });
   }
 
   get f() { return this.dataFieldForm.controls; }

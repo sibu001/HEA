@@ -149,7 +149,7 @@
                               *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
                               <div class="row">
                                 <div class="col-lg-4 col-sm-5 col-md-4 col-xs-12 label-field">
-                                  <label class="control-label m-15px" [for]="answersList.dataField.label"
+                                  <label class="control-label mx-5" [for]="answersList.dataField.label"
                                   [ngStyle]="{'display': setStyle('display',answersList.dataField.labelCssStyle) }"
                                   >
                                     <span class="inputfieldcss">{{answersList.dataField.label}}</span>
@@ -184,7 +184,7 @@
                                   <!-- </div> -->
                                 <!-- </div> -->
                                 <div class="col-lg-1 col-sm-2 col-md-2 col-xs-2">
-                                  <div class="m-15px"
+                                  <div class="mx-5"
                                     *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
                                     style="float:right;">
                                     <img alt="icon"
@@ -208,7 +208,7 @@
               
                             <div id="2" class="form-group thiredPane"
                               *ngIf="answersList.dataField.fieldValues.length>0&&answersList.dataField.nextRowAnswer&&answersList.dataField.dataType=='text'">
-                              <div class="row">
+                              <div class="row text-center">
                                 <div class="col-lg-11 col-sm-11">
                                   <label class="control-label" for="YourName">
                                     <span class="inputfieldcss">{{answersList.dataField.label}}</span>
@@ -1059,7 +1059,7 @@
                         *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
                         <div class="row">
                           <div class="col-lg-4 col-sm-5 col-md-4 col-xs-12 label-field">
-                            <label class="control-label m-15px" [for]="answersList.dataField.label"
+                            <label class="control-label mx-5" [for]="answersList.dataField.label"
                             [ngStyle]="{'display': setStyle('display',answersList.dataField.labelCssStyle) }"
                             >
                               <span class="inputfieldcss">{{answersList.dataField.label}}</span>
@@ -1094,7 +1094,7 @@
                             <!-- </div> -->
                           <!-- </div> -->
                           <div class="col-lg-1 col-sm-2 col-md-2 col-xs-2">
-                            <div class="m-15px"
+                            <div class="mx-5"
                               *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
                               style="float:right;">
                               <img alt="icon"

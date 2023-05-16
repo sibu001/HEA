@@ -168,6 +168,7 @@ export class AppConstant {
     public static readonly DESC = 'desc';
 
     // used for scriptDebugConsole.
+    // for understanding see :- https://xp-dev.com/trac/HEA/ticket/2063#comment:478
     public static readonly contextTypeSurvey = 'survey';
     public static readonly contextTypeBatch = 'batch';
     public static readonly contextTypeFactor = 'factor';

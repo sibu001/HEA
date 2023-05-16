@@ -228,7 +228,10 @@
                             </ng-container>
                                                         
                     </div>  
-                    <div id='12' *ngIf='col.type=="inputField"' (click)='goToEdit(row,col);' >
+                    <div id='12' *ngIf='col.type=="inputField"' >
+
+                        <!-- added specially for the field values edit table inside the data-field screen.-->
+                        <!--  for the enabled fields -->
                         <input type="text" name="{{col.key}}" *ngIf="row.showInputFields == true && col.key != 'range'" class="form-control form-control-sm" [(ngModel)]="addDataObjectList[row.index][col.key]">
                         
                         <ng-container  *ngIf="row.showInputFields == true && col.key == 'range'">
@@ -236,7 +239,12 @@
                             <input type="text" name="{{col.key}}" class="form-control form-control-sm" [(ngModel)]="addDataObjectList[row.index]['rangeEnd']" style="width : 30%; display: initial;">    
                         </ng-container>
 
-                        <input type="text" *ngIf="!row.showInputFields" class="form-control form-control-sm disableInput inline-table-form" value='{{row[col.key]}}' [disabled]='row.disabled' >
+                        <!--  for the disabled fields -->
+                        <div class="h-100p" *ngIf="!row.showInputFields && col.key != 'range'" (click)='goToEdit(row,col)'> {{row[col.key]}}</div>
+                        <div class="h-100p" *ngIf="!row.showInputFields && col.key == 'range'" (click)='goToEdit(row,col)'>
+                            {{(row["rangeStart"]? row["rangeStart"] : "") + " - " + (row["rangeEnd"]? row["rangeEnd"] : "")}}
+                        </div>
+
                     </div>
 
                 </mat-cell>

@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
@@ -210,7 +211,7 @@ export class TopicManagementState {
 
     @Selector()
     static getDataFieldByPaneId(state: TopicManagementModel): any {
-        return state.dataFieldList;
+        return state.dataFieldList.response;
     }
 
     @Selector()
@@ -611,13 +612,17 @@ export class TopicManagementState {
 
                 const dataBlockDataFieldFieldValues : any = ctx.getState().dataBlockDataFieldFieldValues;
                 if(dataBlockDataFieldFieldValues){
-                    dataBlockDataFieldFieldValues.response.push(response);
-                    ctx.patchState({dataBlockDataFieldFieldValues : {...dataBlockDataFieldFieldValues}})
-                }
+                    const index =  dataBlockDataFieldFieldValues.response.findIndex(data => data.id == response.id);
+                    
+                    if(index == -1) dataBlockDataFieldFieldValues.response.push(response);
+                    else dataBlockDataFieldFieldValues.response[index] = response;
 
-                ctx.patchState({ 
-                    dataBlockDataFieldFieldValues: [...dataBlockDataFieldFieldValues]
-                })
+                    ctx.patchState({dataBlockDataFieldFieldValues : {...dataBlockDataFieldFieldValues}})
+                }else {
+                    ctx.patchState({ 
+                        dataBlockDataFieldFieldValues: [response]
+                    });
+                }
 
             },this.errorCallbak));
     }
@@ -768,13 +773,20 @@ export class TopicManagementState {
 
     @Action(LoadDataFiledByPaneId)
     loadDataFiledByPaneId(ctx: StateContext<TopicManagementModel>, action: LoadDataFiledByPaneId) : Actions{
+
+
+        const dataFieldList = ctx.getState().dataFieldList;
+        if(dataFieldList && dataFieldList.id == action.id){
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.pane + '/' + action.id + '/' + AppConstant.dataField)
+        return this.loginService.performGetWithParams(AppConstant.pane + '/' + action.id + '/' + AppConstant.dataField, new HttpParams().append('dataBlockIdEmpty','true'))
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        dataFieldList: response,
+                        dataFieldList: AppUtility.addCustomIdentifierForReducer({response : response}, action.id),
                     });
                 },
                     error => {
@@ -1602,7 +1614,10 @@ export class TopicManagementState {
         }
         return;
     }
-    this.utilityService.showErrorMessage(errorResponse.error.errorMessage);
+    if(errorResponse.error.errorMessage)
+        this.utilityService.showErrorMessage(errorResponse.error.errorMessage);
+
+    this.utilityService.showErrorMessage(errorResponse.statusText)
    }
 
 }

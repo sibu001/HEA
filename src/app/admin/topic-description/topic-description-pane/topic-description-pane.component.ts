@@ -273,6 +273,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getDataBlockListForPane(){
     this.subscriptions.add(
       this.topicService.getDataBlockListByPaneId()
+    .pipe(filter((data : any) => data && data.paneId == this.id))
     .subscribe(
       response => {
         this.dataBlockDataSource = response;
@@ -290,9 +291,10 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getDataFieldForPane(){
     this.subscriptions.add(
       this.topicService.getDataFieldByPaneId()
+      .pipe(filter(data => data && data.paneId == this.id))
       .subscribe(
         response =>{
-          this.dataFieldDataSource = response;
+          this.dataFieldDataSource = [...response];
         }, error =>{
           console.error(error);
         }
@@ -306,7 +308,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getSelectedPaneById(){
     this.subscriptions.add(
       this.topicService.getSelectedTopicPaneById()
-      .pipe(filter( data => data && (data.id == this.id || this.addRequest)))
+      .pipe(filter( (data : any) => data.id && (data.id == this.id || this.addRequest)))
       .subscribe(
         next => {
           this.addRequest = false;
@@ -327,7 +329,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getPaneReportByPaneId(){
     this.subscriptions.add(
       this.topicService.getPaneReportByPaneId()
-      .pipe(filter(data => data != undefined))
+      .pipe(filter((data : any) => data && data.paneId == this.id))
       .subscribe(
         (response) =>{
           this.reportsDataSource = response;
@@ -342,7 +344,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
   getAllPaneCharts(){
     this.topicService.GetAllPaneChartByPaneId()
-    .pipe(filter(resposne => resposne != undefined ))
+    .pipe(filter((response : any) => response && response.paneId == this.id))
     .subscribe(
       (response : any) =>{
         this.chartData.content = response;

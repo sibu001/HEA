@@ -116,7 +116,7 @@ export class FactorEditComponent implements OnInit, OnDestroy {
 
   goToDebug() {
     this.setScriptDebugConsoleData();
-    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { key: AppConstant.contextTypeBatch } });
+    this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: { key: AppConstant.contextTypeFactor } });
   }
 
   setScriptDebugConsoleData(){

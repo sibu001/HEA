@@ -401,9 +401,13 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   goToEdit(event: any, col: any): any {
 
     if( col.type == "inputField"){
-      const data = this.dataSource.data.find( res => res.id == event.id);
-      data.disabled = false;
-      data.showInputFields = true; 
+// added specially for the field values edit table inside the data-field screen.
+      this.dataSource.data.forEach(data =>{
+        if(data.id != event.id)
+          data.showInputFields = undefined;
+      });
+      event.showInputFields = true;
+
     }
 
     if (col.isEdit ) {
