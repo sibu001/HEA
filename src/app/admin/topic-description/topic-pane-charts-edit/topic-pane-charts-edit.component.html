@@ -13,6 +13,9 @@
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <input type="text" class="form-control form-control-sm"
                   formControlName="chartCode" id="chartCode">
+                  <div class="error-message" *ngIf="highlightErrorField('chartCode')" >
+                    <span>Chart code is required.</span>
+                  </div>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
@@ -198,7 +201,7 @@
               </div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <input type="text" class="form-control form-control-sm"
-                  formControlName="format" id="format">
+                  formControlName="pieLabelFormat" id="pieLabelFormat">
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
@@ -297,14 +300,14 @@
               rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                <input type='checkbox' formControlName="showLegend"
-                  id="showLegend">
+                <input type='checkbox' formControlName="legend"
+                  id="legend">
                 Show Legend
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
   
-            <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
+            <div *ngIf='f.toolType.value!=="jschart" && f.legend.value'
               class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Name: </div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -315,7 +318,7 @@
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
+            <div *ngIf='f.toolType.value!=="jschart" && f.legend.value'
               class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Style:</div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -326,7 +329,7 @@
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
+            <div *ngIf='f.toolType.value!=="jschart" && f.legend.value'
               class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Size:</div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -336,7 +339,7 @@
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <!-- <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
+            <div *ngIf='f.toolType.value=="jqplot" && f.legend.value'
               class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Location:</div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -347,8 +350,8 @@
                 </select>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-            </div>  -->
-            <div *ngIf='f.toolType.value==="jqplot"  && f.showLegend.value'
+            </div> 
+            <div *ngIf='f.toolType.value==="jqplot"  && f.legend.value'
               class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -378,8 +381,8 @@
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Label Angle</div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <input type='text' class="form-control form-control-sm"
-                  formControlName="rangeLabelAngle"
-                  id="rangeLabelAngle">
+                  formControlName="rangeAngle"
+                  id="rangeAngle">
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
@@ -511,8 +514,8 @@
           rowPadding">
           <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
           <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-            <input type='checkbox' formControlName="roundToZero"
-              id="roundToZero">
+            <input type='checkbox' formControlName="rangeIntegral"
+              id="rangeIntegral">
             Round to integer
           </div>
           <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -666,8 +669,8 @@
             <div class="row borderBottom rowPadding" style="padding-top: 40px">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart Header:</div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!chartHeader && ( !form.chartHeader || !form.chartHeader.trim())" (click)="chartHeader = !chartHeader" >
-                <ejs-richtexteditor *ngIf="chartHeader || ( form.chartHeader && form.chartHeader.trim())" [toolbarSettings]='tools' formControlName='chartHeader' id='chartHeader'>
+                <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmHeaderTemplate && ( !form.htmHeaderTemplate || !form.htmHeaderTemplate.trim())" (click)="htmHeaderTemplate = !htmHeaderTemplate" >
+                <ejs-richtexteditor *ngIf="htmHeaderTemplate || ( form.htmHeaderTemplate && form.htmHeaderTemplate.trim())" [toolbarSettings]='tools' formControlName='htmHeaderTemplate' id='htmHeaderTemplate'>
                 </ejs-richtexteditor>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -675,8 +678,8 @@
             <div class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart Footer:</div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!chartFooter && ( !form.chartFooter || !form.chartFooter.trim())" (click)="chartFooter = !chartFooter" >
-                <ejs-richtexteditor *ngIf="chartFooter || ( form.chartFooter && form.chartFooter.trim())" [toolbarSettings]='tools' formControlName='chartFooter' id='chartFooter'>
+                <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmFooterTemplate && ( !form.htmFooterTemplate || !form.htmFooterTemplate.trim())" (click)="htmFooterTemplate = !htmFooterTemplate" >
+                <ejs-richtexteditor *ngIf="htmFooterTemplate || ( form.htmFooterTemplate && form.htmFooterTemplate.trim())" [toolbarSettings]='tools' formControlName='htmFooterTemplate' id='htmFooterTemplate'>
                 </ejs-richtexteditor>
               </div>
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -708,18 +711,9 @@
             <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
               <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
             </div>
-            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-              <div class="row">
-                <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10 " style="text-align: end;"
-                  *ngIf="id!==undefined&&id!==null">
-                  <button type="button" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
-                </div>
-                <div [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id !== undefined && id !== null
-                , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id === undefined || id === null}"
-                  style="text-align:right; overflow:auto;">
-                  <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
-                </div>
-              </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 right-buttons">
+                <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
+                <button type="button" class="btn btn-primary mb-button" *ngIf="id" (click)="delete()">Delete</button>
             </div>
 
           </div>

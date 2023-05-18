@@ -273,7 +273,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getDataBlockListForPane(){
     this.subscriptions.add(
       this.topicService.getDataBlockListByPaneId()
-    .pipe(filter((data : any) => data && data.paneId == this.id))
+    .pipe(filter((data : any) =>  data && data[0] && data[0].paneId == this.id))
     .subscribe(
       response => {
         this.dataBlockDataSource = response;
@@ -291,7 +291,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getDataFieldForPane(){
     this.subscriptions.add(
       this.topicService.getDataFieldByPaneId()
-      .pipe(filter(data => data && data.paneId == this.id))
+      .pipe(filter(data => data && data[0] && data[0].paneId == this.id))
       .subscribe(
         response =>{
           this.dataFieldDataSource = [...response];
@@ -308,7 +308,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getSelectedPaneById(){
     this.subscriptions.add(
       this.topicService.getSelectedTopicPaneById()
-      .pipe(filter( (data : any) => data.id && (data.id == this.id || this.addRequest)))
+      .pipe(filter( (data : any) => data && (data.id == this.id || this.addRequest)))
       .subscribe(
         next => {
           this.addRequest = false;
@@ -344,7 +344,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
   getAllPaneCharts(){
     this.topicService.GetAllPaneChartByPaneId()
-    .pipe(filter((response : any) => response && response.paneId == this.id))
+    .pipe(filter((response : any) => response && response[0] && response[0].paneId == this.id))
     .subscribe(
       (response : any) =>{
         this.chartData.content = response;

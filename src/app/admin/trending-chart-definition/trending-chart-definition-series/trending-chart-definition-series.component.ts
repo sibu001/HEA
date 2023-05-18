@@ -8,6 +8,7 @@ import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -76,6 +77,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
         })
         this.chartSeriesData = response;
         this.setForm(response);
+        AppUtility.scrollTop();
       }
     );
   }
@@ -142,6 +144,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
 
   getChartSeriesLookupValues(){
     this.topicService.getChartSeriesQueryColorLookUp()
+    .pipe(filter(data => data))
     .subscribe(
       (response) =>{
         this.seriesQueryTypeList = response;

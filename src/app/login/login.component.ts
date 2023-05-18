@@ -79,10 +79,16 @@ export class LoginComponent implements OnInit, AfterViewInit{
             if (this.loginService.getUser().role != "USERS")
               this.router.navigate(['admin/customer']);
             else {
-              if (this.users.lastVisitedURL == '/surveyView')
-                this.router.navigate(['surveyView']);
-              else
-                this.router.navigate(['/dashboard']);
+              console.log(this.users.surveyList);
+              if(!this.users.surveyList){
+                this.getAllSurvey(this.users.outhMeResponse.customerId);
+              }else{
+                if (this.users.lastVisitedURL == '/surveyView')
+                  this.router.navigate(['surveyView']);
+                else
+                  this.router.navigate(['/dashboard']);
+              }
+
             }
           }, error => {
             this.router.navigate([''], {

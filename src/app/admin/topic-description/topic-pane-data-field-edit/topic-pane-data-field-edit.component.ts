@@ -382,14 +382,15 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
 
   getAllFieldValues(){
     this.topicService.getFieldValuesForDataField()
-    .pipe(skipWhile((item: any) => !item))
+    .pipe(filter((item: any) => item))
     .subscribe(
       response =>{
         response.forEach((data,index) =>{
           data.disabled = true;
           data.index = index;
-        })
-        this.dataFieldData.content = JSON.parse(JSON.stringify(response));
+        });
+        this.dataFieldData.content = [...response];
+        // this.dataFieldData.content = JSON.parse(JSON.stringify(response));
       }, error =>{
         console.error(error);
       })
@@ -404,8 +405,9 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
         response.forEach((data,index) =>{
           data.disabled = true;
           data.index = index;
-        })
-        this.dataFieldData.content = JSON.parse(JSON.stringify(response));
+        });
+        this.dataFieldData.content = [...response];
+        // this.dataFieldData.content = JSON.parse(JSON.stringify(response));
       }));
   }
 
@@ -423,11 +425,11 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
 
   addRowEvent(event){
     if(this.requestFrom == AppConstant.DATA_FIELD_EDIT_REQUEST_FROM_PANE){
-      // this.topicService.saveDataFieldValue(event,this.paneId,this.id);
       this.subscriptions.add(
         this.topicService.saveDataFieldValue(event,this.paneId,this.id)
         .pipe(take(1))
         .subscribe( (response) =>{},(error) =>{
+        // for creating new array
           this.dataFieldData.content = this.dataFieldData.content.slice(0,this.dataFieldData.content.length -1);
         }));
 
@@ -436,6 +438,7 @@ export class TopicPaneDataFieldEditComponent implements OnInit, OnDestroy {
         this.topicService.saveDataBlockDataFieldFieldValues(this.paneId,this.dataBlockId,this.id,event)
         .pipe(take(1))
         .subscribe( (response) =>{},(error) =>{
+        // for creating new array
           this.dataFieldData.content = this.dataFieldData.content.slice(0,this.dataFieldData.content.length -1);
         }));
     }

@@ -302,7 +302,7 @@ export class TopicManagementState {
     
     @Selector()
     static getFieldValueListForDataField(state: TopicManagementModel): any {
-        return state.fieldValueList;
+        return state.fieldValueList.response;
     }
 
     @Selector()
@@ -337,7 +337,7 @@ export class TopicManagementState {
 
     @Selector() 
     static getPaneChartListByPaneId(state : TopicManagementModel) : any{
-        return state.paneChartList;
+        return state.paneChartList.response;
     }
 
     @Selector()
@@ -617,10 +617,10 @@ export class TopicManagementState {
                     if(index == -1) dataBlockDataFieldFieldValues.response.push(response);
                     else dataBlockDataFieldFieldValues.response[index] = response;
 
-                    ctx.patchState({dataBlockDataFieldFieldValues : {...dataBlockDataFieldFieldValues}})
+                    ctx.patchState({dataBlockDataFieldFieldValues : {...dataBlockDataFieldFieldValues, response: [...dataBlockDataFieldFieldValues.response]}});
                 }else {
                     ctx.patchState({ 
-                        dataBlockDataFieldFieldValues: [response]
+                        dataBlockDataFieldFieldValues: AppUtility.addCustomIdentifierForReducer({response : [response]},action.dataBlockId)
                     });
                 }
 
@@ -630,14 +630,14 @@ export class TopicManagementState {
     @Action(DeleteDataBlockDataFieldFieldValues)
     deleteDataBlockDataFieldFieldValues(ctx : StateContext<TopicManagementModel>, action : DeleteDataBlockDataFieldFieldValues) : Actions {
         return this.loginService.performDelete(AppUtility.endPointGenerator(
-            [AppConstant.pane,action.paneId,AppConstant.dataBlock,action.dataBlockId,AppConstant.dataField,action.dataFieldId,AppConstant.fieldValues,action.dataFieldId]))
+            [AppConstant.pane,action.paneId,AppConstant.dataBlock,action.dataBlockId,AppConstant.dataField,action.dataFieldId,AppConstant.fieldValues,action.fieldValueId]))
             .pipe( tap((response : any) =>{
 
                 if(response.data = 'OK'){
                     let dataBlockDataFieldFieldValues = ctx.getState().dataBlockDataFieldFieldValues;
                     if(dataBlockDataFieldFieldValues){
                         dataBlockDataFieldFieldValues.response = dataBlockDataFieldFieldValues.response.filter( data => data.id != action.fieldValueId );
-                        ctx.patchState({ dataBlockDataFieldFieldValues: {...dataBlockDataFieldFieldValues}});
+                        ctx.patchState({ dataBlockDataFieldFieldValues: {...dataBlockDataFieldFieldValues, response : [...dataBlockDataFieldFieldValues.response]}});
                     }
                 }else{
                     this.utilityService.showErrorMessage(response.errorMessage);
@@ -727,10 +727,13 @@ export class TopicManagementState {
                     const dataBlockDataFieldList : any = ctx.getState().dataBlockDataFieldList;
                     if(dataBlockDataFieldList){
                         dataBlockDataFieldList.response.push(response);
-                        ctx.patchState({dataBlockDataFieldList : {...dataBlockDataFieldList}});
+                        ctx.patchState({ dataBlockDataFieldList : {...dataBlockDataFieldList, response : [...dataBlockDataFieldList.response]}});
                     }
 
-                    ctx.patchState({dataBlockDataField : response});
+                    ctx.patchState({
+                        dataBlockDataField : response,
+                        dataBlockDataFieldFieldValues : AppUtility.addCustomIdentifierForReducer({ response : []},response.dataFieldId)
+                    });
                 },this.errorCallbak));
     }
 
@@ -981,9 +984,17 @@ export class TopicManagementState {
         return this.loginService.performPost(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataField)
             .pipe(
                 tap((response: any) => {
+
+                    const dataFieldList : any = ctx.getState().dataFieldList;
+                    if(dataFieldList){
+                        dataFieldList.response.push(response);
+                        ctx.patchState({ dataFieldList : {...dataFieldList , response : [...dataFieldList.response]}});
+                    }
+
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
                         dataField: response,
+                        fieldValueList : AppUtility.addCustomIdentifierForReducer({response: []},response.dataFieldId)
                     });
                 },
                     error => {
@@ -1011,9 +1022,9 @@ export class TopicManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     let dataFieldList = ctx.getState().dataFieldList;
-                    dataFieldList = dataFieldList.filter( data => data.id != action.id);
+                    dataFieldList.response = dataFieldList.response.filter( data => data.id != action.id);
                     ctx.patchState({
-                        dataFieldList: dataFieldList
+                        dataFieldList: {...dataFieldList, response : [...dataFieldList.response]}
                     })
                     ctx.patchState({
                         dataField: undefined,
@@ -1051,15 +1062,20 @@ export class TopicManagementState {
     @Action(LoadFieldValuesForDataField)
     loadFieldValuesForDataField(ctx: StateContext<TopicManagementModel>, action: LoadFieldValuesForDataField): Actions {
 
+        const fieldValueList = ctx.getState().fieldValueList;
+        if(fieldValueList && fieldValueList.id == action.dataFieldId){
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataField + '/' + action.dataField + '/' + AppConstant.fieldValues)
+        return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataField + '/' + action.dataFieldId + '/' + AppConstant.fieldValues)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
 
                     response = TopicUtilityTransformer.transformFieldValuesTableData(response);
                     ctx.patchState({
-                        fieldValueList: response
+                        fieldValueList: AppUtility.addCustomIdentifierForReducer({response : response}, action.dataFieldId)
                     });  
                 },
                     error => {
@@ -1078,9 +1094,9 @@ export class TopicManagementState {
                     if(response.data = 'OK'){
                         document.getElementById('loader').classList.remove('loading');
                         let fieldValueList = ctx.getState().fieldValueList;
-                        fieldValueList = fieldValueList.filter( data => data.id != action.id );
+                        fieldValueList.response = fieldValueList.response.filter( data => data.id != action.id );
                         ctx.patchState({ 
-                            fieldValueList: fieldValueList
+                            fieldValueList: {...fieldValueList, response: [...fieldValueList.response]}
                         })
                     }else{
                         this.utilityService.showErrorMessage(response.errorMessage);
@@ -1101,11 +1117,12 @@ export class TopicManagementState {
                 tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         let fieldValueList = ctx.getState().fieldValueList;
-                        const index = fieldValueList.findIndex( res => res.id == response.id);
-                        if(index == -1) fieldValueList.push(TopicUtilityTransformer.transformFieldValuesSingleData(response));
-                        else fieldValueList[index] = TopicUtilityTransformer.transformFieldValuesSingleData(response);
+                        const index = fieldValueList.response.findIndex( res => res.id == response.id);
+                        if(index == -1) fieldValueList.response.push(TopicUtilityTransformer.transformFieldValuesSingleData(response));
+                        else fieldValueList.response[index] = TopicUtilityTransformer.transformFieldValuesSingleData(response);
+                        
                         ctx.patchState({ 
-                            fieldValueList: [...fieldValueList]
+                            fieldValueList: {...fieldValueList, response: [...fieldValueList.response]}
                         })
 
                 },
@@ -1118,9 +1135,8 @@ export class TopicManagementState {
     @Action(LoadAllPossibleColorForChartAction)
     loadAllPossibleColorForChartAction(ctx: StateContext<TopicManagementModel>, action: LoadAllPossibleColorForChartAction): Actions {
 
-        // if(ctx.getState().possibleColors){
-        //     return null;
-        // }
+        const possibleColors : Array<any> = ctx.getState().possibleColors;
+        if(possibleColors) return;
 
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.charts + '/' + AppConstant.possibleColors)
@@ -1138,9 +1154,8 @@ export class TopicManagementState {
     @Action(LoadAllPossibleStyleForChartAction)
     loadAllPossibleStyleForChartAction(ctx: StateContext<TopicManagementModel>, action: LoadAllPossibleStyleForChartAction): Actions {
 
-        // if(ctx.getState().possibleStyle){
-        //     return null;
-        // }
+        if(ctx.getState().possibleStyle) return null;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.charts + '/' + AppConstant.possibleStyles)
             .pipe(
@@ -1156,9 +1171,8 @@ export class TopicManagementState {
     @Action(LoadAllAvaliableFontFamiliesNamesForChartAction)
     loadAllAvaliableFontFamiliesNamesForChartAction(ctx: StateContext<TopicManagementModel>, action: LoadAllAvaliableFontFamiliesNamesForChartAction): Actions {
 
-            // if(ctx.getState().fontFamilyNames){
-            //     return null;
-            // }
+        if(ctx.getState().fontFamilyNames) return null;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.charts + '/' + AppConstant.availableFontFamilyNames)
             .pipe(
@@ -1286,7 +1300,7 @@ export class TopicManagementState {
     getAppPaneChartByPaneIdAction(ctx: StateContext<TopicManagementModel>, action: GetAppPaneChartByPaneIdAction) : Actions{
 
         const paneChartList = ctx.getState().paneChartList;
-        if(paneChartList && paneChartList[0] && paneChartList[0].paneId == action.paneId){
+        if(paneChartList && paneChartList.id == action.paneId){
             return null;
         }
 
@@ -1296,7 +1310,9 @@ export class TopicManagementState {
             tap(
                 (response) =>{
                     document.getElementById('loader').classList.remove('loading');
-                    ctx.patchState({paneChartList : TopicUtilityTransformer.paneChartListDataTransformer(response as Array<any>)});
+                    const res : Array<any> = TopicUtilityTransformer.paneChartListDataTransformer(response as Array<any>);
+                    ctx.patchState({paneChartList : AppUtility.addCustomIdentifierForReducer({response : res},action.paneId)});
+
                 },(error) =>{
                     document.getElementById('loader').classList.remove('loading');
                     this.utilityService.showErrorMessage(error.message);
@@ -1339,12 +1355,11 @@ export class TopicManagementState {
                 (response : any) =>{
                     document.getElementById('loader').classList.remove('loading');
                     let paneChartList = ctx.getState().paneChartList;
-                    if(!paneChartList){
-                        paneChartList = [];
+                    if(paneChartList){
+                        paneChartList.response = paneChartList.response.filter((data)=> data.id != action.chartId);
+                        ctx.patchState({paneChartList : {...paneChartList, response :[...paneChartList.response]}});
                     }
-                    const index = paneChartList.findIndex((data)=> data.id == action.chartId);
-                    paneChartList.splice(index, 1);
-                    ctx.patchState({paneChartList : paneChartList});
+
                     ctx.patchState({paneChart : undefined})
                 }
             ,(error : any) =>{
@@ -1364,12 +1379,12 @@ export class TopicManagementState {
                 (response : any ) =>{
                     document.getElementById('loader').classList.remove('loading');
                     let paneChartList = ctx.getState().paneChartList;
-                    if(!paneChartList){
-                        paneChartList = [];
+                    if(paneChartList){
+                        response.chartCode = response.chart.chartCode;
+                        paneChartList.response.push( TopicUtilityTransformer.paneChartListDataTransformer([response])[0]);
+                        ctx.patchState({paneChartList : {...paneChartList, response : [...paneChartList.response]}});
                     }
-                    paneChartList.push(response);
-                    paneChartList[paneChartList.length-1].chartCode = response.chart.chartCode;
-                    ctx.patchState({paneChartList : paneChartList});
+
                     ctx.patchState({paneChart : response});
                 }, (error : any) =>{
                     document.getElementById('loader').classList.remove('loading');
@@ -1389,13 +1404,14 @@ export class TopicManagementState {
                 (response : any ) =>{   
                     document.getElementById('loader').classList.remove('loading');
                     let paneChartList = ctx.getState().paneChartList;
-                    if(!paneChartList){
-                        paneChartList = [];
+                    if(paneChartList){
+                        response.chartCode = response.chart.chartCode
+                        paneChartList.response = paneChartList.response.map((data) =>{
+                            if(data.id == response.id) return TopicUtilityTransformer.paneChartListDataTransformer([response])[0];
+                            return data;
+                        });
+                        ctx.patchState({paneChartList : {...paneChartList, response : [...paneChartList.response]}});
                     }
-                    const index = paneChartList.findIndex((data)=> data.id == response.id);
-                    paneChartList[index] = response
-                    paneChartList[index].chartCode = response.chart.chartCode;
-                    ctx.patchState({paneChartList : paneChartList});
                     ctx.patchState({paneChart : response});
                 }, (error : any) =>{
                     document.getElementById('loader').classList.remove('loading');

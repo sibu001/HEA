@@ -256,7 +256,7 @@ export class LoadLookUpValueByType{
 
 export class LoadFieldValuesForDataField{
     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_FIELD_VALUES_FOR_DATA_FIELD;
-    constructor(readonly paneId : number, readonly dataField : number){}
+    constructor(readonly paneId : number, readonly dataFieldId : number){}
 }
 
 export class DeleteFieldValuesForDataField{

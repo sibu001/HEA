@@ -1,6 +1,6 @@
 import { TopicHistoryComponent } from 'src/app/survey/topichistory.component';
 import { AppConstant } from 'src/app/utility/app.constant';
-import { filter, skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-topic-pane-charts-edit',
@@ -29,8 +30,8 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   };
   topicDescriptionId : any;
   paneId : any;
-  chartHeader : any;
-  chartFooter : any;
+  htmHeaderTemplate : any;
+  htmFooterTemplate : any;
   paneData = TableColumnData.PANE_DATA;
   inputData = TableColumnData.INPUT_TYPE_DATA;
   colorData = [];
@@ -38,7 +39,7 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   toolTypeList: any[] = TableColumnData.TOOL_TYPE;
   chartTypeList = [];
   fontStyleList = [];
-  paneChartData : any;
+  paneChartData : any = {};
   locationList: any[] = TableColumnData.LOCATION;
   private readonly subscriptions: Subscription = new Subscription();
   public tools: object = {
@@ -114,24 +115,24 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
       tooltips: [event !== undefined ? event.tooltips : ''],
       width: [event !== undefined ? event.width : ''],
       height: [event !== undefined ? event.height : ''],
-      compression: [event !== undefined ? event.allowRemoving : ''],
-      pieStartAngle: [event !== undefined ? event.allowRemoving : ''],
-      format: [event !== undefined ? event.format : ''],
+      compression: [event !== undefined ? event.compression : ''],
+      pieStartAngle: [event !== undefined ? event.pieStartAngle : ''],
+      pieLabelFormat: [event !== undefined ? event.pieLabelFormat : ''],
       horizontalOrientation: [event !== undefined ? event.horizontalOrientation : ''],
       title: [event !== undefined ? event.title : ''],
-      titleFontName: [event !== undefined ? event.titleFontName : ''],
+      titleFontName: [event !== undefined && event.titleFontName ? event.titleFontName : ''],
       titleFontStyle: [event !== undefined ? event.titleFontStyle : '0'],
       titleFontSize: [event !== undefined ? event.titleFontSize : ''],
       titleColor: [event !== undefined ? event.titleColor : 'default'],
-      showLegend: [event !== undefined ? event.showLegend : ''],
-      legendFontName: [event !== undefined ? event.legendFontName : ''],
+      legend: [event !== undefined ? event.legend : ''],
+      legendFontName: [event !== undefined && event.legendFontName ? event.legendFontName : ''],
       legendFontStyle: [event !== undefined ? event.legendFontStyle : '0'],
       legendFontSize: [event !== undefined ? event.legendFontSize : ''],
       legendLocation: [event !== undefined ? event.legendLocation : ''],
       legendOutsideGrid: [event !== undefined ? event.legendLocation : ''],
       rangeLabel: [event !== undefined ? event.rangeLabel : ''],
-      rangeLabelAngle: [event !== undefined ? event.rangeLabelAngle : ''],
-      rangeFontName: [event !== undefined ? event.rangeFontName : ''],
+      rangeAngle: [event !== undefined ? event.rangeAngle : ''],
+      rangeFontName: [event !== undefined && event.rangeFontName ? event.rangeFontName : ''],
       rangeFontStyle: [event !== undefined ? event.rangeFontStyle : '0'],
       rangeFontSize: [event !== undefined ? event.rangeFontSize : ''],
       rangeColor: [event !== undefined ? event.rangeColor : 'default'],
@@ -139,18 +140,18 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
       rangeGridlineColor: [event !== undefined ? event.rangeGridlineColor : 'default'],
       rangeMax: [event !== undefined ? event.rangeMax : ''],
       rangeMin: [event !== undefined ? event.rangeMin : ''],
-      roundToZero: [event !== undefined ? event.rangeMin : ''],
+      rangeIntegral: [event !== undefined ? event.rangeIntegral : ''],
       domainLabel: [event !== undefined ? event.domainLabel : ''],
       domainLabelAngle: [event !== undefined ? event.domainLabelAngle : ''],
-      domainFontName: [event !== undefined ? event.domainFontName : ''],
+      domainFontName: [event !== undefined && event.domainFontName ? event.domainFontName : ''],
       domainFontStyle: [event !== undefined ? event.domainFontStyle : '0'],
       domainFontSize: [event !== undefined ? event.domainFontSize : ''],
       domainColor: [event !== undefined ? event.domainColor : 'default'],
       domainGridlineVisible: [event !== undefined ? event.domainGridlineVisible : ''],
       domainGridlineColor: [event !== undefined ? event.domainGridlineColor : 'default'],
       canvasHack: [event !== undefined ? event.canvasHack : ''],
-      chartHeader: [event !== undefined ? event.chartHeader : ''],
-      chartFooter: [event !== undefined ? event.chartFooter : ''],
+      htmHeaderTemplate: [event !== undefined ? event.htmHeaderTemplate : ''],
+      htmFooterTemplate: [event !== undefined ? event.htmFooterTemplate : ''],
       helpText: [event !== undefined ? event.helpText : '']
     });
   }
@@ -214,10 +215,10 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
 
   getLookUpChartType(){
     this.topicService.getChartTypeLookUp()
-    .pipe(skipWhile((item: any) => !item))
+    .pipe(filter((item: any) => item))
     .subscribe(
       data=>{
-        if(data) this.chartTypeList = data
+        this.chartTypeList = data
       }, error =>{
         console.error(error);
       }
@@ -230,52 +231,63 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
 
   getPaneChartById(){
     this.topicService.getPaneChartById()
-    .pipe(filter((data : any) => data != undefined))
+    .pipe(filter((data : any) => data && data.id == this.id))
     .subscribe(
       (response : any) =>{
-          this.router.navigate([], { 
-            relativeTo: this.activateRoute,
-            queryParams: {id : response.id , addRequest : null},
-            queryParamsHandling : 'merge'
-          })
+          // this.router.navigate([], { 
+          //   relativeTo: this.activateRoute,
+          //   queryParams: {id : response.id , addRequest : null},
+          //   queryParamsHandling : 'merge'
+          // });
         this.paneChartData = response;
         response.chart.orderNumber = response.orderNumber;
         this.setForm(response.chart);
+        AppUtility.scrollTop();
       }
     )
   }
 
   back(): any {
-    try{
-      this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId }})
-    }catch(e){
-      this.location.back(); 
-    }
+    this.router.navigate(['/admin/topicDescription/topicDescriptionPaneEdit'],{queryParams : { id : this.paneId, topicDescriptionId : this.topicDescriptionId }})
   }
 
   save(): any {
-    if(!this.id){
-      this.paneChartData = {};
-      this.paneChartData.orderNumber = this.chartForm.value.orderNumber;
-      this.paneChartData.paneId = this.paneId;
-      this.paneChartData.chart = this.chartForm.value;
-      this.paneChartData.chart.orderNumber = undefined;
-      this.topicService.saveNewPaneChart(this.paneId,this.paneChartData)
-      .subscribe((res) =>{ this.getPaneChartById();});
-    }else{
-      var chartData =  this.paneChartData;
-      this.paneChartData.orderNumber = this.chartForm.value.orderNumber;
-      this.chartForm.value.orderNumber = undefined;
-      var chart =  this.paneChartData.chart;
-      this.paneChartData.chart = Object.assign(chart,this.chartForm.value);
-      this.topicService.SaveExistingPaneChart(this.paneId,this.id,this.paneChartData)
-      .subscribe((res) =>{ this.getPaneChartById();});
+    
+    if(!AppUtility.validateAndHighlightReactiveFrom(this.chartForm))
+      return;
+
+    if(!this.paneChartData.chart) this.paneChartData.chart = {};
+    const requestBody : any = {
+      ...this.paneChartData, 
+      chart : { ...this.paneChartData.chart ,...this.chartForm.value}, 
+      orderNumber : this.chartForm.value.orderNumber
+    };
+
+    if(this.id){
+      this.topicService.SaveExistingPaneChart(this.paneId,this.id,requestBody);
+      return;
     }
-    this.scrolltop();
+
+    this.subscriptions.add(
+      this.topicService.saveNewPaneChart(this.paneId,requestBody)
+      .pipe(take(1))
+      .subscribe(
+        (response : any)=>{
+            this.id = response.topicManagement.paneChart.id;
+            this.router.navigate([], { 
+              relativeTo: this.activateRoute,
+              queryParams: {id : this.id},
+              queryParamsHandling : 'merge'
+            });
+            this.getPaneChartById();
+        })
+    )
   }
+
   delete(): any {
-    if(confirm('Are you sure you want to delete?')){
+    if(AppUtility.deleteConfirmatonBox()){
       this.topicService.deletePaneChart(this.paneId,this.id)
+      .pipe(take(1))
       .subscribe( (res) => { this.back() },(err) => { console.error(err)});
     }
   }
@@ -294,6 +306,10 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
 
   goToDebug() {
     this.router.navigate(['/admin/debug/scriptDebugConsole'], { queryParams: {} });
+  }
+
+  highlightErrorField(formControlName : string) : boolean {
+    return AppUtility.showErrorMessageOnErrorField(this.f,formControlName);
   }
 
   get f() { return this.chartForm.controls; }
