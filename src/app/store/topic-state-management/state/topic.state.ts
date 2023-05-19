@@ -327,7 +327,7 @@ export class TopicManagementState {
 
     @Selector()
     static getPaneReportsByPaneId(state : TopicManagementModel) : any{
-        return state.paneReportList;
+        return state.paneReportList.response;
     }
 
     @Selector()
@@ -1211,7 +1211,7 @@ export class TopicManagementState {
     loadPaneReportsByPaneId(ctx : StateContext<TopicManagementModel>, action: LoadPaneReportsByPaneId) : Actions{
 
         const paneReports = ctx.getState().paneReportList;
-        if(paneReports && paneReports[0] && paneReports[0].paneId == action.paneId){
+        if(paneReports && paneReports.id == action.paneId){
             return null;
         }
 
@@ -1219,7 +1219,8 @@ export class TopicManagementState {
         return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.reports)
           .pipe(
               tap((response: any) => {
-                ctx.patchState({paneReportList : TopicUtilityTransformer.paneReportsUtility(response)});
+                const res = TopicUtilityTransformer.paneReportsUtility(response);
+                ctx.patchState({paneReportList : AppUtility.addCustomIdentifierForReducer({response : res},action.paneId)});
               },
                   error => {
                       document.getElementById('loader').classList.remove('loading');
@@ -1325,11 +1326,8 @@ export class TopicManagementState {
     loadPaneChartByIdAction(ctx: StateContext<TopicManagementModel>, action: LoadPaneChartByIdAction) : Actions {
 
         const paneChart = ctx.getState().paneChart;
-        if(paneChart && paneChart.id == action.chartId){
-            return null;
-        }
-
-        document.getElementById('loader').classList.add('loading');
+        const force : boolean = action.force || (!paneChart || paneChart.id != action.chartId);
+        if( force)
         return this.loginService
         .performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts + '/' + action.chartId)
         .pipe(
@@ -1343,6 +1341,8 @@ export class TopicManagementState {
                 }
             )
         )
+
+        return null;
     }
 
     @Action(DeletePaneChartByIdAction)
@@ -1423,8 +1423,13 @@ export class TopicManagementState {
 
     @Action(LoadChartSeriesDefinationById)
     loadChartSeriesDefinationById(ctx : StateContext<TopicManagementModel>, action: LoadChartSeriesDefinationById) : Actions {
+
+
+        const paneChartSeriesDefination : any = ctx.getState().paneChartSeriesDefination;
+        if(paneChartSeriesDefination && paneChartSeriesDefination.id == action.id) return;
+
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet( AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId  + '/' + AppConstant.series + '/' + action.id)
+        return this.loginService.performGet( AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.paneChartId  + '/' + AppConstant.series + '/' + action.id)
         .pipe(
             tap(
                 (response : any) =>{
@@ -1446,6 +1451,13 @@ export class TopicManagementState {
         .pipe(
             tap(
                 (response : any) =>{
+
+                    const paneChart : any =  ctx.getState().paneChart;
+                    if(paneChart){
+                        paneChart.chart.chartSeries.push(response);
+                        ctx.patchState({paneChart : {...paneChart}});
+                    }
+
                     ctx.patchState({ paneChartSeriesDefination : response})
                     document.getElementById('loader').classList.remove('loading');
                 }, (error : any) =>{
@@ -1459,22 +1471,20 @@ export class TopicManagementState {
     @Action(SaveExistingChartSeriesAction)
     saveExistingChartSeriesAction(ctx : StateContext<TopicManagementModel>, action: SaveExistingChartSeriesAction) : Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId + '/' + AppConstant.series)
+        return this.loginService.performPut(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.charts +  '/' + action.chartId + '/' + AppConstant.series + '/' + action.id)
         .pipe(
             tap(
                 (response : any) =>{
                     document.getElementById('loader').classList.remove('loading');
-                    ctx.patchState({ paneChartSeriesDefination : response})
-                    const paneChart = ctx.getState();
+                    ctx.patchState({ paneChartSeriesDefination : response});
+
+                    const paneChart = ctx.getState().paneChart;
                     if(paneChart){
-                        // const chartSeries =  paneChart.chart.chartSeries.map(data =>{
-                        //     if(data.id == response.id){
-                        //         return response;
-                        //     }
-                        //     return data;
-                        // })
-                        // paneChart.chart.chartSeries = chartSeries;
-                        // ctx.patchState({paneChart : paneChart});
+                        paneChart.chart.chartSeries = paneChart.chart.chartSeries.map((data) =>{
+                            if(data.id == response.id) return response;
+                            return data;
+                        });
+                        ctx.patchState({paneChart : {...paneChart}});
                     }
                 }, (error : any) =>{
                     document.getElementById('loader').classList.remove('loading');
@@ -1493,6 +1503,13 @@ export class TopicManagementState {
             tap(
                 (response : any) =>{
                     ctx.patchState({ paneChartSeriesDefination : undefined})
+
+                    const paneChart : any = ctx.getState().paneChart;
+                    if(paneChart){
+                        paneChart.chart.chartSeries = paneChart.chart.chartSeries.filter((data) => data.id != action.id);
+                        ctx.patchState({paneChart: {...paneChart}});
+                    }
+
                     document.getElementById('loader').classList.remove('loading');
                 }, (error : any) =>{
                     document.getElementById('loader').classList.remove('loading');

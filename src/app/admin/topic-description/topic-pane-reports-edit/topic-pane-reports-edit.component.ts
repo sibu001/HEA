@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -44,6 +45,7 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
       this.getPaneReportById();
       this.loadPaneById();
     }
+    AppUtility.scrollTop();
   }
 
   loadPaneById(){

@@ -30,6 +30,7 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   };
   topicDescriptionId : any;
   paneId : any;
+  public force : boolean = false;
   htmHeaderTemplate : any;
   htmFooterTemplate : any;
   paneData = TableColumnData.PANE_DATA;
@@ -67,6 +68,7 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
       this.topicDescriptionId = params['topicDescriptionId'];
       this.paneId = params['paneId'];
     });
@@ -226,7 +228,7 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   }
 
   loadPaneChartById(){
-    this.topicService.loadPaneChartById(this.paneId,this.id);
+    this.topicService.loadPaneChartById(this.paneId,this.id,this.force);
   }
 
   getPaneChartById(){
@@ -234,11 +236,6 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
     .pipe(filter((data : any) => data && data.id == this.id))
     .subscribe(
       (response : any) =>{
-          // this.router.navigate([], { 
-          //   relativeTo: this.activateRoute,
-          //   queryParams: {id : response.id , addRequest : null},
-          //   queryParamsHandling : 'merge'
-          // });
         this.paneChartData = response;
         response.chart.orderNumber = response.orderNumber;
         this.setForm(response.chart);
@@ -293,11 +290,20 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   }
 
   goToEditChartSeries(event : any): any {
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { topicDescriptionId : this.topicDescriptionId, paneId : this.paneId , paneChartId : this.id, chartId : event.ChartId , id : event.id} });
+    const queryParams : any = { topicDescriptionId : this.topicDescriptionId, paneId : this.paneId , 
+      paneChartId : this.id, chartId : event.chartId , id : event.id };
+      queryParams[AppConstant.CHART_DEFINATION_SERIER_REQUEST] = AppConstant.CHART_DEFINATION_SERIES_REQUEST_FROM_PANE_CHART;
+
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], 
+      { queryParams: queryParams });
   }
 
   addCharSeries(){
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: { topicDescriptionId : this.topicDescriptionId , paneId : this.paneId , paneChartId : this.id } });
+    const queryParams : any = { topicDescriptionId : this.topicDescriptionId , paneId : this.paneId , paneChartId : this.id };
+    queryParams[AppConstant.CHART_DEFINATION_SERIER_REQUEST] = AppConstant.CHART_DEFINATION_SERIES_REQUEST_FROM_PANE_CHART;
+
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], 
+    { queryParams: queryParams });
   }
 
   saveRow() {

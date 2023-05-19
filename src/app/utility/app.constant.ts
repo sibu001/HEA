@@ -181,5 +181,13 @@ export class AppConstant {
        // request param values :-
     public static readonly DATA_FIELD_EDIT_REQUEST_FROM_PANE = 'pane';
     public static readonly DATA_FIELD_EDIT_REQUEST_FROM_DATA_BLOCK = 'dataBlock';
+
+    //  used for requestParams for data-field-edit screen.
+        // request param key :-
+    public static readonly CHART_DEFINATION_SERIER_REQUEST = "chartEditRequest"
+       
+        // request param values :-
+    public static readonly CHART_DEFINATION_SERIES_REQUEST_FROM_PANE_CHART = "paneChart";
+    public static readonly CHART_DEFINATION_SERIES_REQUEST_FROM_TRENDING_CHART = "trendingChart";
     
 }

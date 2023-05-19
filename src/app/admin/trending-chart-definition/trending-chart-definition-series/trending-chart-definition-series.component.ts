@@ -3,7 +3,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
@@ -23,6 +23,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   colorData = TableColumnData.COLOR_DATA;
   keys: TABLECOLUMN[] = TableColumnData.DATA_SET_KEYS;
   seriesQueryTypeList: any[];
+  public force : boolean = false;
   paneId :number;
   topicDescriptionId : Number ;
   paneChartId : number;
@@ -55,44 +56,29 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     this.getChartSeriesLookupValues();
     this.loadChartSeriesLookupValues();
 
-    if(this.id){
+    //  used by topic-pane-chart-edit component also
+    if(this.id){ 
       this.getChartSerisesById();
       this.loadChartSerisesById();
     }
+    AppUtility.scrollTop();
   }
 
   loadChartSerisesById() {
-    this.topicService.loadChartSerisesById(this.paneId,this.chartId,this.id)
+    this.topicService.loadChartSerisesById(this.paneId,this.paneChartId,this.id)
   }
 
   getChartSerisesById() {
     this.topicService.getChartSeriesById()
-    .pipe(filter(data => data !== undefined))
+    .pipe(filter((data : any) => data && data.id == this.id))
     .subscribe(
       (response : any) => {
-        this.router.navigate([], { 
-          relativeTo: this.activateRoute,
-          queryParams: {id : response.id , addRequest : null},
-          queryParamsHandling : 'merge'
-        })
-        this.chartSeriesData = response;
+        this.chartSeriesData = {...response};
         this.setForm(response);
         AppUtility.scrollTop();
       }
     );
   }
-
-  // setForm(event: any): any {
-  //   this.chartForm = this.formBuilder.group({
-  //     seriesCode: [event !== undefined ? event.Code : '', Validators.required],
-  //     seriesName: [event !== undefined ? event.orderNumber : ''],
-  //     orderNumber: [event !== undefined ? event.toolType : 'jfreechart'],
-  //     seriesQueryType: [event !== undefined ? event.freeChartIncludeJSTemplate : ''],
-  //     seriesQuery: [event !== undefined ? event.freeChartConfigurationJSTemplate : ''],
-  //     seriesColor: [event !== undefined ? event.freeChartDivTemplate : ''],
-  //     seriesStrokeWidth: [event !== undefined ? event.chartType : ''],
-  //   });
-  // }
 
   setForm(event: any): any {
     this.chartForm = this.formBuilder.group({
@@ -108,7 +94,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   
   back(): any {
     try{
-      this.router.navigate(['/admin/topicDescription/topicPaneChartEdit'], { queryParams: {id : this.paneChartId, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId}});
+      this.router.navigate(['/admin/topicDescription/topicPaneChartEdit'], { queryParams: {id : this.paneChartId, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId , force : this.force}});
     }catch(e){
     this.location.back();
     }
@@ -118,21 +104,35 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
 
     if(this.id){
       const body = Object.assign(this.chartSeriesData,this.chartForm.value);
-      this.topicService.saveExistingChartSeries(this.paneId,this.chartId,this.id,body);
+      this.subscriptions.add(
+        this.topicService.saveExistingChartSeries(this.paneId,this.paneChartId,this.id,body)
+        .pipe(take(1))
+        .subscribe((response) =>{
+          this.force = true;
+        }));
     }else{
       const body = Object.assign({},this.chartForm.value);
       body.chartId = this.chartId;
       body.field = body.seriesCode;
-      this.topicService.saveNewChartSeries(this.paneId,this.chartId,body)
-      .subscribe(res => { this.getChartSerisesById()});
+      this.subscriptions.add(
+        this.topicService.saveNewChartSeries(this.paneId,this.paneChartId,body)
+        .pipe(take(1))
+        .subscribe(response => {
+            this.force = true;
+            this.id = response.topicManagement.paneChartSeriesDefination.id;
+            this.chartId = response.topicManagement.paneChartSeriesDefination.chartId;
+            AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+            this.getChartSerisesById();
+        }));
     }
   }
 
   delete(): any {
-    this.topicService.deleteChartSeries(this.paneId,this.chartId,this.id)
-    .subscribe( (response) => {
-        this.setForm(undefined);
-        this.back(); } );
+    if(AppUtility.deleteConfirmatonBox())
+    this.subscriptions.add(
+      this.topicService.deleteChartSeries(this.paneId,this.chartId,this.id)
+      .pipe(take(1))
+      .subscribe( (response) => { this.force = true; this.back(); } ));
   }
 
   addChartDataSeries(){
@@ -154,6 +154,10 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   
   toggleSaveButtonEvent(): any {
     this.toggleSaveButton = !this.toggleSaveButton;
+  }
+
+  saveChartDataSet(event : any){
+    console.log(event);
   }
 
   savePaneChartParameters(event : any ){

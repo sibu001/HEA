@@ -149,7 +149,7 @@
                               *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
                               <div class="row">
                                 <div class="col-lg-4 col-sm-5 col-md-4 col-xs-12 label-field">
-                                  <label class="control-label mx-5" [for]="answersList.dataField.label"
+                                  <label class="control-label my-5" [for]="answersList.dataField.label"
                                   [ngStyle]="{'display': setStyle('display',answersList.dataField.labelCssStyle) }"
                                   >
                                     <span class="inputfieldcss">{{answersList.dataField.label}}</span>
@@ -184,7 +184,7 @@
                                   <!-- </div> -->
                                 <!-- </div> -->
                                 <div class="col-lg-1 col-sm-2 col-md-2 col-xs-2">
-                                  <div class="mx-5"
+                                  <div class="my-5"
                                     *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
                                     style="float:right;">
                                     <img alt="icon"
@@ -746,7 +746,7 @@
                             *ngIf="answersList.dataField.inputType=='textarea'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='text'&&answersList.viewable">
                             <div class="row">
                               <div class="col-sm-11">
-                                <h3 class="survey TH" [innerHTML]="answersList.dataField.label"></h3>
+                                <h3 class="survey TH text-center" [innerHTML]="answersList.dataField.label"></h3>
                                 <p class="demo" *ngIf="answersList.helpHide"
                                   id="helpiconcontaindesktop">
                                   {{answersList.dataField.helpText}}
@@ -754,7 +754,7 @@
                                     (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
                                 <div class="row">
-                                  <div class="col-sm-12">
+                                  <div class="col-sm-offset-2 col-sm-8">
                                     <div class="form-group">
                                       <textarea class="form-control textarea_scroll"
                                         rows="3" id="comment"
@@ -1059,7 +1059,7 @@
                         *ngIf="answersList.dataField.dataType=='text'&&(answersList.dataField.fieldValues.length>0||answersList.dataField.fieldValues.length==0)&&!answersList.dataField.nextRowAnswer">
                         <div class="row">
                           <div class="col-lg-4 col-sm-5 col-md-4 col-xs-12 label-field">
-                            <label class="control-label mx-5" [for]="answersList.dataField.label"
+                            <label class="control-label my-5" [for]="answersList.dataField.label"
                             [ngStyle]="{'display': setStyle('display',answersList.dataField.labelCssStyle) }"
                             >
                               <span class="inputfieldcss">{{answersList.dataField.label}}</span>
@@ -1094,7 +1094,7 @@
                             <!-- </div> -->
                           <!-- </div> -->
                           <div class="col-lg-1 col-sm-2 col-md-2 col-xs-2">
-                            <div class="mx-5"
+                            <div class="my-5"
                               *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1"
                               style="float:right;">
                               <img alt="icon"
@@ -1655,7 +1655,7 @@
                       *ngIf="answersList.dataField.inputType=='textarea'&&answersList.dataField.userDisplay&&answersList.dataField.dataType=='text'&&answersList.viewable">
                       <div class="row">
                         <div class="col-sm-11">
-                          <h3 class="survey TH" [innerHTML]="answersList.dataField.label"></h3>
+                          <h3 class="survey TH text-center"  [innerHTML]="answersList.dataField.label"></h3>
                           <p class="demo" *ngIf="answersList.helpHide"
                             id="helpiconcontaindesktop">
                             {{answersList.dataField.helpText}}
@@ -1663,7 +1663,7 @@
                               (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                           </p>
                           <div class="row">
-                            <div class="col-sm-12">
+                            <div class="col-sm-offset-2 col-sm-8">
                               <div class="form-group">
                                 <textarea class="form-control textarea_scroll"
                                   rows="3" id="comment"

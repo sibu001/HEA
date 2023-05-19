@@ -1,6 +1,7 @@
 import { HttpParams } from "@angular/common/http";
 import { ElementRef } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
 import { PaginateModel } from "../interface/paginate-model";
 import { AdminFilter, ScriptDebugConsoleData } from "../models/filter-object";
 import { AllowedMenuList } from "./app.allowedMenuList";
@@ -391,4 +392,11 @@ export class AppUtility {
         return chunks.join('/');
     }
 
+    public static appendIdToURLAfterSave(router : Router, activatedRoute : ActivatedRoute, id : string | number) : void{
+        router.navigate([], { 
+            relativeTo: activatedRoute,
+            queryParams: {id : id},
+            queryParamsHandling : 'merge'
+          });
+    }
 }

@@ -699,8 +699,8 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Chart Series</span></p>
-            <app-table [keys]="chartKeys" [isSearch]="false" [isDelete]=true
-              [data]="paneChartData?.chart.chartSeries" [isHideAdd]=false
+            <app-table [keys]="chartKeys" [isSearch]="false"
+              [data]="paneChartData?.chart?.chartSeries" [isHideAdd]=false
               (goToEditEvent)='goToEditChartSeries($event)'
               (addEvent)='addCharSeries()'
               (saveRowEvent)="saveRow()">

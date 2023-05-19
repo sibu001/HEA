@@ -329,7 +329,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   getPaneReportByPaneId(){
     this.subscriptions.add(
       this.topicService.getPaneReportByPaneId()
-      .pipe(filter((data : any) => data && data.paneId == this.id))
+      .pipe(filter((data : any) => data && data[0] && data[0].paneId == this.id))
       .subscribe(
         (response) =>{
           this.reportsDataSource = response;

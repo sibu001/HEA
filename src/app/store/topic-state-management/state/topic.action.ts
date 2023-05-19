@@ -321,7 +321,7 @@ export class GetAppPaneChartByPaneIdAction{
 
 export class LoadPaneChartByIdAction{
     static readonly type : TopicActionTypes = TopicActionTypes.LOAD_PANE_CHART_BY_ID;
-    constructor(readonly paneId : number, readonly chartId : number){}
+    constructor(readonly paneId : number, readonly chartId : number, readonly force : boolean){}
 }
 
 export class DeletePaneChartByIdAction{
@@ -341,7 +341,7 @@ export class SaveExistingPaneChartAction{
 
 export class LoadChartSeriesDefinationById{
     static readonly type : TopicActionTypes = TopicActionTypes.LOAD_CHART_SERIES_DEFINATION_BY_ID;
-    constructor(readonly paneId : number, readonly chartId : number,  readonly id : number ){}
+    constructor(readonly paneId : number, readonly paneChartId : number,  readonly id : number ){}
 }
 
 export class SaveNewChartSeriesAction{

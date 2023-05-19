@@ -386,8 +386,8 @@ export class TopicService {
     return this.store.select(TopicManagementState.getPaneChartListByPaneId)
   }
 
-  loadPaneChartById(paneId: number, id: number): Observable<TopicManagementState> {
-    return this.store.dispatch(new LoadPaneChartByIdAction(paneId, id));
+  loadPaneChartById(paneId: number, id: number, force : boolean): Observable<TopicManagementState> {
+    return this.store.dispatch(new LoadPaneChartByIdAction(paneId, id,force));
   }
 
   getPaneChartById(): Observable<TopicManagementState> {
@@ -406,8 +406,8 @@ export class TopicService {
     return this.store.dispatch(new SaveExistingPaneChartAction(paneId, chartId, chartBody))
   }
 
-  loadChartSerisesById(paneId: number, chartId: number, id: number) {
-    return this.store.dispatch(new LoadChartSeriesDefinationById(paneId, chartId, id));
+  loadChartSerisesById(paneId: number, paneChartId: number, id: number) {
+    return this.store.dispatch(new LoadChartSeriesDefinationById(paneId, paneChartId, id));
   }
 
   getChartSeriesById(): Observable<TopicManagementState> {

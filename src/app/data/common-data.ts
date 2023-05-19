@@ -480,7 +480,7 @@ export class TableColumnData {
     ];
     static readonly DATA_SET_KEYS: Array<TABLECOLUMN> = [
         { key: 'queryParameter', isEdit: true, displayName: 'Query Parameter', addRowType: 'text' },
-        { key: 'calculationFormula', isEdit: true, displayName: 'Calculation Formula', addRowType: 'textarea' },
+        { key: 'calculationFormula', isEdit: true, displayName: 'Calculation Formula', addRowType: 'text' },
     ];
 
     static readonly GAS_KEYS: Array<TABLECOLUMN> = [
