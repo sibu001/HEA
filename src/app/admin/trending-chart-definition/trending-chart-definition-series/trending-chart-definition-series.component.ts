@@ -25,6 +25,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   seriesQueryTypeList: any[];
   public force : boolean = false;
   paneId :number;
+  public paneChartParameterList : Array<any> = [];
   topicDescriptionId : Number ;
   paneChartId : number;
   chartSeriesData : any;
@@ -60,6 +61,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     if(this.id){ 
       this.getChartSerisesById();
       this.loadChartSerisesById();
+      this.getPaneChartParameters();
     }
     AppUtility.scrollTop();
   }
@@ -123,6 +125,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
             this.chartId = response.topicManagement.paneChartSeriesDefination.chartId;
             AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
             this.getChartSerisesById();
+            this.getPaneChartParameters();
         }));
     }
   }
@@ -156,16 +159,45 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     this.toggleSaveButton = !this.toggleSaveButton;
   }
 
+  getPaneChartParameters(){
+    this.topicService.loadPaneChartParametersList(this.paneId,this.paneChartId,this.id);
+    this.subscriptions.add(
+      this.topicService.getPaneChartParametersList()
+      .pipe(filter(data => data && data[0] && data[0].chartParameter.chartSeriesId == this.id))
+      .subscribe(
+        (response) =>{
+          const paneChartParameterList = response.map(data =>{
+            data.dataFieldLabel = data.dataField ? data.dataField.label : '';
+            return {...data, queryParameter : data.chartParameter.queryParameter};
+          })
+          this.paneChartParameterList = [...paneChartParameterList];
+        })  
+    )
+  }
+
   saveChartDataSet(event : any){
-    console.log(event);
+
+    // constructing Object to save
+    const paneChartParams = { 
+      paneChartId : this.paneChartId,
+      dataFieldId : event.value.dataFieldLabel,
+      chartParameter : {
+        chartSeriesId : this.id,
+        queryParameter : event.value.queryParameter
+      }
+     };
+
+    this.topicService.saveNewOrExistingPaneChartParamenter(this.paneId,this.paneChartId,this.id,paneChartParams);
+  }
+
+
+  deletePaneChartParameters(event : any){
+    this.topicService.deletePaneChartParameter(this.paneId,this.paneChartId,this.id,event.id);
   }
 
   savePaneChartParameters(event : any ){
-    // this.topicService.saveNewOrExistingPaneChartParamenter(this.paneId,this.chartId,this.id,event);
-  }
-
-  deletePaneChartParameters(event : any){
-    // this.topicService.deletePaneChartParameter(this.paneId,this.chartId,this.id,event.id);
+    //  no use
+    console.log(event);
   }
 
   get f() { return this.chartForm.controls; }

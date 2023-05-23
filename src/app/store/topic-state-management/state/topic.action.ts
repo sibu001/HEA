@@ -58,6 +58,7 @@ export enum TopicActionTypes {
     SAVE_NEW_CHART_SERIES = 'Save New  Chart Series',
     SAVE_EXISTING_CHART_SERIES = 'Save Existing Chart Series',
     DELETE_CHART_SERIES_BY_ID = 'Delete Chart Series By Id',
+    GET_PANE_CHART_PARAMETER_BY_PANE_CHART_ID_AND_SERIES_ID = ' Get Pane Chart Parameters By Pane Chart Id and Series Id',
     SAVE_NEW_OR_EXISTING_PANE_CHART_PARAMETER = 'Save New Or Existing Pane Chart Parameter',
     DELETE_PANE_CHART_PARAMETER = 'Delete Pane Chart Parameter',
     SAVE_NEW_PANE = 'Save New Pane',
@@ -357,6 +358,11 @@ export class SaveExistingChartSeriesAction{
 export class DeleteChartSeriesAction{
     static readonly type : TopicActionTypes = TopicActionTypes.DELETE_CHART_SERIES_BY_ID;
     constructor(readonly paneId : number, readonly chartId : number,  readonly id : number ){}
+}
+
+export class GetPaneChartParametersListByPaneChartIdAndSeriesIdAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.GET_PANE_CHART_PARAMETER_BY_PANE_CHART_ID_AND_SERIES_ID;
+    constructor(readonly paneId : number, readonly paneChartId : number, readonly chartSeriesId : number){}
 }
 
 export class SaveNewOrExistingPaneChartParameter{

@@ -301,10 +301,10 @@ export class TableColumnData {
     ];
 
     static readonly PANE_DATA_FIELD_VALUES_KEY: Array<TABLECOLUMN> = [
-        { key: 'order', isEdit: true, displayName: 'Order', type :'inputField' },
-        { key: 'value', isEdit: true, displayName: 'Value', type :'inputField' },
-        { key: 'range', isEdit: true, displayName: 'Rage' , type :'inputField'},
-        { key: 'name', isEdit: true, displayName: 'Value Name', type :'inputField' }
+        { key: 'order', isEdit: true, displayName: 'Order', type :'inputField', addRowType : 'text' },
+        { key: 'value', isEdit: true, displayName: 'Value', type :'inputField', addRowType : 'text'  },
+        { key: 'range', isEdit: true, displayName: 'Rage' , type :'inputField', addRowType : 'text' },
+        { key: 'name', isEdit: true, displayName: 'Value Name', type :'inputField', addRowType : 'text' }
     ];
 
     static readonly PANE_DATA_FIELD_KEY: Array<TABLECOLUMN> = [
@@ -480,7 +480,7 @@ export class TableColumnData {
     ];
     static readonly DATA_SET_KEYS: Array<TABLECOLUMN> = [
         { key: 'queryParameter', isEdit: true, displayName: 'Query Parameter', addRowType: 'text' },
-        { key: 'calculationFormula', isEdit: true, displayName: 'Calculation Formula', addRowType: 'text' },
+        { key: 'dataFieldLabel', isEdit: true, displayName: 'Data Field', addRowType: 'text' },
     ];
 
     static readonly GAS_KEYS: Array<TABLECOLUMN> = [
@@ -780,7 +780,7 @@ export class TableColumnData {
 
     static readonly REPORT_PARAMETER_KEY: Array<TABLECOLUMN> = [
         {
-            key: 'dataField', isEdit: true, displayName: 'Data Field', addRowType: 'select', option:
+            key: 'dataFieldLabel', isEdit: true, displayName: 'Data Field', type :'inputField', addRowType: 'select', option:
                 [
                     { key: '1246', value: 'Do you have a solar PV system at your home?&nbsp;(pv_ConfirmPV)' },
                     { key: '1248', value: 'Install date&nbsp;(pv_InstallDate)' },
@@ -825,7 +825,7 @@ export class TableColumnData {
                 ]
         },
         {
-            key: 'reportParameter', isEdit: true, displayName: 'Report Parameter', addRowType: 'select', option:
+            key: 'reportParameterLabel', isEdit: true, displayName: 'Report Parameter' , type :'inputField' ,  addRowType: 'select', option:
                 [
                     { key: '37', value: 'Program Name Filter' },
                 ]

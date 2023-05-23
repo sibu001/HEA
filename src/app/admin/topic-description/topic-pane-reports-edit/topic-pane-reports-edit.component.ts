@@ -3,8 +3,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
@@ -18,9 +19,11 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
   id: any;
   reportForm: FormGroup;
   parameterKeys = TableColumnData.REPORT_PARAMETER_KEY;
-  public parameterDataSource: any;
+  public parameterDataSource: Array<any> = [];
   private topicDescriptionId : number;
   private paneId : number;
+  private reportData : any = {};
+  public reportList : Array<any> = [];
   public totalElement = 0;
   public parameterData = {
     content: [],
@@ -31,6 +34,7 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
     private readonly activateRoute: ActivatedRoute,
     private readonly topicService : TopicService,
     private readonly  router : Router,
+    private readonly administrativeService : AdministrativeService,
     private readonly location: Location) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
@@ -41,11 +45,21 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setForm(undefined);
+    this.loadAdminstrativeReports();
     if(this.id){
       this.getPaneReportById();
       this.loadPaneById();
     }
     AppUtility.scrollTop();
+  }
+
+  loadAdminstrativeReports(){
+    this.administrativeService.loadAdministrativeReportList(false, '');
+    this.subscriptions.add(this.administrativeService.getAdministrativeReportList().pipe(filter((item: any) => item))
+      .subscribe((reportList: any) => {
+        this.reportList = reportList;
+        if(!this.id) this.reportForm.patchValue({ reportId : this.reportList[0].id});
+      }));
   }
 
   loadPaneById(){
@@ -55,25 +69,37 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
   getPaneReportById(){
     this.subscriptions.add(
       this.topicService.getPaneReportById()
-      .pipe(filter(data => data != undefined))
-      .subscribe(
-        (response) =>{
+      .pipe(filter((data : any) => data && data.id == this.id))
+      .subscribe((response) =>{
           this.setForm(response);
-        }
-      )
-      )
+          this.reportData = {...response};
+          const parameterDataSource = response.paneReportParams.map(data =>{
+            data.dataFieldLabel = data.dataField ? data.dataField.label : '';
+            data.reportParameterLabel = data.reportParam ? data.reportParam.parameterLabel : '';
+            return data;
+          });
+          this.parameterDataSource = parameterDataSource;
+          AppUtility.scrollTop();
+        }));
   }
 
   setForm(event: any) {
     this.reportForm = this.formBuilder.group({
       reportCode: [event !== undefined ? event.reportCode : '', Validators.required],
-      report: [event !== undefined ? event.report : ''],
+      reportId: [event !== undefined ? event.reportId : (this.reportList[0] ? this.reportList[0].id : '')],
     });
   }
 
   delete(): any {
-    this.topicService.deletePaneReportById(this.paneId,this.id);
-    this.back();
+
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
+    this.subscriptions.add(
+      this.topicService.deletePaneReportById(this.paneId,this.id)
+      .pipe(take(1)).subscribe(
+        (response) =>{
+          this.back();
+      }));
   }
 
   back() {
@@ -83,17 +109,37 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
 
   save(): any {
 
+  if(!AppUtility.validateAndHighlightReactiveFrom(this.reportForm)) 
+    return;
+
+    const body = {...this.reportData, ...this.reportForm.value};
+  
     if(this.id){
-      this.save
-    }else{
-      this.topicService.saveNewPaneReport(this.paneId,this.reportForm.value);
-      this.getPaneReportById();
+      this.topicService.SaveExistingPaneReport(this.paneId,body,this.id);
+      return;
     }
+
+    this.subscriptions.add(
+      this.topicService.saveNewPaneReport(this.paneId,body)
+      .pipe(take(1))
+      .subscribe((response : any) => {
+        this.id = response.topicManagement.paneReport.id;
+        AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+        this.getPaneReportById();
+    }));
 
   }
 
-  addParameter(): any {
+  highlightErrorField(formControlName : string) : boolean{
+    return AppUtility.showErrorMessageOnErrorField(this.f, formControlName);  
+  } 
 
+  addParameter($event): any {
+    console.log($event);
+  } 
+
+  deleteParameter($event): any {
+    console.log($event);
   }
 
   get f(): { [key: string]: AbstractControl; } { return this.reportForm.controls; }

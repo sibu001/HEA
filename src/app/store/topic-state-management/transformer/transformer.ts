@@ -57,13 +57,17 @@ export class TopicUtilityTransformer {
         return outData;
     } 
 
-    static paneReportsUtility(dataSource : Array<any>){
+    static paneReportsUtility(dataSource : Array<any> | any){
+        if(dataSource instanceof Array)
         return dataSource.map(
             (data) =>{
                 data.reportLabel = data.report.reportLabel;
                 return data;
             }
         )
+
+        dataSource.reportLabel = dataSource.report.reportLabel;
+        return dataSource;
     }
 
     public static paneChartListDataTransformer(dataList : Array<any>){

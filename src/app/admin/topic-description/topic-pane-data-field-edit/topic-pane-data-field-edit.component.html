@@ -323,7 +323,7 @@
               <span class="messageName">Field Values</span></p>
             <app-table [keys]="dataFieldKeys" [isSearch]="false" [isDelete]=true [data]="dataFieldData.content"
               [totalElement]="dataFieldData.totalElements" [isHideAdd]=false (addRowEvent)='addRowEvent($event)' [showInlineTableForm]="true"
-              (deleteEvent)='deleteRow($event)' 
+              (deleteEvent)='deleteRow($event)' [editableInlineTableForm]="true"
               (saveRowEvent)="saveRow()">
             </app-table>
           </div>

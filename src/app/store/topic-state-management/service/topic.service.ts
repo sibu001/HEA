@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction, SaveNewPaneAction, UpdadePaneByIdAction, CopyCreateTopicDescriptionFromIdAction, DeletePaneByIdAction, CreateCopyPaneByIdAction, SaveDataBlockByPaneIdAction, UpdateDataBlockByPaneIdAction, DeleteDataBlockByIdAction, GetDataFieldsbyDataBlockAction, GetDataBlockDataFieldByIdAction, SaveDataBlockDataFieldAction, UpdateDataBlockDataFieldByIdAction, UpdateDateFieldByPaneIdAction, DeleteDataBlockDataFieldByIdAction, GetDataBlockDataFieldFieldValues, SaveDataBlockDataFieldFieldValues, DeleteDataBlockDataFieldFieldValues } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction, SaveNewPaneAction, UpdadePaneByIdAction, CopyCreateTopicDescriptionFromIdAction, DeletePaneByIdAction, CreateCopyPaneByIdAction, SaveDataBlockByPaneIdAction, UpdateDataBlockByPaneIdAction, DeleteDataBlockByIdAction, GetDataFieldsbyDataBlockAction, GetDataBlockDataFieldByIdAction, SaveDataBlockDataFieldAction, UpdateDataBlockDataFieldByIdAction, UpdateDateFieldByPaneIdAction, DeleteDataBlockDataFieldByIdAction, GetDataBlockDataFieldFieldValues, SaveDataBlockDataFieldFieldValues, DeleteDataBlockDataFieldFieldValues, GetPaneChartParametersListByPaneChartIdAndSeriesIdAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -424,6 +424,14 @@ export class TopicService {
 
   deleteChartSeries(paneId: number, chartId: number, id: number) {
     return this.store.dispatch(new DeleteChartSeriesAction(paneId, chartId, id));
+  }
+
+  loadPaneChartParametersList(paneId : number, paneChartId : number, chartSeriesId : number){
+    return this.store.dispatch(new GetPaneChartParametersListByPaneChartIdAndSeriesIdAction(paneId, paneChartId, chartSeriesId));
+  }
+
+  getPaneChartParametersList() : Observable<any>{
+    return this.store.select(TopicManagementState.getPaneChartParameters);
   }
 
   saveNewOrExistingPaneChartParamenter(paneId : number, paneChartId : number, chartSeriesId : number, body : any) {

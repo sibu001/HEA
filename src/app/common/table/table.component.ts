@@ -71,6 +71,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() suggestionList = [];
   @Input() isFilePreview = false;
   @Input() showInlineTableForm = false;
+  @Input() editableInlineTableForm : boolean = false;
   @Input() showAddRowButton = false;
   @Input() showAddInputButton = false;
   @Input() isShowHeader = true;
@@ -401,7 +402,11 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   goToEdit(event: any, col: any): any {
 
     if( col.type == "inputField"){
-// added specially for the field values edit table inside the data-field screen.
+  
+      // check weather the form is editabl or not.
+      if(!this.editableInlineTableForm) return null;
+
+    // added specially for the field values edit table inside the data-field screen.
       this.dataSource.data.forEach(data =>{
         if(data.id != event.id)
           data.showInputFields = undefined;

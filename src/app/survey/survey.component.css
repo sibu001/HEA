@@ -2429,3 +2429,10 @@ td .form-group{
   color : rgb(104 111 120);
   font-weight: 500;
 }
+
+.agree.label-size{
+  font-size: 20px;
+	color: #373737;
+	font-weight: 500;
+  margin-bottom: 10px;
+}

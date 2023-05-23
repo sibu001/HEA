@@ -42,5 +42,6 @@ export interface TopicManagementModel {
     paneReport : any;
     paneChartList : any;
     paneChart : any;
+    paneChartParameters : any;
     paneChartSeriesDefination : any;
 }

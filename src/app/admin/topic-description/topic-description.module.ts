@@ -25,6 +25,8 @@ import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { TopicDescriptionEditCopyComponent } from './topic-description-edit-copy/topic-description-edit-copy.component';
 import { TopicDescriptionPaneCopyComponent } from './topic-description-pane-copy/topic-description-pane-copy.component';
+import { AdministrativeManagementState } from 'src/app/store/administrative-state-management/state/administrative.state';
+import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 
 @NgModule({
   imports: [
@@ -38,7 +40,8 @@ import { TopicDescriptionPaneCopyComponent } from './topic-description-pane-copy
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
-      TopicManagementState
+      TopicManagementState,
+      AdministrativeManagementState
     ]),
   ],
   declarations: [TopicDescriptionListComponent,
@@ -52,7 +55,7 @@ import { TopicDescriptionPaneCopyComponent } from './topic-description-pane-copy
     TopicPaneReportsEditComponent,
     TopicDescriptionEditCopyComponent,
     TopicDescriptionPaneCopyComponent],
-  providers: [SystemService, TopicService, LoginService, DatePipe, UtilityService
+  providers: [SystemService, TopicService, LoginService, DatePipe, UtilityService, AdministrativeService
     , ToolbarService, LinkService, ImageService, HtmlEditorService
     , { provide: MAT_DIALOG_DATA, useValue: {} }],
   entryComponents: [TopicDescriptionEditCopyComponent, TopicDescriptionPaneCopyComponent]

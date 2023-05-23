@@ -80,7 +80,7 @@
                 <tr>
                   <td>  
                     <div class="home_energy text-center" [innerHTML]="users.currentPaneNumber.currentPane.htmHeader |
-                    safeHtml">
+                    safeHtml" style="margin-bottom: 20px;" >
                   </div>
                   </td>
                 </tr>
@@ -196,7 +196,7 @@
                               </div>
                               <div class="row " id=""
                               *ngIf="answersList.dataField.helpText!=null&&answersList.dataField.helpText.length>1">
-                              <div class="col-md-offset-2 col-lg-10 col-md-10 col-sm-10 col-xs-12">
+                              <div class="col-md-offset-1 col-lg-10 col-md-10 col-sm-10 col-xs-12">
                                 <p class="demo1 helpText-align" *ngIf="answersList.helpHide">{{answersList.dataField.helpText}}
                                   <span class="hidebuttondemo"
                                     (click)="answersList.helpHide=!answersList.helpHide">hide</span>

@@ -71,6 +71,7 @@ import {
     GetDataBlockDataFieldFieldValues,
     SaveDataBlockDataFieldFieldValues,
     DeleteDataBlockDataFieldFieldValues,
+    GetPaneChartParametersListByPaneChartIdAndSeriesIdAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -118,6 +119,7 @@ import { TopicManagementModel } from './topic.model';
         paneReport : undefined,
         paneChartList : undefined,
         paneChart: undefined,
+        paneChartParameters : undefined,
         paneChartSeriesDefination : undefined,
         SERIES_QUERY_TYPE : undefined,
         SERIES_COLOR : undefined,
@@ -348,6 +350,11 @@ export class TopicManagementState {
     @Selector()
     static getChartSeries(state : TopicManagementModel) : any{
         return state.paneChartSeriesDefination;
+    }
+
+    @Selector()
+    static getPaneChartParameters(state : TopicManagementModel) : any{
+        return state.paneChartParameters.response;
     }
 
     @Action(GetTopicDescriptionListAction)
@@ -1231,6 +1238,19 @@ export class TopicManagementState {
 
     @Action(LoadPaneReportById)
     loadPaneReportById(ctx: StateContext<TopicManagementModel>, action: LoadPaneReportById) : Actions{
+
+        const paneReport : any = ctx.getState().paneReport;
+        if(paneReport && paneReport.id == action.id){
+            return;
+        }
+
+        const paneReportList : any = ctx.getState().paneReportList;
+        if(paneReportList && paneReportList.response[0]){
+            const paneReport = paneReportList.response.find(data => data.id == action.id);
+            ctx.patchState({paneReport : paneReport})
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.reports + '/' + action.id)
           .pipe(
@@ -1250,6 +1270,13 @@ export class TopicManagementState {
         return this.loginService.performPost( action.body ,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.reports)
         .pipe(
             tap((response: any) => {
+
+                const paneReportList =  ctx.getState().paneReportList;
+                if(paneReportList){
+                    paneReportList.response.push(TopicUtilityTransformer.paneReportsUtility(response));
+                    ctx.patchState({paneReportList : {...paneReportList, response: [...paneReportList.response]}});
+                }
+
               ctx.patchState({paneReport : response});
             },
                 error => {
@@ -1266,6 +1293,16 @@ export class TopicManagementState {
         return this.loginService.performPut( action.body ,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.reports + '/' + action.id)
         .pipe(
             tap((response: any) => {
+
+                const paneReportList =  ctx.getState().paneReportList;
+                if(paneReportList){
+                    paneReportList.response = paneReportList.response.map((report) =>{
+                        if(action.id == report.id) return TopicUtilityTransformer.paneReportsUtility(response);
+                        return report;
+                    })
+                    ctx.patchState({paneReportList : {...paneReportList, response: [...paneReportList.response]}});
+                }
+
               ctx.patchState({paneReport : response});
             },
                 error => {
@@ -1283,11 +1320,13 @@ export class TopicManagementState {
         .pipe(
             tap((response: any) => {
                 let paneReportList =  ctx.getState().paneReportList;
-                paneReportList = paneReportList.filter( (data) => data.id != action.id);
 
-                ctx.patchState({paneReport : undefined});
-                ctx.patchState({paneReportList : paneReportList});
+                if(paneReportList){
+                    paneReportList.response = paneReportList.response.filter( (data) => data.id != action.id);
+                    ctx.patchState({paneReportList : {...paneReportList, response : [...paneReportList.response]}});
+                }
               
+                ctx.patchState({paneReport : undefined});
             },
                 error => {
                     document.getElementById('loader').classList.remove('loading');
@@ -1458,7 +1497,8 @@ export class TopicManagementState {
                         ctx.patchState({paneChart : {...paneChart}});
                     }
 
-                    ctx.patchState({ paneChartSeriesDefination : response})
+                    ctx.patchState({ paneChartSeriesDefination : response, 
+                        paneChartParameters : AppUtility.addCustomIdentifierForReducer({response : []},response.id)});
                     document.getElementById('loader').classList.remove('loading');
                 }, (error : any) =>{
                     document.getElementById('loader').classList.remove('loading');
@@ -1528,24 +1568,33 @@ export class TopicManagementState {
         .pipe(
             tap(
                 (response : any) =>{
-                    const paneChartSeriesDefination =  ctx.getState().paneChartSeriesDefination;
-                    if(paneChartSeriesDefination.chartParameters){
-                        paneChartSeriesDefination.chartParameters = [response];
-                    }else{
-                        if(action.body.id){
-                            const templist = paneChartSeriesDefination.chartParameters.map(
-                                (data) =>{
-                                    if(data.id == action.body.id){
-                                        return response;
-                                    }
-                                    return data;
-                                }
-                            );
 
-                            paneChartSeriesDefination.chartParameters = templist;
-                        }
+                    const paneChartParameter = ctx.getState().paneChartParameters;
+                    if(paneChartParameter){
+                        paneChartParameter.response.push(response);
+                        ctx.patchState({paneChartParameters : {...paneChartParameter, response : [...paneChartParameter.response]}});
                     }
-                    ctx.patchState({ paneChartSeriesDefination : paneChartSeriesDefination});
+
+                    //  commented for topic pane chart seried data sets.
+
+                    // const paneChartSeriesDefination =  ctx.getState().paneChartSeriesDefination;
+                    // if(paneChartSeriesDefination.chartParameters){
+                    //     paneChartSeriesDefination.chartParameters = [response];
+                    // }else{
+                    //     if(action.body.id){
+                    //         const templist = paneChartSeriesDefination.chartParameters.map(
+                    //             (data) =>{
+                    //                 if(data.id == action.body.id){
+                    //                     return response;
+                    //                 }
+                    //                 return data;
+                    //             }
+                    //         );
+
+                    //         paneChartSeriesDefination.chartParameters = templist;
+                    //     }
+                    // }
+                    // ctx.patchState({ paneChartSeriesDefination : paneChartSeriesDefination});
                     document.getElementById('loader').classList.remove('loading');
                 }, (error : any) =>{
                     document.getElementById('loader').classList.remove('loading');
@@ -1556,6 +1605,22 @@ export class TopicManagementState {
         
     }
 
+    @Action(GetPaneChartParametersListByPaneChartIdAndSeriesIdAction)
+    GetPaneChartParametersListByPaneChartIdAndSeriesId(ctx : StateContext<TopicManagementModel>, action: GetPaneChartParametersListByPaneChartIdAndSeriesIdAction) : Actions{
+    
+    const paneChartParameter = ctx.getState().paneChartParameters;
+    if(paneChartParameter && paneChartParameter.id == action.chartSeriesId)
+        return;
+    
+    return this.loginService.performGet(AppUtility.endPointGenerator(
+        [AppConstant.pane,action.paneId,AppConstant.charts,action.paneChartId,AppConstant.series,action.chartSeriesId,AppConstant.parameters]))
+        .pipe(
+            tap( (response) =>{
+                ctx.patchState({paneChartParameters : AppUtility.addCustomIdentifierForReducer({response : response},action.chartSeriesId)});
+            },this.errorCallbak));
+
+    }
+
     @Action(DeletePaneChartParameter)
     deletePaneChartParameter(ctx : StateContext<TopicManagementModel>, action: DeletePaneChartParameter) : Actions{
         document.getElementById('loader').classList.remove('loading')
@@ -1564,18 +1629,26 @@ export class TopicManagementState {
             + action.paneChartId + '/' + AppConstant.series + '/' + action.chartSeriesId + '/' + AppConstant.parameters + '/' + action.chartParameterId)
             .pipe(
                 tap((response) =>{
-                    document.getElementById('loader').classList.remove('loading');
-                    const paneChartSeriesDefination =  ctx.getState().paneChartSeriesDefination;
-                    const index =  paneChartSeriesDefination.chartParameters.findIndex(
-                        (data) =>{
-                            if (data.id = action.chartParameterId){
-                                return true;
-                            }
-                            return false;
-                        }
-                    )
-                    paneChartSeriesDefination.chartParameters = paneChartSeriesDefination.chartParameters.slice(index,1);
-                    ctx.patchState({paneChartSeriesDefination : paneChartSeriesDefination});
+
+                    const paneChartParameter = ctx.getState().paneChartParameters;
+                    if(paneChartParameter){
+                        paneChartParameter.response = paneChartParameter.response.filter(data => data.id != action.chartParameterId);
+                        ctx.patchState({ paneChartParameters : { ...paneChartParameter, response : [...paneChartParameter.response]}});
+                    }        
+                
+                    // ----------- commented for the effectively working pane chart -> series data -> data sets
+
+                    // const paneChartSeriesDefination =  ctx.getState().paneChartSeriesDefination;
+                    // const index =  paneChartSeriesDefination.chartParameters.findIndex(
+                    //     (data) =>{
+                    //         if (data.id = action.chartParameterId){
+                    //             return true;
+                    //         }
+                    //         return false;
+                    //     }
+                    // )
+                    // paneChartSeriesDefination.chartParameters = paneChartSeriesDefination.chartParameters.slice(index,1);
+                    // ctx.patchState({paneChartSeriesDefination : paneChartSeriesDefination});
                     
                 },((error) =>{
                     document.getElementById('loader').classList.remove('loading');

@@ -599,7 +599,7 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
 }
 
 #surveyData .survey.w-100 tbody{
-  display: block;
+  /* display: block; */
   overflow: auto;
 }
 
