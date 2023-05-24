@@ -48,7 +48,8 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
     this.loadAdminstrativeReports();
     if(this.id){
       this.getPaneReportById();
-      this.loadPaneById();
+      this.loadPaneReportById();
+      this.getAllDataFields();
     }
     AppUtility.scrollTop();
   }
@@ -62,7 +63,7 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
       }));
   }
 
-  loadPaneById(){
+  loadPaneReportById(){
     this.topicService.loadPaneReportById(this.paneId, this.id);
   }
 
@@ -79,6 +80,17 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
             return data;
           });
           this.parameterDataSource = parameterDataSource;
+
+          const reportParameter = this.reportData.report.reportParams;
+          this.parameterKeys[1].option = reportParameter.map((data) => {
+            const formattedData : any = {};
+            formattedData.id = data.id;
+            formattedData.key = data.id;
+            formattedData.value = data.parameterLabel;
+            return formattedData;
+          })
+          this.parameterKeys = [...this.parameterKeys];
+
           AppUtility.scrollTop();
         }));
   }
@@ -126,6 +138,7 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
         this.id = response.topicManagement.paneReport.id;
         AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
         this.getPaneReportById();
+        this.getAllDataFields();
     }));
 
   }
@@ -134,12 +147,35 @@ export class TopicPaneReportsEditComponent implements OnInit, OnDestroy {
     return AppUtility.showErrorMessageOnErrorField(this.f, formControlName);  
   } 
 
+  getAllDataFields(){
+    this.topicService.loadDataFieldByPaneId(this.paneId);
+    this.subscriptions.add(
+      this.topicService.getDataFieldByPaneId()
+      .pipe(filter(data => data))
+      .subscribe((response) =>{
+        console.log(response);
+          this.parameterKeys[0].option = response.map((data) =>{
+            const formattedData : any = {};
+            formattedData.id = data.id;
+            formattedData.key = data.id;
+            formattedData.value = data.label + ' (' + data.field + ')';
+            return formattedData;
+          });
+          this.parameterKeys = [...this.parameterKeys];
+      }));
+  }
+
   addParameter($event): any {
-    console.log($event);
+    const requestBody = {
+      dataFieldId : $event.dataFieldLabel,
+      reportParamId : $event.reportParameterLabel,
+    };
+
+    this.topicService.savePaneReportParameter(this.paneId,this.id,requestBody);
   } 
 
   deleteParameter($event): any {
-    console.log($event);
+    this.topicService.deletePaneReportParameter(this.paneId,this.id,$event.id);
   }
 
   get f(): { [key: string]: AbstractControl; } { return this.reportForm.controls; }

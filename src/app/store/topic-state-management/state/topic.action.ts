@@ -49,6 +49,8 @@ export enum TopicActionTypes {
     SAVE_NEW_PANE_REPORT = 'Save New Pane Report',
     SAVE_EXISTING_PANE_REPORT = 'Save Existing Pane Report',
     DELETE_PANE_REPORT_BY_ID = 'Delete Pane Report By Id',
+    SAVE_PANE_REPORT_PARAMETER = 'Save Pane Report Parameter',
+    DELETE_PANE_REPORT_PARAMETER_BY_ID = 'Delete Pane Report Param',
     GET_ALL_PANE_CHARTS_BY_ID = 'Get All Pane Chart By Pane Id',
     LOAD_PANE_CHART_BY_ID = 'Load Pane Chart By Id',
     DELETE_PANE_CHART_BY_ID = 'Delete Pane Chart By Id',
@@ -189,7 +191,7 @@ export class DeleteDataBlockDataFieldFieldValues{
 
 export class LoadDataFiledByPaneId{
     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_DATA_FIELD_BY_PANE_ID;
-    constructor(readonly id : number){}
+    constructor(readonly id : number, readonly force ?: boolean){}
 }
 
 
@@ -313,6 +315,16 @@ export class SaveExistingPaneReportAction{
 export class DeletePaneReportByIdAction{
     static readonly type : TopicActionTypes = TopicActionTypes.DELETE_PANE_REPORT_BY_ID;
     constructor(readonly paneId : number, readonly id : number){}
+}
+
+export class SaveNewPaneReportParameterAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.SAVE_PANE_REPORT_PARAMETER;
+    constructor(readonly paneId : number, readonly paneReportId : number, readonly body : any){}
+}
+
+export class DeletePaneReportParameterAction{
+    static readonly type : TopicActionTypes = TopicActionTypes.DELETE_PANE_REPORT_PARAMETER_BY_ID;
+    constructor(readonly paneId : number , readonly paneReportId : number , readonly id : number){}
 }
 
 export class GetAppPaneChartByPaneIdAction{

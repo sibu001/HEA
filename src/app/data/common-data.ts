@@ -479,8 +479,8 @@ export class TableColumnData {
         { key: 'useType', isEdit: true, displayName: 'Use Type' },
     ];
     static readonly DATA_SET_KEYS: Array<TABLECOLUMN> = [
-        { key: 'queryParameter', isEdit: true, displayName: 'Query Parameter', addRowType: 'text' },
-        { key: 'dataFieldLabel', isEdit: true, displayName: 'Data Field', addRowType: 'text' },
+        { key: 'queryParameter', isEdit: true, displayName: 'Query Parameter', type :'inputField' , addRowType: 'text' },
+        { key: 'dataFieldLabel', isEdit: true, displayName: 'Data Field', addRowType: 'select', type :'inputField', option : [] },
     ];
 
     static readonly GAS_KEYS: Array<TABLECOLUMN> = [
@@ -782,52 +782,52 @@ export class TableColumnData {
         {
             key: 'dataFieldLabel', isEdit: true, displayName: 'Data Field', type :'inputField', addRowType: 'select', option:
                 [
-                    { key: '1246', value: 'Do you have a solar PV system at your home?&nbsp;(pv_ConfirmPV)' },
-                    { key: '1248', value: 'Install date&nbsp;(pv_InstallDate)' },
-                    { key: '1249', value: 'System size, in rated kW&nbsp;(pv_Size)' },
-                    { key: '1250', value: 'Orientation&nbsp;(pv_Orientation)' },
-                    { key: '1251', value: 'Shading&nbsp;(pv_Shading)' },
-                    { key: '1271', value: 'Order SV Recalculation&nbsp;(pv_OrderSVRecalculation)' },
-                    { key: '1254', value: 'Date Installed&nbsp;(pv_InstallGroup.pv_InstallGroupDate)' },
-                    { key: '1255', value: 'Total System Size (kW)&nbsp;(pv_InstallGroup.pv_installGroupSize)' },
-                    { key: '1256', value: 'Orientation&nbsp;(pv_InstallGroup.pv_InstallGroupOrientation)' },
-                    { key: '1257', value: 'Shading&nbsp;(pv_InstallGroup.pv_installGroupShading)' },
-                    { key: '1272', value: 'Annual derating factor (%)&nbsp;(pv_InstallGroup.pv_installGroupADF)' },
-                    { key: '1258', value: 'Start of Outage&nbsp;(pv_OutageGroup.pv_OutageGroupStart)' },
-                    { key: '1263', value: 'End of Outage&nbsp;(pv_OutageGroup.pv_OutageGroupEnd)' },
-                    { key: '1267', value: 'UpdatePVOutputCallAllowed&nbsp;(pv_UpdatePVOutputCallAllowed)' },
-                    { key: '1266', value: 'Call UpdatePVOutput&nbsp;(pv_UpdatePVOutput)' },
-                    { key: '1268', value: 'UpdatePVOutputOnSave&nbsp;(pv_UpdatePVOutputOnSave)' },
-                    { key: '1273', value: 'Percent of hourly values above idle load&nbsp;(pv_PctOverIdleLoad)' },
-                    { key: '1275', value: 'Electric use came from the Sun&nbsp;(pv_electricUseFromSun)' },
-                    { key: '1276', value: '12 months Electric Savings&nbsp;(pv_12mElectricSavings)' },
-                    { key: '1259', value: 'Do you have a log of your PV system\'s generation on an hourly basis?&nbsp;(pv_hasHourlyLog)' },
-                    {
-                        key: '1260',
-                        value: `Would you like to compare our estimate to your system log for a particular day
-                        in the past?&nbsp;(pv_CompareToSystemLog)`
-                    },
-                    { key: '1261', value: 'Which day would you like to compare?&nbsp;(pv_CompareDate)' },
-                    { key: '1262', value: 'Enter total logged PV output for this day:&nbsp;(pv_DailyOutputFromLog)' },
-                    { key: '1269', value: 'Estimated daily PV system output&nbsp;(pv_PVDayOutput_kWh)' },
-                    { key: '1270', value: 'Estimation difference&nbsp;(pv_EstimationDiff)' },
-                    {
-                        key: '1264',
-                        value: `Do you have a whole-home battery that is used to shift electric loads from
-                        hour to hour?&nbsp;(pv_hasWholeHomeBattery)`
-                    },
-                    {
-                        key: '1265',
-                        value: `Is your battery also used to shift electric loads more than two days?& nbsp;
-                        (pv_IsBatteryUsedToShiftLoads)`
-                    },
-                    { key: '1274', value: 'Recalc SVs&nbsp;(pv_RecalcSVOnSave)' },
+                    // { key: '1246', value: 'Do you have a solar PV system at your home?&nbsp;(pv_ConfirmPV)' },
+                    // { key: '1248', value: 'Install date&nbsp;(pv_InstallDate)' },
+                    // { key: '1249', value: 'System size, in rated kW&nbsp;(pv_Size)' },
+                    // { key: '1250', value: 'Orientation&nbsp;(pv_Orientation)' },
+                    // { key: '1251', value: 'Shading&nbsp;(pv_Shading)' },
+                    // { key: '1271', value: 'Order SV Recalculation&nbsp;(pv_OrderSVRecalculation)' },
+                    // { key: '1254', value: 'Date Installed&nbsp;(pv_InstallGroup.pv_InstallGroupDate)' },
+                    // { key: '1255', value: 'Total System Size (kW)&nbsp;(pv_InstallGroup.pv_installGroupSize)' },
+                    // { key: '1256', value: 'Orientation&nbsp;(pv_InstallGroup.pv_InstallGroupOrientation)' },
+                    // { key: '1257', value: 'Shading&nbsp;(pv_InstallGroup.pv_installGroupShading)' },
+                    // { key: '1272', value: 'Annual derating factor (%)&nbsp;(pv_InstallGroup.pv_installGroupADF)' },
+                    // { key: '1258', value: 'Start of Outage&nbsp;(pv_OutageGroup.pv_OutageGroupStart)' },
+                    // { key: '1263', value: 'End of Outage&nbsp;(pv_OutageGroup.pv_OutageGroupEnd)' },
+                    // { key: '1267', value: 'UpdatePVOutputCallAllowed&nbsp;(pv_UpdatePVOutputCallAllowed)' },
+                    // { key: '1266', value: 'Call UpdatePVOutput&nbsp;(pv_UpdatePVOutput)' },
+                    // { key: '1268', value: 'UpdatePVOutputOnSave&nbsp;(pv_UpdatePVOutputOnSave)' },
+                    // { key: '1273', value: 'Percent of hourly values above idle load&nbsp;(pv_PctOverIdleLoad)' },
+                    // { key: '1275', value: 'Electric use came from the Sun&nbsp;(pv_electricUseFromSun)' },
+                    // { key: '1276', value: '12 months Electric Savings&nbsp;(pv_12mElectricSavings)' },
+                    // { key: '1259', value: 'Do you have a log of your PV system\'s generation on an hourly basis?&nbsp;(pv_hasHourlyLog)' },
+                    // {
+                    //     key: '1260',
+                    //     value: `Would you like to compare our estimate to your system log for a particular day
+                    //     in the past?&nbsp;(pv_CompareToSystemLog)`
+                    // },
+                    // { key: '1261', value: 'Which day would you like to compare?&nbsp;(pv_CompareDate)' },
+                    // { key: '1262', value: 'Enter total logged PV output for this day:&nbsp;(pv_DailyOutputFromLog)' },
+                    // { key: '1269', value: 'Estimated daily PV system output&nbsp;(pv_PVDayOutput_kWh)' },
+                    // { key: '1270', value: 'Estimation difference&nbsp;(pv_EstimationDiff)' },
+                    // {
+                    //     key: '1264',
+                    //     value: `Do you have a whole-home battery that is used to shift electric loads from
+                    //     hour to hour?&nbsp;(pv_hasWholeHomeBattery)`
+                    // },
+                    // {
+                    //     key: '1265',
+                    //     value: `Is your battery also used to shift electric loads more than two days?& nbsp;
+                    //     (pv_IsBatteryUsedToShiftLoads)`
+                    // },
+                    // { key: '1274', value: 'Recalc SVs&nbsp;(pv_RecalcSVOnSave)' },
                 ]
         },
         {
             key: 'reportParameterLabel', isEdit: true, displayName: 'Report Parameter' , type :'inputField' ,  addRowType: 'select', option:
                 [
-                    { key: '37', value: 'Program Name Filter' },
+                    // { key: '37', value: 'Program Name Filter' },
                 ]
         },
     ];

@@ -485,6 +485,16 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     if(!item){
       item = this.dataSource.data[this.dataSource.data.length - 1];
     }
+
+    this.keys.forEach((data) =>{
+      // replacing the to the actual value when input field type is select.
+      if(data.addRowType == 'select'){
+        // option list contains object in form { id , key , value} 
+        // id is for identification, key is to be passed under the selction, value the label displayed as option
+        item[data.key] = data.option.find(opt => opt.id == item[data.key]).value;
+      };
+    });
+
     item.showInputFields = undefined;
     item.disabled = true
   }

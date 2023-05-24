@@ -62,6 +62,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
       this.getChartSerisesById();
       this.loadChartSerisesById();
       this.getPaneChartParameters();
+      this.getAllDataFields();
     }
     AppUtility.scrollTop();
   }
@@ -126,6 +127,7 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
             AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
             this.getChartSerisesById();
             this.getPaneChartParameters();
+            this.getAllDataFields();
         }));
     }
   }
@@ -180,14 +182,39 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     // constructing Object to save
     const paneChartParams = { 
       paneChartId : this.paneChartId,
-      dataFieldId : event.value.dataFieldLabel,
+      dataFieldId : event.dataFieldLabel,
       chartParameter : {
         chartSeriesId : this.id,
-        queryParameter : event.value.queryParameter
+        queryParameter : event.queryParameter
       }
      };
 
     this.topicService.saveNewOrExistingPaneChartParamenter(this.paneId,this.paneChartId,this.id,paneChartParams);
+  }
+
+// adding all possible options in chart data set table for data field
+  getAllDataFields(){
+    this.topicService.loadDataFieldByPaneId(this.paneId,true);
+    this.subscriptions.add(
+      this.topicService.getDataFieldByPaneId()
+      .pipe(filter(data => data))
+      .subscribe((response) =>{
+
+
+          if(response.length == 0){
+            this.keys[1].addRowType = 'text';
+          }else{
+            //  adding options to the select field 
+            this.keys[1].option = response.map((data) =>{
+              const formattedData : any = {};
+              formattedData.id = data.id;
+              formattedData.key = data.id;
+              formattedData.value = data.label + ' (' + data.field + ')';
+              return formattedData;
+            });
+          }
+          this.keys = [...this.keys];
+      }));
   }
 
 

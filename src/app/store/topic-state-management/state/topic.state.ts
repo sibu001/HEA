@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
-import { of } from 'rxjs';
+import { of, pipe } from 'rxjs';
 import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
@@ -72,6 +72,8 @@ import {
     SaveDataBlockDataFieldFieldValues,
     DeleteDataBlockDataFieldFieldValues,
     GetPaneChartParametersListByPaneChartIdAndSeriesIdAction,
+    SaveNewPaneReportParameterAction,
+    DeletePaneReportParameterAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -657,13 +659,13 @@ export class TopicManagementState {
     saveDataBlockByPaneIdAction(ctx : StateContext<TopicManagementModel>, action : SaveDataBlockByPaneIdAction) : Actions {
         return this.loginService.performPost(action.body,AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataBlock)
         .pipe(
-            tap((response) =>{
+            tap((response : any) =>{
                 const dataBlockList : any = ctx.getState().dataBlockList;
                 if(dataBlockList){
                     dataBlockList.response.push(TopicUtilityTransformer.transformDataBlocksTableData([response])[0]);
                     ctx.patchState({dataBlockList : {...dataBlockList}});
                 }
-                ctx.patchState({dataBlock : response});
+                ctx.patchState({dataBlock : response, dataBlockDataFieldList : AppUtility.addCustomIdentifierForReducer({ response : [] }, response.id) });
             }, this.errorCallbak)
         );
     }
@@ -679,7 +681,7 @@ export class TopicManagementState {
                         dataBlockList.response = dataBlockList.response.filter((data) => data.id != action.id);
                         ctx.patchState({dataBlockList : {...dataBlockList}});
                     }
-                    ctx.patchState({ dataBlock: undefined})
+                    ctx.patchState({ dataBlock: undefined ,dataBlockDataFieldList : undefined});
                 }));
     }
 
@@ -756,7 +758,7 @@ export class TopicManagementState {
                             if(data.id == response.id) return response;
                             return data;
                         });
-                        ctx.patchState({dataBlockDataFieldList : {...dataBlockDataFieldList}});
+                        ctx.patchState({dataBlockDataFieldList : {...dataBlockDataFieldList, response : [...dataBlockDataFieldList.response]}});
                     }
 
                     ctx.patchState({dataBlockDataField : response});
@@ -777,7 +779,7 @@ export class TopicManagementState {
                         ctx.patchState({dataBlockDataFieldList: {...dataBlockDataFieldList}});
                     }
 
-                    ctx.patchState({dataBlockDataField : undefined});
+                    ctx.patchState({dataBlockDataField : undefined, dataBlockDataFieldFieldValues : undefined});
                 },this.errorCallbak));
     }
 
@@ -786,9 +788,9 @@ export class TopicManagementState {
 
 
         const dataFieldList = ctx.getState().dataFieldList;
-        if(dataFieldList && dataFieldList.id == action.id){
-            return;
-        }
+        const force : boolean = action.force || (!dataFieldList || dataFieldList.id != action.id );
+
+        if(!force) return null;
 
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGetWithParams(AppConstant.pane + '/' + action.id + '/' + AppConstant.dataField, new HttpParams().append('dataBlockIdEmpty','true'))
@@ -1015,7 +1017,17 @@ export class TopicManagementState {
         return this.loginService.performPut(action.body,
             AppUtility.endPointGenerator([AppConstant.pane,action.paneId,AppConstant.dataField,action.id]))
             .pipe(
-                tap((response) =>{
+                tap((response : any) =>{
+
+                    const dataFieldList : any = ctx.getState().dataFieldList;
+                    if(dataFieldList){
+                        dataFieldList.response = dataFieldList.response.map(data =>{
+                            if(data.id == response.id) return response;
+                            return data;
+                        })
+                        ctx.patchState({ dataFieldList : {...dataFieldList , response : [...dataFieldList.response]}});
+                    }
+
                     ctx.patchState({dataField : response})
                 },this.errorCallbak));
 
@@ -1035,6 +1047,7 @@ export class TopicManagementState {
                     })
                     ctx.patchState({
                         dataField: undefined,
+                        fieldValueList : undefined
                     });
                 },
                     error => {
@@ -1335,6 +1348,41 @@ export class TopicManagementState {
       );   
     }
 
+    @Action(SaveNewPaneReportParameterAction)
+    saveNewPaneReportParameter(ctx : StateContext<TopicManagementModel>, action : SaveNewPaneReportParameterAction) : Actions{
+        return this.loginService.performPost(action.body,AppUtility.endPointGenerator(
+            [AppConstant.pane,action.paneId,AppConstant.reports,action.paneReportId,AppConstant.parameters]))
+            .pipe(tap(
+                (response : any) =>{
+                    console.log(response);
+                    const topicManagementModel = ctx.getState();
+                    const datafieldList = topicManagementModel.dataFieldList;
+                    const paneReport = topicManagementModel.paneReport;
+                    response.dataField = datafieldList.response.find(data => data.id == response.dataFieldId);
+                    response.reportParam = paneReport.report.reportParams.find(data => data.id == response.reportParamId);
+
+                    paneReport.paneReportParams.push(response);
+                    ctx.patchState({paneReport : {...paneReport}});
+
+                },this.errorCallbak
+            ))
+    }
+
+    @Action(DeletePaneReportParameterAction)
+    deletePaneReportParameter(ctx : StateContext<TopicManagementModel>, action : DeletePaneReportParameterAction) : Actions{
+        return this.loginService.performDelete(AppUtility.endPointGenerator(
+            [AppConstant.pane,action.paneId,AppConstant.reports,action.paneReportId,AppConstant.parameters,action.id]))
+            .pipe(tap(
+                (response : any) =>{
+                    const paneReport = ctx.getState().paneReport;
+                    paneReport.paneReportParams = paneReport.paneReportParams.filter(data => data.id != action.id);
+                    ctx.patchState({paneReport : {...paneReport}});
+
+                },this.errorCallbak
+            ))
+    }
+
+
 
     @Action(GetAppPaneChartByPaneIdAction)
     getAppPaneChartByPaneIdAction(ctx: StateContext<TopicManagementModel>, action: GetAppPaneChartByPaneIdAction) : Actions{
@@ -1571,6 +1619,8 @@ export class TopicManagementState {
 
                     const paneChartParameter = ctx.getState().paneChartParameters;
                     if(paneChartParameter){
+                        const dataFieldList =  ctx.getState().dataFieldList;
+                        response.dataField = dataFieldList.response.find(data => data.id == response.dataFieldId);
                         paneChartParameter.response.push(response);
                         ctx.patchState({paneChartParameters : {...paneChartParameter, response : [...paneChartParameter.response]}});
                     }
