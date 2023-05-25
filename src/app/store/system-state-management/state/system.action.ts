@@ -59,6 +59,7 @@ export enum SystemActionTypes {
     DELETE_RECOMMENDATION_BY_ID = 'Delete Recommendation By Id',
     LOAD_RELATED_LEAKS_BY_ID = 'Load Related Leaks By Id',
     SAVE_RECOMMENDATION_LEAK_ACTION = 'Save Recommendation Leak and Unique',
+    UPDATE_RECOMMENDATAION_LEAK_BY_ID = 'Update Recommendation Leak and Unique By Id',
     SAVE_RELATED_LEAK_ACTION = 'Save Related Leaks',
     SAVE_RELATED_RECOMMENDATION_ACTION = 'Save Related Recommendations',
     DELETE_RELATED_RECOMMENDATION_ACTION = 'Delete Related Recommendations',
@@ -373,6 +374,14 @@ export class SaveRecommendationLeakAction{
     constructor(readonly topicDescriptionId : number, readonly body : any) {
     }
 }
+
+
+export class UpdateRecommendationLeakAction{
+    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_RECOMMENDATAION_LEAK_BY_ID;
+    constructor(readonly topicDescriptionId : number, readonly id : number | string, readonly body : any) {
+    }
+}
+
 
 export class SaveRelatedLeakAction{
     static readonly type: SystemActionTypes = SystemActionTypes.SAVE_RELATED_LEAK_ACTION;

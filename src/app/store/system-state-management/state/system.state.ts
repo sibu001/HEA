@@ -5,6 +5,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SystemTransformer } from '../transformer/transformer';
 import {
     AssignPlaceToCustomerGroupAction,
@@ -68,7 +69,8 @@ import {
     SaveCustomerGoupToList,
     RemoveCustomerGroupList,
     LoadSelectedTopicGroupListAction,
-    GetCustomerAlertTypeListCountAction
+    GetCustomerAlertTypeListCountAction,
+    UpdateRecommendationLeakAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -1180,9 +1182,16 @@ export class SystemManagementState {
     loadRecommendationsLeakAndUniqueByIdAction(ctx: StateContext<SystemManagementModel>, action: LoadRecommendationsLeakAndUniqueByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
 
-        const recommendation = ctx.getState().recommendation;
+        let recommendation = ctx.getState().recommendation;
         if (recommendation && recommendation.id == action.id)
             return null;
+
+        const recommendationList = ctx.getState().recommendationList;
+        if(recommendationList){
+            recommendation = recommendationList.find(recommendation => recommendation.id == action.id);
+            ctx.patchState({ recommendation: recommendation });
+            return;
+        }
 
         return this.loginService.performGet(AppConstant.topicDescription + '/' + action.topicDescriptionId + '/' + AppConstant.recommendations + '/' + action.id)
             .pipe(
@@ -1280,12 +1289,11 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // if(recommendationList){
-                    //     recommendationList = recommendationList.filter( (recommendation) => recommendation.id != action.id);
-                    //     ctx.patchState({
-                    //         recommendationList : recommendationList
-                    //     })
-                    // }
+                    if(recommendationList){
+                        recommendationList = recommendationList.filter( (recommendation) => recommendation.id != action.id);
+                        ctx.patchState({recommendationList : recommendationList });
+                    }
+                    ctx.patchState({ recommendation : undefined });
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1301,6 +1309,32 @@ export class SystemManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({
+                        recommendation: response,
+                    })
+                },
+                    error => {
+                        document.getElementById('loader').classList.remove('loading');
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
+                    }));
+
+    }
+
+    @Action(UpdateRecommendationLeakAction)
+    updateRecommendationLeak(ctx: StateContext<SystemManagementModel>, action: UpdateRecommendationLeakAction): Actions {
+        document.getElementById('loader').classList.add('loading');
+        return this.loginService.performPost(action.body, 
+            AppUtility.endPointGenerator([AppConstant.topicDescription,action.topicDescriptionId,AppConstant.recommendations,action.id]))
+            .pipe(
+                tap((response: any) => {
+                    document.getElementById('loader').classList.remove('loading');
+
+                    let recommendationList = ctx.getState().relatedLeakList;
+                    if(recommendationList){
+                        recommendationList = recommendationList.filter((data) => data.id != action.id);
+                        ctx.patchState({recommendationList : [...recommendationList]});
+                    }
+
                     ctx.patchState({
                         recommendation: response,
                     })

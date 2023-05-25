@@ -6,7 +6,7 @@
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Pane</span>
         </p>
-      <div *ngIf="reRenderFlag" class="form-group">
+      <div class="form-group">
         <form [formGroup]="paneForm">
         <div class="form-padding">
           <div class="row borderTop borderBottom rowPadding">
@@ -228,14 +228,14 @@
             </app-table>
           </div>
 
-          <div class="row rowPadding">
-            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-4 sidePadding">
-              <button type="button" class="btn btn-primary" (click)="back()" style='float: left;'>
+          <div class="row" style="margin-top:85px">
+            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-4 ">
+              <button type="button" class="btn btn-primary" (click)="back()">
                 Back
               </button>
             </div>
 
-            <div class="col-sm-9 col-md-10 col-lg-10 col-xs-8 sidePadding right-buttons">
+            <div class="col-sm-9 col-md-10 col-lg-10 col-xs-8  right-buttons">
               <button type="button" class="btn btn-primary" (click)="save()" >Save</button>
               <button type="button" *ngIf="id" class="btn btn-primary" (click)="delete()">Delete</button>
               <button type="button" *ngIf="id" class="btn btn-primary" (click)="copy()" >Copy</button>

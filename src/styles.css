@@ -2673,3 +2673,39 @@ mat-cell > div{
 .h-100p{
   height: 100%;
 }
+
+/* table component paginator first, prev, next, last button format */
+/* start */
+.mat-paginator-navigation-first>span{
+  display: none;
+}
+
+.mat-paginator-navigation-first::after{
+  content: 'First'
+}
+
+.mat-paginator-navigation-previous>span{
+  display: none;
+}
+
+.mat-paginator-navigation-previous::after{
+  content: 'Prev'
+}
+
+.mat-paginator-navigation-next>span{
+  display: none;
+}
+
+.mat-paginator-navigation-next::after{
+  content: 'Next'
+}
+
+.mat-paginator-navigation-last>span{
+  display: none;
+}
+
+.mat-paginator-navigation-previous::after{
+  content: 'Last'
+}
+
+/* end */

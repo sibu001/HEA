@@ -80,7 +80,12 @@ export class TopicUtilityTransformer {
         )
     }
 
-    public static convertPaneListDataForParentSectionLabel(dataList : Array<any>){
+    public static convertPaneListDataForParentSectionLabel(dataList : Array<any> | any){
+
+        if(!(dataList instanceof Array)){
+            dataList = [dataList];
+        }
+
         return dataList.map(
             data =>{
                 if(data.parentSection)

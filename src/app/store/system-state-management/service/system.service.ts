@@ -63,7 +63,8 @@ import {
   RemoveCustomerGroupList,
   SaveCustomerGoupToList,
   LoadSelectedTopicGroupListAction,
-  GetCustomerAlertTypeListCountAction
+  GetCustomerAlertTypeListCountAction,
+  UpdateRecommendationLeakAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -429,6 +430,10 @@ export class SystemService {
 
   saveRecommendationLeakByIdAction(topicDescriptionId : number, body : any){
     return this.store.dispatch(new SaveRecommendationLeakAction(topicDescriptionId, body))
+  }
+
+  updateRecommendationLeakByIdAction(topicDescriptionId : number , id : number| string, body : any){
+    return this.store.dispatch(new UpdateRecommendationLeakAction(topicDescriptionId,id,body))
   }
 
   saveRelatedLeaksById(topicDescriptionId, recommendationId, leak){

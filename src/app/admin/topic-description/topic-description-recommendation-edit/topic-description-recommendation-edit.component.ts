@@ -8,10 +8,11 @@ import { SystemService } from 'src/app/store/system-state-management/service/sys
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { HtmlEditorService, ImageService, LinkService, ToolbarService } from '@syncfusion/ej2-angular-richtexteditor';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
-import { skipWhile, skip, filter } from 'rxjs/operators';
+import { skipWhile, skip, filter, take } from 'rxjs/operators';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { HttpParams } from '@angular/common/http';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-topic-description-recommendation-edit',
@@ -26,7 +27,7 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   recommendationLeakTypeList = [];
   actionTypeList = [];
   htmlTextTemplate : any;
-  recommendationLeakObject;
+  recommendationLeakObject : any = {};
   priceCalculationType: any = TableColumnData.PRICE_CALCULATION_TYPE;
   imageList = [];
   conservationCategory = [];
@@ -231,20 +232,11 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   getRecommendationsLeakAndUniqueById() {
     this.subscriptions.add(
       this.systemService.getRecommendatonLeakAndUniqueById()
-        .pipe(skipWhile((item: any) => !item))
+        .pipe(filter((item: any) => item && item.id == this.id))
         .subscribe(
           data => {
-            if (!this.addRequest) {
-              this.setForm(data);
-              this.recommendationLeakObject = data;
-              if (!this.id) {
-                this.router.navigate([], {
-                  relativeTo: this.activateRoute,
-                  queryParams: { id: data.id },
-                  queryParamsHandling: 'merge'
-                })
-              }
-            }
+            this.recommendationLeakObject = {...data};
+            this.setForm({...this.recommendationLeakObject});
           }, error => {
             console.error(error);
           }
@@ -422,19 +414,45 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
   // }
 
   save(): any {
-    this.addRequest = false;
-    this.router.navigate([], {
-      relativeTo: this.activateRoute,
-      queryParams: { addRequest: null },
-      queryParamsHandling: 'merge'
-    })
-    const body = Object.assign(this.recommendationLeakObject ? this.recommendationLeakObject : {}, this.recommendationForm.value);
-    this.systemService.saveRecommendationLeakByIdAction(this.topicDescriptionId, body);
+
+    if(!AppUtility.validateAndHighlightReactiveFrom(this.recommendationForm)) return;
+
+    const body = Object.assign(this.recommendationLeakObject, this.recommendationForm.value);
+    AppUtility.removeErrorFieldMessagesFromForm();
+
+    if(this.id){
+      this.subscriptions.add(
+        this.systemService.updateRecommendationLeakByIdAction(this.topicDescriptionId,this.id,body)
+        .pipe(take(1))
+        .subscribe((response)=>{},
+        AppUtility.errorFieldHighlighterCallBack
+        )
+      )
+      return;
+    }
+
+    this.subscriptions.add(
+      this.systemService.saveRecommendationLeakByIdAction(this.topicDescriptionId,body)
+      .pipe(take(1))
+      .subscribe((response) =>{
+        this.id = response.systemManagement.recommendation.id;
+        AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+        AppUtility.scrollTop();
+      },AppUtility.errorFieldHighlighterCallBack)
+    );
+
   }
 
   delete(): any {
-    this.systemService.deleteRecommendationUniqueLeakListAction(this.topicDescriptionId, this.id);
-    this.back();
+
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
+    this.subscriptions.add(
+      this.systemService.deleteRecommendationUniqueLeakListAction(this.topicDescriptionId, this.id)
+      .pipe(take(1))
+      .subscribe((response) =>{
+        this.back();
+      }));
   }
 
   addRelatedLeaks(event: any) {
@@ -458,9 +476,15 @@ export class TopicDescriptionRecommendationEditComponent implements OnInit, OnDe
 
   get f() { return this.recommendationForm.value; }
 
+  get formControl() { return this.recommendationForm.controls; }
+
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 
+  highlightErrorField(formControlName : string) : boolean {
+    return AppUtility.showErrorMessageOnErrorField(this.formControl,formControlName);
+  }
 
 }

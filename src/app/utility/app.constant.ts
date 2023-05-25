@@ -190,4 +190,6 @@ export class AppConstant {
     public static readonly CHART_DEFINATION_SERIES_REQUEST_FROM_PANE_CHART = "paneChart";
     public static readonly CHART_DEFINATION_SERIES_REQUEST_FROM_TRENDING_CHART = "trendingChart";
     
+    //  used to target the error field span in the form
+    public static readonly SERVER_ERROR_MESSAGE_FIELDS = 'server-error-message-fields';
 }

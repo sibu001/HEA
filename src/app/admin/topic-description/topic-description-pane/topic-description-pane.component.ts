@@ -177,13 +177,14 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     
     const body = Object.assign(this.paneData ? this.paneData : {}, this.paneForm.value);
 
+    AppUtility.removeErrorFieldMessagesFromForm();
+
     if(!this.id){
       this.subscriptions.add(
         this.topicService.saveNewPane(body, this.surveyDescriptionId)
         .pipe(take(1))
         .subscribe(
           (response: any) => {
-            this.rerenderform();
             this.addRequest = true;
             this.id = response.topicManagement.topicPane.id;
             this.router.navigate([], { 
@@ -194,7 +195,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
             this.loadWhenIdIsPresent();
 
-          }));
+          },AppUtility.errorFieldHighlighterCallBack));
 
       return;
     }
@@ -203,15 +204,9 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       this.topicService.UpdadePaneById(body,this.surveyDescriptionId,this.id)
       .pipe(take(1))
       .subscribe(
-        (resposne) => {this.rerenderform();}
+        (resposne) => {}
         , AppUtility.errorFieldHighlighterCallBack
       ));
-  }
-
-  reRenderFlag : boolean = true;
-  rerenderform(){
-    this.reRenderFlag = false
-    setTimeout(()=> this.reRenderFlag = true,);
   }
 
   delete() {

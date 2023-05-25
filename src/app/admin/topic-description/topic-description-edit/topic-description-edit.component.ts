@@ -43,6 +43,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
   topicVariablesKeys: TABLECOLUMN[];
   disableNextButtonTopicVariable = false;
   lookupRecommendation = [];
+  public allTopicPane : Array<any> = [];
   htmTopMenuTemplate;
   disableNextButtonRecommendatonLeaks = false;
   disableNextButtonTopicPane = false;
@@ -168,6 +169,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       this.loadCustomerGroupById();
       this.topicVariablesPageChangeEvent(undefined);
       this.pageChangeEventForRecommendationLeaksAndUnique(undefined);
+      this.getAllTopicPanes();
     }
   }
 
@@ -260,6 +262,17 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
 
     this.loadTopicPanesById(params);
 
+  }
+
+  getAllTopicPanes(){
+    this.topicService.loadPaneListByTopicDescriptionId(this.id,new HttpParams(),true);
+    this.subscriptions.add(
+      this.topicService.getAllPanesByTopicDescriptionId()
+      .pipe(filter(data => data),take(1))
+      .subscribe(data =>{
+        this.allTopicPane = data;
+      })
+    )
   }
 
   loadTopicPanesById(params){

@@ -218,12 +218,16 @@ export class TopicService {
     return this.store.dispatch(new GetPaidServiceListAction());
   }
 
-  loadPaneListByTopicDescriptionId(id: number, params: HttpParams) {
-    return this.store.dispatch(new LoadPaneListByTopicDescriptionId(id, params))
+  loadPaneListByTopicDescriptionId(id: number, params: HttpParams, getAll : boolean = false) {
+    return this.store.dispatch(new LoadPaneListByTopicDescriptionId(id, params,getAll))
   }
 
   getPaneListByTopicDescriptionId() {
     return this.store.select(TopicManagementState.getPaneListByTopicDescriptionId)
+  }
+
+  getAllPanesByTopicDescriptionId() {
+    return this.store.select(TopicManagementState.getAllPanesByTopicDescriptionId)
   }
 
   saveDataFiedlByPaneId(paneId: number, body: any) {

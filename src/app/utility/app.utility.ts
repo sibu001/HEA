@@ -322,15 +322,28 @@ export class AppUtility {
         return formControl[formControlName].invalid && (formControl[formControlName].dirty || formControl[formControlName].touched);
     }
 
-    // Noter*** Re-render the form after the successfull save or update value 
-    // because without re-rendering will highlight the old invalid value which valid. 
+    // if you use this callback then must use 'removeErrorFieldMessagesFromForm()' method while calling to save an object
+    // this will remove all the pervious error messages of the form fields.
     // for example see topic-description-pane screen.
     public static errorFieldHighlighterCallBack = async (errResposne : any) =>{
         for(let error of errResposne.error.errors){
             const errorfield = document.querySelector(`[formControlName="${error.field}"]`) as HTMLElement;
             errorfield.focus();
-            errorfield.style.border = '1px solid red';
+
+            // appending span element with message to the from field.
+            const errorText =  document.createElement('span');
+            errorText.classList.add(AppConstant.SERVER_ERROR_MESSAGE_FIELDS);
+            errorText.innerHTML = error.defaultMessage;
+            errorText.style.color = 'red';
+            errorfield.parentNode.appendChild(errorText);
           }
+    }
+
+    public static removeErrorFieldMessagesFromForm() : void{
+        const errorFieldList : HTMLCollectionOf<Element> = document.getElementsByClassName(AppConstant.SERVER_ERROR_MESSAGE_FIELDS);
+        while(errorFieldList.length){
+            errorFieldList[0].parentElement.removeChild(errorFieldList[0]);
+        }
     }
 
     public static checkForAdminFilter(subFilter : string) : AdminFilter{

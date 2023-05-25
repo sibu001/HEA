@@ -150,13 +150,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     if (list.length > 0) {
       list[0].remove();
     }
-    const wrapper = document.getElementsByClassName('mat-button-wrapper');
-    for (let i = 0; i < wrapper.length; i += 4) {
-      wrapper[i].innerHTML = 'First';
-      wrapper[i + 1].innerHTML = 'Previous';
-      wrapper[i + 2].innerHTML = 'Next';
-      wrapper[i + 3].innerHTML = 'Last';
-    }
   }
 
   changeSort(sortState: any) {
@@ -182,6 +175,16 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
     this.disableLastButtonF();
     this.disableNextButtonF();
+
+    console.log(this.paginator);
+
+    // const wrapper = document.getElementsByClassName('mat-button-wrapper');
+    // for (let i = 0; i < wrapper.length; i += 4) {
+    //   wrapper[i].innerHTML = 'First';
+    //   wrapper[i + 1].innerHTML = 'Previous';
+    //   wrapper[i + 2].innerHTML = 'Next';
+    //   wrapper[i + 3].innerHTML = 'Last';
+    // }
   }
 
   ngOnChanges(changes: SimpleChanges) {

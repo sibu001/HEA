@@ -234,7 +234,7 @@ export class GetPaidServiceListAction {
 
 export class LoadPaneListByTopicDescriptionId{
     static readonly type: TopicActionTypes = TopicActionTypes.LOAD_TOPIC_DESCRIPTION_BY_PANE_ID;
-    constructor(readonly id : number, readonly params : HttpParams){}
+    constructor(readonly id : number, readonly params : HttpParams, readonly getAll ?: boolean){}
 }
 
 export class SaveDataFieldByPaneIdAction{

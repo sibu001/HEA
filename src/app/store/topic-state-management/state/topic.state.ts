@@ -100,6 +100,7 @@ import { TopicManagementModel } from './topic.model';
         dataFieldList : undefined,
         dataField : undefined,
         paneList : undefined,
+        allPossiblePaneInTopicDescription : undefined,
         FIELD_SOURCE : undefined,
         DATA_TYPE : undefined,
         INPUT_TYPE : undefined,
@@ -226,6 +227,11 @@ export class TopicManagementState {
     @Selector()
     static getPaneListByTopicDescriptionId(state: TopicManagementModel): any {
         return state.paneList;
+    }
+
+    @Selector()
+    static getAllPanesByTopicDescriptionId(state: TopicManagementModel): any {
+        return state.allPossiblePaneInTopicDescription;
     }
 
     @Selector()
@@ -971,15 +977,24 @@ export class TopicManagementState {
         // const paneList = ctx.getState().paneList;
         // if(paneList && paneList[0] && paneList[0].surveyDescriptionId == action.id)
         //     return null;
+
+        if(action.getAll){
+            const allPossiblePaneInTopicDescription = ctx.getState().allPossiblePaneInTopicDescription;
+            if(allPossiblePaneInTopicDescription) return;
+        }
             
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGetWithParams(AppConstant.topicDescription + '/' + action.id + '/' + AppConstant.pane, action.params)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    ctx.patchState({
-                        paneList: TopicUtilityTransformer.convertPaneListDataForParentSectionLabel(response),
-                    });
+                    if(action.getAll){
+                        ctx.patchState({ allPossiblePaneInTopicDescription : response});
+                    }else{
+                        ctx.patchState({
+                            paneList: TopicUtilityTransformer.convertPaneListDataForParentSectionLabel(response)});
+                    }
+
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1745,6 +1760,13 @@ export class TopicManagementState {
         .pipe(
             tap(
                 (response) =>{
+
+                    let paneList = ctx.getState().paneList;
+                    if(paneList){
+                        paneList = paneList.filter(data => data.id != action.paneId);
+                        ctx.patchState({paneList : paneList});
+                    }
+
                     ctx.patchState({ topicPane : undefined });
                 }, this.errorCallbak
             ));
@@ -1772,8 +1794,8 @@ export class TopicManagementState {
     }
     if(errorResponse.error.errorMessage)
         this.utilityService.showErrorMessage(errorResponse.error.errorMessage);
-
-    this.utilityService.showErrorMessage(errorResponse.statusText)
+    else
+        this.utilityService.showErrorMessage(errorResponse.statusText)
    }
 
 }

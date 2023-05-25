@@ -19,6 +19,7 @@ export interface TopicManagementModel {
     dataFieldList : any;
     dataField : any;
     paneList : any;
+    allPossiblePaneInTopicDescription : any;
     FIELD_SOURCE : any;
     DATA_TYPE : any;
     INPUT_TYPE : any;
