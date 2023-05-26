@@ -10,7 +10,7 @@ import { AppConstant } from '../utility/app.constant';
 import { Router } from '@angular/router';
 import { Users } from '../models/user';
 import { HttpCancelService } from './httpcancel.service';
-import { filter, map, takeUntil, tap, } from 'rxjs/operators';
+import { filter, finalize, map, takeUntil, tap, } from 'rxjs/operators';
 import { AppUtility } from '../utility/app.utility';
 
 
@@ -60,7 +60,6 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             filter((data: any) => data),
             tap((event: HttpEvent<any>) => {
             if (event instanceof HttpResponse) {
-                this.showLoaderOrNot();
                 const response = <HttpResponseBase>event;
                 if(response.url == AppConstant.classicVesionRedirectURLsandbox){
                     this.loginService.logout();
@@ -69,7 +68,6 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             }
         }, (error: any) => {
             if (error instanceof HttpErrorResponse) {
-                this.showLoaderOrNot();
                 switch ((<HttpErrorResponse>error).status) {
                     case 400:
                         return ;
@@ -81,6 +79,10 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             } else {
                 return throwError(error);
             }
+        }),
+        finalize(() => { 
+            console.log('finalize.' + req.url);                 
+            this.showLoaderOrNot();
         }));
 
     }

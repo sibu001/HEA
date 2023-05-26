@@ -43,7 +43,8 @@ export class TopicHistoryComponent implements OnInit {
 
     if (this.users.currentPaneNumber) {
       surveyCode = this.users.currentPaneNumber.survey.surveyDescription.surveyCode;
-      if (this.users.role === 'USERS' && (this.users.surveyLength <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false))) {
+      // if (this.users.role === 'USERS' && (this.users.surveyLength <= 3 || (this.users.currentPaneNumber !== undefined ? surveyCode === 'Profile' : false))) {
+      if (this.users.role === 'USERS' && (this.users.surveyLength <= 3)) {
         this.router.navigate(['surveyView']);
       }
     }
