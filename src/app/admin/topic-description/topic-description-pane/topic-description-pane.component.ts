@@ -39,6 +39,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   public chartDataSource: any;
   public reportsDataSource: any;
   public surveyDescriptionId : any;
+  public forceLoadTopicDescription : boolean = false;
 
   public totalElement = 0;
   public dataBlockData = {
@@ -166,7 +167,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
   }
 
   back(): any {
-    this.router.navigate(['/admin/topicDescription/topicDescriptionEdit'],{queryParams: {id: this.surveyDescriptionId}});
+    this.router.navigate(['/admin/topicDescription/topicDescriptionEdit'],{queryParams: {id: this.surveyDescriptionId , force : this.forceLoadTopicDescription}});
   }
 
   save() {
@@ -194,7 +195,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
             });
 
             this.loadWhenIdIsPresent();
-
+            this.forceLoadTopicDescription = true;
           },AppUtility.errorFieldHighlighterCallBack));
 
       return;
@@ -216,7 +217,11 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.topicService.deletePaneById(this.surveyDescriptionId,this.id)
       .pipe(take(1))
-      .subscribe((response:any) => {AppUtility.scrollTop(); this.back();}));
+      .subscribe((response:any) => {
+        AppUtility.scrollTop(); 
+        this.forceLoadTopicDescription = true; 
+        this.back();
+      }));
       
   }
 

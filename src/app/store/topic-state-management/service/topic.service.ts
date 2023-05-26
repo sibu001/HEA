@@ -1,5 +1,5 @@
 import { LoginService } from './../../../services/login.service';
-import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction, SaveNewPaneAction, UpdadePaneByIdAction, CopyCreateTopicDescriptionFromIdAction, DeletePaneByIdAction, CreateCopyPaneByIdAction, SaveDataBlockByPaneIdAction, UpdateDataBlockByPaneIdAction, DeleteDataBlockByIdAction, GetDataFieldsbyDataBlockAction, GetDataBlockDataFieldByIdAction, SaveDataBlockDataFieldAction, UpdateDataBlockDataFieldByIdAction, UpdateDateFieldByPaneIdAction, DeleteDataBlockDataFieldByIdAction, GetDataBlockDataFieldFieldValues, SaveDataBlockDataFieldFieldValues, DeleteDataBlockDataFieldFieldValues, GetPaneChartParametersListByPaneChartIdAndSeriesIdAction, SaveNewPaneReportParameterAction, DeletePaneReportParameterAction } from './../state/topic.action';
+import { LoadLookUpCalculationPeriodAction, LoadTopicVariablesAction, LoadSelectedTopicDescriptionVariableAction, LoadTopicPaneVariableById, LoadDataBlockByPaneId, LoadDataBlockById, LoadDataFiledByPaneId, LoadDataFieldById, LoadPaneListByTopicDescriptionId, SaveDataFieldByPaneIdAction, DeleteDataFieldByIdAction, LoadLookUpValueByType, LoadFieldValuesForDataField, DeleteFieldValuesForDataField, SaveFieldValuesForDataField, LoadAllPossibleColorForChartAction, LoadAllPossibleStyleForChartAction, LoadAllAvaliableFontFamiliesNamesForChartAction, LoadPanesForSelectionAsNext, LoadPaneReportsByPaneId, LoadPaneReportById, SaveNewPaneReport, SaveExistingPaneReportAction, DeletePaneReportByIdAction, GetAppPaneChartByPaneIdAction, LoadPaneChartByIdAction, DeletePaneChartByIdAction, SaveNewPaneChartAction, SaveExistingPaneChartAction, LoadChartSeriesDefinationById, SaveNewChartSeriesAction, SaveExistingChartSeriesAction, DeleteChartSeriesAction, SaveNewOrExistingPaneChartParameter, DeletePaneChartParameter, GetTopicDescriptionListCountAction, GetAllPossibleTopicDescriptionListAction, SaveNewPaneAction, UpdadePaneByIdAction, CopyCreateTopicDescriptionFromIdAction, DeletePaneByIdAction, CreateCopyPaneByIdAction, SaveDataBlockByPaneIdAction, UpdateDataBlockByPaneIdAction, DeleteDataBlockByIdAction, GetDataFieldsbyDataBlockAction, GetDataBlockDataFieldByIdAction, SaveDataBlockDataFieldAction, UpdateDataBlockDataFieldByIdAction, UpdateDateFieldByPaneIdAction, DeleteDataBlockDataFieldByIdAction, GetDataBlockDataFieldFieldValues, SaveDataBlockDataFieldFieldValues, DeleteDataBlockDataFieldFieldValues, GetPaneChartParametersListByPaneChartIdAndSeriesIdAction, SaveNewPaneReportParameterAction, DeletePaneReportParameterAction, SaveTopicDescriptionVariableAction, UpdateTopicDescriptionVariableAction, DeleteTopicDescriptionVariableAction } from './../state/topic.action';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs/Observable';
@@ -66,8 +66,8 @@ export class TopicService {
     return this.store.dispatch(new GetTopicDescriptionListCountAction(force, filter));
   }
 
-  loadTopicDescriptionById(id: number): Observable<TopicManagementState> {
-    return this.store.dispatch(new GetTopicDescriptionByIdAction(id));
+  loadTopicDescriptionById(id: number, force : boolean = false): Observable<TopicManagementState> {
+    return this.store.dispatch(new GetTopicDescriptionByIdAction(id,force));
   }
 
   CopyCreateTopicDescriptionFromId(topicDescriptionId : number, params : HttpParams) : Observable<any>{
@@ -84,6 +84,18 @@ export class TopicService {
 
   loadSelectedTopicDescriptionVariable(surveyDescriptionId: string, id: string): Observable<any> {
     return this.store.dispatch(new LoadSelectedTopicDescriptionVariableAction(id, surveyDescriptionId));
+  }
+
+  saveTopicDescriptionVariable(surveyDescriptionId: number, body: any): Observable<any>{
+    return this.store.dispatch(new SaveTopicDescriptionVariableAction(surveyDescriptionId, body));
+  }
+
+  updateTopicDescriptionVariable(surveyDescriptionId: number, id: number, body: any): Observable<any>{
+    return this.store.dispatch(new UpdateTopicDescriptionVariableAction(surveyDescriptionId, id, body));
+  }
+
+  deleteTopicDescritpionVariable(surveyDescriptionId: number, id: number) : Observable<any>{
+    return this.store.dispatch(new DeleteTopicDescriptionVariableAction(surveyDescriptionId, id));
   }
 
   getSeletedTopicDescriptionVariable(): Observable<TopicManagementState> {

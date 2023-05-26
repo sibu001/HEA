@@ -81,7 +81,6 @@ export class AuthorizationInterceptor implements HttpInterceptor {
             }
         }),
         finalize(() => { 
-            console.log('finalize.' + req.url);                 
             this.showLoaderOrNot();
         }));
 

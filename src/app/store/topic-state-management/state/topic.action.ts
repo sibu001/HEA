@@ -16,6 +16,9 @@ export enum TopicActionTypes {
     LOAD_TOPIC_VARIABLES = 'Load Topic Variables',
     LOAD_LOOK_UP_CALCULATION_PERIOD = 'Load Look Up Calculation Period',
     LOAD_SELECTED_TOPIC_DESCRIPTION_VARIABLES = 'Load Selected Topic Description Variables',
+    SAVE_TOPIC_DESCRIPTION_VARIABLES = 'Save Topic Description Variables',
+    UPDATE_TOPIC_DESCRIPTION_VARIABLES = 'Update Topic Description Variables',
+    DELETE_TOPIC_DESCRIPTION_VARIABLES = 'Delete Topic Description Variables',
     LOAD_TOPIC_PANE_BY_ID = "Load Topic Pane By Id",
     LOAD_DATA_BLOCK_BY_PANE_ID = 'Load Data Block By Pane Id',
     UPDATE_DATA_BLOCK_BY_PANE_ID ='Update Data Block By Id',
@@ -88,7 +91,7 @@ export class GetTopicDescriptionListCountAction {
 
 export class GetTopicDescriptionByIdAction {
     static readonly type: TopicActionTypes = TopicActionTypes.GET_TOPIC_DESCRIPTION_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly id: number, readonly force : boolean) {
     }
 }
 
@@ -104,8 +107,23 @@ export class LoadLookUpCalculationPeriodAction{
 }
 
 export class LoadSelectedTopicDescriptionVariableAction{
-    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_SELECTED_TOPIC_DESCRIPTION_VARIABLES;
+    static readonly type: TopicActionTypes = TopicActionTypes.SAVE_TOPIC_DESCRIPTION_VARIABLES;
     constructor(readonly id : string , readonly surevyDescriptionId : string) { }
+}
+
+export class SaveTopicDescriptionVariableAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.LOAD_SELECTED_TOPIC_DESCRIPTION_VARIABLES;
+    constructor(readonly surevyDescriptionId : number,readonly body : any) { }
+}
+
+export class UpdateTopicDescriptionVariableAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.UPDATE_TOPIC_DESCRIPTION_VARIABLES;
+    constructor(readonly surevyDescriptionId : number, readonly id : number, readonly body : any) { }
+}
+
+export class DeleteTopicDescriptionVariableAction{
+    static readonly type: TopicActionTypes = TopicActionTypes.DELETE_TOPIC_DESCRIPTION_VARIABLES;
+    constructor(readonly surevyDescriptionId : number, readonly id : number) { }
 }
 
 export class LoadTopicVariablesAction{

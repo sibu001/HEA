@@ -37,6 +37,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
   forceRequestList : boolean = false;
   pageSize = Number.parseInt(AppConstant.pageSize)
   topicForm: FormGroup;
+  public forceLoad : boolean = false;
   public keys: TABLECOLUMN[];
   topicPaneKeys: TABLECOLUMN[];
   recommendationKeys: TABLECOLUMN[];
@@ -125,6 +126,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.addRequest = params['addRequest'];
+      this.forceLoad = AppUtility.forceParamToBoolean(params['force']);
     });
 
     this.setForm(undefined);
@@ -176,7 +178,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
   
 
   private loadTopicDescription() {
-    this.topicService.loadTopicDescriptionById(this.id);
+    this.topicService.loadTopicDescriptionById(this.id,this.forceLoad);
   }
 
   private getTopicDescription(){
@@ -632,6 +634,7 @@ subscriptionSuggestionListForFilterForTopicVariable(){
       .pipe(take(1))
       .subscribe(
         (response: any) => {
+          SubscriptionUtil.unsubscribe(this.subscriptions);
           this.id = response.topicManagement.topicDescription.id ;
           this.router.navigate([], { 
             relativeTo: this.activateRoute,
@@ -639,8 +642,11 @@ subscriptionSuggestionListForFilterForTopicVariable(){
             queryParamsHandling : 'merge'
           });
           this.forceRequestList = true;
-          this.ngOnDestroy();
-          this.ngOnInit();
+          this.topicPanePageChangeEvent(undefined);
+          this.topicVariablesPageChangeEvent(undefined);
+          this.pageChangeEventForRecommendationLeaksAndUnique(undefined);
+          this.loadCustomerGroupById();
+          this.getTopicDescription();
         }
       ));
   }

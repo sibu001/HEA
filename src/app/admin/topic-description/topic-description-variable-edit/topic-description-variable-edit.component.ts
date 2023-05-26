@@ -4,7 +4,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
@@ -13,6 +13,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppComponent } from 'src/app/app.component';
 import { ThrowStmt } from '@angular/compiler';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-topic-description-variable-edit',
@@ -25,8 +26,7 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
   calculationPeriodList: any[] = TableColumnData.CALCULATION_PERIOD;
   calculationTypeList: any[] = [];
   surveyDescriptionId : any;
-  topicDescriptionData : any;
-  topicDescriptionData2 : any;
+  topicDescriptionData : any = {};
   topicDescription : any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
@@ -59,6 +59,7 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
       this.getSeletedTopicDescriptionVariableFromStore();
       this.loadtopicDescriptionVariableData();
     }
+    AppUtility.scrollTop();
   }
 
   loadCalculationTypeList(): any {
@@ -67,11 +68,10 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
 
   getCalculationTypeListFromStore() : any{
     this.subscriptions.add(this.systemService.getCalculationTypeList().pipe(skipWhile((item: any) => !item))
+    .pipe(filter(data => data),take(1))
     .subscribe((calculationTypeList: any) => {
       this.calculationTypeList = calculationTypeList.data;
-      if(this.id === undefined)
-      this.variableForm.patchValue({calculationType : this.calculationTypeList[1].lookupValue});
-      console.log(this.calculationTypeList);
+      if(!this.id) this.variableForm.patchValue({calculationType : this.calculationTypeList[0].lookupValue});
     }));
   }
 
@@ -90,8 +90,8 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
   getCalculationValueFromStore(){
     this.subscriptions.add(
       this.topicService.getLookUpForVariablePeriod()
-      .pipe(skipWhile((item: any) => !item)
-      ).subscribe(
+      .pipe(filter((item: any) => item),take(1))
+      .subscribe(
         (response: any) =>{
             this.calculationPeriodList = response;
             if(this.id === undefined)
@@ -101,22 +101,18 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
   }
 
   loadLookUpCalculationPeriod(){  
-    // this.topicService.loadLookUpCalculationPeriod(AppConstant.lookUpCalculationPeriod);
     this.topicService.loadLookUpValuesByType(AppConstant.lookUpCalculationPeriod);
   }
 
   getSeletedTopicDescriptionVariableFromStore(){
     this.subscriptions.add(
       this.topicService.getSeletedTopicDescriptionVariable()
-      .pipe(skipWhile((item: any) => !item))
+      .pipe(filter((item: any) => item && item.id == this.id))
       .subscribe(
         (response) =>{
           this.topicDescriptionData = {...response};
-          this.topicDescriptionData2 = {...this.topicDescriptionData};
-          this.topicDescriptionData.updatedDate = this.datePipe.transform(this.topicDescriptionData.updatedDate,'mm/dd/yyyy HH:MM:ss')
-          this.topicDescriptionData.createdDate = this.datePipe.transform(this.topicDescriptionData.createdDate,'mm/dd/yyyy HH:MM:ss')
-
           this.setForm(response);
+          AppUtility.scrollTop();
         }
         ));
   }
@@ -135,59 +131,59 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
 
   save(): any {
 
-    const body = Object.assign(this.topicDescriptionData ? this.topicDescriptionData : {},this.variableForm.value);
+    if(!AppUtility.validateAndHighlightReactiveFrom(this.variableForm)) return;
+
+    const body = Object.assign(this.topicDescriptionData,this.variableForm.value);
+
+    AppUtility.removeErrorFieldMessagesFromForm();
+
+    if(this.id){
+      this.subscriptions.add(
+        this.topicService.updateTopicDescriptionVariable(this.surveyDescriptionId,this.id,body)
+        .pipe(take(1)).subscribe(
+          (resposne) =>{}
+          ,AppUtility.errorFieldHighlighterCallBack));
+        
+      return;
+    }
+
     body.createdDate = undefined;
     body.updatedDate = undefined;
 
     this.subscriptions.add(
-      this.loginService
-      .performPostWithParam(body,AppConstant.topicDescription + '/' +this.surveyDescriptionId + '/' + AppConstant.topicDescritptionVariable ,{})
-      .subscribe(
-        next => {
-          this.id = next.id;
-            this.router.navigate([], { 
-              relativeTo: this.activateRoute,
-              queryParams: {id : this.id},
-              queryParamsHandling : 'merge'
-            })
-          this.ngOnInit();
-        } ,error =>{
-            this.utilityService.showErrorMessage(error.message);
-        }
-      )
-    )
+      this.topicService.saveTopicDescriptionVariable(this.surveyDescriptionId,body)
+      .pipe(take(1))
+      .subscribe((response : any) =>{
+        this.id = response.topicManagement.topicDescriptionVariable.id;
+        AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+        this.getSeletedTopicDescriptionVariableFromStore();
+      },AppUtility.errorFieldHighlighterCallBack)
+    );
   }  
   delete(): any {
-    document.getElementById('loader').classList.add('loading');
+
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
     this.subscriptions.add(
-      this.loginService.performDelete(AppConstant.topicDescription + '/' + this.id + '/' + AppConstant.topicDescritptionVariable + '/' + this.id)
-      .subscribe(
-        next =>{
-          document.getElementById('loader').classList.remove('loading');
-          this.back();
-        }, error =>{ 
-          document.getElementById('loader').classList.remove('loading');
-          console.error(error)}
-      ) 
-    )
+      this.topicService.deleteTopicDescritpionVariable(this.surveyDescriptionId,this.id)
+      .pipe(take(1))
+      .subscribe((response) =>{
+        this.back();
+    }));
+
   }
 
   recalculate() {
-    document.getElementById('loader').classList.add('loading')
     this.subscriptions.add(
       this.loginService.performPost({},AppConstant.topicDescription +  '/' + this.surveyDescriptionId + '/' + AppConstant.topicDescritptionVariable + '/' + this.id + '/recalculate')
       .subscribe(
         (response) =>{
-          document.getElementById('loader').classList.remove('loading')
-           console.log(response);
            if(response.errorMessage){
             this.utilityService.showErrorMessage(response.errorMessage);
            }else{
             this.router.navigate(['/admin/topicDescription/topicDescriptionVariableEdit'], { queryParams: { id: this.id , topicDescriptionId : this.surveyDescriptionId , topicDescription : this.topicDescription } });
            }
-        }, error => { 
-          document.getElementById('loader').classList.remove('loading')
-          console.error(error)}
+        }, error => { console.error(error); }
       ) 
     )
   }
@@ -196,6 +192,10 @@ export class TopicDescriptionVariableEditComponent implements OnInit, OnDestroy 
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+
+  highlightErrorField(formControlName : string) : boolean{
+    return this.f[formControlName].invalid && (this.f[formControlName].dirty || this.f[formControlName].touched);
   }
 
 }

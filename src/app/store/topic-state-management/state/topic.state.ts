@@ -74,6 +74,9 @@ import {
     GetPaneChartParametersListByPaneChartIdAndSeriesIdAction,
     SaveNewPaneReportParameterAction,
     DeletePaneReportParameterAction,
+    SaveTopicDescriptionVariableAction,
+    UpdateTopicDescriptionVariableAction,
+    DeleteTopicDescriptionVariableAction,
 } from './topic.action';
 import { TopicManagementModel } from './topic.model';
 
@@ -438,9 +441,9 @@ export class TopicManagementState {
     getTopicDescriptionById(ctx: StateContext<TopicManagementModel>, action: GetTopicDescriptionByIdAction): Actions {
 
         const topicDescription =  ctx.getState().topicDescription;
-        if(topicDescription && topicDescription.id == action.id) {
-            return ;
-        }
+        const force = action.force || (!topicDescription || topicDescription.id != action.id);
+
+        if(!force) return;
 
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.topicDescription + '/' + action.id)
@@ -492,6 +495,19 @@ export class TopicManagementState {
 
     @Action(LoadSelectedTopicDescriptionVariableAction)
     loadSelectedTopicDescriptionVariableAction(ctx : StateContext<TopicManagementModel>, action: LoadSelectedTopicDescriptionVariableAction) : Actions {
+        
+        const topicDescriptionVariable = ctx.getState().topicDescriptionVariable;
+        if(topicDescriptionVariable && topicDescriptionVariable.id == action.id){
+            return;
+        }
+
+        const topicVariables = ctx.getState().topicVariables;
+        if(topicVariables){
+            const variable = topicVariables.find(data => data.id == action.id);
+            ctx.patchState({topicDescriptionVariable : variable});
+            return;
+        }
+        
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.topicDescription + '/' + action.surevyDescriptionId + '/' + AppConstant.topicDescritptionVariable + '/' + action.id)
         .pipe(
@@ -507,6 +523,62 @@ export class TopicManagementState {
                 }
             )
         )
+    }
+
+    @Action(SaveTopicDescriptionVariableAction)
+    saveTopicDescriptionVariable(ctx : StateContext<TopicManagementModel>, action : SaveTopicDescriptionVariableAction) : Actions {
+        return this.loginService.performPost(action.body,AppUtility.endPointGenerator(
+            [AppConstant.topicDescription,action.surevyDescriptionId,AppConstant.topicDescritptionVariable]))
+            .pipe(tap(
+                (response) =>{
+
+                    let topicVariables = ctx.getState().topicVariables;
+                    if(topicVariables){
+                        topicVariables.push(response)
+                        ctx.patchState({topicVariables : [...topicVariables]});
+                    }
+                    
+
+                    ctx.patchState({topicDescriptionVariable : response})
+                },this.errorCallbak
+            ))
+    }
+
+    @Action(UpdateTopicDescriptionVariableAction)
+    updateTopicDescriptionVariable(ctx : StateContext<TopicManagementModel>, action : UpdateTopicDescriptionVariableAction) : Actions {
+        return this.loginService.performPut(action.body,AppUtility.endPointGenerator(
+            [AppConstant.topicDescription,action.surevyDescriptionId,AppConstant.topicDescritptionVariable,action.id]))
+            .pipe(tap(
+                (response) =>{
+
+                    let topicVariables = ctx.getState().topicVariables;
+                    if(topicVariables){
+                        topicVariables = topicVariables.map(data => {
+                            if(data.id == action.id) return response;
+                            return data;
+                        });
+                        ctx.patchState({topicVariables : topicVariables});
+                    }
+
+                    ctx.patchState({topicDescriptionVariable : response})
+                },this.errorCallbak
+            ))
+    }
+    @Action(DeleteTopicDescriptionVariableAction)
+    deleteTopicDescriptionVariable(ctx : StateContext<TopicManagementModel>, action : DeleteTopicDescriptionVariableAction) : Actions {
+        return this.loginService.performDelete(AppUtility.endPointGenerator(
+            [AppConstant.topicDescription,action.surevyDescriptionId,AppConstant.topicDescritptionVariable,action.id]))
+            .pipe(tap(
+                (response) =>{
+                    let topicVariables = ctx.getState().topicVariables;
+                    if(topicVariables){
+                        topicVariables = topicVariables.filter(data => data.id != action.id);
+                        ctx.patchState({topicVariables : topicVariables});
+                    }
+
+                    ctx.patchState({topicDescriptionVariable : undefined})
+                },this.errorCallbak
+            ))
     }
 
     @Action(LoadTopicVariablesAction)
@@ -1729,9 +1801,14 @@ export class TopicManagementState {
         result = this.loginService.performPost(action.body,AppConstant.topicDescription + '/' + action.surveyDescriptionId + '/' + AppConstant.pane)
         .pipe(
             tap((response) =>{
-                ctx.patchState({
-                    topicPane : response
-                })
+
+                const allPossiblePaneInTopicDescription = ctx.getState().allPossiblePaneInTopicDescription;
+                if(allPossiblePaneInTopicDescription){
+                    allPossiblePaneInTopicDescription.push(response);
+                    ctx.patchState({allPossiblePaneInTopicDescription : [...allPossiblePaneInTopicDescription]});
+                }
+
+                ctx.patchState({ topicPane : response }); 
             },this.errorCallbak)
         )
         return result;

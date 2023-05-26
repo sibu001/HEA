@@ -176,8 +176,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     this.disableLastButtonF();
     this.disableNextButtonF();
 
-    console.log(this.paginator);
-
     // const wrapper = document.getElementsByClassName('mat-button-wrapper');
     // for (let i = 0; i < wrapper.length; i += 4) {
     //   wrapper[i].innerHTML = 'First';
