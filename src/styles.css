@@ -1652,7 +1652,7 @@ app-gas-list .mat-column-year ,app-gas-list .mat-column-month ,app-gas-list .mat
 
 app-gas-list .mat-column-billingPeriod , app-gas-charge .mat-column-billingPeriod,
 app-electricity-usage-list .mat-column-billingPeriod, app-electricity-charge-list .mat-column-billingPeriod,
-app-factor-list .mat-column-factorName
+app-factor-list .mat-column-factorName,app-topic-description-edit .mat-column-calculationPeriodActual
 {
   word-wrap: break-word !important;
   white-space: unset !important;
@@ -1732,8 +1732,7 @@ app-topic-description-edit .mat-column-lookupType
 app-water .mat-column-month,
 app-water-charge .mat-column-month,
 app-electricity-smart-meter-list .mat-column-day ,
-app-electricity-smart-meter-list .mat-column-value,
-app-topic-description-edit .mat-column-calculationPeriodActual
+app-electricity-smart-meter-list .mat-column-value
 {
   word-wrap: break-word !important;
   white-space: unset !important;
@@ -2071,6 +2070,10 @@ customereventlist .ui-calendar .ui-calendar-button,
 app-event-history-list .ui-calendar .ui-calendar-button,
 .ui-calendar-button{
   height: 30px !important
+}
+
+app-survey .ui-calendar-button{
+  height: 40px !important 
 }
 
 #trendingProfileChartTrends + div {
@@ -2709,3 +2712,13 @@ mat-cell > div{
 }
 
 /* end */
+
+.notification-dialog .mat-dialog-container{
+  box-shadow: none !important; 
+  position: relative;
+  top: 10px !important;
+  z-index: 999999;
+  background-color: #e8c772 !important;
+  color: #ffff !important;
+  border-radius: 10px !important;
+}
