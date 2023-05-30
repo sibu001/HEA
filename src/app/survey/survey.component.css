@@ -2436,3 +2436,7 @@ td .form-group{
 	font-weight: 500;
   margin-bottom: 10px;
 }
+
+#paneBlockTable td,th{
+  text-align: center;
+}

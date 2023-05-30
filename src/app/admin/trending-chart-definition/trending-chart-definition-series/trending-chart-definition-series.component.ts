@@ -164,8 +164,8 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   getPaneChartParameters(){
     this.topicService.loadPaneChartParametersList(this.paneId,this.paneChartId,this.id);
     this.subscriptions.add(
-      this.topicService.getPaneChartParametersList()
-      .pipe(filter(data => data && data[0] && data[0].chartParameter.chartSeriesId == this.id))
+      this.topicService.getPaneChartParametersList()  
+      .pipe(filter(data => data != undefined && (data.length == 0 || data[0] && data[0].chartParameter.chartSeriesId == this.id)))
       .subscribe(
         (response) =>{
           const paneChartParameterList = response.map(data =>{

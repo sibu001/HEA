@@ -62,8 +62,6 @@ export class TopicListComponent implements OnInit, OnDestroy {
     });
   
     this.users = this.loginService.getUser();
-    this.checkDisableCacheValue();
-    this.checkTopicListFilter();
   }
 
   ngOnInit() {
@@ -79,7 +77,6 @@ export class TopicListComponent implements OnInit, OnDestroy {
     this.loginService.performGet(AppConstant.topic + '/disabledFilter')
       .toPromise()
       .then((data) => {
-        console.log(data);
         if (data.data == "YES")
           this.filter = false;
         else
@@ -95,7 +92,6 @@ export class TopicListComponent implements OnInit, OnDestroy {
     this.loginService.performGet(AppConstant.topic + '/disabledValueCache')
       .toPromise().
       then((data) => {
-        console.log(data);
         if (data.data == "YES")
           this.cache = false;
         else
@@ -154,7 +150,7 @@ export class TopicListComponent implements OnInit, OnDestroy {
   }
 
   private loadCustomerPlaces() {
-    this.systemUtilityService.loadPlaceList(true, '');
+    this.systemUtilityService.loadPlaceList(false, '');
     this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
       .subscribe((placeList: any) => {
         this.customerPlaces = placeList;
@@ -179,19 +175,16 @@ export class TopicListComponent implements OnInit, OnDestroy {
         data.label = data.surveyDescription.label;
         return data;
       });
-      this.tableHeading.nativeElement.scrollIntoView({behavior: 'smooth', inline : 'start'});
+      AppUtility.scrollToTableTop(this.tableHeading);
     }));
   }  
 
   search(event: any, isSearch: boolean): void {
 
-    if(!event){
-      event = this.adminFilter.topicFilter.page;
-      event.pageIndex = this.pageIndex;
-    }else{
-      const sort = this.adminFilter.topicFilter.page.sort;
+    if(event){
+      // const sort = this.adminFilter.topicFilter.page.sort;
       this.adminFilter.topicFilter.page = event;
-      this.adminFilter.topicFilter.page.sort = sort;
+      // this.adminFilter.topicFilter.page.sort = sort;
       this.pageIndex = event.pageIndex;
     }
 
@@ -217,7 +210,7 @@ export class TopicListComponent implements OnInit, OnDestroy {
         .set('sortOrders[0].propertyName', (event && event.sort.active !== undefined ? event.sort.active : ''))
         .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       }
-    this.findTopic(true, params);
+    this.findTopic(isSearch, params);
   }
 
   showSurveys(event: any) {

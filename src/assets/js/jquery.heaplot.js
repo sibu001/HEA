@@ -99,7 +99,7 @@ function findTickIntervalBase(max, min, numTicks) {
 		{
 			undefined: '#E3E4E5',
 			baseLoads: '#4B9C96',
-			recurringLoads: '#FFE178',
+			recurringLoads: '#E2C566',
 			variableLoads: '#0873A2',
 			summerAC: '#2CBFD5',
 			winterSpaceHeating: '#F57D7D'

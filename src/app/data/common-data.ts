@@ -357,9 +357,9 @@ export class TableColumnData {
         { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true  },
         { key: 'user', isEdit: true, displayName: 'User'  },
         { key: 'group', isEdit: true, displayName: 'Group'  },
-        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Start Date', isDate: true , isSurvey :true },
-        { key: 'updatedDate', sort: 'updatedDate', isEdit: true, displayName: 'Modified Date' , isDate: true  , isSurvey :true},
-        { key: 'finishedDate', sort: 'finishedDate', isEdit: true, displayName: 'Completed Date', isDate: true , isSurvey :true},
+        { key: 'createdDate', sort: 'createdDate', isEdit: true, displayName: 'Start Date', isDate: true , dataFormat : 'MM/dd/yyyy hh:mm:ss' , isSurvey :true },
+        { key: 'updatedDate', sort: 'updatedDate', isEdit: true, displayName: 'Modified Date' , isDate: true, dataFormat : 'MM/dd/yyyy hh:mm:ss' , isSurvey :true},
+        { key: 'finishedDate', sort: 'finishedDate', isEdit: true, displayName: 'Completed Date', isDate: true , dataFormat : 'MM/dd/yyyy hh:mm:ss' , isSurvey :true},
     ];
 
     static readonly ADMIN_REPORT_KEYS: Array<TABLECOLUMN> = [

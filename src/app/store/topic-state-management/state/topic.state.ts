@@ -889,6 +889,12 @@ export class TopicManagementState {
 
     @Action(LoadDataFieldById)
     loadDataFiledById(ctx: StateContext<TopicManagementModel>, action: LoadDataFieldById) : Actions{
+        
+        const dataField = ctx.getState().dataField;
+        if(dataField && dataField.id == action.id){
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.pane + '/' + action.paneId + '/' + AppConstant.dataField +'/' + action.id)
             .pipe(
@@ -1052,7 +1058,7 @@ export class TopicManagementState {
 
         if(action.getAll){
             const allPossiblePaneInTopicDescription = ctx.getState().allPossiblePaneInTopicDescription;
-            if(allPossiblePaneInTopicDescription) return;
+            if(allPossiblePaneInTopicDescription && allPossiblePaneInTopicDescription[0].surveyDescriptionId == action.id) return;
         }
             
         document.getElementById('loader').classList.add('loading');
@@ -1733,10 +1739,7 @@ export class TopicManagementState {
                     // }
                     // ctx.patchState({ paneChartSeriesDefination : paneChartSeriesDefination});
                     document.getElementById('loader').classList.remove('loading');
-                }, (error : any) =>{
-                    document.getElementById('loader').classList.remove('loading');
-                    this.utilityService.showErrorMessage(error.message);
-                }            
+                }, this.errorCallbak      
             )
         )
         

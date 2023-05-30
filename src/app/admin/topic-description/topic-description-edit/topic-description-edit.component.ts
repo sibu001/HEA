@@ -270,7 +270,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     this.topicService.loadPaneListByTopicDescriptionId(this.id,new HttpParams(),true);
     this.subscriptions.add(
       this.topicService.getAllPanesByTopicDescriptionId()
-      .pipe(filter(data => data),take(1))
+      .pipe(filter(data => data && data[0].surveyDescriptionId == this.id),take(1))
       .subscribe(data =>{
         this.allTopicPane = data;
       })
@@ -399,14 +399,14 @@ getRecommendationsLeakAndUnique(){
         this.leaksRecommendationTakeBackTypeSubject.next("getRecommendationsLeakAndUnique");
         
         if(data.length == this.pageSize){
-          this.recommendtaionLeakAndUniqueData.dataSource = data;
+          this.recommendtaionLeakAndUniqueData.dataSource = [...data];
           this.disableNextButtonRecommendationUnique = false;
           this.leaksRecommendationTakeBackTypeSubject.next("getRecommendationsLeakAndUnique");
   
         }else{
           this.disableNextButtonRecommendationUnique = true;  
           if(data.length > 0){
-            this.recommendtaionLeakAndUniqueData.dataSource = data;
+            this.recommendtaionLeakAndUniqueData.dataSource = [...data];
             this.leaksRecommendationTakeBackTypeSubject.next("getRecommendationsLeakAndUnique");
 
           }else{
@@ -634,7 +634,7 @@ subscriptionSuggestionListForFilterForTopicVariable(){
       .pipe(take(1))
       .subscribe(
         (response: any) => {
-          SubscriptionUtil.unsubscribe(this.subscriptions);
+          // SubscriptionUtil.unsubscribe(this.subscriptions);
           this.id = response.topicManagement.topicDescription.id ;
           this.router.navigate([], { 
             relativeTo: this.activateRoute,
@@ -646,6 +646,7 @@ subscriptionSuggestionListForFilterForTopicVariable(){
           this.topicVariablesPageChangeEvent(undefined);
           this.pageChangeEventForRecommendationLeaksAndUnique(undefined);
           this.loadCustomerGroupById();
+          this.getAllTopicPanes();
           this.getTopicDescription();
         }
       ));
@@ -720,7 +721,9 @@ subscriptionSuggestionListForFilterForTopicVariable(){
     for(let item of this.lookUpValues){
       for(let data of this.topicVariableDataList){
         if(data.calculationPeriod == item.lookupValue){
-          data.calculationPeriodActual = item.valueName;
+          if(data.calculationPeriod == 'E' || data.calculationPeriod == 'G' || data.calculationPeriod == 'V') 
+              data.calculationPeriodActual = `???variablePeriod.${data.calculationPeriod}???`
+          else data.calculationPeriodActual = item.valueName;
         }
       }}  
 

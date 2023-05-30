@@ -39,6 +39,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   globalK = 0;
   window = window;
   paneblockRowErrorNotation = [];
+  public allowSurveySwitchFromArrowKeys : boolean = true;
 
   subscriptons : Subscription = new Subscription();
   private slidermap = new Map();
@@ -732,6 +733,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.loginService.setUser(this.users);
 
           if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
+            this.users.isDashboard = true;
             this.gotToTopicHistory();
             return;
           }
@@ -1159,6 +1161,12 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
+    // added so that survey should get swithced when dialog box is opened.
+    // allow survey to switch over keys only when the flag 'allowSurveySwitchFromArrowKeys' is set to true 
+    if(!this.allowSurveySwitchFromArrowKeys){
+      return;
+    }
+
     if (event.code === 'ArrowRight') {
       this.next('next', this.users.paneNumber);
     }
@@ -1214,6 +1222,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   showDilalogBox(event : any){
+    this.allowSurveySwitchFromArrowKeys = false;
     const dialogRef = this.matDialog.open(SurveyDialogboxComponent, {
       width: window.outerWidth > 425 ? '70vw' : '85vw',
       height: window.outerWidth > 425 ? '65vh' :  ( event.surveyAnswers.length < 4 ? '55vh' : '70vh'),
@@ -1221,6 +1230,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       disableClose: false
     });
     dialogRef.afterClosed().subscribe(result => {
+      this.allowSurveySwitchFromArrowKeys = true;
       if (result) {
           if(result.action == 'save'){
               this.users.currentPaneNumber.currentPaneBlocks[0].surveyAnswerBlocks[result.indexValue] = result;

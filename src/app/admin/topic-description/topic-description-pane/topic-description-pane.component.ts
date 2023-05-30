@@ -27,7 +27,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
 
   id: any;
   public paneForm: FormGroup;
-  public paneData;
+  public paneData : any = {};
   public addRequest : boolean = false;
   dataBlockKeys = TableColumnData.PANE_DATA_BLOCK_KEY;
   dataFieldKeys = TableColumnData.PANE_DATA_FIELD_KEY;
@@ -176,7 +176,7 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       return ; // don't save incase form is invalid form.
     }
     
-    const body = Object.assign(this.paneData ? this.paneData : {}, this.paneForm.value);
+    const body = Object.assign(this.paneData, this.paneForm.value);
 
     AppUtility.removeErrorFieldMessagesFromForm();
 
@@ -312,8 +312,8 @@ export class TopicDescriptionPaneComponent implements OnInit, OnDestroy {
       .subscribe(
         next => {
           this.addRequest = false;
-          this.paneData = next;
-          this.setForm(next);
+          this.paneData = {...next};
+          this.setForm(this.paneData);
           AppUtility.scrollTop();
         }, error => {
           console.error(error)

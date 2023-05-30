@@ -257,6 +257,7 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   openInfo(message: string): void {
     this.dialogRef = this.dialog.open(ShowInfoComponent, {
       data: { message: message },
+      panelClass : 'notification-dialog',
       disableClose: true,
       backdropClass: 'background-blur',
       position: {

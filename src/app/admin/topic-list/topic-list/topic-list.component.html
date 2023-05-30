@@ -47,7 +47,7 @@
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary" (click)="search(undefined,false)">Show</button>
+              <button type="submit" class="btn btn-primary" (click)="search(undefined,true)">Show</button>
             </div>
           </div>
 
@@ -57,12 +57,12 @@
               <span class="messageName">Topic list (Number of Records =
                 {{totalElement}})</span>
             </p>
-            <app-table  [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false"
+            <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false"
              [data]="dataSource" [pageSize]="pageSize" [addSerialNumber]="true"
-              [totalElement]="topicData.totalElements" (changePageEvent)="search($event,false)" (goToEditEvent)="showSurveys($event)">
+              [totalElement]="totalElement" (changePageEvent)="search($event,true)" (goToEditEvent)="showSurveys($event)">
             </app-table>
           </div>
-          <div class="row rowPadding">
+          <div class="row" style="margin-top: 100px;">
             <div class="col-sm-9 col-md-9 col-lg-9 col-xs-6 display-button-table">
               <input type="button" class="btn btn-primary" (click)="enableDisableFilter()" [value]="!filter?'Enable Filter':'Disable Filter'"
                 >
