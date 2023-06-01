@@ -74,6 +74,11 @@ export class AdministrativeManagementState {
     }
 
     @Selector()
+    static getAdministrativeReportCount(state : AdministrativeManagementModel): number {
+        return state.administrativeReportCount;
+    }
+
+    @Selector()
     static getAdministrativeReportDataSource(state: AdministrativeManagementModel): any {
         return state.administrativeReportDataSource;
     }
@@ -154,6 +159,10 @@ export class AdministrativeManagementState {
     @Action(GetAdministrativeReportCountAction)
     getAdministrativeReportCount(ctx: StateContext<AdministrativeManagementModel>, action: GetAdministrativeReportCountAction): Actions {
         document.getElementById('loader').classList.add('loading');
+
+        const force: boolean = action.force || AdministrativeManagementState.getAdministrativeReportList(ctx.getState()) === undefined;
+        if(!force) return ;
+
         return this.loginService.performGetWithParams(AppConstant.administrativeReport + '/count', action.filter)
             .pipe(
                 tap((response: any) => {
@@ -171,6 +180,20 @@ export class AdministrativeManagementState {
 
     @Action(GetAdministrativeReportByIdAction)
     getAdministrativeReportById(ctx: StateContext<AdministrativeManagementModel>, action: GetAdministrativeReportByIdAction): Actions {
+        
+
+        const administrativeReport = ctx.getState().administrativeReport;
+        if(administrativeReport && administrativeReport.id == action.id){
+            return null;
+        }
+
+        const administrativeReportList = ctx.getState().administrativeReportList;
+        if(administrativeReportList){
+            const adminReport = administrativeReportList.find(data => data.id == action.id);
+            ctx.patchState({ administrativeReport : adminReport});
+            return null;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.administrativeReport + '/' + action.id)
             .pipe(
@@ -192,6 +215,13 @@ export class AdministrativeManagementState {
         return this.loginService.performDelete(AppConstant.administrativeReport + '/' + action.id)
             .pipe(
                 tap((response: any) => {
+
+                    let administrativeReportList = ctx.getState().administrativeReportList;
+                    if(administrativeReportList){
+                        administrativeReportList  = administrativeReportList.filter(data => data.id != action.id);
+                        ctx.patchState({administrativeReportList : [...administrativeReportList]});
+                    }
+                    
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
@@ -208,6 +238,13 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+
+                    const administrativeReportList = ctx.getState().administrativeReportList;
+                    if(administrativeReportList){
+                        administrativeReportList.push(response);
+                        ctx.patchState({ administrativeReportList: [...administrativeReportList]});
+                    }
+
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         administrativeReport: response,
@@ -226,6 +263,18 @@ export class AdministrativeManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+
+                    let administrativeReportList = ctx.getState().administrativeReportList;
+                    if(administrativeReportList){
+                        administrativeReportList = administrativeReportList.map( data =>{
+                            if(data.id == action.id){
+                                return response;
+                            }
+                            return data;
+                        });
+                        ctx.patchState({administrativeReportList : administrativeReportList});
+                    }
+
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         administrativeReport: response,
@@ -266,6 +315,7 @@ export class AdministrativeManagementState {
                     ctx.patchState({
                         administrativeReportParams: response,
                     });
+
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -279,6 +329,13 @@ export class AdministrativeManagementState {
         return this.loginService.performDelete(AppConstant.administrativeReport + '/' + action.reportId + '/reportParams/' + action.id)
             .pipe(
                 tap((response: any) => {
+
+                    const administrativeReport = ctx.getState().administrativeReport;
+                    if(administrativeReport){
+                        administrativeReport.reportParams = administrativeReport.reportParams.filter(data => data.id != action.id);
+                        ctx.patchState({administrativeReport : {...administrativeReport}});
+                    }
+
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
@@ -296,6 +353,13 @@ export class AdministrativeManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // // this.utilityService.showSuccessMessage('Save Successfully');
+
+                    const administrativeReport = ctx.getState().administrativeReport;
+                    if(administrativeReport){
+                        administrativeReport.reportParams.push(response);
+                        ctx.patchState({ administrativeReport : {...administrativeReport}});
+                    }
+
                     ctx.patchState({
                         administrativeReportParams: response,
                     });

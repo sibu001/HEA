@@ -88,7 +88,7 @@
               <tbody class="text-center-webkit">
                 <tr>
                   <td>  
-                    <div class ="analysis-table" id="surveyPageText" *ngIf="users.currentPaneNumber.currentPane.htmPageText!=null&&users.currentPaneNumber.currentPane.htmPageText.length>0">
+                    <div class ="analysis-table p-lf-30px" id="surveyPageText" *ngIf="users.currentPaneNumber.currentPane.htmPageText!=null&&users.currentPaneNumber.currentPane.htmPageText.length>0">
                     <div [innerHTML]="users.currentPaneNumber.currentPane.htmPageText | safeHtml" class="accurate accurate2 top"
                     [ngClass]="{ 'disable-contractor-report-link' : users.currentPaneNumber.currentPane.paneCode == 'be_ContractorReportPane'}"
                     ></div>

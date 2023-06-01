@@ -71,6 +71,8 @@ export class TopicListComponent implements OnInit, OnDestroy {
     this.setUpForm(this.adminFilter.topicFilter.formValue);
     this.search(this.adminFilter.topicFilter.page, false);
     this.getDataFromStore();
+    this.checkDisableCacheValue();
+    this.checkTopicListFilter();
   }
 
   checkTopicListFilter() {
@@ -166,14 +168,15 @@ export class TopicListComponent implements OnInit, OnDestroy {
   getDataFromStore(){
     this.subscriptions.add(this.administrativeService.getTopicList().pipe(skipWhile((item: any) => !item))
     .subscribe((topicList: any) => {
-      this.topicData.content = topicList.list;
+      this.topicData.content = [...topicList.list];
       this.topicData.totalElements = topicList.totalSize;
       this.totalElement = topicList.total = topicList.totalSize;
       this.dataSource = this.topicData.content.map((data,index) =>{
-        data.user = data.user.name;
-        data.group = data.customer.customerGroup.groupName;
-        data.label = data.surveyDescription.label;
-        return data;
+        return {...data, 
+                user : data.user.name, 
+                group : data.customer.customerGroup.groupName, 
+                label : data.surveyDescription.label 
+              };
       });
       AppUtility.scrollToTableTop(this.tableHeading);
     }));
@@ -186,6 +189,8 @@ export class TopicListComponent implements OnInit, OnDestroy {
       this.adminFilter.topicFilter.page = event;
       // this.adminFilter.topicFilter.page.sort = sort;
       this.pageIndex = event.pageIndex;
+    }else{
+      this.pageIndex = 0;
     }
 
     let params = new HttpParams()

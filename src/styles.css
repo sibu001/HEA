@@ -1767,10 +1767,12 @@ app-topic-description-edit .mat-column-groupCode {
 }
 
 
-app-electricity-daily-smart-meter-list .mat-column-month{
+app-electricity-daily-smart-meter-list .mat-column-month,
+app-administrative-reports-list .mat-column-reportName,
+app-administrative-reports-list .mat-column-reportLabel{
   word-wrap: break-word !important;
   white-space: unset !important;
-  flex: 0 0 22% !important;
+  flex: 0 0 25% !important;
   width: 8% !important;
   overflow-wrap: break-word;
   word-wrap: break-word;
@@ -2201,7 +2203,8 @@ word-break: break-word;
 hyphens: auto;
 }
 
-app-customer-view .mat-column-active{
+app-customer-view .mat-column-active,
+app-administrative-reports-list .mat-column-callReport{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 6% !important;
@@ -2707,7 +2710,7 @@ mat-cell > div{
   display: none;
 }
 
-.mat-paginator-navigation-previous::after{
+.mat-paginator-navigation-last::after{
   content: 'Last'
 }
 

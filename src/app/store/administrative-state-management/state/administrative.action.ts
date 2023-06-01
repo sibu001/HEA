@@ -39,7 +39,7 @@ export class GetAdministrativeReportListAction {
 
 export class GetAdministrativeReportCountAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_ADMINISTRATIVE_REPORT_LIST_COUNT;
-    constructor(readonly filter: any) {
+    constructor(readonly force : boolean , readonly filter: any) {
     }
 }
 

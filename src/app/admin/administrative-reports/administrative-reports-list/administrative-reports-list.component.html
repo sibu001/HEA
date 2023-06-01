@@ -6,32 +6,30 @@
           Reports
         </p>
         <form [formGroup]='administrativeForm'>
-          <div class="row rowPadding">
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+          <div class="row rowPadding borderBottom">
+
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <span class="filterLabel">Report Name:</span>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <input type="text" class="form-control"
-                formControlName='reportName' id='reportName'>
+              formControlName='reportName' id='reportName'>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <span class="filterLabel">Report Label:</span>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <input type="text" class="form-control"
-                formControlName="reportLabel" id="reportLabel">
+              formControlName="reportLabel" id="reportLabel">
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               <span class="filterLabel">Report Type:</span>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <select id="reportType" class="form-control form-control-sm"
-                formControlName="reportType">
-                <option value="" selected="selected"></option>
-                <option *ngFor='let report of reportTypeList'
-                  [value]="report.lookupValue">{{report.valueName}}</option>
-              </select>
+              formControlName="reportType">
+              <option value="" selected="selected"></option>
+              <option *ngFor='let report of reportTypeList'
+                [value]="report.lookupValue">{{report.valueName}}</option>
+            </select>
             </div>
+
           </div>
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
@@ -39,22 +37,20 @@
                 (click)="search(undefined, true)">Show</button>
             </div>
           </div>
-
-          <div class="paddingTop">
-            <p class="messages">
+        </form>
+          <div class="paddingTop" >
+            <p class="messages" #tableScrollPoint>
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Report list (Number of Records =
                 {{totalElement| number:'1.0':'en-US'}})</span></p>
             <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
-              [data]="dataSource"
-              [pageIndex]="pageIndex"
-              [totalElement]="reportData.totalElements"
-              (changePageEvent)="search($event,false)"
+              [data]="dataSource" [pageSize]="pageSize" [pageIndex]="pageIndex"
+              [totalElement]="reportData.totalElements"  [addSerialNumber]="true"
+              (changePageEvent)="search($event,true)"
               (addEvent)="addReport()" (goToEditEvent)="goToEditReport($event)"
               (imageEvent)="callReport($event)">
             </app-table>
           </div>
-        </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar></app-sidebar>

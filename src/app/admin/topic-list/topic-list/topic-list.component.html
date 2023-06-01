@@ -58,18 +58,16 @@
                 {{totalElement}})</span>
             </p>
             <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true [isSearch]="false"
-             [data]="dataSource" [pageSize]="pageSize" [addSerialNumber]="true"
+             [data]="dataSource" [pageSize]="pageSize" [addSerialNumber]="true" [pageIndex]="pageIndex"
               [totalElement]="totalElement" (changePageEvent)="search($event,true)" (goToEditEvent)="showSurveys($event)">
             </app-table>
           </div>
           <div class="row" style="margin-top: 100px;">
-            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-6 display-button-table">
-              <input type="button" class="btn btn-primary" (click)="enableDisableFilter()" [value]="!filter?'Enable Filter':'Disable Filter'"
-                >
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-6 display-button-table">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-2"></div>
+            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-10 right-buttons">
+              <input type="button" class="btn btn-primary" (click)="enableDisableFilter()" [value]="!filter?'Enable Filter':'Disable Filter'">
               <input type="button" class="btn btn-primary" style="float: right" 
-                [value]="!cache?'Enable Value Cache':'Disable Value Cache'" (click)="enableDisableCacheValue()">
+              [value]="!cache?'Enable Value Cache':'Disable Value Cache'" (click)="enableDisableCacheValue()">
             </div>
           </div>
         </form>

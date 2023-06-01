@@ -618,6 +618,14 @@ export class TopicManagementState {
         return this.loginService.performPost(action.topicDescription, AppConstant.topicDescription)
             .pipe(
                 tap((response: any) => {
+
+
+                    const topicDescriptionList = ctx.getState().topicDescriptionList;
+                    if(topicDescriptionList != undefined && topicDescriptionList.length < AppConstant.pageSize) {
+                        topicDescriptionList.push(TopicUtilityTransformer.transformTopicDescriptionTableData([response])[0]);
+                        ctx.patchState({ topicDescriptionList : [...topicDescriptionList] });
+                    }
+
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
@@ -973,15 +981,26 @@ export class TopicManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+
+                    let topicDescriptionList = ctx.getState().topicDescriptionList;
+                    if(topicDescriptionList != undefined) {
+                        topicDescriptionList.push(TopicUtilityTransformer.transformTopicDescriptionTableData([response])[0]);
+                        ctx.patchState({ topicDescriptionList : [...topicDescriptionList] });
+
+                        topicDescriptionList = topicDescriptionList.map((data) =>{
+                            if(data.id == response.id)
+                                return TopicUtilityTransformer.transformTopicDescriptionTableData([response])[0];
+                                return data;
+                        })
+                    }
+                    
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     let allPossibleTopicDescription = ctx.getState().allPossibletopicDescriptionList;
                     if(allPossibleTopicDescription){
                         allPossibleTopicDescription = allPossibleTopicDescription.map((data) =>{
-                            
                             if(data.id == response.id){
                                 return response;
                             }
-                            
                             return data;
                         });
                     }

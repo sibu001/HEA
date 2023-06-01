@@ -1,14 +1,16 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -26,10 +28,12 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
     totalElements: 1,
   };
   public pageIndex: any;
+  public pageSize: number = Number(AppConstant.pageSize);
   administrativeForm: FormGroup;
   public force = false;
   public reportTypeList: any;
   public adminFilter: AdminFilter;
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
@@ -49,6 +53,9 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
     this.loadReportType();
     this.setUpForm(this.adminFilter.administrativeFilter.formValue);
     this.search(this.adminFilter.administrativeFilter.page, false);
+
+    this.getAdministrativeReportCount();
+    this.getAdminstrativeReportData();
   }
 
   loadReportType() {
@@ -79,30 +86,49 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
     });
   }
 
-  findAdministrativeReport(force: boolean, filter: any): void {
+  loadAdministrativeReportCount(force: boolean, filter: any): void {
     this.adminFilter.administrativeFilter.formValue = this.administrativeForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.administrativeService.loadAdministrativeReportCount(filter).pipe(skipWhile((item: any) => !item))
-      .subscribe((administrativeReportListCount: any) => {
-        this.reportData.totalElements = administrativeReportListCount.administrativeManagement.administrativeReportCount;
-        this.totalElement = administrativeReportListCount.administrativeManagement.administrativeReportCount;
-        this.administrativeService.loadAdministrativeReportList(force, filter);
-        this.subscriptions.add(this.administrativeService.getAdministrativeReportList().pipe(skipWhile((item: any) => !item))
-          .subscribe((reportList: any) => {
-            this.reportData.content = reportList;
-            this.dataSource = [...this.reportData.content];
-          }));
+      this.administrativeService.loadAdministrativeReportCount(force,filter)
+  }
+
+  getAdministrativeReportCount(){
+    this.subscriptions.add(
+      this.administrativeService.getAdministrativeReportCount()
+      .subscribe((data : number) =>{
+        this.reportData.totalElements = data;
+        this.totalElement = data;
       }));
   }
 
 
+  loadAdminstrativeReportData(force,filter){
+    this.administrativeService.loadAdministrativeReportList(force, filter);
+  }
+
+  getAdminstrativeReportData(){
+    this.subscriptions.add(
+      this.administrativeService.getAdministrativeReportList()
+      .pipe(filter((item: any) => item))
+      .subscribe((reportList: any) => {
+        this.reportData.content = reportList;
+        this.dataSource = [...this.reportData.content];
+        AppUtility.scrollToTableTop(this.tableScrollPoint);
+    }));
+  }
+
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.administrativeFilter.page = event;
-    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-      Number(event.pageIndex) + '' : 0);
+
+    if(event){
+      this.adminFilter.administrativeFilter = event;
+      this.pageIndex = event.pageIndex;
+    }else{
+      this.pageIndex = 0;
+    }
+
     const params = new HttpParams()
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
       .set('useLikeSearch', 'true')
@@ -110,7 +136,9 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
       .set('reportName', (this.administrativeForm.value.reportName !== null ? this.administrativeForm.value.reportName : ''))
       .set('reportLabel', (this.administrativeForm.value.reportLabel !== null ? this.administrativeForm.value.reportLabel : ''))
       .set('reportType', (this.administrativeForm.value.reportType !== null ? this.administrativeForm.value.reportType : ''));
-    this.findAdministrativeReport(true, params);
+    
+    this.loadAdministrativeReportCount(isSearch, params);
+    this.loadAdminstrativeReportData(isSearch,params);
   }
 
   ngOnDestroy(): void {

@@ -92,8 +92,12 @@ export class AdministrativeService {
     return this.store.dispatch(new GetAdministrativeReportListAction(force, filter));
   }
 
-  loadAdministrativeReportCount(filter: any): Observable<AdministrativeManagementState> {
-    return this.store.dispatch(new GetAdministrativeReportCountAction(filter));
+  loadAdministrativeReportCount(force : boolean , filter: any): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetAdministrativeReportCountAction(force, filter));
+  }
+
+  getAdministrativeReportCount() : Observable<number>{
+    return this.store.select(AdministrativeManagementState.getAdministrativeReportCount);
   }
 
   loadAdministrativeReportById(id: number): Observable<AdministrativeManagementState> {

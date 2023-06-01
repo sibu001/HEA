@@ -1105,6 +1105,10 @@ export class SystemManagementState {
 
     @Action(GetReportTypeListAction)
     getAllReportTypeList(ctx: StateContext<SystemManagementModel>, action: GetReportTypeListAction): Actions {
+
+        const reportType = ctx.getState().reportType;
+        if(reportType) return;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.lookupValues + '/REPORT_TYPE')
             .pipe(
