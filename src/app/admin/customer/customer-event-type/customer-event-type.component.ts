@@ -75,7 +75,7 @@ export class CustomerEventTypeComponent implements OnInit {
   }
 
   loadCustomerEventType() {
-    this.systemUtilityService.loadCustomerEventTypeList(true, '');
+    this.systemUtilityService.loadCustomerEventTypeList(true, '',true);
     // .pipe(skipWhile((item: any) => !item))
     //   .subscribe((response: any) => {
     //     this.customerEventTypeList = response.systemUtilityManagement.customerEventTypeList;
@@ -92,7 +92,7 @@ export class CustomerEventTypeComponent implements OnInit {
 
   getCustomerEventType(){
     this.subscriptions.add(
-      this.systemUtilityService.getCustomerEventTypeList()
+      this.systemUtilityService.getAllCustomerEventTypeList()
       .pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.customerEventTypeList = response;

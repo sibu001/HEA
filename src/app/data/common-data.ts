@@ -399,7 +399,7 @@ export class TableColumnData {
     ];
 
     static readonly MAIL_DESC_KEYS: Array<TABLECOLUMN> = [
-        { key: 'serialNumber', displayName: '#' },
+        // { key: 'serialNumber', displayName: '#' },
         { key: 'id', sort: 'id', isEdit: true, displayName: 'ID' },
         { key: 'mailName', sort: 'mailName', isEdit: true, displayName: 'Mail Name', isUnderline: true },
         { key: 'mailPeriod', sort: 'mailPeriod', isEdit: true, displayName: 'Period', isUnderline: true },

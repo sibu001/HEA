@@ -4,6 +4,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { CustomerError } from '../../customer-state-management/state/customer.action';
 import { SystemUtilityTransformer } from '../../system-utility-state-management/transformer/transformer';
 import { AdministrativeReportTransformer } from '../transformer/transformer';
@@ -39,6 +40,7 @@ import {
     UploadEventHistoryFileAction,
     GetCustomerListAction,
     DeleteProspectsListAction,
+    UploadAdministrativeReportFileAction,
 } from './administrative.action';
 import { AdministrativeManagementModel } from './administrative.model';
 
@@ -255,6 +257,20 @@ export class AdministrativeManagementState {
                         this.utilityService.showErrorMessage(error.message);
                     }));
     }
+    
+    @Action(UploadAdministrativeReportFileAction)
+    uploadAdministrativeReportFile(ctx : StateContext<AdministrativeManagementModel>, action : UploadAdministrativeReportFileAction) : Actions{
+        
+        const formData = new FormData();
+        formData.append('fileBody',action.file);
+        return this.loginService.
+        performPostMultiPartFromData(formData,`adminReports/${action.id}/uploadReportBody`)
+        .pipe(tap(
+            (response) =>{
+                    ctx.patchState({ eventHistory : response});
+            }, this.utilityService.errorCallbak
+        ));
+    }
 
     @Action(UpdateAdministrativeReportAction)
     updateAdministrativeReport(ctx: StateContext<AdministrativeManagementModel>, action: UpdateAdministrativeReportAction): Actions {
@@ -283,7 +299,7 @@ export class AdministrativeManagementState {
                     error => {
                         document.getElementById('loader').classList.remove('loading');
                         console.log(error);
-                        // this.utilityService.showErrorMessage(error.error.errorMessage);
+                        this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
 
@@ -648,9 +664,9 @@ export class AdministrativeManagementState {
 
     @Action(GetEventHistoryListAction)
     getAllEventHistoryList(ctx: StateContext<AdministrativeManagementModel>, action: GetEventHistoryListAction): Actions {
-        // const force: boolean = action.force || AdministrativeManagementState.getEventHistoryList(ctx.getState()) === undefined;
-        // let result: Actions;
-        // if (force) {
+        const force: boolean = action.force || AdministrativeManagementState.getEventHistoryList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
             document.getElementById('loader').classList.add('loading');
             return this.loginService.performGetWithParams(AppConstant.eventHistory, action.filter)
                 .pipe(
@@ -666,12 +682,16 @@ export class AdministrativeManagementState {
                             this.utilityService.showErrorMessage(error.message);
                             ctx.dispatch(new CustomerError(error));
                         }));
-        // }
-        // return result;
+        }
+        return result;
     }
 
     @Action(GetEventHistoryCountAction)
     getAllEventHistoryCount(ctx: StateContext<AdministrativeManagementModel>, action: GetEventHistoryCountAction): Actions {
+        
+        const force: boolean = action.force || AdministrativeManagementState.getEventHistoryList(ctx.getState()) === undefined;
+        if(!force) return;        
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGetWithParams(AppConstant.eventHistory + '/count', action.filter)
             .pipe(
@@ -690,9 +710,16 @@ export class AdministrativeManagementState {
 
     @Action(GetEventHistoryByIdAction)
     getEventHistoryById(ctx: StateContext<AdministrativeManagementModel>, action: GetEventHistoryByIdAction): Actions {
+        
         const eventHistory = ctx.getState().eventHistory;
-
         if(eventHistory && eventHistory.customerEventId == action.customerEventId){
+            return;
+        }
+
+        const eventHistoryList = ctx.getState().eventHistoryList;
+        if(eventHistoryList){
+            const evntHistory = eventHistoryList.find((data) => data.id == action.customerEventId);
+            ctx.patchState({eventHistory : evntHistory});
             return;
         }
 

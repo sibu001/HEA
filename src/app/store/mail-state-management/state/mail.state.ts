@@ -4,6 +4,7 @@ import { tap } from 'rxjs/internal/operators/tap';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { CustomerError } from '../../customer-state-management/state/customer.action';
 import { MailTransformer } from '../transformer/transformer';
 import {
@@ -50,6 +51,7 @@ import { MailManagementModel } from './mail.model';
         contextVariableList: undefined,
         contextVariable: undefined,
         mailDescriptionList: undefined,
+        getAllMailDescriptionList : undefined,
         mailDescriptionCount: undefined,
         mailDescriptionDataSourceList: undefined,
         mailDescription: undefined,
@@ -72,6 +74,17 @@ export class MailManagementState {
     static getMailDescriptionList(state: MailManagementModel): any {
         return state.mailDescriptionList;
     }
+
+    @Selector()
+    static getAllMailDescriptionList(state: MailManagementModel): any {
+        return state.getAllMailDescriptionList;
+    }
+
+    @Selector()
+    static getMailDescriptionCount(state: MailManagementModel): any {
+        return state.mailDescriptionCount;
+    }
+
 
     @Selector()
     static getMailDescriptionById(state: MailManagementModel): any {
@@ -120,12 +133,18 @@ export class MailManagementState {
 
     @Selector()
     static getCustomerGroupMailDescriptionId(state: MailManagementModel){
-        return state.mailDescriptionCustomerGroupList;
+        return state.mailDescriptionCustomerGroupList.response;
     }
 
     @Action(GetMailDescriptionListAction)
     getAllMailDescriptionList(ctx: StateContext<MailManagementModel>, action: GetMailDescriptionListAction): Actions {
         const force: boolean = action.force || MailManagementState.getMailDescriptionList(ctx.getState()) === undefined;
+
+        const getAllMailDescriptionList = ctx.getState().getAllMailDescriptionList;
+        if(action.getAll && getAllMailDescriptionList){
+            return;
+        }
+
         if (force) {
             document.getElementById('loader').classList.add('loading');
             return this.loginService.performGetWithParams(AppConstant.mailDescription, action.filter)
@@ -133,9 +152,12 @@ export class MailManagementState {
                     tap((response: any) => {
                         const res = MailTransformer.transformMailDescription(response, action.filter);
                         document.getElementById('loader').classList.remove('loading');
-                        ctx.patchState({
-                            mailDescriptionList: res,
-                        });
+
+                        if(action.getAll){
+                            ctx.patchState({getAllMailDescriptionList : res});
+                        }else{
+                            ctx.patchState({mailDescriptionList: res});
+                        }
                     },
                         error => {
                             document.getElementById('loader').classList.remove('loading');
@@ -147,13 +169,17 @@ export class MailManagementState {
 
     @Action(GetMailDescriptionCountAction)
     getAllMailDescriptionCount(ctx: StateContext<MailManagementModel>, action: GetMailDescriptionCountAction): Actions {
+
+        const force: boolean = action.force || MailManagementState.getMailDescriptionList(ctx.getState()) === undefined;
+        if(!force) return;
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGetWithParams(AppConstant.mailDescription + '/count', action.filter)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        mailContentPartCount: response,
+                        mailDescriptionCount: response,
                     });
                 },
                     error => {
@@ -165,6 +191,19 @@ export class MailManagementState {
 
     @Action(GetMailDescriptionByIdAction)
     getMailDescriptionById(ctx: StateContext<MailManagementModel>, action: GetMailDescriptionByIdAction): Actions {
+        
+        const mailDescription = ctx.getState().mailDescription;
+        if(mailDescription && mailDescription.id == action.id){
+            return;
+        }
+
+        const mailDescriptionList = ctx.getState().mailDescriptionList;
+        if(mailDescriptionList){
+            const mailDesc = mailDescriptionList.find(mailDescription => mailDescription.id == action.id);
+            ctx.patchState({ mailDescription: mailDesc });
+            return;
+        }
+        
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.mailDescription + '/' + action.id)
             .pipe(
@@ -233,6 +272,10 @@ export class MailManagementState {
 
     @Action(GetMailConfigurationListAction)
     getAllMailConfigurationList(ctx: StateContext<MailManagementModel>, action: GetMailConfigurationListAction): Actions {
+
+        const mailConfigurationList = ctx.getState().mailConfigurationList;
+        if(mailConfigurationList){ return; }
+
         return this.loginService.performGet(AppConstant.mailDescription + '/' + AppConstant.mailConfiguration)
             .pipe(
                 tap((response: any) => {
@@ -453,13 +496,19 @@ export class MailManagementState {
 
     @Action(GetCustomerGroupListByMailDescriptionIdAction)
     getCustomerGroupListByMailDescriptionId(ctx: StateContext<MailManagementModel>, action: GetCustomerGroupListByMailDescriptionIdAction): Actions {
+        
+        const mailDescriptionCustomerGroupList = ctx.getState().mailDescriptionCustomerGroupList;
+        if(mailDescriptionCustomerGroupList && action.mailDescriptionId == mailDescriptionCustomerGroupList.id){
+
+        }
+        
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.customerGroups)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        mailDescriptionCustomerGroupList: response,
+                        mailDescriptionCustomerGroupList: AppUtility.addCustomIdentifierForReducer({ response : response.data},action.mailDescriptionId)
                     });
                 },
                     error => {

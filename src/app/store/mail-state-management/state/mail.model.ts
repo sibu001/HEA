@@ -1,5 +1,6 @@
 export interface MailManagementModel {
     mailDescriptionList: any;
+    getAllMailDescriptionList : Array<any>;
     mailDescriptionCount: any;
     mailDescription: any;
     mailDescriptionDataSourceList: any;

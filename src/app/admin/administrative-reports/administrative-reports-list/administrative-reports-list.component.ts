@@ -45,14 +45,14 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
       this.adminFilter = new AdminFilter();
     }
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
     });
   }
 
   ngOnInit() {
     this.loadReportType();
     this.setUpForm(this.adminFilter.administrativeFilter.formValue);
-    this.search(this.adminFilter.administrativeFilter.page, false);
+    this.search(this.adminFilter.administrativeFilter.page, this.force);
 
     this.getAdministrativeReportCount();
     this.getAdminstrativeReportData();

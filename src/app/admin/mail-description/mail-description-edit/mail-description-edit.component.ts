@@ -83,7 +83,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
     this.loadCustomerGroup(false, '');
     if (this.id !== undefined) {
       this.mailService.loadMailDescriptionById(this.id);
-      this.loadMailDescriptionById();
+      this.getMailDescriptionById();
       this.getUserCustomerGroup();
       this.loadMailContentPartList();
       this.loadContextVariableList();
@@ -187,8 +187,8 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
     this.mailService.mailDescriptionProcess(this.id);
   }
 
-  loadMailDescriptionById() {
-    this.subscriptions.add(this.mailService.getMailDescriptionById().pipe(skipWhile((item: any) => !item))
+  getMailDescriptionById() {
+    this.subscriptions.add(this.mailService.getMailDescriptionById().pipe(filter((item: any) => item))
       .subscribe((mailDescription: any) => {
         this.scrollTop();
         this.findUserCustomerGroup(mailDescription.data.id);
@@ -262,7 +262,7 @@ export class MailDescriptionEditComponent implements OnInit, OnDestroy ,AfterVie
       .pipe(filter(item => item))
       .subscribe(
         response =>{
-          this.customerGroupList = [...response.data];
+          this.customerGroupList = [...response];
           this.setTopicGroupData();
         }
       )

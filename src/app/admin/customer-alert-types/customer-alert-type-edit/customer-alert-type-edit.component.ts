@@ -54,8 +54,8 @@ export class CustomerAlertTypeEditComponent implements OnInit, OnDestroy {
   }
 
   loadCustomerEventTypeList() {
-    this.systemUtilityService.loadCustomerEventTypeList(true, '');
-    this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
+    this.systemUtilityService.loadCustomerEventTypeList(true, '',true);
+    this.subscriptions.add(this.systemUtilityService.getAllCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((credentialTypeList: any) => {
         this.eventType = credentialTypeList;
       }));

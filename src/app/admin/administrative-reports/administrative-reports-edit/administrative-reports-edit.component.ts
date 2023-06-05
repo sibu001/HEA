@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { AppUtility } from 'src/app/utility/app.utility';
@@ -31,12 +32,15 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
   dataFieldDataSource: any;
   parameters: any;
   reportTypeList: any;
+  fileObject : Blob;
+  public previousReport : string;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
     private readonly administrativeService: AdministrativeService,
     private readonly el: ElementRef,
     private readonly systemService: SystemService,
+    private readonly loginService : LoginService,
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
@@ -60,13 +64,13 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
       reportName: [event !== undefined ? event.reportName : '', Validators.required],
       reportLabel: [event !== undefined ? event.reportLabel : ''],
       reportType: [event !== undefined ? event.reportType : 'sql'],
-      report: [event !== undefined ? event.report : ''],
+      report: [event && event.report ? atob(event.report) : ''],
       reportParams: [event !== undefined ? event.reportParams : []],
-      reportFile: [event !== undefined && event.reportFile ? event.reportFile : ''],
+      reportFile: [''],
     });
   }
   back(): any {
-    this.router.navigate(['admin/administrativeReport/administrativeReportList']);
+    this.router.navigate(['admin/administrativeReport/administrativeReportList'], { queryParams : { force : this.isForce }});
   }
 
   loadAdministrativeReportById(){
@@ -100,6 +104,8 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
         // if (this.isForce) {
         //   this.router.navigate(['admin/administrativeReport/administrativeReportEdit'], { queryParams: { 'id': report.id } });
         // }
+
+        this.previousReport = report.report;
         this.setForm(report);
         AppUtility.scrollTop();
       }));
@@ -143,11 +149,28 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
   save(): any {
     if (AppUtility.validateAndHighlightReactiveFrom(this.reportForm)) {
       if (this.id) {
-        const requestBody = {...this.reportObject, ...this.reportForm.value};
+        const requestBody = {...this.reportObject, ...this.reportForm.value, report : btoa(this.reportForm.value.report) };
+
+        if(requestBody.reportType == 'jrxml') {
+          requestBody.report = '';
+        }
+
+        //  for uploading the file only if reportType is 'jrxml'
+        if(this.fileObject && this.reportForm.value.reportType == 'jrxml'){
+          setTimeout(() => this.uploadReportFile(), 150);
+        }
+
         this.subscriptions.add(this.administrativeService.updateAdministrativeReport(this.id, requestBody).pipe(
           filter((item: any) => item))
           .subscribe((response: any) => {
+
+            this.fileObject = null;
+          }, (error) =>{
+            this.isForce = true;
           }));
+
+
+
       } else {
         this.subscriptions.add(this.administrativeService.saveAdministrativeReport(this.reportForm.value).pipe(
           filter((item: any) => item))
@@ -155,9 +178,19 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
             this.id = response.administrativeManagement.administrativeReport.id;
             AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
             this.getAdministrativeReport();
-          }));
+          }, (error) => { this.isForce = true}));
       }
     } 
+  }
+
+  handleFileInput(event : Array<Blob>){
+    this.fileObject = event[0];
+    console.log(this.fileObject);
+  }
+
+  // for jrxml type
+  uploadReportFile(){
+    this.administrativeService.uploadAdministrativeReportfile(this.id,this.fileObject);
   }
 
   validateForm() {

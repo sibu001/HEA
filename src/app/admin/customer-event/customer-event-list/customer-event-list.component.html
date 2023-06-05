@@ -43,7 +43,7 @@
               [data]="dataSource" [pageSize]="pageSize"
               [pageIndex]="currentPageIndex"
               [totalElement]="customerEventTypeData.totalElements"
-              (changePageEvent)="search($event,false)"
+              (changePageEvent)="search($event,true)"
               (goToEditEvent)="goToEditEventEventType($event)"
               (addEvent)='addCustomerEventType()'
               class="customer-event-table">

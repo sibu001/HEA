@@ -84,7 +84,8 @@ export class MailTransformer {
         src.data.forEach(element => {
             let dataSourceObject: any = {};
             dataSourceObject = element;
-            dataSourceObject.calculation = element.calculation.substring(0, 60);
+            //  commented due to mail description edit page.
+            // dataSourceObject.calculation = element.calculation.substring(0, 60);
             dataSourceList.push(dataSourceObject);
         });
         return { data: dataSourceList };

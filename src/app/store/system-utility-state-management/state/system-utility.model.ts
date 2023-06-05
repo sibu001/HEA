@@ -2,6 +2,7 @@ export interface SystemUtilityManagementModel {
     placeList: any;
     place: any;
     customerEventTypeList: any;
+    allCustomerEventTypeList : any;
     custoemerEventTypeResctrictionForUserId : any;
     customerEventType: any;
     customerEventTypeCount: any;

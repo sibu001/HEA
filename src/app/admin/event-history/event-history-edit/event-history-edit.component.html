@@ -19,6 +19,9 @@
                   <input type="text" class="form-control" matInput 
                formControlName='auditId' [matAutocomplete]="auditId"
                   (keyup)="findCustomerByAuditIdOrCustomerName('auditId')" >
+                  <div class="error-message" *ngIf="highlightErrorField('auditId')" >
+                    <span>Audit id is required.</span>
+                  </div>
                   <mat-autocomplete #auditId="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
                     <mat-option *ngFor="let data of dataListForSuggestions" [value]="data">
                       {{data.user.name}}
@@ -36,6 +39,9 @@
                   <input type="text" class="form-control" matInput 
                   [matAutocomplete]="auditIdAutoComplete"
                   formControlName="customerName" (input)="findCustomerByAuditIdOrCustomerName('customerName')" >
+                  <div class="error-message" *ngIf="highlightErrorField('customerName')" >
+                    <span>Customer name is required.</span>
+                  </div>
                    <mat-autocomplete #auditIdAutoComplete="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
                      <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
                        {{data.user.name}}

@@ -108,8 +108,8 @@ export class customerEventViewComponent implements OnInit, OnDestroy {
   }
 
   loadCustomerEventType() {
-    this.systemUtilityService.loadCustomerEventTypeList(true, '');
-    this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
+    this.systemUtilityService.loadCustomerEventTypeList(true, '',true);
+    this.subscriptions.add(this.systemUtilityService.getAllCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.eventTypeData = response;
           if (!this.customerEventId) {

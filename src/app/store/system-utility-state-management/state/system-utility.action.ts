@@ -103,7 +103,7 @@ export class DeletePlaceByIdAction {
 
 export class GetCustomerEventTypeListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_EVENT_TYPE_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly filter: any, readonly getAll : boolean) {
     }
 }
 
@@ -127,7 +127,7 @@ export class DeleteEventTypeResctrictionFromUserById {
 
 export class GetCustomerEventTypeCountAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_EVENT_TYPE_COUNT;
-    constructor(readonly filter: any) {
+    constructor(readonly force : boolean, readonly filter: any) {
     }
 }
 

@@ -86,8 +86,8 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
   }
 
   loadMailType() {
-    this.mailService.loadMailDescriptionList(true, '');
-    this.subscriptions.add(this.mailService.getMailDescriptionList().pipe(skipWhile((item: any) => !item))
+    this.mailService.loadMailDescriptionList(true, '',true);
+    this.subscriptions.add(this.mailService.getAllMailDescriptionList().pipe(skipWhile((item: any) => !item))
       .subscribe((mailDescriptionList: any) => {
         this.mailType = mailDescriptionList.data;
       }));
@@ -105,7 +105,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
     const self = this;
     this.subscriptions.add(
       this.mailService.getMailPreviewById()
-      .pipe(filter(data => data))
+      .pipe(filter(data => data && data.id == this.id))
       .subscribe(
         data =>{
 

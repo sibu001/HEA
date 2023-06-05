@@ -47,6 +47,14 @@ export class MailService {
     return this.store.select(MailManagementState.getMailDescriptionList);
   }
 
+  getAllMailDescriptionList() : Observable<any> {
+    return this.store.select(MailManagementState.getAllMailDescriptionList);
+  }
+
+  getMailDescriptionCount() : Observable<number> {
+    return this.store.select(MailManagementState.getMailDescriptionCount);
+  }
+
   getMailDescriptionById(): Observable<any> {
     return this.store.select(MailManagementState.getMailDescriptionById);
   }
@@ -79,12 +87,12 @@ export class MailService {
     return this.store.select(MailManagementState.getCustomerGroupMailPartById);
   }
 
-  loadMailDescriptionList(force: boolean, filter: any): Observable<MailManagementState> {
-    return this.store.dispatch(new GetMailDescriptionListAction(force, filter));
+  loadMailDescriptionList(force: boolean, filter: any, getAll : boolean = false): Observable<MailManagementState> {
+    return this.store.dispatch(new GetMailDescriptionListAction(force, filter,getAll));
   }
 
-  loadMailDescriptionCount(filter: any): Observable<MailManagementState> {
-    return this.store.dispatch(new GetMailDescriptionCountAction(filter));
+  loadMailDescriptionCount(force : boolean, filter: any): Observable<MailManagementState> {
+    return this.store.dispatch(new GetMailDescriptionCountAction(force,filter));
   }
 
   loadMailDescriptionById(id: number): Observable<MailManagementState> {

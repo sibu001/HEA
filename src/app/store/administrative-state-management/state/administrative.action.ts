@@ -3,6 +3,7 @@ export enum AdministrativeActionTypes {
     GET_ADMINISTRATIVE_REPORT_LIST_COUNT = 'Get All Administrative Report List Count',
     GET_ADMINISTRATIVE_REPORT_BY_ID = 'Get Administrative Report By Id',
     SAVE_ADMINISTRATIVE_REPORT = 'Save Administrative Report',
+    UPLOAD_ADMINISTRATIVE_REPORT_FILE = 'Upload administrative Report File',
     UPDATE_ADMINISTRATIVE_REPORT = 'Update Administrative Report',
     DELETE_ADMINISTRATIVE_REPORT_BY_ID = 'Delete Administrative Report By Id',
     GET_ADMINISTRATIVE_REPORT_PARAMS_LIST = 'Get All Administrative Report Params List',
@@ -52,6 +53,12 @@ export class GetAdministrativeReportByIdAction {
 export class SaveAdministrativeReportAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.SAVE_ADMINISTRATIVE_REPORT;
     constructor(readonly administrativeReport: any) {
+    }
+}
+
+export class UploadAdministrativeReportFileAction {
+    static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.UPLOAD_ADMINISTRATIVE_REPORT_FILE;
+    constructor(readonly id: any, readonly file : Blob) {
     }
 }
 
@@ -178,7 +185,7 @@ export class GetEventHistoryListAction {
 
 export class GetEventHistoryCountAction {
     static readonly type: AdministrativeActionTypes = AdministrativeActionTypes.GET_EVENT_HISTORY_COUNT;
-    constructor(readonly filter: any) {
+    constructor(readonly force : boolean, readonly filter: any) {
     }
 }
 

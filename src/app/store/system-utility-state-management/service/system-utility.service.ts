@@ -91,6 +91,10 @@ export class SystemUtilityService {
     return this.store.select(SystemUtilityManagementState.getCustomerEventTypeList);
   }
 
+  getAllCustomerEventTypeList(): Observable<any> {
+    return this.store.select(SystemUtilityManagementState.getAllCustomerEventTypeList);
+  }
+
   getCustomerEventTypeById(): Observable<any> {
     return this.store.select(SystemUtilityManagementState.getCustomerEventTypeById);
   }
@@ -179,8 +183,8 @@ export class SystemUtilityService {
     return this.store.dispatch(new DeletePlaceByIdAction(id));
   }
 
-  loadCustomerEventTypeList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetCustomerEventTypeListAction(force, filter));
+  loadCustomerEventTypeList(force: boolean, filter: any, getAll : boolean = false): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerEventTypeListAction(force, filter,getAll));
   }
 
   loadEventTypeRestrictionsForUserById(force: boolean, userId: number): Observable<SystemUtilityManagementState> {
@@ -199,8 +203,8 @@ export class SystemUtilityService {
     return this.store.select(SystemUtilityManagementState.getCustoemerEventTypeResctrictionForUserId)
   }
 
-  loadCustomerEventTypeCount(filter: any): Observable<SystemUtilityManagementState> {
-    return this.store.dispatch(new GetCustomerEventTypeCountAction(filter));
+  loadCustomerEventTypeCount(force : boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetCustomerEventTypeCountAction(force, filter));
   }
 
   getCustomerEventTypeCount(){

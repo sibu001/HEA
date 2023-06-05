@@ -32,6 +32,7 @@ import {
   UpdateEventHistoryAction,
   UpdateProspectsAction,
   UpdateTopicAction,
+  UploadAdministrativeReportFileAction,
   UploadEventHistoryFileAction
 } from '../state/administrative.action';
 import { AdministrativeManagementState } from '../state/administrative.state';
@@ -106,6 +107,10 @@ export class AdministrativeService {
 
   saveAdministrativeReport(customer: any): Observable<AdministrativeManagementState> {
     return this.store.dispatch(new SaveAdministrativeReportAction(customer));
+  }
+
+  uploadAdministrativeReportfile(id: any, file : Blob): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new UploadAdministrativeReportFileAction(id,file));
   }
 
   updateAdministrativeReport(id: number, customer: any): Observable<AdministrativeManagementState> {
@@ -187,8 +192,8 @@ export class AdministrativeService {
     return this.store.dispatch(new GetEventHistoryListAction(force, filter));
   }
 
-  getEventHistoryCount(filter: any): Observable<AdministrativeManagementState> {
-    return this.store.dispatch(new GetEventHistoryCountAction(filter));
+  getEventHistoryCount(filter: any ,force : boolean= true): Observable<AdministrativeManagementState> {
+    return this.store.dispatch(new GetEventHistoryCountAction(force, filter));
   }
 
   loadEventHistoryById(customerId: any, customerEventId: any): Observable<AdministrativeManagementState> {

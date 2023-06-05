@@ -197,7 +197,7 @@ export class TopicListComponent implements OnInit, OnDestroy {
       .set('disableTotalSize', 'false')
       // .set('homeowner', 'false')
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize)
-      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('label', (this.topicForm.value.label !== null ? this.topicForm.value.label : ''))
@@ -236,6 +236,8 @@ export class TopicListComponent implements OnInit, OnDestroy {
       errors => {
         console.log(errors);
         document.getElementById('loader').classList.remove('loading');
+        AppUtility.scrollTop();
+        this.utilityService.showErrorMessage(errors.error.errorMessage);
       }
     );
   }

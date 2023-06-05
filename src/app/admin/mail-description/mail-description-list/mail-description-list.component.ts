@@ -1,6 +1,6 @@
 import { AppConstant } from 'src/app/utility/app.constant';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -11,6 +11,7 @@ import { AdminFilter } from 'src/app/models/filter-object';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-mail-description-list',
@@ -33,6 +34,7 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   mailForm: FormGroup;
   public force = false;
   public adminFilter: AdminFilter;
+  @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly mailService: MailService,
@@ -50,8 +52,10 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.scrollTop();
-    this.getMailPeriodList();
     this.loadMailPeriodList();
+    this.getMailPeriodList();
+    this.getMailDescriptionCount();
+    this.getMailDescriptionList();
     this.setUpForm(this.adminFilter.mailDescriptionFilter.formValue);
     this.search(this.adminFilter.mailDescriptionFilter.page, false);
   }
@@ -59,7 +63,6 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   scrollTop() {
     window.scroll(0, 0);
   }
-
 
   loadMailPeriodList(): any {
     this.systemService.loadMailPeriodList();
@@ -96,20 +99,32 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
     });
   }
 
-  findMailDescription(force: boolean, filter: any): void {
+  loadMailDescriptionCount(force: boolean, filter: any): void {
     this.adminFilter.mailDescriptionFilter.formValue = this.mailForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.subscriptions.add(this.mailService.loadMailDescriptionCount(filter).pipe(skipWhile((item: any) => !item))
-      .subscribe((mailDescriptionCount: any) => {
-        this.mailData.totalElements = mailDescriptionCount.mailManagement.mailContentPartCount.data;
-        this.totalElement = mailDescriptionCount.mailManagement.mailContentPartCount.data;
-        this.mailService.loadMailDescriptionList(force, filter);
-        this.subscriptions.add(this.mailService.getMailDescriptionList().pipe(skipWhile((item: any) => !item))
-          .subscribe((mailDescriptionList: any) => {
-            this.mailData.content = mailDescriptionList.data;
-            this.dataSource = [...this.mailData.content];
-          }));
-      }));
+    this.mailService.loadMailDescriptionCount(force,filter);
+  }
+
+  getMailDescriptionCount() {
+    this.subscriptions.add(this.mailService.getMailDescriptionCount()
+    .pipe(skipWhile((item: any) => !item))
+    .subscribe((mailDescriptionCount: any) => {
+      this.mailData.totalElements = mailDescriptionCount.data;
+      this.totalElement = mailDescriptionCount.data;
+    }));
+  }
+
+  loadMailDescriptionList(force : boolean, filter : any) {
+    this.mailService.loadMailDescriptionList(force, filter);
+  }
+
+  getMailDescriptionList(){
+    this.subscriptions.add(this.mailService.getMailDescriptionList().pipe(skipWhile((item: any) => !item))
+    .subscribe((mailDescriptionList: any) => {
+      this.mailData.content = mailDescriptionList.data;
+      this.dataSource = [...this.mailData.content];
+      AppUtility.scrollToTableTop(this.tableScrollPoint);
+    }));
   }
 
   goToEditMailDescription(event: any): void {
@@ -117,11 +132,11 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any, isSearch: boolean): void {
+    event ? this.pageIndex = event.pageIndex : this.pageIndex = 0;
     this.adminFilter.mailDescriptionFilter.page = event;
-    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-      Number(event.pageIndex) + '' : 0);
+
     const params = new HttpParams()
-      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
@@ -130,8 +145,9 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
       .set('active', (this.mailForm.value.isActive !== null ? this.mailForm.value.isActive : true))
       .set('subjectTemplate', (this.mailForm.value.subject !== null ? this.mailForm.value.subject : ''))
       .set('mailPeriod', (this.mailForm.value.mailPeriod !== null ? this.mailForm.value.mailPeriod : ''));
-    this.findMailDescription(true, params);
-    this.scrollTop();
+    
+    this.loadMailDescriptionCount(isSearch ,params);
+    this.loadMailDescriptionList(isSearch , params);
   }
 
   ngOnDestroy(): void {

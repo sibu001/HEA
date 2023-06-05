@@ -42,7 +42,8 @@
               <textarea *ngIf="f.reportType.value==='sql'" cols='30' rows='10' class="form-control form-control-sm"
                 id="report" formControlName="report"></textarea>
               <input *ngIf="f.reportType.value==='jrxml'" type="file" class="custom-file-input"
-                style='font-size: smaller;' name="reportFile" id="reportFile" formControlName='reportFile'>
+              (change)="handleFileInput($event.target.files)"
+                style='font-size: smaller;' name="reportFile" id="reportFile" formControlName='reportFile' >
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>

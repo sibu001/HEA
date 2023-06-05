@@ -3,7 +3,7 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
-import { debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, skipWhile, take } from 'rxjs/operators';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
@@ -26,7 +26,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   customerList: any = [];
   eventForm: FormGroup;
   eventTypeData: Array<any>;
-  isForce = false;
+  isForce : boolean = false;
   customerData: any;
   userId: any;
   linkedPersonType: any;
@@ -53,11 +53,11 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
       this.customerData = this.customerList[0];
     }
     this.activateRoute.queryParams.subscribe(params => {
-      this.customerEventId = params['customerEventId'];
+      this.customerEventId = params['customerEventId'] || params['id'];
       this.customerId = params['customerId'];
       this.addRequest = params['addRequest'];
     });
-    this.originalCustomerId = this.customerId;
+    // this.originalCustomerId = this.customerId;
     this.findCustomer();
     this.setForm(undefined);
   }
@@ -71,12 +71,12 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.getEventHistoryById();
     this.loadCustomerEventType();
-    this.getCustomerByCustomerId();
     if (this.customerEventId !== undefined && this.customerId !== undefined) {
+      this.getEventHistoryById();
       this.loadEventHistoryById();
       this.loadCustomerByCustomerId();
+      this.getCustomerByCustomerId();
     }else{
       this.setTodayDate();
     }
@@ -90,7 +90,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   getCustomerByCustomerId(){
     this.subscriptions.add(
       this.customerService.getCustomerById()
-      .pipe(filter(data => data && this.customerId))
+      .pipe(filter(data => data && this.customerId == data.customerId))
       .subscribe(
         data =>{
           this.customerData = data;
@@ -143,8 +143,8 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
   }
 
   loadCustomerEventType() {
-    this.systemUtilityService.loadCustomerEventTypeList(true, '');
-    this.subscriptions.add(this.systemUtilityService.getCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
+    this.systemUtilityService.loadCustomerEventTypeList(true, '',true);
+    this.subscriptions.add(this.systemUtilityService.getAllCustomerEventTypeList().pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.eventTypeData = response;
         if (!this.customerEventId) {
@@ -182,17 +182,12 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
 
   getEventHistoryById(){
     this.subscriptions.add(this.administrativeService.getEventHistoryById()
-    .pipe(skipWhile((item: any) => !item))
+    .pipe(filter((item: any) => item && this.customerEventId == item.id))
     .subscribe((eventHistory: any) => {
-      if(!this.addRequest)
-        this.eventData = eventHistory;
-      
-      if (this.isForce) {
-        this.customerId = eventHistory.customerId;
-        this.customerEventId = eventHistory.customerEventId;
-        this.router.navigate(['/admin/eventHistory/eventHistoryEdit'], { queryParams: { customerEventId: this.customerEventId, customerId: this.customerId } });
-      }
+      this.originalCustomerId = eventHistory.customerId;
+      this.eventData = eventHistory;
       this.setForm(this.eventData);
+      AppUtility.scrollTop();
     }));
   }
 
@@ -235,6 +230,7 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
        debounceTime(600)  
       , distinctUntilChanged())
       .switchMap((filters : HttpParams) => this.loginService.customerSuggestionListRequest(filters))
+      .pipe(filter((data : any) => data))
       .subscribe(
         (response) =>{
           this.dataListForSuggestions = response.slice(0,100);
@@ -267,7 +263,7 @@ selectedSuggestion(event : any){
 
  
 save() {
-  if (this.eventForm.valid) {
+  if (AppUtility.validateAndHighlightReactiveFrom(this.eventForm)) {
     this.eventForm.value.linkedPersonType = this.linkedPersonType;
     this.eventForm.value.eventDatetime = this.eventForm.value.eventDatetime ? new Date(this.eventForm.value.eventDatetime).getTime() : '';
     this.isForce = true;
@@ -276,25 +272,57 @@ save() {
 
       // added if admin has changed the customer in the existing customer event.
       if(this.originalCustomerId != this.customerId){
-        this.administrativeService.deleteEventHistoryById(this.customerId, this.customerEventId);
-        this.administrativeService.saveEventHistory(this.customerId, this.eventForm.value);
+        this.subscriptions.add(
+          this.administrativeService.deleteEventHistoryById(this.customerId, this.customerEventId)
+          .pipe((take(1)))
+          .subscribe((response) =>{
+            this.isForce=true;}
+          ));
+        
+          this.subscriptions.add(
+            this.administrativeService.saveEventHistory(this.customerId, this.eventForm.value)
+            .pipe((take(1)))
+            .subscribe((response : any) =>{
+              this.isForce=true;
+              this.customerEventId = response.administrativeManagement.eventHistory.id;
+              AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.customerEventId);
+            }
+          ));
+
         return;
       }
 
       let payload = {...this.eventForm.value};
       Object.assign(this.eventData, payload);
       this.eventData.auditId = undefined;
-      this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventData);
+      
+      this.subscriptions.add(
+        this.administrativeService.updateEventHistory(this.customerId, this.customerEventId, this.eventData)
+        .pipe(take(1))
+        .subscribe(data =>{
+            this.isForce= true;
+        }));
+
     } else {
       this.eventForm.value.modifyAllowed = true;
-      this.administrativeService.saveEventHistory(this.customerId, this.eventForm.value);
+      this.subscriptions.add(
+        this.administrativeService.saveEventHistory(this.customerId, this.eventForm.value)
+        .pipe(take(1))
+        .subscribe((response : any) =>{
+          this.isForce=true;
+          this.customerEventId = response.administrativeManagement.eventHistory.id;
+          AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.customerEventId);
+          this.getEventHistoryById();
+        }));
     }
-  } else {
-    this.validateForm();
-  }
+  } 
 }
 
   get f() { return this.eventForm.controls; }
+
+  highlightErrorField(formControlName : string) : boolean{
+    return this.f[formControlName].invalid && (this.f[formControlName].dirty || this.f[formControlName].touched);
+  }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

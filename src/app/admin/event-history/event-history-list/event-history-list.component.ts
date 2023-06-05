@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,6 +10,7 @@ import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -30,13 +31,15 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
     totalElements: Number.MAX_SAFE_INTEGER,
   };
 
-  public pageIndex;
+  public pageIndex : number = 0;
+  public pageSize : number = Number(AppConstant.pageSize);
   topicForm: FormGroup;
-  public force = false;
+  public force : boolean = false;
   public adminFilter: AdminFilter;
   private readonly subscriptions: Subscription = new Subscription();
   filter : any;
   dateFormat : string = AppConstant.DATE_SELECTION_FORMAT;
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
     private readonly router: Router,
@@ -47,14 +50,14 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
       this.adminFilter = new AdminFilter();
     }
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
     });
   }
 
   ngOnInit() {
 
     this.setUpForm(this.adminFilter.eventHistoryFilter.formValue);
-    this.search(this.adminFilter.eventHistoryFilter.page, true);
+    this.search(this.adminFilter.eventHistoryFilter.page, this.force);
     this.getEventHistoryListFromStore();
     this.getEventHistoryDataCountFromStore();
     this.scrollTop();
@@ -87,7 +90,7 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
   findEventHistory(force: boolean, filter: any): void {
     this.adminFilter.eventHistoryFilter.formValue = this.topicForm.value;
     localStorage.setItem('adminFilter', JSON.stringify(this.adminFilter));
-    this.administrativeService.loadEventHistoryList(this.force, this.filter);
+    this.administrativeService.loadEventHistoryList(force,filter);
   }
 
   getEventHistoryDataCountFromStore(){
@@ -103,14 +106,22 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.administrativeService.getEventHistoryList()
     .pipe(skipWhile((item: any) => !item))
     .subscribe((eventHistoryList: any) => {
-      this.reportData.content = eventHistoryList;
+      this.reportData.content = JSON.parse(JSON.stringify(eventHistoryList));
       this.dataSource = [...this.reportData.content];
       this.reportData.totalElements = this.totalElement;
+      AppUtility.scrollToTableTop(this.tableScrollPoint);
     }));
   }
 
   search(event: any, isSearch: boolean): void {
-    this.adminFilter.eventHistoryFilter.page = event;
+
+    if(event){
+      this.adminFilter.eventHistoryFilter.page = event;
+      this.pageIndex = event.pageIndex;
+    }else{
+      this.pageIndex = 0;
+    } 
+
     let sortFiled = '';
     if (event && event.sort.active === 'eventCode') {
       sortFiled = 'customerEventType.eventCode';
@@ -119,8 +130,6 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
     } else if (event && event.sort.active) {
       sortFiled = event.sort.active;
     }
-    this.pageIndex = (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-      Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('dateFrom', (this.topicForm.value.periodStart ? this.datePipe.transform(this.topicForm.value.periodStart, 'MM/dd/yyyy') : ''))
       .set('customer.auditId', (this.topicForm.value.auditId !== null ? this.topicForm.value.auditId : ''))
@@ -128,21 +137,15 @@ export class EventHistoryListComponent implements OnInit, OnDestroy {
       .set('dateTo', (this.topicForm.value.periodEnd ? this.datePipe.transform(this.topicForm.value.periodEnd, 'MM/dd/yyyy') : ''))
       .set('customer.user.name', (this.topicForm.value.customerName !== null ? this.topicForm.value.customerName : ''))
       .set('customerEventType.eventName', (this.topicForm.value.eventName !== null ? this.topicForm.value.eventName : ''))
-      .set('eventFile', (this.topicForm.value.eventFile !== null ? this.topicForm.value.eventFile : ''));
-    
-      this.force = true;
-      this.filter = params;
-      if(isSearch) {
-        this.administrativeService.getEventHistoryCount(this.filter);
-      }
-
-      this.filter = this.filter
-        .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
-        .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-          (event.pageIndex * event.pageSize) + '' : '0'))
-        .set('sortField', (event && sortFiled !== undefined ? (sortFiled === 'customerName' ? 'customer.user.name' : sortFiled) : ''))
-        .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'));
-      this.findEventHistory(true, params);
+      .set('eventFile', (this.topicForm.value.eventFile !== null ? this.topicForm.value.eventFile : ''))
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('sortField', (event && sortFiled !== undefined ? (sortFiled === 'customerName' ? 'customer.user.name' : sortFiled) : ''))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'));
+      
+      this.administrativeService.getEventHistoryCount(params,isSearch);
+      this.findEventHistory(isSearch, params);
   }
 
   handleFileInput(file: any) {

@@ -412,7 +412,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   }
 
   loadCustomerEventTypeList(){
-    this.systemUtilityService.loadCustomerEventTypeList(false, '');
+    this.systemUtilityService.loadCustomerEventTypeList(true, '',true);
   }
 
   loadEventTypeRestrictionsForUserById(){
@@ -421,7 +421,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
 
   combineLatestCustomerEventTypeList(){
 
-    const eventTypeData$ : Observable<any>= this.systemUtilityService.getCustomerEventTypeList().pipe(filter((item: any) => item));
+    const eventTypeData$ : Observable<any>= this.systemUtilityService.getAllCustomerEventTypeList().pipe(filter((item: any) => item));
     const eventTypeRestrictionOfUserById$ : Observable<any> = this.systemUtilityService.getCustoemerEventTypeResctrictionForUserId();
 
     this.subscriptions.add(

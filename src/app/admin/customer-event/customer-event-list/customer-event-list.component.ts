@@ -42,7 +42,7 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.search({ pageIndex : this.currentPageIndex}, true);  
+    this.search({ pageIndex : this.currentPageIndex}, false);  
     this.combineEventTypeDataAndCountResponse();
   }
 
@@ -71,7 +71,7 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
   }
 
   findCustomerEventTypeCount(force: boolean, filter: any): void {
-    this.systemUtilityService.loadCustomerEventTypeCount(filter);
+    this.systemUtilityService.loadCustomerEventTypeCount(force,filter);
   }
 
   loadCustomerEventTypeList(force: boolean, filter: any){
@@ -94,7 +94,8 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
 
     if(event) {
       this.currentPageIndex = event.pageIndex;
-
+    }else{
+      this.currentPageIndex = 0;
     }
 
     const params = new HttpParams()
@@ -107,8 +108,7 @@ export class CustomerEventListComponent implements OnInit, OnDestroy {
       .set('eventCode', (this.customerGroupForm.value.eventCode !== null ? this.customerGroupForm.value.eventCode : ''))
       .set('eventName', (this.customerGroupForm.value.eventName !== null ? this.customerGroupForm.value.eventName : ''));
    
-    if(isSearch) this.findCustomerEventTypeCount(true, params);
-
-    this.loadCustomerEventTypeList(true,params);
+    this.findCustomerEventTypeCount(true , params);
+    this.loadCustomerEventTypeList(true ,params);
   }
 }

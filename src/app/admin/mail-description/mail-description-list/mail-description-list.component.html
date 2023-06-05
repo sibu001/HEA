@@ -6,16 +6,16 @@
           Mail notification templates
         </p>
         <form [formGroup]='mailForm'>
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
+          <div class="row rowPadding borderBottom">
+            <!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div> -->
+            <div class="col-sm-2 col-md-2 col-lg-1 col-xs-12">
               <span class="filterLabel">Subject:</span>
             </div>
             <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
               <input type="text" class="form-control" formControlName='subject'
                 id='subject'>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12" style="text-align:center;">
               <label for="isActive">
                 <input type="checkbox" formControlName="isActive" id="isActive">
                 <span class="filterLabel checkbox">Active</span>
@@ -32,7 +32,7 @@
                   [value]="period.lookupValue">{{period.valueName}}</option>
               </select>
             </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+            <!-- <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div> -->
           </div>
 
           <div class="row rowPadding">
@@ -44,7 +44,7 @@
 
           <div class="row">
             <div class="col-sm-12">
-              <p class="messages">
+              <p class="messages" #tableScrollPoint>
                 <img src='assets/images/dot03.gif' alt="dot" class='dot'>
                 <span class="messageName">Mail Descriptions (Number of Records =
                   {{totalElement | number:'1.0':'en-US'}})</span></p>
@@ -55,10 +55,10 @@
               <app-table [keys]="keys" [isPaginate]="true"
                 (goToEditEvent)='goToEditMailDescription($event)'
                 (addEvent)='addMailDescriptions()' [isSearch]="false"
-                [data]="dataSource"
+                [data]="dataSource" [addSerialNumber]="true"
                 [pageIndex]="pageIndex"
                 [totalElement]="mailData.totalElements"
-                (changePageEvent)="search($event,false)"
+                (changePageEvent)="search($event,true)"
                 class="mail-description-table">
               </app-table>
             </div>

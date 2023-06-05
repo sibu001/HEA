@@ -1148,7 +1148,11 @@ export class SystemManagementState {
     }
 
     @Action(GetContentTypeListAction)
-    getAllContentTypeList(ctx: StateContext<SystemManagementModel>, action: GetContentTypeListAction): Actions {
+    getAllContentTypeList(ctx: StateContext<SystemManagementModel>, acstion: GetContentTypeListAction): Actions {
+
+        const contentType = ctx.getState().contentType;
+        if(contentType){ return ;}
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.lookupValues + '/CONTENT_TYPE')
             .pipe(

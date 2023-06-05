@@ -364,6 +364,12 @@ export class CustomerManagementState {
 
     @Action(GetCustomerByIdAction)
     getCustomerById(ctx: StateContext<CustomerManagementModel>, action: GetCustomerByIdAction): Actions {
+
+        const customer = ctx.getState().customer;
+        if(customer && action.id == customer.id){
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.customer + '/' + action.id)
             .pipe(
