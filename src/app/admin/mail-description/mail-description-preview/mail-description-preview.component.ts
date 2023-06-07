@@ -89,7 +89,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
     this.mailService.loadMailDescriptionList(true, '',true);
     this.subscriptions.add(this.mailService.getAllMailDescriptionList().pipe(skipWhile((item: any) => !item))
       .subscribe((mailDescriptionList: any) => {
-        this.mailType = mailDescriptionList.data;
+        this.mailType = mailDescriptionList;
       }));
   }
 

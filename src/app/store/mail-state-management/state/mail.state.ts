@@ -6,6 +6,7 @@ import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { CustomerError } from '../../customer-state-management/state/customer.action';
+import { SystemManagementState } from '../../system-state-management/state/system.state';
 import { MailTransformer } from '../transformer/transformer';
 import {
     GetMailDescriptionListAction,
@@ -98,7 +99,7 @@ export class MailManagementState {
 
     @Selector()
     static getContextVariableList(state: MailManagementModel): any {
-        return state.contextVariableList;
+        return state.contextVariableList.response;
     }
 
     @Selector()
@@ -108,7 +109,7 @@ export class MailManagementState {
 
     @Selector()
     static getMailContentPartList(state: MailManagementModel): any {
-        return state.mailContentPartList;
+        return state.mailContentPartList.response;
     }
 
     @Selector()
@@ -138,11 +139,15 @@ export class MailManagementState {
 
     @Action(GetMailDescriptionListAction)
     getAllMailDescriptionList(ctx: StateContext<MailManagementModel>, action: GetMailDescriptionListAction): Actions {
-        const force: boolean = action.force || MailManagementState.getMailDescriptionList(ctx.getState()) === undefined;
-
-        const getAllMailDescriptionList = ctx.getState().getAllMailDescriptionList;
-        if(action.getAll && getAllMailDescriptionList){
-            return;
+        
+        let force : boolean = true;
+        if(!action.getAll){
+             force = action.force || MailManagementState.getMailDescriptionList(ctx.getState()) === undefined;
+        }else{
+            const getAllMailDescriptionList = ctx.getState().getAllMailDescriptionList;
+            if(getAllMailDescriptionList){
+                return;
+            }
         }
 
         if (force) {
@@ -150,13 +155,13 @@ export class MailManagementState {
             return this.loginService.performGetWithParams(AppConstant.mailDescription, action.filter)
                 .pipe(
                     tap((response: any) => {
-                        const res = MailTransformer.transformMailDescription(response, action.filter);
+                        // const res = MailTransformer.transformMailDescription(response.data, action.filter);
                         document.getElementById('loader').classList.remove('loading');
 
                         if(action.getAll){
-                            ctx.patchState({getAllMailDescriptionList : res});
+                            ctx.patchState({getAllMailDescriptionList : response.data});
                         }else{
-                            ctx.patchState({mailDescriptionList: res});
+                            ctx.patchState({mailDescriptionList: response.data});
                         }
                     },
                         error => {
@@ -210,7 +215,7 @@ export class MailManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        mailDescription: response,
+                        mailDescription: response.data,
                     });
                 },
                     error => {
@@ -243,13 +248,9 @@ export class MailManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        mailDescription: response,
+                        mailDescription: response.data,
                     });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        // this.utilityService.showErrorMessage(error.message);
-                    }));
+                },this.utilityService.errorCallbak));
     }
 
     @Action(UpdateMailDescriptionAction)
@@ -261,13 +262,9 @@ export class MailManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        mailDescription: response,
+                        mailDescription: response.data,
                     });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        // this.utilityService.showErrorMessage(error.message);
-                    }));
+                },this.utilityService.errorCallbak));
     }
 
     @Action(GetMailConfigurationListAction)
@@ -292,14 +289,18 @@ export class MailManagementState {
 
     @Action(GetContextVariableListAction)
     getAllContextVariableList(ctx: StateContext<MailManagementModel>, action: GetContextVariableListAction): Actions {
+
+        const contextVariableList = ctx.getState().contextVariableList;
+        if(contextVariableList && contextVariableList.id == action.mailDescriptionId) { return; }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.contextVariable)
             .pipe(
                 tap((response: any) => {
-                    const res = MailTransformer.transformContextVariableTableData(response);
+                    const res = MailTransformer.transformContextVariableTableData(response.data);
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        contextVariableList: res,
+                        contextVariableList: AppUtility.addCustomIdentifierForReducer({ response: res}, action.mailDescriptionId),
                     });
                 },
                     error => {
@@ -310,13 +311,27 @@ export class MailManagementState {
 
     @Action(GetContextVariableByIdAction)
     getContextVariableById(ctx: StateContext<MailManagementModel>, action: GetContextVariableByIdAction): Actions {
+
+
+        const contextVariable = ctx.getState().contextVariable;
+        if(contextVariable && contextVariable.id == action.mailVariableId){
+            return;
+        }
+
+        const contextVariableList = ctx.getState().contextVariableList;
+        if(contextVariableList && contextVariableList.id == action.mailDescriptionId){
+            const contextVar = contextVariableList.response.find(data => data.id == action.mailVariableId);
+            ctx.patchState({contextVariable : {...contextVar}});
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.contextVariable + '/' + action.mailVariableId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        contextVariable: response,
+                        contextVariable: {...response.data},
                     });
                 },
                     error => {
@@ -332,6 +347,15 @@ export class MailManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+
+                    const contextVariableList = ctx.getState().contextVariableList;
+                    if(contextVariableList){
+                        contextVariableList.response = contextVariableList.response.filter(data => data.id != action.mailVariableId);
+                        ctx.patchState({ contextVariableList : {response : [...contextVariableList.response], id : action.mailDescriptionId}});
+                    }
+
+                    ctx.patchState({contextVariable : undefined});
+
                     // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
@@ -348,8 +372,15 @@ export class MailManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
+
+                    const contextVariableList = ctx.getState().contextVariableList;
+                    if(contextVariableList){
+                        contextVariableList.response.push({...response.data});
+                        ctx.patchState({ contextVariableList : {response : [...contextVariableList.response], id : action.mailDescriptionId}});
+                    }
+
                     ctx.patchState({
-                        contextVariable: response,
+                        contextVariable: {...response.data},
                     });
                 },
                     error => {
@@ -366,8 +397,18 @@ export class MailManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
+
+                    const contextVariableList = ctx.getState().contextVariableList;
+                    if(contextVariableList){
+                        contextVariableList.response = contextVariableList.response.map(data =>{
+                            if(data.id == response.data.id){ return {...response.data}}
+                            return data;
+                        })
+                        ctx.patchState({ contextVariableList : {response : [...contextVariableList.response], id : action.mailDescriptionId}});
+                    }
+
                     ctx.patchState({
-                        contextVariable: response,
+                        contextVariable: {...response.data},
                     });
                 },
                     error => {
@@ -378,6 +419,10 @@ export class MailManagementState {
 
     @Action(GetMailContentPartListAction)
     getAllMailContentPartList(ctx: StateContext<MailManagementModel>, action: GetMailContentPartListAction): Actions {
+
+        const mailContentPartist = ctx.getState().mailContentPartList;
+        if(mailContentPartist && mailContentPartist.id == action.mailDescriptionId) { return; } 
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart)
             .pipe(
@@ -385,7 +430,7 @@ export class MailManagementState {
                     // const res = Transformer.transformMailContentPartTableData(response);
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        mailContentPartList: response,
+                        mailContentPartList: AppUtility.addCustomIdentifierForReducer({response : response.data}, action.mailDescriptionId),
                     });
                 },
                     error => {
@@ -396,13 +441,26 @@ export class MailManagementState {
 
     @Action(GetMailContentPartByIdAction)
     getMailContentPartById(ctx: StateContext<MailManagementModel>, action: GetMailContentPartByIdAction): Actions {
+        
+        const mailContentPart = ctx.getState().mailContentPart;
+        if(mailContentPart && mailContentPart.id == action.mailContentId){
+            return;
+        }
+        
+        const mailContentPartList = ctx.getState().mailContentPartList;
+        if(mailContentPartList && mailContentPartList.id == action.mailDescriptionId){
+            const mailContPart = mailContentPartList.response.find(data => data.id == action.mailContentId);
+            ctx.patchState({ mailContentPart : {...mailContPart} });
+            return;
+        }
+        
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.mailDescription + '/' + action.mailDescriptionId + '/' + AppConstant.mailContentPart + '/' + action.mailContentId)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        mailContentPart: response,
+                        mailContentPart: response.data,
                     });
                 },
                     error => {
@@ -418,7 +476,14 @@ export class MailManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    ctx.patchState({ mailContentPart : undefined });
                     // this.utilityService.showSuccessMessage('Deleted Successfully');
+
+                    const mailContentPartList : any = ctx.getState().mailContentPartList;
+                    if(mailContentPartList){
+                        mailContentPartList.response =  mailContentPartList.response.filter(data => (data.id != action.mailContentId));        
+                        ctx.patchState({ mailContentPartList: {response: [...mailContentPartList.response],id : action.mailDescriptionId}});
+                    }
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -435,8 +500,14 @@ export class MailManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        mailContentPart: response,
+                        mailContentPart: {...response.data},
                     });
+
+                    const mailContentPartList : any = ctx.getState().mailContentPartList;
+                    if(mailContentPartList){
+                        mailContentPartList.response.push({...response.data});
+                        ctx.patchState({ mailContentPartList: {response: [...mailContentPartList.response],id : action.mailDescriptionId}});
+                    }
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -453,8 +524,19 @@ export class MailManagementState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        mailContentPart: response,
+                        mailContentPart: { ...response.data },
                     });
+
+                    const mailContentPartList : any = ctx.getState().mailContentPartList;
+                    if(mailContentPartList){
+                        mailContentPartList.response =  mailContentPartList.response.map(data => {
+                            if(data.id == action.mailContentId){
+                                return { ...response.data };
+                            } return data;
+                        });
+        
+                        ctx.patchState({ mailContentPartList: {response: [...mailContentPartList.response],id : action.mailDescriptionId}});
+                    }
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -499,7 +581,7 @@ export class MailManagementState {
         
         const mailDescriptionCustomerGroupList = ctx.getState().mailDescriptionCustomerGroupList;
         if(mailDescriptionCustomerGroupList && action.mailDescriptionId == mailDescriptionCustomerGroupList.id){
-
+            return;
         }
         
         document.getElementById('loader').classList.add('loading');
@@ -525,6 +607,12 @@ export class MailManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+
+                    const mailDescriptionCustomerGroupList : any = ctx.getState().mailDescriptionCustomerGroupList;
+                    if(mailDescriptionCustomerGroupList){
+                        mailDescriptionCustomerGroupList.response = mailDescriptionCustomerGroupList.response.filter(data => data.customerGroupId != action.groupCode);
+                        ctx.patchState({mailDescriptionCustomerGroupList : { response : [...mailDescriptionCustomerGroupList.response], id : action.mailDescriptionId}});
+                    }
                     // this.utilityService.showSuccessMessage('Deleted Successfully');
                 },
                     error => {
@@ -540,6 +628,14 @@ export class MailManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+
+                    const mailDescriptionCustomerGroupList = ctx.getState().mailDescriptionCustomerGroupList;
+                    if(mailDescriptionCustomerGroupList){
+                        const mailDescription = ctx.getState().mailDescription;
+                        // response.mailDescription = mailDescription;
+                        mailDescriptionCustomerGroupList.response.push(response.data);
+                        ctx.patchState({mailDescriptionCustomerGroupList : { response : [...mailDescriptionCustomerGroupList.response], id : action.mailDescriptionId}});
+                    }
                     // this.utilityService.showSuccessMessage('Save Successfully');
                 },
                     error => {

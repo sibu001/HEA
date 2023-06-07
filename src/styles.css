@@ -2656,6 +2656,7 @@ app-electricity-usage-popup input[type="date"] {
 }
 
 mat-cell > div{
+  /* margin-top: 15px; */
   height: 100%;
   width: 100%;
 }

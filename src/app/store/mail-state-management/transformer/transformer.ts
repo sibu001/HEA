@@ -1,16 +1,11 @@
 import { AppUtility } from 'src/app/utility/app.utility';
 
 export class MailTransformer {
-    static transformMailDescription(src: any, filter: any): any {
+    static transformMailDescription(src: any): any {
         const dataSourceList: any = [];
-        let index = 1;
-        if (filter && filter.get('startRow')) {
-            index = Number(filter.get('startRow')) + 1;
-        }
-        src.data.forEach(element => {
+        src.forEach(element => {
             let dataSourceObject: any = {};
             dataSourceObject = element;
-            dataSourceObject.serialNumber = index;
             dataSourceObject.totalProcessedTime = AppUtility.convertMillisecondToTime(element.totalProcessedTime);
             switch (element.mailPeriod) {
                 case 'M':
@@ -35,9 +30,8 @@ export class MailTransformer {
                     break;
             }
             dataSourceList.push(dataSourceObject);
-            index++;
         });
-        return { data: dataSourceList };
+        return dataSourceList;
     }
 
     static transformCustomerGroupMailPartTableData(src: any, filter: any): any {
@@ -81,14 +75,14 @@ export class MailTransformer {
 
     static transformContextVariableTableData(src: any): any {
         const dataSourceList: any = [];
-        src.data.forEach(element => {
+        src.forEach(element => {
             let dataSourceObject: any = {};
             dataSourceObject = element;
             //  commented due to mail description edit page.
             // dataSourceObject.calculation = element.calculation.substring(0, 60);
             dataSourceList.push(dataSourceObject);
         });
-        return { data: dataSourceList };
+        return dataSourceList;
     }
 
 }

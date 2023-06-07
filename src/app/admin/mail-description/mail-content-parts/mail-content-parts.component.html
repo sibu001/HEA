@@ -15,6 +15,9 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" formControlName='label' id='label' class="form-control">
+              <div class="error-message" *ngIf="highlightErrorField('label')" >
+                <span>Label is required.</span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -46,10 +49,13 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm' formControlName="contentTemplate"
                 id="contentTemplate" rows="12" cols="12"> </textarea>
-                <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!f.disableHtmlEditor.value && !contentTemplate" (click)="contentTemplate = !contentTemplate" >
-              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value && contentTemplate' [toolbarSettings]='tools' formControlName='contentTemplate'
+                <!-- <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!f.disableHtmlEditor.value && !contentTemplate" (click)="contentTemplate = !contentTemplate" > -->
+              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value' [toolbarSettings]='tools' formControlName='contentTemplate'
                 id='contentTemplate'>
               </ejs-richtexteditor>
+              <div class="error-message" *ngIf="highlightErrorField('contentTemplate')" >
+                <span>Content is required.</span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -90,24 +96,13 @@
             </div>
           </div>
 
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-6">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
-              </button>
+          <div class="row" style="margin-top: 20px">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
+              <button type="button" class="btn btn-primary" (click)="back()"> Back </button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-6 row rowPadding sidePadding">
-              <div class="col-xs-12 col-sm-10 col-md-10 col-lg-10 sidePadding">
-                <button type="button" class="btn btn-primary" *ngIf="id !== undefined && id !== null"
-                  style="float: right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="col-xs-12 col-sm-2 col-md-2 col-lg-2 sidePadding">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
-                  Save
-                </button>
-              </div>
+            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-9 right-buttons">
+              <button type="button" class="btn btn-primary"  (click)="save()"> Save </button>
+              <button type="button" class="btn btn-primary" *ngIf="id" (click)="delete()"> Delete </button>
             </div>
           </div>
         </form>

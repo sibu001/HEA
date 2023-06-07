@@ -4,7 +4,7 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, skipWhile } from 'rxjs/operators';
+import { exhaustMap, filter, skipWhile, switchMap, withLatestFrom } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
@@ -12,6 +12,7 @@ import { MailService } from 'src/app/store/mail-state-management/service/mail.se
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { AppUtility } from 'src/app/utility/app.utility';
+import { MailTransformer } from 'src/app/store/mail-state-management/transformer/transformer';
 
 @Component({
   selector: 'app-mail-description-list',
@@ -119,9 +120,18 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
   }
 
   getMailDescriptionList(){
-    this.subscriptions.add(this.mailService.getMailDescriptionList().pipe(skipWhile((item: any) => !item))
-    .subscribe((mailDescriptionList: any) => {
-      this.mailData.content = mailDescriptionList.data;
+
+    this.subscriptions.add(this.mailService.getMailDescriptionList()
+    .pipe(skipWhile((item: any) => !item),
+      withLatestFrom(this.systemService.getMailPeriod().pipe(filter(data => data))))
+    .subscribe(([mailDescriptionList,_]) => {
+      this.mailData.content = mailDescriptionList.map(data =>{
+
+        return {...data, 
+                mailPeriod : AppUtility.changeLookUpValuetoValueName(data.mailPeriod,this.periodData),
+                totalProcessedTime : AppUtility.convertMillisecondToTime(data.totalProcessedTime)
+              };
+      });
       this.dataSource = [...this.mailData.content];
       AppUtility.scrollToTableTop(this.tableScrollPoint);
     }));

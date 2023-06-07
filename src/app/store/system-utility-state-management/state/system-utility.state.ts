@@ -388,15 +388,16 @@ export class SystemUtilityManagementState {
     @Action(GetCustomerEventTypeListAction)
     getAllCustomerEventType(ctx: StateContext<SystemUtilityManagementModel>, action: GetCustomerEventTypeListAction): Actions {
         
+        let force: boolean = true;
         if(action.getAll){
             // this data to get all the customer events to show in drop-down/options.
             const allCustomerEventTypeList = ctx.getState().allCustomerEventTypeList;
             if(allCustomerEventTypeList){
                 return;
             }
+        }else{
+            force = action.force ||  SystemUtilityManagementState.getCustomerEventTypeList(ctx.getState()) === undefined;
         }
-        
-        const force: boolean = action.force ||  SystemUtilityManagementState.getCustomerEventTypeList(ctx.getState()) === undefined;
         let result: Actions;
 
         if (force) {

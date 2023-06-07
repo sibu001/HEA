@@ -1,10 +1,11 @@
 import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -16,9 +17,10 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
   id: any;
   contentForm: FormGroup;
   calculationType: any;
+  contextVariable : any = {};
   private readonly subscriptions: Subscription = new Subscription();
   isForce = false;
-  variableId: any;
+  mailDescriptionId: number | string;
   errorMessage: any;
   constructor(
     private readonly fb: FormBuilder,
@@ -28,18 +30,18 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
+      this.mailDescriptionId = params['mailDescriptionId'];
       this.id = params['id'];
-      this.variableId = params['variableId'];
     });
   }
 
   ngOnInit() {
-    this.scrollTop();
+    AppUtility.scrollTop();
     this.loadCalculationType();
     this.setForm(undefined);
-    if (this.id && this.variableId) {
-      this.mailService.loadContextVariableById(this.id, this.variableId);
-      this.loadContextVariableById();
+    if (this.mailDescriptionId && this.id) {
+      this.mailService.loadContextVariableById(this.mailDescriptionId, this.id);
+      this.getContextVariableById();
     }
   }
 
@@ -60,20 +62,20 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.contentForm = this.fb.group({
-      field: [event !== undefined ? event.field : ''],
-      orderNumber: [event !== undefined ? event.orderNumber : ''],
+      field: [event !== undefined ? event.field : '', Validators.required],
+      orderNumber: [event !== undefined ? event.orderNumber : '',Validators.required],
       calculationType: [event !== undefined ? event.calculationType : 'javascript'],
       calculation: [event !== undefined ? event.calculation : '']
     });
   }
 
-  loadContextVariableById() {
-    this.subscriptions.add(this.mailService.getContextVariableById().pipe(skipWhile((item: any) => !item))
+  getContextVariableById() {
+    this.subscriptions.add(this.mailService.getContextVariableById()
+    .pipe(filter((item: any) => item && this.id == item.id))
       .subscribe((contextVariable: any) => {
-        if (this.isForce) {
-          this.router.navigate(['admin/mailDescription/mailContextVariables'], { queryParams: { 'id': this.id, 'variableId': contextVariable.data.id } });
-        }
-        this.setForm(contextVariable.data);
+        this.contextVariable = contextVariable;
+        this.setForm(contextVariable);
+        AppUtility.scrollTop();
       },
       error => {
         this.errorMessage = error;
@@ -81,13 +83,14 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.id } });
+    this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.mailDescriptionId } });
   }
 
   delete() {
-    this.subscriptions.add(this.mailService.deleteContextVariableById(this.id, this.variableId).pipe(skipWhile((item: any) => !item))
+    if(!AppUtility.deleteConfirmatonBox()) return;
+    this.subscriptions.add(this.mailService.deleteContextVariableById(this.mailDescriptionId, this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-        this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.id } });
+        this.back();
       },
       error => {
         this.errorMessage = error;
@@ -95,32 +98,28 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
   }
 
   save() {
-    if (this.contentForm.valid) {
-      if (this.id && this.variableId) {
-        this.subscriptions.add(this.mailService.updateContextVariable(this.id, this.variableId, this.contentForm.value).pipe(
-          skipWhile((item: any) => !item))
+
+    
+    if (AppUtility.validateAndHighlightReactiveFrom(this.contentForm)) {
+      if (this.id) {
+
+        const requestBody : any = { ...this.contextVariable, ...this.contentForm.value };
+        this.subscriptions.add(this.mailService.updateContextVariable(this.mailDescriptionId, this.id, requestBody)
+        .pipe( filter((item: any) => item),take(1))
           .subscribe((response: any) => {
-            this.isForce = true;
-            this.scrollTop();
-            this.loadContextVariableById();
-          },
-          error => {
-            this.errorMessage = error;
-          }));
+          },AppUtility.errorFieldHighlighterCallBack));
+
       } else {
-        this.subscriptions.add(this.mailService.saveContextVariable(this.id, this.contentForm.value).pipe(
-          skipWhile((item: any) => !item))
+
+        this.subscriptions.add(this.mailService.saveContextVariable(this.mailDescriptionId, this.contentForm.value)
+          .pipe( filter((item: any) => item),take(1))
           .subscribe((response: any) => {
-            this.isForce = true;
-            this.scrollTop();
-            this.loadContextVariableById();
-          },
-          error => {
-            this.errorMessage = error;
-          }));
+            this.id = response.mailManagement.contextVariable.id;
+            AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+            this.getContextVariableById();
+          },AppUtility.errorFieldHighlighterCallBack));
+
       }
-    } else {
-      this.validateForm();
     }
   }
   validateForm() {
@@ -134,6 +133,10 @@ export class MailContextVariablesComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.contentForm.controls; }
+
+  highlightErrorField(formControlName : string) : boolean{
+    return this.f[formControlName].invalid && (this.f[formControlName].dirty || this.f[formControlName].touched);
+  }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

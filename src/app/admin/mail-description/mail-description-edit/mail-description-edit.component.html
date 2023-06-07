@@ -52,6 +52,9 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-10">
               <input type="text" class="form-control" formControlName="mailName"
                 id="mailName">
+                <div class="error-message" *ngIf="highlightErrorField('mailName')" >
+                  <span>Report Name is required.</span>
+                </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
               <img src="assets/images/icon_help.svg" alt="help"
@@ -135,12 +138,9 @@
               <textarea class='form-control form-control-sm'
                 formControlName="periodDayRule"
                 id="periodDayRule"> </textarea>
-              <div *ngIf="f.periodDayRule.invalid && (f.periodDayRule.dirty ||
-                f.periodDayRule.touched)">
-                <span class="error" *ngIf="f.periodDayRule.errors.required">
-                  Intra-Period trigger is required.
-                </span>
-              </div>
+                <div class="error-message" *ngIf="highlightErrorField('periodDayRule')" >
+                  <span>Report Name is required.</span>
+                </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-2">
               <img src="assets/images/icon_help.svg" alt="help"
@@ -284,13 +284,9 @@
               <textarea class='form-control form-control-sm'
                 formControlName="subjectTemplate"
                 id="subjectTemplate"> </textarea>
-              <div *ngIf="f.subjectTemplate.invalid && (f.subjectTemplate.dirty
-                ||
-                f.subjectTemplate.touched)">
-                <span class="error" *ngIf="f.subjectTemplate.errors.required">
-                  Subject Template is required.
-                </span>
-              </div>
+                <div class="error-message" *ngIf="highlightErrorField('subjectTemplate')" >
+                  <span>Report Name is required.</span>
+                </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -370,9 +366,10 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Total Processed
               Time:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class='show-value'
+              <!-- <input type="text" class='show-value'
                 formControlName="totalProcessedTimeShow" id="totalProcessedTime"
-                disabled>
+                disabled> -->
+                {{  convertMillisecondToTime(mailDescription.totalProcessedTime ? mailDescription.totalProcessedTime : 0) }}
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -380,12 +377,15 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Max Processed
               Time:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <input type="text" class='show-value formInput'
+              {{ convertMillisecondToTime(mailDescription.maxProcessedTime ? mailDescription.maxProcessedTime : 0) }}&nbsp; &nbsp;
+              {{ mailDescription.maxProcessedId ? '(' + mailDescription.maxProcessedId + ')' : '' }}&nbsp; &nbsp;
+
+              <!-- <input type="text" class='show-value formInput'
                 formControlName="maxProcessedTimeShow" id="maxProcessedTime"
                 disabled>
               <input type="text" class='show-value formInput'
                 formControlName="maxProcessedIdShow" id="maxProcessedId"
-                disabled>
+                disabled> -->
               <button class="btn btn-primary" (click)='showStackTrace()'
                 *ngIf="maxProcessedStack">Show
                 Stack</button>
@@ -396,31 +396,35 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Calls in the last
               session:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <input type="text" class='show-value'
-                formControlName="lastCalls" id="lastCalls" disabled>
+              {{ mailDescription.lastCalls }}
+              <!-- <input type="text" class='show-value'
+                formControlName="lastCalls" id="lastCalls" disabled> -->
             </div>
           </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Last Session Time:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <input type="text" class='show-value'
+              {{ convertMillisecondToTime(mailDescription.lastProcessedTime ? mailDescription.lastProcessedTime : 0) }}
+              <!-- <input type="text" class='show-value'
                 formControlName="lastProcessedTimeShow" id="lastProcessedTime"
-                disabled>
-            </div>
+                disabled> -->
+            </div> 
           </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Max Time for the
               last session:</div>
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
-              <input type="text" class='show-value formInput'
+              {{ convertMillisecondToTime(mailDescription.lastMaxProcessedTime ? mailDescription.lastMaxProcessedTime : 0) }}&nbsp; &nbsp;
+              {{ mailDescription.lastMaxProcessedId  ? '(' + mailDescription.lastMaxProcessedId + ')' : '' }}&nbsp; &nbsp;
+              <!-- <input type="text" class='show-value formInput'
                 formControlName="lastMaxProcessedTimeShow"
                 id="lastMaxProcessedTime"
                 disabled>
               <input type="text" class='show-value formInput'
                 formControlName="lastMaxProcessedIdShow" id="lastMaxProcessedId"
-                disabled>
+                disabled> -->
             </div>
           </div>
 
@@ -432,6 +436,24 @@
                 <option *ngFor='let mailConfigurationObj of mailConfigurationList'
                   [value]="mailConfigurationObj.lookupValue">{{mailConfigurationObj.valueName}}</option>
               </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          
+          <div class="row borderBottom rowPadding" *ngIf="fromValue.mailConfiguration=='gmail'">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Mail Account username:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class='form-control'
+                formControlName="accountUsername" id="accountUsername">
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
+          <div class="row borderBottom rowPadding" *ngIf="fromValue.mailConfiguration=='gmail'">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 highlight-labels">Mail Account password:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class='form-control'
+                formControlName="accountPassword" id="accountPassword">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -489,37 +511,15 @@
             </app-table>
           </div>
 
-          <div class="row rowPadding paddingTop margin-around-button" style="margin-top: 10px">
-            <div class="col-sm-2 col-md-3 col-lg-3 col-xs-6 display-inline-button-big mt-5">
+          <div class="row paddingTop margin-around-button" style="margin-top: 10px">
+            <div class="col-sm-3 col-md-2 col-xs-3">
               <button type="button" class="btn btn-primary " (click)="back()">Back</button>
             </div>
-            <div class="col-sm-3 col-md-2 col-lg-2 col-xs-6 display-inline-button-big mt-5 lg-b" 
-              [ngClass]="{'display-responsive-big3': id!==undefined&&id!==null}" style="text-align: end;" *ngIf="id!==undefined&&id!==null">
-              <button type="button" class="btn btn-primary "
-                (click)="Preview()" >
-                Preview
-              </button>
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-6 mt-5 lg-b"
-              [ngClass]="{'display-responsive-big3':id!==undefined&&id!==null}" style="text-align: left;" *ngIf="id !==
-              undefined && id !== null">
-              <button class="btn btn-primary " (click)='callMailSender()'>
-                Call Mail Sender
-              </button>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 
-              display-inline-button-big mt-5 lg-b
-              " [ngClass]="{'display-responsive-big2':
-              id!==undefined&&id!==null}" style="text-align: end;" *ngIf="id!==undefined&&id!==null">
-              <button type="button" class="btn btn-primary " (click)="delete()" style="float:right"
-               >Delete</button>
-            </div>
-            <!-- <div class="col-sm-2 col-md-2 col-lg-2" *ngIf="!id">
-            </div> -->
-            <div class="mt-5 lg-b" 
-            [ngClass]="{'col-xs-12 col-sm-2 col-md-2 col-lg-2': id!==undefined&&id!==null , 'col-xs-6 col-sm-10 col-lg-9 col-md-9' :  id===undefined || id===null, 'col-xs-12': id!==undefined&&id!==null}"
-              style="text-align: end;">
+            <div class="col-xs-9 col-sm-9 col-md-10 right-buttons">
               <button type="button" class="btn btn-primary " (click)="save()">Save</button>
+              <button type="button" class="btn btn-primary " *ngIf="id" (click)="delete()" style="float:right">Delete</button>
+              <button class="btn btn-primary " *ngIf="id" (click)='callMailSender()'> Call Mail Sender </button>              
+              <button type="button" class="btn btn-primary " *ngIf="id" (click)="Preview()" >Preview </button>
             </div>
           </div>
         </form>

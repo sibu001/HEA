@@ -10,7 +10,8 @@ import {
   ToolbarService
 } from '@syncfusion/ej2-angular-richtexteditor';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
+import { AppUtility } from 'src/app/utility/app.utility';
 @Component({
   selector: 'app-mail-content-parts',
   templateUrl: './mail-content-parts.component.html',
@@ -39,7 +40,8 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
   };
   id: any;
   public fileObject: any;
-  contentId: any;
+  mailDescriptionId: number;
+  mailContentPart : any = {};
   contentForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
   isForce = false;
@@ -52,17 +54,17 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
+      this.mailDescriptionId = params['mailDescriptionId'];
       this.id = params['id'];
-      this.contentId = params['contentId'];
     });
   }
 
   ngOnInit() {
     this.scrollTop();
     this.setForm(undefined);
-    if (this.id && this.contentId) {
-      this.mailService.loadMailContentPartById(this.id, this.contentId);
-      this.loadMailContentPartById();
+    if (this.mailDescriptionId && this.id) {
+      this.mailService.loadMailContentPartById(this.mailDescriptionId, this.id);
+      this.getMailContentPartById();
     }
   }
 
@@ -72,7 +74,7 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
 
   setForm(event: any) {
     this.contentForm = this.fb.group({
-      label: [event !== undefined ? event.label : ''],
+      label: [event !== undefined ? event.label : '', Validators.required],
       contentOrder: [event !== undefined ? event.contentOrder : ''],
       contentFilterRule: [event !== undefined ? event.contentFilterRule : ''],
       disableHtmlEditor: [event !== undefined ? event.disableHtmlEditor : ''],
@@ -83,13 +85,13 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
     });
   }
 
-  loadMailContentPartById() {
-    this.subscriptions.add(this.mailService.getMailContentPartById().pipe(skipWhile((item: any) => !item))
+  getMailContentPartById() {
+    this.subscriptions.add(this.mailService.getMailContentPartById()
+    .pipe(filter((item: any) => item && this.id == item.id))
       .subscribe((mailContentPart: any) => {
-        if (this.isForce) {
-          this.router.navigate(['admin/mailDescription/mailContentParts'], { queryParams: { 'id': this.id, 'contentId': mailContentPart.data.id } });
-        }
-        this.setForm(mailContentPart.data);
+        this.setForm(mailContentPart);
+        this.mailContentPart = {...mailContentPart};
+        AppUtility.scrollTop();
       },
       error => {
         this.errorMessage = error;
@@ -97,46 +99,43 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.id } });
+    this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.mailDescriptionId } });
   }
 
   delete() {
-    this.subscriptions.add(this.mailService.deleteMailContentPartById(this.id, this.contentId).pipe(skipWhile((item: any) => !item))
+    if(!AppUtility.deleteConfirmatonBox()) return;
+    this.subscriptions.add(this.mailService.deleteMailContentPartById(this.mailDescriptionId, this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-        this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.id } });
-      },
-      error => {
-        this.errorMessage = error;
+        this.back();
+        // this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.mailDescriptionId } });
       }));
   }
 
   save() {
-    if (this.contentForm.valid) {
-      if (this.id && this.contentId) {
-        this.subscriptions.add(this.mailService.updateMailContentPart(this.id, this.contentId, this.contentForm.value).pipe(
-          skipWhile((item: any) => !item))
+
+    AppUtility.removeErrorFieldMessagesFromForm();
+    if (AppUtility.validateAndHighlightReactiveFrom(this.contentForm)) {
+
+      if (this.id) {
+
+        const requestBody = { ...this.mailContentPart, ...this.contentForm.value };
+        this.subscriptions.add(this.mailService.updateMailContentPart(this.mailDescriptionId, this.id, requestBody).pipe(
+          filter((item: any) => item),take(1))
           .subscribe((response: any) => {
-            this.isForce = true;
-            this.scrollTop();
-            this.loadMailContentPartById();
-          },
-          error => {
-            this.errorMessage = error;
-          }));
+          },AppUtility.errorFieldHighlighterCallBack));
+
       } else {
-        this.subscriptions.add(this.mailService.saveMailContentPart(this.id, this.contentForm.value).pipe(
-          skipWhile((item: any) => !item))
+
+        this.subscriptions.add(this.mailService.saveMailContentPart(this.mailDescriptionId, this.contentForm.value).pipe(
+          filter((item: any) => item),take(1))
           .subscribe((response: any) => {
-            this.isForce = true;
-            this.scrollTop();
-            this.loadMailContentPartById();
-          },
-          error => {
-            this.errorMessage = error;
-          }));
+            this.id = response.mailManagement.mailContentPart.id;
+            AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);   
+            this.getMailContentPartById();       
+          },AppUtility.errorFieldHighlighterCallBack));
+
       }
-    } else {
-      this.validateForm();
+
     }
   }
 
@@ -151,7 +150,7 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
       else
         formData.append('imageBody', this.fileObject);
 
-    this.subscriptions.add(this.mailService.generateEmbedImage(this.id, this.contentId, formData, null).pipe(
+    this.subscriptions.add(this.mailService.generateEmbedImage(this.mailDescriptionId, this.id, formData, null).pipe(
       skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         if (response.mailManagement.mailEmbedImage.data) {
@@ -173,6 +172,10 @@ export class MailContentPartsComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.contentForm.controls; }
+
+  highlightErrorField(formControlName : string) : boolean{
+    return this.f[formControlName].invalid && (this.f[formControlName].dirty || this.f[formControlName].touched);
+  }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

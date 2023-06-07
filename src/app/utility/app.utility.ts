@@ -52,6 +52,11 @@ export class AppUtility {
         return dayValue + timeValue;
     }
 
+    // use to get the value name from the lookupCode.
+    static changeLookUpValuetoValueName(lookupCodeFromobject : any , lookupValueList : Array<any>){
+        return lookupValueList.find((lookUpVal) => lookUpVal.lookupValue == lookupCodeFromobject).valueName;
+    }
+
     static getDateFromMilllis(millisecond: any) {
 
         if(millisecond == undefined || millisecond == undefined) return '';
@@ -302,6 +307,8 @@ export class AppUtility {
 
     public static validateAndHighlightReactiveFrom(formGroup : FormGroup) : boolean{
         let isFormValid : boolean = true;
+
+        let markedFirstInvalidField : boolean = false;
         for (const key of Object.keys(formGroup.controls)) {
             
             // check for the nested form.
@@ -311,8 +318,14 @@ export class AppUtility {
             if (formGroup.controls[key].invalid) {
                 isFormValid = false;
                 formGroup.controls[key].markAsTouched();
-                const invalidControl = document.querySelector('[formControlName="' + key + '"]') as HTMLInputElement;
-                invalidControl.focus();
+                
+                // for scrolling to the first invalid field. 
+                if(!markedFirstInvalidField){
+                    const invalidControl = document.querySelector('[formControlName="' + key + '"]') as HTMLInputElement;
+                    invalidControl.focus();
+                }
+
+                markedFirstInvalidField = true;
             }
         }
         return isFormValid;

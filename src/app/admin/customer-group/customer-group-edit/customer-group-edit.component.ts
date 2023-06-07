@@ -175,7 +175,7 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
     this.mailService.loadMailDescriptionList(false, params,true);
     this.subscriptions.add(this.mailService.getAllMailDescriptionList().pipe(skipWhile((item: any) => !item))
       .subscribe((mailDescriptionList: any) => {
-        this.mailDescriptionList = mailDescriptionList.data;
+        this.mailDescriptionList = mailDescriptionList;
       }));
   }
 

@@ -77,7 +77,7 @@ import { SystemManagementModel } from './system.model';
 @State<SystemManagementModel>({
     name: 'systemManagement',
     defaults: {
-        customerGroupList: undefined,
+        customerGroupList: [],
         customerGroup: undefined,
         placeListByCustomerGroupId: undefined,
         programGroupListByCustomerGroupId: undefined,
@@ -124,7 +124,7 @@ export class SystemManagementState {
 
     @Selector()
     static getCustomerGroupList(state: SystemManagementModel): any {
-        return state.customerGroupList;
+        return state.customerGroupList.map(data => {return {...data}});
     }
 
     @Selector()
@@ -300,7 +300,7 @@ export class SystemManagementState {
 
     @Action(GetCustomerGroupListAction)
     getAllCustomerGroup(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupListAction): Actions {
-        const force: boolean = action.force || !ctx.getState().customerGroupList;
+        const force: boolean = action.force || !ctx.getState().customerGroupList.length;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -1173,7 +1173,7 @@ export class SystemManagementState {
         /* istanbul ignore next */
         ctx.patchState({
             error: action.error,
-            customerGroupList: undefined
+            customerGroupList: []
         });
     }
 

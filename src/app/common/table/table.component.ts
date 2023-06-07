@@ -225,14 +225,12 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     }
 
     if(this.selection && this.selectionList.length > 0) {
+      this.selection = new SelectionModel<any>(true, []);
       this.selectionList.forEach(e => {
-        this.dataSource.data.every((row) => {
+        this.dataSource.data.forEach((row) => {
           if (e === row[this.id]) {
             this.selection.select(row);
             this.checkBoxChange();
-            return false;
-          } else {
-            return true;
           }
         });
       });

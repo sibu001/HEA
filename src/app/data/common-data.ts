@@ -216,7 +216,7 @@ export class TableColumnData {
     ];
 
     static readonly CUSTOMER_GROUP_KEY: Array<TABLECOLUMN> = [
-        // { key: 'optional', displayName: 'Optional', type: 'checkbox' },
+        // { key: 'optional', displayName: 'Optional', type: 'checkbox' }, // push this object in mail-description-edit component.
         { key: 'groupCode', isEdit: true, displayName: 'Group Code' },
         { key: 'groupName', isEdit: true, displayName: 'Group Name' },
     ];
