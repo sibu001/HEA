@@ -9,9 +9,10 @@ import {
   LinkService,
   ToolbarService
 } from '@syncfusion/ej2-angular-richtexteditor';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { MailService } from 'src/app/store/mail-state-management/service/mail.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-customer-group-mail-parts-edit',
@@ -42,6 +43,7 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
   id: any;
   partForm: FormGroup;
   isForce = false;
+  customerGroupMailPartData : any = {};
   customerGroupData: any = [];
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
@@ -59,62 +61,32 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.id !== undefined) {
+    if (this.id) {
+      this.getCustomerGroupMailPartById();
       this.loadCustomerGroupMailPartById();
     }
+
+    AppUtility.scrollTop();
   }
 
   changeDropDownValue(event: any) {
-    const i = this.customerGroupData.findIndex((item: any) => item.groupCode === event.target.value);
-    if (i !== -1) {
-      const customerGroup: any = this.partForm.controls.customerGroup;
-      customerGroup.controls['groupCode'].setValue(this.customerGroupData[i].groupCode);
-      customerGroup.controls['groupName'].setValue(this.customerGroupData[i].groupName);
-      customerGroup.controls['theme'].setValue(this.customerGroupData[i].theme);
-      customerGroup.controls['customerGroupId'].setValue(this.customerGroupData[i].customerGroupId);
-      this.partForm.controls['customerGroupId'].setValue(this.customerGroupData[i].customerGroupId);
-    }
+    const customerGroup = this.customerGroupData.find((item: any) => item.customerGroupId == event.target.value);
+    this.customerGroupMailPartData.customerGroup = customerGroup;
   }
 
   setForm(event: any) {
     this.partForm = this.formBuilder.group({
-      id: [event !== undefined ? event.id : null],
       disableHtmlEditor: [event !== undefined ? event.disableHtmlEditor : null],
-      customerGroupMailPartId: [event !== undefined ? event.customerGroupMailPartId : null],
-      customerGroupId: [event !== undefined ? event.customerGroupId : null],
-      partType: [event !== undefined ? event.partType : ''],
+      customerGroupId: [event !== undefined ? event.customerGroupId : '9'],
+      partType: [event !== undefined ? event.partType : 'header'],
       contentTemplate: [event !== undefined ? event.contentTemplate : ''],
-      customerGroup: this.formBuilder.group({
-        allowBilling: [event !== undefined ? event.customerGroup.allowBilling : null],
-        archived: [event !== undefined ? event.customerGroup.archived : null],
-        auditIdPattern: [event !== undefined ? event.customerGroup.auditIdPattern : ''],
-        baseDirectory: [event !== undefined ? event.customerGroup.baseDirectory : ''],
-        contextPath: [event !== undefined ? event.customerGroup.contextPath : ''],
-        customerGroupId: [event !== undefined ? event.customerGroup.customerGroupId : null],
-        customerRegistrationSuccessViewId: [event !== undefined ? event.customerGroup.customerRegistrationSuccessViewId : null],
-        customerRegistrationViewId: [event !== undefined ? event.customerGroup.customerRegistrationViewId : null],
-        dataCheckAlg: [event !== undefined ? event.customerGroup.dataCheckAlg : ''],
-        forgotPwdMailDescriptionId: [event !== undefined ? event.customerGroup.forgotPwdMailDescriptionId : null],
-        groupCode: [event !== undefined ? event.customerGroup.groupCode : ''],
-        groupName: [event !== undefined ? event.customerGroup.groupName : ''],
-        immediateLogin: [event !== undefined ? event.customerGroup.immediateLogin : ''],
-        mailChangedMailDescriptionId: [event !== undefined ? event.customerGroup.mailChangedMailDescriptionId : null],
-        mailDescriptionId: [event !== undefined ? event.customerGroup.mailDescriptionId : null],
-        newRecommendationMailDescriptionId: [event !== undefined ? event.customerGroup.newRecommendationMailDescriptionId : null],
-        registrationErrorMailDescriptionId: [event !== undefined ? event.customerGroup.registrationErrorMailDescriptionId : null],
-        registrationUrl: [event !== undefined ? event.customerGroup.registrationUrl : ''],
-        repeatedMailDescriptionId: [event !== undefined ? event.customerGroup.repeatedMailDescriptionId : null],
-        scrapingPeriod: [event !== undefined ? event.customerGroup.scrapingPeriod : ''],
-        showEventHistory: [event !== undefined ? event.customerGroup.showEventHistory : null],
-        spamTestMailDescriptionId: [event !== undefined ? event.customerGroup.spamTestMailDescriptionId : null],
-        theme: [event !== undefined ? event.customerGroup.theme : ''],
-      })
     });
   }
 
   findCustomerGroup(force: boolean, filter: any) {
     this.systemService.loadCustomerGroupList(force, filter);
-    this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemService.getCustomerGroupList()
+    // .pipe(filter((item: any) => item && item.length),take(1))
       .subscribe((customerGroupList: any) => {
         this.customerGroupData = customerGroupList;
       }));
@@ -123,32 +95,40 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
 
   loadCustomerGroupMailPartById() {
     this.mailService.loadCustomerGroupMailPartById(Number(this.id));
-    this.subscriptions.add(this.mailService.getCustomerGroupMailPartById().pipe(skipWhile((item: any) => !item))
-      .subscribe((report: any) => {
-        if (this.isForce) {
-          this.router.navigate(['admin/customerGroupMailParts/customerGroupMailPartsEdit'], { queryParams: { 'id': report.id } });
-        }
-        this.setForm(report);
-      }));
+  }
+
+  getCustomerGroupMailPartById(){
+    this.subscriptions.add(this.mailService.getCustomerGroupMailPartById()
+    .pipe(filter((item: any) => item && item.id == this.id))
+    .subscribe((report: any) => {
+      this.setForm(report);
+      this.customerGroupMailPartData = report;
+      AppUtility.scrollTop();
+    }));
   }
 
   save(): any {
     if (this.partForm.valid) {
-      if (this.id !== null && this.id !== undefined) {
-        this.subscriptions.add(this.mailService.updateCustomerGroupMailPart(this.id, this.partForm.value).pipe(
-          skipWhile((item: any) => !item))
+      if (this.id) {
+
+        const requestBody : any = {... this.customerGroupMailPartData, ...this.partForm.value};
+        this.subscriptions.add(this.mailService.updateCustomerGroupMailPart(this.id, requestBody).pipe(
+          filter((item: any) => item),take(1))
           .subscribe((response: any) => {
             this.isForce = true;
-            this.loadCustomerGroupMailPartById();
-          }));
+          },AppUtility.errorFieldHighlighterCallBack));
+
       } else {
+
         this.subscriptions.add(this.mailService.saveCustomerGroupMailPart(this.partForm.value).pipe(
-          skipWhile((item: any) => !item))
+          filter((item: any) => item),take(1))
           .subscribe((response: any) => {
-            // this.id = response.customerGroupMailPartId;
             this.isForce = true;
-            // this.loadCustomerGroupMailPartById();
-          }));
+            this.id = response.mailManagement.customerGroupMailPart.id;
+            AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+            this.getCustomerGroupMailPartById();
+          },AppUtility.errorFieldHighlighterCallBack));
+
       }
     } else {
       this.validateForm();
@@ -167,12 +147,12 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
   delete(): any {
     this.subscriptions.add(this.mailService.deleteCustomerGroupMailPartById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-        this.router.navigate(['admin/customerGroupMailParts/customerGroupMailPartsList'], { queryParams: { 'force': true } });
+        this.back();
       }));
   }
 
   back() {
-    this.router.navigate(['admin/customerGroupMailParts/customerGroupMailPartsList']);
+    this.router.navigate(['admin/customerGroupMailParts/customerGroupMailPartsList'],{ queryParams: { 'force': this.isForce }});
   }
 
   get f() { return this.partForm.controls; }

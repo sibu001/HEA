@@ -8,12 +8,12 @@
           Customer Group Mail Parts
         </p>
         <form [formGroup]='mailForm'>
-          <div class="row rowPadding">
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+            <div class="col-sm-3 col-md-3 col-lg-2 col-xs-12">
               <span class="filterLabel">Customer Group:</span>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-5 col-lg-5 col-xs-12">
               <select class="form-control" formControlName='customerGroup'
                 id='customerGroup'>
                 <option></option>
@@ -32,16 +32,15 @@
             </div>
           </div>
 
-          <div class="paddingTop">
-            <p class="messages">
+          <div class="paddingTop" >
+            <p class="messages" #tableScrollPoint>
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Customer Group Mail Part List</span></p>
-            <app-table [keys]="keys" [isPaginate]="false"
-              (goToEditEvent)='goToEditMailParts($event)'
+            <app-table [keys]="keys" [isPaginate]="true" [pageIndex]="mailData.pageIndex"
+              (goToEditEvent)='goToEditMailParts($event)' [pageSize]="pageSize"
               (addEvent)='addMailParts()' [isSearch]="false" [data]="dataSource"
-              [pageIndex]="pageIndex"
               [totalElement]="mailData.totalElements"
-              (changePageEvent)="search($event,false)">
+              (changePageEvent)="search($event,true)">
             </app-table>
           </div>
         </form>

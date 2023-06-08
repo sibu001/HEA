@@ -64,7 +64,8 @@ import {
   SaveCustomerGoupToList,
   LoadSelectedTopicGroupListAction,
   GetCustomerAlertTypeListCountAction,
-  UpdateRecommendationLeakAction
+  UpdateRecommendationLeakAction,
+  GetCustomerGroupCountAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -77,6 +78,10 @@ export class SystemService {
 
   getCustomerGroupList(): Observable<any> {
     return this.store.select(SystemManagementState.getCustomerGroupList);
+  }
+
+  getCustomerGroupCount() : Observable<number>{
+    return this.store.select(SystemManagementState.getCustomerGroupCount)
   }
 
   getCustomerGroupById(): Observable<any> {
@@ -193,6 +198,10 @@ export class SystemService {
 
   loadCustomerGroupList(force: boolean, filter: any): Observable<SystemManagementState> {
     return this.store.dispatch(new GetCustomerGroupListAction(force, filter));
+  }
+
+  loadCustomerGroupCount(force: boolean, filter: any): Observable<SystemManagementState>{
+    return this.store.dispatch(new GetCustomerGroupCountAction(force, filter));
   }
 
   loadCustomerGroupById(id: number): Observable<SystemManagementState> {

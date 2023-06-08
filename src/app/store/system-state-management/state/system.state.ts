@@ -70,7 +70,8 @@ import {
     RemoveCustomerGroupList,
     LoadSelectedTopicGroupListAction,
     GetCustomerAlertTypeListCountAction,
-    UpdateRecommendationLeakAction
+    UpdateRecommendationLeakAction,
+    GetCustomerGroupCountAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -78,6 +79,7 @@ import { SystemManagementModel } from './system.model';
     name: 'systemManagement',
     defaults: {
         customerGroupList: [],
+        customerGroupCount : 0,
         customerGroup: undefined,
         placeListByCustomerGroupId: undefined,
         programGroupListByCustomerGroupId: undefined,
@@ -125,6 +127,11 @@ export class SystemManagementState {
     @Selector()
     static getCustomerGroupList(state: SystemManagementModel): any {
         return state.customerGroupList.map(data => {return {...data}});
+    }
+
+    @Selector()
+    static getCustomerGroupCount(state: SystemManagementModel): any {
+        return state.customerGroupCount;
     }
 
     @Selector()
@@ -300,7 +307,8 @@ export class SystemManagementState {
 
     @Action(GetCustomerGroupListAction)
     getAllCustomerGroup(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupListAction): Actions {
-        const force: boolean = action.force || !ctx.getState().customerGroupList.length;
+        const force: boolean = true;
+        // = action.force || !ctx.getState().customerGroupList.length;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -317,6 +325,25 @@ export class SystemManagementState {
                             this.utilityService.showErrorMessage(error.errorMessage);
                             ctx.dispatch(new CustomerGroupError(error));
                         }));
+        }
+        return result;
+    }
+
+    @Action(GetCustomerGroupCountAction)
+    getAllCustomerGroupCount(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupCountAction): Actions {
+        const force: boolean = true;
+        // = action.force || !ctx.getState().customerGroupList.length;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(AppUtility.endPointGenerator([AppConstant.customerGroups,'count']), action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            customerGroupCount: response,
+                        });
+                    },this.utilityService.errorCallbak));
         }
         return result;
     }

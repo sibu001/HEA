@@ -164,7 +164,7 @@ export class MailDescriptionProcessAction {
 
 export class GetCustomerGroupMailPartListAction {
     static readonly type: MailActionTypes = MailActionTypes.GET_CUSTOMER_GROUP_MAIL_PART_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly mailPartParams: any, readonly customerGroupParams : any) {
     }
 }
 

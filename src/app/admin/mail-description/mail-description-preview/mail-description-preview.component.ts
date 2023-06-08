@@ -105,7 +105,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
     const self = this;
     this.subscriptions.add(
       this.mailService.getMailPreviewById()
-      .pipe(filter(data => data && data.id == this.id))
+      .pipe(filter(data => data && data.mailDescriptionId == this.id))
       .subscribe(
         data =>{
 
@@ -164,7 +164,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.location.back();
+    this.router.navigate(['admin/mailDescription/mailDescriptionEdit'], { queryParams: { 'id': this.mailDescriptionId } });
   }
 
   search(event: any) {
@@ -257,7 +257,6 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
       .subscribe(
         (response) =>{
           document.getElementById('loader').classList.remove('loading');
-          console.log(response);
         }, error=>{
           document.getElementById('loader').classList.remove('loading');
           this.utilityService.showErrorMessage(error.error.message);

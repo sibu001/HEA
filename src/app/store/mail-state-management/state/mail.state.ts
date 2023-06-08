@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
+import { combineLatest } from 'rxjs';
 import { tap } from 'rxjs/internal/operators/tap';
+import { filter } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { CustomerError } from '../../customer-state-management/state/customer.action';
+import { SystemService } from '../../system-state-management/service/system.service';
 import { SystemManagementState } from '../../system-state-management/state/system.state';
 import { MailTransformer } from '../transformer/transformer';
 import {
@@ -59,6 +62,7 @@ import { MailManagementModel } from './mail.model';
         mailDescriptionCustomerGroupList: undefined,
         mailEmbedImage: undefined,
         customerGroupMailPartList: undefined,
+        customerGroupMailPartListTableData : undefined,
         customerGroupMailPart: undefined,
         customerGroupMailPartCount: undefined,
         mailPreview : undefined
@@ -68,7 +72,8 @@ import { MailManagementModel } from './mail.model';
 @Injectable()
 export class MailManagementState {
 
-    constructor(private readonly loginService: LoginService, private readonly utilityService: UtilityService) { }
+    constructor(private readonly loginService: LoginService, private readonly utilityService: UtilityService,
+            private systemService: SystemService) { }
 
 
     @Selector()
@@ -115,6 +120,11 @@ export class MailManagementState {
     @Selector()
     static getMailContentPartById(state: MailManagementModel): any {
         return state.mailContentPart;
+    }
+
+    @Selector()
+    static getCustomerGroupMailPartListTableData(state: MailManagementModel): any {
+        return state.customerGroupMailPartListTableData;
     }
 
     @Selector()
@@ -569,6 +579,12 @@ export class MailManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
+                    if(response.data != 'OK'){
+                        if(response.errorMessage)
+                            this.utilityService.showErrorMessage(response.errorMessage);
+                        else if(response.warningMessage)
+                            this.utilityService.showErrorMessage(response.warningMessage);
+                    }
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -650,19 +666,19 @@ export class MailManagementState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.customerGroupMailPart, action.filter)
+
+            result = combineLatest([this.loginService.performGetWithParams(AppConstant.customerGroups, action.customerGroupParams),
+                this.loginService.performGetWithParams(AppConstant.customerGroupMailPart, action.mailPartParams)])
                 .pipe(
-                    tap((response: any) => {
-                        document.getElementById('loader').classList.remove('loading');
-                        const res = MailTransformer.transformCustomerGroupMailPartTableData(response, action.filter);
+                    tap(([ customerGroupList, customerGroupMailPartList]) => {
+
+                        const res = MailTransformer.
+                            transformCustomerGroupMailPartTableData(customerGroupMailPartList, customerGroupList,action.customerGroupParams);
                         ctx.patchState({
-                            customerGroupMailPartList: res,
+                            customerGroupMailPartListTableData : res,
+                            customerGroupMailPartList: customerGroupMailPartList,
                         });
-                    },
-                        error => {
-                            document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.message);
-                        }));
+                    },this.utilityService.errorCallbak));
         }
         return result;
     }
@@ -688,6 +704,20 @@ export class MailManagementState {
     @Action(GetCustomerGroupMailPartByIdAction)
     getCustomerGroupMailPartById(ctx: StateContext<MailManagementModel>, action: GetCustomerGroupMailPartByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
+
+        const customerGroupMailPart = ctx.getState().customerGroupMailPartList;
+        if(customerGroupMailPart && action.id == customerGroupMailPart.id){
+            ctx.patchState({ customerGroupMailPart : customerGroupMailPart });
+            return;
+        }
+
+        const customerGroupMailPartList = ctx.getState().customerGroupMailPartList;
+        if(customerGroupMailPartList){
+            const customerGroupMailPart = customerGroupMailPartList.find(data => data.id == action.id);
+            ctx.patchState({ customerGroupMailPart: customerGroupMailPart});
+            return;
+        }
+
         return this.loginService.performGet(AppConstant.customerGroupMailPart + '/' + action.id)
             .pipe(
                 tap((response: any) => {

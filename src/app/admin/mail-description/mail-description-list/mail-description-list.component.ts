@@ -58,7 +58,7 @@ export class MailDescriptionListComponent implements OnInit, OnDestroy {
     this.getMailDescriptionCount();
     this.getMailDescriptionList();
     this.setUpForm(this.adminFilter.mailDescriptionFilter.formValue);
-    this.search(this.adminFilter.mailDescriptionFilter.page, false);
+    this.search(this.adminFilter.mailDescriptionFilter.page, this.force);
   }
 
   scrollTop() {

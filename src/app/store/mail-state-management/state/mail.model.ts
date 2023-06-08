@@ -12,6 +12,7 @@ export interface MailManagementModel {
     mailContentPart: any;
     mailDescriptionCustomerGroupList: any;
     mailEmbedImage: any;
+    customerGroupMailPartListTableData: any;
     customerGroupMailPartList: any;
     customerGroupMailPart: any;
     customerGroupMailPartCount: any;

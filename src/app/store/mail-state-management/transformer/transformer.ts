@@ -34,43 +34,40 @@ export class MailTransformer {
         return dataSourceList;
     }
 
-    static transformCustomerGroupMailPartTableData(src: any, filter: any): any {
-        const dataSourceList: any = [];
+
+    //  for explanation see comment :- https://xp-dev.com/trac/HEA/ticket/2063#comment:557
+    public static transformCustomerGroupMailPartTableData
+        (customerGroupMailPart : Array<any>, customerGroupList : Array<any>, filter : any) : Array<any>{
+
         let index = 1;
         if (filter && filter.get('startRow')) {
             index = Number(filter.get('startRow')) + 1;
         }
-        src.forEach(element => {
-            let dataSourceObject: any = {};
-            const i = dataSourceList.findIndex((item: any) => item.customerGroup.groupCode === element.customerGroup.groupCode);
-            if (i !== -1) {
-                if (element.partType === 'header') {
-                    dataSourceList[i].headerId = element.customerGroupMailPartId;
-                    dataSourceList[i].header = 'Edit part';
-                } else if (element.partType === 'footer') {
-                    dataSourceList[i].footerId = element.customerGroupMailPartId;
-                    dataSourceList[i].footer = 'Edit part';
+
+        return customerGroupList.map((customerGroup) =>{
+
+            const mailPartCustomerGroup = {...customerGroup};
+            mailPartCustomerGroup.serialNumber = index;
+            mailPartCustomerGroup.groupName = `${mailPartCustomerGroup.groupCode}, ${mailPartCustomerGroup.groupName}`;
+            
+            const selectedMailPartCustomerGroup : Array<any> = customerGroupMailPart
+                .filter(data => data.customerGroupId == customerGroup.customerGroupId);
+
+            selectedMailPartCustomerGroup.forEach((mailPartGroup) =>{
+
+                if(mailPartGroup.partType == 'header'){
+                    mailPartCustomerGroup.header = 'Edit Part';
+                    mailPartCustomerGroup.headerId = mailPartGroup.customerGroupMailPartId;
+                } else if( mailPartGroup.partType == 'footer'){
+                    mailPartCustomerGroup.footer = 'Edit Part';
+                    mailPartCustomerGroup.footerId = mailPartGroup.customerGroupMailPartId;
                 }
-            } else {
-                dataSourceObject = element;
-                dataSourceObject.groupName = element.customerGroup.groupCode + ' ' + element.customerGroup.groupName;
-                dataSourceObject.serialNumber = index;
-                dataSourceObject.headerId = 0;
-                dataSourceObject.footerId = 0;
-                dataSourceObject.header = '';
-                dataSourceObject.footer = '';
-                if (element.partType === 'header') {
-                    dataSourceObject.header = 'Edit part';
-                    dataSourceObject.headerId = element.customerGroupMailPartId;
-                } else if (element.partType === 'footer') {
-                    dataSourceObject.footer = 'Edit part';
-                    dataSourceObject.footerId = element.customerGroupMailPartId;
-                }
-                index++;
-                dataSourceList.push(dataSourceObject);
-            }
-        });
-        return dataSourceList;
+
+            });
+
+            index++;
+            return mailPartCustomerGroup;
+        })
     }
 
     static transformContextVariableTableData(src: any): any {

@@ -79,6 +79,10 @@ export class MailService {
     return this.store.select(MailManagementState.getMailContentPartById);
   }
 
+  getCustomerGroupMailPartListTableData(): Observable<any> {
+    return this.store.select(MailManagementState.getCustomerGroupMailPartListTableData);
+  }
+
   getCustomerGroupMailPartList(): Observable<any> {
     return this.store.select(MailManagementState.getCustomerGroupMailPartList);
   }
@@ -179,8 +183,8 @@ export class MailService {
     return this.store.dispatch(new DeleteMailDescriptionCustomerGroupAction(mailDescriptionId, groupCode));
   }
 
-  loadCustomerGroupMailPartList(force: boolean, filter: any): Observable<MailManagementState> {
-    return this.store.dispatch(new GetCustomerGroupMailPartListAction(force, filter));
+  loadCustomerGroupMailPartList(force: boolean, mailPartParams: any, customerGroupParams : any): Observable<MailManagementState> {
+    return this.store.dispatch(new GetCustomerGroupMailPartListAction(force, mailPartParams, customerGroupParams));
   }
 
   loadCustomerGroupMailPartCount(filter: any): Observable<MailManagementState> {

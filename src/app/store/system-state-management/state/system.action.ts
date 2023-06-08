@@ -2,6 +2,7 @@ import { HttpParams } from "@angular/common/http";
 
 export enum SystemActionTypes {
     GET_CUSTOMER_GROUP_LIST = 'Get All Customer Group List',
+    GET_CUSTOMER_GROUP_COUNT = 'Get Customer Group Count',
     GET_CUSTOMER_GROUP_BY_ID = 'Get Customer Group By Id',
     ADD_CUSTOMER_GROUP_TO_TOPIC_DESCRIPTION = 'Add Customer Group To List',
     REMOVE_CUSTOMER_GROUP_TO_TOPIC_DESCRIPTION = 'Remove Customer Group To List',
@@ -69,6 +70,12 @@ export enum SystemActionTypes {
 }
 export class GetCustomerGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetCustomerGroupCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_COUNT;
     constructor(readonly force: boolean, readonly filter: any) {
     }
 }

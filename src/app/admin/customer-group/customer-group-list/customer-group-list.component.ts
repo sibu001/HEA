@@ -48,18 +48,26 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.scrollTop();
     this.search(undefined);
-    // this.findCustomerGroup(this.force, '');
+    this.getCustomerGroup();
+    this.getCustomerGroupCount();
   }
   scrollTop() {
     window.scroll(0, 0);
   }
-  findCustomerGroup(force: boolean, filter: any) {
-    this.systemService.loadCustomerGroupList(force, filter);
+  getCustomerGroup() {
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
-        this.performPagination(customerGroupList);
-
+        this.dataSource = [...customerGroupList];
       }));
+  }
+
+  getCustomerGroupCount(){
+    this.subscriptions.add(
+      this.systemService.getCustomerGroupCount()
+      .subscribe((response : number) =>{
+        this.customerGroupData.totalElements = response;
+      })
+    )
   }
 
   performPagination(dataList: any){
@@ -92,7 +100,9 @@ export class CustomerGroupListComponent implements OnInit, OnDestroy {
       .set('groupCode', (this.customerGroupForm.value.groupCode !== null ? this.customerGroupForm.value.groupCode : ''))
       .set('groupName', (this.customerGroupForm.value.groupName !== null ? this.customerGroupForm.value.groupName : ''))
       .set ('pageSize', this.pageSize.toString())
-    this.findCustomerGroup(true, params);
+    
+      this.systemService.loadCustomerGroupList(true, params);
+      this.systemService.loadCustomerGroupCount(true,params);
   }
 
 
