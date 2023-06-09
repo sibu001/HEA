@@ -77,12 +77,12 @@ export class CustomerGroupMailPartsListComponent implements OnInit, OnDestroy {
     .subscribe((reportList: any) => {
       this.mailData.content = reportList;
       this.dataSource = [...this.mailData.content];
-      AppUtility.scrollToTableTop(this.tableScrollPoint);
+      setTimeout(() => AppUtility.scrollToTableTop(this.tableScrollPoint));
     }));
   }
 
   getCustomerGroupList(){
-    this.systemService.loadCustomerGroupList(false, filter);
+    this.systemService.loadCustomerGroupList(false, '');
     this.subscriptions.add(this.systemService.getCustomerGroupList()
       .pipe(filter((item: any) => item && item.length),take(1))
       .subscribe((customerGroupList: any) => {

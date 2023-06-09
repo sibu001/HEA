@@ -1,5 +1,6 @@
 export interface DynamicViewManagementModel {
     JavaScriptPageList: any;
+    JavaScriptPageCount : any;
     JavaScriptPage: any;
     dynamicViewList: any;
     dynamicView: any;

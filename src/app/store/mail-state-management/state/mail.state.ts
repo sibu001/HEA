@@ -662,7 +662,12 @@ export class MailManagementState {
 
     @Action(GetCustomerGroupMailPartListAction)
     getAllCustomerGroupMailPartList(ctx: StateContext<MailManagementModel>, action: GetCustomerGroupMailPartListAction): Actions {
-        const force: boolean = action.force || MailManagementState.getCustomerGroupMailPartList(ctx.getState()) === undefined;
+
+        const customerGroupMailPartList = ctx.getState().customerGroupMailPartList;
+        const force: boolean = action.force || !customerGroupMailPartList;
+        
+        if(!force){ return ;}
+
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -675,8 +680,8 @@ export class MailManagementState {
                         const res = MailTransformer.
                             transformCustomerGroupMailPartTableData(customerGroupMailPartList, customerGroupList,action.customerGroupParams);
                         ctx.patchState({
-                            customerGroupMailPartListTableData : res,
-                            customerGroupMailPartList: customerGroupMailPartList,
+                            customerGroupMailPartListTableData : res,   // for showing data in table
+                            customerGroupMailPartList: customerGroupMailPartList, // for using data in edit List.
                         });
                     },this.utilityService.errorCallbak));
         }

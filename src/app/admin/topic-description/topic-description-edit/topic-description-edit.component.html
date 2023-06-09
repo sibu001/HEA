@@ -170,7 +170,7 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="nextTopic"
                 formControlName="nextTopic">
-                <option *ngFor='let topic of nextPermanentTopic' value="{{topic.id}}">
+                <option *ngFor='let topic of nextPermanentTopic' value="{{topic.surveyCode}}">
                   {{topic.label}}
                 </option>
               </select>

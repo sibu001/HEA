@@ -6,23 +6,21 @@
           JavaScript pages
         </p>
         <form [formGroup]='jsPagesForm'>
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Code:</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-3 col-xs-12">
               <input type="text" class="form-control" formControlName='code'
                 id='code'>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Page Name:</span>
             </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+            <div class="col-sm-4 col-md-4 col-lg-3 col-xs-12">
               <input type="text" class="form-control" formControlName='pageName'
                 id='pageName'>
             </div>
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
           </div>
 
           <div class="row rowPadding">
@@ -33,14 +31,14 @@
           </div>
 
           <div class="paddingTop">
-            <p class="messages">
+            <p class="messages" #tableScrollPoint>
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">JavaScript pages</span></p>
             <app-table [keys]="keys" [isPaginate]="true"
               (goToEditEvent)='goToEditJsPages($event)' (addEvent)='addJsPages()'
-              [isSearch]="false" [data]="dataSource"
-              [totalElement]="jsPagesData.totalElements" [disableLastButton]='true'
-              (changePageEvent)="search($event,false)">
+              [isSearch]="false" [data]="dataSource" [pageSize]="jsPagesData.pageSize"
+              [totalElement]="jsPagesData.totalElements" [pageIndex]="jsPagesData.pageIndex"
+              (changePageEvent)="search($event,true,true)"> 
             </app-table>
           </div>
         </form>

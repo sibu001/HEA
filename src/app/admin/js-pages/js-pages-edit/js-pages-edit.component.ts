@@ -6,6 +6,7 @@ import { skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -57,6 +58,7 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
       this.dynamicViewService.loadJavaScriptPageById(this.id);
       this.loadJavaScriptPageById();
     }
+    AppUtility.scrollTop();
   }
 
   findCustomerGroup(force: boolean, filter: any) {
@@ -107,18 +109,20 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
   back() {
     this.router.navigate(['admin/jsPages/jsPagesList'], { queryParams: { 'force': this.isForce } });
   }
+
   delete() {
-    if (confirm('Are you sure you want to delete?')) {
+    if (AppUtility.deleteConfirmatonBox()) {
       this.subscriptions.add(this.dynamicViewService.deleteJavaScriptPageById(this.id).pipe(skipWhile((item: any) => !item))
         .subscribe((response: any) => {
-          this.router.navigate(['admin/jsPages/jsPagesList'], { queryParams: { 'force': true } });
+          this.isForce = true;
+          this.back();
         }));
     }
   }
 
   save() {
-    if (this.jsPagesForm.valid) {
-      if (this.id !== null && this.id !== undefined) {
+    if (AppUtility.validateAndHighlightReactiveFrom(this.jsPagesForm)) {
+      if (this.id) {
         this.subscriptions.add(this.dynamicViewService.updateJavaScriptPage(this.id, this.jsPagesForm.value).pipe(
           skipWhile((item: any) => !item))
           .subscribe((response: any) => {
@@ -133,9 +137,8 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
             this.loadJavaScriptPageById();
           }));
       }
-    } else {
-      this.validateForm();
-    }
+    } 
+
   }
   validateForm() {
     for (const key of Object.keys(this.jsPagesForm.controls)) {
@@ -148,6 +151,12 @@ export class JsPagesEditComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.jsPagesForm.controls; }
+
+  highlightErrorField(formControlName : string) : boolean {
+    return AppUtility.showErrorMessageOnErrorField(this.f,formControlName);
+  }
+
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }

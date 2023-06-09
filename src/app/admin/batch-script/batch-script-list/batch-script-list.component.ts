@@ -53,7 +53,7 @@ export class BatchScriptListComponent implements OnInit, OnDestroy {
     this.getBatchScriptCount();
     this.getBatchScriptList();
     this.setUpForm(this.adminFilter.batchScriptFilter.formValue);
-    this.search(this.adminFilter.batchScriptFilter.page, false);
+    this.search(this.adminFilter.batchScriptFilter.page, this.force);
   }
 
   gotoEditBatchScript(event: any): any {

@@ -2,6 +2,7 @@ import { HttpParams } from "@angular/common/http";
 import { ElementRef } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { isNullOrUndefined } from "util";
 import { PaginateModel } from "../interface/paginate-model";
 import { AdminFilter, ScriptDebugConsoleData } from "../models/filter-object";
 import { AllowedMenuList } from "./app.allowedMenuList";
@@ -375,6 +376,19 @@ export class AppUtility {
     public static addCustomIdentifierForReducer(responseObject : any, lastRequestedId : any) : {response : any, id : number}{
         responseObject.id = lastRequestedId;
         return responseObject;
+    }
+
+    public static addRequestParamsToObjectState(responseObject : any, params : any) : {response : any, requestParams : string} {
+        responseObject.requestParams = params;
+        return  responseObject;
+    }
+
+    public static isRequestAndStateParamsSame(requestParams : any, stateParams : any) : boolean{
+       
+        if( isNullOrUndefined(requestParams) || isNullOrUndefined(stateParams)) 
+            return false;
+
+        return requestParams.toString() == stateParams.toString();
     }
 
     public static initPendingMessagesService(userId : string){

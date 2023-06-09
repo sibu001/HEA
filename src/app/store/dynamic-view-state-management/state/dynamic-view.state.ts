@@ -4,6 +4,7 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { TopicUtilityTransformer } from '../../topic-state-management/transformer/transformer';
 import {
     GetAttributeListAction,
@@ -26,6 +27,7 @@ import {
     GetDynamicViewListAction,
     SaveDynamicViewAction,
     UpdateDynamicViewAction,
+    GetJavaScriptPageCountAction,
 } from './dynamic-view.action';
 import { DynamicViewManagementModel } from './dynamic-view.model';
 
@@ -34,6 +36,7 @@ import { DynamicViewManagementModel } from './dynamic-view.model';
     name: 'dynamicViewManagement',
     defaults: {
         JavaScriptPageList: undefined,
+        JavaScriptPageCount : 0,
         JavaScriptPage: undefined,
         dynamicViewList: undefined,
         dynamicView: undefined,
@@ -51,7 +54,12 @@ export class DynamicViewManagementState {
 
     @Selector()
     static getJavaScriptPageList(state: DynamicViewManagementModel): any {
-        return state.JavaScriptPageList;
+        return state.JavaScriptPageList.response;
+    }
+
+    @Selector()
+    static getJavaScriptPageCount(state: DynamicViewManagementModel): any {
+        return state.JavaScriptPageCount.response;
     }
 
     @Selector()
@@ -91,16 +99,19 @@ export class DynamicViewManagementState {
 
     @Action(GetJavaScriptPageListAction)
     getAllJavaScriptPage(ctx: StateContext<DynamicViewManagementModel>, action: GetJavaScriptPageListAction): Actions {
-        const force: boolean = action.force || DynamicViewManagementState.getJavaScriptPageList(ctx.getState()) === undefined;
-        let result: Actions;
+        
+        const JavaScriptPageList = ctx.getState().JavaScriptPageList;
+        let force: boolean = action.force 
+            || (!JavaScriptPageList || !AppUtility.isRequestAndStateParamsSame(action.filter,JavaScriptPageList.requestParams));
+
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGetWithParams(AppConstant.javaScriptPages, action.filter)
+            return this.loginService.performGetWithParams(AppConstant.javaScriptPages, action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            JavaScriptPageList: response,
+                            JavaScriptPageList: AppUtility.addRequestParamsToObjectState({response : response}, action.filter),
                         });
                     },
                         error => {
@@ -108,7 +119,29 @@ export class DynamicViewManagementState {
                             this.utilityService.showErrorMessage(error.errorMessage);
                         }));
         }
-        return result;
+        return;
+    }
+
+    @Action(GetJavaScriptPageCountAction)
+    getJavaScriptPageCount(ctx: StateContext<DynamicViewManagementModel>, action: GetJavaScriptPageCountAction): Actions {
+        
+        const JavaScriptPageCount = ctx.getState().JavaScriptPageCount;
+        let force: boolean = action.force 
+            || (!JavaScriptPageCount || !AppUtility.isRequestAndStateParamsSame(action.filter,JavaScriptPageCount.requestParams));
+
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            return this.loginService.performGetWithParams(
+                AppUtility.endPointGenerator([AppConstant.javaScriptPages,'count']), action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            JavaScriptPageCount: AppUtility.addRequestParamsToObjectState({response : response}, action.filter),
+                        });
+                    },this.utilityService.errorCallbak));
+        }
+        return;
     }
 
     @Action(GetJavaScriptPageByIdAction)

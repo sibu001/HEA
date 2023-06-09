@@ -1,6 +1,6 @@
 export interface SystemManagementModel {
     customerGroupList: any;
-    customerGroupCount : number;
+    customerGroupCount : any;
     customerGroup: any;
     placeListByCustomerGroupId: any;
     programGroupListByCustomerGroupId: any;

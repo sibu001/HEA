@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -13,6 +14,7 @@ import {
   GetJavaScriptCustomerGroupByIdAction,
   GetJavaScriptCustomerGroupListAction,
   GetJavaScriptPageByIdAction,
+  GetJavaScriptPageCountAction,
   GetJavaScriptPageListAction,
   SaveAttributeAction,
   SaveDynamicViewAction,
@@ -34,6 +36,10 @@ export class DynamicViewService {
 
   getJavaScriptPageList(): Observable<any> {
     return this.store.select(DynamicViewManagementState.getJavaScriptPageList);
+  }
+
+  getJavaScriptPageCount(): Observable<any> {
+    return this.store.select(DynamicViewManagementState.getJavaScriptPageCount);
   }
 
   getJavaScriptPageById(): Observable<any> {
@@ -58,6 +64,10 @@ export class DynamicViewService {
 
   loadJavaScriptPageList(force: boolean, filter: any): Observable<DynamicViewManagementState> {
     return this.store.dispatch(new GetJavaScriptPageListAction(force, filter));
+  }
+
+  loadJavaScriptPageCount(force: boolean, filter: HttpParams): Observable<DynamicViewManagementState> {
+    return this.store.dispatch(new GetJavaScriptPageCountAction(force, filter));
   }
 
   loadJavaScriptPageById(id: number): Observable<DynamicViewManagementState> {

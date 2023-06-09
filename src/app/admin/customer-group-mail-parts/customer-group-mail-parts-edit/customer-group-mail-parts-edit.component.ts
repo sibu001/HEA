@@ -43,6 +43,7 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
   id: any;
   partForm: FormGroup;
   isForce = false;
+  public showContentTemplate : boolean = false;
   customerGroupMailPartData : any = {};
   customerGroupData: any = [];
   private readonly subscriptions: Subscription = new Subscription();
@@ -83,8 +84,8 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  findCustomerGroup(force: boolean, filter: any) {
-    this.systemService.loadCustomerGroupList(force, filter);
+  findCustomerGroup(force: boolean, params : any) {
+    this.systemService.loadCustomerGroupList(force, params);
     this.subscriptions.add(this.systemService.getCustomerGroupList()
     // .pipe(filter((item: any) => item && item.length),take(1))
       .subscribe((customerGroupList: any) => {
@@ -147,6 +148,7 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
   delete(): any {
     this.subscriptions.add(this.mailService.deleteCustomerGroupMailPartById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
+        this.isForce = true;
         this.back();
       }));
   }

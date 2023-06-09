@@ -327,7 +327,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       showUnique: [event !== undefined ? event.showUnique : ''],
       showRightMenu: [event !== undefined ? event.showRightMenu : ''],
       showTopMenu: [event !== undefined ? event.showTopMenu : ''],
-      nextTopic: [event !== undefined ? this.selectNextPermanentTopic() : ''],
+      nextTopic: [event !== undefined ? event.nextSurveyCode : ''],
       messageOnUnload: [event !== undefined ? event.messageOnUnload : ''],
       allowPublic: [event !== undefined ? event.allowPublic : ''],
       messageForSurveyUnloadEvent: [event !== undefined ? event.messageForSurveyUnloadEvent : ''],
@@ -339,15 +339,15 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
     });
   }
 
-selectNextPermanentTopic(){
-  let index ;
-  for(let i = 1; i < this.nextPermanentTopic.length ; i++) {
-   if(this.topicDescriptionData.nextSurveyCode == this.nextPermanentTopic[i].surveyCode) {
-    return this.nextPermanentTopic[i].id;
-   }
-  }
-  return 0;
-}
+// selectNextPermanentTopic(){
+//   let index ;
+//   for(let i = 1; i < this.nextPermanentTopic.length ; i++) {
+//    if(this.topicDescriptionData.nextSurveyCode == this.nextPermanentTopic[i].surveyCode) {
+//     return this.nextPermanentTopic[i].id;
+//    }
+//   }
+//   return 0;
+// }
 
 loadPermanentTopicList(){
   this.topicService.loadAllPossibleTopicDescriptionList(false);

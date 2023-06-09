@@ -1,5 +1,8 @@
+import { HttpParams } from "@angular/common/http";
+
 export enum DynamicViewActionTypes {
     GET_JAVA_SCRIPT_PAGE_LIST = 'Get All Java Script Page List',
+    GET_JAVA_SCRIPT_PAGE_COUNT = 'Get All Java Script Page Count',
     GET_JAVA_SCRIPT_PAGE_BY_ID = 'Get Java Script Page By Id',
     UPDATE_JAVA_SCRIPT_PAGE = 'Update Java Script Page',
     SAVE_JAVA_SCRIPT_PAGE = 'Save Java Script Page',
@@ -24,6 +27,13 @@ export enum DynamicViewActionTypes {
 export class GetJavaScriptPageListAction {
     static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.GET_JAVA_SCRIPT_PAGE_LIST;
     constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+
+export class GetJavaScriptPageCountAction {
+    static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.GET_JAVA_SCRIPT_PAGE_COUNT;
+    constructor(readonly force: boolean, readonly filter: HttpParams) {
     }
 }
 

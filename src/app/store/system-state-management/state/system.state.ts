@@ -78,8 +78,8 @@ import { SystemManagementModel } from './system.model';
 @State<SystemManagementModel>({
     name: 'systemManagement',
     defaults: {
-        customerGroupList: [],
-        customerGroupCount : 0,
+        customerGroupList: undefined,
+        customerGroupCount : undefined,
         customerGroup: undefined,
         placeListByCustomerGroupId: undefined,
         programGroupListByCustomerGroupId: undefined,
@@ -126,12 +126,12 @@ export class SystemManagementState {
 
     @Selector()
     static getCustomerGroupList(state: SystemManagementModel): any {
-        return state.customerGroupList.map(data => {return {...data}});
+        return state.customerGroupList.response.map(data => {return {...data}});
     }
 
     @Selector()
     static getCustomerGroupCount(state: SystemManagementModel): any {
-        return state.customerGroupCount;
+        return state.customerGroupCount.response;
     }
 
     @Selector()
@@ -308,7 +308,11 @@ export class SystemManagementState {
     @Action(GetCustomerGroupListAction)
     getAllCustomerGroup(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupListAction): Actions {
         const force: boolean = true;
-        // = action.force || !ctx.getState().customerGroupList.length;
+        const customerGroupList = ctx.getState().customerGroupList;
+        if(customerGroupList && AppUtility.isRequestAndStateParamsSame(customerGroupList.requestParams,action.filter)){
+            return;
+        }
+
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -317,7 +321,7 @@ export class SystemManagementState {
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            customerGroupList: response,
+                            customerGroupList: AppUtility.addRequestParamsToObjectState( { response : response }, action.filter),
                         });
                     },
                         error => {
@@ -332,7 +336,12 @@ export class SystemManagementState {
     @Action(GetCustomerGroupCountAction)
     getAllCustomerGroupCount(ctx: StateContext<SystemManagementModel>, action: GetCustomerGroupCountAction): Actions {
         const force: boolean = true;
-        // = action.force || !ctx.getState().customerGroupList.length;
+        const customerGroupCount = ctx.getState().customerGroupCount;
+        
+        if(customerGroupCount && AppUtility.isRequestAndStateParamsSame(customerGroupCount.requestParams,action.filter)){
+            return;
+        }
+
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -341,7 +350,7 @@ export class SystemManagementState {
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            customerGroupCount: response,
+                            customerGroupCount: AppUtility.addRequestParamsToObjectState( { response : response }, action.filter),
                         });
                     },this.utilityService.errorCallbak));
         }
