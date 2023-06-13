@@ -23,6 +23,7 @@ export class JsPagesListComponent implements OnInit, OnDestroy {
   public dataSource: any;
   public totalElement = 0;
   public adminFilter : AdminFilter;
+  public pageIndex : number = 0;
   @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   public jsPagesData = {
     pageSize : Number(AppConstant.pageSize),
@@ -49,7 +50,7 @@ export class JsPagesListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setUpForm(this.adminFilter.jsPageList.formValue);
-    this.search(this.adminFilter.jsPageList.page, this.force, false);
+    this.search(this.adminFilter.jsPageList.page, this.force, this.force?false: true);
   }
 
   addJsPages(): any {
@@ -84,8 +85,9 @@ export class JsPagesListComponent implements OnInit, OnDestroy {
           modifiedObject.showInMenu = '';
 
         return modifiedObject;
-      })
-      AppUtility.scrollToTableTop(this.tableScrollPoint);
+      });
+      
+      setTimeout(() => AppUtility.scrollToTableTop(this.tableScrollPoint),50);
     }));
   }
 
@@ -104,6 +106,7 @@ export class JsPagesListComponent implements OnInit, OnDestroy {
   search(event: any, isSearch: boolean, pageChange : boolean = false): void {
 
     if(!event) this.jsPagesData.pageIndex = 0;
+    else this.jsPagesData.pageIndex = event.pageIndex;
     this.adminFilter.jsPageList = { page : event, formValue : this.jsPagesForm.value};
     AppUtility.saveAdminFilter(this.adminFilter);
 
@@ -118,11 +121,11 @@ export class JsPagesListComponent implements OnInit, OnDestroy {
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.jsPagesData.pageSize.toString())
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
       .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
-      // .set('jsPageId', '')
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'));
     
     this.loadJsPagesList(isSearch,listParams);
     this.loadJsPagesCount(!pageChange,countParams);
+    
   }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

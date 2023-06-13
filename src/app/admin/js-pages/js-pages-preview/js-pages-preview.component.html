@@ -25,9 +25,12 @@
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <div *ngIf="url!=null"
+              <!-- <div *ngIf="url!=null"
                 [innerHTML]="url |
-                safeHtml"></div>
+                safeHtml"></div> -->
+                <iframe id="ifrmMailContent" title="Mail Preview"
+                class="form-control" style="width: 100%; overflow:hidden; word-break: break-word; min-height: 650px;"
+                [style.height]='iframeHeight'></iframe>
             </div>
           </div>
           <div class="row rowPadding">

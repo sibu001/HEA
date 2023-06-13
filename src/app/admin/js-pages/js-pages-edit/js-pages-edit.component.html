@@ -161,33 +161,22 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">JS Page Customer groups</span></p>
-            <app-table [keys]="customerGroupKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true [hideMasterCheckBox]=true
-              [isSearch]="false" [data]="customerGroupDataSource" [totalElement]="customerGroupData.totalElements">
+            <app-table [keys]="customerGroupKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true 
+              [hideMasterCheckBox]=true [isSearch]="false" [data]="customerGroupDataSource"   id = "customerGroupId"
+              [totalElement]="customerGroupData.totalElements" [selectionList]='selectedCustomerGroupList'
+              (checkBoxChangeEvent)="newlySelectedCustomerGroupList = ($event)" >
             </app-table>
           </div>
 
           <div class="row rowPadding paddingTop">
-            <div class="col-sm-5 col-md-5 col-lg-5 col-xs-6
-              display-inline-button-big">
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3 display-inline-button-big">
               <button type="button" class="btn btn-primary mb-5" (click)="back()">Back</button>
             </div>
 
-            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-6
-              display-inline-button-big" style="text-align: end;">
-              <button type="button" class="btn btn-primary mb-5"
-                (click)="Preview()" *ngIf="id!==undefined&&id!==null">
-                Preview
-              </button>
-            </div>
-
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6
-              display-inline-button-big" style="text-align: left;">
-              <button type="button" class="btn btn-primary mb-5" (click)="delete()" 
-               *ngIf="id!==undefined&&id!==null">Delete</button>
-            </div>
-
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6"  style="text-align: end;">
+            <div class="col-sm-10 col-md-10 col-lg-10 col-xs-9 right-buttons">
               <button type="button" class="btn btn-primary mb-5" (click)="save()">Save</button>
+              <button type="button" class="btn btn-primary mb-5" (click)="delete()" *ngIf="id">Delete</button>
+              <button type="button" class="btn btn-primary mb-5" (click)="Preview()" *ngIf="id"> Preview</button>
             </div>
           </div>
         </form>

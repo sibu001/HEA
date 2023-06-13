@@ -1,7 +1,7 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
@@ -12,13 +12,16 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
   templateUrl: './js-pages-preview.component.html',
   styleUrls: ['./js-pages-preview.component.css']
 })
-export class JsPagesPreviewComponent implements OnInit, OnDestroy {
+export class JsPagesPreviewComponent implements OnInit, OnDestroy, AfterViewInit {
   id: any;
   jsPreviewForm: FormGroup;
   url: any;
+  public iframeHeight : string = '650px';
+
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
+    private readonly router : Router,
     private readonly dynamicViewService: DynamicViewService,
     private readonly location: Location) {
     this.activateRoute.queryParams.subscribe(params => {
@@ -26,16 +29,28 @@ export class JsPagesPreviewComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngAfterViewInit(): void {
+  }
+
+  private renderJsPage(){
+    setTimeout(()=>{
+      const iFrame = document.getElementById('ifrmMailContent') as HTMLIFrameElement;
+      iFrame.contentDocument.body.innerHTML = this.url;
+      this.iframeHeight = iFrame.contentWindow.document.body.scrollHeight + 20 + 'px';
+    },100);
+  
+  }
+
 
   ngOnInit() {
     this.setForm(undefined);
-    if (this.id !== undefined) {
+    if (this.id) {
       this.dynamicViewService.loadJavaScriptPageById(this.id);
-      this.loadJavaScriptPageById();
+      this.getJavaScriptPageById();
     }
   }
 
-  loadJavaScriptPageById() {
+  getJavaScriptPageById() {
     this.subscriptions.add(this.dynamicViewService.getJavaScriptPageById().pipe(skipWhile((item: any) => !item))
       .subscribe((jsPages: any) => {
         this.setForm(jsPages);
@@ -44,17 +59,22 @@ export class JsPagesPreviewComponent implements OnInit, OnDestroy {
 
 
   setForm(event: any) {
+
     if (event && event.pageBody) {
       this.url = event.pageBody;
+      this.renderJsPage();
     }
+
     this.jsPreviewForm = this.formBuilder.group({
       code: [event !== undefined ? event.code : ''],
       name: [event !== undefined ? event.name : ''],
       pageBody: [event !== undefined ? event.pageBody : ''],
     });
+
   }
+
   back() {
-    this.location.back();
+    this.router.navigate(['/admin/jsPages/jsPagesEdit'],{ queryParams: { id : this.id}});
   }
 
   save(): any { }

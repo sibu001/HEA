@@ -11,6 +11,7 @@ import {
   GetAttributeListAction,
   GetDynamicViewByIdAction,
   GetDynamicViewListAction,
+  GetDynamicViewListCountAction,
   GetJavaScriptCustomerGroupByIdAction,
   GetJavaScriptCustomerGroupListAction,
   GetJavaScriptPageByIdAction,
@@ -46,6 +47,10 @@ export class DynamicViewService {
     return this.store.select(DynamicViewManagementState.getJavaScriptPageById);
   }
 
+  getJavaScriptCustomerGroupList() : Observable<any>{
+    return this.store.select(DynamicViewManagementState.getJavaScriptCustomerGroupList);
+  }
+
   getDynamicViewList(): Observable<any> {
     return this.store.select(DynamicViewManagementState.getDynamicViewList);
   }
@@ -60,6 +65,10 @@ export class DynamicViewService {
 
   getAttributeById(): Observable<any> {
     return this.store.select(DynamicViewManagementState.getAttributeById);
+  }
+
+  getDynamicViewCount() : Observable<number> {
+    return this.store.select(DynamicViewManagementState.getDynamicViewCount);
   }
 
   loadJavaScriptPageList(force: boolean, filter: any): Observable<DynamicViewManagementState> {
@@ -88,6 +97,10 @@ export class DynamicViewService {
 
   loadDynamicViewList(force: boolean, filter: any): Observable<DynamicViewManagementState> {
     return this.store.dispatch(new GetDynamicViewListAction(force, filter));
+  }
+
+  loadDynamicViewCount(force: boolean, filter: any): Observable<DynamicViewManagementState> {
+    return this.store.dispatch(new GetDynamicViewListCountAction(force, filter));
   }
 
   loadDynamicViewById(id: number): Observable<DynamicViewManagementState> {
@@ -126,23 +139,23 @@ export class DynamicViewService {
     return this.store.dispatch(new DeleteAttributeByIdAction(id));
   }
 
-  loadJavaScriptCustomerGroupList(force: boolean, filter: any): Observable<DynamicViewManagementState> {
-    return this.store.dispatch(new GetJavaScriptCustomerGroupListAction(force, filter));
+  loadJavaScriptCustomerGroupList(force: boolean, id: number): Observable<DynamicViewManagementState> {
+    return this.store.dispatch(new GetJavaScriptCustomerGroupListAction(force, id));
   }
 
   loadJavaScriptCustomerGroupById(id: number): Observable<DynamicViewManagementState> {
     return this.store.dispatch(new GetJavaScriptCustomerGroupByIdAction(id));
   }
 
-  saveJavaScriptCustomerGroup(javaScriptCustomerGroup: any): Observable<DynamicViewManagementState> {
-    return this.store.dispatch(new SaveJavaScriptCustomerGroupAction(javaScriptCustomerGroup));
+  saveJavaScriptCustomerGroup(jsPageId : number, id: number): Observable<DynamicViewManagementState> {
+    return this.store.dispatch(new SaveJavaScriptCustomerGroupAction(jsPageId,id));
   }
 
   updateJavaScriptCustomerGroup(id: number, javaScriptCustomerGroup: any): Observable<DynamicViewManagementState> {
     return this.store.dispatch(new UpdateJavaScriptCustomerGroupAction(id, javaScriptCustomerGroup));
   }
 
-  deleteJavaScriptCustomerGroupById(id: number): Observable<DynamicViewManagementState> {
-    return this.store.dispatch(new DeleteJavaScriptCustomerGroupByIdAction(id));
+  deleteJavaScriptCustomerGroupById(jsPageId : number, id: number): Observable<DynamicViewManagementState> {
+    return this.store.dispatch(new DeleteJavaScriptCustomerGroupByIdAction(jsPageId,id));
   }
 }

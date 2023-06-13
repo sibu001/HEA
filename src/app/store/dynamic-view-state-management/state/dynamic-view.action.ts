@@ -13,7 +13,8 @@ export enum DynamicViewActionTypes {
     SAVE_JAVA_SCRIPT_CUSTOMER_GROUP = 'Save Java Script Customer Group',
     DELETE_JAVA_SCRIPT_CUSTOMER_GROUP_BY_ID = 'Delete Java Script Customer Group By Id',
     GET_DYNAMIC_VIEW_LIST = 'Get All Dynamic View List',
-    GET_DYNAMIC_VIEW_BY_ID = 'Get Dynamic View By Id',
+    GET_DYNAMIC_VIEW_LIST_COUNT = 'Get All Dynamic View List Count',
+    GET_DYNAMIC_VIEW_BY_ID = 'Get Dynamic View By Id', 
     UPDATE_DYNAMIC_VIEW = 'Update Dynamic View',
     SAVE_DYNAMIC_VIEW = 'Save Dynamic View',
     DELETE_DYNAMIC_VIEW_BY_ID = 'Delete Dynamic View By Id',
@@ -62,7 +63,7 @@ export class DeleteJavaScriptPageByIdAction {
 
 export class GetJavaScriptCustomerGroupListAction {
     static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.GET_JAVA_SCRIPT_CUSTOMER_GROUP_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly id: number) {
     }
 }
 
@@ -79,13 +80,13 @@ export class UpdateJavaScriptCustomerGroupAction {
 
 export class SaveJavaScriptCustomerGroupAction {
     static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.SAVE_JAVA_SCRIPT_CUSTOMER_GROUP;
-    constructor(readonly javaScriptCustomerGroup: any) {
+    constructor(readonly jsPageId: number, readonly id : number) {
     }
 }
 
 export class DeleteJavaScriptCustomerGroupByIdAction {
     static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.DELETE_JAVA_SCRIPT_CUSTOMER_GROUP_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly jsPageId: number, readonly id : number) {
     }
 }
 
@@ -94,6 +95,13 @@ export class GetDynamicViewListAction {
     constructor(readonly force: boolean, readonly filter: any) {
     }
 }
+
+export class GetDynamicViewListCountAction {
+    static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.GET_DYNAMIC_VIEW_LIST_COUNT;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
 
 export class GetDynamicViewByIdAction {
     static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.GET_DYNAMIC_VIEW_BY_ID;

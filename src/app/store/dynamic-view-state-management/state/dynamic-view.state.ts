@@ -28,6 +28,7 @@ import {
     SaveDynamicViewAction,
     UpdateDynamicViewAction,
     GetJavaScriptPageCountAction,
+    GetDynamicViewListCountAction,
 } from './dynamic-view.action';
 import { DynamicViewManagementModel } from './dynamic-view.model';
 
@@ -39,6 +40,7 @@ import { DynamicViewManagementModel } from './dynamic-view.model';
         JavaScriptPageCount : 0,
         JavaScriptPage: undefined,
         dynamicViewList: undefined,
+        dynamicViewCount : undefined,
         dynamicView: undefined,
         attributeList: undefined,
         attribute: undefined,
@@ -69,7 +71,7 @@ export class DynamicViewManagementState {
 
     @Selector()
     static getJavaScriptCustomerGroupList(state: DynamicViewManagementModel): any {
-        return state.javaScriptCustomerGroupList;
+        return state.javaScriptCustomerGroupList.response;
     }
 
     @Selector()
@@ -80,6 +82,11 @@ export class DynamicViewManagementState {
     @Selector()
     static getDynamicViewList(state: DynamicViewManagementModel): any {
         return state.dynamicViewList;
+    }
+
+    @Selector()
+    static getDynamicViewCount(state : DynamicViewManagementModel): number {
+        return state.dynamicViewCount;
     }
 
     @Selector()
@@ -146,6 +153,19 @@ export class DynamicViewManagementState {
 
     @Action(GetJavaScriptPageByIdAction)
     getJavaScriptPageById(ctx: StateContext<DynamicViewManagementModel>, action: GetJavaScriptPageByIdAction): Actions {
+
+        const javaScriptPage : any = ctx.getState().JavaScriptPage;
+        if(javaScriptPage && javaScriptPage.id == action.id){
+            return;
+        }
+
+        const JavaScriptPageList : any = ctx.getState().JavaScriptPageList;
+        if(JavaScriptPageList && JavaScriptPageList.response){
+            const  javaScriptPage  : any = JavaScriptPageList.response.find(data => data.id == action.id);
+            ctx.patchState({ JavaScriptPage : javaScriptPage });
+            return; 
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.javaScriptPages + '/' + action.id)
             .pipe(
@@ -238,25 +258,35 @@ export class DynamicViewManagementState {
         return result;
     }
 
+    @Action(GetDynamicViewListCountAction)
+    getDynamicViewListCountAction(ctx : StateContext<DynamicViewManagementModel>, action : GetDynamicViewListCountAction) : Actions {
+        return this.loginService.performGetWithParams(
+            AppUtility.endPointGenerator([AppConstant.dynamicViews,AppConstant.count]),action.filter)
+            .pipe(tap(response =>{  
+                ctx.patchState({ dynamicViewCount : response});
+            },this.utilityService.errorCallbak));
+    }
+
     @Action(GetJavaScriptCustomerGroupListAction)
     getAllJavaScriptCustomerGroup(ctx: StateContext<DynamicViewManagementModel>, action: GetJavaScriptCustomerGroupListAction): Actions {
-        const force: boolean = action.force || DynamicViewManagementState.getJavaScriptCustomerGroupList(ctx.getState()) === undefined;
+        const javaScriptCustomerGroupList : any = ctx.getState().javaScriptCustomerGroupList;
+        
+        const force: boolean = action.force || !javaScriptCustomerGroupList || javaScriptCustomerGroupList.id != action.id;
         let result: Actions;
+        
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.javaScriptCustomerGroups + action.filter)
+            result = this.loginService.performGet(
+                AppUtility.endPointGenerator([AppConstant.javaScriptPages,action.id,AppConstant.groups]))
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            javaScriptCustomerGroupList: response,
+                            javaScriptCustomerGroupList: AppUtility.addCustomIdentifierForReducer({ response : response }, action.id),
                         });
-                    },
-                        error => {
-                            document.getElementById('loader').classList.remove('loading');
-                            this.utilityService.showErrorMessage(error.errorMessage);
-                        }));
+                    },this.utilityService.errorCallbak));
         }
+        
         return result;
     }
 
@@ -280,11 +310,21 @@ export class DynamicViewManagementState {
     @Action(DeleteJavaScriptCustomerGroupByIdAction)
     deleteJavaScriptCustomerGroupById(ctx: StateContext<DynamicViewManagementModel>, action: DeleteJavaScriptCustomerGroupByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.javaScriptCustomerGroups + '/' + action.id)
+        return this.loginService.performDelete(
+            AppUtility.endPointGenerator(
+                [AppConstant.javaScriptPages,action.jsPageId,AppConstant.groups,action.id]))
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage('Deleted Successfully');
+                    const javaScriptCustomerGroupList = ctx.getState().javaScriptCustomerGroupList;
+                    if(javaScriptCustomerGroupList){
+                        javaScriptCustomerGroupList.response = javaScriptCustomerGroupList.response.filter(data => data.customerGroupId != action.id)
+                    }
+
+                    ctx.patchState({
+                        javaScriptCustomerGroupList: { response : [...javaScriptCustomerGroupList.response], id : javaScriptCustomerGroupList.id },
+                    });
+
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -295,13 +335,20 @@ export class DynamicViewManagementState {
     @Action(SaveJavaScriptCustomerGroupAction)
     saveJavaScriptCustomerGroup(ctx: StateContext<DynamicViewManagementModel>, action: SaveJavaScriptCustomerGroupAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.javaScriptCustomerGroup, AppConstant.javaScriptCustomerGroups)
+        return this.loginService.performPost({},
+            AppUtility.endPointGenerator(
+                [AppConstant.javaScriptPages,action.jsPageId,AppConstant.groups,action.id]))
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage('Save Successfully');
+
+                    const javaScriptCustomerGroupList = ctx.getState().javaScriptCustomerGroupList;
+                    if(javaScriptCustomerGroupList){
+                        javaScriptCustomerGroupList.response.push(response);
+                    }
+
                     ctx.patchState({
-                        javaScriptCustomerGroup: response,
+                        javaScriptCustomerGroupList: { response : [...javaScriptCustomerGroupList.response], id : javaScriptCustomerGroupList.id },
                     });
                 },
                     error => {
@@ -317,10 +364,6 @@ export class DynamicViewManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage('Updated Successfully');
-                    ctx.patchState({
-                        javaScriptCustomerGroup: response,
-                    });
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

@@ -40,6 +40,8 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.setUpForm(undefined);
     this.search(undefined, false);
+    this.getViewConfigurationCount();
+    this.getViewConfigurationList();
   }
 
   addViewConfigurations(): any {
@@ -69,13 +71,28 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
     });
   }
 
-  findViewConfiguration(force: boolean, filter: any): void {
+  loadViewConfigurationList(force: boolean, filter: any): void {
     this.dynamicViewService.loadDynamicViewList(force, filter);
+  }
+
+  getViewConfigurationList() : void{
     this.subscriptions.add(this.dynamicViewService.getDynamicViewList().pipe(skipWhile((item: any) => !item))
-      .subscribe((dynamicViewList: any) => {
-        this.viewData.content = dynamicViewList;
-        this.viewData.totalElements = dynamicViewList.length;
-        this.dataSource = [...this.viewData.content];
+    .subscribe((dynamicViewList: any) => {
+      this.viewData.content = dynamicViewList;
+      this.viewData.totalElements = dynamicViewList.length;
+      this.dataSource = [...this.viewData.content];
+    }));
+  }
+
+  loadViewConfigurationCount(force : boolean , params : HttpParams) : void {
+      this.dynamicViewService.loadDynamicViewCount(force,params);
+  }
+
+  getViewConfigurationCount(): void {
+    this.subscriptions.add(
+      this.dynamicViewService.getDynamicViewCount()
+      .subscribe(response =>{
+        this.viewData.totalElements = response;
       }));
   }
 
@@ -92,7 +109,9 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
       .set('viewConfigurationId', '')
       .set('filter.configurationName', (this.viewConfiguration.value.configurationName !== null ? this.viewConfiguration.value.configurationName : ''))
       .set('filter.user.name', (this.viewConfiguration.value.userName !== null ? this.viewConfiguration.value.userName : ''));
-    this.findViewConfiguration(true, params);
+    
+      this.loadViewConfigurationList(true, params);
+      this.loadViewConfigurationCount(true,params);
   }
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

@@ -5,6 +5,7 @@ export class AppConstant {
     public static viewConfigurations = 'viewConfigurations';
     public static customerGroups = 'customerGroups';
     public static programGroups = 'programGroups';
+    public static groups = 'groups';
     public static customerAlertTypes = 'customerAlertTypes';
     public static credentialTypes = 'credentialTypes';
     public static users = 'users';
@@ -107,6 +108,7 @@ export class AppConstant {
     public static electricityDailySmartMeterList = 'electricityDailyMeter';
     public static waterList = 'water';
     public static water = 'water';
+    public static count = 'count'
     public static waterChargeList = 'waterCharge';
     public static waterCharge = 'waterCharge';
     public static waterSmartMeterList = 'smartMeterWater';

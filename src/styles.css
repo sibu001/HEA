@@ -2454,6 +2454,15 @@ app-customer-event-list .mat-column-eventName{
  -webkit-hyphens: auto;
  hyphens: auto;      
 }
+
+.mat-column-name{
+  flex : 0 0 16% !important;
+}
+
+app-js-pages-list .mat-column-name{
+  flex : 0 0 35% !important;
+}
+
 @media (max-width: 767px) {
   .survey.TH.text-right{
     text-align: left;
