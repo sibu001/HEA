@@ -1,10 +1,10 @@
 import { DatePipe } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
@@ -13,6 +13,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { Users } from '../models/user';
 import { LoginService } from '../services/login.service';
 import { AppConstant } from '../utility/app.constant';
+import { AppUtility } from '../utility/app.utility';
 
 @Component({
   selector: 'customerEventList',
@@ -26,7 +27,10 @@ export class customerEventListComponent implements OnInit, OnDestroy {
   public keys: Array<TABLECOLUMN> = [];
   public dataSource: any;
   public totalElement = 0;
+  public pageSize : number = Number(AppConstant.pageSize);
+  public pageIndex : number = 0;
   public fileObject: any;
+  @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef;
   public reportData = {
     content: [{ 'test': 'test' }],
     totalElements: 1,
@@ -50,7 +54,7 @@ export class customerEventListComponent implements OnInit, OnDestroy {
       this.adminFilter = new AdminFilter();
     }
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
     });
   }
 
@@ -96,7 +100,7 @@ export class customerEventListComponent implements OnInit, OnDestroy {
     this.administrativeService.getEventHistoryCount(filter);
   }
 
-  search(event: any, isSearch: boolean): void {
+  search(event: any, isSearch: boolean, pageChange : boolean = false ): void {
     this.adminFilter.eventHistoryFilter.page = event;
     let sortFiled = '';
     if (event && event.sort.active === 'eventCode') {
@@ -106,12 +110,11 @@ export class customerEventListComponent implements OnInit, OnDestroy {
     } else if (event && event.sort.active) {
       sortFiled = event.sort.active;
     }
-    const params = new HttpParams()
-      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
-      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
-        (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('sortField', (event && sortFiled !== undefined ? (sortFiled === 'customerName' ? 'customer.user.name' : sortFiled) : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+
+    if(!event) this.pageIndex = 0;
+    else this.pageIndex = event.pageIndex;
+
+    const dataCountParams = new HttpParams()
       .set('dateFrom', (this.topicForm.value.periodStart ? this.datePipe.transform(this.topicForm.value.periodStart, 'MM/dd/yyyy') : ''))
       .set('customer.auditId', (this.topicForm.value.auditId !== null ? this.topicForm.value.auditId : ''))
       .set('customerEventType.eventCode', (this.topicForm.value.eventCode !== null ? this.topicForm.value.eventCode : ''))
@@ -120,10 +123,17 @@ export class customerEventListComponent implements OnInit, OnDestroy {
       .set('customerEventType.eventName', (this.topicForm.value.eventName !== null ? this.topicForm.value.eventName : ''))
       .set('eventFile', (this.topicForm.value.eventFile !== null ? this.topicForm.value.eventFile : ''));
 
-      this.force = true;
-      this.filter = params;
-      if(isSearch) this.administrativeService.getEventHistoryCount(this.filter);
-      this.administrativeService.loadEventHistoryList(this.force, this.filter);
+
+    const dataListParams : HttpParams = dataCountParams
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.pageSize.toString())
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
+        (event.pageIndex * event.pageSize) + '' : '0'))
+      .set('sortField', (event && sortFiled !== undefined ? (sortFiled === 'customerName' ? 'customer.user.name' : sortFiled) : ''))
+      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'));
+
+      // this.filter = params;
+      this.administrativeService.getEventHistoryCount(dataCountParams,!pageChange);
+      this.administrativeService.loadEventHistoryList(isSearch, dataListParams);
   }
 
   getEventHistoryDataCountFromStore(){
@@ -137,10 +147,11 @@ export class customerEventListComponent implements OnInit, OnDestroy {
 
   getEventHistoryListFromStore(){
     this.subscriptions.add(this.administrativeService.getEventHistoryList()
-    .pipe(skipWhile((item: any) => !item))
+    .pipe(filter((item: any) => item instanceof Array))
     .subscribe((eventHistoryList: any) => {
       this.reportData.content = eventHistoryList;
       this.dataSource = [...this.reportData.content];
+      setTimeout(() => AppUtility.scrollToTableTop(this.tableScrollPoint));
     }));
   }
 
@@ -150,7 +161,14 @@ export class customerEventListComponent implements OnInit, OnDestroy {
 
   uploadEventHistoryFile() {
     if (this.fileObject) {
-      this.administrativeService.uploadEventHistoryFile(this.fileObject);
+      this.subscriptions.add(
+        this.administrativeService.uploadEventHistoryFile(this.fileObject)
+        .pipe(take(1))
+        .subscribe((response) =>{
+          this.topicForm.patchValue({ 'eventFile' : ''});
+        },(error) => {
+          this.topicForm.patchValue({ 'eventFile' : ''});
+        }));
     }
   }
 

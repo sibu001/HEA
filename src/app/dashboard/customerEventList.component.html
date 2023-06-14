@@ -5,7 +5,7 @@
           <p class="heading">
             Events history
           </p>
-          <form [formGroup]='topicForm' (submit)="search(undefined,true)">
+          <form [formGroup]='topicForm'>
             <div class="row rowPadding borderBottom">
               <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
                 <span class="filterLabel">Period Start:</span>
@@ -84,14 +84,14 @@
             </div>
   
             <div class="paddingTop">
-              <p class="messages">
+              <p class="messages" #tableScrollPoint>
                 <img alt="dot" src='assets/images/dot03.gif' class='dot'>
                 <span class="messageName">Event list (Number of Records =
                   {{totalElement | number:'1.0':'en-US'}})</span></p>
               <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false"
-                [data]="dataSource" [pageSize]="25"
+                [data]="dataSource" [pageSize]="pageSize" [pageIndex]="pageIndex"
                 [totalElement]="reportData.totalElements"
-                (changePageEvent)="search($event,false)"
+                (changePageEvent)="search($event,true,true)"
                 (addEvent)="addEventHistory()"
                 (goToEditEvent)="goToEditEventHistory($event)"
                 class="event-history-table">

@@ -49,10 +49,7 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
     const selectedDiv = document.querySelector('[href="#collapse' + this.users.recommendationNo +'"]');
     selectedDiv.setAttribute('aria-expanded','true');
     selectedDiv.classList.remove('collapsed');
-    selectedDiv.scrollIntoView();
-    setTimeout(() => {
-      window.scrollBy(0,-100);
-    },100);
+    setTimeout(() =>selectedDiv.scrollIntoView());
   }
 
   back() {

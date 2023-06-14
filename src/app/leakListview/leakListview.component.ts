@@ -37,8 +37,8 @@ export class leakListViewComponent implements OnInit, AfterViewInit {
     const leak = document.getElementById('leak' + this.users.leakFocusId);
     if(this.users.leakFocusId && leak){
       try {
-        leak.scrollIntoView();
-        window.scrollBy(0,-100);
+        setTimeout(() =>leak.scrollIntoView());
+        // window.scrollBy(0,-100);
       } catch (e) {
         console.error(e)
        }

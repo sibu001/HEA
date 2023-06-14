@@ -731,11 +731,7 @@ export class AdministrativeManagementState {
                     ctx.patchState({
                         eventHistory: response.data,
                     });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
-                    }));
+                },this.utilityService.errorCallbak));
     }
 
     @Action(DeleteEventHistoryByIdAction)

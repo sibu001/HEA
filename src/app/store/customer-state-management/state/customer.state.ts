@@ -378,12 +378,7 @@ export class CustomerManagementState {
                     ctx.patchState({
                         customer: response,
                     });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
-                        ctx.dispatch(new CustomerError(error));
-                    }));
+                },this.utilityService.errorCallbak));
     }
 
     @Action(DeleteCustomerByIdAction)

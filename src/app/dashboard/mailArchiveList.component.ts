@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { DatePipe, Location } from '@angular/common';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { AppConstant } from '../utility/app.constant';
 import { filter } from 'rxjs/operators';
 import { AdminFilter } from '../models/filter-object';
+import { AppUtility } from '../utility/app.utility';
 @Component({
   selector: 'mailArchiveList',
   templateUrl: './mailArchiveList.component.html',
@@ -22,6 +23,7 @@ export class MailArchiveListComponent implements OnInit {
   dateFormat : string = AppConstant.DATE_SELECTION_FORMAT;
   pageIndex = 0;
   mailArchiveForm: FormGroup;
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   public keys: Array<TABLECOLUMN> = TableColumnData.MAIL_ARCHIVE_KEY;
   dataSource: any;
   disableNextButton = false;
@@ -76,6 +78,7 @@ export class MailArchiveListComponent implements OnInit {
           }
         }
 
+        AppUtility.scrollToTableTop(this.tableScrollPoint);
         document.getElementById('loader').classList.remove('loading');
       },
       error => {
