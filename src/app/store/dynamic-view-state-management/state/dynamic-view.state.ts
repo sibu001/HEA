@@ -237,7 +237,7 @@ export class DynamicViewManagementState {
 
     @Action(GetDynamicViewListAction)
     getAllDynamicView(ctx: StateContext<DynamicViewManagementModel>, action: GetDynamicViewListAction): Actions {
-        const force: boolean = action.force || DynamicViewManagementState.getDynamicViewList(ctx.getState()) === undefined;
+        const force: boolean = action.force;
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -373,6 +373,19 @@ export class DynamicViewManagementState {
 
     @Action(GetDynamicViewByIdAction)
     getDynamicViewById(ctx: StateContext<DynamicViewManagementModel>, action: GetDynamicViewByIdAction): Actions {
+        
+        const dynamicView = ctx.getState().dynamicView;
+        if(dynamicView && dynamicView.id == action.id){
+            return;
+        }
+
+        const dynamicViewList = ctx.getState().dynamicViewList;
+        if(dynamicViewList && dynamicViewList){
+            const dynamicView = dynamicViewList.find(data => data.id == action.id);
+            ctx.patchState({dynamicView : {...dynamicView}});
+            return;
+        }
+        
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.dynamicViews + '/' + action.id)
             .pipe(

@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Subject, Subscription } from 'rxjs';
@@ -37,6 +37,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   newFilterSearch = false;
   selectionPrivilege : boolean = false;
   subject$ = new Subject();
+  @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -128,6 +129,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
         }}
       this.checkForDisplayingUtilityAndSolarColumn();
       this.newFilterSearch = false;
+      AppUtility.scrollToTableTop(this.tableScrollPoint);
       }));
   }
 

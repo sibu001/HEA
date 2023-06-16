@@ -439,4 +439,21 @@ export class AppUtility {
             queryParamsHandling : 'merge'
           });
     }
-}
+
+    public static getFormObjectFromStateFilter(formObject : any, params : string) : Object{
+
+        const responseObject : any = {};
+
+        const filterParams : HttpParams = new HttpParams({fromString : params.toString()});
+        const filterKeySet : Array <string> = filterParams.keys();
+        const objectKeySet : Array<string> = Object.keys(formObject);
+
+        filterKeySet.forEach((data) =>{
+            if(objectKeySet.includes(data)){
+                responseObject[data] = filterParams.get(data);
+            }
+        });
+
+        return responseObject;
+    } 
+}  

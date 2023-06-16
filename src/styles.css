@@ -145,6 +145,7 @@ div.factoid > div > p {
 #chartThreeNorms2 {
   margin-top: 15px !important;
   margin-left: 10px !important;
+  height: 56px !important;   /* addded because of too much height of norm chart in View trends details */
   /* width: 225px !important; */
 }
 
@@ -2672,7 +2673,7 @@ mat-cell > div{
 
 .right-buttons *{
   margin-left: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 5px !important;
   float : right;
 }
 

@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Subject, Subscription } from 'rxjs';
@@ -39,6 +39,7 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
   newFilterSearch = false;
   pageSize = AppConstant.pageSize;
   subject$ = new Subject();
+  @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef;
   constructor(private loginService: LoginService,
     private readonly usageHistoryService: UsageHistoryService,
     private readonly fb: FormBuilder,
@@ -193,38 +194,41 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
       if(gasList.data.length == AppConstant.pageSize){
         this.usageHistoryData.content = gasList.data;
         this.totalElements = this.usageHistoryData.totalElements;
-        this.dataSource = [...this.usageHistoryData.content];
+        // this.dataSource = [...this.usageHistoryData.content];
         this.pageIndex = this.currentIndex;
         this.disableNextButton = false;
       } else {
         this.disableNextButton = true;
         if(gasList.data.length > 0){
           this.usageHistoryData.content = gasList.data;
-          this.dataSource = [...this.usageHistoryData.content];
+          // this.dataSource = [...this.usageHistoryData.content];
         } else {
           if(this.newFilterSearch)
-            this.dataSource = [...gasList.data];
+            // this.dataSource = [...gasList.data];
+            this.usageHistoryData.content = gasList.data;
           this.pageIndex = this.currentIndex -1;
         }}
         this.newFilterSearch = false;
         this.checkForDisplayingUtilityAndSolarColumn();
+        AppUtility.scrollToTableTop(this.tableScrollPoint);
       }));
   }
 
   checkForDisplayingUtilityAndSolarColumn(){
-    const displayExtraColumn = this.dataSource.find(data =>{
+    const displayExtraColumn = this.usageHistoryData.content.find(data =>{
        if(data.pv)
          return true;
      });
  
      if(displayExtraColumn){
-       this.dataSource = this.dataSource.map(data =>{
+       this.dataSource = this.usageHistoryData.content.map(eleData =>{
+        const data = {...eleData};
          if(data.pv && data.utility){
            data.total = data.pv + data.utility;
          }else{
            data.total = data.utility;
          }
-         data.total = data.total.toFixed(4);
+         data.total = data.value.toFixed(3);
          return data;
        });
  
@@ -235,7 +239,13 @@ export class ElectricityDailySmartMeterListComponent implements OnInit ,OnDestro
        this.keys.push({ key: 'pv', isEdit: true, displayName: 'Solar' });
      }else{
        this.keys = TableColumnData.SMART_METER_DAILY_KEYS;
+       this.dataSource = this.usageHistoryData.content.map((eleData,index) =>{
+          const data = {...eleData};
+          data.value = data.value.toFixed(3);
+          return data;
+       }); 
      }
+
    }
 
   search(event: any, isSearch: boolean , forced ?: boolean): void {

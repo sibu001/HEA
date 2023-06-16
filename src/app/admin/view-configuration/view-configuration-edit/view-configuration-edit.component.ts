@@ -2,10 +2,11 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -30,19 +31,19 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
       this.id = params['id'];
     });
     this.user = this.loginService.getUser();
+    AppUtility.scrollTop();
   }
 
   ngOnInit() {
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.dynamicViewService.loadDynamicViewById(this.id);
-      this.loadDynamicViewById();
+      this.getDynamicViewById();
     }
   }
 
   setForm(event: any) {
     this.configForm = this.formBuilder.group({
-      owner : [event !== undefined ? event.createdBy : this.user.name],
       configurationName: [event !== undefined ? event.configurationName : '', Validators.required],
       baseEntity: [event !== undefined ? event.baseEntity : ''],
       paged: [event !== undefined ? event.paged : ''],
@@ -63,57 +64,65 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
   }
 
   get owner(){
-    return this.configForm.value.owner;
+    return this.user.name;
   }
 
   goToAttributeList(): any {
     this.router.navigate(['/admin/viewConfiguration/viewConfigurationAttributeList'], { queryParams: { id: this.id } });
   }
 
-  loadDynamicViewById() {
-    this.subscriptions.add(this.dynamicViewService.getDynamicViewById().pipe(skipWhile((item: any) => !item))
+  getDynamicViewById() {
+    this.subscriptions.add(this.dynamicViewService.getDynamicViewById()
+    .pipe(filter((item: any) => item && this.id == item.id))
       .subscribe((dynamicView: any) => {
-        if (this.isForce) {
-          this.router.navigate(['admin/viewConfiguration/viewConfigurationEdit'], { queryParams: { 'id': dynamicView.id } });
-        }
-        this.setForm(dynamicView);
-        this.dynamicViewData = dynamicView;
+        this.setForm({...dynamicView});
+        this.dynamicViewData = {...dynamicView};
+        AppUtility.scrollTop();
       }));
   }
 
   back() {
     this.router.navigate(['admin/viewConfiguration/viewConfigurationList'], { queryParams: { 'force': this.isForce } });
   }
+
   delete() {
-    this.subscriptions.add(this.dynamicViewService.deleteDynamicViewById(this.id).pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.dynamicViewService.deleteDynamicViewById(this.id).pipe(filter((item: any) => item),take(1))
       .subscribe((response: any) => {
-        this.router.navigate(['admin/viewConfiguration/viewConfigurationList'], { queryParams: { 'force': true } });
+        this.isForce = true;
+        this.back();
       }));
   }
 
   save() {
-    if (this.configForm.valid) {
-      if (this.id !== null && this.id !== undefined) {
-        this.subscriptions.add(this.dynamicViewService.updateDynamicView(this.id, this.configForm.value).pipe(
-          skipWhile((item: any) => !item))
+    AppUtility.removeErrorFieldMessagesFromForm();
+    if (AppUtility.validateAndHighlightReactiveFrom(this.configForm)) {
+
+      if (this.id) {
+
+        const requestBody = {...this.dynamicViewData, ...this.configForm.value};
+        this.subscriptions.add(this.dynamicViewService.updateDynamicView(this.id, requestBody).pipe(
+          filter((item: any) => item),take(1))
           .subscribe((response: any) => {
             this.isForce = true;
-            this.loadDynamicViewById();
-          }));
+          },AppUtility.errorFieldHighlighterCallBack));
+
       } else {
-        const body = {...this.configForm.value};
-        body.userId = this.user.userId;
-        this.subscriptions.add(this.dynamicViewService.saveDynamicView(body).pipe(
-          skipWhile((item: any) => !item))
+
+        this.subscriptions.add(this.dynamicViewService.saveDynamicView(this.configForm.value).pipe(
+          filter((item: any) => item),take(1))
           .subscribe((response: any) => {
+
             this.isForce = true;
-            this.loadDynamicViewById();
-          }));
+            this.id = response.dynamicViewManagement.dynamicView.id;
+            AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+            this.getDynamicViewById();
+
+          },AppUtility.errorFieldHighlighterCallBack));
+
       }
-    } else {
-      this.validateForm();
-    }
+    } 
   }
+
   validateForm() {
     for (const key of Object.keys(this.configForm.controls)) {
       if (this.configForm.controls[key].invalid) {
@@ -125,6 +134,11 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
   }
 
   get f() { return this.configForm.controls; }
+
+  highlightErrorField(formControlName : string) : boolean{
+    return this.f[formControlName].invalid && (this.f[formControlName].dirty || this.f[formControlName].touched);
+  }
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }

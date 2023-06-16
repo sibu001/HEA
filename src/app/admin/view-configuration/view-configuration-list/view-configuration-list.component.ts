@@ -1,12 +1,14 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -18,10 +20,13 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.VIEW_CONF_KEYS;
   public dataSource: any;
+  @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef;
   public totalElement = 0;
   public viewData = {
+    pageIndex : 0,
     content: [],
     totalElements: 0,
+    pageSize : Number(AppConstant.pageSize)
   };
   filter = false;
   cache = false;
@@ -33,13 +38,13 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly activateRoute: ActivatedRoute) {
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
     });
   }
 
   ngOnInit() {
     this.setUpForm(undefined);
-    this.search(undefined, false);
+    this.search(undefined, this.force);
     this.getViewConfigurationCount();
     this.getViewConfigurationList();
   }
@@ -76,11 +81,12 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
   }
 
   getViewConfigurationList() : void{
-    this.subscriptions.add(this.dynamicViewService.getDynamicViewList().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.dynamicViewService.getDynamicViewList()
+    .pipe(filter((item: any) => item))
     .subscribe((dynamicViewList: any) => {
       this.viewData.content = dynamicViewList;
-      this.viewData.totalElements = dynamicViewList.length;
       this.dataSource = [...this.viewData.content];
+      setTimeout(() => AppUtility.scrollToTableTop(this.tableScrollPoint));
     }));
   }
 
@@ -97,22 +103,27 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
   }
 
   search(event: any, isSearch: boolean): void {
+
+    if(event) this.viewData.pageIndex = event.pageIndex;
+    else this.viewData.pageIndex = 0; 
+
     const params = new HttpParams()
-      .set('filter.disableTotalSize', 'false')
-      .set('filter.homeowner', 'false')
-      .set('filter.pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : '10')
-      .set('filter.startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
+      .set('disableTotalSize', 'false')
+      .set('homeowner', 'false')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.viewData.pageSize.toString())
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-      .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortField', (event && event.sort.active !== undefined ? event.sort.active : ''))
-      .set('sortOrderAsc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
+      .set('sortField', (event && event.sort && event.sort.active !== undefined ? event.sort.active : ''))
+      .set('sortOrderAsc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
       .set('viewConfigurationId', '')
-      .set('filter.configurationName', (this.viewConfiguration.value.configurationName !== null ? this.viewConfiguration.value.configurationName : ''))
-      .set('filter.user.name', (this.viewConfiguration.value.userName !== null ? this.viewConfiguration.value.userName : ''));
+      .set('useLikeSearch', 'true')
+      .set('configurationName', (this.viewConfiguration.value.configurationName !== null ? this.viewConfiguration.value.configurationName : ''))
+      .set('user.name', (this.viewConfiguration.value.userName !== null ? this.viewConfiguration.value.userName : ''));
     
       this.loadViewConfigurationList(true, params);
       this.loadViewConfigurationCount(true,params);
   }
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }

@@ -706,7 +706,7 @@ function findTickIntervalBase(max, min, numTicks) {
 					unit: normData.unit,
 					decimalPlaces: normData.decimalPlaces,
 					max: maxNorm
-				}, { showYou: true });
+				},  { showYou: !n1Defined });
 			}
 
 			if (n3Defined) {
@@ -726,7 +726,7 @@ function findTickIntervalBase(max, min, numTicks) {
 					unit: normData.unit,
 					decimalPlaces: normData.decimalPlaces,
 					max: maxNorm
-				}, { showYou: true });
+				}, { showYou: (!n1Defined && !n2Defined)});
 			}
 		}
 

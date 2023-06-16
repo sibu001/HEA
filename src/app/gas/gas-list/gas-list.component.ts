@@ -32,6 +32,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
   totalElements = 0;
   disableNextButton = false;
   currentIndex : number;
+  @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef; 
   selectionPrivilege : boolean  = false;
   usageHistoryData = {
     content: [],
@@ -223,6 +224,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
             this.pageIndex = this.currentIndex -1;
           }}  
           this.newFilterSearch = false;
+          AppUtility.scrollToTableTop(this.tableScrollPoint);
         }));
   } 
 

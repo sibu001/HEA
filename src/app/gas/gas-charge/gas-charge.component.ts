@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
@@ -37,6 +37,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   totalElements : any;
   newFilterSearch = false;
   pageSize = AppConstant.pageSize;
+  @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   subject$ = new Subject();
   constructor(private loginService: LoginService,
     private router: Router,
@@ -140,6 +141,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
             this.pageIndex = this.currentIndex -1;
           }}
         this.newFilterSearch = false;
+        AppUtility.scrollToTableTop(this.tableScrollPoint);
         }))
   }
 

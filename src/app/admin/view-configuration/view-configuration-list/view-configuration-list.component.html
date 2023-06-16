@@ -31,13 +31,13 @@
           </div>
 
           <div class="paddingTop">
-            <p class="messages">
+            <p class="messages" #tableScrollPoint>
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Dynamic Views List</span></p>
             <app-table [keys]="keys" [isPaginate]="true" (goToEditEvent)='goToEditViewConfigurations($event)'
               (addEvent)='addViewConfigurations()' [isSearch]="false" [data]="dataSource"
-              [totalElement]="viewData.totalElements" (changePageEvent)="search($event,false)"
-              (handleLinkEvent)="handleLink($event)">
+              [totalElement]="viewData.totalElements" (changePageEvent)="search($event,true)"
+              (handleLinkEvent)="handleLink($event)" [pageIndex]="viewData.pageIndex" [pageSize]="viewData.pageSize">
             </app-table>
           </div>
         </form>

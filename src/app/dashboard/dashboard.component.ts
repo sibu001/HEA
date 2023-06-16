@@ -508,12 +508,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.trendingParts = response.data;
         const self = this;
         setTimeout(function () {
-          for (const areaSeries of response.data[0].trendingCharts) {
+          for (let areaSeries of response.data[0].trendingCharts) {
             if (areaSeries.chart.freeChartConfigurationJS != null) {
               let freeChartConfigurationJS = AppUtility.removeJqplotPlugins(areaSeries.chart.freeChartConfigurationJS);
               eval(freeChartConfigurationJS);
                 $('#trendingChart' + areaSeries.id + '>div .jqplot-target').click(function(event){
                   if($(document).width() <= 786) return;
+
+                  const customerId = self.users.outhMeResponse.customerId;
+                  const trendingPartsLocalStorage = JSON.parse(localStorage.getItem('trendingParts')); 
+                  if(trendingPartsLocalStorage.customerId === customerId){
+                    areaSeries = trendingPartsLocalStorage;
+                  }
                   self.router.navigate(['/trendingPartsView'],{queryParams : {activeResource : areaSeries.resourceUse, unitType : areaSeries.unitType
                     , useTypes : areaSeries.useType}})
                 }).css('cursor', 'pointer');
