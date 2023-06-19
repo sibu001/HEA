@@ -3,17 +3,17 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9 content admin-content">
         <div class="paddingTop">
-          <p class="messages">
+          <p class="messages" #tableScrollPoint>
             <img src='assets/images/dot03.gif' alt="dot" class='dot'>
             <span class="messageName">Attributes List</span></p>
-          <app-table [keys]="keys" [isPaginate]="true"
-            (goToEditEvent)='goToEditAttributes()'
+          <app-table [keys]="keys" [isPaginate]="true" [pageIndex]="attributeData.pageIndex"
+            (goToEditEvent)='goToEditAttributes($event)' [pageSize]="attributeData.pageSize"
             (addEvent)='addAttributes()' [isSearch]="false" [data]="dataSource"
             [totalElement]="attributeData.totalElements"
             (changePageEvent)="search($event,false)">
           </app-table>
         </div>
-        <div class="row rowPadding">
+        <div class="row rowPadding " style="margin-top : 20px;">
           <div class="col-12">
             <button type="button" class="btn btn-primary" (click)='back()'>Back</button>
           </div>

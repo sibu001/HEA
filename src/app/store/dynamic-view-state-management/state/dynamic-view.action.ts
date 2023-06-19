@@ -19,6 +19,7 @@ export enum DynamicViewActionTypes {
     SAVE_DYNAMIC_VIEW = 'Save Dynamic View',
     DELETE_DYNAMIC_VIEW_BY_ID = 'Delete Dynamic View By Id',
     GET_ATTRIBUTE_LIST = 'Get All Attribute List',
+    GET_ATTRIBUTE_COUNT = 'Get All Attribute Count',
     GET_ATTRIBUTE_BY_ID = 'Get Attribute By Id',
     UPDATE_ATTRIBUTE_ = 'Update Attribute',
     SAVE_ATTRIBUTE_ = 'Save Attribute',
@@ -128,6 +129,12 @@ export class DeleteDynamicViewByIdAction {
 
 export class GetAttributeListAction {
     static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.GET_ATTRIBUTE_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+
+export class GetAttributesCountAction {
+    static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.GET_ATTRIBUTE_COUNT;
     constructor(readonly force: boolean, readonly filter: any) {
     }
 }

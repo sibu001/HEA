@@ -77,7 +77,8 @@
                     id="totalProcessedTime">
                 </div>
                 <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                  ({{(totalProcessedTime / totalCalls) | number: '1.0-0'}} ms per request)
+                  ({{( dynamicViewData.totalProcessedTime != undefined && dynamicViewData.totalCalls != undefined 
+                       ?( totalProcessedTime / totalCalls | number: '1.0-0' ) : 000) }} ms per request)
                 </div>
               </div>
             </div>

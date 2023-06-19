@@ -126,6 +126,11 @@ export class AdminFilter {
         formValue: null
     };
 
+    public attributeList: any = {
+        page: null,
+        formValue: null
+    };
+
     public mailPreview =  {
         customerId : '',
         auditId : '',

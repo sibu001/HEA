@@ -454,8 +454,19 @@ export class TableColumnData {
         { key: 'definition', sort: 'definition', isEdit: true, displayName: 'Definition' },
         { key: 'label', sort: 'label', isEdit: true, displayName: 'Label' },
         { key: 'attributeType', sort: 'attributeType', isEdit: true, displayName: 'Attribute Type' },
-        { key: 'sortAllow', sort: 'sortAllow', isEdit: true, displayName: 'Sort Allow' },
+        { key: 'sortAllowed', sort: 'sortAllow', isEdit: true, displayName: 'Sort Allow' },
     ];
+
+    static readonly VIEW_ATTRIBUTE_ATTRIBUTE_TYPE : Map<string, string> = new Map<string, string>([
+        ['C','Only Column'],
+        ['S', 'Script Calculation'],
+        ['V', 'Variable'],
+        ['A', 'Alerts'],
+        ['E', 'Events'],
+        ['N', 'Notes'],
+        ['D', 'Customer Files']
+    ]);
+
 
     static readonly TRENDING_PART_KEYS: Array<TABLECOLUMN> = [
         { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },

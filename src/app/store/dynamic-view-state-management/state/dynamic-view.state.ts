@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Action, Actions, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
@@ -29,6 +30,7 @@ import {
     UpdateDynamicViewAction,
     GetJavaScriptPageCountAction,
     GetDynamicViewListCountAction,
+    GetAttributesCountAction,
 } from './dynamic-view.action';
 import { DynamicViewManagementModel } from './dynamic-view.model';
 
@@ -43,6 +45,7 @@ import { DynamicViewManagementModel } from './dynamic-view.model';
         dynamicViewCount : undefined,
         dynamicView: undefined,
         attributeList: undefined,
+        attributeCount : undefined,
         attribute: undefined,
         javaScriptCustomerGroupList: undefined,
         javaScriptCustomerGroup: undefined,
@@ -96,7 +99,12 @@ export class DynamicViewManagementState {
 
     @Selector()
     static getAttributeList(state: DynamicViewManagementModel): any {
-        return state.attributeList;
+        return state.attributeList.response;
+    }
+
+    @Selector()
+    static getAttributeCount(state : DynamicViewManagementModel): number{
+        return state.attributeCount.response;
     }
 
     @Selector()
@@ -245,7 +253,7 @@ export class DynamicViewManagementState {
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
-                        response = TopicUtilityTransformer.transformDynamicFilterList(response);
+                        // response = TopicUtilityTransformer.transformDynamicFilterList(response);
                         ctx.patchState({
                             dynamicViewList: response,
                         });
@@ -427,11 +435,7 @@ export class DynamicViewManagementState {
                     ctx.patchState({
                         dynamicView: response,
                     });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
+                },this.utilityService.errorCallbak));
     }
 
     @Action(UpdateDynamicViewAction)
@@ -445,25 +449,23 @@ export class DynamicViewManagementState {
                     ctx.patchState({
                         dynamicView: response,
                     });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.error.errorMessage);
-                    }));
+                },this.utilityService.errorCallbak));
     }
 
     @Action(GetAttributeListAction)
     getAllAttribute(ctx: StateContext<DynamicViewManagementModel>, action: GetAttributeListAction): Actions {
-        const force: boolean = action.force || DynamicViewManagementState.getAttributeList(ctx.getState()) === undefined;
+
+        const attributeList = ctx.getState().attributeList;
+        const force: boolean = action.force || !attributeList || !AppUtility.isRequestAndStateParamsSame(action.filter,attributeList.requestParams);
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.attributes + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.attributes,action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            attributeList: response,
+                            attributeList: AppUtility.addRequestParamsToObjectState({response : response}, action.filter),
                         });
                     },
                         error => {
@@ -472,6 +474,21 @@ export class DynamicViewManagementState {
                         }));
         }
         return result;
+    }
+
+    @Action(GetAttributesCountAction)
+    getAttributesCountAction(ctx : StateContext<DynamicViewManagementModel>, action : GetAttributesCountAction) : Actions {
+        
+        const attributeCount = ctx.getState().attributeCount;
+        const force: boolean = action.force || !attributeCount || !AppUtility.isRequestAndStateParamsSame(action.filter,attributeCount.requestParams);
+
+        if(!force) return;
+        
+        return this.loginService.performGetWithParams(AppUtility.endPointGenerator([AppConstant.attributes,AppConstant.count]),action.filter)
+            .pipe(tap(response =>{ 
+                ctx.patchState({attributeCount : AppUtility.addRequestParamsToObjectState({response : response}, action.filter)});
+            },this.utilityService.errorCallbak));
+
     }
 
     @Action(GetAttributeByIdAction)

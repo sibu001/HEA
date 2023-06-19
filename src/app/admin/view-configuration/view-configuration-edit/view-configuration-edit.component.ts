@@ -19,7 +19,7 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
   configForm: FormGroup;
   isForce = false;
   user : Users = new Users();
-  dynamicViewData;
+  public dynamicViewData = { createdBy : undefined , totalProcessedTime : undefined , totalCalls : undefined };
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
@@ -45,7 +45,7 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
   setForm(event: any) {
     this.configForm = this.formBuilder.group({
       configurationName: [event !== undefined ? event.configurationName : '', Validators.required],
-      baseEntity: [event !== undefined ? event.baseEntity : ''],
+      baseEntity: [event !== undefined ? event.baseEntity : 'customer'],
       paged: [event !== undefined ? event.paged : ''],
       shared: [event !== undefined ? event.shared : ''],
       note: [event !== undefined ? event.note : ''],
@@ -64,11 +64,11 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
   }
 
   get owner(){
-    return this.user.name;
+    return this.dynamicViewData.createdBy ? this.dynamicViewData.createdBy : this.user.outhMeResponse.user.name;
   }
 
   goToAttributeList(): any {
-    this.router.navigate(['/admin/viewConfiguration/viewConfigurationAttributeList'], { queryParams: { id: this.id } });
+    this.router.navigate(['/admin/viewConfiguration/viewConfigurationAttributeList'], { queryParams: { viewConfigurationId: this.id } });
   }
 
   getDynamicViewById() {
@@ -108,7 +108,11 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
 
       } else {
 
-        this.subscriptions.add(this.dynamicViewService.saveDynamicView(this.configForm.value).pipe(
+        const requestBody = {...this.configForm.value};
+        requestBody.user  = this.user.outhMeResponse.user;
+        requestBody.userId = requestBody.user.id;
+        
+        this.subscriptions.add(this.dynamicViewService.saveDynamicView(requestBody).pipe(
           filter((item: any) => item),take(1))
           .subscribe((response: any) => {
 

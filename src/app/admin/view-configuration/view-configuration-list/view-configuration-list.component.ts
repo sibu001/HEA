@@ -66,7 +66,7 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
   }
 
   handleLink(event){
-    this.router.navigate([event.routeLink],{queryParams : { id : event.value.id}});
+    this.router.navigate([event.routeLink],{queryParams : { viewConfigurationId : event.value.id }});
   }
 
   setUpForm(event: any) {
@@ -85,7 +85,12 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
     .pipe(filter((item: any) => item))
     .subscribe((dynamicViewList: any) => {
       this.viewData.content = dynamicViewList;
-      this.dataSource = [...this.viewData.content];
+      this.dataSource = this.viewData.content.map(data =>{
+        const viewData = {...data};
+        viewData.createdBy = viewData.user.name;
+        viewData.sharedShow = viewData.shared ? '*' : '';
+        return viewData;
+      })
       setTimeout(() => AppUtility.scrollToTableTop(this.tableScrollPoint));
     }));
   }

@@ -6,6 +6,7 @@ export interface DynamicViewManagementModel {
     dynamicViewCount : number;
     dynamicView: any;
     attributeList: any;
+    attributeCount : any;
     attribute: any;
     javaScriptCustomerGroupList: any;
     javaScriptCustomerGroup: any;

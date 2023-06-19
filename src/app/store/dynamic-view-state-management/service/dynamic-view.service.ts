@@ -9,6 +9,7 @@ import {
   DeleteJavaScriptPageByIdAction,
   GetAttributeByIdAction,
   GetAttributeListAction,
+  GetAttributesCountAction,
   GetDynamicViewByIdAction,
   GetDynamicViewListAction,
   GetDynamicViewListCountAction,
@@ -61,6 +62,10 @@ export class DynamicViewService {
 
   getAttributeList(): Observable<any> {
     return this.store.select(DynamicViewManagementState.getAttributeList);
+  }
+
+  getAttributeCount() : Observable<number> {
+    return this.store.select(DynamicViewManagementState.getAttributeCount);
   }
 
   getAttributeById(): Observable<any> {
@@ -121,6 +126,10 @@ export class DynamicViewService {
 
   loadAttributeList(force: boolean, filter: any): Observable<DynamicViewManagementState> {
     return this.store.dispatch(new GetAttributeListAction(force, filter));
+  }
+
+  loadAttributeCount(force: boolean, filter: any): Observable<DynamicViewManagementState> {
+    return this.store.dispatch(new GetAttributesCountAction(force, filter));
   }
 
   loadAttributeById(id: number): Observable<DynamicViewManagementState> {

@@ -83,7 +83,7 @@ export class AppConstant {
     public static javaScriptCustomerGroups = '';
     public static javaScriptPages = 'jsPages';
     public static dynamicViews = 'viewConfigurations';
-    public static attributes = '';
+    public static attributes = 'viewAttributes';
     public static keyIndicator = '';
     public static keyIndicatorVariables = '';
     public static keyIndicatorCustomerGroups = '';
