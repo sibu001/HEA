@@ -36,7 +36,6 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     private elementRef: ElementRef,
     private activatedRoute : ActivatedRoute) {
     this.users = this.loginService.getUser();
-    this.getTrendingPartResource();
     
     this.activatedRoute.queryParams.subscribe(
       (params: any) => {
@@ -44,6 +43,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
           this.trendingParts.activeResource = params['activeResource'];
           this.trendingParts.unitType = params['unitType'];
           this.trendingParts.useTypes = params['useTypes'];
+          this.getTrendingPartResource();
         }
       }
     )
@@ -110,10 +110,10 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
   }
 
   getTrendingPartResource() {
-    const trendingPartsLocalStorage = JSON.parse(localStorage.getItem('trendingParts')); 
-    if(trendingPartsLocalStorage && trendingPartsLocalStorage.customerId == this.users.outhMeResponse.customerId){
-      this.trendingParts = trendingPartsLocalStorage;
-    }
+    // const trendingPartsLocalStorage = JSON.parse(localStorage.getItem('trendingParts')); 
+    // if(trendingPartsLocalStorage && trendingPartsLocalStorage.customerId == this.users.outhMeResponse.customerId){
+    //   this.trendingParts = trendingPartsLocalStorage;
+    // }
 
     this.useType = new Array;
     this.unitType = new Array;
@@ -220,7 +220,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     this.trendingParts.unitType = unitType;
     this.trendingParts.useTypes = this.partLookupValue = useType;
     this.trendingParts.customerId = this.users.outhMeResponse.customerId;
-    localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
+    // localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
     const param = 'resourceUse=' + resourcesUse + '&unitType=' + unitType + '&useType=' + useType;
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingParts?' + param).subscribe(
       data => {
@@ -235,7 +235,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
             this.eventListnerForGraphDateChange(newData);
             return (F());
             // eval(response.data[0].trendingCharts[0].chart.freeChartConfigurationJS);
-          }, 1000);
+          }, 200);
         }
         document.getElementById('loader').classList.remove('loading');
       },
@@ -246,7 +246,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
       }
     );
     this.trendingParts.partLookupValue = useType;
-    localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
+    // localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
   }
 
   //  event added to change the date range on the bar graph

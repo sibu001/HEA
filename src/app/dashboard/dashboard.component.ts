@@ -515,11 +515,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 $('#trendingChart' + areaSeries.id + '>div .jqplot-target').click(function(event){
                   if($(document).width() <= 786) return;
 
-                  const customerId = self.users.outhMeResponse.customerId;
-                  const trendingPartsLocalStorage = JSON.parse(localStorage.getItem('trendingParts')); 
-                  if(trendingPartsLocalStorage.customerId === customerId){
-                    areaSeries = trendingPartsLocalStorage;
-                  }
                   self.router.navigate(['/trendingPartsView'],{queryParams : {activeResource : areaSeries.resourceUse, unitType : areaSeries.unitType
                     , useTypes : areaSeries.useType}})
                 }).css('cursor', 'pointer');
