@@ -65,7 +65,14 @@ import {
   LoadSelectedTopicGroupListAction,
   GetCustomerAlertTypeListCountAction,
   UpdateRecommendationLeakAction,
-  GetCustomerGroupCountAction
+  GetCustomerGroupCountAction,
+  GetUserReportListAction,
+  GetUserReportCountAction,
+  GetUserReportByIdAction,
+  SaveUserReportAction,
+  UpdateUserReportByIdAction,
+  DeleteUserReportByIdAction,
+  LoadUserReportCustomerGroupsAction
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -194,6 +201,22 @@ export class SystemService {
 
   getRecommendatonLeakAndUnique(){
     return this.store.select(SystemManagementState.getRecommendatonLeakAndUnique);
+  }
+
+  getUserReportList() : Observable<any> {
+    return this.store.select(SystemManagementState.getUserReportList);
+  }
+
+  getUserReportCount() : Observable<any> {
+    return this.store.select(SystemManagementState.getUserReportCount);
+  }
+
+  getUserReport() : Observable<any> {
+    return this.store.select(SystemManagementState.getUserReport);
+  }
+
+  getUserReportCustomerGroups() : Observable<any> {
+    return this.store.select(SystemManagementState.getUserReportCustomerGroups);
   }
 
   loadCustomerGroupList(force: boolean, filter: any): Observable<SystemManagementState> {
@@ -476,5 +499,33 @@ export class SystemService {
 
   getSelectedTopicGroupList() : Observable<SystemManagementState>{
     return this.store.select(SystemManagementState.getSelectedTopicGroupList);
+  }
+
+  loadUserReportList(params : HttpParams, force : boolean) : Observable<SystemManagementState>{
+    return this.store.dispatch(new GetUserReportListAction(params, force));
+  }
+
+  loadUserReportCount(params : HttpParams, force : boolean) : Observable<SystemManagementState>{
+    return this.store.dispatch(new GetUserReportCountAction(params, force));
+  }
+
+  loadUserReportById(id : number) : Observable<SystemManagementState>{
+    return this.store.dispatch(new GetUserReportByIdAction(id));
+  }
+
+  saveNewUserReport(body : any) : Observable<SystemManagementState>{
+    return this.store.dispatch(new SaveUserReportAction(body));
+  }
+
+  updateUserReportById(body : any , id : number) : Observable<SystemManagementState>{
+    return this.store.dispatch( new UpdateUserReportByIdAction(body,id));
+  }
+
+  deleteUserReportById(id : number) : Observable<SystemManagementState> {
+    return this.store.dispatch(new DeleteUserReportByIdAction(id));
+  }
+
+  loadUserReportsCustomerGroups(userReportId : number) : Observable<SystemManagementState> {
+    return this.store.dispatch(new LoadUserReportCustomerGroupsAction(userReportId));
   }
 }

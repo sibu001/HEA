@@ -31,6 +31,7 @@ import {
     GetJavaScriptPageCountAction,
     GetDynamicViewListCountAction,
     GetAttributesCountAction,
+    GetDefinationsForAttributeTypeAndBaseEntityAction,
 } from './dynamic-view.action';
 import { DynamicViewManagementModel } from './dynamic-view.model';
 
@@ -49,6 +50,9 @@ import { DynamicViewManagementModel } from './dynamic-view.model';
         attribute: undefined,
         javaScriptCustomerGroupList: undefined,
         javaScriptCustomerGroup: undefined,
+        attributeTypeDefinations : undefined,
+        // userReportList : undefined,
+        // userReportCount : undefined
     }
 })
 
@@ -84,12 +88,12 @@ export class DynamicViewManagementState {
 
     @Selector()
     static getDynamicViewList(state: DynamicViewManagementModel): any {
-        return state.dynamicViewList;
+        return state.dynamicViewList.response;
     }
 
     @Selector()
     static getDynamicViewCount(state : DynamicViewManagementModel): number {
-        return state.dynamicViewCount;
+        return state.dynamicViewCount.response;
     }
 
     @Selector()
@@ -110,6 +114,11 @@ export class DynamicViewManagementState {
     @Selector()
     static getAttributeById(state: DynamicViewManagementModel): any {
         return state.attribute;
+    }
+
+    @Selector()
+    static getAttributeTypeDefinations(state : DynamicViewManagementModel) : any {
+        return state.attributeTypeDefinations.response;
     }
 
     @Action(GetJavaScriptPageListAction)
@@ -245,7 +254,10 @@ export class DynamicViewManagementState {
 
     @Action(GetDynamicViewListAction)
     getAllDynamicView(ctx: StateContext<DynamicViewManagementModel>, action: GetDynamicViewListAction): Actions {
-        const force: boolean = action.force;
+        
+        const dynamicViewList :  any = ctx.getState().dynamicViewList;
+        const force: boolean = action.force || !dynamicViewList ||  !AppUtility.isRequestAndStateParamsSame(action.filter,dynamicViewList.requestParams);
+
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
@@ -255,7 +267,7 @@ export class DynamicViewManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         // response = TopicUtilityTransformer.transformDynamicFilterList(response);
                         ctx.patchState({
-                            dynamicViewList: response,
+                            dynamicViewList: AppUtility.addRequestParamsToObjectState({response : response}, action.filter),
                         });
                     },
                         error => {
@@ -268,10 +280,16 @@ export class DynamicViewManagementState {
 
     @Action(GetDynamicViewListCountAction)
     getDynamicViewListCountAction(ctx : StateContext<DynamicViewManagementModel>, action : GetDynamicViewListCountAction) : Actions {
+        
+        const dynamicViewCount :  any = ctx.getState().dynamicViewCount;
+        const force: boolean = action.force || !dynamicViewCount || !AppUtility.isRequestAndStateParamsSame(action.filter,dynamicViewCount.requestParams);
+        
+        if(!force) { return; }
+        
         return this.loginService.performGetWithParams(
             AppUtility.endPointGenerator([AppConstant.dynamicViews,AppConstant.count]),action.filter)
             .pipe(tap(response =>{  
-                ctx.patchState({ dynamicViewCount : response});
+                ctx.patchState({ dynamicViewCount : AppUtility.addRequestParamsToObjectState({response : response}, action.filter)});
             },this.utilityService.errorCallbak));
     }
 
@@ -389,7 +407,7 @@ export class DynamicViewManagementState {
 
         const dynamicViewList = ctx.getState().dynamicViewList;
         if(dynamicViewList && dynamicViewList){
-            const dynamicView = dynamicViewList.find(data => data.id == action.id);
+            const dynamicView = dynamicViewList.response.find(data => data.id == action.id);
             ctx.patchState({dynamicView : {...dynamicView}});
             return;
         }
@@ -432,9 +450,18 @@ export class DynamicViewManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
+
+                    const dynamicViewList = ctx.getState().dynamicViewList;
+                    if(dynamicViewList && dynamicViewList.response ){
+                        dynamicViewList.response.push(response);
+
+                        ctx.patchState({ ...dynamicViewList, response : [...dynamicViewList.response], });
+                    }
+
                     ctx.patchState({
                         dynamicView: response,
                     });
+
                 },this.utilityService.errorCallbak));
     }
 
@@ -446,9 +473,23 @@ export class DynamicViewManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
+
+                    const dynamicViewList = ctx.getState().dynamicViewList;
+                    if(dynamicViewList && dynamicViewList.response ){
+                        dynamicViewList.response = dynamicViewList.response.map((data) => {
+                            if(data.id == response.id){
+                                return response;
+                            }
+                            return data;
+                        });
+
+                        ctx.patchState({ ...dynamicViewList, response : [...dynamicViewList.response], });
+                    }
+
                     ctx.patchState({
                         dynamicView: response,
                     });
+
                 },this.utilityService.errorCallbak));
     }
 
@@ -480,7 +521,8 @@ export class DynamicViewManagementState {
     getAttributesCountAction(ctx : StateContext<DynamicViewManagementModel>, action : GetAttributesCountAction) : Actions {
         
         const attributeCount = ctx.getState().attributeCount;
-        const force: boolean = action.force || !attributeCount || !AppUtility.isRequestAndStateParamsSame(action.filter,attributeCount.requestParams);
+        const force: boolean = action.force || 
+            (!attributeCount || !AppUtility.isRequestAndStateParamsSame(action.filter,attributeCount.requestParams));
 
         if(!force) return;
         
@@ -493,6 +535,19 @@ export class DynamicViewManagementState {
 
     @Action(GetAttributeByIdAction)
     getAttributeById(ctx: StateContext<DynamicViewManagementModel>, action: GetAttributeByIdAction): Actions {
+
+        const attribute = ctx.getState().attribute;
+        if(attribute && attribute.id == action.id){
+            return;
+        }
+
+        const attributeList = ctx.getState().attributeList;
+        if(attributeList && attributeList.response){
+            const attribute = attributeList.response.find(attribute => attribute.id == action.id);
+            ctx.patchState({ attribute : attribute });
+            return;
+        }
+
         document.getElementById('loader').classList.add('loading');
         return this.loginService.performGet(AppConstant.attributes + '/' + action.id)
             .pipe(
@@ -522,6 +577,26 @@ export class DynamicViewManagementState {
                         document.getElementById('loader').classList.remove('loading');
                         this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
+    }
+
+    @Action(GetDefinationsForAttributeTypeAndBaseEntityAction)
+    getDefinationsForAttributeTypeAndBaseEntityAction(ctx : StateContext<DynamicViewManagementModel>, action : GetDefinationsForAttributeTypeAndBaseEntityAction) : Actions {
+        
+        const params : HttpParams = new HttpParams()
+            .set('baseEntity',action.baseEntity)
+            .set('attributeType',action.attributeType);
+
+        const attributeTypeDefinations : any = ctx.getState().attributeTypeDefinations;
+        if(attributeTypeDefinations && AppUtility.isRequestAndStateParamsSame(params, attributeTypeDefinations.requestParams)){
+            return;
+        }
+
+        return this.loginService.performGetWithParams(AppUtility.endPointGenerator([AppConstant.attributes,'attributes']),params)
+            .pipe(tap((response) =>{
+                const res : any = AppUtility.addRequestParamsToObjectState({response : response},params);
+                ctx.patchState({attributeTypeDefinations : res });
+            },this.utilityService.errorCallbak));
+
     }
 
     @Action(SaveAttributeAction)
@@ -559,4 +634,5 @@ export class DynamicViewManagementState {
                         this.utilityService.showErrorMessage(error.error.errorMessage);
                     }));
     }
+
 }

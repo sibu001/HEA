@@ -71,7 +71,14 @@ import {
     LoadSelectedTopicGroupListAction,
     GetCustomerAlertTypeListCountAction,
     UpdateRecommendationLeakAction,
-    GetCustomerGroupCountAction
+    GetCustomerGroupCountAction,
+    GetUserReportListAction,
+    GetUserReportCountAction,
+    GetUserReportByIdAction,
+    SaveUserReportAction,
+    UpdateUserReportByIdAction,
+    DeleteUserReportByIdAction,
+    LoadUserReportCustomerGroupsAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -115,6 +122,10 @@ import { SystemManagementModel } from './system.model';
         relatedLeakList: undefined,
         customerProgramGroupList : undefined,     
         selectedTopicGroupList : undefined, 
+        userReportList : undefined,
+        userReportCount : undefined,
+        userReport : undefined,
+        userReportCustomerGroup : undefined
     }
 
 })
@@ -303,6 +314,26 @@ export class SystemManagementState {
     @Selector()
     static getSelectedTopicGroupList(state: SystemManagementModel) : any {
         return state.selectedTopicGroupList;
+    }
+
+    @Selector()
+    static getUserReportCount(state : SystemManagementModel) : any {
+        return state.userReportCount.response;
+    }
+
+    @Selector()
+    static getUserReportList(state : SystemManagementModel) : any {
+        return state.userReportList.response;
+    }
+
+    @Selector()
+    static getUserReport(state : SystemManagementModel) : any {
+        return state.userReport;
+    }
+
+    @Selector()
+    static getUserReportCustomerGroups(state : SystemManagementModel) : any {
+        return state.userReportCustomerGroup;
     }
 
     @Action(GetCustomerGroupListAction)
@@ -1573,4 +1604,120 @@ export class SystemManagementState {
         )
 
     }
+
+    @Action(GetUserReportListAction)
+    getUserReportList(ctx : StateContext<SystemManagementModel>, action : GetUserReportListAction) : Actions {
+        
+        const userReportList = ctx.getState().userReportList;
+        const force = action.force || !userReportList || !AppUtility.isRequestAndStateParamsSame(action.params, userReportList.requestParams);
+        if(!force) return;
+
+        return this.loginService.performGetWithParams(
+            AppUtility.endPointGenerator([AppConstant.userReports]),action.params)
+        .pipe(
+            tap((response : any) =>{
+                ctx.patchState({ userReportList : AppUtility.addRequestParamsToObjectState({response : response.data.list}, action.params)});
+            },this.utilityService.errorCallbak));
+    }
+
+    @Action(GetUserReportCountAction)
+    getUserReportCount(ctx : StateContext<SystemManagementModel>, action : GetUserReportCountAction) : Actions {
+        
+        const userReportCount = ctx.getState().userReportCount;
+        const force = action.force || !userReportCount || !AppUtility.isRequestAndStateParamsSame(action.params, userReportCount.requestParams);
+        if(!force) return;
+
+        return this.loginService.performGetWithParams(
+            AppUtility.endPointGenerator([AppConstant.userReports,AppConstant.count]),action.params)
+        .pipe(
+            tap((response : any) =>{
+                ctx.patchState({ userReportCount : AppUtility.addRequestParamsToObjectState({response : response}, action.params) });
+            },this.utilityService.errorCallbak));
+    }
+
+    @Action(GetUserReportByIdAction)
+    getUserReportById(ctx : StateContext<SystemManagementModel>, action : GetUserReportByIdAction) : Actions {
+
+        const userReport = ctx.getState().userReport;
+        if(userReport && userReport.id == action.id){
+            return;
+        }
+
+        const userReportList = ctx.getState().userReportList;
+        if(userReportList && userReportList.response){
+            const userReport : any = userReportList.response.find(report => report.id == action.id);
+            ctx.patchState({ userReport : userReport }); 
+            return;
+        }
+
+        return this.loginService.performGet(AppUtility.endPointGenerator([AppConstant.userReports,action.id]))
+            .pipe( tap(
+                (response : any) =>{
+                    ctx.patchState({ userReport : response.data});
+                }, this.utilityService.errorCallbak));
+    }
+
+    @Action(SaveUserReportAction)
+    saveUserReport(ctx : StateContext<SystemManagementModel>, action : SaveUserReportAction) : Actions {
+
+        return this.loginService.performPost(action.body,AppUtility.endPointGenerator([AppConstant.userReports]))
+            .pipe( tap(
+                (response : any) =>{
+
+                    const userReportList = ctx.getState().userReportList;
+                    if(userReportList){
+                        userReportList.response.push(response.data);
+                        ctx.patchState({ userReportList : {...userReportList, response : userReportList.response} }); 
+                    }
+
+                    ctx.patchState({ userReport : response.data});
+                }, this.utilityService.errorCallbak));
+    }
+
+    @Action(UpdateUserReportByIdAction)
+    updateUserReportById(ctx : StateContext<SystemManagementModel>, action : UpdateUserReportByIdAction) : Actions {
+        return this.loginService.performPut(action.body,AppUtility.endPointGenerator([AppConstant.userReports,action.id]))
+            .pipe( tap(
+                (response : any) =>{
+
+                    const userReportList = ctx.getState().userReportList;
+                    if(userReportList){
+                        userReportList.response = userReportList.response.map( report =>{
+                            if(report.id == response.data.id){
+                                return response.data;
+                            }
+                            return report;
+                        })
+                        ctx.patchState({ userReportList : {...userReportList, response : userReportList.response} }); 
+                    }
+
+                    ctx.patchState({ userReport : response.data});
+                }, this.utilityService.errorCallbak));
+    }
+
+    @Action(DeleteUserReportByIdAction)
+    deleteUserReportById(ctx : StateContext<SystemManagementModel>, action : DeleteUserReportByIdAction) : Actions {
+        return this.loginService.performDelete(AppUtility.endPointGenerator([AppConstant.userReports,action.id]))
+            .pipe( tap(
+                (response : any) =>{
+
+                    const userReportList = ctx.getState().userReportList;
+                    if(userReportList){
+                        userReportList.response = userReportList.response.filter( report => report.id != action.id);
+                        ctx.patchState({ userReportList : {...userReportList, response : userReportList.response} }); 
+                    }
+
+                    ctx.patchState({ userReport : undefined});
+                }, this.utilityService.errorCallbak));
+    }
+    
+    @Action(LoadUserReportCustomerGroupsAction)
+    loadUserReportCustomerGroups(ctx : StateContext<SystemManagementModel>, action : LoadUserReportCustomerGroupsAction) : Actions {
+        return this.loginService.performGet(AppUtility
+                .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.customerGroups]))
+            .pipe(tap((response:any) => {
+                ctx.patchState({ userReportCustomerGroup : response.data.list})
+            },this.utilityService.errorCallbak))
+    }
+
 }

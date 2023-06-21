@@ -428,10 +428,10 @@ export class TableColumnData {
     ];
 
     static readonly USER_REPORTS_KEYS: Array<TABLECOLUMN> = [
-        { key: 'order', isEdit: true, displayName: 'Order' },
-        { key: 'reportType', isEdit: true, displayName: 'Report Type' },
-        { key: 'displayLabel', sort: 'displayLabel', isEdit: true, displayName: 'Display Label', isUnderline: true },
-        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
+        { key: 'orderNumber', isEdit: true, displayName: 'Order' },
+        { key: 'userReportType', isEdit: true, displayName: 'Report Type' },
+        { key: 'displayName', sort: 'displayName', isEdit: true, displayName: 'Display Label', isUnderline: true },
+        { key: 'labelTemplate', sort: 'labelTemplate', isEdit: true, displayName: 'Label', isUnderline: true },
     ];
 
     static readonly JS_PAGES_KEYS: Array<TABLECOLUMN> = [
@@ -868,6 +868,10 @@ export class TableColumnData {
         { key: 'waterProfile', value: 'Water Profile' },
         { key: 'waterProgress', value: 'Water Progress' },
     ];
+
+    static readonly BASE_ENTITIES : Array<any> = [
+        { key : 'customer' , value: 'Customer list' }   
+    ]
 
     static readonly ATTRIBUTE_TYPE_DATA: any[] = [
         { key: 'C', value: 'Only Column' },

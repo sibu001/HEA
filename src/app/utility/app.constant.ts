@@ -76,6 +76,7 @@ export class AppConstant {
     public static mailContentPart = 'mailContents';
     public static generateEmbedImage = 'generateEmbedImage';
     public static eventHistory = 'customerEvents';
+    public static userReports = 'userReports';
     public static userReportDefinitions = '';
     public static userReportDefinitionContextVariableTypes = '';
     public static userReportDefinitionContentParts = '';
@@ -127,6 +128,7 @@ export class AppConstant {
     public static dataField = 'dataFields';
     public static fieldValues = 'fieldValues'
     public static parameters = 'parameters'
+    public static lookUpUserReportType = 'USER_REPORT_TYPE';
     public static lookUpCalculationPeriod = 'VARIABLE_PERIOD';
     public static lookUpCodeTakeBackValue = 'TAKEBACK_TYPE';
     public static lookUpCodeDataType = 'DATA_TYPE';

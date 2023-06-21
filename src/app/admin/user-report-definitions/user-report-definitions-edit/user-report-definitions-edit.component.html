@@ -10,14 +10,14 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="order" id="order">
+              <input type="text" class="form-control" formControlName="orderNumber" id="orderNumber">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Display Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="displayLabel" id="displayLabel">
+              <input type="text" class="form-control" formControlName="displayName" id="displayName">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -25,7 +25,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Report Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select id="userReportType" formControlName="userReportType" class="form-control">
-                <option *ngFor='let type of reportType' [value]="type.key">{{type.value}}</option>
+                <option *ngFor='let type of userReportType' [value]="type.lookupValue">{{type.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -34,7 +34,10 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Label:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class='form-control form-control-sm' formControlName="label" id="label"> </textarea>
+              <textarea class='form-control form-control-sm' formControlName="labelTemplate" id="labelTemplate"> </textarea>
+              <div class="error-message" *ngIf="highlightErrorField('labelTemplate')" >
+                <span> Label is required.</span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -57,16 +60,17 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+          <div class="paddingTop" *ngIf="id" style="margin-top: 100px;">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName"> User Report Groups</span></p>
             <app-table [keys]="userReportKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true
-              [isSearch]="false" [data]="userReportDataSource" [totalElement]="userReportData.totalElements">
+              [isSearch]="false" [data]="customerGroup.content" [selectionList]="customerGroup.selectedContent"
+              id="customerGroupId" [hideMasterCheckBox]=true>
             </app-table>
           </div>
 
-          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+          <div class="paddingTop" *ngIf="id" style="margin-top: 100px;">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Content Parts</span></p>
@@ -76,7 +80,7 @@
             </app-table>
           </div>
 
-          <div class="paddingTop" *ngIf="id !== undefined && id !== null">
+          <div class="paddingTop" *ngIf="id" style="margin-top: 100px;">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Context variables</span></p>
@@ -86,25 +90,15 @@
             </app-table>
           </div>
 
-          <div class="row rowPadding paddingTop ">
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6 
-              display-inline-button-big">
+          <div class="row paddingTop" style="padding-top: 50px;">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3 ">
               <button type="button" class="btn btn-primary mb-5" (click)="back()">Back</button>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 
-              display-inline-button-big" style="text-align:end;" *ngIf="id !== undefined && id !== null">
-              <button type="button" class="btn btn-primary mb-5"
-                (click)="Preview()" >
-                Preview
-              </button>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-6 
-              display-inline-button-big" style="text-align: left;" *ngIf="id !== undefined && id !== null">
-              <button type="button" class="btn btn-primary mb-5" (click)="delete()"  >Delete</button>
-            </div>
-            <div class=""
-              [ngClass]="{'col-sm-6 col-md-6 col-xs-6 col-lg-6': id === undefined || id === null , 'col-sm-2 col-md-2 col-lg-2' :id !== undefined && id !== null}" style="text-align: end;">
+
+            <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9 right-buttons">
               <button type="button" class="btn btn-primary mb-5" (click)="save()">Save</button>
+              <button type="button" class="btn btn-primary mb-5" *ngIf="id" (click)="delete()"  >Delete</button>
+              <button type="button" class="btn btn-primary mb-5" *ngIf="id" (click)="Preview()" > Preview </button>
             </div>
           </div>
         </form>

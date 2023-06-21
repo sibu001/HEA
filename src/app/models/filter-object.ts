@@ -126,7 +126,17 @@ export class AdminFilter {
         formValue: null
     };
 
+    public dynamicViews: any = {
+        page: null,
+        formValue: null
+    };
+
     public attributeList: any = {
+        page: null,
+        formValue: null
+    };
+
+    public userReportList: any = {
         page: null,
         formValue: null
     };

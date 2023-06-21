@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, skipWhile, take } from 'rxjs/operators';
+import { TableColumnData } from 'src/app/data/common-data';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
@@ -19,6 +20,7 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
   configForm: FormGroup;
   isForce = false;
   user : Users = new Users();
+  public baseEntities : Array<any> = TableColumnData.BASE_ENTITIES;
   public dynamicViewData = { createdBy : undefined , totalProcessedTime : undefined , totalCalls : undefined };
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,

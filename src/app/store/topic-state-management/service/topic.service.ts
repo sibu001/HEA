@@ -318,6 +318,10 @@ export class TopicService {
     return this.store.select(TopicManagementState.getChartSeriesColorLookup);
   }
 
+  getUserReportTypeLookUp(){
+    return this.store.select(TopicManagementState.getUserReportTypeLookUp);
+  }
+
   loadAllFieldValuesForDataField(paneId: number, dataFieldId: number) {
     return this.store.dispatch(new LoadFieldValuesForDataField(paneId, dataFieldId));
   }

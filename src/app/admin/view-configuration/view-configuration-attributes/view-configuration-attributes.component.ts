@@ -41,9 +41,9 @@ export class ViewConfigurationAttributesComponent implements OnInit, OnDestroy {
     this.adminFilter = AppUtility.checkForAdminFilter('attributeList');
 
     this.activateRoute.queryParams.subscribe(params => {
-      this.force = params['force'];
+      this.force = AppUtility.forceParamToBoolean(params['force']);
       this.viewConfigurationId = params['viewConfigurationId'];
-      this.search(undefined, false);
+      this.search(this.adminFilter.attributeList.page, this.force);
     });
 
   }
@@ -128,11 +128,12 @@ export class ViewConfigurationAttributesComponent implements OnInit, OnDestroy {
       params = params.append('viewConfigurationId', this.viewConfigurationId.toString());
     }
 
-    this.loadAttributes(true, params);
-    this.loadAttributesCount(true,countParams);
+    this.loadAttributes(isSearch, params);
+    this.loadAttributesCount(isSearch,countParams);
 
     AppUtility.saveAdminFilter(this.adminFilter);
   }
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }

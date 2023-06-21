@@ -34,6 +34,7 @@ export interface TopicManagementModel {
     CONSERVATION_CATEGORY : any;
     SERIES_COLOR : any;
     SERIES_QUERY_TYPE : any;
+    USER_REPORT_TYPE : any;
     fieldValueList : any;
     possibleColors : any;
     possibleStyle : any;

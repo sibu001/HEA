@@ -10,6 +10,7 @@ import {
   GetAttributeByIdAction,
   GetAttributeListAction,
   GetAttributesCountAction,
+  GetDefinationsForAttributeTypeAndBaseEntityAction,
   GetDynamicViewByIdAction,
   GetDynamicViewListAction,
   GetDynamicViewListCountAction,
@@ -148,6 +149,14 @@ export class DynamicViewService {
     return this.store.dispatch(new DeleteAttributeByIdAction(id));
   }
 
+  getDefinationsForAttributeTypeAndBaseEntity() : Observable<DynamicViewManagementState> {
+    return this.store.select(DynamicViewManagementState.getAttributeTypeDefinations);
+  }
+
+  loadDefinationsForAttributeTypeAndBaseEntity(attributeType: string, baseEntity: string) : Observable<any>{
+    return this.store.dispatch(new GetDefinationsForAttributeTypeAndBaseEntityAction(attributeType, baseEntity));
+  }
+
   loadJavaScriptCustomerGroupList(force: boolean, id: number): Observable<DynamicViewManagementState> {
     return this.store.dispatch(new GetJavaScriptCustomerGroupListAction(force, id));
   }
@@ -167,4 +176,5 @@ export class DynamicViewService {
   deleteJavaScriptCustomerGroupById(jsPageId : number, id: number): Observable<DynamicViewManagementState> {
     return this.store.dispatch(new DeleteJavaScriptCustomerGroupByIdAction(jsPageId,id));
   }
+
 }

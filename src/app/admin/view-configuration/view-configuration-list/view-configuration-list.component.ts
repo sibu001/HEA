@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { AdminFilter } from 'src/app/models/filter-object';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
@@ -33,6 +34,7 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
   viewConfiguration: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
   public force = false;
+  public adminFilter : AdminFilter;
   constructor(public fb: FormBuilder,
     private readonly dynamicViewService: DynamicViewService,
     private readonly router: Router,
@@ -40,11 +42,13 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.force = AppUtility.forceParamToBoolean(params['force']);
     });
+
+    this.adminFilter = AppUtility.checkForAdminFilter('dynamicViews');
   }
 
   ngOnInit() {
-    this.setUpForm(undefined);
-    this.search(undefined, this.force);
+    this.setUpForm(this.adminFilter.dynamicViews.form);
+    this.search(this.adminFilter.dynamicViews.page, this.force);
     this.getViewConfigurationCount();
     this.getViewConfigurationList();
   }
@@ -120,13 +124,15 @@ export class ViewConfigurationListComponent implements OnInit, OnDestroy {
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('sortField', (event && event.sort && event.sort.active !== undefined ? event.sort.active : ''))
       .set('sortOrderAsc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
-      .set('viewConfigurationId', '')
+      // .set('viewConfigurationId', '')
       .set('useLikeSearch', 'true')
       .set('configurationName', (this.viewConfiguration.value.configurationName !== null ? this.viewConfiguration.value.configurationName : ''))
       .set('user.name', (this.viewConfiguration.value.userName !== null ? this.viewConfiguration.value.userName : ''));
     
-      this.loadViewConfigurationList(true, params);
-      this.loadViewConfigurationCount(true,params);
+      this.loadViewConfigurationList(isSearch, params);
+      this.loadViewConfigurationCount(isSearch,params);
+
+      AppUtility.saveAdminFilter(this.adminFilter);
   }
 
   ngOnDestroy(): void {

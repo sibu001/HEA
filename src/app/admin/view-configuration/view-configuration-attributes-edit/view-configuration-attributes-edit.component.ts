@@ -2,7 +2,7 @@ import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, skipWhile, take } from 'rxjs/operators';
+import { filter, skip, skipWhile, take, tap } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
 import { AppUtility } from 'src/app/utility/app.utility';
@@ -21,7 +21,9 @@ export class ViewConfigurationAttributesEditComponent implements OnInit, OnDestr
   attributeForm: FormGroup;
   isForce = false;
   attributeTypeData = TableColumnData.ATTRIBUTE_TYPE_DATA;
-  definitionData = TableColumnData.DEFINITION_DATA;
+  definitionData : Array<any> = [];
+  public baseEntities : Array<any> = TableColumnData.BASE_ENTITIES;
+
   valueTypeList: any[] = TableColumnData.VALUE_TYPE;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
@@ -39,20 +41,25 @@ export class ViewConfigurationAttributesEditComponent implements OnInit, OnDestr
   ngOnInit() {
     AppUtility.scrollTop();
     this.setForm(undefined);
+    this.getDefinationsForAttributeType();
+
     if (this.id) {
       this.dynamicViewService.loadAttributeById(this.id);
       this.getAttributeById();
+    }else{
+      this.onAttributeTypeChange('C',true);
     }
   }
 
   setForm(event: any) {
     this.attributeForm = this.formBuilder.group({
-      columnOrder: [event !== undefined ? event.columnOrder : ''],
-      attributeType: [event !== undefined ? event.attributeType : ''],
-      definition: [event !== undefined ? event.definition : ''],
+      columnOrder: [event !== undefined ? event.columnOrder : '0'],
+      attributeType: [event !== undefined ? event.attributeType : 'C'],
+      definition: [event !== undefined ? event.definition : 'customerId'],
       label: [event !== undefined ? event.label : '', Validators.required],
       sortAllowed: [event !== undefined ? event.sortAllowed : ''],
-      valueType: [event !== undefined ? event.valueType : ''],
+      valueType: [event !== undefined ? event.valueType : 'C'],
+      pattern: [event !== undefined ? event.pattern : ''],
     });
   }
 
@@ -66,7 +73,8 @@ export class ViewConfigurationAttributesEditComponent implements OnInit, OnDestr
     .pipe(filter((item: any) => item && item.id == this.id))
       .subscribe((attribute: any) => {
         this.setForm(attribute);
-        this.attributeData = {...this.attributeData};
+        this.attributeData = {...attribute};
+        this.onAttributeTypeChange(this.attributeData.attributeType, !['S', 'V'].includes(this.attributeData.attributeType));
         AppUtility.scrollTop();
       }));
   }
@@ -81,11 +89,13 @@ export class ViewConfigurationAttributesEditComponent implements OnInit, OnDestr
       this.dynamicViewService.deleteAttributeById(this.id)
       .pipe(filter((item: any) => item),take(1))
       .subscribe((response: any) => {
+        this.isForce = true;
         this.back();
       }));
   }
 
   save() {
+
     if (AppUtility.validateAndHighlightReactiveFrom(this.attributeForm)) {
 
       if (this.id) {
@@ -98,7 +108,10 @@ export class ViewConfigurationAttributesEditComponent implements OnInit, OnDestr
 
       } else {
 
-        this.subscriptions.add(this.dynamicViewService.saveAttribute(this.attributeForm.value).pipe(
+        const requestBody = {...this.attributeForm.value};
+        requestBody.viewConfigurationId = this.viewConfigurationId;
+
+        this.subscriptions.add(this.dynamicViewService.saveAttribute(requestBody).pipe(
           filter((item: any) => item),take(1))
           .subscribe((response: any) => {
             this.isForce = true;
@@ -123,7 +136,47 @@ export class ViewConfigurationAttributesEditComponent implements OnInit, OnDestr
     }
   }
 
+  onDefinationChange(event : any){
+    const definition : any = this.definitionData.find(defination => defination.key == event);
+    if(definition){
+      this.attributeForm.patchValue({ label : definition.value});
+    }
+  }
+
+  onAttributeTypeChange(attributeType : string, checkAvaliableOptions : boolean) : void{
+
+    if(!checkAvaliableOptions) return;
+
+    const baseEntity : string = this.baseEntities[0].key;
+    this.loadDefinationsForAttributeType(attributeType, baseEntity);
+  }
+
+  loadDefinationsForAttributeType(attributeType : string , baseEntity ?: string) : void {
+    this.dynamicViewService.loadDefinationsForAttributeTypeAndBaseEntity(attributeType, baseEntity)
+  }
+
+  getDefinationsForAttributeType() : void {
+    this.subscriptions.add(
+      this.dynamicViewService.getDefinationsForAttributeTypeAndBaseEntity()
+      .pipe(filter( data => data != undefined),
+        tap((response : any ) =>{ this.definitionData = response.viewAttributeItems; },
+        skip(1)))
+      .subscribe((response : any) =>{
+     
+        if(this.definitionData.length > 0 ){
+          this.attributeForm.patchValue({ definition : this.definitionData[0].definition });
+        }
+
+      }));
+  }
+
+  highlightErrorField(formControlName : string) : boolean{
+    return AppUtility.showErrorMessageOnErrorField(this.f,formControlName);
+  }
+
   get f() { return this.attributeForm.controls; }
+
+  get form() { return this.attributeForm.value; }
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);

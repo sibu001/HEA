@@ -3,11 +3,12 @@ export interface DynamicViewManagementModel {
     JavaScriptPageCount : any;
     JavaScriptPage: any;
     dynamicViewList: any;
-    dynamicViewCount : number;
+    dynamicViewCount : any;
     dynamicView: any;
     attributeList: any;
     attributeCount : any;
     attribute: any;
+    attributeTypeDefinations : any;
     javaScriptCustomerGroupList: any;
     javaScriptCustomerGroup: any;
 }

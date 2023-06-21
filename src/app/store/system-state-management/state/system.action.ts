@@ -65,8 +65,14 @@ export enum SystemActionTypes {
     SAVE_RELATED_RECOMMENDATION_ACTION = 'Save Related Recommendations',
     DELETE_RELATED_RECOMMENDATION_ACTION = 'Delete Related Recommendations',
     DELETE_RELATED_LEAK_ACTION = 'Delete Related Leaks',
-    LOAD_SELECTED_TOPIC_GROUP_LIST_BY_ID = 'Load Selected Topic Group List By ID'
-
+    LOAD_SELECTED_TOPIC_GROUP_LIST_BY_ID = 'Load Selected Topic Group List By ID',
+    GET_USER_REPORT_LIST = 'Get User Report List',
+    GET_USER_REPORT_COUNT = 'Get User Report Count',
+    GET_USER_REPORT_BY_ID = 'Get User Report By ID',
+    SAVE_USER_REPORT = 'Save User Report',
+    UPDATE_USER_REPORT_BY_ID = 'Update User Report by ID',
+    DELETE_USER_REPORT_BY_ID = 'Delete User Report by ID',
+    LOAD_CUSTOMER_GROUP_BY_USER_REPORT_ID = 'Load Customer Group by User Report Id'
 }
 export class GetCustomerGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_LIST;
@@ -431,3 +437,44 @@ export class LoadSelectedTopicGroupListAction{
     constructor(readonly id: number){}
 }
 
+export class GetUserReportListAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_REPORT_LIST;
+    constructor(readonly params : HttpParams, readonly force : boolean) {
+    }
+}
+
+export class GetUserReportCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_REPORT_COUNT;
+    constructor(readonly params : HttpParams, readonly force : boolean) {
+    }
+}
+
+export class GetUserReportByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_REPORT_BY_ID;
+    constructor(readonly id : number) {
+    }
+}
+
+export class SaveUserReportAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_USER_REPORT;
+    constructor(readonly body : any) {
+    }
+}
+
+export class UpdateUserReportByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_USER_REPORT_BY_ID;
+    constructor(readonly body : any, readonly id : number) {
+    }
+}
+
+export class DeleteUserReportByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_USER_REPORT_BY_ID;
+    constructor(readonly id : number) {
+    }
+}
+
+export class LoadUserReportCustomerGroupsAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.LOAD_CUSTOMER_GROUP_BY_USER_REPORT_ID;
+    constructor(readonly userReportId : number) {
+    }
+}

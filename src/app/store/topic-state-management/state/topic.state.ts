@@ -129,6 +129,7 @@ import { TopicManagementModel } from './topic.model';
         paneChartSeriesDefination : undefined,
         SERIES_QUERY_TYPE : undefined,
         SERIES_COLOR : undefined,
+        USER_REPORT_TYPE : undefined,
     }
 })
 
@@ -311,6 +312,11 @@ export class TopicManagementState {
     @Selector()
     static getChartSeriesColorLookup(state: TopicManagementModel): any {
         return state.SERIES_COLOR;
+    }
+
+    @Selector()
+    static getUserReportTypeLookUp(state: TopicManagementModel): any {
+        return state.USER_REPORT_TYPE;
     }
     
     @Selector()
@@ -1176,13 +1182,15 @@ export class TopicManagementState {
             return null;
 
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.lookup + '/' + action.type + '/' + AppConstant.lookupValues)
+        // return this.loginService.performGet(AppConstant.lookup + '/' + action.type + '/' + AppConstant.lookupValues)
+        return this.loginService.performGet(AppConstant.lookupValues + '/' + action.type)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     const currentState = ctx.getState();
                     // console.log("pre state :- " + JSON.stringify(state))
-                    currentState[action.type] = response
+                    // currentState[action.type] = response
+                    currentState[action.type] = response.data;
                     // console.log("post state :- " + JSON.stringify(state))
                 },
                     error => {

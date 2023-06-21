@@ -24,7 +24,7 @@ export enum DynamicViewActionTypes {
     UPDATE_ATTRIBUTE_ = 'Update Attribute',
     SAVE_ATTRIBUTE_ = 'Save Attribute',
     DELETE_ATTRIBUTE_BY_ID = 'Delete Attribute By Id',
-
+    GET_DEFINATION_FOR_ATTRIBUTE_TYPE_AND_BASE_ENTITY = ' Get Defination for Attribute Type And Base Entity',
 }
 export class GetJavaScriptPageListAction {
     static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.GET_JAVA_SCRIPT_PAGE_LIST;
@@ -112,7 +112,9 @@ export class GetDynamicViewByIdAction {
 export class UpdateDynamicViewAction {
     static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.UPDATE_DYNAMIC_VIEW;
     constructor(readonly id: number, readonly dynamicView: any) {
-    }
+    }    // GET_USER_REPORT_LIST = 'Get User Report List',
+    // GET_USER_REPORT_COUNT = 'Get User Report Count',
+
 }
 
 export class SaveDynamicViewAction {
@@ -161,5 +163,13 @@ export class DeleteAttributeByIdAction {
     constructor(readonly id: number) {
     }
 }
+
+export class GetDefinationsForAttributeTypeAndBaseEntityAction {
+    static readonly type: DynamicViewActionTypes = DynamicViewActionTypes.GET_DEFINATION_FOR_ATTRIBUTE_TYPE_AND_BASE_ENTITY;
+    constructor(readonly attributeType : string, readonly baseEntity : string) {
+    }
+}
+
+
 
 

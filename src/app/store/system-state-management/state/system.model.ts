@@ -36,4 +36,8 @@ export interface SystemManagementModel {
     relatedLeakList : any;
     selectedTopicGroupList : any;
     customerProgramGroupList : any;
+    userReportList : any;
+    userReportCount : any;
+    userReport : any;
+    userReportCustomerGroup : any;
 }
