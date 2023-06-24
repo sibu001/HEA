@@ -72,7 +72,19 @@ import {
   SaveUserReportAction,
   UpdateUserReportByIdAction,
   DeleteUserReportByIdAction,
-  LoadUserReportCustomerGroupsAction
+  LoadUserReportCustomerGroupsAction,
+  SaveUserReportCustomerGroupsAction,
+  RemoveUserReportCustomerGroupsAction,
+  GetUserReportContentPartsAction,
+  GetUserReportContextVariableAction,
+  GetUserReportContentByIdAction,
+  SaveUserReportContentAction,
+  UpdateUserReportContentByIdAction,
+  DeleteUserReportContentByIdAction,
+  GetUserReportContextVariableByIdAction,
+  SaveUserReportContextVariableAction,
+  UpdateUserReportContextVariableByIdAction,
+  DeleteUserReportContextVariableByIdAction,
 } from '../state/system.action';
 import { SystemManagementState } from '../state/system.state';
 
@@ -217,6 +229,30 @@ export class SystemService {
 
   getUserReportCustomerGroups() : Observable<any> {
     return this.store.select(SystemManagementState.getUserReportCustomerGroups);
+  }
+
+  getUserReportContentParts()  : Observable<any> {
+    return this.store.select(SystemManagementState.getUserReportContentParts);
+  }
+
+  getUserReportContentPartsCount() : Observable<number>{
+    return this.store.select(SystemManagementState.getUserReportContentPartsCount);
+  }
+
+  getUserReportContextVariables() : Observable<any> {
+    return this.store.select(SystemManagementState.getUserReportContextVariables);
+  }
+
+  getUserReportContextVariablesCount() : Observable<number>{
+    return this.store.select(SystemManagementState.getUserReportContextVariablesCount);
+  }
+
+  getUserReportContentById() : Observable<any> {
+    return this.store.select(SystemManagementState.getUserReportContent);
+  }
+
+  getUserReportContextVariableById() : Observable<any>{
+    return this.store.select(SystemManagementState.getUserReportContextVariable);
   }
 
   loadCustomerGroupList(force: boolean, filter: any): Observable<SystemManagementState> {
@@ -527,5 +563,53 @@ export class SystemService {
 
   loadUserReportsCustomerGroups(userReportId : number) : Observable<SystemManagementState> {
     return this.store.dispatch(new LoadUserReportCustomerGroupsAction(userReportId));
+  }
+
+  saveUserReportCustomerGroup(userReportId : number, customerGroupId : number) : Observable<SystemManagementState> {
+    return this.store.dispatch(new SaveUserReportCustomerGroupsAction(userReportId, customerGroupId));
+  }
+
+  removeUserReportCustomerGroup(userReportId : number, customerGroupId : number) : Observable<SystemManagementState> {
+    return this.store.dispatch(new RemoveUserReportCustomerGroupsAction(userReportId, customerGroupId));
+  }
+  
+  loadUserReportContentParts(userReportId : number, params : HttpParams) : Observable<SystemManagementState> {
+    return this.store.dispatch(new GetUserReportContentPartsAction(userReportId,params))
+  }
+
+  loadUserReportContextVariablesList(userReportId : number,params : HttpParams) : Observable<SystemManagementState> {
+    return this.store.dispatch(new GetUserReportContextVariableAction(userReportId,params))
+  }
+
+  loadUserReportContentById(userReportId : number , id : number) : Observable<SystemManagementState> {
+    return this.store.dispatch(new GetUserReportContentByIdAction(userReportId,id))
+  }
+
+  saveUserReportContentById(userReportId : number , body  : any) : Observable<SystemManagementState> {
+    return this.store.dispatch(new SaveUserReportContentAction(userReportId,body))
+  }
+
+  updateUserReportContentById(userReportId : number , body  : any, id : number) : Observable<SystemManagementState> {
+    return this.store.dispatch(new UpdateUserReportContentByIdAction(userReportId, body, id))
+  }
+
+  deleteUserReportContentById(userReportId : number , id : number) : Observable<SystemManagementState> {
+    return this.store.dispatch(new DeleteUserReportContentByIdAction(userReportId, id))
+  }
+
+  loadUserReportContextVariableById(userReportId : number , id : number) : Observable<SystemManagementState>{
+    return this.store.dispatch(new GetUserReportContextVariableByIdAction(userReportId,id));
+  }
+
+  SaveUserReportContextVariable(userReportId : number , body : any) : Observable<SystemManagementState>{
+    return this.store.dispatch(new SaveUserReportContextVariableAction(userReportId, body));
+  }
+
+  UpdateUserReportContextVariableId(userReportId : number, id : number , body : any) : Observable<SystemManagementState>{
+    return this.store.dispatch(new UpdateUserReportContextVariableByIdAction(userReportId,id, body));
+  }
+
+  DeleteUserReportContextVariableById(userReportId : number, id : number) : Observable<SystemManagementState>{
+    return this.store.dispatch(new DeleteUserReportContextVariableByIdAction(userReportId, id));
   }
 }

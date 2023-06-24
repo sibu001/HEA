@@ -77,6 +77,8 @@ export class AppConstant {
     public static generateEmbedImage = 'generateEmbedImage';
     public static eventHistory = 'customerEvents';
     public static userReports = 'userReports';
+    public static contents = 'contents';
+    public static variables = 'variables';
     public static userReportDefinitions = '';
     public static userReportDefinitionContextVariableTypes = '';
     public static userReportDefinitionContentParts = '';

@@ -72,7 +72,19 @@ export enum SystemActionTypes {
     SAVE_USER_REPORT = 'Save User Report',
     UPDATE_USER_REPORT_BY_ID = 'Update User Report by ID',
     DELETE_USER_REPORT_BY_ID = 'Delete User Report by ID',
-    LOAD_CUSTOMER_GROUP_BY_USER_REPORT_ID = 'Load Customer Group by User Report Id'
+    LOAD_CUSTOMER_GROUP_BY_USER_REPORT_ID = 'Load Customer Group by User Report Id',
+    SAVE_CUSTOMER_GROUP_BY_USER_REPORT_ID = 'Save Customer Group by User Report Id',
+    REMOVE_CUSTOMER_GROUP_BY_USER_REPORT_ID = 'Remove Customer Group by User Report Id',
+    GET_USER_REPORT_CONTENT_PART = 'Get User Report Content',
+    GET_USER_REPORT_CONTEXT_VARIABLE = 'Get User Report Context Variable',
+    GET_USER_REPORT_CONTENT_BY_ID = 'Get User Report Content By Id',
+    SAVE_USER_REPORT_CONTENT = 'Save User Report Content',
+    UPDATE_USER_REPORT_CONTENT_BY_ID = 'Update User Report Content By Id',
+    DELETE_USER_REPORT_CONTENT_BY_ID = 'Delete User Report By Id',
+    GET_USER_REPORT_CONTEXT_VARIABLE_BY_ID = 'Get User Report Context Variable By Id',
+    SAVE_USER_REPORT_CONTEXT_VARIABLE = 'Save User Report Context Variable',
+    UPDATE_USER_REPORT_CONTEXT_VARIABLE_BY_ID  = 'Update User Report Context Variable By Id',   
+    DELETE_USER_REPORT_CONTEXT_VARIABLE_BY_ID = 'Delete User Report Context Variable By Id'
 }
 export class GetCustomerGroupListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_CUSTOMER_GROUP_LIST;
@@ -476,5 +488,77 @@ export class DeleteUserReportByIdAction {
 export class LoadUserReportCustomerGroupsAction {
     static readonly type: SystemActionTypes = SystemActionTypes.LOAD_CUSTOMER_GROUP_BY_USER_REPORT_ID;
     constructor(readonly userReportId : number) {
+    }
+}
+
+export class SaveUserReportCustomerGroupsAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_CUSTOMER_GROUP_BY_USER_REPORT_ID;
+    constructor(readonly userReportId : number, readonly customerGroupId : number) {
+    }
+}
+
+export class RemoveUserReportCustomerGroupsAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.REMOVE_CUSTOMER_GROUP_BY_USER_REPORT_ID;
+    constructor(readonly userReportId : number, readonly customerGroupId : number) {
+    }
+}
+
+export class GetUserReportContentPartsAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_REPORT_CONTENT_PART;
+    constructor(readonly userReportId : number, readonly params : HttpParams) {
+    }
+}
+
+export class GetUserReportContextVariableAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_REPORT_CONTEXT_VARIABLE;
+    constructor(readonly userReportId : number, readonly params : HttpParams) {
+    }
+}
+
+export class GetUserReportContentByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_REPORT_CONTENT_BY_ID;
+    constructor(readonly userReportId : number, readonly id : number) {
+    }
+}
+
+export class SaveUserReportContentAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_USER_REPORT_CONTENT;
+    constructor(readonly userReportId : number, readonly body : any) {
+    }
+}
+
+export class UpdateUserReportContentByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_USER_REPORT_CONTENT_BY_ID;
+    constructor(readonly userReportId : number, readonly body : any, readonly id : number) {
+    }
+}
+
+export class DeleteUserReportContentByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_USER_REPORT_CONTENT_BY_ID;
+    constructor(readonly userReportId : number, readonly id : number) {
+    }
+}
+
+export class GetUserReportContextVariableByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_USER_REPORT_CONTEXT_VARIABLE_BY_ID;
+    constructor(readonly userReportId : number, readonly id : number) {
+    }
+}
+
+export class SaveUserReportContextVariableAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.SAVE_USER_REPORT_CONTEXT_VARIABLE;
+    constructor(readonly userReportId : number, readonly body : any) {
+    }
+}
+
+export class UpdateUserReportContextVariableByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.UPDATE_USER_REPORT_CONTEXT_VARIABLE_BY_ID;
+    constructor(readonly userReportId : number, readonly  id : number ,readonly body : any) {
+    }
+}
+
+export class DeleteUserReportContextVariableByIdAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.DELETE_USER_REPORT_CONTEXT_VARIABLE_BY_ID;
+    constructor(readonly userReportId : number, readonly id : number) {
     }
 }

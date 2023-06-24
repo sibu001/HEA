@@ -78,7 +78,19 @@ import {
     SaveUserReportAction,
     UpdateUserReportByIdAction,
     DeleteUserReportByIdAction,
-    LoadUserReportCustomerGroupsAction
+    LoadUserReportCustomerGroupsAction,
+    SaveUserReportCustomerGroupsAction,
+    RemoveUserReportCustomerGroupsAction,
+    GetUserReportContentPartsAction,
+    GetUserReportContextVariableAction,
+    GetUserReportContentByIdAction,
+    SaveUserReportContentAction,
+    UpdateUserReportContentByIdAction,
+    DeleteUserReportContentByIdAction,
+    GetUserReportContextVariableByIdAction,
+    SaveUserReportContextVariableAction,
+    UpdateUserReportContextVariableByIdAction,
+    DeleteUserReportContextVariableByIdAction
 } from './system.action';
 import { SystemManagementModel } from './system.model';
 
@@ -125,7 +137,13 @@ import { SystemManagementModel } from './system.model';
         userReportList : undefined,
         userReportCount : undefined,
         userReport : undefined,
-        userReportCustomerGroup : undefined
+        userReportCustomerGroup : undefined,
+        userReportContentParts : undefined,
+        userReportContentPartsCount : undefined,
+        userReportContextVariables : undefined,
+        userReportContextVariablesCount : undefined,
+        userReportContent : undefined,
+        userReportContextVariable : undefined
     }
 
 })
@@ -333,7 +351,38 @@ export class SystemManagementState {
 
     @Selector()
     static getUserReportCustomerGroups(state : SystemManagementModel) : any {
-        return state.userReportCustomerGroup;
+        return state.userReportCustomerGroup.response;
+    }
+
+    @Selector()
+    static getUserReportContentPartsCount(state : SystemManagementModel) : number {
+        return state.userReportContentPartsCount.response;
+    }
+
+    @Selector()
+    static getUserReportContentParts(state : SystemManagementModel) : any {
+        return state.userReportContentParts.response
+    }
+
+
+    @Selector()
+    static getUserReportContextVariables(state : SystemManagementModel){
+        return state.userReportContextVariables.response;
+    }
+
+    @Selector()
+    static getUserReportContextVariablesCount(state : SystemManagementModel){
+        return state.userReportContextVariablesCount.response;
+    }
+
+    @Selector()
+    static getUserReportContextVariable(state : SystemManagementModel){
+        return state.userReportContextVariable;
+    }
+
+    @Selector()
+    static getUserReportContent(state : SystemManagementModel){
+        return state.userReportContent;
     }
 
     @Action(GetCustomerGroupListAction)
@@ -1716,8 +1765,215 @@ export class SystemManagementState {
         return this.loginService.performGet(AppUtility
                 .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.customerGroups]))
             .pipe(tap((response:any) => {
-                ctx.patchState({ userReportCustomerGroup : response.data.list})
+                ctx.patchState({ userReportCustomerGroup : AppUtility.addCustomIdentifierForReducer({response : response.data.list }, action.userReportId )});
             },this.utilityService.errorCallbak))
     }
 
+    @Action(SaveUserReportCustomerGroupsAction)
+    saveUserReportCustomerGroups(ctx : StateContext<SystemManagementModel>, action : SaveUserReportCustomerGroupsAction) : Actions {
+        return this.loginService.performPost({},AppUtility
+                .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.customerGroups,action.customerGroupId]))
+            .pipe( tap((response : any) =>{
+                const userReportCustomerGroup = ctx.getState().userReportCustomerGroup;
+                if(userReportCustomerGroup && userReportCustomerGroup.id == action.userReportId) {
+                    userReportCustomerGroup.response.push(response.data);
+
+                    ctx.patchState({userReportCustomerGroup : { ...userReportCustomerGroup, response : userReportCustomerGroup.response }});
+                }
+            },this.utilityService.errorCallbak));
+    }
+
+    @Action(RemoveUserReportCustomerGroupsAction)
+    removeUserReportCustomerGroups(ctx : StateContext<SystemManagementModel>, action : RemoveUserReportCustomerGroupsAction) : Actions {
+        return this.loginService.performDelete(AppUtility
+                .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.customerGroups,action.customerGroupId]))
+            .pipe( tap((response : any) =>{
+                const userReportCustomerGroup = ctx.getState().userReportCustomerGroup;
+                if(userReportCustomerGroup && userReportCustomerGroup.id == action.userReportId) {
+                    userReportCustomerGroup.response = userReportCustomerGroup
+                        .response.filter((userReport) => userReport.customerGroupId != action.customerGroupId);
+
+                        ctx.patchState({userReportCustomerGroup : { ...userReportCustomerGroup, response : userReportCustomerGroup.response }});
+                    }
+            },this.utilityService.errorCallbak));
+    }
+
+    @Action(GetUserReportContentPartsAction)
+    getUserReportContentParts(ctx : StateContext<SystemManagementModel>, action : GetUserReportContentPartsAction) : Actions {
+        return this.loginService.performGetWithParams(AppUtility
+            .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.contents]),action.params)
+            .pipe(tap( (response : any) => {
+
+                ctx.patchState({ userReportContentPartsCount : AppUtility.addCustomIdentifierForReducer({ response : response.data.totalSize},action.userReportId)});
+                ctx.patchState({ userReportContentParts : AppUtility.addCustomIdentifierForReducer({ response : response.data.list},action.userReportId)});
+
+            },this.utilityService.errorCallbak))
+    }
+
+    @Action(GetUserReportContextVariableAction)
+    getUserReportContextVariable(ctx : StateContext<SystemManagementModel>, action : GetUserReportContextVariableAction) : Actions {
+        return this.loginService.performGetWithParams(AppUtility
+            .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.variables]),action.params)
+            .pipe(tap( (response : any) => {
+
+                ctx.patchState({ userReportContextVariablesCount : AppUtility.addCustomIdentifierForReducer({ response : response.data.totalSize},action.userReportId)});
+                ctx.patchState({ userReportContextVariables : AppUtility.addCustomIdentifierForReducer({ response : response.data.list},action.userReportId)});
+
+            },this.utilityService.errorCallbak))
+    }
+
+    @Action(GetUserReportContentByIdAction)
+    getUserReportContentById(ctx : StateContext<SystemManagementModel>, action : GetUserReportContentByIdAction) : Actions {
+
+        const userReportContent = ctx.getState().userReportContent;
+        if(userReportContent && userReportContent.id == action.id){
+            return;
+        }
+
+        const userReportContentParts = ctx.getState().userReportContentParts;
+        if(userReportContentParts && userReportContentParts.id == action.userReportId){
+            const userReportContent = userReportContentParts.response.find(report => report.id == action.id);
+            ctx.patchState({ userReportContent : {...userReportContent} });
+            return;
+        }
+
+        return this.loginService.performGet(
+            AppUtility.endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.contents,action.id]))
+            .pipe(tap((response : any) =>{
+                ctx.patchState({ userReportContent : response.data});
+            },this.utilityService.errorCallbak));
+    }
+
+    @Action(SaveUserReportContentAction)
+    saveUserReportContent(ctx : StateContext<SystemManagementModel>, action : SaveUserReportContentAction) : Actions {
+
+        return this.loginService.performPost(action.body,
+            AppUtility.endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.contents]))
+            .pipe(tap((response : any) =>{
+
+                const userReportContentParts = ctx.getState().userReportContentParts;
+                if(userReportContentParts && userReportContentParts.id == action.userReportId){
+                    userReportContentParts.response.push(response.data);
+                    ctx.patchState({ userReportContentParts : {...userReportContentParts, response : userReportContentParts.response} });
+                }
+
+                ctx.patchState({ userReportContent : response.data});
+            },this.utilityService.errorCallbak));
+    }
+
+    @Action(UpdateUserReportContentByIdAction)
+    UpdateUserReportContentById(ctx : StateContext<SystemManagementModel>, action : UpdateUserReportContentByIdAction) : Actions {
+        return this.loginService.performPut(action.body,
+            AppUtility.endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.contents,action.id]))
+            .pipe(tap((response : any) =>{
+
+                const userReportContentParts = ctx.getState().userReportContentParts;
+                if(userReportContentParts && userReportContentParts.id == action.userReportId){
+                    userReportContentParts.response.map(report => {
+                        if(report.id == action.id){
+                            return response.data;
+                        }
+                        return report;
+                    });
+
+                    ctx.patchState({ userReportContentParts : {...userReportContentParts, response : userReportContentParts.response} });
+                }
+
+                ctx.patchState({ userReportContent : response.data});
+            },this.utilityService.errorCallbak));
+    }
+
+    @Action(DeleteUserReportContentByIdAction)
+    DeleteUserReportContentById(ctx : StateContext<SystemManagementModel>, action : DeleteUserReportContentByIdAction) : Actions {
+        return this.loginService.performDelete(
+            AppUtility.endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.contents,action.id]))
+            .pipe(tap((response : any) =>{
+
+                const userReportContentParts = ctx.getState().userReportContentParts;
+                if(userReportContentParts && userReportContentParts.id == action.userReportId){
+                    userReportContentParts.response = 
+                        userReportContentParts.response.filter(report => report.id != action.id);
+                    
+                    ctx.patchState({ userReportContentParts : {...userReportContentParts, response : userReportContentParts.response} });
+                }
+
+                ctx.patchState({ userReportContent : undefined});
+            },this.utilityService.errorCallbak));
+    }
+
+    @Action(GetUserReportContextVariableByIdAction)
+    getUserReportContextVariableById(ctx : StateContext<SystemManagementModel>, action : GetUserReportContextVariableByIdAction) : Actions {
+
+        const userReportContextVariable = ctx.getState().userReportContextVariable;
+        if(userReportContextVariable && userReportContextVariable.id == action.id){
+            return
+        }
+
+        const userReportContextVariables = ctx.getState().userReportContextVariables;
+        if(userReportContextVariables && userReportContextVariables.id == action.userReportId){
+            const userReportContextVariable = userReportContextVariables.response.find(variable => variable.id == action.id);
+            ctx.patchState({ userReportContextVariable : userReportContextVariable});
+            return;
+        }
+
+        return this.loginService.performGet(AppUtility
+            .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.variables,action.id]))
+        .pipe(tap((response : any) =>{
+            ctx.patchState({ userReportContextVariable : response.data });
+        },this.utilityService.errorCallbak));
+    }
+
+    @Action(SaveUserReportContextVariableAction)
+    saveUserReportContextVariable(ctx : StateContext<SystemManagementModel>, action : SaveUserReportContextVariableAction) : Actions {
+        return this.loginService.performPost(action.body,AppUtility
+            .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.variables]))
+        .pipe(tap((response : any) =>{
+
+            const userReportContextVariables = ctx.getState().userReportContextVariables;
+            if(userReportContextVariables && userReportContextVariables.id == action.userReportId){
+                userReportContextVariables.response.push(response.data);
+                ctx.patchState({ userReportContextVariables : {...userReportContextVariables , response : userReportContextVariables.response}});
+            }
+
+            ctx.patchState({ userReportContextVariable : response.data });
+        },this.utilityService.errorCallbak));
+    }
+
+    @Action(UpdateUserReportContextVariableByIdAction)
+    updateUserReportContextVariableById(ctx : StateContext<SystemManagementModel>, action : UpdateUserReportContextVariableByIdAction) : Actions {
+        return this.loginService.performPut(action.body,AppUtility
+            .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.variables,action.id]))
+        .pipe(tap((response : any) =>{
+
+            const userReportContextVariables = ctx.getState().userReportContextVariables;
+            if(userReportContextVariables && userReportContextVariables.id == action.userReportId){
+
+                userReportContextVariables.response = userReportContextVariables.response.map(variable =>{
+                    if(variable.id == action.id){
+                        return response.data;
+                    } return variable;
+                });
+                ctx.patchState({ userReportContextVariables : {...userReportContextVariables , response : userReportContextVariables.response}});
+            }
+
+            ctx.patchState({ userReportContextVariable : response.data });
+        },this.utilityService.errorCallbak));
+    }
+
+    @Action(DeleteUserReportContextVariableByIdAction)
+    deleteUserReportContextVariableById(ctx : StateContext<SystemManagementModel>, action : DeleteUserReportContextVariableByIdAction) : Actions {
+        return this.loginService.performDelete(AppUtility
+            .endPointGenerator([AppConstant.userReports,action.userReportId,AppConstant.variables,action.id]))
+        .pipe(tap((response : any) =>{
+
+            const userReportContextVariables = ctx.getState().userReportContextVariables;
+            if(userReportContextVariables && userReportContextVariables.id == action.userReportId){
+
+                userReportContextVariables.response = userReportContextVariables.response.filter(variable => variable.id != action.id);
+                ctx.patchState({ userReportContextVariables : {...userReportContextVariables , response : userReportContextVariables.response}});
+            }
+
+            ctx.patchState({ userReportContextVariable : undefined });
+        },this.utilityService.errorCallbak));
+    }
 }

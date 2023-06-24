@@ -40,4 +40,10 @@ export interface SystemManagementModel {
     userReportCount : any;
     userReport : any;
     userReportCustomerGroup : any;
+    userReportContentParts : any;
+    userReportContentPartsCount : any;
+    userReportContextVariables : any;
+    userReportContextVariablesCount : any;
+    userReportContent : any;
+    userReportContextVariable : any;
 }

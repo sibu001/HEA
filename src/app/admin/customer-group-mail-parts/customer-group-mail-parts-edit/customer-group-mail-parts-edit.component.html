@@ -41,7 +41,7 @@
             <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
               <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm'
                 formControlName="contentTemplate" id="contentTemplate" rows="10" cols="10"> </textarea>
-              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!showContentTemplate && ( !f.contentTemplate.value || !f.contentTemplate.value.trim())" (click)="showContentTemplate = true;" >
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!f.disableHtmlEditor.value && showHTMLIcon()" (click)="showContentTemplate = true;" >
               <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value && showContentTemplate' [toolbarSettings]='tools'
                 formControlName='contentTemplate' id='contentTemplate'>
               </ejs-richtexteditor>

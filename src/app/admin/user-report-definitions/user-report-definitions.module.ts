@@ -20,6 +20,7 @@ import { SystemManagementState } from 'src/app/store/system-state-management/sta
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
 import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { MatAutocompleteModule, MatInputModule, MatOptionModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -28,6 +29,9 @@ import { TopicService } from 'src/app/store/topic-state-management/service/topic
     ReactiveFormsModule,
     RichTextEditorModule,
     FormsModule,
+    MatAutocompleteModule,
+    MatOptionModule,
+    MatInputModule,
     UserReportDefinitionsRoutingModule,
     NgxsModule.forRoot([
       SystemManagementState,

@@ -2,6 +2,13 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="error-message" style="margin-top:15px;" *ngIf="errorMessage">
+          <!-- {{errorMessage}} -->
+          <ng-container *ngIf="errorMessage"><br>
+              System exception. Please contact support@hea.com for help.
+          </ng-container>
+          
+        </p>
         <p class="messages">
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">User Report Preview </span>
@@ -11,22 +18,51 @@
           <div class="row borderBottom borderTop rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Customer:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <div class='row borderBottom borderTop rowPadding'>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                  Audit Id:
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                  <input type="text" formControlName='auditId' id='auditId' class="form-control">
+              <div class="row rowPadding borderBottom" style="margin-left: 0px;
+              margin-right: 0px;">
+              <div class='col-sm-4 col-md-4 col-lg-4 col-xs-12'>
+                AuditId:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control" matInput 
+             formControlName='auditId' [matAutocomplete]="auditId"
+                (keyup)="findCustomerByAuditIdOrCustomerName('auditId')" >
+                <mat-autocomplete #auditId="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                  <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
+                    {{data.user.name}}
+                  </mat-option>
+                </mat-autocomplete>
+                <div *ngIf="f.auditId.invalid && (f.auditId.dirty ||
+                  f.auditId.touched)">
+                  <span class="error" *ngIf="f.auditId.errors.required">
+                    Audit Id is required.
+                  </span>
                 </div>
               </div>
-              <div class='row borderBottom rowPadding'>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                  Customer Name:
-                </div>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                  <input type="text" formControlName='customerName' id='customerName' class="form-control">
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div class="row rowPadding" style="margin-left: 0px; margin-right:
+              0px;" s>
+              <div class='col-sm-4 col-md-4 col-lg-4 col-xs-12'>
+                Customer Name:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" matInput class='form-control form-control-sm'
+                (keyup)="findCustomerByAuditIdOrCustomerName('customerName')" formControlName="customerName" [matAutocomplete]="customerName">
+                  <mat-autocomplete #customerName="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
+                    <mat-option *ngFor="let data of dataListForSuggestions; index as i" [value]="data">
+                      {{data.user.name}}
+                    </mat-option>
+                  </mat-autocomplete>
+                <div *ngIf="f.customerName.invalid && (f.customerName.dirty ||
+                  f.customerName.touched)">
+                  <span class="error" *ngIf="f.customerName.errors.required">
+                    Customer Name is required.
+                  </span>
                 </div>
               </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -44,18 +80,17 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-
           <div class="row borderBottom rowPadding">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <iframe id="ifrmMailContent" title="User Preview" class="form-control" style="height: 1500px; width: 100%; overflow: hidden;"
-                height="">
+              <iframe id="ifrmMailContent" title="Mail Preview"
+                class="form-control" style="height: 850px; width: 100%; overflow:hidden;" height="">
               </iframe>
             </div>
           </div>
-
+        </form>
           <div class="row rowPadding">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <input type="checkbox" formControlName='showHtml' id='showHtml'>
+              <input type="checkbox" id='showHtml' [(ngModel)]="showHTML" (change)="showHideHTML()">
               Show Html
             </div>
           </div>
@@ -66,7 +101,6 @@
               </button>
             </div>
           </div>
-        </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar></app-sidebar>

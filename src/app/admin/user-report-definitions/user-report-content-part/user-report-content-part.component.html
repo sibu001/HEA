@@ -18,14 +18,14 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="order" id="order">
+              <input type="text" class="form-control" formControlName="contentOrder" id="contentOrder">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content Filter:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="contentFilter" id="contentFilter"></textarea>
+              <textarea class="form-control" formControlName="contentFilterRule" id="contentFilterRule"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -41,21 +41,23 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Content:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm' formControlName="content"
-                id="content"> </textarea>
-              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value' [toolbarSettings]='tools' formControlName='content'
-                id='content'>
+
+              <textarea *ngIf='f.disableHtmlEditor.value' class='form-control form-control-sm'
+              formControlName="contentTemplate" id="contentTemplate" rows="10" cols="10"> </textarea>
+
+              <img src="assets/images/ico_html.png" alt="HTML" *ngIf=" !f.disableHtmlEditor.value && showHTMLIcon()" (click)="showContentTemplate = true;" >
+              <input formControlName="contentTemplate" *ngIf=" !f.disableHtmlEditor.value && showHTMLIcon()" type="hidden">
+
+              <ejs-richtexteditor *ngIf='!f.disableHtmlEditor.value && showContentTemplate' [toolbarSettings]='tools'
+                formControlName='contentTemplate' id='contentTemplate'>
               </ejs-richtexteditor>
+
+              <div class="error-message" *ngIf="highlightErrorField('contentTemplate')" >
+                <span>Content is required.</span>
+              </div>
+
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-          </div>
-
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
           </div>
 
           <div class="row borderBottom rowPadding">
@@ -71,7 +73,7 @@
               <span class="filterLabel">Image:</span>
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="file" formControlName="imageFile" id="imageFile">
+              <input type="file" formControlName="imageFile" id="imageFile" (change)="handleFileInput($event.target.files)">
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
             </div>
@@ -81,29 +83,21 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Generated embedded image:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class='form-control form-control-sm' formControlName="embeddedImage"
-                id="embeddedImage">
+                 id="embeddedImage">
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
+              <button type="button" class="btn btn-primary" style="margin-top: 5px; float: right;" 
+                (click)="generate()">Generate</button>
+            </div>
           </div>
 
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
-              </button>
+          <div class="row" style="margin-top: 20px;">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
+              <button type="button" class="btn btn-primary" (click)="back()"> Back </button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 sidePadding">
-                <button type="button" class="btn btn-primary" *ngIf="id !== undefined && id !== null"
-                  style="float: right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
-                  Save
-                </button>
-              </div>
+            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-9 right-buttons">
+              <button type="button" class="btn btn-primary" (click)="save()"> Save </button>
+              <button type="button" class="btn btn-primary" *ngIf="id" (click)="delete()"> Delete </button>
             </div>
           </div>
         </form>

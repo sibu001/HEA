@@ -12,6 +12,9 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Field:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" formControlName='field' id='field' class="form-control">
+              <div class="error-message" *ngIf="highlightErrorField('field')" >
+                <span>Field is required.</span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -19,6 +22,9 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order Number:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control" formControlName="orderNumber" id="orderNumber">
+              <div class="error-message" *ngIf="highlightErrorField('orderNumber')" >
+                <span>Order Number is required.</span>
+              </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -26,8 +32,8 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control" formControlName="calculationType" id="calculationType">
-                <option *ngFor="let type of calculationType" [value]="type.valueName">
-                  {{ type.lookupValue }}
+                <option *ngFor="let type of calculationType" [value]="type.lookupValue">
+                  {{ type.valueName }}
                 </option>
               </select>
             </div>
@@ -36,30 +42,19 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Calculation Expression:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="calculationExpression"
-                id="calculationExpression"></textarea>
+              <textarea class="form-control" formControlName="calculation" rows="15"
+                id="calculation"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
-              </button>
+          <div class="row" style="margin-top: 10px;">
+            <div class="col-sm-3 col-md-3 col-lg-3 col-xs-3">
+              <button type="button" class="btn btn-primary" (click)="back()"> Back </button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 sidePadding">
-                <button type="button" class="btn btn-primary" *ngIf="id !== undefined && id !== null"
-                  style="float: right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 sidePadding">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
-                  Save
-                </button>
-              </div>
+            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-9 right-buttons">
+                <button type="button" class="btn btn-primary" (click)="save()"> Save </button>
+                <button type="button" class="btn btn-primary" *ngIf="id" (click)="delete()"> Delete </button>
             </div>
           </div>
         </form>

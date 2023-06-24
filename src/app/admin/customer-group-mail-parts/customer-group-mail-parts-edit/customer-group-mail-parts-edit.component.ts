@@ -157,6 +157,12 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/customerGroupMailParts/customerGroupMailPartsList'],{ queryParams: { 'force': this.isForce }});
   }
 
+  showHTMLIcon() : boolean{
+    const isContentPresent : boolean = (!this.f.contentTemplate.value || !this.f.contentTemplate.value.trim());
+    if(!isContentPresent) { this.showContentTemplate = true; }
+    return !this.showContentTemplate && isContentPresent;
+  }
+
   get f() { return this.partForm.controls; }
 
   ngOnDestroy(): void {

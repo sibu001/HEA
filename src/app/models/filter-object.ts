@@ -141,6 +141,17 @@ export class AdminFilter {
         formValue: null
     };
 
+    public userReportContextVariable: any = {
+        page: null,
+        formValue: null
+    };
+
+    public userReportPreview =  {
+        customerId : '',
+        auditId : '',
+        user : { name : ''}
+    }
+
     public mailPreview =  {
         customerId : '',
         auditId : '',

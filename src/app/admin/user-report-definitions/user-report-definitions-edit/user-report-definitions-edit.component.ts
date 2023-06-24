@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
 import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { AdminFilter } from 'src/app/models/filter-object';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { AppConstant } from 'src/app/utility/app.constant';
@@ -30,23 +31,33 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
   public userReportData : any = {};
   public force : boolean = false;
   contentTypeList: any[] = [];
+  public adminFilter : AdminFilter;
   public customerGroupSource: any;
   public contentPartsDataSource: any;
   public variableDataSource: any;
   public totalElement = 0;
+  
   public customerGroup = {
     content: [],
     totalElements: 0,
     selectedContent: [],
+    NewSelectedContent : []
   };
-  public contentPartsData = {
+
+  public contentPartsData = {    
     content: [],
     totalElements: 0,
+    pageSize : Number(AppConstant.pageSize),
+    pageIndex : 0
   };
-  public variableData = {
+
+  public contextVariableData = {
     content: [],
     totalElements: 0,
+    pageSize : Number(AppConstant.pageSize),
+    pageIndex : 0
   };
+
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
@@ -57,26 +68,36 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
 
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
-      if(this.id){
-        this.systemService.loadUserReportById(this.id);
-        this.loadWhenObjectExists();
-      }
+        this.adminFilter = AppUtility.checkForAdminFilter('userReportContextVariable');
     });
 
   }
 
   ngOnInit() {
+
     this.setForm(undefined);
-    this.getUserReportById();
     this.loadUserReportType();
     this.loadContentTypeList();
+    this.loadWhenObjectExists();
+
+    if(this.id){
+      this.systemService.loadUserReportById(this.id);
+      this.getUserReportById();
+    }
+
     AppUtility.scrollTop();
   }
 
   loadWhenObjectExists(){
+    this.getUserReportContentParts();
+    this.changePageForContentParts(undefined);
+
     this.loadCustomerGroup();
     this.loadUserReportCustomerGroups();
     this.combineLatestResponseOfCustomerGroup();
+
+    this.changePageForContextVariable(undefined);
+    this.getUserReportContextVariableList();
   }
 
   setForm(event: any) {
@@ -97,6 +118,74 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
       .subscribe((contentTypeList: any) => {
         this.contentTypeList = [...contentTypeList.data];
       }));
+  }
+
+  channgeUserReportContentPartsPage(event : any) : void{
+    const params : HttpParams = this.paginationParams(event);
+    this.loadUserReportContentParts(params);
+  }
+
+  loadUserReportContentParts(params : HttpParams){
+    this.systemService.loadUserReportContentParts(this.id,params);
+  }
+
+  getUserReportContentParts(){
+
+    this.subscriptions.add(
+      this.systemService.getUserReportContentPartsCount()
+      .pipe(filter(data => !isNaN(data)))
+      .subscribe((count) =>{
+        this.contentPartsData.totalElements = count;
+      }));
+
+    this.subscriptions.add(
+      this.systemService.getUserReportContentParts()
+      .pipe(filter(data => data instanceof Array))
+      .subscribe(((contentParts : Array<any>) => {
+        this.contentPartsData.content = [...contentParts];
+      })));
+  }
+
+  changePageForContentParts(event : any) : void {
+    const params : HttpParams = this.paginationParams(event);
+    this.loadUserReportContentParts(params);
+  }
+
+  changePageForContextVariable(event : any) : void {
+    const params : HttpParams = this.paginationParams(event);
+    this.loadUserReportContextVariable(params);
+  }
+
+  private paginationParams(event : any) : HttpParams {
+    return new HttpParams()
+      .set('disableTotalSize', 'false')
+      .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : this.contentPartsData.pageSize.toString())
+      .set('startRow', (event && event.pageIndex !== undefined && event.pageSize ?
+        (event.pageIndex * event.pageSize) + '' : '0'));
+  }
+
+  loadUserReportContextVariable(params : HttpParams){
+    this.systemService.loadUserReportContextVariablesList(this.id,params);
+  }
+
+  getUserReportContextVariableList(){
+
+    this.subscriptions.add(
+      this.systemService.getUserReportContextVariablesCount()
+      .pipe(filter(data => !isNaN(data)))
+      .subscribe(count =>{
+        this.contextVariableData.totalElements = count;
+      })
+    );
+
+    this.subscriptions.add(
+      this.systemService.getUserReportContextVariables()
+      .pipe(filter(data => data instanceof Array))
+      .subscribe((variableList : Array<any>) =>{
+        this.contextVariableData.content = [...variableList];
+      })
+    );
+
   }
 
   loadUserReportType() : void {
@@ -136,6 +225,28 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
 
   }
 
+  upateUserReportCustomerGroups(){
+    const {newlySelected, newlyRemoved } = AppUtility.getNewlySelectedAndRemovedList
+      (this.customerGroup.NewSelectedContent,this.customerGroup.selectedContent,'customerGroupId');
+
+    console.log(newlySelected, newlyRemoved);
+
+    this.saveUserReportCustomerGroup(newlySelected);
+    this.removeUserReportCustomerGroup(newlyRemoved);
+  }
+
+  saveUserReportCustomerGroup(customerGroupList : Array<any>): void {
+    customerGroupList.forEach((customerGroupId) =>{
+      this.systemService.saveUserReportCustomerGroup(this.id,customerGroupId);
+    });
+  }
+
+  removeUserReportCustomerGroup(customerGroupList : Array<any>): void {
+    customerGroupList.forEach((customerGroupId) =>{
+      this.systemService.removeUserReportCustomerGroup(this.id,customerGroupId);
+    });
+  }
+
   back() {
     this.router.navigate(['/admin/userReportDefinitions/userReportDefinitionsList'], { queryParams: { force : this.force }})
   }
@@ -162,8 +273,11 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
       this.subscriptions.add(
         this.systemService.updateUserReportById(requestBody,this.id)
         .pipe(take(1))
-        .subscribe( response =>{
-              this.force = true;
+        .subscribe( (response : any) =>{
+
+          this.force = true;
+          this.upateUserReportCustomerGroups();
+
         },AppUtility.errorFieldHighlighterCallBack));
 
       return;
@@ -186,6 +300,8 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
   }
 
   delete(): void { 
+    
+    if(!AppUtility.deleteConfirmatonBox()) return;
 
     this.subscriptions.add(
       this.systemService.deleteUserReportById(this.id)
@@ -207,19 +323,19 @@ export class UserReportDefinitionsEditComponent implements OnInit, OnDestroy {
 
 
   addContentParts(): any {
-    this.router.navigate(['/admin/userReportDefinitions/userReportContentParts']);
+    this.router.navigate(['/admin/userReportDefinitions/userReportContentParts'], { queryParams : { userReportId : this.id}});
   }
 
   addVariable(): any {
-    this.router.navigate(['/admin/userReportDefinitions/userReportContextVariable']);
+    this.router.navigate(['/admin/userReportDefinitions/userReportContextVariable'], { queryParams : { userReportId : this.id}});
   }
 
-  goToEditContentParts(): any {
-    this.router.navigate(['/admin/userReportDefinitions/userReportContentParts'], { queryParams: { id: this.id } });
+  goToEditContentParts(event : any): any {
+    this.router.navigate(['/admin/userReportDefinitions/userReportContentParts'], { queryParams: { userReportId : this.id, id: event.id } });
   }
 
-  goToEditVariable(): any {
-    this.router.navigate(['/admin/userReportDefinitions/userReportContextVariable'], { queryParams: { id: this.id } });
+  goToEditVariable(event : any): any {
+    this.router.navigate(['/admin/userReportDefinitions/userReportContextVariable'], { queryParams: { userReportId : this.id, id: event.id } });
   }
 
   Preview() {

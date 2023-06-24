@@ -1886,7 +1886,9 @@ app-share-my-data-list .mat-column-city{
 
 app-topic-description-edit .mat-column-section,
 app-customer-list .mat-column-place,
-app-batch-script-list .mat-column-batchPeriod{
+app-batch-script-list .mat-column-batchPeriod,
+app-user-report-definitions-edit .mat-column-contentOrder,
+app-user-report-definitions-edit .mat-column-orderNumber{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 11% !important;
@@ -2460,7 +2462,10 @@ app-customer-event-list .mat-column-eventName{
   flex : 0 0 16% !important;
 }
 
-app-js-pages-list .mat-column-name{
+app-js-pages-list .mat-column-name,
+app-user-report-definitions-edit .mat-column-field,
+app-user-report-definitions-edit .mat-column-label,
+app-user-report-definitions-edit .mat-column-groupCode{
   flex : 0 0 35% !important;
 }
 
@@ -2509,7 +2514,7 @@ mat-paginator{
  }   
 }
 
-@media(max-width: 500px){
+@media(max-width: 767px){
   .form-padding{
     padding-left: 20px  !important;
     padding-right: 20px !important;

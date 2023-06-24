@@ -58,3 +58,8 @@ section.space-top {
     }
   }
   
+
+.form-padding {
+  padding-left: 40px;
+  padding-right: 40px;
+}

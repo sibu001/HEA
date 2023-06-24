@@ -6,7 +6,8 @@
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">User Report</span>
         </p>
-        <form [formGroup]="topicForm" class="form-group form-padding">
+        <form [formGroup]="topicForm" class="form-group">
+          <div class="form-padding">
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -59,14 +60,15 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-
+          </div>
           <div class="paddingTop" *ngIf="id" style="margin-top: 100px;">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName"> User Report Groups</span></p>
             <app-table [keys]="userReportKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true
               [isSearch]="false" [data]="customerGroup.content" [selectionList]="customerGroup.selectedContent"
-              id="customerGroupId" [hideMasterCheckBox]=true>
+              id="customerGroupId" [hideMasterCheckBox]=true 
+              (checkBoxChangeEvent)="customerGroup.NewSelectedContent= ($event)">
             </app-table>
           </div>
 
@@ -74,9 +76,10 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Content Parts</span></p>
-            <app-table [keys]="contentPartsKeys" [isPaginate]="true" [isSearch]="true" [data]="contentPartsDataSource"
+            <app-table [keys]="contentPartsKeys" [isPaginate]="true" [isSearch]="false" [data]="contentPartsData.content"
+              [pageIndex]="contextVariableData.pageIndex" [pageSize]="contextVariableData.pageSize"  
               [totalElement]="contentPartsData.totalElements" (addEvent)='addContentParts()'
-              (goToEditEvent)='goToEditContentParts()'>
+              (goToEditEvent)='goToEditContentParts($event)' (changePageEvent)="changePageForContentParts($event)">
             </app-table>
           </div>
 
@@ -84,9 +87,11 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Context variables</span></p>
-            <app-table [keys]="variableKeys" [isPaginate]="true" [isSearch]="false" [data]="variableDataSource"
-              [totalElement]="variableData.totalElements" (addEvent)='addVariable()'
-              (goToEditEvent)='goToEditVariable()'>
+            <app-table [keys]="variableKeys" [isPaginate]="true" [isSearch]="false" 
+              [data]="contextVariableData.content" [pageIndex]="contextVariableData.pageIndex"
+              [pageSize]="contextVariableData.pageSize"
+              [totalElement]="contextVariableData.totalElements" (addEvent)='addVariable()'
+              (goToEditEvent)='goToEditVariable($event)' (changePageEvent)="changePageForContextVariable($event)">
             </app-table>
           </div>
 
