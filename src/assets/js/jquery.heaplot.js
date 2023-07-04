@@ -100,10 +100,34 @@ function findTickIntervalBase(max, min, numTicks) {
 			undefined: '#E3E4E5',
 			baseLoads: '#4B9C96',
 			recurringLoads: '#E2C566',
-			variableLoads: '#0873A2',
-			summerAC: '#2CBFD5',
-			winterSpaceHeating: '#F57D7D'
-		}
+			variableLoads: '#01628C',
+			variableEV: '#A4DB61',
+			summerAC: '#20A5B9',
+			winterSpaceHeating: '#D76B6B'			
+		},
+		
+		names: 
+		{
+			undefined: '',
+			baseLoads: 'Always on',
+			recurringLoads: 'Recurring Loads',
+			variableLoads: 'Variable Loads',
+			variableEV: 'EV Charging',
+			summerAC: 'Summer Cooling',
+			winterSpaceHeating: 'Winter Space Heating'			
+		},
+		
+		lineNames: 
+		{
+			baseLoads: 'line1',
+			recurringLoads: 'line2',
+			variableLoads: 'line3',
+			variableEV: 'line3EV',
+			summerAC: 'line4',
+			winterSpaceHeating: 'line5'
+		},
+		
+		lines: ['line1', 'line2', 'line3', 'line3EV', 'line4', 'line5']
 	};
 
 	/**
@@ -593,7 +617,7 @@ function findTickIntervalBase(max, min, numTicks) {
 						seriesTotalValue = seriesTotalValue + item[1];
 					});
 					var showSeriesTotalValue = _formatValueWithUnit(seriesTotalValue, 0, normData.unit);
-					overlib(showSeriesTotalValue, FOLLOWMOUSE, WIDTH, 50);
+					overlib(showSeriesTotalValue, WIDTH, 50);
 				}
 			).bind('jqplotDataUnhighlight',
 				function (ev) {
@@ -656,7 +680,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				function (ev, seriesIndex, pointIndex, data) {
 					var pieTotalValue = parseInt($('#' + chartSeasonalPieDiv).attr('pieTotalValue'));
 					var showPieValue = _formatValueWithUnit((data[1] / pieTotalValue) * 100, 0, '%');
-					overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+					overlib(showPieValue, WIDTH, 30);
 				}
 			).bind('jqplotDataUnhighlight',
 				function (ev) {
@@ -668,7 +692,7 @@ function findTickIntervalBase(max, min, numTicks) {
 			function (ev, seriesIndex, pointIndex, data) {
 				var pieTotalValue = parseInt($('#' + chartSeasonalPieDiv).attr('pieTotalValue'));
 				var showPieValue = _formatValueWithUnit((data[1] / pieTotalValue) * 100, 0, '%');
-				overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+				overlib(showPieValue, WIDTH, 30);
 			});
 		}
 
@@ -736,7 +760,7 @@ function findTickIntervalBase(max, min, numTicks) {
 		if (currentYear != null && currentMonthNumber != null) {
 			currentDate = new Date(currentYear, currentMonthNumber, 1);
 		}
-		var showDate = $.fullCalendar.formatDate(currentDate, 'MMM, yyyy');
+		var showDate = formatDate(currentDate, 'MMM, yyyy');
 
 		$("#currentDateTop").html(showDate);
 		$("#currentDateTable").html(showDate);
@@ -749,22 +773,28 @@ function findTickIntervalBase(max, min, numTicks) {
 
 		var totalCurrentMonth = 0;
 		var totalCurrentMonthD = 0;
-		for (x = 0; x < seriesDataLength; x = x + 1) {
-			totalCurrentMonth = totalCurrentMonth + seriesData[x][currentMonthNumber][1];
-			if (options.highlightedSeriesIndex == null || options.highlightedSeriesIndex == x) {
-				totalCurrentMonthD = totalCurrentMonthD + seriesData[x][currentMonthNumber][1];
+		for(x = 0; x < seriesDataLength; x = x + 1)
+		{
+			var currM = (seriesData[x] == null || seriesData[x].length == 0)? 0 : seriesData[x][currentMonthNumber][1];
+			totalCurrentMonth = totalCurrentMonth + currM;
+			if(options.highlightedSeriesIndex == null || options.highlightedSeriesIndex == x)
+			{
+				totalCurrentMonthD = totalCurrentMonthD + currM;
 			}
 		}
-
+		
 		var totalPrevMonth = 0;
 		var totalPrevMonthD = 0;
-		for (x = 0; x < seriesDataLength; x = x + 1) {
-			totalPrevMonth = totalPrevMonth + seriesData[x][prevMonthIndex][1];
-			if (options.highlightedSeriesIndex == null || options.highlightedSeriesIndex == x) {
-				totalPrevMonthD = totalPrevMonthD + seriesData[x][prevMonthIndex][1];
+		for(x = 0; x < seriesDataLength; x = x + 1)
+		{
+			var currM = (seriesData[x] == null || seriesData[x].length == 0)? 0 : seriesData[x][prevMonthIndex][1];
+			totalPrevMonth = totalPrevMonth + currM;
+			if(options.highlightedSeriesIndex == null || options.highlightedSeriesIndex == x)
+			{
+				totalPrevMonthD = totalPrevMonthD + currM;
 			}
 		}
-
+		
 		var changedPercentMonth = 0;
 		if (totalPrevMonthD > 0) {
 			changedPercentMonth = ((totalCurrentMonthD - totalPrevMonthD) / totalPrevMonthD) * 100.0;
@@ -800,10 +830,30 @@ function findTickIntervalBase(max, min, numTicks) {
 				monthPieData[i] = [line6[i][0], seriesData[i][currentMonthNumber][1]];
 			}
 
+            var hasEV = line6.length == 6 ? true : false; 
+			
 			for (x = 0; x < line6.length; x = x + 1) {
 				var lineName = 'line' + (x + 1);
 
+				if(hasEV)
+				{
+					if(x == 3)
+					{
+						lineName = 'line3EV';
+					} else if(x > 3)
+					{
+						lineName = 'line' + x;
+					}
+				}	
+
 				if (options.series != null) {
+
+					if(options.series[x].lineName != null
+						&& options.series[x].lineName != '')
+					{
+						lineName = options.series[x].lineName;
+					}
+
 					$("#" + lineName + "Label").html(options.series[x].label);
 					$("#" + lineName + "Color").attr('bgcolor', options.series[x].color);
 				}
@@ -858,7 +908,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				function (ev, seriesIndex, pointIndex, data) {
 					var pieTotalValue = parseInt($('#' + chartMonthPieDiv).attr('pieTotalValue'));
 					var showPieValue = _formatValueWithUnit((data[1] / pieTotalValue) * 100, 0, '%');
-					overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+					overlib(showPieValue, WIDTH, 30);
 				}
 			).bind('jqplotDataUnhighlight',
 				function (ev) {
@@ -870,7 +920,7 @@ function findTickIntervalBase(max, min, numTicks) {
 			function (ev, seriesIndex, pointIndex, data) {
 				var pieTotalValue = parseInt($('#' + chartMonthPieDiv).attr('pieTotalValue'));
 				var showPieValue = _formatValueWithUnit((data[1] / pieTotalValue) * 100, 0, '%');
-				overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+				overlib(showPieValue, WIDTH, 30);
 			}
 		);
 		}
@@ -908,6 +958,8 @@ function findTickIntervalBase(max, min, numTicks) {
 		var decimalPlaces = data.decimalPlaces;
 		if (decimalPlaces == null) decimalPlaces = 0;
 
+		var normingOn = data.norm != null; 
+
 		var nf1 = new NumberFormat(data.norm);
 		nf1.setPlaces(decimalPlaces);
 		nf1.setSeparators(true);
@@ -926,7 +978,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				max: max,
 				ticks: [
 					[-10, ' '],
-					[data.norm, data.normLabel + ': ' + _formatWithUnit(fn, data.unit)],
+					[ (data.norm != null ? data.norm : ' '), data.norm != null ? (data.normLabel + ': ' + _formatWithUnit(fn, data.unit)) : '' ],
 					[max, ' ']
 				],
 				rendererOptions: { tickRenderer: $.jqplot.CanvasAxisTickRenderer },
@@ -1139,7 +1191,7 @@ function findTickIntervalBase(max, min, numTicks) {
 		$('#' + divName).bind('jqplotDataHighlight',
 			function (ev, seriesIndex, pointIndex, data) {
 				var showPieValue = _formatValueWithUnit(data[1], 0, dataUnit);
-				overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+				overlib(showPieValue, WIDTH, 30);
 			}
 		).bind('jqplotDataUnhighlight',
 			function (ev) {
@@ -1150,7 +1202,7 @@ function findTickIntervalBase(max, min, numTicks) {
 		).bind('jqplotDataMouseOver',
 		function (ev, seriesIndex, pointIndex, data) {
 			var showPieValue = _formatValueWithUnit(data[1], 0, dataUnit);
-			overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+			overlib(showPieValue, WIDTH, 30);
 		}
 	);
 
@@ -1292,7 +1344,7 @@ function findTickIntervalBase(max, min, numTicks) {
 		$('#' + divName).bind('jqplotDataHighlight',
 			function (ev, seriesIndex, pointIndex, data) {
 				var showPieValue = _formatValueWithUnit(data[1], 0, dataUnit);
-				overlib(showPieValue, FOLLOWMOUSE, WIDTH, 30);
+				overlib(showPieValue, WIDTH, 30);
 			}
 		).bind('jqplotDataUnhighlight',
 			function (ev) {

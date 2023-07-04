@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivationEnd, Router } from '@angular/router';
+import { AppUtility } from './utility/app.utility';
 
 @Component({
   selector: 'app-root',
@@ -12,9 +13,7 @@ export class AppComponent {
   constructor( private router : Router){
     this.router.events.subscribe((data) => {
       if(data instanceof ActivationEnd){
-        const dataLabelDiv = document.getElementById('overDiv');
-        if(dataLabelDiv)
-          dataLabelDiv.style.visibility='hidden';
+        AppUtility.removeHighlighterFromChart();
       }
     });
    }

@@ -40,15 +40,17 @@ export class UserReportPreviewComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    this.setForm(undefined);
     AppUtility.scrollTop();
     this.findCustomer();
+    this.setForm(this.adminFilter.userReportPreview);
+    this.currentSelectedCustomer = this.adminFilter.userReportPreview;
+    this.getuserReportPreview(Number(this.adminFilter.userReportPreview.customerId));
   }
 
   setForm(event: any) {
     this.contentForm = this.formBuilder.group({
       auditId: [event !== undefined ? event.auditId : ''],
-      customerName: [event !== undefined ? event.customerName : ''],
+      customerName: [event !== undefined && event.user.name ? event.user.name : ''],
       showHtml: [event !== undefined ? event.showHtml : ''],
     });
   }
@@ -121,11 +123,12 @@ export class UserReportPreviewComponent implements OnInit, OnDestroy {
     if(!this.userReportPreviewData)
       return;
 
+    const htmlContent : string = AppUtility.domFormatter(this.userReportPreviewData.content);
     const userReportPreview = document.getElementById('ifrmMailContent') as any;
     if(this.showHTML){
-        userReportPreview.contentDocument.body.textContent = this.userReportPreviewData.content;
+        userReportPreview.contentDocument.body.textContent = htmlContent;
     }else{
-        userReportPreview.contentDocument.body.innerHTML = this.userReportPreviewData.content;
+        userReportPreview.contentDocument.body.innerHTML = htmlContent;
     }
   }
 
@@ -137,10 +140,14 @@ export class UserReportPreviewComponent implements OnInit, OnDestroy {
       .switchMap(filters => this.loginService.customerSuggestionListRequest(filters))
       .subscribe(
         (response) =>{
-          this.dataListForSuggestions = response;
-          if(this.dataListForSuggestions.length == 1){
-            this.selectedSuggestion(this.dataListForSuggestions[0]);
+          if(response.length == 1){
+            setTimeout(() => this.selectedSuggestion(response[0]),30);
+            this.dataListForSuggestions = [];
+            return;
           }
+
+          this.dataListForSuggestions = response;
+
         }, error =>{
            console.log(error);
         }

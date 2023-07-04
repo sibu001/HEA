@@ -152,7 +152,7 @@
 		innerHtml += '<div style="width:'+firstDivWidth+'px; height: 172px; font-size: 12px; font-family:Roboto; font-weight: normal; color: black; background-color: #EFEFEF; position: relative; float: left;"><div style="width:'+secondDivWidth+'px; height: 25px; margin:'+secondDivMargin+' ; float: left;"><div style="width: '+thirdDivWidth+'px; height: 25px; font-size: 16px; float: left;">'+indicator.name+'</div>';
 		if(indicator.help != null && indicator.help != '')
 		{
-			innerHtml += '<div style="width: 25px; height: 25px; float: right;"><a href="javascript:void(0);" style="text-decoration: none; color: black; border-bottom: none;" onmouseover="return overlib('+"'"+indicator.help+"'"+ ', STICKY, MOUSEOFF, WRAP, CELLPAD, 5);" onmouseout="return nd();"><img style="width: 25px; height: 25px;" src="assets/images/helpbtn_grey.png" /></a></div>';
+			innerHtml += '<div style="width: 25px; height: 25px; float: right;"><a href="javascript:void(0);" style="text-decoration: none; color: black; border-bottom: none;" onmouseover="return overlib('+"'"+indicator.help+"'"+ ', MOUSEOFF, WRAP, CELLPAD, 5);" onmouseout="return nd(50);"><img style="width: 25px; height: 25px;" src="assets/images/helpbtn_grey.png" /></a></div>';
 		}
 		innerHtml += '</div><div style="width: '+fifthDivWidth+'px; height: 20px; float: left;"><div style="width: '+sixDivWidth+'px; height: 20px; font-size: 30px; text-align: right; float: left;"></div>';
 		innerHtml += '<div style="width: 100px; margin-left:' + normingPosition +'px; height: 20px; text-align: center; float: left;">'+ indicator.normingValueName + '</div>';

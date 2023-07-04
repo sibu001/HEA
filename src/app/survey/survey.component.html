@@ -117,24 +117,25 @@
                             <!-- <div class="row"> -->
                               <!-- <div class="col-lg-12 col-sm-12"> -->
                                 <div class="radio_buttonfirst display-center-col"
-                                  [ngClass]="{'ml-30' : users.currentPaneNumber.currentPane.paneCode == 'prf_ReferralSource'}"
                                 >
                                   <!--data field label-->
                                   <div [innerHTML]="answersList.dataField.label |
                                     safeHtml" class="agree label-size"></div>
-                                  <label class="secondpage"
-                                    *ngFor="let dataFieldValue of
-                                    answersList.dataField.fieldValues;index as k">
-                                    <div [innerHTML]="dataFieldValue.name |
-                                      safeHtml" class="silvercolorsecond"></div>
-                                    <input type="radio" *ngIf="disableNextPrevButtonCheck(answersList.value)"
-                                      [name]="answersList.dataField.field" [id]="k"
-                                      [value]="dataFieldValue.value"
-                                      [(ngModel)]="answersList.value"
-                                      [checked]="'Y'==dataFieldValue.value"
-                                      (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh,answersList.value)">
-                                    <span class="checkmark1"></span>
-                                  </label>
+                                  <div style="margin-left:15px">
+                                      <label class="secondpage" style="text-align: left;"
+                                      *ngFor="let dataFieldValue of
+                                      answersList.dataField.fieldValues;index as k">
+                                      <div [innerHTML]="dataFieldValue.name |
+                                        safeHtml" class="silvercolorsecond"></div>
+                                      <input type="radio" *ngIf="disableNextPrevButtonCheck(answersList.value)"
+                                        [name]="answersList.dataField.field" [id]="k"
+                                        [value]="dataFieldValue.value"
+                                        [(ngModel)]="answersList.value"
+                                        [checked]="'Y'==dataFieldValue.value"
+                                        (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh,answersList.value)">
+                                      <span class="checkmark1"></span>
+                                    </label>
+                                  </div>
                                 </div>
                               <!-- </div> -->
                             <!-- </div> -->
@@ -608,7 +609,8 @@
                                 <div class="radio"
                                   *ngFor="let radioButtonList of
                                   answersList.dataField.fieldValues;index as L">
-                                  <label class="secondpage">
+                                  <div style="margin-left:15px">
+                                  <label class="secondpage" style="text-align: left;">
                                     <input type="radio"
                                       [name]="answersList.dataField.field" [id]="L"
                                       [value]="radioButtonList.value"
@@ -618,6 +620,7 @@
                                     <div class="text-left font-w-400" [innerHTML]="radioButtonList.name |
                                       safeHtml"></div>
                                   </label>
+                                </div>
                                 </div>
                               </div>
                               <div class="col-xs-12"
@@ -930,8 +933,7 @@
                     *ngIf="users.currentPaneNumber.paneCharts!=null&&users.currentPaneNumber.paneCharts.length>0">
                     <!-- <div class="col-lg-12 col-md-12 col-sm-12 border_class"> -->
                       <tr *ngFor="let charts of
-                        users.currentPaneNumber.paneCharts">
-                        <!-- help icon -->
+                        users.currentPaneNumber.paneCharts">                        <!-- help icon -->
                         <div
                           *ngIf="charts.chart.helpText!=null&&charts.chart.helpText!=undefined&&charts.chart.helpText.length>1">
                           <div class="row">
@@ -1032,10 +1034,11 @@
                             <!--data field label-->
                             <div [innerHTML]="answersList.dataField.label |
                               safeHtml" class="agree label-size"></div>
-                            <label class="secondpage"
-                              *ngFor="let dataFieldValue of
-                              answersList.dataField.fieldValues;index as k">
-                              <div [innerHTML]="dataFieldValue.name |
+                            <div style="margin-left:15px">
+                            <label class="secondpage" style="text-align: left;"
+                            *ngFor="let dataFieldValue of
+                            answersList.dataField.fieldValues;index as k">
+                                <div [innerHTML]="dataFieldValue.name |
                                 safeHtml" class="silvercolorsecond"></div>
                               <input type="radio" *ngIf="disableNextPrevButtonCheck(answersList.value)"
                                 [name]="answersList.dataField.field" [id]="k"
@@ -1045,6 +1048,7 @@
                                 (change)="postSurveyAnswerData(users.currentPaneNumber.currentPaneAnswers,users.currentPaneNumber.currentPaneBlocks,'change',answersList.dataField.onChangeRefresh,answersList.value)">
                               <span class="checkmark1"></span>
                             </label>
+                            </div>
                           </div>
                         <!-- </div> -->
                       <!-- </div> -->

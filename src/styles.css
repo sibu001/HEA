@@ -591,10 +591,17 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   margin-left: 12px !important;
 }
 
+.jqplot-table-legend tbody >:nth-child(2) >:nth-child(3){
+  display: table-cell !important;
+}
 .jqplot-table-legend tbody >:nth-child(2) >:nth-child(5){
   display: none !important;
 }
 
+/* added for dashboard Chart */
+.jqplot-table-legend{
+  padding-left:3px;
+}
 #surveyData .survey.w-100{
   table-layout: fixed;
 }
@@ -1888,7 +1895,8 @@ app-topic-description-edit .mat-column-section,
 app-customer-list .mat-column-place,
 app-batch-script-list .mat-column-batchPeriod,
 app-user-report-definitions-edit .mat-column-contentOrder,
-app-user-report-definitions-edit .mat-column-orderNumber{
+app-user-report-definitions-edit .mat-column-orderNumber,
+app-user-report-definitions .mat-column-orderNumber{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 11% !important;
@@ -2020,7 +2028,7 @@ div.jqplot-xaxis-tick {
 
 @media screen and (min-width: 981px) {
   #resizable2 #chartSeasonalStack table {
-    margin-bottom: -100px !important;
+    /* margin-bottom: -100px !important; */
   }
 }
 
@@ -2465,7 +2473,8 @@ app-customer-event-list .mat-column-eventName{
 app-js-pages-list .mat-column-name,
 app-user-report-definitions-edit .mat-column-field,
 app-user-report-definitions-edit .mat-column-label,
-app-user-report-definitions-edit .mat-column-groupCode{
+app-user-report-definitions-edit .mat-column-groupCode,
+app-user-report-definitions .mat-column-labelTemplate{
   flex : 0 0 35% !important;
 }
 

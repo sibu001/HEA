@@ -456,4 +456,53 @@ export class AppUtility {
 
         return responseObject;
     } 
+
+    public static removeHighlighterFromChart(){
+        const dataLabelDiv = document.getElementById('overDiv');
+        if(dataLabelDiv) dataLabelDiv.style.visibility='hidden';
+    }
+
+    public static domFormatter(htmlContent: string): string{
+        
+        const finalHTMLString : string = htmlContent;
+        // const parser : DOMParser = new DOMParser();
+        // const htmlDocumet = parser.parseFromString(htmlContent,'text/html');
+
+        // htmlDocumet.querySelectorAll('script[src^="./js/jqplot/plugins/"]')
+        // .forEach((scriptTag : any) => {
+        //     const chunks : Array<any> = scriptTag.getAttribute('src').split('/');
+        //     const jqplotFileName : string = chunks[chunks.length-1];
+        //     scriptTag.setAttribute('src', `https://sandbox.hea.com/hea-web/js/jqplot/plugins/${jqplotFileName}`);
+        // });
+
+
+        // htmlDocumet.querySelectorAll('script[src^="./js/jqplot/"]')
+        // .forEach((scriptTag : any) => {
+        //     const chunks : Array<any> = scriptTag.getAttribute('src').split('/');
+        //     const jqplotFileName : string = chunks[chunks.length-1];
+        //     scriptTag.setAttribute('src', `https://sandbox.hea.com/hea-web/js/jqplot/${jqplotFileName}`);
+        // });
+
+
+        // htmlDocumet.querySelectorAll('script[src^="./js/"]')
+        // .forEach((scriptTag : any) => {
+        //     const chunks : Array<any> = scriptTag.getAttribute('src').split('/');
+        //     const jqplotFileName : string = chunks[chunks.length-1];
+        //     scriptTag.setAttribute('src', `https://sandbox.hea.com/hea-web/js/${jqplotFileName}`);
+        // });
+
+
+        // htmlDocumet.querySelectorAll('link[href^="./js/jqplot"]')
+        //     .forEach(linkTag =>{
+        //         const chunks : Array<any> = linkTag.getAttribute('href').split('/');
+        //         const jqplotFileName : string = chunks[chunks.length-1];
+        //         linkTag.setAttribute('href', `https://sandbox.hea.com/hea-web/js/jqplot/${jqplotFileName}`);
+        //     });
+
+
+        // const finalHTMLString : string = htmlDocumet.documentElement.outerHTML;
+        // console.log(finalHTMLString);
+
+        return finalHTMLString;
+    }
 }  

@@ -223,10 +223,14 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
         .switchMap(filters => this.loginService.customerSuggestionListRequest(filters))
         .subscribe(
           (response) =>{
-            this.dataListForSuggestions = response;
-            if(this.dataListForSuggestions.length == 1){
-              this.selectedSuggestion(this.dataListForSuggestions[0]);
+
+            if(response.length == 1){
+              setTimeout(() => this.selectedSuggestion(response[0]),20);
+              this.dataListForSuggestions = [];
+              return;
             }
+
+            this.dataListForSuggestions = response;
           }, error =>{
              console.log(error);
           }
@@ -237,6 +241,7 @@ export class MailDescriptionPreviewComponent implements OnInit, OnDestroy {
       this.currentSelectedCustomer = event;
       this.contentForm.get('customerName').setValue(this.currentSelectedCustomer.user.name)
       this.contentForm.get('auditId').setValue(this.currentSelectedCustomer.auditId);
+      (document.querySelector('input[formControlName="customerName"') as HTMLInputElement).blur();
       this.loadMailPreviewbyId(this.currentSelectedCustomer.customerId);
   }
 

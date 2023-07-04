@@ -3,6 +3,7 @@ import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
 declare var $: any;
+declare const plotChartWithParams : any;
 @Component({
   selector: 'trendingProfileView',
   templateUrl: './trendingProfileView.component.html',
@@ -201,48 +202,8 @@ export class TrendingProfileViewComponent implements OnInit {
 
         const response = JSON.parse(JSON.stringify(data));
         this.trendingProfileData = response.data;
-        const line1 = new Array;
-        const lineV = new Array;
-        const line2 = new Array;
-        const line3 = new Array;
-        const line4 = new Array;
-        const line5 = new Array;
-        const line6 = new Array;
-        let i = 0;
-        for (const areaSeries of response.data.chart.series) {
-          if (areaSeries.chartSeries.field === 'line1') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line1.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field === 'line2') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line2.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field === 'line3') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line3.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field === 'line4') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line4.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field === 'line5') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line5.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field === 'line6') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line6.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field === 'lineV') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              lineV.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          }
-          i++;
-        }
-        setTimeout(function () {
-          eval(response.data.chart.freeChartConfigurationJS);
+        setTimeout(() =>  {
+          plotChartWithParams(response.data.chart.freeChartConfigurationJS,this.trendingProfileData.chart.series);
           document.getElementById('trendingProfileChartLegendSection').classList.add('table-responsive');
         }, 100);
         document.getElementById('loader').classList.remove('loading');

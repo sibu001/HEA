@@ -10,6 +10,7 @@ import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.co
 import { AppConstant } from '../utility/app.constant';
 import { AppUtility } from '../utility/app.utility';
 
+declare const plotChartWithParams : any;
 declare var $: any;
 @Component({
   selector: 'app-survey',
@@ -29,7 +30,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   paneList: any;
   divHeight: any;
   colors: string;
-  paneCharts: any;
+  paneCharts: Array<any> = [];
   currentPaneAnswers: any[] = [];
   totalPanes: any[] = [];
   selectDate: Date;
@@ -200,90 +201,36 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   chartDataConfiguration() {
     this.paneCharts = this.users.currentPaneNumber.paneCharts;
-    let line1: Array<any>;
-    let line2: Array<any>;
-    let line3: Array<any>;
-    let line4: Array<any>;
-    let line5: Array<any>;
-    let line6: Array<any>;
-    let line7: Array<any>;
-    let pie : Array<any>;
-    if (this.users.currentPaneNumber.paneCharts.length > 0) {
+    if (this.users.currentPaneNumber.paneCharts) {
       const panechart = this.users.currentPaneNumber.paneCharts;
       for (const paneCharts of panechart) {
-        line1 = new Array;
-        line2 = new Array;
-        line3 = new Array;
-        line4 = new Array;
-        line5 = new Array;
-        line6 = new Array;
-        line7 = new Array;
-        pie = new Array;
-        for (const areaSeries of paneCharts.chart.series) {
-          if (areaSeries.chartSeries.field == 'line1') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line1.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field == 'line2') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line2.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field == 'line3') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line3.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field == 'line4') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line4.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field == 'line5') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line5.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field == 'line6') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line6.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (areaSeries.chartSeries.field == 'line7') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line7.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          }else if (areaSeries.chartSeries.field == 'pie') {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              pie.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          }
-        }
-        console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6 + '' + line7);
         /* tslint:disable:no-unused-variable */
         // tslint:disable-next-line: prefer-const
-        let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
-        if (this.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
-          seriesData = [line1, line2];
-        }
+        // if (this.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
+        //   seriesData = [line1, line2];
+        // }
         // tslint:disable-next-line: no-eval
 
-        if(this.users.currentPaneNumber.currentPane.paneCode === "hhe_VariableGasLoadsCost"){
-        if(paneCharts.chart.freeChartConfigurationJS.indexOf("var n1") == -1){
-        paneCharts.chart.freeChartConfigurationJS = "var " + paneCharts.chart.freeChartConfigurationJS;
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("n2", " var n2");
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("normingValue", " var normingValue");
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("norm1", " var norm1");
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("norm2", " var norm2");
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("you", " var you");
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("stackplot", " var stackplot");
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("plotThreeNorms1", " var plotThreeNorms1");
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("plotThreeNorms2", " var plotThreeNorms2");
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("lineIndex", " var lineIndex");
-        paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("pie", " var pie");
+      //   if(this.users.currentPaneNumber.currentPane.paneCode === "hhe_VariableGasLoadsCost"){
+      //   if(paneCharts.chart.freeChartConfigurationJS.indexOf("var n1") == -1){
+      //   paneCharts.chart.freeChartConfigurationJS = "var " + paneCharts.chart.freeChartConfigurationJS;
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("n2", " var n2");
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("normingValue", " var normingValue");
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("norm1", " var norm1");
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("norm2", " var norm2");
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("you", " var you");
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("stackplot", " var stackplot");
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("plotThreeNorms1", " var plotThreeNorms1");
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("plotThreeNorms2", " var plotThreeNorms2");
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("lineIndex", " var lineIndex");
+      //   paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("pie", " var pie");
 
-        // this.paneCharts = this.users.currentPaneNumber.paneCharts;
-        // this.users.currentPaneNumber.paneCharts[0].chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS
-        this.loginService.setUser(this.users);
-        // this.users = this.loginService.getUser();
-        }
-      }
-
+      //   // this.paneCharts = this.users.currentPaneNumber.paneCharts;
+      //   // this.users.currentPaneNumber.paneCharts[0].chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS
+      //   this.loginService.setUser(this.users);
+      //   // this.users = this.loginService.getUser();
+      //   }
+      // }
 
       // added condition to regulate the bar width(on bar chart) on on the small screen
       try{
@@ -308,7 +255,11 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             
           }
 
-          eval(paneCharts.chart.freeChartConfigurationJS);
+          if(paneCharts.chart.freeChartConfigurationJS){
+            paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("FOLLOWMOUSE,","");
+          }
+          
+          this.plotChartWithParams(paneCharts.chart.freeChartConfigurationJS, paneCharts.chart.series);
 
           if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
           const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
@@ -354,7 +305,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       const self = this;
       self.globalM++;
       this.users.currentPaneNumber.paneCharts = undefined;
-      setTimeout(function () {
+      setTimeout(() => {
         self.globalK++;
         if (self.paneCharts.length > 0) {
           const panechart = self.paneCharts;
@@ -362,67 +313,19 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           // console.log(self.globalM === self.globalK);
           if (self.globalM === self.globalK) {
             self.users.currentPaneNumber.paneCharts = self.paneCharts;
-            setTimeout(function () {
-              let line1;
-              let line2;
-              let line3;
-              let line4;
-              let line5;
-              let line6;
-              let line7;
-              let pie;
+            setTimeout(() => {
               for (const paneCharts of panechart) {
-                line1 = new Array;
-                line2 = new Array;
-                line3 = new Array;
-                line4 = new Array;
-                line5 = new Array;
-                line6 = new Array;
-                line7 = new Array;
-                pie = new Array;
-                for (const areaSeries of paneCharts.chart.series) {
-                  if (areaSeries.chartSeries.field == 'line1') {
-                    for (const areaSeriesValue of areaSeries.seriesValues) {
-                      line1.push([areaSeriesValue.label, areaSeriesValue.value]);
-                    }
-                  } else if (areaSeries.chartSeries.field == 'line2') {
-                    for (const areaSeriesValue of areaSeries.seriesValues) {
-                      line2.push([areaSeriesValue.label, areaSeriesValue.value]);
-                    }
-                  } else if (areaSeries.chartSeries.field == 'line3') {
-                    for (const areaSeriesValue of areaSeries.seriesValues) {
-                      line3.push([areaSeriesValue.label, areaSeriesValue.value]);
-                    }
-                  } else if (areaSeries.chartSeries.field == 'line4') {
-                    for (const areaSeriesValue of areaSeries.seriesValues) {
-                      line4.push([areaSeriesValue.label, areaSeriesValue.value]);
-                    }
-                  } else if (areaSeries.chartSeries.field == 'line5') {
-                    for (const areaSeriesValue of areaSeries.seriesValues) {
-                      line5.push([areaSeriesValue.label, areaSeriesValue.value]);
-                    }
-                  } else if (areaSeries.chartSeries.field == 'line6') {
-                    for (const areaSeriesValue of areaSeries.seriesValues) {
-                      line6.push([areaSeriesValue.label, areaSeriesValue.value]);
-                    }
-                  } else if (areaSeries.chartSeries.field == 'line7') {
-                    for (const areaSeriesValue of areaSeries.seriesValues) {
-                      line7.push([areaSeriesValue.label, areaSeriesValue.value]);
-                    }
-                  }else if (areaSeries.chartSeries.field == 'pie') {
-                    for (const areaSeriesValue of areaSeries.seriesValues) {
-                      pie.push([areaSeriesValue.label, areaSeriesValue.value]);
-                    }
-                  }
-                }
+
                 // tslint:disable-next-line: prefer-const
-                let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
-                console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
+                // let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
+                // console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
                 // tslint:disable-next-line: no-eval
-                if (self.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
-                  seriesData = [line1, line2];
-                }
-                eval(paneCharts.chart.freeChartConfigurationJS);
+                // if (self.users.currentPaneNumber.currentPane.paneCode === 'pv_ElectricUse') {
+                //   seriesData = [line1, line2];
+                // }
+
+                this.plotChartWithParams(paneCharts.chart.freeChartConfigurationJS, paneCharts.chart.series);
+                
                 self.globalM = 0;
                 self.globalK = 0;
                 if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
@@ -442,7 +345,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                   );
                 }
               }
-            }, 200);
+            }, 300);
           }
         }
         if (self.users.currentPaneNumber.currentPane.htmPageText != null) {
@@ -457,6 +360,13 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }, 1500);
     }
   }
+
+  plotChartWithParams(chartExpression, chartSeries){
+    // utility function created in chartPlotUtility.js
+    setTimeout(() =>{  plotChartWithParams(chartExpression, chartSeries); },100); 
+    return true;
+  }
+  
   progressShow() {
     this.totalPanes = new Array;
     for (let i = 0; i < this.users.currentPaneNumber.totalPane; i++) {
@@ -481,6 +391,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.nextPane(this.users.currentPaneNumber);
       }
       document.getElementById('loader').classList.add('loading');
+    
+      AppUtility.removeHighlighterFromChart();
   }
   
   prev(id: any, paneNumber: any) {
@@ -493,6 +405,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.previousPane(this.users.currentPaneNumber);
     }
     document.getElementById('loader').classList.add('loading');
+    AppUtility.removeHighlighterFromChart();
   }
 
   surveyRecommendationList(number: any) {

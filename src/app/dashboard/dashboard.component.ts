@@ -14,6 +14,8 @@ import { Subject, Subscription } from 'rxjs';
 import { AppConstant } from '../utility/app.constant';
 import { UsageHistoryFilter } from '../models/filter-object';
 import { SubscriptionUtil } from '../utility/subscription-utility';
+
+declare const plotChartWithParams : any;
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -367,51 +369,50 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const response = JSON.parse(JSON.stringify(data));
         this.trendingHomeChart = response.data;
         this.trendingHomeChartCopy = JSON.parse(JSON.stringify(this.trendingHomeChart));
-        /* tslint:disable:no-unused-variable */
-        const line1: Array<any> = new Array;
-        /* tslint:disable:no-unused-variable */
-        const line2: Array<any> = new Array;
-        /* tslint:disable:no-unused-variable */
-        const line3: Array<any> = new Array;
-        /* tslint:disable:no-unused-variable */
-        const line4: Array<any> = new Array;
-        /* tslint:disable:no-unused-variable */
-        const line5: Array<any> = new Array;
-        /* tslint:disable:no-unused-variable */
-        const line6: Array<any> = new Array;
-        let i = 0;
-        for (const areaSeries of response.data.chart.series) {
-          if (i === 0) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line1.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 1) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line2.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 2) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line3.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 3) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line4.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 4) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line5.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          } else if (i === 5) {
-            for (const areaSeriesValue of areaSeries.seriesValues) {
-              line6.push([areaSeriesValue.label, areaSeriesValue.value]);
-            }
-          }
-          i++;
-        }
-        console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
-        setTimeout(function () {
-          eval(response.data.chart.freeChartConfigurationJS);
-        }, 50);
+        // /* tslint:disable:no-unused-variable */
+        // const line1: Array<any> = new Array;
+        // /* tslint:disable:no-unused-variable */
+        // const line2: Array<any> = new Array;
+        // /* tslint:disable:no-unused-variable */
+        // const line3: Array<any> = new Array;
+        // /* tslint:disable:no-unused-variable */
+        // const line4: Array<any> = new Array;
+        // /* tslint:disable:no-unused-variable */
+        // const line5: Array<any> = new Array;
+        // /* tslint:disable:no-unused-variable */
+        // const line6: Array<any> = new Array;
+        // let i = 0;
+        // for (const areaSeries of response.data.chart.series) {
+        //   if (i === 0) {
+        //     for (const areaSeriesValue of areaSeries.seriesValues) {
+        //       line1.push([areaSeriesValue.label, areaSeriesValue.value]);
+        //     }
+        //   } else if (i === 1) {
+        //     for (const areaSeriesValue of areaSeries.seriesValues) {
+        //       line2.push([areaSeriesValue.label, areaSeriesValue.value]);
+        //     }
+        //   } else if (i === 2) {
+        //     for (const areaSeriesValue of areaSeries.seriesValues) {
+        //       line3.push([areaSeriesValue.label, areaSeriesValue.value]);
+        //     }
+        //   } else if (i === 3) {
+        //     for (const areaSeriesValue of areaSeries.seriesValues) {
+        //       line4.push([areaSeriesValue.label, areaSeriesValue.value]);
+        //     }
+        //   } else if (i === 4) {
+        //     for (const areaSeriesValue of areaSeries.seriesValues) {
+        //       line5.push([areaSeriesValue.label, areaSeriesValue.value]);
+        //     }
+        //   } else if (i === 5) {
+        //     for (const areaSeriesValue of areaSeries.seriesValues) {
+        //       line6.push([areaSeriesValue.label, areaSeriesValue.value]);
+        //     }
+        //   }
+        //   i++;
+        // }
+        // console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);
+        // utility function created in chartPlotUtility.js
+        setTimeout(() => plotChartWithParams(response.data.chart.freeChartConfigurationJS,response.data.chart.series), 100);
         // this.getTrendingProfileChart(); // get data for trending chart
         if (this.users.recommendationList != null && this.users.recommendationList.length > 0 && !this.users.recommendationStatusChange) {
           document.getElementById('loader').classList.remove('loading');
@@ -438,50 +439,50 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const self = this;
         self.globalM++;
         this.trendingHomeChart = undefined;
-        setTimeout(function () {
+        setTimeout(() => {
           self.globalK++;
-          const line1: Array<any> = new Array;
-          const line2: Array<any> = new Array;
-          const line3: Array<any> = new Array;
-          const line4: Array<any> = new Array;
-          const line5: Array<any> = new Array;
-          const line6: Array<any> = new Array;
-          let i = 0;
-          for (const areaSeries of self.trendingHomeChartCopy.chart.series) {
-            if (i === 0) {
-              for (const areaSeriesValue of areaSeries.seriesValues) {
-                line1.push([areaSeriesValue.label, areaSeriesValue.value]);
-              }
-            } else if (i === 1) {
-              for (const areaSeriesValue of areaSeries.seriesValues) {
-                line2.push([areaSeriesValue.label, areaSeriesValue.value]);
-              }
-            } else if (i === 2) {
-              for (const areaSeriesValue of areaSeries.seriesValues) {
-                line3.push([areaSeriesValue.label, areaSeriesValue.value]);
-              }
-            } else if (i === 3) {
-              for (const areaSeriesValue of areaSeries.seriesValues) {
-                line4.push([areaSeriesValue.label, areaSeriesValue.value]);
-              }
-            } else if (i === 4) {
-              for (const areaSeriesValue of areaSeries.seriesValues) {
-                line5.push([areaSeriesValue.label, areaSeriesValue.value]);
-              }
-            } else if (i === 5) {
-              for (const areaSeriesValue of areaSeries.seriesValues) {
-                line6.push([areaSeriesValue.label, areaSeriesValue.value]);
-              }
-            }
-            i++;
-          }
-          console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);          
+          // const line1: Array<any> = new Array;
+          // const line2: Array<any> = new Array;
+          // const line3: Array<any> = new Array;
+          // const line4: Array<any> = new Array;
+          // const line5: Array<any> = new Array;
+          // const line6: Array<any> = new Array;
+          // let i = 0;
+          // for (const areaSeries of self.trendingHomeChartCopy.chart.series) {
+          //   if (i === 0) {
+          //     for (const areaSeriesValue of areaSeries.seriesValues) {
+          //       line1.push([areaSeriesValue.label, areaSeriesValue.value]);
+          //     }
+          //   } else if (i === 1) {
+          //     for (const areaSeriesValue of areaSeries.seriesValues) {
+          //       line2.push([areaSeriesValue.label, areaSeriesValue.value]);
+          //     }
+          //   } else if (i === 2) {
+          //     for (const areaSeriesValue of areaSeries.seriesValues) {
+          //       line3.push([areaSeriesValue.label, areaSeriesValue.value]);
+          //     }
+          //   } else if (i === 3) {
+          //     for (const areaSeriesValue of areaSeries.seriesValues) {
+          //       line4.push([areaSeriesValue.label, areaSeriesValue.value]);
+          //     }
+          //   } else if (i === 4) {
+          //     for (const areaSeriesValue of areaSeries.seriesValues) {
+          //       line5.push([areaSeriesValue.label, areaSeriesValue.value]);
+          //     }
+          //   } else if (i === 5) {
+          //     for (const areaSeriesValue of areaSeries.seriesValues) {
+          //       line6.push([areaSeriesValue.label, areaSeriesValue.value]);
+          //     }
+          //   }
+          //   i++;
+          // }
+          // console.log(line1 + '' + line2 + '' + line3 + '' + line4 + '' + line5 + '' + line6);          
           if (self.globalM === self.globalK) {
             self.trendingHomeChart = self.trendingHomeChartCopy;
           }
-          setTimeout(function () {
+          setTimeout(()=> {
             if (self.globalM === self.globalK) {
-              eval(self.trendingHomeChartCopy.chart.freeChartConfigurationJS);
+              plotChartWithParams(self.trendingHomeChartCopy.chart.freeChartConfigurationJS, self.trendingHomeChartCopy.chart.series);
                self.globalM = 0;
                self.globalK = 0;
             }
@@ -492,7 +493,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           setTimeout(function () {
             $($('#chartSeasonalStack tr.jqplot-table-legend td.jqplot-table-legend').get(10)).hide();
           }, 50);
-          i++;
+          // i++;
         }, 20);          // self.renderTrendingProfileChart();
 
       }
