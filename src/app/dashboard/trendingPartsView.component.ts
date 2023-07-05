@@ -43,8 +43,8 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
           this.trendingParts.activeResource = params['activeResource'];
           this.trendingParts.unitType = params['unitType'];
           this.trendingParts.useTypes = params['useTypes'];
-          this.getTrendingPartResource();
         }
+        this.getTrendingPartResource();
       }
     )
 

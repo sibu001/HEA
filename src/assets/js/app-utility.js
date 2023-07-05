@@ -1,4 +1,4 @@
-function plotChartWithParams(chartExpression,chartSeries,attempt){
+function plotChartWithParams(chartExpression, chartSeries, paneCode, attempt){
   
   const chartParamsArray  = new Array;
   for (const areaSeries of chartSeries) {
@@ -16,12 +16,16 @@ function plotChartWithParams(chartExpression,chartSeries,attempt){
 
   if(!attempt) attemp = 1;
 
-  // let i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
+  var i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
+  if (paneCode === 'pv_ElectricUse') {
+    seriesData = [line1, line2];
+  }
+
   try{ eval(chartExpression) }
   catch(e){ console.error(e);
     if(attempt <= 5) {
       setTimeout(() => {
-      plotChartWithParams(chartExpression, chartSeries, attempt + 1 );
+      plotChartWithParams(chartExpression, chartSeries,'', attempt + 1 );
       console.log('attempt : ' + attempt);
     }, (attempt + 1) * 100);
    } else { 
@@ -29,4 +33,16 @@ function plotChartWithParams(chartExpression,chartSeries,attempt){
     alert('Please reload the page.'); }
   }
 
+}
+
+/**
+ * over-writting the overlib.js function 'overlib' to make the tooltip/popup appear close the tap (touched screen) in small(touch screen) devices,
+ * here removing the parameter 'FOLLOWMOUSE' from the actual call to the function(overlib.js).
+ */
+function overlib(){
+
+  let args = Array.from(overlib.arguments)
+    .filter( (val) => val != FOLLOWMOUSE); // removing FOLLOWMOUSE argument
+  
+  overLib.apply(window,args);
 }

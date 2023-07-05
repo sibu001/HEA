@@ -259,7 +259,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             paneCharts.chart.freeChartConfigurationJS = paneCharts.chart.freeChartConfigurationJS.replace("FOLLOWMOUSE,","");
           }
           
-          this.plotChartWithParams(paneCharts.chart.freeChartConfigurationJS, paneCharts.chart.series);
+          this.plotChartWithParams(paneCharts.chart.freeChartConfigurationJS, this.users.currentPaneNumber.currentPane.paneCode, 
+            paneCharts.chart.series);
 
           if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
           const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
@@ -324,7 +325,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 //   seriesData = [line1, line2];
                 // }
 
-                this.plotChartWithParams(paneCharts.chart.freeChartConfigurationJS, paneCharts.chart.series);
+                this.plotChartWithParams(paneCharts.chart.freeChartConfigurationJS,  this.users.currentPaneNumber.currentPane.paneCode, 
+                  paneCharts.chart.series);
                 
                 self.globalM = 0;
                 self.globalK = 0;
@@ -361,9 +363,9 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
   }
 
-  plotChartWithParams(chartExpression, chartSeries){
+  plotChartWithParams(chartExpression, paneCode, chartSeries){
     // utility function created in chartPlotUtility.js
-    setTimeout(() =>{  plotChartWithParams(chartExpression, chartSeries); },100); 
+    setTimeout(() =>{  plotChartWithParams(chartExpression, chartSeries, paneCode); },100); 
     return true;
   }
   

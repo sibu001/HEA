@@ -1,4 +1,9 @@
 /**
+ *  storing ovelib.js overlib function, as we over-writting it in app.utility.js
+ */
+overLib = overlib;
+
+/**
  * jqPlot facade to make constructing of standard charts used in HEA possible
  * with less code and to keep most default configuration/style options centralized.
  */
