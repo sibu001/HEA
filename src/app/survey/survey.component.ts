@@ -644,8 +644,17 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/nextPane').subscribe(
         data => {
           const response = JSON.parse(JSON.stringify(data));
+          const currentPaneCode = this.users.currentPaneNumber.currentPane.paneCode;
           this.users.currentPaneNumber = response.data;
           this.loginService.setUser(this.users);
+
+          // in case if next and current pane is same return to the topic history screen.
+          if(this.users.currentPaneNumber.currentPane){
+            if (currentPaneCode === this.users.currentPaneNumber.currentPane.paneCode) {
+              this.router.navigate(['/topicshistory']);
+              return;
+            }
+          }
 
           if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
             this.users.isDashboard = true;

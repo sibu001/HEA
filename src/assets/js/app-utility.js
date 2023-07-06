@@ -14,7 +14,7 @@ function plotChartWithParams(chartExpression, chartSeries, paneCode, attempt){
     eval('var ' + chartParamsArray[j][0] + ' =  chartParamsArray[j][1];');
   };
 
-  if(!attempt) attemp = 1;
+  if(!attempt) attempt = 1;
 
   var i, plot1, pieplot, loadIdle, loadStandby, data1, s, stackplot, seriesData;
   if (paneCode === 'pv_ElectricUse') {

@@ -2754,3 +2754,9 @@ mat-cell > div{
   color: #ffff !important;
   border-radius: 10px !important;
 }
+
+/* 'Feedback Intro' survey screen hyperlinke seperation.  */
+#fdbRecommendations td a img{
+  margin-bottom: 5px;
+  margin-left : 5px;
+}
