@@ -34,6 +34,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     private loginService: LoginService,
     private renderer: Renderer2,
     private elementRef: ElementRef,
+    private router: Router,
     private activatedRoute : ActivatedRoute) {
     this.users = this.loginService.getUser();
     
@@ -51,6 +52,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    AppUtility.removeAllPreviousCanvasElements();
   }
 
   ngAfterViewInit() {
@@ -59,6 +61,10 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
 
   back() {
     this.location.back();
+  }
+
+  home() {
+    this.router.navigate(['/dashboard']);
   }
 
   changesLookupValue(value: any) {
@@ -224,6 +230,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     const param = 'resourceUse=' + resourcesUse + '&unitType=' + unitType + '&useType=' + useType;
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingParts?' + param).subscribe(
       data => {
+        AppUtility.removeAllPreviousCanvasElements();
         const response = JSON.parse(JSON.stringify(data));
         this.trendingData = response.data;
         for (const newData of response.data) {
@@ -259,7 +266,6 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
       const toDate : string = (document.getElementById(trendingPartId +'_toDate') as HTMLInputElement).value;
 
       this.getTrendingPartForDifferentDate(trendingPartId,fromDate,toDate);
-
     });
   
   }
@@ -281,6 +287,10 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
         ,params)
       .subscribe(
         (response) =>{
+
+
+          const canvasList = document.querySelectorAll(`div[id="trendingChartDiv${trendingPartId}"] canvas`);
+          AppUtility.removeAllPreviousCanvasElements(canvasList);
 
           document.getElementById('loader').classList.remove('loading');
           const newTrendingPartData = response.data;

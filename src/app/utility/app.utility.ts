@@ -505,4 +505,15 @@ export class AppUtility {
 
         return finalHTMLString;
     }
+
+    public static removeAllPreviousCanvasElements(canvasList ?: any){
+
+        if(!canvasList) canvasList = document.getElementsByTagName('canvas');
+
+        for(let i=0; i<canvasList.length; i++){
+          canvasList[i].height = 0;
+          canvasList[i].width = 0;
+        }
+    
+      }
 }  

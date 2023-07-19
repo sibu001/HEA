@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
+import { AppUtility } from '../utility/app.utility';
 declare var $: any;
 declare const plotChartWithParams : any;
 @Component({
@@ -37,6 +38,7 @@ export class TrendingProfileViewComponent implements OnInit {
   }
 
   ngOnInit() {
+    AppUtility.removeAllPreviousCanvasElements();
   }
 
   home() {
@@ -194,7 +196,7 @@ export class TrendingProfileViewComponent implements OnInit {
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingProfileChart?' + param).subscribe(
       data => {
 
-
+        AppUtility.removeAllPreviousCanvasElements();
         // check for removing the double text label on the graph
         const rootEle = document.getElementById('trendingProfileView');
         if(rootEle)

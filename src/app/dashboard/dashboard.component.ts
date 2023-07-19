@@ -80,6 +80,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    AppUtility.removeAllPreviousCanvasElements();
+
     // for re-initialization after selecting different customer
     this.trendingParts = [];
     this.trendingHomeChart = undefined;

@@ -478,6 +478,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               if (response.data.currentPane.paneCode === 'pv_EditPVConfigs') {
                 response.data.currentPaneBlocks = this.users.currentPaneNumber.currentPaneBlocks;
               }
+              this.removeAllPreviousCanvasElements();
               this.users.currentPaneNumber = response.data;
               this.loginService.setUser(this.users);
               this.colors = 'red';
@@ -645,6 +646,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         data => {
           const response = JSON.parse(JSON.stringify(data));
           const currentPaneCode = this.users.currentPaneNumber.currentPane.paneCode;
+          this.removeAllPreviousCanvasElements();
           this.users.currentPaneNumber = response.data;
           this.loginService.setUser(this.users);
 
@@ -752,6 +754,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               // this.utilityService.showErrorMessage("Request Failed Please Retry.");
               this.gotToTopicHistory();
             } else {
+              this.removeAllPreviousCanvasElements();
               this.users.currentPaneNumber = response.data;
               this.loginService.setUser(this.users);
               if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
@@ -1227,4 +1230,9 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
   }
+
+  removeAllPreviousCanvasElements(){
+    AppUtility.removeAllPreviousCanvasElements();
+  }
+
 }

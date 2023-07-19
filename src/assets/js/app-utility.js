@@ -41,8 +41,8 @@ function plotChartWithParams(chartExpression, chartSeries, paneCode, attempt){
  */
 function overlib(){
 
-  let args = Array.from(overlib.arguments)
+  const args = Array.from(overlib.arguments)
     .filter( (val) => val != FOLLOWMOUSE); // removing FOLLOWMOUSE argument
   
-  overLib.apply(window,args);
+  overLib.call(window,...args);
 }
