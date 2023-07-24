@@ -1361,5 +1361,62 @@ function findTickIntervalBase(max, min, numTicks) {
 
 		scaleCanvas($('#' + divName));
 	};
+	
+	/**
+	 * 
+	 * Renders the TOU pie chart:
+	 * 
+	 * @param pieData		array with a single element representing the pie slices, e.g. [line6]
+	 * @param options		associative array: {
+	 *							title: chart title, e.g. "Your Utility Bill",
+	 *							showLegend: true or false,
+	 *							series: [
+	 *								{ label: first series label, color: first series color },
+	 *								{ label: second series label, color: second series color }, ... ]
+	 * 						}
+	 * @param touChartPieDiv   div name for the pie chart. Default value is "chartTOUPie" if not specified
+	 * 
+	 */
+	 $.heaplot.touPieChart = function(pieData, options, touChartPieDiv)
+	 {
+		 var pieColors;
+		 
+		 if(options.series != null)
+		 {
+			 pieColors = $.map(options.series, function(val, i) { return val.color; });
+		 } else
+		 {
+			 pieColors = {series: [{color:'red'}, {color:'orange'}, {color:'green'}]};
+		 }
+		 
+		 pieplot = $.jqplot(touChartPieDiv, pieData, {
+			 seriesColors: pieColors,
+			 border: false,
+			 seriesDefaults: { renderer:$.jqplot.PieRenderer,	
+				 rendererOptions: {
+					 padding: 0,
+					 shadow: false,
+					 showDataLabels: true
+				 }
+			 },
+			 grid: {
+				 borderWidth: 0,
+				 background: "#ffffff",
+				 shadow: false
+			 },
+			 legend: {
+				 show: false,
+				 location: 'w',
+				 fontSize: '80%'
+			 },
+			 cursor: {
+				 show: false,
+				 zoom: false
+			 }
+		 });
+		 
+		 $('#' + touChartPieDiv + ' .jqplot-data-label').css('color', 'white');
+		 //$('#' + touChartPieDiv + ' .jqplot-data-label').css('color', 'black');
+	 } 
 
 })(jQuery);

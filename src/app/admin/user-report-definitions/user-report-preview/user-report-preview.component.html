@@ -5,7 +5,7 @@
         <p class="error-message" style="margin-top:15px;" *ngIf="errorMessage">
           <!-- {{errorMessage}} -->
           <ng-container *ngIf="errorMessage"><br>
-              System exception. Please contact support@hea.com for help.
+              {{errorMessage}}
           </ng-container>
           
         </p>
@@ -24,7 +24,7 @@
                 AuditId:
               </div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-                <input type="text" class="form-control" matInput 
+                <input type="text" class="form-control" matInput  
              formControlName='auditId' [matAutocomplete]="auditId"
                 (keyup)="findCustomerByAuditIdOrCustomerName('auditId')" >
                 <mat-autocomplete #auditId="matAutocomplete" (optionSelected)="selectedSuggestion($event.option.value)" >
@@ -83,7 +83,7 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12">
               <iframe id="ifrmMailContent" title="Mail Preview"
-                class="form-control" style="height: 850px; width: 100%; overflow:hidden;" height="">
+                class="form-control" style="height: 850px; width: 100%; overflow:auto;" height="">
               </iframe>
             </div>
           </div>

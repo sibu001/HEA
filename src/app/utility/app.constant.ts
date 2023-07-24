@@ -151,6 +151,9 @@ export class AppConstant {
     public static availableFontFamilyNames = 'availableFontFamilyNames';
     public static classicVesionRedirectURLsandbox = 'https://sandbox.hea.com/hea-web/login.do';
 
+    public static classicVersionPrefixSandbox = 'https://sandbox.hea.com/hea-web';
+    public static classicVersionPrefixLive = 'https://www.hea.com/hea-web';
+
     public static readonly SANDBOX_HOST_NAME = 'sandbox.hea.com'
     public static readonly LIVE_HOST_NAME = 'www.hea.com';
 

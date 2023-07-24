@@ -11,6 +11,7 @@ import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
+declare var plotChartWithParams : any;
 @Component({
   selector: 'app-user-report-preview',
   templateUrl: './user-report-preview.component.html',
@@ -87,6 +88,8 @@ export class UserReportPreviewComponent implements OnInit, OnDestroy {
 
   getuserReportPreview(customerId : number) : void {
 
+    if(!customerId) return;
+
     const params : HttpParams = new HttpParams().append('customerId',customerId.toString());
     
     this.subscriptions.add(
@@ -98,7 +101,7 @@ export class UserReportPreviewComponent implements OnInit, OnDestroy {
           this.errorMessage = response.errorMessage;
           this.userReportPreviewData = undefined;
           const mailContentFrame = document.getElementById('ifrmMailContent') as any;
-          mailContentFrame.contentDocument.body.textContent = '';
+          mailContentFrame.innerHTML = '';
           return;
         }
 
@@ -114,6 +117,14 @@ export class UserReportPreviewComponent implements OnInit, OnDestroy {
 
       },(error : any) =>{
         console.error(error);
+
+        if(error.error.errorMessage){
+          this.errorMessage = error.error.errorMessage;
+          this.userReportPreviewData = undefined;
+          const mailContentFrame = document.getElementById('ifrmMailContent') as any;
+          mailContentFrame.innerHTML = '';
+          return;
+        }
       })
     )
   }
@@ -123,12 +134,43 @@ export class UserReportPreviewComponent implements OnInit, OnDestroy {
     if(!this.userReportPreviewData)
       return;
 
-    const htmlContent : string = AppUtility.domFormatter(this.userReportPreviewData.content);
+    let htmlContent : string = AppUtility.domFormatter(this.userReportPreviewData.content);
     const userReportPreview = document.getElementById('ifrmMailContent') as any;
+    const parser : DOMParser = new DOMParser();
+    const htmlDocument = parser.parseFromString(htmlContent,'text/html');
+
+    //  getting all the script tags without src attribute specified.
+    const scripts = Array.from(htmlDocument.querySelectorAll('script'))
+      .filter((script : any) => !script.hasAttribute('src'));
+
+    // adding host and origin to the CDN's in the script tags.
+    Array.from(htmlDocument.querySelectorAll('script'))
+      .filter((script : any) => script.hasAttribute('src'))
+      .forEach(script => script.setAttribute('src', `${AppConstant.classicVersionPrefixLive}${script.getAttribute('src').slice(1)}`));
+
+    // adding host and origin to the CDN's in the link tags.
+    Array.from(htmlDocument.querySelectorAll('link'))
+      .forEach((link) =>{
+        link.setAttribute('href', `${AppConstant.classicVersionPrefixLive}${link.getAttribute('href').slice(1)}`) 
+      });
+
+    htmlContent = htmlDocument.documentElement.outerHTML;
+
     if(this.showHTML){
-        userReportPreview.contentDocument.body.textContent = htmlContent;
+      userReportPreview.contentDocument.body.textContent = htmlContent;
     }else{
-        userReportPreview.contentDocument.body.innerHTML = htmlContent;
+
+      const iframeDocument = userReportPreview.contentDocument || userReportPreview.contentWindow.document;
+  
+      // Set the content of the iframe's document using the provided HTML string
+      iframeDocument.open();
+      iframeDocument.write(htmlContent);
+      iframeDocument.close();
+
+      scripts.forEach((script : any) =>{
+         setTimeout(() => { 
+            plotChartWithParams(AppUtility.removeJqplotPlugins(script.innerHTML),[]);
+          },200); }); 
     }
   }
 

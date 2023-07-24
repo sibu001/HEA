@@ -506,6 +506,10 @@ export class AppUtility {
         return finalHTMLString;
     }
 
+        //  utility method used for managing memory occupied by canvas element, 
+        //  In IOS devices chart is not getting plot after some time while switching between different charts,
+        // below method will clear the canvas element making the new chart get plotted.
+        // check the link for more info, https://bugs.webkit.org/show_bug.cgi?id=195325
     public static removeAllPreviousCanvasElements(canvasList ?: any){
 
         if(!canvasList) canvasList = document.getElementsByTagName('canvas');
