@@ -76,6 +76,11 @@ export class LoginComponent implements OnInit, AfterViewInit{
         .subscribe(
           response => {
             // document.getElementById('loader').classList.remove('loading');
+
+            if(this.users.outhMeResponse.userId != response.userId){
+              this.performOuthMe();
+            }
+
             if (this.loginService.getUser().role != "USERS")
               this.router.navigate(['admin/customer']);
             else {
