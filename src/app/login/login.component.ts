@@ -103,11 +103,15 @@ export class LoginComponent implements OnInit, AfterViewInit{
           }
         );
     }else{
-      this.router.navigate([''], {
-        relativeTo: this.route,
-        queryParams: { theme: 'MBL' },
-        queryParamsHandling: 'merge'
-      })
+      this.performOuthMe();
+
+      //  uncomment and fix,s in case the user not successfully redirected to the login screen.
+
+      // this.router.navigate([''], {
+      //   relativeTo: this.route,
+      //   queryParams: { theme: 'MBL' },
+      //   queryParamsHandling: 'merge'
+      // })
 
       this.fbConnect();
       this.googleInitialize();
