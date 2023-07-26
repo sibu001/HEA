@@ -7,6 +7,7 @@ import { LoginService } from './../services/login.service';
 import { Location } from '@angular/common';
 import { AdminFilter, UsageHistoryFilter } from '../models/filter-object';
 import { AppUtility } from '../utility/app.utility';
+import { AppConstant } from '../utility/app.constant';
 
 declare function mobilecheck() : boolean ;
 declare var FB: any;
@@ -396,7 +397,12 @@ export class LoginComponent implements OnInit, AfterViewInit{
                this.users.allSurveyCheck = false;
                this.loginService.setUser(this.users);
                document.getElementById('loader').classList.add('loading');
-               this.router.navigate(['dashboard']);
+               
+               if(this.users.outhMeResponse.uiVersion == AppConstant.classicVersionSelectionValue){
+                window.location.href = window.location.origin + AppConstant.classicVersionDashboardURL;
+               }else{
+                this.router.navigate(['dashboard']);
+               }
                
             //  } else {
             //    this.users.allSurveyCheck = true;

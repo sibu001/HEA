@@ -278,43 +278,44 @@ export class LoginService {
         document.getElementById('loader').classList.add('loading');
         this.performGetLogOut('j_spring_security_logout').subscribe(
             data => {
-                const response = JSON.parse(JSON.stringify(data));
-                console.log(response);
-                this.users = this.getUser();
-                theme = this.users.theme;
-                const userId = this.users.userData.userId;
-                const currentPaneNumber = this.users.currentPaneNumber;
-                this.users = new Users();
-                this.users.currentPaneNumber = currentPaneNumber;
-                this.users.userId = userId;
-                // localStorage.removeItem('users');
-                this.users.lastVisitedURL = this.router.url;
-                localStorage.setItem('users', JSON.stringify(this.users));
-                // localStorage.clear();
+                // const response = JSON.parse(JSON.stringify(data));
+                // console.log(response);
+                // this.users = this.getUser();
+                // theme = this.users.theme;
+                // const userId = this.users.userData.userId;
+                // const currentPaneNumber = this.users.currentPaneNumber;
+                // this.users = new Users();
+                // this.users.currentPaneNumber = currentPaneNumber;
+                // this.users.userId = userId;
+                // // localStorage.removeItem('users');
+                // this.users.lastVisitedURL = this.router.url;
+                // localStorage.setItem('users', JSON.stringify(this.users));
+                localStorage.clear();
                 this.router.navigate(['\login'], { queryParams: { 'theme': theme } });
-                document.getElementById('loader').classList.remove('loading');
+                // document.getElementById('loader').classList.remove('loading');
             },
             errors => {
                 console.log(errors);
-                this.users = this.getUser();
-                theme = this.users.theme;
-                let userId;
-                if(this.users.role == "USERS")
-                    userId = this.users.outhMeResponse.user.userId;
-                else{
-                    if(this.users.userData)
-                    userId = this.users.userData.userId;
-                }
-                const currentPaneNumber = this.users.currentPaneNumber;
-                this.users = new Users();
-                this.users.currentPaneNumber = currentPaneNumber;
-                this.users.userId = userId;
-                // localStorage.removeItem('users');
-                this.users.lastVisitedURL = this.router.url;
-                localStorage.setItem('users', JSON.stringify(this.users));
-                // localStorage.clear();
+                localStorage.clear();
+                // this.users = this.getUser();
+                // theme = this.users.theme;
+                // let userId;
+                // if(this.users.role == "USERS")
+                //     userId = this.users.outhMeResponse.user.userId;
+                // else{
+                //     if(this.users.userData)
+                //     userId = this.users.userData.userId;
+                // }
+                // const currentPaneNumber = this.users.currentPaneNumber;
+                // this.users = new Users();
+                // this.users.currentPaneNumber = currentPaneNumber;
+                // this.users.userId = userId;
+                // // localStorage.removeItem('users');
+                // this.users.lastVisitedURL = this.router.url;
+                // localStorage.setItem('users', JSON.stringify(this.users));
+                localStorage.clear();
                 this.router.navigate(['\login'], { queryParams: { 'theme': theme } });
-                document.getElementById('loader').classList.remove('loading');
+                // document.getElementById('loader').classList.remove('loading');
             }
         );
     }

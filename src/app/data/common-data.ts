@@ -988,8 +988,8 @@ export class TableColumnData {
 
     static readonly UI_VERSION: any[] = [
         { key: '', value: '-'},
-        { key: 'V1', value: 'classic version' },
-        { key: 'V2', value: 'The new responsive version' },
+        { key: AppConstant.classicVersionSelectionValue, value: 'classic version' },
+        { key: AppConstant.responsiveVersionSelectionValue, value: 'The new responsive version' },
     ];
 
     static readonly SCRIPT_DEBUG_EVENT: any[] = [

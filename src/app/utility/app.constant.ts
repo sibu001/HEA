@@ -149,10 +149,17 @@ export class AppConstant {
     public static possibleColors = 'possibleColors';
     public static possibleStyles = 'possibleStyles';
     public static availableFontFamilyNames = 'availableFontFamilyNames';
+
+    public static classicVersionSelectionValue = 'V1';
+    public static responsiveVersionSelectionValue = 'V2';
+
     public static classicVesionRedirectURLsandbox = 'https://sandbox.hea.com/hea-web/login.do';
 
     public static classicVersionPrefixSandbox = 'https://sandbox.hea.com/hea-web';
     public static classicVersionPrefixLive = 'https://www.hea.com/hea-web';
+
+    public static readonly classicVersionTopicHistoryURL = '/hea-web/discover.do';
+    public static readonly classicVersionDashboardURL = '/hea-web/trendingHome.do';
 
     public static readonly SANDBOX_HOST_NAME = 'sandbox.hea.com'
     public static readonly LIVE_HOST_NAME = 'www.hea.com';
