@@ -96,6 +96,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       // self.addClass();
     }, 1000);
 
+    this.highlighterrorFieldlabels();
   }
 
   ngAfterViewChecked(): void{
@@ -294,6 +295,9 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
+
+    setTimeout(() => this.highlighterrorFieldlabels(),50);
+
     if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode == 'Profile') {
       this.hideNavBarOpitonsInProfile();
     }
@@ -472,6 +476,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.loginService.performPostMultiPartDataPost(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
         this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answers').subscribe(
           data => {
+            setTimeout(() => this.highlighterrorFieldlabels(),50); 
             const response = JSON.parse(JSON.stringify(data));
             this.paneblockRowErrorNotation = [];
             if (response.data.errors != null) {
@@ -492,7 +497,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               }, 500);    
 
               // eval(this.users.currentPaneNumber.currentPane.paneCharts.chart.freeChartConfigurationJS);
-  
               document.getElementById('loader').classList.remove('loading');
             } else {
               if (id === 'next') {
@@ -530,10 +534,13 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.users.currentPaneNumber = data;
     this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPane != null) {
-      if (currentPaneCode === this.users.currentPaneNumber.currentPane.paneCode) {
-        // this.utilityService.showErrorMessage("Request Failed Please Retry.");
-        this.router.navigate(['/topicshistory']);
-      } else {
+      // if (currentPaneCode === this.users.currentPaneNumber.currentPane.paneCode) {
+      //   // this.utilityService.showErrorMessage("Request Failed Please Retry.");
+      //   this.router.navigate(['/topicshistory']);
+      // } else {
+
+      this.checkRedirectionInCaseCurrentAndNextPaneAreSame(currentPaneCode);
+
         if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks &&
           (this.users.surveyLength !== 3 || !this.users.currentPaneNumber.firstPage || this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'LeaksIntro')) {
           if (this.users.currentPaneNumber.firstPage) {
@@ -589,7 +596,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }, 1000);
         this.helpHides();
         this.progressShow();
-      }
+      // }
     } else {
       this.router.navigate(['/topicshistory']);
     }
@@ -650,19 +657,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.users.currentPaneNumber = response.data;
           this.loginService.setUser(this.users);
 
-          // in case if next and current pane is same return to the topic history screen.
-          if(this.users.currentPaneNumber.currentPane){
-            if (currentPaneCode === this.users.currentPaneNumber.currentPane.paneCode) {
-              this.router.navigate(['/topicshistory']);
-              return;
-            }
-          }
-
-          if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
-            this.users.isDashboard = true;
-            this.gotToTopicHistory();
-            return;
-          }
+          // in case if next and current pane is same 
+          this.checkRedirectionInCaseCurrentAndNextPaneAreSame(currentPaneCode);
 
           this.getSessionPendingMessage();
           if (this.users.currentPaneNumber.currentPane != null) {
@@ -1233,6 +1229,38 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   removeAllPreviousCanvasElements(){
     AppUtility.removeAllPreviousCanvasElements();
+  }
+
+  checkRedirectionInCaseCurrentAndNextPaneAreSame(currentPaneCode : string){
+    if(this.users.currentPaneNumber.currentPane){
+      if (currentPaneCode === this.users.currentPaneNumber.currentPane.paneCode) {
+        
+        // return to dashboard, if user is on last survey.
+        if (this.users.currentPaneNumber.currentPane.paneCode === 'fdb_Thanks') {
+          this.users.isDashboard = true;
+          this.gotToTopicHistory();
+          return;
+        }
+
+        //  return to topic history, if user is not on last survey but all the survey's are completed.
+        this.router.navigate(['/topicshistory']);
+        return;
+      }
+    }
+  }
+
+  // to highlight the field label if invalid value is passed, add custom attribute label with value field_label,
+  // see survey.component.html line no. 324 as example.
+  highlighterrorFieldlabels(){
+    const errorList = this.users.currentPaneNumber.errors || [];
+    errorList.forEach((error) => {
+      const fieldLabel : any = document.querySelector(`[label=${error.field}_label]`);
+
+      if(fieldLabel){
+        fieldLabel.classList.add('error-fields-highlight');
+      }
+
+    });
   }
 
 }

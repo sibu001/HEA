@@ -2124,7 +2124,7 @@ snack-bar-container simple-snack-bar{
 }
 
 .error-fields-highlight{
-  color: red;
+  color: red !important;
 }
 
 ::-webkit-scrollbar {

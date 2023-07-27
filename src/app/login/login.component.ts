@@ -389,7 +389,13 @@ export class LoginComponent implements OnInit, AfterViewInit{
             if(response.data.currentPane){
               this.users.currentPaneNumber = response.data;
               this.users = this.loginService.setUser(this.users);
-              this.router.navigate(['surveyView']);
+
+              if(this.users.outhMeResponse.uiVersion == AppConstant.classicVersionSelectionValue){
+                window.location.href = window.location.origin + AppConstant.classicVersionTopicHistoryURL;
+               }else{
+                this.router.navigate(['surveyView']);
+              }
+
             }else{
 
               // if (this.users.lastVisitedURL != '/surveyView') {

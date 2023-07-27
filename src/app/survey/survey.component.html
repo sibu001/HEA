@@ -321,7 +321,7 @@
                               <div class="row seven text-center">
                                 <div class="col-sm-1 col-lg-1 col-md-1"></div>
                                 <div class="col-lg-10 col-md-10 col-sm-10">
-                                  <h3 class="about_program">{{answersList.dataField.label}}</h3>
+                                  <h3 class="about_program" [attr.label]="answersList.field +'_label'" >{{answersList.dataField.label}}</h3>
                                   <p class="demo" *ngIf="answersList.helpHide"
                                     id="helpiconcontaindesktop">
                                     {{answersList.dataField.helpText}}
@@ -339,7 +339,7 @@
                                             col-xs-4">
                                               <form
                                                 *ngIf="answersList.field!='vl_EVannualCost'&&answersList.field!='vl_EVkWh'">
-                                                <input type="text" name="people"
+                                                <input type="text" [name]="answersList.field"
                                                   class="form-control"
                                                   [(ngModel)]="answersList.value">
                                               </form>
