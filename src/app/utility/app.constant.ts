@@ -149,6 +149,7 @@ export class AppConstant {
     public static possibleColors = 'possibleColors';
     public static possibleStyles = 'possibleStyles';
     public static availableFontFamilyNames = 'availableFontFamilyNames';
+    public static topicSkipPaneLabel = '(This topic was skipped)';
 
     public static classicVersionSelectionValue = 'V1';
     public static responsiveVersionSelectionValue = 'V2';

@@ -6,8 +6,11 @@
                 <h3 class="select_next">
                     <img alt="icon" src="assets/images/right-.png" class="back_img"
                         (click)="back()">&nbsp;&nbsp;Topics history</h3>
-                <p class="accurate" *ngIf="users.role!=='ADMIN'">You have
+                <p class="accurate" *ngIf="!users.nextSurvey && !isTopicGotSkipped">You have
                     completed all existing Topics</p>
+                <p class="accurate" *ngIf="isTopicGotSkipped">
+                    You have skipped one or more topics
+                </p>
                 <div class="row m-auto" *ngIf="users.role==='ADMIN'">
                     <div class="col-sm-1"></div>
                     <div class="col-sm-2">Audit Id:</div>

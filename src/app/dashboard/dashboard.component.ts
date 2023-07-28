@@ -216,6 +216,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.surveyCode = response.data.surveyDescription.surveyCode;
           this.surveyId = response.data.surveyId;
         }
+          this.users.nextSurvey = response.data;
+          this.loginService.setUser(this.users);
+        
       },
       error => {
         console.log(JSON.parse(JSON.stringify(error)));

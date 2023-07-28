@@ -64,4 +64,5 @@ export class Users {
     public isDashboard: boolean;
     public lastVisitedURL : string;
     public allowedMenuList : AllowedMenuList;
+    public nextSurvey : any;
 }

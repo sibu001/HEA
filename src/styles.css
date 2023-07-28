@@ -2760,3 +2760,8 @@ mat-cell > div{
   margin-bottom: 5px;
   margin-left : 5px;
 }
+
+#chartSeasonalStack + div{
+  margin-left: 15px !important; 
+  /* margin-top: 15px !important; */
+}

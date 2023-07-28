@@ -30,7 +30,8 @@ function plotChartWithParams(chartExpression, chartSeries, paneCode, attempt){
     }, (attempt + 1) * 100);
    } else { 
     console.error(e);
-    alert('Please reload the page.'); }
+    // alert('Please reload the page.');
+ }
   }
 
 }

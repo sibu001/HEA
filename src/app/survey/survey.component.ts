@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material';
 import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.component';
 import { AppConstant } from '../utility/app.constant';
 import { AppUtility } from '../utility/app.utility';
+import { HttpParams } from '@angular/common/http';
 
 declare const plotChartWithParams : any;
 declare var $: any;
@@ -472,9 +473,14 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
       }
 
+      let params = new HttpParams();
+      if(id == 'change'){
+        params = params.append('refreshPaneAnswers','true');
+      }
+
       this.subscriptons.add(
-        this.loginService.performPostMultiPartDataPost(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
-        this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answers').subscribe(
+        this.loginService.performPostMultiPartFromData(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
+        this.users.currentPaneNumber.survey.surveyDescription.surveyCode + '/panes/' + this.users.currentPaneNumber.currentPane.paneCode + '/answers',params).subscribe(
           data => {
             setTimeout(() => this.highlighterrorFieldlabels(),50); 
             const response = JSON.parse(JSON.stringify(data));

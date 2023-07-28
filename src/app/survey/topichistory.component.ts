@@ -20,6 +20,7 @@ export class TopicHistoryComponent implements OnInit {
   public customer : any = { user : { name : ''}, auditId : ''};
   private readonly subscriptions: Subscription = new Subscription();
   subject$ : Subject<any> = new Subject();
+  public isTopicGotSkipped : boolean = false;
   dataListForSuggestions = [];
   public allowedMenuListforUser;
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
@@ -36,9 +37,11 @@ export class TopicHistoryComponent implements OnInit {
     if (this.users.allSurveyCheck) {
       this.users.surveyList = new Array;
       this.getAllSurvey();
+      this.checkSkippedSurveys();
     } else {
       this.users.allSurveyCheck = false;
       this.loginService.setUser(this.users);
+      this.isTopicGotSkipped = AppUtility.checkifTopicGetSkipped(this.users.surveyList);
     }
 
     if (this.users.currentPaneNumber) {
@@ -51,6 +54,16 @@ export class TopicHistoryComponent implements OnInit {
     AppUtility.scrollTop();
   }
 
+  checkSkippedSurveys(){
+    this.subscriptions.add(
+      this.loginService
+      .performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/nextSurvey')
+      .subscribe((response : any ) =>{
+          this.users.nextSurvey = response.data;
+          this.loginService.setUser(this.users);
+      })
+    );
+  }
 
   goToTopicPage(surveyId, paneCode, surveyCode, index,customerId?:string) {
     document.getElementById('loader').classList.add('loading');
@@ -91,6 +104,7 @@ export class TopicHistoryComponent implements OnInit {
         this.users.surveyList = response.data;
         this.users.allSurveyCheck = false;
         this.loginService.setUser(this.users);
+        this.isTopicGotSkipped = AppUtility.checkifTopicGetSkipped(this.users.surveyList);
       },
       error => {
         document.getElementById('loader').classList.remove('loading');

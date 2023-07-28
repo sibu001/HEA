@@ -520,4 +520,19 @@ export class AppUtility {
         }
     
       }
+
+    public static checkifTopicGetSkipped(surveyList : any[]) : boolean{
+
+        for(let i = 0; i < surveyList.length; i++){
+            const survey = surveyList[i];
+            for(let j = 0; j < survey.panes.length; j++){
+                const pane = survey.panes[j];
+                if(pane.label == AppConstant.topicSkipPaneLabel){
+                    return true;
+                }
+            } 
+        }
+
+        return false;
+    }
 }  
