@@ -41,7 +41,7 @@ export class TopicHistoryComponent implements OnInit {
     } else {
       this.users.allSurveyCheck = false;
       this.loginService.setUser(this.users);
-      this.isTopicGotSkipped = AppUtility.checkifTopicGetSkipped(this.users.surveyList);
+      this.isTopicGotSkipped = this.users.surveyList.find((survey) => survey.skipped);
     }
 
     if (this.users.currentPaneNumber) {
@@ -104,7 +104,7 @@ export class TopicHistoryComponent implements OnInit {
         this.users.surveyList = response.data;
         this.users.allSurveyCheck = false;
         this.loginService.setUser(this.users);
-        this.isTopicGotSkipped = AppUtility.checkifTopicGetSkipped(this.users.surveyList);
+        this.isTopicGotSkipped = this.users.surveyList.find((survey) => survey.skipped);
       },
       error => {
         document.getElementById('loader').classList.remove('loading');
