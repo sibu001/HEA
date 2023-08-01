@@ -29,7 +29,7 @@ export class RedirectionComponent implements OnInit {
   private subscriptions :Subscription = new Subscription();
   private users:Users;
   private redirectedRoute : string;
-  private isNewTabAllowed : boolean = true;
+  public isNewTabAllowed : boolean = true;
 
   constructor(
     private router : Router,
