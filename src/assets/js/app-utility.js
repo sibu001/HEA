@@ -47,3 +47,36 @@ function overlib(){
   
   overLib.call(window,...args);
 }
+
+// Function to check the number of open tabs
+var allowNewTab = true;
+const MAX_TABS = 1;
+
+function checkTabsLimit() {
+  const currentTabs = parseInt(localStorage.getItem('openTabs') || '0', 10);
+  
+  const users = JSON.parse(localStorage.getItem('users'));
+  if(users.role == 'USERS') { return; }
+
+  if (currentTabs >= MAX_TABS) {
+      allowNewTab = false;
+      alert('Cannot open new tab for user screen. Close all other HomeIntel tabs first.');
+      return false;
+  }
+
+  // Increment the counter and store it in localStorage
+  localStorage.setItem('openTabs', (currentTabs + 1).toString());
+  allowNewTab = true;
+  return true;
+  }
+
+  // Function to decrement the openTabs counter when a tab is closed
+  function decrementTabCounter() {
+  const currentTabs = parseInt(localStorage.getItem('openTabs') || '0', 10);
+  if (currentTabs > 0 && allowNewTab) {
+      localStorage.setItem('openTabs', (currentTabs - 1).toString());
+  }
+  }
+
+  // Attach event listener to decrement the counter when a tab is closed
+  window.addEventListener('beforeunload', decrementTabCounter);
