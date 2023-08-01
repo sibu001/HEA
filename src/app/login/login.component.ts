@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
   code: string;
   buildForSandbox = true; 
   auth2: any;
+  redirectedRoute : string;
   @ContentChild('showhideinput') input;
 
   constructor(
@@ -36,6 +37,8 @@ export class LoginComponent implements OnInit, AfterViewInit{
   ) {
     this.route.queryParams.subscribe((params) => {
       this.theme = params['theme'] || 'MBL';
+      this.redirectedRoute = params['redirectedRoute']
+
     });
     this.users =JSON.parse(localStorage.getItem('users'));
     if (!this.users) this.users = new Users(); 
@@ -301,7 +304,8 @@ export class LoginComponent implements OnInit, AfterViewInit{
           this.users.name = response.name;
           this.loginService.setUser(this.users);
           AppUtility.showLoader();
-          this.router.navigate(['admin/customer']);
+
+          this.router.navigate([this.redirectedRoute ? this.redirectedRoute : 'admin/customer']); 
         },
         (error) => {
           const response = JSON.parse(JSON.stringify(error));
@@ -407,7 +411,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
                if(this.users.outhMeResponse.uiVersion == AppConstant.classicVersionSelectionValue){
                 window.location.href = window.location.origin + AppConstant.classicVersionDashboardURL;
                }else{
-                this.router.navigate(['dashboard']);
+                this.router.navigate([this.redirectedRoute ? this.redirectedRoute : 'dashboard']);
                }
                
             //  } else {

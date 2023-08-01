@@ -56,7 +56,7 @@ function checkTabsLimit() {
   const currentTabs = parseInt(localStorage.getItem('openTabs') || '0', 10);
   
   const users = JSON.parse(localStorage.getItem('users'));
-  if(users.role == 'USERS') { return; }
+  if(users && users.role == 'USERS') { return; }
 
   if (currentTabs >= MAX_TABS) {
       allowNewTab = false;
