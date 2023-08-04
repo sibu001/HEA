@@ -48,35 +48,52 @@ function overlib(){
   overLib.call(window,...args);
 }
 
-// Function to check the number of open tabs
 var allowNewTab = true;
-const MAX_TABS = 1;
 
 function checkTabsLimit() {
-  const currentTabs = parseInt(localStorage.getItem('openTabs') || '0', 10);
+  const isSurveyInUse = JSON.parse(localStorage.getItem('surveyInUse'));
   
   const users = JSON.parse(localStorage.getItem('users'));
-  if(users && users.role == 'USERS') { return; }
+  if(users && users.role == 'USERS') { return true; }
 
-  if (currentTabs >= MAX_TABS) {
-      allowNewTab = false;
+  if (isSurveyInUse && allowNewTab ) {
       alert('Cannot open new tab for user screen. Close all other HomeIntel tabs first.');
       return false;
   }
 
-  // Increment the counter and store it in localStorage
-  localStorage.setItem('openTabs', (currentTabs + 1).toString());
-  allowNewTab = true;
+  localStorage.setItem('surveyInUse', true);
+  allowNewTab = false;
   return true;
-  }
+}
 
-  // Function to decrement the openTabs counter when a tab is closed
   function decrementTabCounter() {
-  const currentTabs = parseInt(localStorage.getItem('openTabs') || '0', 10);
-  if (currentTabs > 0 && allowNewTab) {
-      localStorage.setItem('openTabs', (currentTabs - 1).toString());
+  const isSurveyInUse = JSON.parse(localStorage.getItem('surveyInUse'));
+  if (isSurveyInUse && !allowNewTab) {
+      allowNewTab = true;
+      localStorage.setItem('surveyInUse', false);
   }
-  }
+}
 
-  // Attach event listener to decrement the counter when a tab is closed
-  window.addEventListener('beforeunload', decrementTabCounter);
+window.addEventListener('beforeunload', decrementTabCounter);
+
+
+//  getting used by the classic ui to prevent using classic UI in multiple tabs.
+var sameTabAlert = false;
+window.addEventListener('storage', (e) => 
+					{
+						if(!sameTabAlert && e.key == 'dummy-HEA-APP')
+						{
+							sameTabAlert = true;
+							// var message = 'Another window or tab is working with the same application. Close one of it!';
+							
+							// if(window.pendingMessagesClient != null)
+							// {
+							// 	window.pendingMessagesClient.showNotificationBar(1, message, 10, 60000);
+							// } else
+							// {
+							// 	window.alert(message);
+							// }
+							sameTabAlert = false;
+						}
+					}, false)
+					localStorage.setItem('dummy-HEA-APP', Math.random());

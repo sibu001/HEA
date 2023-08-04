@@ -6,7 +6,7 @@ import { Users } from './models/user';
 import { LoginService } from './services/login.service';
 import { AppUtility } from './utility/app.utility';
 
-declare var allowNewTab : boolean;
+declare var sameTabAlert : boolean;
 
 @Component({
   selector: 'app-root',
@@ -21,12 +21,7 @@ export class AppComponent {
   constructor( private router : Router, 
       private readonly loginService : LoginService,
       private readonly activatedRoute : ActivatedRoute){
-
-      //  to limit the number of tabs opened by user.
-      // check app-utility.js
-      this.isNewTabAllowed = allowNewTab;
-      if(!this.isNewTabAllowed){ return; }
-      
+            
       this.router.events.subscribe((data) =>{
         if(data instanceof NavigationEnd){
           AppUtility.removeHighlighterFromChart();
@@ -47,6 +42,7 @@ export class AppComponent {
               return;
             }
 
+            //  in case data in cookies and local storage differs then clear the local storage and relogin the user.
             localStorage.clear();
             this.router.navigate(['/login'] , {queryParams : {'redirectedRoute' : data.url}});
 
@@ -55,5 +51,17 @@ export class AppComponent {
           });
         }
     );
+    // localStorage.setItem('dummy-HEA-APP', Math.random().toString());
    }
+
+  // @HostListener('window:storage', ['$event'])
+  // onStorageChange(event: StorageEvent) {
+  //   console.log(event);
+  //   // if(!sameTabAlert && event.key == 'dummy-HEA-APP'){
+  //   //   sameTabAlert = true;
+  //   //   var message = 'Another window or tab is working with the same application. Close one of it!';
+  //   //     window.alert(message);
+  //   //   sameTabAlert = false;
+  //   // }
+  // }
 }
