@@ -5,8 +5,8 @@
         <p class="heading">
           Key Indicators
         </p>
-        <form [formGroup]='mailForm'>
-          <div class="row rowPadding" (submit)="search()">
+        <form [formGroup]='keyIndicatorForm'>
+          <div class="row rowPadding borderBottom">
             <div class="col-sm-1 col-md-1 col-lg-1 col-xs-0"></div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12">
               <span class="filterLabel">Key Indicator Code:</span>
@@ -26,17 +26,18 @@
 
           <div class="row rowPadding">
             <div class="col-sm-12" style="text-align: end;margin-top: 10px;">
-              <button type="submit" class="btn btn-primary">Show</button>
+              <button type="submit" class="btn btn-primary" (click)="search($event,true)">Show</button>
             </div>
           </div>
 
           <div class="paddingTop">
-            <p class="messages">
+            <p class="messages" #tableScrollPoint>
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
-              <span class="messageName">Key Indicators (Number of Records = {{totalElement}})</span></p>
-            <app-table [keys]="keys" [isPaginate]="true" (goToEditEvent)='goToEditKeyIndicators()'
-              (addEvent)='addKeyIndicators()' [isSearch]="false" [data]="dataSource"
-              [totalElement]="data.totalElements" (changePageEvent)="findKeyIndicator($event)">
+              <span class="messageName">Key Indicators (Number of Records = {{keyIndicatorData.totalElements}})</span></p>
+            <app-table [keys]="keys" [isPaginate]="true" (goToEditEvent)='goToEditKeyIndicators($event)' 
+              [pageIndex]="pageIndex" [pageSize]="keyIndicatorData.pageSize"
+              (addEvent)='addKeyIndicators()' [isSearch]="false" [data]="keyIndicatorData.content"
+              [totalElement]="keyIndicatorData.totalElements" (changePageEvent)="search($event,false)">
             </app-table>
           </div>
         </form>

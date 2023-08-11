@@ -408,6 +408,11 @@ export class TableColumnData {
         { key: 'subjectTemplate', sort: 'subjectTemplate', isEdit: true, displayName: 'Subject' },
     ];
 
+    static readonly KEY_INDICATOR_KEYS: Array<TABLECOLUMN> = [
+        { key: 'keyIndicatorCode', sort: 'keyIndicatorCode', isEdit: true, displayName: 'Key Indicator Code', isUnderline : true },
+        { key: 'keyIndicatorName', sort: 'keyIndicatorName', isEdit: true, displayName: 'Key Indicator Name' }, 
+    ];
+
     static readonly CONTENT_PART_KEYS: Array<TABLECOLUMN> = [
         { key: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
         { key: 'contentOrder', isEdit: true, displayName: 'Order' },

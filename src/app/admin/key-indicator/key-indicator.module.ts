@@ -17,6 +17,8 @@ import { MailService } from 'src/app/store/mail-state-management/service/mail.se
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
+import { TrendingDefinitionService } from 'src/app/store/trending-defination-state-management/service/trending-definition.service';
+import { TrendingDefinitionState } from 'src/app/store/trending-defination-state-management/state/trending-definition.state';
 
 @NgModule({
   imports: [
@@ -30,10 +32,11 @@ import { TopicManagementState } from 'src/app/store/topic-state-management/state
       CustomerManagementState,
       SystemUtilityManagementState,
       MailManagementState,
-      TopicManagementState
+      TopicManagementState,
+      TrendingDefinitionState
     ]),
   ],
   declarations: [KeyIndicatorListComponent, KeyIndicatorEditComponent, KeyIndicatorVariableComponent],
-  providers: [SystemService, MailService, CustomerService, TopicService],
+  providers: [SystemService, MailService, CustomerService, TopicService, TrendingDefinitionService],
 })
 export class KeyIndicatorModule { }

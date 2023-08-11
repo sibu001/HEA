@@ -1683,7 +1683,9 @@ app-electricity-charge-list .mat-column-year ,app-electricity-charge-list .mat-c
 app-topic-description-edit .mat-column-orderNumber,
 app-degree-days-list .mat-column-createdDate,
 app-degree-days-list .mat-column-value,
-app-degree-days-list .mat-column-type{
+app-degree-days-list .mat-column-type,
+app-view-configuration-attributes .mat-column-columnOrder,
+app-view-configuration-attributes .mat-column-sortAllowed{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 13% !important;
@@ -1896,7 +1898,8 @@ app-customer-list .mat-column-place,
 app-batch-script-list .mat-column-batchPeriod,
 app-user-report-definitions-edit .mat-column-contentOrder,
 app-user-report-definitions-edit .mat-column-orderNumber,
-app-user-report-definitions .mat-column-orderNumber{
+app-user-report-definitions .mat-column-orderNumber,
+app-key-indicator-edit .mat-column-orderNumber{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 11% !important;
@@ -2351,7 +2354,8 @@ table .ui-calendar .ui-calendar-button {
 }
 
 app-customer-view .mat-column-note,
-app-customer-view .mat-column-description{
+app-customer-view .mat-column-description,
+app-view-configuration-attributes .mat-column-definition{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 40% !important;
@@ -2474,7 +2478,8 @@ app-js-pages-list .mat-column-name,
 app-user-report-definitions-edit .mat-column-field,
 app-user-report-definitions-edit .mat-column-label,
 app-user-report-definitions-edit .mat-column-groupCode,
-app-user-report-definitions .mat-column-labelTemplate{
+app-user-report-definitions .mat-column-labelTemplate,
+app-key-indicator-edit .mat-column-field{
   flex : 0 0 35% !important;
 }
 

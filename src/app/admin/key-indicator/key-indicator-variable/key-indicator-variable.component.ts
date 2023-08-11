@@ -1,10 +1,12 @@
 import { Location } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
+import { pipe, Subscription } from 'rxjs';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { TrendingDefinitionService } from 'src/app/store/trending-defination-state-management/service/trending-definition.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -16,19 +18,47 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
   id: any;
   contentForm: FormGroup;
   calculationType: any;
+  keyIndicatorId : number;
+  variableData : any;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute,
-    private readonly location: Location) {
+    private readonly location: Location,
+    private readonly trendingDefinationService : TrendingDefinitionService,
+    private readonly router : Router) {
     this.activateRoute.queryParams.subscribe(params => {
+      this.keyIndicatorId = params['keyIndicatorId'];
       this.id = params['id'];
     });
   }
 
   ngOnInit() {
+    AppUtility.scrollTop();
     this.loadCalculationType();
     this.setForm(undefined);
+
+    if(this.id){
+      this.loadKeyIndicatorVariableById();
+      this.getKeyIndicatorVariableById();
+    }
+  }
+
+
+  getKeyIndicatorVariableById(){
+    this.subscriptions.add(
+      this.trendingDefinationService.getKeyIndicatorVariable()
+      .pipe(filter((variable : any) => variable && variable.id == this.id))
+      .subscribe((variable : any ) =>{
+        this.variableData = {...variable};
+        this.setForm({...variable});
+          
+      })
+    )
+  }
+
+  loadKeyIndicatorVariableById(){
+    this.trendingDefinationService.loadKeyIndicatorVariableById(this.keyIndicatorId,this.id);
   }
 
   loadCalculationType() {
@@ -43,20 +73,44 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
     this.contentForm = this.formBuilder.group({
       field: [event !== undefined ? event.field : '', Validators.required],
       orderNumber: [event !== undefined ? event.orderNumber : '', Validators.required],
-      calculationType: [event !== undefined ? event.calculationType : ''],
+      calculationType: [event !== undefined ? event.calculationType : 'javascript'],
       calculationExpression: [event !== undefined ? event.calculationExpression : '']
     });
   }
+  
   back() {
-    this.location.back();
+    this.router.navigate(['/admin/keyIndicator/keyIndicatorEdit'],{queryParams: { id : this.keyIndicatorId}});
   }
 
   save(): any {
-    console.log('save');
+
+    if(this.id){
+      const requestBody = {...this.variableData, ...this.contentForm.value};
+      this.trendingDefinationService.updateKeyIndicatorVariable(this.id,this.keyIndicatorId,requestBody);
+      return;
+    }
+
+    const requestBody : any = {...this.contentForm.value};
+    this.subscriptions.add(
+      this.trendingDefinationService.saveKeyIndicatorVariable(requestBody,this.keyIndicatorId)
+      .pipe(take(1))
+      .subscribe((state : any) =>{
+          this.id = state.trendingDefinationManagement.keyIndicatorVariable.id;
+          AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+          this.getKeyIndicatorVariableById();
+      })
+    );
+
   }
 
   delete(): any {
-    console.log('delete');
+    this.subscriptions.add(
+      this.trendingDefinationService.deleteKeyIndicatorVariableById(this.id,this.keyIndicatorId)
+      .pipe(take(1))
+      .subscribe((response : any ) =>{
+        this.back();
+      })
+    )
   }
 
   get f() { return this.contentForm.controls; }

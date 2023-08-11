@@ -520,4 +520,27 @@ export class AppUtility {
         }
     
       }
+
+    public static resolveCDNforIFrame(htmlContent : string) : string{
+        
+        const parser : DOMParser = new DOMParser();
+        const htmlDocument = parser.parseFromString(htmlContent,'text/html');
+
+        //  getting all the script tags without src attribute specified.
+        const scripts = Array.from(htmlDocument.querySelectorAll('script'))
+          .filter((script : any) => !script.hasAttribute('src'));
+    
+        // adding host and origin to the CDN's in the script tags.
+        Array.from(htmlDocument.querySelectorAll('script'))
+          .filter((script : any) => script.hasAttribute('src'))
+          .forEach((script : any) => script.setAttribute('src', `${AppConstant.classicVersionPrefixLive}${script.getAttribute('src').slice(1)}`));
+    
+        // adding host and origin to the CDN's in the link tags.
+        Array.from(htmlDocument.querySelectorAll('link'))
+          .forEach((link : any) =>{
+            link.setAttribute('href', `${AppConstant.classicVersionPrefixLive}${link.getAttribute('href').slice(1)}`) 
+          });
+    
+        return htmlDocument.documentElement.outerHTML;
+    }
 }  

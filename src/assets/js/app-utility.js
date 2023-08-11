@@ -91,7 +91,7 @@ window.addEventListener('storage', (e) =>
 							// 	window.pendingMessagesClient.showNotificationBar(1, message, 10, 60000);
 							// } else
 							// {
-							// 	window.alert(message);
+								window.alert(message);
 							// }
 							sameTabAlert = false;
 						}

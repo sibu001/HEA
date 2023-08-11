@@ -4,9 +4,10 @@ import { tap } from 'rxjs/operators';
 import { LoginService } from 'src/app/services/login.service';
 import { UtilityService } from 'src/app/services/utility.service';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import {
     DeleteKeyIndicatorByIdAction,
-    DeleteKeyIndicatorCustomerGroupByIdAction,
+    RemoveKeyIndicatorCustomerGroupByIdAction,
     DeleteKeyIndicatorVariableByIdAction,
     DeleteTrendingPartsByIdAction,
     GetKeyIndicatorByIdAction,
@@ -18,7 +19,7 @@ import {
     GetTrendingPartsByIdAction,
     GetTrendingPartsListAction,
     SaveKeyIndicatorAction,
-    SaveKeyIndicatorCustomerGroupAction,
+    AddKeyIndicatorCustomerGroupAction,
     SaveKeyIndicatorVariableAction,
     SaveTrendingPartsAction,
     UpdateKeyIndicatorAction,
@@ -31,7 +32,7 @@ import { TrendingDefinitionModel } from './trending-definition.model';
 
 
 @State<TrendingDefinitionModel>({
-    name: 'keyIndicatorCustomerGroupManagement',
+    name: 'trendingDefinationManagement',
     defaults: {
         keyIndicatorList: undefined,
         keyIndicator: undefined,
@@ -95,12 +96,12 @@ export class TrendingDefinitionState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.keyIndicator + action.filter)
+            result = this.loginService.performGetWithParams(AppConstant.keyIndicator,action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            keyIndicatorList: response,
+                            keyIndicatorList: response.data,
                         });
                     },
                         error => {
@@ -119,7 +120,7 @@ export class TrendingDefinitionState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        keyIndicator: response,
+                        keyIndicator: response.data,
                     });
                 },
                     error => {
@@ -152,7 +153,7 @@ export class TrendingDefinitionState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        keyIndicator: response,
+                        keyIndicator: response.data,
                     });
                 },
                     error => {
@@ -170,7 +171,7 @@ export class TrendingDefinitionState {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
-                        keyIndicator: response,
+                        keyIndicator: response.data,
                     });
                 },
                     error => {
@@ -185,12 +186,13 @@ export class TrendingDefinitionState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.keyIndicatorVariables + action.filter)
+            result = this.loginService.performGetWithParams(AppUtility
+                .endPointGenerator([AppConstant.keyIndicator,action.keyIndicatorId,AppConstant.variables]),action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            keyIndicatorVariableList: response,
+                            keyIndicatorVariableList: response.data,
                         });
                     },
                         error => {
@@ -204,12 +206,13 @@ export class TrendingDefinitionState {
     @Action(GetKeyIndicatorVariableByIdAction)
     getKeyIndicatorVariableById(ctx: StateContext<TrendingDefinitionModel>, action: GetKeyIndicatorVariableByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performGet(AppConstant.keyIndicatorVariables + '/' + action.id)
+        return this.loginService.performGet(
+                AppUtility.endPointGenerator([AppConstant.keyIndicator,action.keyIndicatorId,AppConstant.variables,action.id]))
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        keyIndicatorVariable: response,
+                        keyIndicatorVariable: response.data,
                     });
                 },
                     error => {
@@ -221,7 +224,8 @@ export class TrendingDefinitionState {
     @Action(DeleteKeyIndicatorVariableByIdAction)
     deleteKeyIndicatorVariableById(ctx: StateContext<TrendingDefinitionModel>, action: DeleteKeyIndicatorVariableByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.keyIndicatorVariables + '/' + action.id)
+        return this.loginService.performDelete( 
+            AppUtility.endPointGenerator([AppConstant.keyIndicator,action.keyIndicatorId,AppConstant.variables,action.id]))
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -236,13 +240,14 @@ export class TrendingDefinitionState {
     @Action(SaveKeyIndicatorVariableAction)
     saveKeyIndicatorVariable(ctx: StateContext<TrendingDefinitionModel>, action: SaveKeyIndicatorVariableAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.keyIndicatorVariable, AppConstant.keyIndicatorVariables)
+        return this.loginService.performPost(action.keyIndicatorVariable, 
+                AppUtility.endPointGenerator([AppConstant.keyIndicator,action.keyIndicatorId,AppConstant.variables]))
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
-                        keyIndicatorVariable: response,
+                        keyIndicatorVariable: response.data,
                     });
                 },
                     error => {
@@ -254,7 +259,8 @@ export class TrendingDefinitionState {
     @Action(UpdateKeyIndicatorVariableAction)
     updateKeyIndicatorVariable(ctx: StateContext<TrendingDefinitionModel>, action: UpdateKeyIndicatorVariableAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPut(action.keyIndicatorVariable, AppConstant.keyIndicatorVariables + '/' + action.id)
+        return this.loginService.performPut(action.keyIndicatorVariable,
+            AppUtility.endPointGenerator([AppConstant.keyIndicator,action.keyIndicatorId,AppConstant.variables,action.id]))
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
@@ -275,12 +281,13 @@ export class TrendingDefinitionState {
         let result: Actions;
         if (force) {
             document.getElementById('loader').classList.add('loading');
-            result = this.loginService.performGet(AppConstant.keyIndicatorCustomerGroups + action.filter)
+            result = this.loginService.performGetWithParams(
+                AppUtility.endPointGenerator([AppConstant.keyIndicator,action.keyIndicatorId.toString(),AppConstant.customerGroups]), action.filter)
                 .pipe(
                     tap((response: any) => {
                         document.getElementById('loader').classList.remove('loading');
                         ctx.patchState({
-                            keyIndicatorCustomerGroupList: response,
+                            keyIndicatorCustomerGroupList: response.data.list,
                         });
                     },
                         error => {
@@ -308,14 +315,20 @@ export class TrendingDefinitionState {
                     }));
     }
 
-    @Action(DeleteKeyIndicatorCustomerGroupByIdAction)
-    deleteKeyIndicatorCustomerGroupById(ctx: StateContext<TrendingDefinitionModel>, action: DeleteKeyIndicatorCustomerGroupByIdAction): Actions {
+    @Action(AddKeyIndicatorCustomerGroupAction)
+    deleteKeyIndicatorCustomerGroupById(ctx: StateContext<TrendingDefinitionModel>, action: AddKeyIndicatorCustomerGroupAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performDelete(AppConstant.keyIndicatorCustomerGroups + '/' + action.id)
+        return this.loginService.performPost({},AppUtility.endPointGenerator(
+            [AppConstant.keyIndicator,action.keyIndicatorId,AppConstant.customerGroups,action.customerGroupId]))
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Deleted Successfully');
+
+                    const newKeyIndicatorCustomerGroupList = ctx.getState().keyIndicatorCustomerGroupList;
+                    newKeyIndicatorCustomerGroupList.push({...response.data});
+                    ctx.patchState({ keyIndicatorCustomerGroupList : [...newKeyIndicatorCustomerGroupList] });
+
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -323,17 +336,20 @@ export class TrendingDefinitionState {
                     }));
     }
 
-    @Action(SaveKeyIndicatorCustomerGroupAction)
-    saveKeyIndicatorCustomerGroup(ctx: StateContext<TrendingDefinitionModel>, action: SaveKeyIndicatorCustomerGroupAction): Actions {
+    @Action(RemoveKeyIndicatorCustomerGroupByIdAction)
+    saveKeyIndicatorCustomerGroup(ctx: StateContext<TrendingDefinitionModel>, action: RemoveKeyIndicatorCustomerGroupByIdAction): Actions {
         document.getElementById('loader').classList.add('loading');
-        return this.loginService.performPost(action.keyIndicatorCustomerGroup, AppConstant.keyIndicatorCustomerGroups)
+        return this.loginService.performDelete(AppUtility.endPointGenerator(
+            [AppConstant.keyIndicator,action.keyIndicatorId,AppConstant.customerGroups,action.customerGroupId]))
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
-                    ctx.patchState({
-                        keyIndicatorCustomerGroup: response,
-                    });
+
+                    const newKeyIndicatorCustomerGroupList =  ctx.getState().keyIndicatorCustomerGroupList
+                        .filter(((customerGroup : any) => customerGroup.customerGroupId != action.customerGroupId));
+
+                    ctx.patchState({ keyIndicatorCustomerGroupList: newKeyIndicatorCustomerGroupList });
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');

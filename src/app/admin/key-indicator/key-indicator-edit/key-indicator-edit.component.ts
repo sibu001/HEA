@@ -1,10 +1,16 @@
 import { Location } from '@angular/common';
+import { HttpParams } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { combineLatest, Observable, pipe, Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
+import { SystemService } from 'src/app/store/system-state-management/service/system.service';
+import { TrendingDefinitionService } from 'src/app/store/trending-defination-state-management/service/trending-definition.service';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -14,40 +20,58 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 })
 export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
   id: any;
-  topicForm: FormGroup;
+  keyIndicatorForm: FormGroup;
   public customerGroupKeys = TableColumnData.CUSTOMER_GROUP_KEY;
   variableKeys = TableColumnData.VARIABLE_KEYS;
   public customerGroupDataSource: any;
   public variableDataSource: any;
+  public keyIndicatorData : any;
   public totalElement = 0;
   public customerGroupData = {
     content: [],
     totalElements: 0,
+    selectedContent : [],
+    NewSelectedContent : []
   };
+
   public variableData = {
     content: [],
     totalElements: 0,
+    pageIndex : 0,
+    pageSize : AppConstant.pageSize
   };
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly activateRoute: ActivatedRoute,
     private readonly location: Location,
     private readonly router: Router,
-    public dialog: MatDialog) {
+    public dialog: MatDialog,
+    private readonly trendingDefinationService : TrendingDefinitionService,
+    private readonly systemService : SystemService) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
     });
   }
 
   ngOnInit() {
+    AppUtility.scrollTop();
     this.setForm(undefined);
+    this.getCombineResponseOfCustomerGroups();
+    this.loadCustomerGroup(true,new HttpParams());
+    this.loadKeyIndicatorCustomerGroups(true,new HttpParams());
+
+    if(this.id) {
+      this.loadKeyIndicatorById();
+      this.getKeyIndicatorById();
+      this.keyIndicatorPageChangeEvent(undefined);
+    }
   }
 
   setForm(event: any) {
-    this.topicForm = this.formBuilder.group({
+    this.keyIndicatorForm = this.formBuilder.group({
       keyIndicatorCode: [event !== undefined ? event.keyIndicatorCode : ''],
       keyIndicatorName: [event !== undefined ? event.keyIndicatorName : ''],
-      filter: [event !== undefined ? event.filter : ''],
+      filterRule: [event !== undefined ? event.filterRule : ''],
       indicatorPartTemplate: [event !== undefined ? event.indicatorPartTemplate : '', Validators.required],
       trendingPartTemplate: [event !== undefined ? event.trendingPartTemplate : '', Validators.required],
       explainPartTemplate: [event !== undefined ? event.explainPartTemplate : ''],
@@ -55,20 +79,149 @@ export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
       hideOnTrendingPage: [event !== undefined ? event.hideOnTrendingPage : '', Validators.required],
     });
   }
-  back() {
-    this.location.back();
+
+
+  getKeyIndicatorById(){
+    this.subscriptions.add(
+      this.trendingDefinationService.getKeyIndicatorById()
+      .pipe(filter((keyIndicator : any) => keyIndicator && keyIndicator.id == this.id ))
+      .subscribe((keyIndicator : any) =>{
+        this.keyIndicatorData = keyIndicator;
+        this.setForm({...keyIndicator});
+        AppUtility.scrollTop();
+      })
+    )
   }
 
-  save(): any { }
+  loadKeyIndicatorById(){
+    this.trendingDefinationService.loadKeyIndicatorById(this.id);
+  }
 
-  delete(): any { }
+
+  back() {
+    this.router.navigate(['/admin/keyIndicator/keyIndicatorList']);
+  }
+
+  save(): any {
+
+    AppUtility.removeErrorFieldMessagesFromForm();
+
+    if(this.id){
+      const requestBody = {...this.keyIndicatorData, ...this.keyIndicatorForm.value};
+      this.subscriptions.add(
+        this.trendingDefinationService.updateKeyIndicator(this.id,requestBody)
+        .subscribe(() =>{},
+        AppUtility.errorFieldHighlighterCallBack)
+      );
+
+      this.updateCustomerGroupsForKeyIndicators();
+
+      return;
+    }
+
+    const requestBody = this.keyIndicatorForm.value;
+    this.subscriptions.add(
+      this.trendingDefinationService.saveKeyIndicator(requestBody)
+      .pipe(take(1))
+      .subscribe((state : any) =>{
+          this.id = state.trendingDefinationManagement.keyIndicator.id;
+          AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+          this.getKeyIndicatorById();
+      },AppUtility.errorFieldHighlighterCallBack)
+    );
+
+  }
+
+  delete(): any {
+    this.subscriptions.add(
+      this.trendingDefinationService.deleteKeyIndicatorById(this.id)
+      .pipe(take(1))
+      .subscribe((response : any ) =>{
+        this.back();
+      })
+    );
+   }
+
+   
+  loadCustomerGroup(force: boolean, filter: any) {
+    this.systemService.loadCustomerGroupList(force, filter);
+  }
+
+  loadKeyIndicatorCustomerGroups(force : boolean, filter : any){
+    this.trendingDefinationService.loadKeyIndicatorCustomerGroupList(true,this.id, filter);
+  }
+
+  getCombineResponseOfCustomerGroups(){
+
+    const customerGroupList$ : Observable<any> = this.systemService.getCustomerGroupList()
+      .pipe(filter((data : any) => data instanceof Array));
+
+    const keyIndicatorCustomerGroupList$ : Observable<any> = this.trendingDefinationService
+      .getKeyIndicatorCustomerGroupList()
+      .pipe(filter((data : any) => data instanceof Array));
+
+    combineLatest([customerGroupList$,keyIndicatorCustomerGroupList$])
+    .subscribe((([ customerGroupList, keyIndicatorCustomerGroupList] : any) =>{
+      this.customerGroupData.content = [...customerGroupList];
+      this.customerGroupData.selectedContent = keyIndicatorCustomerGroupList
+        .map(customerGroup => customerGroup.customerGroupId);
+    }));
+
+  }
+
+  updateCustomerGroupsForKeyIndicators(){
+
+    const {newlySelected, newlyRemoved } = AppUtility.getNewlySelectedAndRemovedList
+    (this.customerGroupData.NewSelectedContent,this.customerGroupData.selectedContent,'customerGroupId');
+
+    console.log({newlySelected, newlyRemoved });
+    this.saveKeyIndicatorCustomerGroup(newlySelected);
+    this.removeKeyIndicatorCustomerGroup(newlyRemoved);
+
+  }
+
+  saveKeyIndicatorCustomerGroup(customerGroupList : Array<any >){
+    customerGroupList.forEach((customerGroupId : any) =>{
+      this.trendingDefinationService.addIndicatorCustomerGroup(this.id,customerGroupId);
+    });
+  }
+
+  removeKeyIndicatorCustomerGroup(customerGroupList : Array<any >){
+    customerGroupList.forEach((customerGroupId : any) =>{
+      this.trendingDefinationService.removeKeyIndicatorCustomerGroupById(this.id,customerGroupId);
+    });
+  }
+
+
+  keyIndicatorPageChangeEvent(event : any){
+    const params : HttpParams = new HttpParams()
+      .append('startRow', event && event.pageIndex ? (event.pageIndex *  event.pageSize) + '' : '0')
+      .append('pageSize', event && event.pageSize ? event.pageSize : this.variableData.pageSize) 
+      .append('disableTotalSize','false');
+     
+    this.getKeyIndicatorVariables(params);
+  } 
+
+  getKeyIndicatorVariables(params : HttpParams){
+    this.trendingDefinationService.loadKeyIndicatorVariableList(true,this.id,params);
+    this.subscriptions.add(
+      this.trendingDefinationService.getKeyIndicatorVariableList()
+      .pipe(filter((variables : any) => variables))
+      .subscribe((variables : any) =>{
+          this.variableData.content = variables.list;
+          this.variableData.totalElements = variables.totalSize;
+      })
+    );
+  }
+
 
   addVariable(): any {
-    this.router.navigate(['/admin/keyIndicator/keyIndicatorVariable']);
+    this.router.navigate(['/admin/keyIndicator/keyIndicatorVariable'], { queryParams: {keyIndicatorId: this.id}});
   }
 
-  goToEditVariable(): any {
-    this.router.navigate(['/admin/keyIndicator/keyIndicatorVariable'], { queryParams: { id: this.id } });
+  goToEditVariable(event : any): any {
+    this.router.navigate(['/admin/keyIndicator/keyIndicatorVariable'],
+       { queryParams: { keyIndicatorId: this.id, id : event.id } });
   }
 
   ngOnDestroy(): void {

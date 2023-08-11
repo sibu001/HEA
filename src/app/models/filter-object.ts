@@ -163,6 +163,11 @@ export class AdminFilter {
         subject : '',
         periodEnd : '' 
     }
+
+    public keyIndicatorList = {
+        page: null,
+        formValue: null
+    }
 }
 
 export class UsageHistoryFilter {

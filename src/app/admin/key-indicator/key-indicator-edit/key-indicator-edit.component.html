@@ -6,7 +6,7 @@
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Key Indicator</span>
         </p>
-        <form [formGroup]="topicForm" class="form-group form-padding">
+        <form [formGroup]="keyIndicatorForm" class="form-group form-padding">
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Key Indicator Code:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -24,14 +24,15 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Filter:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control" formControlName="filter" id="filter">
+              <textarea class="form-control" formControlName="filterRule" rows="4">
+              </textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Indicator Part Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="indicatorPartTemplate"
+              <textarea class="form-control" formControlName="indicatorPartTemplate" rows="6"
                 id="indicatorPartTemplate"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -39,7 +40,7 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Trending Part Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="trendingPartTemplate"
+              <textarea class="form-control" formControlName="trendingPartTemplate" rows="6"
                 id="trendingPartTemplate"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -47,7 +48,7 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Explain Part Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class='form-control form-control-sm' formControlName="explainPartTemplate"
+              <textarea class='form-control form-control-sm' formControlName="explainPartTemplate" rows="6"
                 id="explainPartTemplate"> </textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -69,24 +70,29 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
+        </form>
+
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Customer groups</span>
             </p>
             <app-table [keys]="customerGroupKeys" [isPaginate]="false" [checkbox]=true [isHideAdd]=true
-              [isSearch]="false" [data]="customerGroupDataSource" [totalElement]="customerGroupData.totalElements">
+              id="customerGroupId" [hideMasterCheckBox]=true  [selectionList]="customerGroupData.selectedContent"
+              [isSearch]="false" [data]="customerGroupData.content" 
+              (checkBoxChangeEvent)="customerGroupData.NewSelectedContent= ($event)">
             </app-table>
           </div>
+
 
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">KeyIndicator variables</span>
             </p>
-            <app-table [keys]="variableKeys" [isPaginate]="true" [isSearch]="false" [data]="variableDataSource"
+            <app-table [keys]="variableKeys" [isPaginate]="true" [isSearch]="false" [data]="variableData.content"
               [totalElement]="variableData.totalElements" (addEvent)='addVariable()'
-              (goToEditEvent)='goToEditVariable()'>
+              (goToEditEvent)='goToEditVariable($event)' (changePageEvent)="keyIndicatorPageChangeEvent($event)">
             </app-table>
           </div>
           <!-- <div class="row paddingTop form-padding">
@@ -101,27 +107,25 @@
             </div>
           </div> -->
 
-          <div class="row rowPadding paddingTop">
+          <div class="row paddingTop">
             <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
               <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
             </div>
-            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-              <div class="row">
-                <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10 " style="text-align: end;"
-                  *ngIf="id!==undefined&&id!==null">
-                  <button type="button" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
-                </div>
-                <div [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id != undefined && id !== null
-                , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id == undefined || id == null}"
-                  style="text-align:right; overflow:auto;">
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 right-buttons">
+              <!-- <div class="row"> -->
+                <!-- <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10 " style="text-align: end;"
+                  *ngIf="id"> -->
                   <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
-                </div>
-              </div>
+                  <button type="button" *ngIf="id" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
+                <!-- </div> -->
+                <!-- <div [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id != undefined && id !== null
+                , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id == undefined || id == null}"
+                  style="text-align:right; overflow:auto;"> -->
+                <!-- </div> -->
+              <!-- </div> -->
             </div>
 
           </div>
-
-        </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar [showMethod]='true'></app-sidebar>

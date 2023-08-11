@@ -25,6 +25,7 @@ export class UserReportPreviewComponent implements OnInit, OnDestroy {
   public showHTML : boolean = false;
   public adminFilter : AdminFilter;
   public userReportPreviewData : any;
+  public executionTime : number ;
   public dataListForSuggestions : Array<any> = [];
   private readonly subscriptions: Subscription = new Subscription();
   private subject$ : Subject<any> = new Subject();
@@ -92,10 +93,15 @@ export class UserReportPreviewComponent implements OnInit, OnDestroy {
 
     const params : HttpParams = new HttpParams().append('customerId',customerId.toString());
     
+    const startTime = new Date().getTime();
+    
     this.subscriptions.add(
       this.loginService.performGetWithParams(
         AppUtility.endPointGenerator([AppConstant.userReports,this.id,AppConstant.preview]),params)
       .subscribe((response : any) =>{
+
+        const endTime = new Date().getTime();
+        this.executionTime = endTime - startTime;
 
         if(response.errorMessage){
           this.errorMessage = response.errorMessage;

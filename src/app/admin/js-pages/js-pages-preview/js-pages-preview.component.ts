@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { skipWhile } from 'rxjs/operators';
 import { DynamicViewService } from 'src/app/store/dynamic-view-state-management/service/dynamic-view.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 
 @Component({
@@ -35,8 +36,14 @@ export class JsPagesPreviewComponent implements OnInit, OnDestroy, AfterViewInit
   private renderJsPage(){
     setTimeout(()=>{
       const iFrame = document.getElementById('ifrmMailContent') as HTMLIFrameElement;
-      iFrame.contentDocument.body.innerHTML = this.url;
-      this.iframeHeight = iFrame.contentWindow.document.body.scrollHeight + 20 + 'px';
+      const iframeDocument = iFrame.contentDocument || iFrame.contentWindow.document;
+  
+      // Set the content of the iframe's document using the provided HTML string
+      iframeDocument.open();
+      iframeDocument.write(AppUtility.resolveCDNforIFrame(this.url));
+      iframeDocument.close();
+      // iFrame.contentDocument.body.innerHTML = this.url;
+      // this.iframeHeight = iFrame.contentWindow.document.body.scrollHeight + 20 + 'px';
     },100);
   
   }

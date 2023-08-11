@@ -52,36 +52,36 @@ export class DeleteKeyIndicatorByIdAction {
 
 export class GetKeyIndicatorVariableListAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_VARIABLE_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly keyIndicatorId: number, readonly filter : any) {
     }
 }
 
 export class GetKeyIndicatorVariableByIdAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_VARIABLE_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly keyIndicatorId : number, readonly id: number) {
     }
 }
 export class UpdateKeyIndicatorVariableAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.UPDATE_KEY_INDICATOR_VARIABLE;
-    constructor(readonly id: number, readonly keyIndicatorVariable: any) {
+    constructor(readonly id: number, readonly keyIndicatorId : number,  readonly keyIndicatorVariable: any) {
     }
 }
 
 export class SaveKeyIndicatorVariableAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.SAVE_KEY_INDICATOR_VARIABLE;
-    constructor(readonly keyIndicatorVariable: any) {
+    constructor(readonly keyIndicatorVariable: any,readonly keyIndicatorId : number) {
     }
 }
 
 export class DeleteKeyIndicatorVariableByIdAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_KEY_INDICATOR_VARIABLE_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly id: number, readonly keyIndicatorId : number) {
     }
 }
 
 export class GetKeyIndicatorCustomerGroupListAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_CUSTOMER_GROUP_LIST;
-    constructor(readonly force: boolean, readonly filter: any) {
+    constructor(readonly force: boolean, readonly keyIndicatorId : number, readonly filter: any) {
     }
 }
 
@@ -96,15 +96,15 @@ export class UpdateKeyIndicatorCustomerGroupAction {
     }
 }
 
-export class SaveKeyIndicatorCustomerGroupAction {
+export class AddKeyIndicatorCustomerGroupAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.SAVE_KEY_INDICATOR_CUSTOMER_GROUP;
-    constructor(readonly keyIndicatorCustomerGroup: any) {
+    constructor(readonly keyIndicatorId: number, readonly customerGroupId : number ) {
     }
 }
 
-export class DeleteKeyIndicatorCustomerGroupByIdAction {
+export class RemoveKeyIndicatorCustomerGroupByIdAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_KEY_INDICATOR_CUSTOMER_GROUP_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly keyIndicatorId: number, readonly customerGroupId : number ) {
     }
 }
 
