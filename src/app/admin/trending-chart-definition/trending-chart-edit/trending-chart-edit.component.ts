@@ -48,6 +48,8 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
   unitTypeList: any = TableColumnData.UNIT_TYPE;
   useTypeList = [];
   trendingPartChartData : any = { chart : { } };
+  htmHeaderTemplate;
+  htmFooterTemplate;
   private readonly subscriptions: Subscription = new Subscription();
   public tools: object = {
     items: ['Undo', 'Redo', '|',
