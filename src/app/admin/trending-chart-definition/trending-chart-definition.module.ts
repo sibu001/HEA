@@ -22,6 +22,8 @@ import { RichTextEditorModule, ToolbarService, LinkService, ImageService, HtmlEd
 import { NgxsModule } from '@ngxs/store';
 import { CustomerManagementState } from 'src/app/store/customer-state-management/state/customer.state';
 import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
+import { TrendingDefinitionService } from 'src/app/store/trending-defination-state-management/service/trending-definition.service';
+import { TrendingDefinitionState } from 'src/app/store/trending-defination-state-management/state/trending-definition.state';
 
 @NgModule({
   imports: [
@@ -34,7 +36,8 @@ import { TopicManagementState } from 'src/app/store/topic-state-management/state
     NgxsModule.forRoot([
       SystemManagementState,
       CustomerManagementState,
-      TopicManagementState
+      TopicManagementState,
+      TrendingDefinitionState
     ]),
   ],
   declarations: [
@@ -43,7 +46,7 @@ import { TopicManagementState } from 'src/app/store/topic-state-management/state
     TrendingChartDefinitionSeriesComponent,
     TrendingChartEditComponent
   ],
-  providers: [HtmlEditorService, ImageService, LinkService, ToolbarService]
+  providers: [HtmlEditorService, ImageService, LinkService, ToolbarService, TrendingDefinitionService]
 
 })
 export class TrendingChartDefinitionModule { }

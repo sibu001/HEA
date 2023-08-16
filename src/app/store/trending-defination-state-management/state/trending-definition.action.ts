@@ -1,3 +1,5 @@
+import { HttpParams } from "@angular/common/http";
+
 export enum TrendingDefinitionActionTypes {
     GET_KEY_INDICATOR_LIST = 'Get All Key Indicator List',
     GET_KEY_INDICATOR_BY_ID = 'Get Key Indicator By Id',
@@ -19,6 +21,11 @@ export enum TrendingDefinitionActionTypes {
     UPDATE_TRENDING_PARTS_ = 'Update TrendingParts',
     SAVE_TRENDING_PARTS_ = 'Save TrendingParts',
     DELETE_TRENDING_PARTS_BY_ID = 'Delete TrendingParts By Id',
+    LOAD_TRENDING_CHART_BY_TRENDING_PARTS_ID = ' Load Trending Charts By Trending Parts Id',
+    LOAD_TRENDING_PARTS_CHARTS_BY_ID = ' Load Trending Parts Chart By Id',
+    SAVE_TRENDING_PARTS_CHARTS_BY_ID = ' Save Trending Parts Chart ',
+    UPDATE_TRENDING_PARTS_CHARTS_BY_ID = ' Update Trending Parts Charts By Id',
+    DELETE_TRENDING_PARTS_CHARTS_BY_ID = ' Delete Trending Parts Charts By Id',
 
 }
 export class GetKeyIndicatorListAction {
@@ -116,7 +123,7 @@ export class GetTrendingPartsListAction {
 
 export class GetTrendingPartsByIdAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_TRENDING_PARTS_BY_ID;
-    constructor(readonly id: number) {
+    constructor(readonly force : boolean, readonly id: number) {
     }
 }
 export class UpdateTrendingPartsAction {
@@ -137,4 +144,32 @@ export class DeleteTrendingPartsByIdAction {
     }
 }
 
+export class LoadTrendingChartsByTrendingPartsIdAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.LOAD_TRENDING_CHART_BY_TRENDING_PARTS_ID;
+    constructor(readonly force : boolean, readonly id: number, readonly params : HttpParams) {
+    }
+}
 
+export class LoadTrenginPartChartByIdAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.LOAD_TRENDING_PARTS_CHARTS_BY_ID;
+    constructor(readonly force : boolean, readonly trendingPartId: number, readonly id: number) {
+    }
+}
+
+export class SaveTrenginPartChartByAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.SAVE_TRENDING_PARTS_CHARTS_BY_ID;
+    constructor(readonly trendingPartId: number, readonly body : any) {
+    }
+}
+
+export class UpdateTrenginPartChartByIdAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.UPDATE_TRENDING_PARTS_CHARTS_BY_ID;
+    constructor(readonly trendingPartId: number, readonly id: number, readonly body : any) {
+    }
+}
+
+export class DeleteTrenginPartChartByIdAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_TRENDING_PARTS_CHARTS_BY_ID;
+    constructor(readonly trendingPartId: number, readonly id: number) {
+    }
+}

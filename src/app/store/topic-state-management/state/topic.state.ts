@@ -130,6 +130,7 @@ import { TopicManagementModel } from './topic.model';
         SERIES_QUERY_TYPE : undefined,
         SERIES_COLOR : undefined,
         USER_REPORT_TYPE : undefined,
+        USE_TYPE : undefined
     }
 })
 
@@ -318,6 +319,11 @@ export class TopicManagementState {
     static getUserReportTypeLookUp(state: TopicManagementModel): any {
         return state.USER_REPORT_TYPE;
     }
+
+    @Selector()
+    static getUseTypeLookUp(state : TopicManagementModel) : any {
+        return state.USE_TYPE;
+    } 
     
     @Selector()
     static getFieldValueListForDataField(state: TopicManagementModel): any {

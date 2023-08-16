@@ -2,15 +2,16 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9 content" >
-        <p class="heading">
+        <p class="heading" #tableScrollPoint>
           Trending Parts
         </p>
         <div class="paddingTop">
           <p class="messages">
             <img src='assets/images/dot03.gif' alt="dot" class='dot'>
-            <span class="messageName">Trending Parts (Number of Records = {{totalElement}})</span></p>
-          <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="dataSource"
-            [totalElement]="data.totalElements" (changePageEvent)="findTrendingChart($event)"
+            <span class="messageName">Trending Parts (Number of Records = {{trendingPartsData.totalElements}})</span></p>
+          <app-table [keys]="keys" [isPaginate]="true" [isSearch]="false" [data]="trendingPartsData.content"
+            [totalElement]="trendingPartsData.totalElements" (changePageEvent)="search($event)"
+            [pageSize]="trendingPartsData.pageSize" [pageIndex]="trendingPartsData.pageIndex"
             (goToEditEvent)="goToEditTrendingChart($event)" (addEvent)='addTrendingChart()'>
           </app-table>
         </div>

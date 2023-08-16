@@ -3,525 +3,566 @@
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
-          <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
+          <img class="pointer" src="assets/images/dot03.gif" alt="dot" class="dot">
           <span class="messageName">Trending Chart Definition</span>
         </p>
-        <form [formGroup]="chartForm" class="form-group form-padding">
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart code:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="chartCode" id="chartCode">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order Number:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="orderNumber" id="orderNumber">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='!isBlockField' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Tool Type:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="toolType"
-                formControlName="toolType">
-                <option *ngFor='let group of toolTypeList' [value]="group.key">{{group.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value==="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Script tags to include all the dependent JS and plugins:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control form-control-sm" cols="30" rows="10"
-                formControlName="freeChartIncludeJSTemplate"
-                id="freeChartIncludeJSTemplate"></textarea>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value==="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Script for chart configuration:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control form-control-sm" cols="30" rows="10"
-                formControlName="freeChartConfigurationJSTemplate"
-                id="freeChartConfigurationJSTemplate"></textarea>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value==="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Div tags inside the body:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control form-control-sm" cols="30" rows="10"
-                formControlName="freeChartDivTemplate"
-                id="freeChartDivTemplate"></textarea>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Chart type:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="chartType"
-                formControlName="chartType">
-                <option *ngFor='let group of chartTypList' [value]="group.key">{{group.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Background Color:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+        <div class="form-group form-padding">
+          <form [formGroup]="chartForm" class="">
+            <div class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart code:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <input type="text" class="form-control form-control-sm"
-                  formControlName="backgroundColor"
-                  id="backgroundColor" [value]='f.backgroundColor.value'>
+                  formControlName="chartCode" id="chartCode">
+                  <div class="error-message" *ngIf="highlightErrorField('chartCode')" >
+                    <span>Chart code is required.</span>
+                  </div>
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <select class="form-control form-control-sm"
-                  id="backgroundColor" formControlName="backgroundColor"
-                  [value]='f.backgroundColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Topic description:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                  <select id="surveyDescriptionId" class="form-control form-control-sm"
+                    formControlName="surveyDescriptionId">
+                    <option value="null"></option>
+                  <option *ngFor='let topic of topicDescriptionList' [value]="topic.id">{{topic.label}}</option>
                 </select>
               </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='checkbox' cols="30" rows="10"
-                formControlName="borderVisible" id="borderVisible">
-              Border Visible
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Border Color:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+            <div class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Order Number:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <input type="text" class="form-control form-control-sm"
-                  formControlName="borderColor" id="borderColor"
-                  [value]='f.borderColor.value'>
+                  formControlName="orderNumber" id="orderNumber">
+                  <div class="error-message" *ngIf="highlightErrorField('orderNumber')" >
+                    <span>Order Number is required.</span>
+                  </div>
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <select class="form-control form-control-sm" id="borderColor"
-                  formControlName="borderColor"
-                  [value]='f.borderColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='!isBlockField' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Tool Type:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select class="form-control form-control-sm" id="toolType"
+                  formControlName="toolType">
+                  <option *ngFor='let group of toolTypeList' [value]="group.key">{{group.value}}</option>
                 </select>
               </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='checkbox' formControlName="tooltips" id="tooltips">
-              Configure chart to generate tool tips
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Width:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="width" id="width">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Height:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="height" id="height">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Compression Coefficient:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="compression" id="compression">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Start Angle:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="pieStartAngle"
-                id="pieStartAngle">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && (f.chartType.value==="pie"
-            || f.chartType.value==="timeSeries" )'
-            class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              <span *ngIf='f.chartType.value==="pie" '>Pie Label Format:</span>
-              <span *ngIf='f.chartType.value==="timeSeries" '>Date Format:</span>
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="format" id="format">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            && f.chartType.value!=="timeSeries" '
-            class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="checkbox" formControlName="horizontalOrientation"
-                id="horizontalOrientation">
-              Horizontal orientation
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
-            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
-            <span class="messageName">Title</span>
-          </p>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Title:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class="form-control form-control-sm"
-                formControlName="title" id="title">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Font Name:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="titleFontName" class="form-control form-control-sm"
-                formControlName="titleFontName">
-                <option *ngFor='let font of fontData' [value]="font.key">{{font.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Font Style:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                formControlName="titleFontStyle" id="titleFontStyle">
-                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Font Size:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class="form-control form-control-sm"
-                formControlName="titleFontSize"
-                id="titleFontSize">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Color:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <input type='text' class="form-control form-control-sm"
-                  formControlName="titleColor" id="titleColor"
-                  [value]='f.titleColor.value'>
+            <div *ngIf='f.toolType.value==="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Script tags to include all the dependent JS and plugins:
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <select class="form-control form-control-sm" id="titleColor"
-                  formControlName="titleColor"
-                  [value]='f.titleColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <textarea class="form-control form-control-sm" cols="30" rows="10"
+                  formControlName="freeChartIncludeJSTemplate"
+                  id="freeChartIncludeJSTemplate"></textarea>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value==="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Script for chart configuration:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <textarea class="form-control form-control-sm" cols="30" rows="10"
+                  formControlName="freeChartConfigurationJSTemplate"
+                  id="freeChartConfigurationJSTemplate"></textarea>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value==="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Div tags inside the body:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <textarea class="form-control form-control-sm" cols="30" rows="10"
+                  formControlName="freeChartDivTemplate"
+                  id="freeChartDivTemplate"></textarea>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Chart type:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select class="form-control form-control-sm" id="chartType"
+                  formControlName="chartType">
+                  <option *ngFor='let group of chartTypeList' [value]="group.lookupValue">{{group.valueName}}</option>
                 </select>
               </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
-          <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
-            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
-            <span class="messageName">Legend</span>
-          </p>
-          <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='checkbox' formControlName="showLegend"
-                id="showLegend">
-              Show Legend
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
-          <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
-            class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Name: </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="legendFontName" class="form-control form-control-sm"
-                formControlName="legendFontName">
-                <option *ngFor='let font of fontData' [value]="font.key">{{font.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
-            class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Style:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                formControlName="legendFontStyle" id="legendFontStyle">
-                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
-            class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Size:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class="form-control form-control-sm"
-                formControlName="legendFontSize"
-                id="legendFontSize">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
-            class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Location:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="legendLocation"
-                formControlName="legendLocation">
-                <option *ngFor='let group of locationList' [value]="group.key">{{group.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.showLegend.value'
-            class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='checkbox' formControlName="legendOutsideGrid"
-                id="legendOutsideGrid">
-              Outside grid
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
-          <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
-            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
-            <span class="messageName">Range</span>
-          </p>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Label</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class='form-control form-control-sm'
-                formControlName="rangeLabel" id="rangeLabel">
-
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Label Angle</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class="form-control form-control-sm"
-                formControlName="rangeLabelAngle"
-                id="rangeLabelAngle">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Font Name:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="rangeFontName" class="form-control form-control-sm"
-                formControlName="rangeFontName">
-                <option *ngFor='let font of fontData' [value]="font.key">{{font.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Font Style:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                formControlName="rangeFontStyle" id="rangeFontStyle">
-                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Font Size:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class="form-control form-control-sm"
-                formControlName="rangeFontSize"
-                id="rangeFontSize">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Color:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <input type='text' class="form-control form-control-sm"
-                  formControlName="rangeColor"
-                  [value]='f.rangeColor.value' id="rangeColor">
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Background Color:
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <select class="form-control form-control-sm" id="rangeColor"
-                  formControlName="rangeColor"
-                  [value]='f.rangeColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <input type="text" class="form-control form-control-sm"
+                    formControlName="backgroundColor"
+                    id="backgroundColor" [value]='f.backgroundColor.value'>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <select class="form-control form-control-sm"
+                    id="backgroundColor" formControlName="backgroundColor"
+                    [value]='f.backgroundColor.value'>
+                    <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='checkbox' cols="30" rows="10"
+                  formControlName="borderVisible" id="borderVisible">
+                Border Visible
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Border Color:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <input type="text" class="form-control form-control-sm"
+                    formControlName="borderColor" id="borderColor"
+                    [value]='f.borderColor.value'>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <select class="form-control form-control-sm" id="borderColor"
+                    formControlName="borderColor"
+                    [value]='f.borderColor.value'>
+                    <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='checkbox' formControlName="tooltips" id="tooltips">
+                Configure chart to generate tool tips
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Width:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm"
+                  formControlName="width" id="width">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Height:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm"
+                  formControlName="height" id="height">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Compression Coefficient:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm"
+                  formControlName="compression" id="compression">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Start Angle:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm"
+                  formControlName="pieStartAngle"
+                  id="pieStartAngle">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && (f.chartType.value==="pie"
+              || f.chartType.value==="timeSeries" )'
+              class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <span *ngIf='f.chartType.value==="pie" '>Pie Label Format:</span>
+                <span *ngIf='f.chartType.value==="timeSeries" '>Date Format:</span>
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm"
+                  formControlName="pieLabelFormat" id="pieLabelFormat">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              && f.chartType.value!=="timeSeries" '
+              class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="checkbox" formControlName="horizontalOrientation"
+                  id="horizontalOrientation">
+                Horizontal orientation
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
+              <img class="pointer" src="assets/images/dot03.gif" alt="dot" class="dot">
+              <span class="messageName">Title</span>
+            </p>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Title:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class="form-control form-control-sm"
+                  formControlName="title" id="title">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Font Name:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select id="titleFontName" class="form-control form-control-sm"
+                  formControlName="titleFontName">
+                  <option *ngFor='let font of fontData' [value]="font.lookupValue">{{font.valueName}}</option>
                 </select>
               </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='checkbox' formControlName="rangeGridlineVisible"
-                id="rangeGridlineVisible">
-              Range Gridline Visible
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Range Gridline Color:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <input type='text' class="form-control form-control-sm"
-                  formControlName="rangeGridlineColor"
-                  [value]='f.rangeGridlineColor.value' id="rangeGridlineColor">
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Font Style:
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <select class="form-control form-control-sm"
-                  id="rangeGridlineColor"
-                  formControlName="rangeGridlineColor"
-                  [value]='f.rangeGridlineColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  formControlName="titleFontStyle" id="titleFontStyle">
+                  <option *ngFor='let group of fontStyleList' [value]="group.lookupValue">{{group.valueName}}</option>
                 </select>
               </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Maximum</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class="form-control form-control-sm"
-                formControlName="rangeMax" id="rangeMax">
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Font Size:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class="form-control form-control-sm"
+                  formControlName="titleFontSize"
+                  id="titleFontSize">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Minimum
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Color:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <input type='text' class="form-control form-control-sm"
+                    formControlName="titleColor" id="titleColor"
+                    [value]='f.titleColor.value'>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <select class="form-control form-control-sm" id="titleColor"
+                    formControlName="titleColor"
+                    [value]='f.titleColor.value'>
+                    <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class="form-control form-control-sm"
-                formControlName="rangeMin" id="rangeMin">
+  
+            <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
+              <img class="pointer" src="assets/images/dot03.gif" alt="dot" class="dot">
+              <span class="messageName">Legend</span>
+            </p>
+            <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='checkbox' formControlName="legend"
+                  id="legend">
+                Show Legend
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
+  
+            <div *ngIf='f.toolType.value!=="jschart" && f.legend.value'
+              class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Name: </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select id="legendFontName" class="form-control form-control-sm"
+                  formControlName="legendFontName">
+                  <option *ngFor='let font of fontData' [value]="font.lookupValue">{{font.valueName}}</option>
+                </select>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.legend.value'
+              class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Style:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select class="form-control form-control-sm"
+                  formControlName="legendFontStyle" id="legendFontStyle">
+                  <option *ngFor='let group of fontStyleList' [value]="group.lookupValue">{{group.valueName}}</option>
+                </select>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.legend.value'
+              class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Font Size:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class="form-control form-control-sm"
+                  formControlName="legendFontSize"
+                  id="legendFontSize">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value=="jqplot" && f.legend.value'
+              class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Location:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select class="form-control form-control-sm" id="legendLocation"
+                  formControlName="legendLocation">
+                  <option value=""></option>
+                  <option *ngFor='let group of locationList' [value]="group.key">{{group.value}}</option>
+                </select>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div> 
+            <div *ngIf='f.toolType.value==="jqplot"  && f.legend.value'
+              class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='checkbox' formControlName="legendOutsideGrid"
+                  id="legendOutsideGrid">
+                Outside grid
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+  
+            <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
+              <img class="pointer" src="assets/images/dot03.gif" alt="dot" class="dot">
+              <span class="messageName">Range</span>
+            </p>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Label</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class='form-control form-control-sm'
+                  formControlName="rangeLabel" id="rangeLabel">
+  
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Label Angle</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class="form-control form-control-sm"
+                  formControlName="rangeAngle"
+                  id="rangeAngle">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Font Name:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select id="rangeFontName" class="form-control form-control-sm"
+                  formControlName="rangeFontName">
+                  <option *ngFor='let font of fontData' [value]="font.lookupValue">{{font.valueName}}</option>
+                </select>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Font Style:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select class="form-control form-control-sm"
+                  formControlName="rangeFontStyle" id="rangeFontStyle">
+                  <option *ngFor='let group of fontStyleList' [value]="group.lookupValue">{{group.valueName}}</option>
+                </select>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Font Size:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class="form-control form-control-sm"
+                  formControlName="rangeFontSize"
+                  id="rangeFontSize">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Color:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <input type='text' class="form-control form-control-sm"
+                    formControlName="rangeColor"
+                    [value]='f.rangeColor.value' id="rangeColor">
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <select class="form-control form-control-sm" id="rangeColor"
+                    formControlName="rangeColor"
+                    [value]='f.rangeColor.value'>
+                    <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+  
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='checkbox' formControlName="rangeGridlineVisible"
+                  id="rangeGridlineVisible">
+                Range Gridline Visible
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Range Gridline Color:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <input type='text' class="form-control form-control-sm"
+                    formControlName="rangeGridlineColor"
+                    [value]='f.rangeGridlineColor.value' id="rangeGridlineColor">
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <select class="form-control form-control-sm"
+                    id="rangeGridlineColor"
+                    formControlName="rangeGridlineColor"
+                    [value]='f.rangeGridlineColor.value'>
+                    <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Maximum</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class="form-control form-control-sm"
+                  formControlName="rangeMax" id="rangeMax">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Range Minimum
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class="form-control form-control-sm"
+                  formControlName="rangeMin" id="rangeMin">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+  
+            <!-- <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='checkbox' formControlName="roundToZero"
+                  id="roundToZero">
+                Round To Zero
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+          -->
+  
           <div *ngIf='f.toolType.value!=="jschart" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='checkbox' formControlName="roundToZero"
-                id="roundToZero">
-              Round To Zero
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          rowPadding">
+          <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
+          <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <input type='checkbox' formControlName="rangeIntegral"
+              id="rangeIntegral">
+            Round to integer
           </div>
-
-          <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
-            <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
-            <span class="messageName">Domain</span>
-          </p>
-
-
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Domain Label</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class='form-control form-control-sm'
-                formControlName="domainLabel" id="domainLabel">
+          <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+        </div>
+  
+            <p *ngIf='f.toolType.value!=="jschart" ' class="messages">
+              <img class="pointer" src="assets/images/dot03.gif" alt="dot" class="dot">
+              <span class="messageName">Domain</span>
+            </p> 
+  
+  
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Domain Label</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class='form-control form-control-sm'
+                  formControlName="domainLabel" id="domainLabel">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Domain Label Angle</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class="form-control form-control-sm"
+                  formControlName="domainLabelAngle"
+                  id="domainLabelAngle">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
             ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Domain Label Angle</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Domain Angle</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type='text' class="form-control form-control-sm"
                 formControlName="domainLabelAngle"
@@ -529,155 +570,156 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Font Name:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select id="domainFontName" class="form-control form-control-sm"
-                formControlName="domainFontName">
-                <option *ngFor='let font of fontData' [value]="font.key">{{font.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Font Style:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm"
-                formControlName="domainFontStyle" id="domainFontStyle">
-                <option *ngFor='let group of fontStyleList' [value]="group.key">{{group.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Font Size:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='text' class="form-control form-control-sm"
-                formControlName="domainFontSize"
-                id="domainFontSize">
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Color:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <input type='text' class="form-control form-control-sm"
-                  formControlName="domainColor"
-                  [value]='f.domainColor.value' id="domainColor">
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Font Name:
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <select class="form-control form-control-sm" id="domainColor"
-                  formControlName="domainColor"
-                  [value]='f.domainColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select id="domainFontName" class="form-control form-control-sm"
+                  formControlName="domainFontName">
+                  <option *ngFor='let font of fontData' [value]="font.lookupValue">{{font.valueName}}</option>
                 </select>
               </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='checkbox' formControlName="domainGridlineVisible"
-                id="domainGridlineVisible">
-              Domain Gridline Visible
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
-            ' class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Domain Gridline Color:
-            </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
-                <input type='text' class="form-control form-control-sm"
-                  formControlName="domainGridlineColor"
-                  [value]='f.domainGridlineColor.value'
-                  id="domainGridlineColor">
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Font Style:
               </div>
-              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <select class="form-control form-control-sm"
-                  id="domainGridlineColor"
-                  formControlName="domainGridlineColor"
-                  [value]='f.domainGridlineColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  formControlName="domainFontStyle" id="domainFontStyle">
+                  <option *ngFor='let group of fontStyleList' [value]="group.lookupValue">{{group.valueName}}</option>
                 </select>
               </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Font Size:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='text' class="form-control form-control-sm"
+                  formControlName="domainFontSize"
+                  id="domainFontSize">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Color:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <input type='text' class="form-control form-control-sm"
+                    formControlName="domainColor"
+                    [value]='f.domainColor.value' id="domainColor">
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <select class="form-control form-control-sm" id="domainColor"
+                    formControlName="domainColor"
+                    [value]='f.domainColor.value'>
+                    <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+  
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"> </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='checkbox' formControlName="domainGridlineVisible"
+                  id="domainGridlineVisible">
+                Domain Gridline Visible
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+            <div *ngIf='f.toolType.value!=="jschart" && f.chartType.value!=="pie"
+              ' class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                Domain Gridline Color:
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 row paddingRight">
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <input type='text' class="form-control form-control-sm"
+                    formControlName="domainGridlineColor"
+                    [value]='f.domainGridlineColor.value'
+                    id="domainGridlineColor">
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
+                  <select class="form-control form-control-sm"
+                    id="domainGridlineColor"
+                    formControlName="domainGridlineColor"
+                    [value]='f.domainGridlineColor.value'>
+                    <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
 
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
-          </div>
+            <div class="row borderBottom rowPadding" *ngIf='f.toolType.value != "jschart"'>
+              <div class="col-sm-12 col-md-12 col-lg-12 col-xs-12"></div>
+            </div>
+  
+            <div *ngIf='f.toolType.value==="jqplot" ' class="row borderBottom
+              rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+              </div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type='checkbox' formControlName="canvasHack"
+                  id="canvasHack">Canvas Hack
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
+              
 
-          <div *ngIf='f.toolType.value==="jqplot" ' class="row borderBottom
-            rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+            <div class="row borderBottom rowPadding" style="padding-top: 40px">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart Header:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmHeaderTemplate && ( !form.htmHeaderTemplate || !form.htmHeaderTemplate.trim())" (click)="htmHeaderTemplate = !htmHeaderTemplate" >
+                <ejs-richtexteditor *ngIf="htmHeaderTemplate || ( form.htmHeaderTemplate && form.htmHeaderTemplate.trim())" [toolbarSettings]='tools' formControlName='htmHeaderTemplate' id='htmHeaderTemplate'>
+                </ejs-richtexteditor>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type='checkbox' formControlName="canvasHack"
-                id="canvasHack">Canvas Hack
+            <div class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart Footer:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!htmFooterTemplate && ( !form.htmFooterTemplate || !form.htmFooterTemplate.trim())" (click)="htmFooterTemplate = !htmFooterTemplate" >
+                <ejs-richtexteditor *ngIf="htmFooterTemplate || ( form.htmFooterTemplate && form.htmFooterTemplate.trim())" [toolbarSettings]='tools' formControlName='htmFooterTemplate' id='htmFooterTemplate'>
+                </ejs-richtexteditor>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
+  
+            <div class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Div CSS style:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <input type="text" class="form-control form-control-sm"
+                  formControlName="divStyle" id="divStyle">
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+            </div>
 
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart Header:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!chartHeader && ( !form.chartHeader || !form.chartHeader.trim())" (click)="chartHeader = !chartHeader" >
-              <ejs-richtexteditor *ngIf="chartHeader || ( form.chartHeader && form.chartHeader.trim())" [toolbarSettings]='tools' formControlName='chartHeader' id='chartHeader'>
-              </ejs-richtexteditor>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart Footer:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <img src="assets/images/ico_html.png" alt="HTML" *ngIf="!chartFooter && ( !form.chartFooter || !form.chartFooter.trim())" (click)="chartFooter = !chartFooter" >
-              <ejs-richtexteditor *ngIf="chartFooter || ( form.chartFooter && form.chartFooter.trim())" [toolbarSettings]='tools' 
-                formControlName='chartFooter' id='chartFooter'>
-              </ejs-richtexteditor>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
 
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Div CSS style:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm"
-                formControlName="divCssStyle" id="divCssStyle">
+            <div class="row borderBottom rowPadding">
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Resource Use:</div>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <select class="form-control form-control-sm" id="resourceUse"
+                  formControlName="resourceUse">
+                  <option *ngFor='let group of resourceUseList'
+                    [value]="group.key">{{group.value}}</option>
+                </select>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
             </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
-
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Resource Use:</div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <select class="form-control form-control-sm" id="resourceUse"
-                formControlName="resourceUse">
-                <option *ngFor='let group of resourceUseList'
-                  [value]="group.key">{{group.value}}</option>
-              </select>
-            </div>
-            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div>
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Unit Type:</div>
@@ -697,40 +739,41 @@
               <select class="form-control form-control-sm" id="useType"
                 formControlName="useType">
                 <option value=""></option>
-                <option *ngFor='let group of useTypeList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of useTypeList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
+
+          </form>
+        </div>
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Chart Series</span></p>
-            <app-table [keys]="chartKeys" [isSearch]="false" [isDelete]=true
-              [data]="chartDataSource"
-              [totalElement]="chartData.totalElements"
-              (addEvent)='addChartSeries()'
-              (goToEditEvent)='goToEditChartSeries()'>
+            <app-table [keys]="chartKeys" [isSearch]="false"
+              [data]="paneChartData?.chart?.chartSeries" [isHideAdd]=false
+              (goToEditEvent)='goToEditChartSeries($event)'
+              (addEvent)='addCharSeries()'
+              (saveRowEvent)="saveRow()">
             </app-table>
           </div>
-          <div class="row paddingTop form-padding">
-            <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1">
-              <button type="reset" class="btn btn-primary" (click)='back()'>Back</button>
+
+          <div class="row paddingTop">
+            <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
+              <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
             </div>
-            <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9" style="text-align:
-              end;">
-              <button type="button" class="btn btn-primary"
-                *ngIf="id!==undefined" (click)="delete()">Delete</button>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 right-buttons">
+                <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
+                <button type="button" class="btn btn-primary mb-button" *ngIf="id" (click)="delete()">Delete</button>
             </div>
-            <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="text-align:
-              end;">
-              <button type="submit" class="btn btn-primary" (click)="save()">Save</button>
-            </div>
+
           </div>
-        </form>
+
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
-        <app-sidebar></app-sidebar>
+        <app-sidebar [showDataFields]='true' [showTopicVariableFields]='true'
+          [showMethod]='true'></app-sidebar>
       </div>
     </div>
   </div>

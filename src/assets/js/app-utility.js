@@ -97,3 +97,23 @@ window.addEventListener('storage', (e) =>
 						}
 					}, false)
 					localStorage.setItem('dummy-HEA-APP', Math.random());
+
+
+function addForceQueryParam() {
+
+  const currentUrl = window.location.href;
+
+  let newUrl = '';
+
+  if (currentUrl.includes('force=')) {
+     newUrl = currentUrl.replace(/force=(true|false)/, 'force=true');
+  }else{
+    newUrl = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'force=true';
+  }
+  
+  window.history.replaceState({}, '', newUrl);
+}
+
+window.addEventListener('popstate', (event) => {
+  addForceQueryParam();
+});

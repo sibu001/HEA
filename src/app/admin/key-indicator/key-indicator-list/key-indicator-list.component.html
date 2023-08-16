@@ -37,7 +37,7 @@
             <app-table [keys]="keys" [isPaginate]="true" (goToEditEvent)='goToEditKeyIndicators($event)' 
               [pageIndex]="pageIndex" [pageSize]="keyIndicatorData.pageSize"
               (addEvent)='addKeyIndicators()' [isSearch]="false" [data]="keyIndicatorData.content"
-              [totalElement]="keyIndicatorData.totalElements" (changePageEvent)="search($event,false)">
+              [totalElement]="keyIndicatorData.totalElements" (changePageEvent)="search($event,true)">
             </app-table>
           </div>
         </form>

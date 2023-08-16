@@ -1,7 +1,7 @@
 import { HttpParams } from '@angular/common/http';
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
@@ -30,14 +30,21 @@ export class KeyIndicatorListComponent implements OnInit, OnDestroy {
   };
   filter = false;
   cache = false;
+  public force : boolean = false;
   adminFilter : AdminFilter = new AdminFilter();
   private readonly subscriptions: Subscription = new Subscription();
   @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   keyIndicatorForm: FormGroup;
   constructor(public router: Router,
               public fb: FormBuilder,
+              private activatedRoute : ActivatedRoute,
               private readonly trendingDefinationSeries : TrendingDefinitionService)
-              { }
+              { 
+
+                this.activatedRoute.queryParams.subscribe(params =>{
+                  this.force = AppUtility.forceParamToBoolean(params['force']);
+                })
+              }
 
   ngOnInit() {
     this.keys = TableColumnData.KEY_INDICATOR_KEYS;
@@ -45,7 +52,7 @@ export class KeyIndicatorListComponent implements OnInit, OnDestroy {
     this.setUpForm(this.adminFilter.keyIndicatorList.formValue);
     AppUtility.scrollTop();
     this.getKeyIndicatorsList();
-    this.search(this.adminFilter.keyIndicatorList.page,false);
+    this.search(this.adminFilter.keyIndicatorList.page,this.force);
   }
 
   setUpForm(event : any){
@@ -94,7 +101,7 @@ export class KeyIndicatorListComponent implements OnInit, OnDestroy {
       if(event) this.pageIndex = event.pageIndex;
       else this.pageIndex = 0;
 
-      this.loadKeyIndicatorsList(true, params);
+      this.loadKeyIndicatorsList(force, params);
       this.adminFilter.keyIndicatorList.formValue = this.keyIndicatorForm.value; 
       this.adminFilter.keyIndicatorList.page = event;
       AppUtility.saveAdminFilter(this.adminFilter);

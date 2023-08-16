@@ -1660,7 +1660,8 @@ app-gas-list .mat-column-year ,app-gas-list .mat-column-month ,app-gas-list .mat
 
 app-gas-list .mat-column-billingPeriod , app-gas-charge .mat-column-billingPeriod,
 app-electricity-usage-list .mat-column-billingPeriod, app-electricity-charge-list .mat-column-billingPeriod,
-app-factor-list .mat-column-factorName,app-topic-description-edit .mat-column-calculationPeriodActual
+app-factor-list .mat-column-factorName,app-topic-description-edit .mat-column-calculationPeriodActual,
+app-trending-chart-definition-list .mat-column-labelTemplate
 {
   word-wrap: break-word !important;
   white-space: unset !important;
@@ -1685,7 +1686,8 @@ app-degree-days-list .mat-column-createdDate,
 app-degree-days-list .mat-column-value,
 app-degree-days-list .mat-column-type,
 app-view-configuration-attributes .mat-column-columnOrder,
-app-view-configuration-attributes .mat-column-sortAllowed{
+app-view-configuration-attributes .mat-column-sortAllowed,
+app-trending-chart-definition-list .mat-column-orderNumber{
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 13% !important;
@@ -2479,7 +2481,8 @@ app-user-report-definitions-edit .mat-column-field,
 app-user-report-definitions-edit .mat-column-label,
 app-user-report-definitions-edit .mat-column-groupCode,
 app-user-report-definitions .mat-column-labelTemplate,
-app-key-indicator-edit .mat-column-field{
+app-key-indicator-edit .mat-column-field
+{
   flex : 0 0 35% !important;
 }
 

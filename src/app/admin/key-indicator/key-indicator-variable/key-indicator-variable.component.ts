@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { pipe, Subscription } from 'rxjs';
@@ -19,7 +19,9 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
   contentForm: FormGroup;
   calculationType: any;
   keyIndicatorId : number;
+  public popStateEvent : any;
   variableData : any;
+  public forceReloadPreviousScreen : boolean = false;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(private readonly formBuilder: FormBuilder,
     private readonly systemService: SystemService,
@@ -42,6 +44,7 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
       this.loadKeyIndicatorVariableById();
       this.getKeyIndicatorVariableById();
     }
+    this.popStateEvent = this.back.bind(this);
   }
 
 
@@ -74,19 +77,27 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
       field: [event !== undefined ? event.field : '', Validators.required],
       orderNumber: [event !== undefined ? event.orderNumber : '', Validators.required],
       calculationType: [event !== undefined ? event.calculationType : 'javascript'],
-      calculationExpression: [event !== undefined ? event.calculationExpression : '']
+      calculation: [event !== undefined ? event.calculation : '']
     });
   }
   
-  back() {
-    this.router.navigate(['/admin/keyIndicator/keyIndicatorEdit'],{queryParams: { id : this.keyIndicatorId}});
+  back(event ?: any) {
+    if(event) event.stopImmediatePropagation();
+    this.router.navigate(['/admin/keyIndicator/keyIndicatorEdit'],
+      { queryParams: { id : this.keyIndicatorId , 
+          force : this.forceReloadPreviousScreen
+      }});
   }
 
   save(): any {
 
+
+    this.forceReloadPreviousScreen = true;
+    AppUtility.scrollTop();
     if(this.id){
       const requestBody = {...this.variableData, ...this.contentForm.value};
       this.trendingDefinationService.updateKeyIndicatorVariable(this.id,this.keyIndicatorId,requestBody);
+
       return;
     }
 
@@ -108,6 +119,7 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
       this.trendingDefinationService.deleteKeyIndicatorVariableById(this.id,this.keyIndicatorId)
       .pipe(take(1))
       .subscribe((response : any ) =>{
+        this.forceReloadPreviousScreen = true;
         this.back();
       })
     )
@@ -116,6 +128,7 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
   get f() { return this.contentForm.controls; }
 
   ngOnDestroy(): void {
+
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }

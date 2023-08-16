@@ -362,7 +362,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
 
   removeDeletedItemFromTheSelection(){
     let selectedList = this.selection.selected;
-
   }
 
   checkboxLabel(row?: any): string {

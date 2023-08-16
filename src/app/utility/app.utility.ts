@@ -543,4 +543,20 @@ export class AppUtility {
     
         return htmlDocument.documentElement.outerHTML;
     }
+
+    public static getObjectPropertyValue(object : any, propertyPath : string) {
+        const properties = propertyPath.split('.');
+        
+        let value = object;
+        
+        for (const property of properties) {
+            if (value.hasOwnProperty(property)) {
+                value = value[property];
+            } else {
+                return undefined; // Property doesn't exist
+            }
+        }
+        
+        return value;
+    }
 }  

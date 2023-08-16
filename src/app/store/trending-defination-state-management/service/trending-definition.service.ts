@@ -1,3 +1,4 @@
+import { HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -21,7 +22,12 @@ import {
   UpdateKeyIndicatorAction,
   UpdateKeyIndicatorCustomerGroupAction,
   UpdateKeyIndicatorVariableAction,
-  UpdateTrendingPartsAction
+  UpdateTrendingPartsAction,
+  LoadTrendingChartsByTrendingPartsIdAction,
+  LoadTrenginPartChartByIdAction,
+  DeleteTrenginPartChartByIdAction,
+  UpdateTrenginPartChartByIdAction,
+  SaveTrenginPartChartByAction
 } from '../state/trending-definition.action';
 import { TrendingDefinitionState } from '../state/trending-definition.state';
 
@@ -61,6 +67,14 @@ export class TrendingDefinitionService {
 
   getKeyIndicatorVariable() : Observable<any> {
     return this.store.select(TrendingDefinitionState.getKeyIndicatorVariable);
+  }
+
+  getTrendingPartsCharts() : Observable<any> {
+    return this.store.select(TrendingDefinitionState.getTrendingPartsCharts);
+  }
+
+  getTrendingPartChartById() : Observable<any>{
+    return this.store.select(TrendingDefinitionState.getTrendingPartChart);
   }
 
   loadKeyIndicatorList(force: boolean, filter: any): Observable<TrendingDefinitionState> {
@@ -107,8 +121,8 @@ export class TrendingDefinitionService {
     return this.store.dispatch(new GetTrendingPartsListAction(force, filter));
   }
 
-  loadTrendingPartsById(id: number): Observable<TrendingDefinitionState> {
-    return this.store.dispatch(new GetTrendingPartsByIdAction(id));
+  loadTrendingPartsById(force : boolean, id: number): Observable<TrendingDefinitionState> {
+    return this.store.dispatch(new GetTrendingPartsByIdAction( force, id));
   }
 
   saveTrendingParts(trendingParts: any): Observable<TrendingDefinitionState> {
@@ -142,4 +156,25 @@ export class TrendingDefinitionService {
   deleteKeyIndicatorVariableById(id: number, keyIndicatorId : number): Observable<TrendingDefinitionState> {
     return this.store.dispatch(new DeleteKeyIndicatorVariableByIdAction(id, keyIndicatorId));
   }
+
+  loadTrendingChartsByTrendingPartsId(force : boolean, trendingPartsId : number, params : HttpParams) : Observable<TrendingDefinitionState>{
+    return this.store.dispatch(new LoadTrendingChartsByTrendingPartsIdAction(force,trendingPartsId,params));
+  }
+
+  loadTrenginPartChartById(force : boolean, trendingPartsId : number, id : number) : Observable<any>{
+    return this.store.dispatch(new LoadTrenginPartChartByIdAction(force,trendingPartsId,id));
+  }
+
+  saveTrenginPartChartById(trendingPartsId : number, requestBody : any) : Observable<any>{
+    return this.store.dispatch(new SaveTrenginPartChartByAction(trendingPartsId,requestBody));
+  }
+
+  UpdateTrenginPartChartById(trendingPartsId : number, chartId : number, requestBody : any) : Observable<any>{
+    return this.store.dispatch(new UpdateTrenginPartChartByIdAction(trendingPartsId,chartId, requestBody));
+  }
+
+  deleteTrenginPartChartById(trendingPartsId : number, charId : number ) : Observable<any> {
+    return this.store.dispatch(new DeleteTrenginPartChartByIdAction(trendingPartsId,charId));
+  }
+
 }

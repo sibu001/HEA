@@ -6,7 +6,7 @@
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Trending Part</span>
         </p>
-        <form [formGroup]="paneForm" class="form-group form-padding">
+        <form [formGroup]="trendingForm" class="form-group form-padding">
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Label Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -24,7 +24,9 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Explanation Template:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="explanationTemplate" id="explanationTemplate"></textarea>
+              <textarea class="form-control" formControlName="explanationTemplate" id="explanationTemplate"
+              rows="6"
+              ></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -40,52 +42,32 @@
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Filter:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <textarea class="form-control" formControlName="filter" id="filter"></textarea>
+              <textarea class="form-control" formControlName="filter" id="filter" rows="6"></textarea>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-
+        </form>
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Trending Charts</span>
             </p>
-            <app-table [keys]="chartKeys" [isPaginate]="true" [isSearch]="false" [data]="chartDataSource"
-              [totalElement]="chartData.totalElements" (addEvent)='addCharts()' (goToEditEvent)='goToEditCharts()'>
+            <app-table [keys]="chartKeys" [isPaginate]="true" [isSearch]="false" [data]="chartData.content"
+              [pageSize]="chartData.pageSize" [pageIndex]="chartData.pageIndex"
+              [totalElement]="chartData.totalElements" (addEvent)='addCharts()' (goToEditEvent)='goToEditCharts($event)'
+              (changePageEvent)='search($event)'>
             </app-table>
           </div>
-          <!-- <div class="row paddingTop form-padding">
-            <div class="col-xs-3 col-sm-1 col-md-1 col-lg-1">
-              <button type="reset" class="btn btn-primary" (click)='back()'>Back</button>
-            </div>
-            <div class="col-xs-6 col-sm-9 col-md-9 col-lg-9" style="text-align: end;">
-                <button type="button" class="btn btn-primary" *ngIf="id!==undefined" (click)="delete()">Delete</button>
-            </div>
-            <div class="col-xs-3 col-sm-2 col-md-2 col-lg-2" style="text-align: end;">
-              <button type="submit" class="btn btn-primary" (click)="save()">Save</button>
-            </div>
-          </div> -->
 
-          <div class="row rowPadding paddingTop">
+          <div class="row paddingTop">
             <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
               <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
             </div>
-            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8">
-              <div class="row">
-                <div class="col-sm-8 col-md-9 col-lg-9  col-xs-12 col-xl-10 " style="text-align: end;"
-                  *ngIf="id!==undefined&&id!==null">
-                  <button type="button" class="btn btn-primary mb-button" (click)="delete()">Delete</button>
-                </div>
-                <div [ngClass]="{ 'col-xs-12 col-sm-4 col-md-3 col-lg-3 col-xl-2': id !== undefined && id !== null
-                , 'col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12' : id === undefined || id === null}"
-                  style="text-align:right; overflow:auto;">
-                  <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
-                </div>
-              </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 right-buttons">
+              <button type="button" class="btn btn-primary mb-button" (click)="save()">Save</button>
+              <button type="button" class="btn btn-primary mb-button" *ngIf="id"(click)="delete()">Delete</button>
             </div>
-
           </div>
-        </form>
       </div>
       <div class="col-md-3 .col-lg-3 col-sm-12">
         <app-sidebar [showDataFields]='true' [showTopicVariableFields]='true' [showMethod]='true'></app-sidebar>

@@ -322,6 +322,10 @@ export class TopicService {
     return this.store.select(TopicManagementState.getUserReportTypeLookUp);
   }
 
+  getUseTypeLookUp(){
+    return this.store.select(TopicManagementState.getUseTypeLookUp);
+  }
+
   loadAllFieldValuesForDataField(paneId: number, dataFieldId: number) {
     return this.store.dispatch(new LoadFieldValuesForDataField(paneId, dataFieldId));
   }

@@ -474,9 +474,9 @@ export class TableColumnData {
 
 
     static readonly TRENDING_PART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'label', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
+        { key: 'labelTemplate', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
         { key: 'orderNumber', sort: 'orderNumber', isEdit: true, displayName: 'Order Number' },
-        { key: 'explanation', sort: 'Explanation', isEdit: true, displayName: 'Explanation' },
+        { key: 'explanationTemplate', sort: 'Explanation', isEdit: true, displayName: 'Explanation' },
     ];
 
     static readonly TRENDING_CHART_KEYS: Array<TABLECOLUMN> = [

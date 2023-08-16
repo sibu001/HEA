@@ -1,6 +1,6 @@
 import { Location } from '@angular/common';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,6 +21,9 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
   id: any;
   keyIndicatorForm: FormGroup;
+  public popStateEvent : any;
+  public forceReloadListScreen : boolean = false;
+  public forceReload : boolean = false;
   public customerGroupKeys = TableColumnData.CUSTOMER_GROUP_KEY;
   variableKeys = TableColumnData.VARIABLE_KEYS;
   public customerGroupDataSource: any;
@@ -50,21 +53,27 @@ export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
     private readonly systemService : SystemService) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
+      this.forceReload = AppUtility.forceParamToBoolean(params['force']);
     });
+
   }
+
 
   ngOnInit() {
     AppUtility.scrollTop();
     this.setForm(undefined);
     this.getCombineResponseOfCustomerGroups();
     this.loadCustomerGroup(true,new HttpParams());
-    this.loadKeyIndicatorCustomerGroups(true,new HttpParams());
+    this.getKeyIndicatorVariables();
 
     if(this.id) {
       this.loadKeyIndicatorById();
       this.getKeyIndicatorById();
+      this.loadKeyIndicatorCustomerGroups(true,new HttpParams());
       this.keyIndicatorPageChangeEvent(undefined);
     }
+
+    this.popStateEvent = this.back.bind(this);
   }
 
   setForm(event: any) {
@@ -97,19 +106,22 @@ export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
     this.trendingDefinationService.loadKeyIndicatorById(this.id);
   }
 
-
-  back() {
-    this.router.navigate(['/admin/keyIndicator/keyIndicatorList']);
+  back(event ?: any) {
+    if(event) event.stopImmediatePropagation();
+    this.router.navigate(['/admin/keyIndicator/keyIndicatorList'], 
+      { queryParams: { force : this.forceReloadListScreen }});
   }
 
   save(): any {
 
     AppUtility.removeErrorFieldMessagesFromForm();
 
+    this.forceReloadListScreen = true;
     if(this.id){
       const requestBody = {...this.keyIndicatorData, ...this.keyIndicatorForm.value};
       this.subscriptions.add(
         this.trendingDefinationService.updateKeyIndicator(this.id,requestBody)
+        .pipe(take(1))
         .subscribe(() =>{},
         AppUtility.errorFieldHighlighterCallBack)
       );
@@ -127,6 +139,7 @@ export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
           this.id = state.trendingDefinationManagement.keyIndicator.id;
           AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
           this.getKeyIndicatorById();
+          this.loadKeyIndicatorCustomerGroups(true,new HttpParams());
       },AppUtility.errorFieldHighlighterCallBack)
     );
 
@@ -137,6 +150,7 @@ export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
       this.trendingDefinationService.deleteKeyIndicatorById(this.id)
       .pipe(take(1))
       .subscribe((response : any ) =>{
+        this.forceReloadListScreen = true;
         this.back();
       })
     );
@@ -199,16 +213,19 @@ export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
       .append('pageSize', event && event.pageSize ? event.pageSize : this.variableData.pageSize) 
       .append('disableTotalSize','false');
      
-    this.getKeyIndicatorVariables(params);
+    this.loadKeyIndicatorVariables(params);
   } 
 
-  getKeyIndicatorVariables(params : HttpParams){
-    this.trendingDefinationService.loadKeyIndicatorVariableList(true,this.id,params);
+  loadKeyIndicatorVariables(params : HttpParams) : void {
+    this.trendingDefinationService.loadKeyIndicatorVariableList(this.forceReload,this.id,params);
+  }
+
+  getKeyIndicatorVariables(){
     this.subscriptions.add(
       this.trendingDefinationService.getKeyIndicatorVariableList()
       .pipe(filter((variables : any) => variables))
       .subscribe((variables : any) =>{
-          this.variableData.content = variables.list;
+          this.variableData.content = [...variables.list];
           this.variableData.totalElements = variables.totalSize;
       })
     );

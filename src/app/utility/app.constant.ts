@@ -90,7 +90,7 @@ export class AppConstant {
     public static keyIndicator = 'keyIndicators';
     public static keyIndicatorVariables = '';
     public static keyIndicatorCustomerGroups = '';
-    public static trendingParts = '';
+    public static trendingParts = 'trendingParts';
     public static shareMyDataList = 'shareMyDataCustomerList.do';
     public static shareMyDataProcessCustomer = 'shareMyDataProcessCustomer.do'
     public static shareMyData = '';
@@ -144,6 +144,7 @@ export class AppConstant {
     public static lookUpCodeForConservationCategory = 'CONSERVATION_CATEGORY';
     public static lookupCodeForChartSeriesQueryType='SERIES_QUERY_TYPE';
     public static lookupCodeForSeriesColor = 'SERIES_COLOR';
+    public static lookupCodeForUserType = 'USE_TYPE';
     public static series = 'series'
     public static charts ='charts';
     public static possibleColors = 'possibleColors';
