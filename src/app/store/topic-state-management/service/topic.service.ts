@@ -310,7 +310,7 @@ export class TopicService {
     return this.store.select(TopicManagementState.getChartTypeLookUp);
   }
 
-  getChartSeriesQueryColorLookUp(){
+  getChartSeriesQueryTypeLookUp(){
     return this.store.select(TopicManagementState.getChartSeriesQueryLookup);
   }
 

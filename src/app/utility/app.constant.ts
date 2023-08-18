@@ -143,7 +143,7 @@ export class AppConstant {
     public static lookUpCodeForActionType = 'ACTION_TYPE';
     public static lookUpCodeForConservationCategory = 'CONSERVATION_CATEGORY';
     public static lookupCodeForChartSeriesQueryType='SERIES_QUERY_TYPE';
-    public static lookupCodeForSeriesColor = 'SERIES_COLOR';
+    public static lookupCodeForSeriesColor = 'colors';
     public static lookupCodeForUserType = 'USE_TYPE';
     public static series = 'series'
     public static charts ='charts';

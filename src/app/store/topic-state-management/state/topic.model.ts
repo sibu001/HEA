@@ -32,7 +32,7 @@ export interface TopicManagementModel {
     ACTION_TYPE : any;
     VARIABLE_PERIOD : any;
     CONSERVATION_CATEGORY : any;
-    SERIES_COLOR : any;
+    colors : any;
     SERIES_QUERY_TYPE : any;
     USER_REPORT_TYPE : any;
     USE_TYPE : any;

@@ -81,8 +81,8 @@
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Chart Data Sets</span></p>
-            <app-table [keys]="keys" [isSearch]="false" [isDelete]=true [data]="chartSeriesParameterList"
-              [totalElement]="chartSeriesParameterList.length" [isHideAdd]=false  [showInlineTableForm]="true"
+            <app-table [keys]="keys" [isSearch]="false" [isDelete]=true [data]="paneChartParameterList"
+              [totalElement]="data.totalElements" [isHideAdd]=false  [showInlineTableForm]="true"
               (deleteEvent)='deletePaneChartParameters($event)' (toggleSaveButtonEvent)='toggleSaveButtonEvent()'
               (addRowEvent)='saveChartDataSet($event)' >
             </app-table>

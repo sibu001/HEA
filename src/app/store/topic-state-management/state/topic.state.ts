@@ -128,7 +128,7 @@ import { TopicManagementModel } from './topic.model';
         paneChartParameters : undefined,
         paneChartSeriesDefination : undefined,
         SERIES_QUERY_TYPE : undefined,
-        SERIES_COLOR : undefined,
+        colors : undefined,
         USER_REPORT_TYPE : undefined,
         USE_TYPE : undefined
     }
@@ -312,7 +312,7 @@ export class TopicManagementState {
 
     @Selector()
     static getChartSeriesColorLookup(state: TopicManagementModel): any {
-        return state.SERIES_COLOR;
+        return state.colors;
     }
 
     @Selector()
@@ -1196,7 +1196,7 @@ export class TopicManagementState {
                     const currentState = ctx.getState();
                     // console.log("pre state :- " + JSON.stringify(state))
                     // currentState[action.type] = response
-                    currentState[action.type] = response.data;
+                    currentState[action.type] = [...response.data];
                     // console.log("post state :- " + JSON.stringify(state))
                 },
                     error => {

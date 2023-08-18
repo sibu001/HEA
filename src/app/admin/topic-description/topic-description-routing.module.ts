@@ -7,6 +7,7 @@ import {
   TopicDescriptionRecommendationEditComponent
 } from './topic-description-recommendation-edit/topic-description-recommendation-edit.component';
 import { TopicDescriptionVariableEditComponent } from './topic-description-variable-edit/topic-description-variable-edit.component';
+import { TopicPaneChartSeriesComponent } from './topic-pane-chart-series/topic-pane-chart-series.component';
 import { TopicPaneChartsEditComponent } from './topic-pane-charts-edit/topic-pane-charts-edit.component';
 import { TopicPaneDataBlockEditComponent } from './topic-pane-data-block-edit/topic-pane-data-block-edit.component';
 import { TopicPaneDataFieldEditComponent } from './topic-pane-data-field-edit/topic-pane-data-field-edit.component';
@@ -22,6 +23,7 @@ const routes: Routes = [
   { path: 'topicPaneDataFieldEdit', component: TopicPaneDataFieldEditComponent },
   { path: 'topicPaneChartEdit', component: TopicPaneChartsEditComponent },
   { path: 'topicPaneReportEdit', component: TopicPaneReportsEditComponent },
+  { path: 'topicPaneChartSeriesEdit', component: TopicPaneChartSeriesComponent}
 ];
 
 @NgModule({

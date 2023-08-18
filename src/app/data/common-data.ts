@@ -483,7 +483,7 @@ export class TableColumnData {
         { key: 'chartCode', isEdit: true, displayName: 'Chart Code', isUnderline: true },
         { key: 'orderNumber', isEdit: true, displayName: 'Order Number' },
         { key: 'resourceUse', isEdit: true, displayName: 'Resource Use' },
-        { key: 'unitType ', isEdit: true, displayName: 'Unit Type' },
+        { key: 'unitType', isEdit: true, displayName: 'Unit Type' },
         { key: 'useType', isEdit: true, displayName: 'Use Type' },
     ];
 
@@ -494,9 +494,15 @@ export class TableColumnData {
         { key: 'unitType ', isEdit: true, displayName: 'Unit Type' },
         { key: 'useType', isEdit: true, displayName: 'Use Type' },
     ];
+
     static readonly DATA_SET_KEYS: Array<TABLECOLUMN> = [
         { key: 'queryParameter', isEdit: true, displayName: 'Query Parameter', type :'inputField' , addRowType: 'text' },
         { key: 'dataFieldLabel', isEdit: true, displayName: 'Data Field', addRowType: 'select', type :'inputField', option : [] },
+    ];
+
+    static readonly TRENDING_DATA_SET_KEYS: Array<TABLECOLUMN> = [
+        { key: 'field', isEdit: true, displayName: 'Query Parameter', type :'inputField' , addRowType: 'text' },
+        { key: 'calculation', isEdit: true, displayName: 'Calculation formula', type :'inputField' , addRowType: 'text'  },
     ];
 
     static readonly GAS_KEYS: Array<TABLECOLUMN> = [

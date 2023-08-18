@@ -7,6 +7,7 @@ import { filter, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { TrendingDefinitionService } from 'src/app/store/trending-defination-state-management/service/trending-definition.service';
 import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
@@ -21,11 +22,13 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   chartForm: FormGroup;
   private readonly subscriptions: Subscription = new Subscription();
   colorData = TableColumnData.COLOR_DATA;
-  keys: TABLECOLUMN[] = TableColumnData.DATA_SET_KEYS;
+  keys: TABLECOLUMN[] = TableColumnData.TRENDING_DATA_SET_KEYS;
   seriesQueryTypeList: any[];
   public force : boolean = false;
-  paneId :number;
-  public paneChartParameterList : Array<any> = [];
+  public reloadPreviousList : boolean = false;
+  trendingPartId :number;
+  public chartSeriesParameterList : Array<any> = [];
+  public chartSeriesParameterListBackUp : Array<any> = [];
   topicDescriptionId : Number ;
   paneChartId : number;
   chartSeriesData : any;
@@ -40,13 +43,12 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     private readonly activateRoute: ActivatedRoute,
     private readonly location: Location,
     private readonly topicService: TopicService,
-    private readonly router: Router) {
+    private readonly router: Router,
+    private readonly trendingDefinationService : TrendingDefinitionService) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
-      this.paneId = params['paneId'];
+      this.trendingPartId = params['trendingPartId'];
       this.chartId = params['chartId'];
-      this.topicDescriptionId = params['topicDescriptionId'];
-      this.paneChartId = params['paneChartId'];
     });
   }
 
@@ -57,31 +59,37 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
     this.getChartSeriesLookupValues();
     this.loadChartSeriesLookupValues();
 
-    //  used by topic-pane-chart-edit component also
+    this.loadChartSeriesColor();
+    this.getChartSeriesColor();
+    this.getChartParameterListBySeriesId();
+
     if(this.id){ 
-      this.getChartSerisesById();
-      this.loadChartSerisesById();
-      this.getPaneChartParameters();
-      this.getAllDataFields();
+      this.getChartSeriesById();
+      this.loadChartSeriesById();
+      this.loadChartParameterListBySeriesId();
     }
+
     AppUtility.scrollTop();
   }
 
-  loadChartSerisesById() {
-    this.topicService.loadChartSerisesById(this.paneId,this.paneChartId,this.id)
+  loadChartSeriesById(){
+    this.trendingDefinationService.loadTrendingChartSeriesById(true,this.trendingPartId,this.chartId,this.id);
   }
 
-  getChartSerisesById() {
-    this.topicService.getChartSeriesById()
-    .pipe(filter((data : any) => data && data.id == this.id))
-    .subscribe(
-      (response : any) => {
-        this.chartSeriesData = {...response};
-        this.setForm(response);
-        AppUtility.scrollTop();
-      }
-    );
+  getChartSeriesById(){
+    this.subscriptions.add(
+      this.trendingDefinationService.getTrendingChartSeriesById()
+      .pipe(filter((data : any) => data && data.id == this.id))
+      .subscribe(
+        (response : any) => {
+          this.chartSeriesData = {...response};
+          // this.chartSeriesParameterList = this.chartSeriesData.chartParameters.map(data => {return {...data}});
+          this.setForm({...response});
+          AppUtility.scrollTop();
+        }
+      ));
   }
+
 
   setForm(event: any): any {
     this.chartForm = this.formBuilder.group({
@@ -96,136 +104,137 @@ export class TrendingChartDefinitionSeriesComponent implements OnInit, OnDestroy
   }
   
   back(): any {
-    try{
-      this.router.navigate(['/admin/topicDescription/topicPaneChartEdit'], { queryParams: {id : this.paneChartId, paneId : this.paneId, topicDescriptionId : this.topicDescriptionId , force : this.force}});
-    }catch(e){
-    this.location.back();
-    }
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartEdit'],
+      { queryParams: { trendingPartId : this.trendingPartId, id : this.chartId , force : this.reloadPreviousList} } );
   }
 
   save(): any {
+    
+  if(this.id){
+    const requestBody = {...this.chartSeriesData, ...this.chartForm.value};
+    this.subscriptions.add(
+      this.trendingDefinationService
+      .updateTrendingChartSeriesById(this.trendingPartId,this.chartId,this.id, requestBody)
+      .subscribe( (state : any) =>{
+        this.reloadPreviousList = true;
+      })
+    )
+    return;
+  }
 
-    if(this.id){
-      const body = Object.assign(this.chartSeriesData,this.chartForm.value);
-      this.subscriptions.add(
-        this.topicService.saveExistingChartSeries(this.paneId,this.paneChartId,this.id,body)
-        .pipe(take(1))
-        .subscribe((response) =>{
-          this.force = true;
-        }));
-    }else{
-      const body = Object.assign({},this.chartForm.value);
-      body.chartId = this.chartId;
-      body.field = body.seriesCode;
-      this.subscriptions.add(
-        this.topicService.saveNewChartSeries(this.paneId,this.paneChartId,body)
-        .pipe(take(1))
-        .subscribe(response => {
-            this.force = true;
-            this.id = response.topicManagement.paneChartSeriesDefination.id;
-            this.chartId = response.topicManagement.paneChartSeriesDefination.chartId;
-            AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
-            this.getChartSerisesById();
-            this.getPaneChartParameters();
-            this.getAllDataFields();
-        }));
-    }
+  const requestBody = {...this.chartForm.value};
+  this.subscriptions.add(
+    this.trendingDefinationService.saveTrendingChartSeries(this.trendingPartId,this.chartId, requestBody)
+    .pipe(take(1))
+    .subscribe((state : any) =>{
+      this.id = state.trendingDefinationManagement.trendingChartSeries.id;
+      AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+      this.getChartSeriesById();
+      this.loadChartParameterListBySeriesId();
+      this.reloadPreviousList = true;
+    })
+  )
+
   }
 
   delete(): any {
-    if(AppUtility.deleteConfirmatonBox())
-    this.subscriptions.add(
-      this.topicService.deleteChartSeries(this.paneId,this.chartId,this.id)
-      .pipe(take(1))
-      .subscribe( (response) => { this.force = true; this.back(); } ));
-  }
 
-  addChartDataSeries(){
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
+    this.subscriptions.add(
+      this.trendingDefinationService.deleteTrendingChartSeriesById(this.trendingPartId,this.chartId,this.id)
+      .pipe(take(1))
+      .subscribe((data : any) =>{
+        this.reloadPreviousList = true;
+        this.back();
+      })
+    )
   }
 
   loadChartSeriesLookupValues(){
-    this.topicService.loadLookUpValuesByType(AppConstant.lookupCodeForChartSeriesQueryType);
+      this.topicService.loadLookUpValuesByType(AppConstant.lookupCodeForChartSeriesQueryType)
   }
 
   getChartSeriesLookupValues(){
-    this.topicService.getChartSeriesQueryColorLookUp()
-    .pipe(filter(data => data))
-    .subscribe(
-      (response) =>{
-        this.seriesQueryTypeList = response;
-      }
+    this.subscriptions.add(
+      this.topicService.getChartSeriesQueryTypeLookUp()
+      .pipe(filter(data => data))
+      .subscribe(
+        (response) =>{
+          this.seriesQueryTypeList = response;
+        })
     )
   } 
+
+  loadChartSeriesColor(){
+    this.topicService.loadAllPossibleColorsForCharts();
+  }
+
+  getChartSeriesColor(){
+    this.subscriptions.add(
+      this.topicService.getAllPossibleColorsForChart()
+      .pipe(filter((data : any) => data))
+      .subscribe((data : any) =>{
+        this.colorData = [...data];
+      })
+    );
+  }
   
   toggleSaveButtonEvent(): any {
     this.toggleSaveButton = !this.toggleSaveButton;
   }
 
-  getPaneChartParameters(){
-    this.topicService.loadPaneChartParametersList(this.paneId,this.paneChartId,this.id);
-    this.subscriptions.add(
-      this.topicService.getPaneChartParametersList()  
-      .pipe(filter(data => data != undefined && (data.length == 0 || data[0] && data[0].chartParameter.chartSeriesId == this.id)))
-      .subscribe(
-        (response) =>{
-          const paneChartParameterList = response.map(data =>{
-            data.dataFieldLabel = data.dataField ? data.dataField.label : '';
-            return {...data, queryParameter : data.chartParameter.queryParameter};
-          })
-          this.paneChartParameterList = [...paneChartParameterList];
-        })  
-    )
+
+  loadChartParameterListBySeriesId(){
+    this.trendingDefinationService.loadChartParameterListBySeriesId(this.trendingPartId,this.chartId,this.id);
   }
+
+  getChartParameterListBySeriesId(){
+    this.subscriptions.add(
+      this.trendingDefinationService.getChartParameterListBySeriesId()
+      .pipe(filter(data => data))
+      .subscribe((paramList : any) =>{
+        this.chartSeriesParameterListBackUp = paramList.map(param => {return {...param}});
+        this.chartSeriesParameterList = paramList.map(param => {return {...param}});
+      })
+    );
+  }
+
 
   saveChartDataSet(event : any){
+    
+    const requestBody = { 
 
-    // constructing Object to save
-    const paneChartParams = { 
-      paneChartId : this.paneChartId,
-      dataFieldId : event.dataFieldLabel,
+      trendingChartId : this.chartId,
+      calculation : event.calculation,
+      calculationType : this.chartForm.value.seriesQueryType,
       chartParameter : {
         chartSeriesId : this.id,
-        queryParameter : event.queryParameter
-      }
+        queryParameter : event.field,
+        }
+      
      };
-
-    this.topicService.saveNewOrExistingPaneChartParamenter(this.paneId,this.paneChartId,this.id,paneChartParams);
+    
+     this.subscriptions.add(
+      this.trendingDefinationService.addChartDataSetToCharSeries(this.trendingPartId,this.chartId,this.id,requestBody)
+      .subscribe((data : any ) =>{
+        this.reloadPreviousList = true;
+      },(error : any) =>{
+        // restoring chart Parameter in case of faliure.
+        this.chartSeriesParameterList = this.chartSeriesParameterListBackUp.map(param => {return {...param}});
+      })
+     )
   }
-
-// adding all possible options in chart data set table for data field
-  getAllDataFields(){
-    this.topicService.loadDataFieldByPaneId(this.paneId,true);
-    this.subscriptions.add(
-      this.topicService.getDataFieldByPaneId()
-      .pipe(filter(data => data))
-      .subscribe((response) =>{
-
-
-          if(response.length == 0){
-            this.keys[1].addRowType = 'text';
-          }else{
-            //  adding options to the select field 
-            this.keys[1].option = response.map((data) =>{
-              const formattedData : any = {};
-              formattedData.id = data.id;
-              formattedData.key = data.id;
-              formattedData.value = data.label + ' (' + data.field + ')';
-              return formattedData;
-            });
-          }
-          this.keys = [...this.keys];
-      }));
-  }
-
 
   deletePaneChartParameters(event : any){
-    this.topicService.deletePaneChartParameter(this.paneId,this.paneChartId,this.id,event.id);
-  }
-
-  savePaneChartParameters(event : any ){
-    //  no use
-    console.log(event);
-  }
+      this.subscriptions.add(
+        this.trendingDefinationService.deleteChartDataSetToCharSeriesById(this.trendingPartId,this.chartId,this.id,event.id)
+        .subscribe((data) =>{
+          this.reloadPreviousList = true;
+          // this.loadChartSeriesById();
+        })
+      )
+    }
 
   get f() { return this.chartForm.controls; }
 

@@ -24,6 +24,7 @@ import { CustomerManagementState } from 'src/app/store/customer-state-management
 import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 import { TrendingDefinitionService } from 'src/app/store/trending-defination-state-management/service/trending-definition.service';
 import { TrendingDefinitionState } from 'src/app/store/trending-defination-state-management/state/trending-definition.state';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
 
 @NgModule({
   imports: [
@@ -46,7 +47,7 @@ import { TrendingDefinitionState } from 'src/app/store/trending-defination-state
     TrendingChartDefinitionSeriesComponent,
     TrendingChartEditComponent
   ],
-  providers: [HtmlEditorService, ImageService, LinkService, ToolbarService, TrendingDefinitionService]
+  providers: [HtmlEditorService, ImageService, LinkService, ToolbarService, TrendingDefinitionService, TopicService]
 
 })
 export class TrendingChartDefinitionModule { }

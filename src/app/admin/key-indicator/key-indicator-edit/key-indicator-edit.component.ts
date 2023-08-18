@@ -146,6 +146,9 @@ export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
   }
 
   delete(): any {
+
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
     this.subscriptions.add(
       this.trendingDefinationService.deleteKeyIndicatorById(this.id)
       .pipe(take(1))

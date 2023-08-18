@@ -91,12 +91,21 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
 
   save(): any {
 
+    if(!AppUtility.validateAndHighlightReactiveFrom(this.contentForm)) return;
+    
+    AppUtility.removeErrorFieldMessagesFromForm();
 
     this.forceReloadPreviousScreen = true;
     AppUtility.scrollTop();
     if(this.id){
       const requestBody = {...this.variableData, ...this.contentForm.value};
-      this.trendingDefinationService.updateKeyIndicatorVariable(this.id,this.keyIndicatorId,requestBody);
+      this.subscriptions.add(
+        this.trendingDefinationService.updateKeyIndicatorVariable(this.id,this.keyIndicatorId,requestBody)
+        .pipe(take(1))
+        .subscribe((response : any) =>{
+
+        },AppUtility.errorFieldHighlighterCallBack)
+      )
 
       return;
     }
@@ -109,12 +118,15 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
           this.id = state.trendingDefinationManagement.keyIndicatorVariable.id;
           AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
           this.getKeyIndicatorVariableById();
-      })
+      },AppUtility.errorFieldHighlighterCallBack)
     );
 
   }
 
   delete(): any {
+
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
     this.subscriptions.add(
       this.trendingDefinationService.deleteKeyIndicatorVariableById(this.id,this.keyIndicatorId)
       .pipe(take(1))
@@ -127,8 +139,11 @@ export class KeyIndicatorVariableComponent implements OnInit, OnDestroy {
 
   get f() { return this.contentForm.controls; }
 
-  ngOnDestroy(): void {
+  highlightErrorField(formControlName : string) : boolean {
+    return AppUtility.showErrorMessageOnErrorField(this.f,formControlName);
+  }
 
+  ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }

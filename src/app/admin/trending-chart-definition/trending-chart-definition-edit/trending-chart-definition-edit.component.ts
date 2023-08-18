@@ -114,6 +114,9 @@ export class TrendingChartDefinitionEditComponent implements OnInit, OnDestroy {
   }
 
   delete() {
+
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
     this.subscriptions.add(
       this.trendingDefinationService.deleteTrendingPartsById(this.id)
       .pipe(take(1))
@@ -133,6 +136,11 @@ export class TrendingChartDefinitionEditComponent implements OnInit, OnDestroy {
       .pipe(filter((charts : any) => charts))
       .subscribe((charts : any) => {
 
+        if(charts.startOfCurrentPage == 0){
+          this.chartData.pageIndex = 0;
+        }else{
+          this.chartData.pageIndex = (charts.startOfCurrentPage/Number.parseInt(this.chartData.pageSize));
+        }
         this.chartData.content = charts.list.map((data : any) => {
           data.chartCode = data.chart.chartCode;
           return {...data};

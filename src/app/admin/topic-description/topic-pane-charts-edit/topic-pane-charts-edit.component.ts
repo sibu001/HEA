@@ -292,17 +292,17 @@ export class TopicPaneChartsEditComponent implements OnInit, OnDestroy {
   goToEditChartSeries(event : any): any {
     const queryParams : any = { topicDescriptionId : this.topicDescriptionId, paneId : this.paneId , 
       paneChartId : this.id, chartId : event.chartId , id : event.id };
-      queryParams[AppConstant.CHART_DEFINATION_SERIER_REQUEST] = AppConstant.CHART_DEFINATION_SERIES_REQUEST_FROM_PANE_CHART;
+      // queryParams[AppConstant.CHART_DEFINATION_SERIER_REQUEST] = AppConstant.CHART_DEFINATION_SERIES_REQUEST_FROM_PANE_CHART;
 
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], 
+    this.router.navigate(['/admin/topicDescription/topicPaneChartSeriesEdit'], 
       { queryParams: queryParams });
   }
 
   addCharSeries(){
     const queryParams : any = { topicDescriptionId : this.topicDescriptionId , paneId : this.paneId , paneChartId : this.id };
-    queryParams[AppConstant.CHART_DEFINATION_SERIER_REQUEST] = AppConstant.CHART_DEFINATION_SERIES_REQUEST_FROM_PANE_CHART;
+    // queryParams[AppConstant.CHART_DEFINATION_SERIER_REQUEST] = AppConstant.CHART_DEFINATION_SERIES_REQUEST_FROM_PANE_CHART;
 
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], 
+    this.router.navigate(['/admin/topicDescription/topicPaneChartSeriesEdit'], 
     { queryParams: queryParams });
   }
 

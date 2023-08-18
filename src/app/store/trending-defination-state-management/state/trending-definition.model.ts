@@ -9,4 +9,6 @@ export interface TrendingDefinitionModel {
     keyIndicatorVariable: any;
     trendingPartsCharts : any;
     trendingPartChart : any;
+    trendingChartSeries : any;
+    trendingChartSeriesParameter : any;
 }

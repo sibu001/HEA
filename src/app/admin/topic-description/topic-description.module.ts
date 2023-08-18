@@ -27,6 +27,7 @@ import { TopicDescriptionEditCopyComponent } from './topic-description-edit-copy
 import { TopicDescriptionPaneCopyComponent } from './topic-description-pane-copy/topic-description-pane-copy.component';
 import { AdministrativeManagementState } from 'src/app/store/administrative-state-management/state/administrative.state';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
+import { TopicPaneChartSeriesComponent } from './topic-pane-chart-series/topic-pane-chart-series.component';
 
 @NgModule({
   imports: [
@@ -54,7 +55,8 @@ import { AdministrativeService } from 'src/app/store/administrative-state-manage
     TopicPaneChartsEditComponent,
     TopicPaneReportsEditComponent,
     TopicDescriptionEditCopyComponent,
-    TopicDescriptionPaneCopyComponent],
+    TopicDescriptionPaneCopyComponent,
+    TopicPaneChartSeriesComponent],
   providers: [SystemService, TopicService, LoginService, DatePipe, UtilityService, AdministrativeService
     , ToolbarService, LinkService, ImageService, HtmlEditorService
     , { provide: MAT_DIALOG_DATA, useValue: {} }],

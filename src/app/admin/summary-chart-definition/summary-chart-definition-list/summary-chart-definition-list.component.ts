@@ -3,6 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-summary-chart-definition-list',
@@ -23,6 +24,7 @@ export class SummaryChartDefinitionListComponent implements OnInit {
 
   ngOnInit() {
     document.getElementById('loader').classList.remove('loading');
+    AppUtility.scrollTop();
     this.findSummaryChart();
   }
 

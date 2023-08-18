@@ -30,7 +30,14 @@ import {
     LoadTrenginPartChartByIdAction,
     SaveTrenginPartChartByAction,
     UpdateTrenginPartChartByIdAction,
-    DeleteTrenginPartChartByIdAction
+    DeleteTrenginPartChartByIdAction,
+    GetTrendingChartSeriesbyChartIdAction,
+    DeleteTrendingChartSeriesByChartIdAction,
+    SaveTrendingChartSeriesAction,
+    UpdateTrendingChartSeriesByChartIdAction,
+    DeleteChartDataSetToTrendingChartSeriesAction,
+    AddChartDataSetToTrendingChartSeriesAction,
+    GetChartDataSetToTrendingChartSeriesAction
 } from './trending-definition.action';
 
 import { TrendingDefinitionModel } from './trending-definition.model';
@@ -49,6 +56,8 @@ import { TrendingDefinitionModel } from './trending-definition.model';
         keyIndicatorVariable: undefined,
         trendingPartsCharts : undefined,
         trendingPartChart : undefined,
+        trendingChartSeries : undefined,
+        trendingChartSeriesParameter : undefined
     }
 })
 
@@ -105,6 +114,16 @@ export class TrendingDefinitionState {
     @Selector()
     static getTrendingPartChart( state : TrendingDefinitionModel) : any {
         return state.trendingPartChart
+    }
+
+    @Selector()
+    static getTrendingChartSeries(state : TrendingDefinitionModel) : any {
+        return state.trendingChartSeries;
+    }
+
+    @Selector()
+    static getTrendingChartSeriesParameter(state : TrendingDefinitionModel) : any {
+        return state.trendingChartSeriesParameter;
     }
 
     @Action(GetKeyIndicatorListAction)
@@ -546,6 +565,15 @@ export class TrendingDefinitionState {
 
     @Action(LoadTrenginPartChartByIdAction)
     loadTrenginPartChartById(ctx : StateContext<TrendingDefinitionModel>, action : LoadTrenginPartChartByIdAction) : Actions {
+
+        if(!action.force){
+
+            const trendingPartChart = ctx.getState().trendingPartChart;
+            if(trendingPartChart && trendingPartChart.id == action.id){
+                return;
+            }
+        }
+        
         return  this.loginService.performGet(AppUtility
                     .endPointGenerator([AppConstant.trendingParts,action.trendingPartId,AppConstant.charts,action.id]))
                 .pipe(tap((response : any) =>{
@@ -576,7 +604,114 @@ export class TrendingDefinitionState {
         return  this.loginService.performDelete(AppUtility
                     .endPointGenerator([AppConstant.trendingParts,action.trendingPartId,AppConstant.charts,action.id]))
                 .pipe(tap((response : any) =>{
-                        ctx.patchState( { trendingPartChart : response});
+                        ctx.patchState( { trendingPartChart : undefined});
                 }, this.utilityService.errorCallbak));
     }
+
+
+    @Action(GetTrendingChartSeriesbyChartIdAction)
+    getTrendingChartSeriesbyChartId(ctx : StateContext<TrendingDefinitionModel>, action : GetTrendingChartSeriesbyChartIdAction) : Actions {
+
+        
+        if(!action.force){
+            const trendingChartSeries = ctx.getState().trendingChartSeries;
+            if(trendingChartSeries && trendingChartSeries.id == action.seriesId){
+                return;
+            }
+
+            const trendingChart = ctx.getState().trendingPartChart;
+            if(trendingChart && trendingChart.id == action.chartId){
+                const chartSeries = trendingChart.chart.chartSeries.find((data : any) => data.id == action.seriesId);
+                if(chartSeries){
+                    ctx.patchState({ trendingChartSeries : {...chartSeries} });
+                    return;
+                }
+            }
+        }
+
+        return this.loginService.performGet(AppUtility
+            .endPointGenerator([AppConstant
+                .trendingParts,action.trendingPartId,AppConstant.charts,action.chartId,AppConstant.series, action. seriesId]))
+            .pipe(tap((response : any) =>{
+                ctx.patchState({ trendingChartSeries : response });
+            },this.utilityService.errorCallbak))
+    }
+
+    @Action(DeleteTrendingChartSeriesByChartIdAction)
+    deleteTrendingChartSeriesByChartId(ctx : StateContext<TrendingDefinitionModel>, action : DeleteTrendingChartSeriesByChartIdAction) : Actions {
+
+        return this.loginService.performDelete(AppUtility
+            .endPointGenerator([AppConstant
+                .trendingParts,action.trendingPartId,AppConstant.charts,action.chartId,AppConstant.series, action. seriesId]))
+            .pipe(tap((response : any) =>{
+                ctx.patchState({ trendingChartSeries : undefined });
+            },this.utilityService.errorCallbak))
+    }
+
+    @Action(SaveTrendingChartSeriesAction)
+    saveTrendingChartSeries(ctx : StateContext<TrendingDefinitionModel>, action : SaveTrendingChartSeriesAction) : Actions {
+
+        return this.loginService.performPost(action.seriesBody,AppUtility
+            .endPointGenerator([AppConstant
+                .trendingParts,action.trendingPartId,AppConstant.charts,action.chartId,AppConstant.series]))
+            .pipe(tap((response : any) =>{
+                ctx.patchState({ trendingChartSeries : response });
+            },this.utilityService.errorCallbak))
+    }
+
+    @Action(UpdateTrendingChartSeriesByChartIdAction)
+    updateTrendingChartSeriesByChartId(ctx : StateContext<TrendingDefinitionModel>, action : UpdateTrendingChartSeriesByChartIdAction) : Actions {
+
+        return this.loginService.performPut(action.seriesBody,AppUtility
+            .endPointGenerator([AppConstant
+                .trendingParts,action.trendingPartId,AppConstant.charts,action.chartId,AppConstant.series,action.seriesId]))
+            .pipe(tap((response : any) =>{
+                ctx.patchState({ trendingChartSeries : response });
+            },this.utilityService.errorCallbak))
+    }
+
+    @Action(DeleteChartDataSetToTrendingChartSeriesAction)
+    deleteChartDataSetToTrendingChartSeries(ctx : StateContext<TrendingDefinitionModel>, action : DeleteChartDataSetToTrendingChartSeriesAction) : Actions {
+
+        return this.loginService.performDelete(AppUtility.endPointGenerator([AppConstant
+                .trendingParts,action.trendingPartId,AppConstant.charts,action.chartId,AppConstant.series,action.seriesId,AppConstant.parameters,action.dataSetId]))
+            .pipe(tap((response : any) =>{
+
+                const trendingChartSeriesParameter = ctx.getState().trendingChartSeriesParameter;
+                if(trendingChartSeriesParameter){
+                    const trendingChartSeriesParameter2 = trendingChartSeriesParameter.filter(data => data.id != action.dataSetId);
+                    ctx.patchState({ trendingChartSeriesParameter : [...trendingChartSeriesParameter2] });
+                }
+
+            },this.utilityService.errorCallbak))
+    }
+
+
+    @Action(AddChartDataSetToTrendingChartSeriesAction)
+    addChartDataSetToTrendingChartSeries(ctx : StateContext<TrendingDefinitionModel>, action : AddChartDataSetToTrendingChartSeriesAction) : Actions {
+
+        return this.loginService.performPost(action.datasetbody, AppUtility.endPointGenerator([AppConstant
+                .trendingParts,action.trendingPartId,AppConstant.charts,action.chartId,AppConstant.series,action.seriesId,AppConstant.parameters]))
+            .pipe(tap((response : any) =>{
+
+                const trendingChartSeriesParameter = ctx.getState().trendingChartSeriesParameter;
+                if(trendingChartSeriesParameter){
+                    trendingChartSeriesParameter.push(response);
+                    ctx.patchState({trendingChartSeriesParameter : [...trendingChartSeriesParameter]});
+                }
+
+            },this.utilityService.errorCallbak))
+    }
+
+    @Action(GetChartDataSetToTrendingChartSeriesAction)
+    getChartDataSetToTrendingChartSeries(ctx : StateContext<TrendingDefinitionModel>, action : GetChartDataSetToTrendingChartSeriesAction) : Actions {
+
+        return this.loginService.performGet(AppUtility.endPointGenerator([AppConstant
+                .trendingParts,action.trendingPartId,AppConstant.charts,action.chartId,AppConstant.series,action.seriesId,AppConstant.parameters]))
+            .pipe(tap((response : any) =>{
+
+                ctx.patchState({ trendingChartSeriesParameter : response })
+            },this.utilityService.errorCallbak))
+    }
+    
 }

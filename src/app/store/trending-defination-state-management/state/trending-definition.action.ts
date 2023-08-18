@@ -26,7 +26,14 @@ export enum TrendingDefinitionActionTypes {
     SAVE_TRENDING_PARTS_CHARTS_BY_ID = ' Save Trending Parts Chart ',
     UPDATE_TRENDING_PARTS_CHARTS_BY_ID = ' Update Trending Parts Charts By Id',
     DELETE_TRENDING_PARTS_CHARTS_BY_ID = ' Delete Trending Parts Charts By Id',
-
+    GET_TRENDING_CHART_SERIES_LIST_BY_CHART_ID = ' Get Trending Charts Series By Chart Id',
+    GET_TRENDING_CHART_SERIES_BY_CHART_ID = ' Get Trending Charts Series By Charts Id',
+    SAVE_TRENDING_CHART_SERIES = 'Save Trending Charts Series',
+    DELETE_TRENDING_CHART_SERIES_BY_CHART_ID = 'Delete Trending Charts Series By Chart Id',
+    UPDATE_TRENDING_CHART_SERIES_BY_CHART_ID = 'Update Trending Charts Series By Chart Id',
+    GET_CHART_DATA_SETS_FROM_CHART_SERIES = 'Get Chart Data Sets Charts Series By Id',
+    ADD_CHART_DATA_SETS_FROM_CHART_SERIES = 'Add Chart Data Sets Charts Series By Id',
+    DELETE_CHART_DATA_SETS_FROM_CHART_SERIES = 'Delete Chart Data Sets Charts Series By Id'
 }
 export class GetKeyIndicatorListAction {
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_KEY_INDICATOR_LIST;
@@ -172,4 +179,47 @@ export class DeleteTrenginPartChartByIdAction{
     static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_TRENDING_PARTS_CHARTS_BY_ID;
     constructor(readonly trendingPartId: number, readonly id: number) {
     }
+}
+
+export class GetTrendingChartSeriesbyChartIdAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_TRENDING_CHART_SERIES_BY_CHART_ID;
+    constructor(readonly force: boolean, readonly trendingPartId: number, readonly chartId: number, readonly seriesId : number) {
+ }
+}
+
+export class DeleteTrendingChartSeriesByChartIdAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_TRENDING_CHART_SERIES_BY_CHART_ID;
+    constructor(readonly trendingPartId: number, readonly chartId: number, readonly seriesId : number) {
+ }
+}
+
+export class SaveTrendingChartSeriesAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.SAVE_TRENDING_CHART_SERIES;
+    constructor(readonly trendingPartId: number, readonly chartId: number, readonly seriesBody : any) {
+ }
+}
+
+export class UpdateTrendingChartSeriesByChartIdAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.UPDATE_TRENDING_CHART_SERIES_BY_CHART_ID;
+    constructor(readonly trendingPartId: number, readonly chartId: number, readonly seriesId : number, readonly seriesBody : any) {
+ }
+}
+
+
+export class GetChartDataSetToTrendingChartSeriesAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.GET_CHART_DATA_SETS_FROM_CHART_SERIES;
+    constructor(readonly trendingPartId: number, readonly chartId: number, readonly seriesId : number) {
+ }
+}
+
+export class AddChartDataSetToTrendingChartSeriesAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.ADD_CHART_DATA_SETS_FROM_CHART_SERIES;
+    constructor(readonly trendingPartId: number, readonly chartId: number, readonly seriesId : number, readonly datasetbody : any) {
+ }
+}
+
+export class DeleteChartDataSetToTrendingChartSeriesAction{
+    static readonly type: TrendingDefinitionActionTypes = TrendingDefinitionActionTypes.DELETE_CHART_DATA_SETS_FROM_CHART_SERIES;
+    constructor(readonly trendingPartId: number, readonly chartId: number, readonly seriesId : number, readonly dataSetId : number) {
+ }
 }

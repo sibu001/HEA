@@ -31,6 +31,7 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
   };
   chartTypeList = [];
   forceReload : boolean = false;
+  forceReloadPreviousPage = false;
   chartDataSource: any;
   chartFooter : any;
   chartHeader : any;
@@ -78,7 +79,7 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.trendingPartId = params['trendingPartId']
-      this.forceReload = AppUtility.forceParamToBoolean('force');
+      this.forceReload = AppUtility.forceParamToBoolean(params['force']);
     });
   }
 
@@ -253,6 +254,7 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
       this.trendingDefinationService.getTrendingPartChartById()
       .pipe(filter((data : any) => data && data.id == this.id))
       .subscribe((chart : any ) =>{
+
           this.trendingPartChartData = {...chart};
           const chartTemp = {...chart}
           chartTemp.chart.orderNumber = chart.orderNumber;
@@ -282,7 +284,7 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
 
   back(): any {
     this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionEdit'],
-      { queryParams : { id : this.trendingPartId, force : this.forceReload }});
+      { queryParams : { id : this.trendingPartId, force : this.forceReloadPreviousPage }});
   }
 
   save(): any {
@@ -316,7 +318,7 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
         this.trendingDefinationService.UpdateTrenginPartChartById(this.trendingPartId,this.id,requestBody)
         .pipe(take(1))
         .subscribe((state : any) => {
-          this.forceReload = true;
+          this.forceReloadPreviousPage = true;
         }
         ,AppUtility.errorFieldHighlighterCallBack)
       )
@@ -327,10 +329,10 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
       this.trendingDefinationService.saveTrenginPartChartById(this.trendingPartId,requestBody)
       .pipe(take(1))
       .subscribe((state : any) =>{
-        this.forceReload = true;
         this.id = state.trendingDefinationManagement.trendingPartChart.id;
         AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
         this.getTrendingPartChartById();
+        this.forceReloadPreviousPage = true;
       },AppUtility.errorFieldHighlighterCallBack)
     );
 
@@ -338,24 +340,28 @@ export class TrendingChartEditComponent implements OnInit, OnDestroy {
 
 
   delete(): any {
+
+    if(!AppUtility.deleteConfirmatonBox()) return;
+
     this.subscriptions.add(
       this.trendingDefinationService.deleteTrenginPartChartById(this.trendingPartId,this.id)
       .pipe(take(1))
       .subscribe((state : any) => {
-        this.forceReload = true;
+        this.forceReloadPreviousPage = true;
         this.back();
       })
     )
   }
 
-
-  goToEditChartSeries(): any {
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], { queryParams: {} });
+  goToEditChartSeries(event : any): any {
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'], 
+      { queryParams: { trendingPartId : this.trendingPartId, chartId : this.id , id : event.id} });
 
   }
 
   addChartSeries(): any {
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries']);
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionSeries'],
+    { queryParams: { trendingPartId : this.trendingPartId, chartId : this.id } });
 
   }
 

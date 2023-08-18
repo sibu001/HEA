@@ -27,7 +27,14 @@ import {
   LoadTrenginPartChartByIdAction,
   DeleteTrenginPartChartByIdAction,
   UpdateTrenginPartChartByIdAction,
-  SaveTrenginPartChartByAction
+  SaveTrenginPartChartByAction,
+  GetTrendingChartSeriesbyChartIdAction,
+  SaveTrendingChartSeriesAction,
+  UpdateTrendingChartSeriesByChartIdAction,
+  DeleteTrendingChartSeriesByChartIdAction,
+  AddChartDataSetToTrendingChartSeriesAction,
+  DeleteChartDataSetToTrendingChartSeriesAction,
+  GetChartDataSetToTrendingChartSeriesAction
 } from '../state/trending-definition.action';
 import { TrendingDefinitionState } from '../state/trending-definition.state';
 
@@ -75,6 +82,14 @@ export class TrendingDefinitionService {
 
   getTrendingPartChartById() : Observable<any>{
     return this.store.select(TrendingDefinitionState.getTrendingPartChart);
+  }
+
+  getTrendingChartSeriesById() : Observable<any>{
+    return this.store.select(TrendingDefinitionState.getTrendingChartSeries);
+  }
+
+  getChartParameterListBySeriesId() : Observable<any>  {
+    return this.store.select(TrendingDefinitionState.getTrendingChartSeriesParameter);
   }
 
   loadKeyIndicatorList(force: boolean, filter: any): Observable<TrendingDefinitionState> {
@@ -175,6 +190,34 @@ export class TrendingDefinitionService {
 
   deleteTrenginPartChartById(trendingPartsId : number, charId : number ) : Observable<any> {
     return this.store.dispatch(new DeleteTrenginPartChartByIdAction(trendingPartsId,charId));
+  }
+
+  loadTrendingChartSeriesById(force : boolean , trendingPartId : number, chartId : number, seriesId : number) : Observable<any> {
+    return this.store.dispatch(new GetTrendingChartSeriesbyChartIdAction(force, trendingPartId,chartId, seriesId));
+  }
+
+  saveTrendingChartSeries(trendingPartId: number, chartId: number, seriesBody : any) : Observable<any> {
+    return this.store.dispatch( new SaveTrendingChartSeriesAction(trendingPartId, chartId, seriesBody));
+  }
+
+  updateTrendingChartSeriesById(trendingPartId: number, chartId: number, seriesId : number, seriesBody : any) : Observable<any> {
+    return this.store.dispatch( new UpdateTrendingChartSeriesByChartIdAction(trendingPartId, chartId, seriesId, seriesBody));
+  }
+
+  deleteTrendingChartSeriesById( trendingPartId : number, chartId : number, seriesId : number) : Observable<any>{
+    return this.store.dispatch(new DeleteTrendingChartSeriesByChartIdAction(trendingPartId, chartId, seriesId))
+  }
+
+  addChartDataSetToCharSeries( trendingPartId : number, chartId : number, seriesId : number, dataSetbody : any) : Observable<any>{
+    return this.store.dispatch(new AddChartDataSetToTrendingChartSeriesAction(trendingPartId, chartId, seriesId, dataSetbody));
+  }
+
+  deleteChartDataSetToCharSeriesById( trendingPartId : number, chartId : number, seriesId : number, dataSetId : number) : Observable<any>{
+    return this.store.dispatch(new DeleteChartDataSetToTrendingChartSeriesAction(trendingPartId, chartId, seriesId, dataSetId))
+  }
+
+  loadChartParameterListBySeriesId(trendingPartId : number, chartId : number, seriesId : number) : Observable<any>{
+    return this.store.dispatch( new GetChartDataSetToTrendingChartSeriesAction(trendingPartId, chartId, seriesId));
   }
 
 }
