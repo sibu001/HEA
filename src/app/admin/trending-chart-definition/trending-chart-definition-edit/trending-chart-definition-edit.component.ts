@@ -23,6 +23,7 @@ export class TrendingChartDefinitionEditComponent implements OnInit, OnDestroy {
   chartKeys = TableColumnData.TRENDING_CHART_KEYS;
   public chartDataSource: any;
   public forceReload : boolean = false;
+  public forceReloadPreviousScreen : boolean = false;
   public trendingPartData : any;
   public totalElement = 0;
   public chartData = {
@@ -82,7 +83,8 @@ export class TrendingChartDefinitionEditComponent implements OnInit, OnDestroy {
   }
 
   back() {
-    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionList']);
+    this.router.navigate(['/admin/trendingChartDefinition/trendingChartDefinitionList'], 
+      { queryParams: { force : this.forceReloadPreviousScreen } });
   }
 
   save() {
@@ -95,7 +97,7 @@ export class TrendingChartDefinitionEditComponent implements OnInit, OnDestroy {
         this.trendingDefinationService.updateTrendingParts(this.id,requestBody)
         .pipe(take(1))
         .subscribe((state) =>{
-
+        this.forceReloadPreviousScreen = true;
         },AppUtility.errorFieldHighlighterCallBack)
       )
       return;
@@ -109,6 +111,7 @@ export class TrendingChartDefinitionEditComponent implements OnInit, OnDestroy {
         this.id = state.trendingDefinationManagement.trendingParts.id;
         AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
         this.getTrendingPartsById();
+        this.forceReloadPreviousScreen = true;
       },AppUtility.errorFieldHighlighterCallBack)
     )
   }
@@ -121,6 +124,7 @@ export class TrendingChartDefinitionEditComponent implements OnInit, OnDestroy {
       this.trendingDefinationService.deleteTrendingPartsById(this.id)
       .pipe(take(1))
       .subscribe((state : any) =>{
+        this.forceReloadPreviousScreen = true;
         this.back();
       })
     )

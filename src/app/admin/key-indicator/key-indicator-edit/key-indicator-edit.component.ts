@@ -116,13 +116,14 @@ export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
 
     AppUtility.removeErrorFieldMessagesFromForm();
 
-    this.forceReloadListScreen = true;
     if(this.id){
       const requestBody = {...this.keyIndicatorData, ...this.keyIndicatorForm.value};
       this.subscriptions.add(
         this.trendingDefinationService.updateKeyIndicator(this.id,requestBody)
         .pipe(take(1))
-        .subscribe(() =>{},
+        .subscribe(() =>{
+          this.forceReloadListScreen = true;
+        },
         AppUtility.errorFieldHighlighterCallBack)
       );
 
@@ -138,8 +139,13 @@ export class KeyIndicatorEditComponent implements OnInit, OnDestroy {
       .subscribe((state : any) =>{
           this.id = state.trendingDefinationManagement.keyIndicator.id;
           AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+
           this.getKeyIndicatorById();
           this.loadKeyIndicatorCustomerGroups(true,new HttpParams());
+
+          this.getKeyIndicatorVariables();
+          this.loadKeyIndicatorVariables(undefined);
+
       },AppUtility.errorFieldHighlighterCallBack)
     );
 

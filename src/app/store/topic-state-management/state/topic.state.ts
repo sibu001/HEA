@@ -1196,7 +1196,7 @@ export class TopicManagementState {
                     const currentState = ctx.getState();
                     // console.log("pre state :- " + JSON.stringify(state))
                     // currentState[action.type] = response
-                    currentState[action.type] = [...response.data];
+                    ctx.patchState({[action.type] : [...response.data] });
                     // console.log("post state :- " + JSON.stringify(state))
                 },
                     error => {

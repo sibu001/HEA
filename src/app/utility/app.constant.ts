@@ -152,6 +152,7 @@ export class AppConstant {
     public static availableFontFamilyNames = 'availableFontFamilyNames';
     public static topicSkipPaneLabel = '(This topic was skipped)';
     public static adminEnterUserScreen = false;
+    public static summaryCharts = 'summaryCharts';
 
     public static classicVersionSelectionValue = 'V1';
     public static responsiveVersionSelectionValue = 'V2';

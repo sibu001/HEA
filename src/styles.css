@@ -2481,7 +2481,8 @@ app-user-report-definitions-edit .mat-column-field,
 app-user-report-definitions-edit .mat-column-label,
 app-user-report-definitions-edit .mat-column-groupCode,
 app-user-report-definitions .mat-column-labelTemplate,
-app-key-indicator-edit .mat-column-field
+app-key-indicator-edit .mat-column-field,
+app-summary-chart-definition-list .mat-column-chartCode
 {
   flex : 0 0 35% !important;
 }

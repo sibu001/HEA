@@ -6,7 +6,8 @@
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
           <span class="messageName">Chart Series Definition</span>
         </p>
-        <form [formGroup]="chartForm" class="form-group form-padding">
+        <form [formGroup]="chartForm">
+          <div class="form-group form-padding">
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Series code:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -32,7 +33,7 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Series Query Type:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <select class="form-control form-control-sm" id="seriesQueryType" formControlName="seriesQueryType">
-                <option *ngFor='let group of seriesQueryList' [value]="group.key">{{group.value}}</option>
+                <option *ngFor='let group of seriesQueryTypeList' [value]="group.lookupValue">{{group.valueName}}</option>
               </select>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
@@ -59,7 +60,7 @@
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 paddingRight">
                 <select class="form-control form-control-sm" id="seriesColor" formControlName="seriesColor"
                   [value]='f.seriesColor.value'>
-                  <option *ngFor='let color of colorData' [value]="color.key">{{color.value}}</option>
+                  <option *ngFor='let color of colorData' [value]="color.lookupValue">{{color.valueName}}</option>
                 </select>
               </div>
             </div>
@@ -75,38 +76,28 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-        
+        </div>
           <div class="paddingTop" *ngIf="id !== undefined && id !== null">
             <p class="messages">
               <img src='assets/images/dot03.gif' alt="dot" class='dot'>
               <span class="messageName">Chart Data Sets</span></p>
-            <app-table [keys]="keys" [isSearch]="false" [isDelete]=true [data]="dataSource"
-              [totalElement]="data.totalElements" [isHideAdd]=true [showAddRowButton]=true (saveRowEvent)='saveRow()'
-              >
+            <app-table [keys]="keys" [isSearch]="false" [isDelete]=true [data]="chartSeriesParameterList"
+              [totalElement]="chartSeriesParameterList.length" [isHideAdd]=false  [showInlineTableForm]="true"
+              (deleteEvent)='deletePaneChartParameters($event)' (toggleSaveButtonEvent)='toggleSaveButtonEvent()'
+              (addRowEvent)='saveChartDataSet($event)' >
             </app-table>
           </div>
 
 
-          <div class="row rowPadding">
-            <div class="col-sm-1 col-md-1 col-lg-1 col-xs-12 sidePadding">
-              <button type="button" class="btn btn-primary" (click)="back()">
-                Back
-              </button>
+          <div class="row paddingTop">
+            <div class="col-sm-4 col-md- col-lg-4 col-xs-4 col-xl-4">
+              <button type="button" class="btn btn-primary mb-button" (click)="back()">Back</button>
             </div>
-            <div class="col-sm-11 col-md-11 col-lg-11 col-xs-12 row rowPadding sidePadding">
-              <div class="col-sm-8 col-md-8 col-lg-9 col-xs-0 sidePadding" *ngIf="id === undefined || id === null">
-              </div>
-              <div class="col-sm-10 col-md-10 col-lg-10 col-xs-2 sidePadding" *ngIf="id !== undefined && id !== null">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="delete()">
-                  Delete
-                </button>
-              </div>
-              <div class="col-sm-2 col-md-1 col-lg-1 col-xs-2 sidePadding">
-                <button type="button" class="btn btn-primary" style="float: right" (click)="save()">
-                  Save
-                </button>
-              </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8 col-xl-8 right-buttons">
+                <button type="submit" class="btn btn-primary mb-button"  (click)="save()">Save</button>
+                <button type="button" class="btn btn-primary mb-button" *ngIf="id" (click)="delete()">Delete</button>
             </div>
+
           </div>
         </form>
       </div>

@@ -168,6 +168,11 @@ export class AdminFilter {
         page: null,
         formValue: null
     }
+
+    public summaryChartDefinationList = {
+        page : null,
+        formValue : null
+    }
 }
 
 export class UsageHistoryFilter {

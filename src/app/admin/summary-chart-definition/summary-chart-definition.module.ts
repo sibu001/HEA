@@ -8,6 +8,11 @@ import { SummaryChartDefinitionSeriesComponent } from './summary-chart-definitio
 import { CommonHEAModule } from 'src/app/common/common.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
+import { SummaryChartDefinationService } from 'src/app/store/summary-chart-defination-management/service/summary-chart-defination.service';
+import { NgxsModule } from '@ngxs/store';
+import { SummaryChartDefinationState } from 'src/app/store/summary-chart-defination-management/state/summary-chart-defination.state';
+import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
+import { TopicManagementState } from 'src/app/store/topic-state-management/state/topic.state';
 
 @NgModule({
   imports: [
@@ -16,11 +21,16 @@ import { RichTextEditorModule } from '@syncfusion/ej2-angular-richtexteditor';
     CommonHEAModule,
     ReactiveFormsModule,
     RichTextEditorModule,
-    SummaryChartDefinitionRoutingModule
+    SummaryChartDefinitionRoutingModule,
+    NgxsModule.forRoot([
+      SummaryChartDefinationState,
+      TopicManagementState
+    ])
   ],
   declarations: [SummaryChartDefinitionListComponent,
     SummaryChartDefinitionEditComponent,
     SummaryChartDefinitionSeriesComponent,
-  ]
+  ],
+  providers : [SummaryChartDefinationService, TopicService ]
 })
 export class SummaryChartDefinitionModule { }

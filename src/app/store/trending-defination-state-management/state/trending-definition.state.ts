@@ -186,7 +186,12 @@ export class TrendingDefinitionState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Deleted Successfully');
-                    ctx.patchState({ keyIndicator : undefined });
+                    const keyIndicatorList =  ctx.getState().keyIndicatorList;
+                    keyIndicatorList.list =  keyIndicatorList.list.filter((keyIndicator : any ) => keyIndicator.id != action.id);
+                    ctx.patchState({ 
+                        keyIndicator : undefined,
+                        keyIndicatorList : {...keyIndicatorList}
+                    });
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -204,6 +209,7 @@ export class TrendingDefinitionState {
                     // this.utilityService.showSuccessMessage('Save Successfully');
                     ctx.patchState({
                         keyIndicator: response.data,
+                        keyIndicatorList : undefined
                     });
                 },
                     error => {
@@ -222,6 +228,7 @@ export class TrendingDefinitionState {
                     // this.utilityService.showSuccessMessage('Updated Successfully');
                     ctx.patchState({
                         keyIndicator: response.data,
+                        keyIndicatorList : undefined
                     });
                 },
                     error => {
@@ -519,8 +526,11 @@ export class TrendingDefinitionState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Save Successfully');
+                    const trendingPartsList = ctx.getState().trendingPartsList;
+                    trendingPartsList.list.push(response.data);
                     ctx.patchState({
                         trendingParts: response.data,
+                        trendingPartsList : { ...trendingPartsList }
                     });
                 },
                     error => {
@@ -537,9 +547,16 @@ export class TrendingDefinitionState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     // this.utilityService.showSuccessMessage('Updated Successfully');
+                    const trendingPartsList = ctx.getState().trendingPartsList;
+                    trendingPartsList.list = trendingPartsList.list.map((part : any) =>{
+                        if(action.id == part.id) return response.data; 
+                        return part;
+                    });
                     ctx.patchState({
                         trendingParts: response.data,
+                        trendingPartsList : { ...trendingPartsList }
                     });
+
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -586,7 +603,12 @@ export class TrendingDefinitionState {
         return  this.loginService.performPost(action.body,AppUtility
                     .endPointGenerator([AppConstant.trendingParts,action.trendingPartId,AppConstant.charts]))
                 .pipe(tap((response : any) =>{
-                        ctx.patchState( { trendingPartChart : response});
+
+                        ctx.patchState( { 
+                            trendingPartChart : response,
+                            trendingPartsCharts : undefined
+                        });
+                        
                 }, this.utilityService.errorCallbak));
     }
 
@@ -595,7 +617,12 @@ export class TrendingDefinitionState {
             return  this.loginService.performPut(action.body,AppUtility
                     .endPointGenerator([AppConstant.trendingParts,action.trendingPartId,AppConstant.charts,action.id]))
                 .pipe(tap((response : any) =>{
-                    ctx.patchState( { trendingPartChart : response});
+
+                    ctx.patchState( { 
+                        trendingPartChart : response,
+                        trendingPartsCharts : undefined
+                    });
+
                 }, this.utilityService.errorCallbak));
     }
 
