@@ -2774,3 +2774,7 @@ mat-cell > div{
   margin-left: 15px !important; 
   /* margin-top: 15px !important; */
 }
+
+app-summary-chart-defination-preview .content-div > img{
+  max-width: 100% !important;
+}

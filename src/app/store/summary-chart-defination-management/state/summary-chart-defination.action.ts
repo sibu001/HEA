@@ -6,6 +6,7 @@ export enum SummaryChartDefinationActionType {
     SAVE_SUMMARY_CHART_DEFINITION = 'Save Summary Chart Definition',
     UPDATE_SUMMARY_CHART_DEFINITION = 'Update Summary Chart Defination',
     DELETE_SUMMARY_CHART_DEFINITION = 'Delete Summary Chart Definition',
+    COPY_SUMMARY_CHART_DEFINITION = 'Copy Summary Chart Definition',
     GET_SUMMARY_CHART_SERIES_BY_ID = 'Get Summary Chart Series By Id',
     SAVE_SUMMARY_CHART_SERIES = 'Save Summary Chart Series',
     UPDATE_SUMMARY_CHART_SERIES_BY_ID = 'Update Summary Series By Id',
@@ -39,6 +40,12 @@ export class DeleteSummaryChartDefinationAction{
     static readonly type : SummaryChartDefinationActionType = SummaryChartDefinationActionType.DELETE_SUMMARY_CHART_DEFINITION;
     constructor( readonly id : number) {}
 }
+
+export class SummaryChartDefinationCopyAction{
+    static readonly type : SummaryChartDefinationActionType = SummaryChartDefinationActionType.COPY_SUMMARY_CHART_DEFINITION;
+    constructor( readonly summaryChartId : number, readonly params : HttpParams) {}
+}
+
 
 export class GetSummaryChartSeriesByIdAction{
     static readonly type : SummaryChartDefinationActionType = SummaryChartDefinationActionType.GET_SUMMARY_CHART_SERIES_BY_ID;

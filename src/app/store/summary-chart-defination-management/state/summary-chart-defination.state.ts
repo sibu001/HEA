@@ -5,7 +5,7 @@ import { LoginService } from "src/app/services/login.service";
 import { UtilityService } from "src/app/services/utility.service";
 import { AppConstant } from "src/app/utility/app.constant";
 import { AppUtility } from "src/app/utility/app.utility";
-import { DeleteChartSeriesParameterAction, DeleteSummaryChartDefinationAction, DeleteSummaryChartSeriesAction, GetChartSeriesParameterAction, GetSummaryChartDefinationByIdAction, GetSummaryChartSeriesByIdAction, LoadSummaryChartDefinationListAction, SaveChartSeriesParameterAction, SaveSummaryChartDefinationAction, SaveSummaryChartSeriesAction, UpdateSummaryChartDefinationAction, UpdateSummaryChartSeriesAction } from "./summary-chart-defination.action";
+import { DeleteChartSeriesParameterAction, DeleteSummaryChartDefinationAction, DeleteSummaryChartSeriesAction, GetChartSeriesParameterAction, GetSummaryChartDefinationByIdAction, GetSummaryChartSeriesByIdAction, LoadSummaryChartDefinationListAction, SaveChartSeriesParameterAction, SaveSummaryChartDefinationAction, SaveSummaryChartSeriesAction, SummaryChartDefinationCopyAction, UpdateSummaryChartDefinationAction, UpdateSummaryChartSeriesAction } from "./summary-chart-defination.action";
 import { SummaryChartDefinationModel } from "./summary-chart-defination.model";
 
 @State<SummaryChartDefinationModel>({
@@ -90,6 +90,16 @@ export class SummaryChartDefinationState{
         return this.loginService.performDelete(AppUtility.endPointGenerator([AppConstant.summaryCharts,action.id]))
             .pipe(tap((response : any) =>{
                 ctx.patchState({summaryChartDefination : undefined});
+            },this.utilityService.errorCallbak))
+    }
+
+    @Action(SummaryChartDefinationCopyAction)
+    summaryChartDefinationCopy(ctx : StateContext<SummaryChartDefinationModel>, action : SummaryChartDefinationCopyAction) : Actions {
+
+        return this.loginService.performPostWithParam({},AppUtility
+                .endPointGenerator([AppConstant.summaryCharts,action.summaryChartId,'copy']), action.params)
+            .pipe(tap((response : any) =>{
+                ctx.patchState({summaryChartDefination : response });
             },this.utilityService.errorCallbak))
     }
 

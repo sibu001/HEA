@@ -488,7 +488,7 @@ export class TableColumnData {
     ];
 
     static readonly SUMMARY_CHART_KEYS: Array<TABLECOLUMN> = [
-        { key: 'chartCode', isEdit: true, displayName: 'Chart Code', isUnderline: true },
+        { key: 'chartCode', isEdit: true, sort: 'chart.chartCode',  displayName: 'Chart Code', isUnderline: true },
         { key: 'orderNumber', sort: 'orderNumber', isEdit: true, displayName: 'Order Number' },
         { key: 'resourceUse', isEdit: true, displayName: 'Resource Use' },
         { key: 'unitType', isEdit: true, displayName: 'Unit Type' },
@@ -507,7 +507,7 @@ export class TableColumnData {
 
     static readonly SUMMARY_DATA_SET_KEYS: Array<TABLECOLUMN> = [
         { key: 'field', isEdit: true, displayName: 'Query Parameter', type :'inputField' , addRowType: 'text' },
-        { key: 'value', isEdit: true, displayName: 'Calculation formula', type :'inputField' , addRowType: 'text'  },
+        { key: 'calculation', isEdit: true, displayName: 'Calculation formula', type :'inputField' , addRowType: 'text'  },
     ];
 
     static readonly GAS_KEYS: Array<TABLECOLUMN> = [

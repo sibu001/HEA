@@ -14,6 +14,9 @@ import { AppConstant } from 'src/app/utility/app.constant';
 import { AppUtility } from 'src/app/utility/app.utility';
 import { TrendingDefinitionService } from 'src/app/store/trending-defination-state-management/service/trending-definition.service';
 import { SummaryChartDefinationService } from 'src/app/store/summary-chart-defination-management/service/summary-chart-defination.service';
+import { MatDialog } from '@angular/material';
+import { SummaryChartDefinationCopyComponent } from '../summary-chart-defination-copy/summary-chart-defination-copy.component';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-summary-chart-definition-edit',
@@ -76,7 +79,8 @@ export class SummaryChartDefinitionEditComponent implements OnInit, OnDestroy {
     private readonly location: Location,
     private readonly topicService : TopicService,
     private readonly summaryChartDefinationService : SummaryChartDefinationService,
-    private readonly router: Router) {
+    private readonly router: Router,
+    private readonly matDialog : MatDialog) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.forceReload = AppUtility.forceParamToBoolean(params['force']);
@@ -373,11 +377,39 @@ export class SummaryChartDefinitionEditComponent implements OnInit, OnDestroy {
   }
 
   preview(){
-
+    this.router.navigate(['/admin/summaryChartDefinition/summaryChartDefinitionPreview'],
+      { queryParams: { summaryChartId : this.id }} );
   }
 
   copyChart(){
+    const dialog = this.matDialog.open(SummaryChartDefinationCopyComponent,
+      { 
+        width: '500px',
+        height: '200px',
+        disableClose: false
+      });
+    dialog.afterClosed().subscribe(
+      data => {
+        if(data)
+          this.createCopy(data);
+    })
+  }
 
+  createCopy(data : any) {
+    const params = new HttpParams()
+      .append('newChartCode',data.newChartCode);
+
+    this.subscriptions.add(
+      this.summaryChartDefinationService.copySummaryChartDefination(this.id,params)
+      .pipe(take(1))
+      .subscribe((state : any) =>{
+        this.id = state.summaryChartManagementState.summaryChartDefination.id;
+        AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+        this.forceReloadPreviousPage = true;
+        this.ngOnDestroy();
+        this.ngOnInit();
+      },AppUtility.errorFieldHighlighterCallBack)
+    );
   }
 
   get f() { return this.chartForm.controls; }

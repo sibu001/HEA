@@ -61,7 +61,8 @@ export class SummaryChartDefinitionListComponent implements OnInit, OnDestroy {
     .append('chart.chartCode', this.summaryChartForm && this.summaryChartForm.value.chartCode ? this.summaryChartForm.value.chartCode  : '' ) 
     .append('startRow', event && event.pageIndex ? (event.pageIndex *  event.pageSize) + '' : '0')
     .append('pageSize', event && event.pageSize ? event.pageSize : this.summaryChartData.pageSize)
-    .append('sortField', (event && event.sort && event.sort.active !== undefined ? event.sort.active : ''))
+    .append('sortField', (event && event.sort && event.sort.active !== undefined ? 
+        (event.sort.active == 'chartCode' ? 'chart.chartCode' : event.sort.active ) : ''))
     .append('sortOrderAsc', (event && event.sort && event.sort.direction !== undefined ? 
         (event.sort.direction === 'desc' ? 'false' : 'true') : 'true'))
     .append('useLikeSearch','true')

@@ -1,0 +1,132 @@
+<section class="space-top">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12 col-md-9 col-lg-9">
+        <p class="messages">
+          <img class="pointer" src="assets/images/dot03.gif" alt="dot" class="dot">
+          <span class="messageName">Chart Preview</span>
+        </p>
+        <p class="messages">
+          <span class="messageName">Search Options (use "%" as wildcard in searches)</span>
+        </p>
+        <form [formGroup]="previewForm">
+          <div class="form-group form-padding">
+            <div class="row borderBottom rowPadding">
+
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12 text-right">Audit Id:</div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <input type="text" class="form-control form-control-sm"
+                  formControlName="auditId" id="auditId">
+              </div>
+
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12 text-right">Customer Group:</div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <select type="text" class="form-control form-control-sm"
+                  formControlName="customerGroupId" id="customerGroupId">
+                    <option value="" selected> </option>
+                    <option *ngFor="let group of customerGroupList" [value]="group.customerGroupId">
+                      {{group.groupName}}</option>                  
+                  </select>
+              </div>
+
+            </div>
+
+            <div class="row borderBottom rowPadding">
+
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12 text-right">Customer Name:</div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <input type="text" class="form-control form-control-sm"
+                  formControlName="customerName" id="customerName">
+              </div>
+
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12 text-right">Customer Place:</div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <select class="form-control form-control-sm" id="customerPlace" formControlName="customerPlace">
+                  <option value="" selected="selected"></option>
+                  <option *ngFor="let placeData of placeList" [value]="placeData.id">
+                      {{placeData.placeName}}</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div class="row borderBottom rowPadding">
+
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12 text-right">Customer E-mail:</div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <input type="text" class="form-control form-control-sm"
+                  formControlName="customerEmail" id="customerEmail">
+              </div>
+
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12 text-right">Program:</div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <select class="form-control form-control-sm" id="program" formControlName="program">
+                  <option value=""></option>
+                  <option *ngFor="let programGroup of
+                      programGroupList" [value]="programGroup.programGroupId">
+                      {{programGroup.programName}}</option>
+                </select>
+              </div>
+
+            </div>
+
+            <div class="row borderBottom rowPadding">
+
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12 text-right"></div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+
+              <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12 text-right">Status:</div>
+              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+                <select class="form-control form-control-sm" id="status" formControlName="status">
+                  <option value=""></option>
+                  <option *ngFor="let statusObj of
+                  statusData" [value]="statusObj.id">
+                      {{statusObj.value}}</option>
+                </select>
+
+              </div>
+
+            </div>
+
+            <div class="row borderBottom rowPadding">
+              <div class="col-md-12 right-buttons">
+                <button class="btn btn-primary" (click)="loadCustomer('next',true)">Show</button>
+              </div>
+            </div>
+            
+          </div>
+        </form>
+
+        <div *ngIf="customer" class="col-sm-12 col-md-12 col-lg-12 borderBottom rowPadding"
+          style="display: flex; justify-content: space-between;" >
+          <div>
+            <button *ngIf="this.customerListData.pageIndex != 0" class="btn btn-primary" 
+            (click)="pageAction('prev')">Prev</button>
+          </div>
+
+          <div class="text-center" >
+            <div>
+              {{ customer.auditId }} ( {{ (customerListData.pageIndex  + 1)+ ', ' + customerListData.totalSize }} ) 
+            </div>
+          </div>
+
+          <div>
+            <button *ngIf="this.customerGroupList.pageIndex != this.customerListData.totalSize -1" 
+              class="btn btn-primary" style="float: right;" (click)="pageAction('next')">Next</button>
+          </div>
+        </div>
+
+        <div *ngIf="customer" class="col-sm-12 col-md-12 col-lg-12 borderBottom rowPadding text-center content-div" #contentDiv>
+        </div>
+
+        <div class="col-sm-12 col-md-12 col-lg-12 rowPadding">
+          <button class="btn btn-primary" style="margin-top: 10px;" (click)="back()">Back</button>
+        </div>
+        
+      </div>
+      <div class="col-md-3 col-lg-3 col-sm-12">
+        <app-sidebar></app-sidebar>
+      </div>
+    </div>
+  </div>
+</section>

@@ -2,7 +2,7 @@ import { HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Store } from "@ngxs/store";
 import { Observable } from "rxjs";
-import { DeleteChartSeriesParameterAction, DeleteSummaryChartDefinationAction, DeleteSummaryChartSeriesAction, GetChartSeriesParameterAction, GetSummaryChartDefinationByIdAction, GetSummaryChartSeriesByIdAction, LoadSummaryChartDefinationListAction, SaveChartSeriesParameterAction, SaveSummaryChartDefinationAction, SaveSummaryChartSeriesAction, UpdateSummaryChartDefinationAction, UpdateSummaryChartSeriesAction } from "../state/summary-chart-defination.action";
+import { DeleteChartSeriesParameterAction, DeleteSummaryChartDefinationAction, DeleteSummaryChartSeriesAction, GetChartSeriesParameterAction, GetSummaryChartDefinationByIdAction, GetSummaryChartSeriesByIdAction, LoadSummaryChartDefinationListAction, SaveChartSeriesParameterAction, SaveSummaryChartDefinationAction, SaveSummaryChartSeriesAction, SummaryChartDefinationCopyAction, UpdateSummaryChartDefinationAction, UpdateSummaryChartSeriesAction } from "../state/summary-chart-defination.action";
 import { SummaryChartDefinationState } from "../state/summary-chart-defination.state";
 
 @Injectable({
@@ -34,6 +34,10 @@ export class SummaryChartDefinationService {
     deleteSummaryChartDefination(id : number) : Observable<any>{
         return this.store.dispatch(new DeleteSummaryChartDefinationAction(id));
     }
+
+    copySummaryChartDefination(summaryChartId : number, params : HttpParams){
+        return this.store.dispatch( new SummaryChartDefinationCopyAction(summaryChartId, params));
+    } 
 
     getSummaryChartDefination() : Observable<any>{
         return this.store.select(SummaryChartDefinationState.getSummaryChartDefination);

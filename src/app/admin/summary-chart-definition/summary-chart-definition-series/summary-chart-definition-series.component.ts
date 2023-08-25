@@ -207,14 +207,23 @@ export class SummaryChartDefinitionSeriesComponent implements OnInit, OnDestroy 
     const requestBody = { 
 
       summaryChartId : this.summaryChartId,
-      field : event.field,
-      value : event.value,
+      calculation : event.calculation,
+      calculationType : this.chartForm.value.seriesQueryType,
       chartParameter : {
         chartSeriesId : this.id,
         queryParameter : event.field,
-        }
-      
-     };
+      }
+        
+    };
+
+
+    //  trendingChartId : this.chartId,
+    //  calculation : event.calculation,
+    //  calculationType : this.chartForm.value.seriesQueryType,
+    //  chartParameter : {
+    //    chartSeriesId : this.id,
+    //    queryParameter : event.field,
+    //    }
     
      this.subscriptions.add(
       this.summaryChartDefinationService.SaveChartSeriesParamter(this.summaryChartId,this.id,requestBody)
