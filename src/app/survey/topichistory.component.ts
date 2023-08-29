@@ -1,20 +1,21 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Subject, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, skip, take } from 'rxjs/operators';
+import { fromEvent, Subject, Subscription } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { AppUtility } from '../utility/app.utility';
 import { AppConstant } from '../utility/app.constant';
+import { SubscriptionUtil } from '../utility/subscription-utility';
 
 @Component({
   selector: 'topic-history',
   templateUrl: './topichistory.component.html',
   styleUrls: ['./topichistory.component.css']
 })
-export class TopicHistoryComponent implements OnInit {
+export class TopicHistoryComponent implements OnInit, OnDestroy {
   hide = true;
   users: Users = new Users();
   public customer : any = { user : { name : ''}, auditId : ''};
@@ -171,6 +172,33 @@ export class TopicHistoryComponent implements OnInit {
   
     this.ngOnInit();
   
+  }
+
+  copyTextToClipBoard( text : string ) : void{
+
+    AppUtility.copyToClipBoard(text);
+    const toolTip = document.querySelector('.tooltip-cp:hover .tooltiptext-cp');
+
+    const originalMessage = toolTip.innerHTML;
+
+    if((window as any).windowWidth() >= 768)
+      toolTip.innerHTML = text;
+    else
+      toolTip.innerHTML = 'copied!';
+
+    const normalMessage = toolTip.innerHTML;
+    this.subscriptions.add(
+      fromEvent(document.querySelector('.tooltip-cp:hover'),'mouseleave')
+      .pipe(take(1))
+      .subscribe((event : any) =>{
+        toolTip.innerHTML = originalMessage;
+      })
+    )
+
+  }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
   
 }

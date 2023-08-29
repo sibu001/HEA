@@ -119,13 +119,15 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
 
   showSelectedServiceId(event : any, serviceId : string ,list :any) {
 
+
+
     let selectedId;
     if( serviceId == "electricityServiceId")
       selectedId = event.credential.electricityServiceId;
     else 
       selectedId = event.credential.heatingServiceId;
 
-    return list.find( (services) => services.customerAgreement == selectedId);
+    return list.find( (services) => services.customerAgreement == selectedId) || selectedId;
   }
 
   findCredentialType(force: boolean, filter: string): void {
@@ -137,14 +139,20 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   }
 
   setForm(event: any) {
+
+    let selectedElectricityIndex = undefined;
+    let selectedHeatingIndex = undefined;
+
     if (event !== undefined) {
       event = event.data;
 
-      this.getAllElectricityServiceIdFromList(event.serviceIds);
-      this.getAllHeatingServiceIdFromList(event.serviceIds);
+      if(event.serviceIds){
+        this.getAllElectricityServiceIdFromList(event.serviceIds);
+        this.getAllHeatingServiceIdFromList(event.serviceIds);
 
-    var selectedElectricityIndex =  this.showSelectedServiceId(event,"electricityServiceId",this.electricServiceIds);
-    var selectedHeatingIndex = this.showSelectedServiceId(event,"heatingServiceId",this.heatingServiceIds);
+        selectedElectricityIndex =  this.showSelectedServiceId(event,"electricityServiceId",this.electricServiceIds);
+        selectedHeatingIndex = this.showSelectedServiceId(event,"heatingServiceId",this.heatingServiceIds);
+      }
 
     }
     
@@ -155,11 +163,17 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
       password: [event !== undefined ? event.credential.password : null],
       active: [event !== undefined ? event.credential.active : false],
       account: [event !== undefined ? event.credential.account : null],
-      electricityServiceId: [event !== undefined  && selectedElectricityIndex ? selectedElectricityIndex.customerAgreement : ''],
+      electricityServiceId: [event !== undefined  && selectedElectricityIndex ? selectedElectricityIndex.customerAgreement 
+        : ( event ? event.electricityServiceId : '' )],
       electricityMeterId: [event !== undefined ? event.credential.electricityMeterId : null],
+      electricityMeterSerialNumber: [event !== undefined ? event.credential.electricityMeterSerialNumber : null],
+      electricityMeterUtcNumber: [event !== undefined ? event.credential.electricityMeterUtcNumber : null],
       electricitySignDate: [event !== undefined && selectedElectricityIndex? AppUtility.getDateFromMilllis(selectedElectricityIndex.signDate) : ''],
-      heatingServiceId: [event !== undefined && selectedHeatingIndex ? selectedHeatingIndex.customerAgreement : ''],
+      heatingServiceId: [event !== undefined && selectedHeatingIndex ? selectedHeatingIndex.customerAgreement 
+        : ( event ? event.heatingServiceId : "")],
       heatingMeterId: [event !== undefined ? event.credential.heatingMeterId  : null],
+      heatingMeterSerialNumber: [event !== undefined ? event.credential.heatingMeterSerialNumber : null],
+      heatingMeterUtcNumber: [event !== undefined ? event.credential.heatingMeterUtcNumber : null],
       heatingSignDate: [event !== undefined && selectedHeatingIndex ? AppUtility.getDateFromMilllis(selectedHeatingIndex.signDate) : ''],
       waterServiceId: [event !== undefined ? event.credential.waterServiceId : null],
       waterMeterId: [event !== undefined ? event.credential.waterMeterId : null],
@@ -237,20 +251,32 @@ export class UtilityCredentialsComponent implements OnInit , OnDestroy{
   }
 
   getAllHeatingServiceIdFromList(serviceList: any): Array<any> {
-    this.heatingServiceIds = serviceList.filter((service) => {
-      if (service.serviceKind == 1)
-        return true;
-      return false;
-    });
+
+    if(!serviceList){
+      this.heatingServiceIds = [];
+    }else{
+      this.heatingServiceIds = serviceList.filter((service) => {
+        if (service.serviceKind == 1)
+          return true;
+        return false;
+      });
+    }
+
     return this.heatingServiceIds;
   }
 
   getAllElectricityServiceIdFromList(serviceList: any): Array<any> {
-    this.electricServiceIds = serviceList.filter((service) => {
-      if (service.serviceKind == 0)
-        return true;
-      return false;
-    });
+
+    if(!serviceList) {
+      this.electricServiceIds = []; 
+    }else{
+      this.electricServiceIds = serviceList.filter((service) => {
+        if (service.serviceKind == 0)
+          return true;
+        return false;
+      });
+    }
+
     return this.electricServiceIds;
   }
 

@@ -2599,6 +2599,10 @@ leaklistview a, surveyRecommendationList a{
   display: inline-block;
 }
 
+.d-flex{
+  display: flex;
+}
+
 
 trendingpartsview .trendingChartDiv>div{
   height: auto !important;

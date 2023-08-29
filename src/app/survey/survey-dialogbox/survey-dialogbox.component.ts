@@ -24,14 +24,17 @@ export class SurveyDialogboxComponent implements OnInit, AfterViewChecked, After
       answer.dataField.onChangeRefresh = true;
     }));
     
+    // $('.scroll-div').mCustomScrollbar(
+    //   { axis:"y",
+    //     theme:"dark",
+    //     scrollbarPosition : "inside"
+    //   }
+    // );
+    
   }
 
   ngAfterViewChecked(): void {
-    $('mat-dialog-container').mCustomScrollbar(
-      { axis:"y",
-        theme:"dark",
-        scrollbarPosition : "inside"
-      });
+
   }
 
   ngOnInit() {

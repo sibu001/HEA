@@ -41,31 +41,47 @@
 
                 <hr class="hr_space">
                 <div class="panel panel-info">
-                    <div class="panel-group" id="accordion">
-                        <div class="panel panel-default" *ngFor="let
+                    <div class="panel-group" id="accordion" style="position: relative;">
+                        <div class="panel panel-default row" *ngFor="let
                             userSurveyList of users.surveyList;index as i">
-                            <div class="panel-heading collapsed"
-                                data-toggle="collapse" data-parent="#accordion"
-                                [attr.href]="'#collapse'+userSurveyList.surveyId">
-                                <img alt="icon" src="assets/images/triangledown.svg"
-                                    class="fa fa-fw fa-caret-down fa_icon">
-                                <img alt="icon" src="assets/images/triangleright.svg"
-                                    class="fa fa-fw fa-caret-right fa_icon">
-                                &nbsp;&nbsp;
+                            <div class="d-flex col-md-12" >
+                                <div class="panel-heading collapsed"
+                                    data-toggle="collapse" data-parent="#accordion"
+                                    [attr.href]="'#collapse'+userSurveyList.surveyId">
+                                    <img alt="icon" src="assets/images/triangledown.svg"
+                                        class="fa fa-fw fa-caret-down fa_icon">
+                                    <img alt="icon" src="assets/images/triangleright.svg"
+                                        class="fa fa-fw fa-caret-right fa_icon">
+                                    &nbsp;
 
-                                <a class="topic_heading" id="topic{{i}}">{{userSurveyList.surveyDescription.label}}&nbsp;&nbsp;<span *ngIf="userSurveyList.finishedDate">({{
-                                    userSurveyList.finishedDate | date
-                                    : "MM/dd/y HH:mm" }})</span></a>
+                                    <a class="topic_heading" id="topic{{i}}">{{userSurveyList.surveyDescription.label}}&nbsp;<span *ngIf="userSurveyList.finishedDate">({{
+                                        userSurveyList.finishedDate | date
+                                        : "MM/dd/y HH:mm" }})</span>
+                                    </a> &nbsp;
+                                </div>
+                                <a *ngIf="users.role != 'USERS'" (click)="copyTextToClipBoard(userSurveyList.directLink)" 
+                                    class="cursor-pointer tooltip-cp">  
+                                    <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;">
+                                    <span class="tooltiptext-cp" >Copy to clipboard the topic link</span>                               
+                                </a>
                             </div>
+
+
                             <div id="collapse{{userSurveyList.surveyId}}"
                                 class="panel-collapse collapse">
                                 <!-- The inside div eliminates the 'jumping' animation. -->
                                 <div class="panel-body">
                                     <ng-container *ngFor="let paneList of
                                         userSurveyList.panes;index as j">
-                                        <p class="topic_subpoint">
-                                            <a class="topic_point"
+                                        <p class="topic_subpoint" >
+                                            <a class="topic_point"style="position: relative;"
                                                 (click)="goToTopicPage(userSurveyList.surveyId,paneList.paneCode,userSurveyList.surveyDescription.surveyCode,j)">{{paneList.label}}</a>
+                                            &nbsp;
+                                            <a *ngIf="users.role != 'USERS'" (click)="copyTextToClipBoard(userSurveyList.directLink)" 
+                                                class="cursor-pointer tooltip-cp">  
+                                                <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;">
+                                                <span class="tooltiptext-cp" >Copy to clipboard the topic link</span>                               
+                                            </a>
                                         </p>
                                     </ng-container>
                                 </div>

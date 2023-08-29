@@ -1154,8 +1154,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   showDilalogBox(event : any){
     this.allowSurveySwitchFromArrowKeys = false;
     const dialogRef = this.matDialog.open(SurveyDialogboxComponent, {
-      width: window.outerWidth > 425 ? '70vw' : '85vw',
-      height: window.outerWidth > 425 ? '65vh' :  ( event.surveyAnswers.length < 4 ? '55vh' : '70vh'),
+      width: window.outerWidth > 425 ? '65vw' : '85vw',
+      height: window.outerWidth > 425 ? '60vh' :  ( event.surveyAnswers.length < 4 ? '55vh' : '70vh'),
       data: JSON.parse(JSON.stringify(event)),
       disableClose: false
     });
