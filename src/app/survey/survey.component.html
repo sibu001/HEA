@@ -865,7 +865,7 @@
 
                               <div class="form-group" 
                                *ngIf="surveyAnswerValue?.dataField?.dataType=='number'">
-                                {{((surveyAnswerValue.numberValue ) + (surveyAnswerValue?.dataField?.unit? surveyAnswerValue?.dataField?.unit : '') | displayPatternPipe:surveyAnswerValue?.dataField)}}
+                                {{((surveyAnswerValue.value ) + (surveyAnswerValue?.dataField?.unit? surveyAnswerValue?.dataField?.unit : '') | displayPatternPipe:surveyAnswerValue?.dataField)}}
                               </div>
                             </td>
                           </ng-container>

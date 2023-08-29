@@ -440,7 +440,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks, 'nextPane': true };
         }
       } else {
-        dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks };
+        dataObj = { 'currentPaneAnswers': currentPaneAnswers, 'currentPaneBlocks': currentPaneBlocks, nextPane : false };
       }
 
       if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
@@ -473,10 +473,11 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
       }
 
+      //  check comment https://xp-dev.com/trac/HEA/ticket/2063#comment:624 for better understanding.
       let params = new HttpParams();
-      if(id == 'change'){
-        params = params.append('refreshPaneAnswers','true');
-      }
+      // if(id == 'change'){
+      //   params = params.append('refreshPaneAnswers','true');
+      // }
 
       this.subscriptons.add(
         this.loginService.performPostMultiPartFromData(dataObj, 'customers/' + this.users.currentPaneNumber.survey.customerId + '/surveys/' +
