@@ -60,7 +60,7 @@
                                     </a> &nbsp;
                                 </div>
                                 <a *ngIf="users.role != 'USERS'" (click)="copyTextToClipBoard(userSurveyList.directLink)" 
-                                    class="cursor-pointer tooltip-cp">  
+                                    class="cursor-pointer tooltip-cp d-flex">  
                                     <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;">
                                     <span class="tooltiptext-cp" >Copy to clipboard the topic link</span>                               
                                 </a>
@@ -73,12 +73,12 @@
                                 <div class="panel-body">
                                     <ng-container *ngFor="let paneList of
                                         userSurveyList.panes;index as j">
-                                        <p class="topic_subpoint" >
-                                            <a class="topic_point"style="position: relative;"
+                                        <p class="topic_subpoint d-flex col-md-12" >
+                                            <a class="topic_point"
                                                 (click)="goToTopicPage(userSurveyList.surveyId,paneList.paneCode,userSurveyList.surveyDescription.surveyCode,j)">{{paneList.label}}</a>
-                                            &nbsp;
+                                            &nbsp;&nbsp;
                                             <a *ngIf="users.role != 'USERS'" (click)="copyTextToClipBoard(userSurveyList.directLink)" 
-                                                class="cursor-pointer tooltip-cp">  
+                                                class="cursor-pointer tooltip-cp d-flex">  
                                                 <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;">
                                                 <span class="tooltiptext-cp" >Copy to clipboard the topic link</span>                               
                                             </a>

@@ -22,7 +22,7 @@ export class ZipCodeEditComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
-    this.findWeatherStation(true, '');
+    this.findWeatherStation(false, '');
     this.setForm(undefined);
   }
 

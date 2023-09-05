@@ -69,7 +69,8 @@ import {
   GetLogsCountAction,
   GetEventTypeResctrictionForUserById,
   AddEventTypeResctrictionToUserById,
-  DeleteEventTypeResctrictionFromUserById
+  DeleteEventTypeResctrictionFromUserById,
+  GetPlaceListCountAction
 } from '../state/system-utility.action';
 import { SystemUtilityManagementState } from '../state/system-utility.state';
 
@@ -163,9 +164,18 @@ export class SystemUtilityService {
     return this.store.select(SystemUtilityManagementState.getDegreeDaysById);
   }
 
+  getPlaceListCount() : Observable<any>{
+    return this.store.select(SystemUtilityManagementState.getPlaceListCount)
+  }
+
   loadPlaceList(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetPlaceListAction(force, filter));
   }
+
+  loadPlaceListCount(force: boolean, filter: any): Observable<SystemUtilityManagementState> {
+    return this.store.dispatch(new GetPlaceListCountAction(force, filter));
+  }
+
 
   loadPlaceById(id: number): Observable<SystemUtilityManagementState> {
     return this.store.dispatch(new GetPlaceByIdAction(id));

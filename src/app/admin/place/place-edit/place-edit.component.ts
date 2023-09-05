@@ -2,11 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { ZipCodeEditComponent } from '../zip-code-edit/zip-code-edit.component';
 
@@ -22,6 +23,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   public placeStationId: Array<any>;
   public timezoneData: Array<any>;
   public dataSource: any;
+  public placeData : any;
   public zipData = {
     content: [],
     totalElements: 0,
@@ -38,36 +40,20 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     private readonly router: Router) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
-      this.getZipCodeList();
+      this.loadZipCodeList();
     });
   }
 
   ngOnInit() {
     this.scrollTop();
-    this.findWeatherStation(true, '');
+    this.findWeatherStation(false, '');
     this.loadTimeZoneList();
     this.setForm(undefined);
     if (this.id !== undefined) {
       this.systemUtilityService.loadPlaceById(this.id);
-      this.loadPlaceById();
-    } else {
-      this.findWeatherStation(true, '');
+      this.getPlaceById();
     }
-  }
-
-  findWeatherStation(force: boolean, filter: any): void {
-    this.systemUtilityService.loadWeatherStationList(force, filter);
-    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
-      .subscribe((weatherStationList: any) => {
-        this.placeStationId = weatherStationList;
-      },
-      error => {
-        this.errorMessage = error;
-      }));
-  }
-
-  findZipCode(event: any): any {
-
+    this.combineLatestWeatherStationAndZipCode(); 
   }
 
   goToEditZipCode(event: any): any {
@@ -86,13 +72,13 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     window.scroll(0, 0);
   }
 
-  loadPlaceById() {
-    this.subscriptions.add(this.systemUtilityService.getPlaceById().pipe(skipWhile((item: any) => !item))
+  getPlaceById() {
+    this.subscriptions.add(this.systemUtilityService.getPlaceById()
+    .pipe(filter((item: any) => item && this.id == item.id))
       .subscribe((place: any) => {
-        if (this.isForce) {
-          this.router.navigate(['admin/place/placeEdit'], { queryParams: { 'id': place.id } });
-        }
+        this.placeData = {...place};
         this.setForm(place);
+        this.scrollTop();
       },
       error => {
         this.errorMessage = error;
@@ -116,7 +102,7 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
       place: this.fb.control(event !== undefined ? event.id : '', Validators.required),
       placeName: this.fb.control(event !== undefined ? event.placeName : '', Validators.required),
       stationId: this.fb.control(event !== undefined ? event.stationId : ''),
-      timezone: this.fb.control(event !== undefined ? event.timezone : 'America/Los_Angeles'),
+      timezone: this.fb.control(event !== undefined ? event.timezone : ''),
       latitude: this.fb.control(event !== undefined ? event.latitude : '', [Validators.required, Validators.pattern('^[0-9]+(.[0-9]{0,100})?$')]),
       longitude: this.fb.control(event !== undefined ? event.longitude : '', [Validators.required, Validators.pattern('^[0-9]+(.[0-9]{0,100})?$')]),
     });
@@ -129,7 +115,8 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     if (confirm('Are you sure you want to delete?')) {
       this.subscriptions.add(this.systemUtilityService.deletePlaceById(this.id).pipe(skipWhile((item: any) => !item))
         .subscribe((response: any) => {
-          this.router.navigate(['admin/place/placeList'], { queryParams: { 'force': true } });
+          this.isForce = true;
+          this.back();
         },
         error => {
           this.errorMessage = error;
@@ -140,29 +127,32 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
   save() {
     if (this.placeForm.valid) {
       if (this.id !== null && this.id !== undefined) {
-        this.placeForm.value.id = this.placeForm.value.place;
-        this.subscriptions.add(this.systemUtilityService.updatePlace(this.placeForm.value.id, this.placeForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
+
+        const placeData = {...this.placeData, ...this.placeForm.value};
+        this.subscriptions.add(this.systemUtilityService.updatePlace(this.placeForm.value.id, placeData)
+        .pipe( take(1))
+          .subscribe((state: any) => {
             this.isForce = true;
-            this.scrollTop();
-            this.loadPlaceById();
           },
-            error => {
-              this.errorMessage = error;
-            }));
+          error => {
+            this.errorMessage = error;
+          }));
+
       } else {
-        this.subscriptions.add(this.systemUtilityService.savePlace(this.placeForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.scrollTop();
-            this.loadPlaceById();
+
+        this.subscriptions.add(this.systemUtilityService.savePlace(this.placeForm.value)
+        .pipe(take(1))
+          .subscribe((state: any) => {
+            this.id = state.systemUtilityManagement.place.id;
+            AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+            this.getPlaceById();
           },
-            error => {
-              this.errorMessage = error;
-            }));
+          error => {
+            this.errorMessage = error;
+          }));
+
       }
+
     } else {
       this.validateAllFormFields(this.placeForm);
     }
@@ -179,26 +169,41 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  getZipCodeList() {
+  findWeatherStation(force: boolean, filter: any): void {
+    this.systemUtilityService.loadWeatherStationList(force, filter);
+  }
 
-    this.systemUtilityService.loadWeatherStationList(false, '');
-    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
-      .subscribe((weatherStationList: any) => {
+  loadZipCodeList() {
+    this.systemUtilityService.loadZipCodeList(this.id, '');
+  }
+
+  combineLatestWeatherStationAndZipCode(){
+
+    const weatherStationList$ : Observable<any> = this.systemUtilityService.getWeatherStationList()
+      .pipe(filter((item: any) => item));
+    
+    const zipCodeList$ : Observable<any> = this.systemUtilityService.getZipCodeList()
+      .pipe(filter((item: any) => item));
+
+    this.subscriptions.add(
+      combineLatest([weatherStationList$, zipCodeList$])
+      .subscribe(([weatherStationList, zipCodeList] : any) =>{
+
         this.placeStationId = weatherStationList;
-        this.subscriptions.add(this.systemUtilityService.loadZipCodeList(this.id, '').pipe(skipWhile((item: any) => !item))
-          .subscribe((zipCodeList: any) => {
-            this.zipData.content = [];
-            zipCodeList.systemUtilityManagement.zipCodeList.forEach(element => {
-              let customerGroupObj: any;
-              customerGroupObj = element;
-              if (element.stationId) {
-                customerGroupObj.stationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
-              }
-              this.zipData.content.push(customerGroupObj);
-            });
-            this.dataSource = [...this.zipData.content];
-          }));
-      }));
+        this.zipData.content = [];
+        this.zipData.content = zipCodeList.map(data => {
+          const element = {...data};
+          let customerGroupObj: any;
+          customerGroupObj = element;
+          if (element.stationId) {
+            customerGroupObj.stationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
+          }
+          return element;
+        });
+        this.dataSource = [...this.zipData.content];
+        
+      })
+    )
   }
 
   addZipCode(): any {
@@ -212,15 +217,15 @@ export class PlaceEditComponent implements OnInit, OnDestroy {
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.getZipCodeList();
+        this.loadZipCodeList();
       }
     });
   }
 
   deleteZip(event: any): any {
-    this.subscriptions.add(this.systemUtilityService.deleteZipCodeById(this.id, event.zipCode).pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.systemUtilityService.deleteZipCodeById(this.id, event.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
-        this.getZipCodeList();
+        this.loadZipCodeList();
       },
       error => {
         this.errorMessage = error;

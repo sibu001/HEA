@@ -1,9 +1,9 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { skipWhile } from 'rxjs/operators';
+import { combineLatest, Observable, Subscription } from 'rxjs';
+import { filter, map, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
@@ -21,7 +21,7 @@ export class PlaceListComponent implements OnInit, OnDestroy {
   public dataSource: any;
   public placeData = {
     content: [],
-    totalElements: Number.MAX_SAFE_INTEGER,
+    totalElements: 0,
   };
 
   placeForm: FormGroup = this.fb.group({
@@ -35,6 +35,7 @@ export class PlaceListComponent implements OnInit, OnDestroy {
   public disableNextButton : boolean = false;
   public force = false;
   public sortData: any;
+  @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef;
   private readonly subscriptions: Subscription = new Subscription();
   constructor(public fb: FormBuilder,
     private readonly systemUtilityService: SystemUtilityService,
@@ -51,31 +52,58 @@ export class PlaceListComponent implements OnInit, OnDestroy {
       active: 'placeName',
       direction: 'asc'
     };
-    // this.findPlace(this.force, null);
+    this.loadWeatherStationList();
+    this.combineResponseOfWeatherListAndPlaceList();
+    this.getPlaceListCount();
     this.search(undefined);
   }
 
-  findPlace(force: boolean, filter: HttpParams): any {
+  loadWeatherStationList(){
     this.systemUtilityService.loadWeatherStationList(false, '');
-    this.subscriptions.add(this.systemUtilityService.getWeatherStationList().pipe(skipWhile((item: any) => !item))
-      .subscribe((weatherStationList: any) => {
-        this.systemUtilityService.loadPlaceList(force, filter);
-        this.subscriptions.add(this.systemUtilityService.getPlaceList().pipe(skipWhile((item: any) => !item))
-          .subscribe((customerGroupList: any) => {
-            const placeListData: any = [];
-            customerGroupList.forEach(element => {
-              let customerGroupObj: any;
-              customerGroupObj = element;
-              if (element.stationId) {
-                customerGroupObj.weatherStationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
-              }
-              placeListData.push(customerGroupObj);
-            });
-            this.performPagination(placeListData);
-          }));
-      }));
   }
 
+  loadPlacesList(force: boolean, filter: HttpParams){
+    this.systemUtilityService.loadPlaceList(force, filter);
+  }
+
+  combineResponseOfWeatherListAndPlaceList(){
+    const weatherStation$ :  Observable<any> = this.systemUtilityService.getWeatherStationList().pipe(filter((item: any) => item));
+    const placeList$ :  Observable<any> = this.systemUtilityService.getPlaceList().pipe(filter((item: any) => item));
+
+    this.subscriptions.add(
+      combineLatest([weatherStation$,placeList$])
+      .subscribe(([weatherStationList,placeList] : Array<any>) =>{
+
+        const placeListData: any = [];
+        placeList.forEach(element => {
+          let customerGroupObj: any;
+          customerGroupObj = element;
+          if (element.stationId) {
+            customerGroupObj.weatherStationId = weatherStationList.find(({ stationId }) => stationId === element.stationId).stationNameForLabel;
+          }
+          placeListData.push(customerGroupObj);
+        });
+        this.dataSource = placeListData;
+
+        AppUtility.scrollToTableTop(this.tableScrollPoint);
+      })
+    )
+  
+  }
+
+  loadPlaceListCount(params : HttpParams, force : boolean){
+    this.systemUtilityService.loadPlaceListCount(force,params);    
+  }
+
+  getPlaceListCount() {
+    this.subscriptions.add(
+      this.systemUtilityService.getPlaceListCount()
+      .pipe(map(data => data ? data : 0 ))
+      .subscribe((count : number) =>{
+        this.placeData.totalElements = count;
+      })
+    )
+  }
 
   performPagination(dataList: any){
 
@@ -119,7 +147,8 @@ export class PlaceListComponent implements OnInit, OnDestroy {
       .set('placeName', (this.placeForm.value.placeName !== null ? this.placeForm.value.placeName : ''))
       .set('zipCode', (this.placeForm.value.zipCode !== null ? this.placeForm.value.zipCode : ''))
       .set('pageSize',this.pageSize.toString())
-    this.findPlace(true, params);
+    this.loadPlacesList(true, params);
+    this.loadPlaceListCount(params,true,);
   }
 
   ngOnDestroy(): void {

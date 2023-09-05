@@ -44,6 +44,7 @@ import {
     GetLookupValueListAction,
     GetPlaceByIdAction,
     GetPlaceListAction,
+    GetPlaceListCountAction,
     GetSystemParameterByIdAction,
     GetSystemParameterCountAction,
     GetSystemParameterListAction,
@@ -81,7 +82,8 @@ import { SystemUtilityManagementModel } from './system-utility.model';
 @State<SystemUtilityManagementModel>({
     name: 'systemUtilityManagement',
     defaults: {
-        placeList: undefined,
+        placeList: undefined, 
+        placeListCount: undefined,
         place: undefined,
         customerEventTypeList: undefined,
         allCustomerEventTypeList : undefined,
@@ -282,7 +284,7 @@ export class SystemUtilityManagementState {
 
     @Selector()
     static getZipCodeList(state: SystemUtilityManagementModel): any {
-        return state.zipCodeList;
+        return state.zipCodeList.response;
     }
 
     @Selector()
@@ -317,9 +319,46 @@ export class SystemUtilityManagementState {
         return result;
     }
 
+    @Selector()
+    static getPlaceListCount(state : SystemUtilityManagementModel) : any {
+        return state.placeListCount;
+    }
+
+    @Action(GetPlaceListCountAction)
+    getAllPlaceCount(ctx: StateContext<SystemUtilityManagementModel>, action: GetPlaceListCountAction): Actions {
+        const force: boolean = action.force || SystemUtilityManagementState.getPlaceList(ctx.getState()) === undefined;
+        let result: Actions;
+        if (force) {
+            document.getElementById('loader').classList.add('loading');
+            result = this.loginService.performGetWithParams(
+                AppUtility.endPointGenerator([AppConstant.places,AppConstant.count])
+                , action.filter)
+                .pipe(
+                    tap((response: any) => {
+                        document.getElementById('loader').classList.remove('loading');
+                        ctx.patchState({
+                            placeListCount: response,
+                        });
+                    },this.utilityService.errorCallbak))
+        }
+        return result;
+    }
+
     @Action(GetPlaceByIdAction)
     getPlaceById(ctx: StateContext<SystemUtilityManagementModel>, action: GetPlaceByIdAction): Actions {
-        document.getElementById('loader').classList.add('loading');
+
+        const place = ctx.getState().place;
+        if(place && place.id == action.id) {
+            return;
+        }
+
+        const placeList : any =  ctx.getState().placeList;
+        if(placeList){
+            const place =  placeList.find((place) => place.id == action.id);
+            ctx.patchState({ place : place });
+            return;
+        }
+
         return this.loginService.performGet(AppConstant.places + '/' + action.id)
             .pipe(
                 tap((response: any) => {
@@ -1519,12 +1558,18 @@ export class SystemUtilityManagementState {
     @Action(GetZipCodeListAction)
     getAllZipCodeList(ctx: StateContext<SystemUtilityManagementModel>, action: GetZipCodeListAction): Actions {
         document.getElementById('loader').classList.add('loading');
+
+        const zipCodeList = ctx.getState().zipCodeList;
+        if(zipCodeList && zipCodeList.id == action.placeCode){
+            return;
+        }
+
         return this.loginService.performGetWithParams(AppConstant.places + '/' + action.placeCode + '/' + AppConstant.zipCode, action.filter)
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     ctx.patchState({
-                        zipCodeList: response,
+                        zipCodeList: AppUtility.addCustomIdentifierForReducer({ response : response },action.placeCode),
                     });
                 },
                     error => {
@@ -1540,7 +1585,15 @@ export class SystemUtilityManagementState {
             .pipe(
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
-                    // this.utilityService.showSuccessMessage('Deleted Successfully');
+
+                    let zipCodeList = ctx.getState().zipCodeList;
+                    if(zipCodeList){
+                        zipCodeList.response = zipCodeList.response.filter(data => data.id != action.id);   
+                        
+                        ctx.patchState({
+                            zipCodeList: {...zipCodeList ,  response: [...zipCodeList.response]},
+                        });
+                    }
                 },
                     error => {
                         document.getElementById('loader').classList.remove('loading');
@@ -1556,14 +1609,15 @@ export class SystemUtilityManagementState {
                 tap((response: any) => {
                     document.getElementById('loader').classList.remove('loading');
                     //  this.utilityService.showSuccessMessage('Save Successfully');
+
+                    let zipCodeList =  ctx.getState().zipCodeList;
+                    if(!zipCodeList) zipCodeList = { id : action.placeCode , response : []};
+                    zipCodeList.response.push({...response});
+
                     ctx.patchState({
-                        zipCode: response,
+                        zipCodeList: {...zipCodeList ,  response: [...zipCodeList.response]},
                     });
-                },
-                    error => {
-                        document.getElementById('loader').classList.remove('loading');
-                        this.utilityService.showErrorMessage(error.message);
-                    }));
+                },this.utilityService.errorCallbak));
     }
 
     @Action(GetTimeZoneListAction)

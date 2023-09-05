@@ -1,5 +1,6 @@
 export enum SystemActionTypes {
     GET_PLACE_LIST = 'Get All Place List',
+    GET_PLACE_LIST_COUNT = 'Get All Place List Count',
     GET_PLACE_BY_ID = 'Get Place By Id',
     UPDATE_PLACE = 'Update Place',
     SAVE_PLACE = 'Save Place',
@@ -74,6 +75,11 @@ export enum SystemActionTypes {
 }
 export class GetPlaceListAction {
     static readonly type: SystemActionTypes = SystemActionTypes.GET_PLACE_LIST;
+    constructor(readonly force: boolean, readonly filter: any) {
+    }
+}
+export class GetPlaceListCountAction {
+    static readonly type: SystemActionTypes = SystemActionTypes.GET_PLACE_LIST_COUNT;
     constructor(readonly force: boolean, readonly filter: any) {
     }
 }

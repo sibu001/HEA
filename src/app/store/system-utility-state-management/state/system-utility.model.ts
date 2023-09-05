@@ -1,5 +1,6 @@
 export interface SystemUtilityManagementModel {
     placeList: any;
+    placeListCount : any;
     place: any;
     customerEventTypeList: any;
     allCustomerEventTypeList : any;

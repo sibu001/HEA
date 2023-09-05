@@ -305,7 +305,8 @@ export class LoginComponent implements OnInit, AfterViewInit{
           this.loginService.setUser(this.users);
           AppUtility.showLoader();
 
-          this.router.navigate([this.redirectedRoute ? this.redirectedRoute : 'admin/customer']); 
+          if(!this.redirectedRoute)
+          this.router.navigate(['admin/customer']); 
         },
         (error) => {
           const response = JSON.parse(JSON.stringify(error));
