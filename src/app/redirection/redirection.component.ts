@@ -128,7 +128,7 @@ export class RedirectionComponent implements OnInit {
         this.users =  this.loginService.setUser(this.users);
         if(!this.redirectedRoute){
           this.goToTopicPage(this.surveyId,this.paneCode,this.surveyCode,0,this.customerId);
-        }else if(this.users.role == 'ADMIN' && this.redirectedRoute){
+        }else if(this.users.role != 'USERS' && this.redirectedRoute){
           this.router.navigate([this.redirectedRoute]);
         }else{
           this.router.navigate(['/']);
