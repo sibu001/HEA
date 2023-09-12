@@ -349,6 +349,7 @@ select.dispenser{
 }
 #trendingProfileChartTrends{
     position: fixed !important;
+    width: 300px !important;
 }
 span.Trendswithoutline {
     padding-right: 12px;
@@ -363,4 +364,10 @@ span.title {
 }
 .row.responsive {
     margin-top: 2px;
+}
+
+.trendingProfileChart{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }

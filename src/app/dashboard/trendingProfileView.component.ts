@@ -1,10 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
 import { AppUtility } from '../utility/app.utility';
+import { fromEvent, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+
 declare var $: any;
 declare const plotChartWithParams : any;
+declare const debounce : any;
+
 @Component({
   selector: 'trendingProfileView',
   templateUrl: './trendingProfileView.component.html',
@@ -27,6 +32,9 @@ export class TrendingProfileViewComponent implements OnInit {
   trendingProfile: any;
   errorMessage: any;
   users: Users = new Users();
+  subscriptions : Subscription = new Subscription();
+  public show : boolean = true;
+
   constructor(private loginService: LoginService, private router: Router) {
     this.users = this.loginService.getUser();
     this.getTrendingProfileResource();
@@ -39,6 +47,23 @@ export class TrendingProfileViewComponent implements OnInit {
 
   ngOnInit() {
     AppUtility.removeAllPreviousCanvasElements();
+
+    this.subscriptions.add(
+      fromEvent(window, 'resize')
+      .pipe(debounceTime(500))
+      .subscribe(() =>{
+        this.show = false;
+  
+        AppUtility.removeAllPreviousCanvasElements();
+        setTimeout(() =>  {
+          this.show = true
+          if(!this.trendingProfileData) return;
+          plotChartWithParams(this.trendingProfileData.chart.freeChartConfigurationJS,this.trendingProfileData.chart.series);
+          document.getElementById('trendingProfileChartLegendSection').classList.add('table-responsive');
+        }, 300);
+      
+      })
+    );
   }
 
   home() {
@@ -219,4 +244,6 @@ export class TrendingProfileViewComponent implements OnInit {
     this.trendingProfile.profileLookupValue = useType;
     localStorage.setItem('trendingProfile', JSON.stringify(this.trendingProfile));
   }
+
+
 }

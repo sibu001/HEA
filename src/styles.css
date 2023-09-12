@@ -424,6 +424,10 @@ div.factoid > div > p {
   }
 }
 
+#trendingProfileChartTrends{
+  width: 300px !important;
+}
+
 @media only screen and (min-width: 320px) and (max-width: 480px) {
   .qtip.qtip-default {
     left: 170px !important;
@@ -936,6 +940,15 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   }
 }
 
+@media only screen and (min-width: 816px) and (max-width: 980px) {
+
+  .trendingProfileChart > div {
+    width: 685px !important;
+    height: 100% !important;
+  }
+
+}
+
 @media only screen and (min-width: 816px) and (max-width: 930px) {
   .chartDiv > div > :nth-child(2) {
     float: unset !important;
@@ -943,10 +956,6 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   .chartDiv > div {
     width: 585px !important;
     height: auto !important;
-  }
-  .trendingProfileChart > div {
-    width: 685px !important;
-    height: 100% !important;
   }
   .trendingProfileChart > :nth-child(2) {
     width: 685px !important;
@@ -988,6 +997,12 @@ td.jqplot-table-legend.jqplot-table-legend-label.jqplot-seriesToggle {
   div#chartSeasonalStack {
     margin-bottom: 20px;
   }
+
+  #trendingProfileView #chartSeasonalStack + div {
+    margin-left: 0px !important;
+    margin-top: 0px !important;
+  }
+
   .trendingProfileChart > :nth-child(2) > :nth-child(1) > table {
     margin-top: 20px !important;
   }

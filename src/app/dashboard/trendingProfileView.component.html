@@ -162,7 +162,7 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12" *ngIf="trendingProfileData!=null&&trendingProfileData!=undefined">
-                        <div [innerHTML]="trendingProfileData.chart.freeChartDiv | safeHtml" id="trendingProfileView"
+                        <div *ngIf="show" [innerHTML]="trendingProfileData.chart.freeChartDiv | safeHtml" id="trendingProfileView"
                             class="trendingProfileChart"></div>
                     </div>
                 </div>

@@ -7,10 +7,11 @@ export class DisplayPatternPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
 
+    let displayPattern = ''
     if (value.unit) return value;
 
     if(args.inputType == 'text'){
-      const displayPattern = args.displayPattern;
+      displayPattern = args.displayPattern;
 
     if(displayPattern[0] != '#'){
       return displayPattern[0] + value;
@@ -31,6 +32,11 @@ export class DisplayPatternPipe implements PipeTransform {
 
     }
 
+    if(displayPattern.includes(',')){
+      const formattedValue = Math.abs(value) > 999 ? Math.sign(value)*((Math.abs(value)/1000)): Math.sign(value)*Math.abs(value)
+      return formattedValue.toString().replace('.',',');
+    }
+    
     return value;
   }
 
