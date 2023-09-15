@@ -90,8 +90,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.getNextSurvey();
     this.getTrendingHomeChart();
     this.getTrendingProfileChart();
-    if (this.users.myReportsData != null && this.users.myReportsData.length >= 1) {
-      this.myReportsList = this.users.myReportsData;
+    if (this.users.myReportsData && this.users.myReportsData.customerId == this.users.outhMeResponse.customerId) {
+      this.myReportsList = this.users.myReportsData.data;
     } else {
       this.getMyReport();
     }
@@ -187,8 +187,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/user-reports').subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
-        this.users.myReportsData = response;
-        this.myReportsList = this.users.myReportsData;
+
+        this.users.myReportsData = {
+          customerId : this.users.outhMeResponse.customerId,
+          data : response
+        };
+        this.myReportsList = this.users.myReportsData.data;
         this.loginService.setUser(this.users);
       },
       error => {

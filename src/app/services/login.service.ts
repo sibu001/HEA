@@ -38,7 +38,7 @@ export class LoginService {
         users.treadingLoadsValue = '';
         users.trendId = 1;
         users.profileId = 1;
-        users.myReportsData = null;
+        // users.myReportsData = null;
         users.recommendationList = [];
         users.leakList = [];
         users.customerMailList = [];

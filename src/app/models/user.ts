@@ -24,7 +24,7 @@ export class Users {
     public treadingLoadsValue: string;
     public trendId = 1;
     public profileId = 1;
-    public myReportsData: any;
+    public myReportsData: {customerId : number, data : Array<any> };
     public refreshToken: string;
     public instructionHtml: string;
     public isLeakChange: boolean;
