@@ -2797,3 +2797,36 @@ mat-cell > div{
 app-summary-chart-defination-preview .content-div > img{
   max-width: 100% !important;
 }
+.tooltip-cp .tooltiptext-cp::after{
+  content:"";
+  position: absolute;
+  top:100%;
+  left: 0.5em;
+  border-width: 5px;
+  border-style: solid;
+  border-color:#555 transparent transparent transparent;
+
+}
+
+.tooltip-cp .tooltiptext-cp{
+  display: none;
+  width: auto;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding:5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  opacity: 0;
+  transition: opacity 0.3s;
+  font-size:small;
+  font-weight: normal;
+
+}
+
+.tooltip-cp:hover .tooltiptext-cp{
+  display:block;
+  opacity: 1;
+}

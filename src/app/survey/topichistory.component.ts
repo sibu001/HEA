@@ -175,26 +175,7 @@ export class TopicHistoryComponent implements OnInit, OnDestroy {
   }
 
   copyTextToClipBoard( text : string ) : void{
-
-    AppUtility.copyToClipBoard(text);
-    const toolTip = document.querySelector('.tooltip-cp:hover .tooltiptext-cp');
-
-    const originalMessage = toolTip.innerHTML;
-
-    if((window as any).windowWidth() >= 768)
-      toolTip.innerHTML = text;
-    else
-      toolTip.innerHTML = 'copied!';
-
-    const normalMessage = toolTip.innerHTML;
-    this.subscriptions.add(
-      fromEvent(document.querySelector('.tooltip-cp:hover'),'mouseleave')
-      .pipe(take(1))
-      .subscribe((event : any) =>{
-        toolTip.innerHTML = originalMessage;
-      })
-    )
-
+    this.subscriptions.add(AppUtility.copyToClipboardEvent(text));
   }
 
   ngOnDestroy(): void {

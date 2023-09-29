@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
@@ -6,6 +6,10 @@ import { Location } from '@angular/common';
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
+import { SubscriptionUtil } from '../utility/subscription-utility';
+import { AppUtility } from '../utility/app.utility';
+import { Subscription } from 'rxjs';
+import { AppConstant } from '../utility/app.constant';
 declare var $: any;
 @Component({
   // tslint:disable-next-line: component-selector
@@ -14,16 +18,19 @@ declare var $: any;
   styleUrls: ['./surveyRecommendationList.component.css']
 })
 // tslint:disable-next-line: class-name
-export class surveyRecommendationListComponent implements OnInit, AfterViewInit {
+export class surveyRecommendationListComponent implements OnInit, AfterViewInit, OnDestroy {
   recommendationList: any[] = [];
   users: Users = new Users();
+  private customerId : number;
   savingColor = '#000';
   titleColor = '76ba19';
   statusColor = '76ba19';
   sortingBy = '-priceValue';
   recommendationPriceValueSum = 0;
+  private subscriptions : Subscription = new Subscription();
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
+    this.customerId = this.users.outhMeResponse.customerId;
     this.getLeak();
   }
 
@@ -31,10 +38,27 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
     this.recommendationList = this.users.recommendationList;
    }
 
+   addDirectLinksToRecommendationList(){
+    this.users.recommendationList.forEach(recommendation =>{
+        const recommendationId = recommendation.id;
+        this.addDirectLinkToRecommendation(recommendation,recommendationId );
+    })
+  } 
+
+  addDirectLinkToRecommendation(item:any,recommendationId:number){
+    if(item.directLink) return;
+    this.loginService.performGet(`${AppConstant.customer}/${this.customerId}/${AppConstant.recommendations}/${recommendationId}/directLink`)
+    .subscribe(response => {
+      item.directLink = response.data;
+    });
+
+  }
+
   ngAfterViewInit() {
     if (this.recommendationList.length <= 0 || this.users.recommendationStatusChange) {
       this.getRecommendation();
     }else{
+     this.addDirectLinksToRecommendationList();
       this.scrollToRecommendation();
     }
   }
@@ -104,6 +128,7 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
         this.users.recommendationList = array;
         this.users.recommendationStatusChange = false;
         this.loginService.setUser(this.users);
+        this.addDirectLinksToRecommendationList();
         document.getElementById('loader').classList.remove('loading');
       },
       error => {
@@ -148,5 +173,17 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit 
       array.push(value[0]);
     });
     this.users.recommendationList = array;
+  }
+
+
+  copyTextToClipBoard(event : Event,text : string){
+    event.stopPropagation();
+    event.preventDefault();
+    this.subscriptions.add(AppUtility.copyToClipboardEvent(text));
+  }
+
+  ngOnDestroy(): void {
+    this.loginService.setUser(this.users);
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }

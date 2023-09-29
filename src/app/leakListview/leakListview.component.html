@@ -23,7 +23,14 @@
                         </button>
                     </div>
                     <div class="col-lg-6 col-sm-6 col-xs-9 leaksdata" #first>
-                        <p class="leaks_text" style="margin-top: -21px;">{{leak.recommendation.takebackLabel}}</p>
+                        <p class="leaks_text d-flex"  style="margin-top: -21px;">
+                            {{leak.recommendation.takebackLabel}} &nbsp;&nbsp;
+                            <a *ngIf="users.role != 'USERS'" (click)="copyTextToClipBoard(leak.directLink)" 
+                                class="cursor-pointer tooltip-cp d-flex" style="margin-top: 6px;">  
+                                <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;">
+                                <span class="tooltiptext-cp" >Copy to clipboard the topic link</span>                               
+                            </a>
+                        </p>
                         <div class="row progressbar">
                             <div class="col-lg-5 col-sm-5">
                                 <div class="progress">

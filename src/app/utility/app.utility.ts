@@ -2,6 +2,8 @@ import { HttpParams } from "@angular/common/http";
 import { ElementRef } from "@angular/core";
 import { AbstractControl, FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { fromEvent, Subscription } from "rxjs";
+import { take } from "rxjs/operators";
 import { isNullOrUndefined } from "util";
 import { PaginateModel } from "../interface/paginate-model";
 import { AdminFilter, ScriptDebugConsoleData } from "../models/filter-object";
@@ -569,4 +571,27 @@ export class AppUtility {
         document.execCommand('copy');
         document.body.removeChild(tempInput);
     }
+
+    // check topic-history.copyTextToClipBoard method in java.
+    public static copyToClipboardEvent(text : string) : Subscription{
+
+        AppUtility.copyToClipBoard(text);
+        const toolTip = document.querySelector('.tooltip-cp:hover .tooltiptext-cp');
+        const originalMessage = toolTip.innerHTML;
+    
+        if((window as any).windowWidth() >= 768)
+          toolTip.innerHTML = text;
+        else
+          toolTip.innerHTML = 'copied!';
+    
+        const normalMessage = toolTip.innerHTML;
+
+        return fromEvent(document.querySelector('.tooltip-cp:hover'),'mouseleave')
+        .pipe(take(1))
+        .subscribe((event : any) =>{
+          toolTip.innerHTML = originalMessage;
+        })
+
+    }
+    
 }  
