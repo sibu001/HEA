@@ -110,16 +110,34 @@ export class leakListViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/surveyRecommendationList']);
 
   }
-  leakHelp(id, priceValue, takebackValue, takebackLabel) {
-    this.sendMailForHelp(priceValue, takebackValue, takebackLabel);
+  leakHelp(id, priceValue, takebackValue, surveyRecommendationId) {
+    this.sendMailForHelp(priceValue, takebackValue, surveyRecommendationId);
     this.users.leakList[id].flag = false;
   }
 
-  sendMailForHelp(priceValue, takebackValue, takebackLabel) {
-    const content = 'toAddress=support@hea.com&fromAddress=' + this.users.outhMeResponse.user.email + '&subject=Request for Leak help, audit '
-      + this.users.outhMeResponse.auditId + '&subjectCharset=utf-8&bodyContent=Leak:' + takebackLabel + ' <br> Size:' + takebackValue + ' watts and $' +
-      priceValue + ' wasted a year <br> User: ' + this.users.outhMeResponse.user.name + ' ' + this.users.outhMeResponse.user.email + ' ' + this.users.outhMeResponse.phoneNumber + '&bodyCharset=utf-8&contentType=text/html';
-    this.loginService.performGetMultiPartData('sendMail.do?' + content).subscribe(
+  sendMailForHelp(priceValue, takebackValue, surveyRecommendationId) {
+    // const content = 'toAddress=support@hea.com&fromAddress=' + this.users.outhMeResponse.user.email + '&subject=Request for Leak help, audit '
+    //   + this.users.outhMeResponse.auditId + '&subjectCharset=utf-8&bodyContent=Leak:' + surveyRecommendationId + ' <br> Size:' + takebackValue + ' watts and $' +
+    //   priceValue + ' wasted a year <br> User: ' + this.users.outhMeResponse.user.name + ' ' + this.users.outhMeResponse.user.email + ' ' + this.users.outhMeResponse.phoneNumber + '&bodyCharset=utf-8&contentType=text/html';
+
+      const formData = new FormData();
+      formData.append('toAddress','support@hea.com');
+      formData.append('fromAddress',this.users.outhMeResponse.user.email);
+      formData.append('subject','Request for Leak help, audit'+this.users.outhMeResponse.auditId);
+      formData.append('subjectCharset','utf-8');
+      formData.append('bodyContent','Leak:'+surveyRecommendationId);
+      formData.append('<br> Size',takebackValue);
+      formData.append('watts and $',priceValue);
+      formData.append('wasted a year <br> User:',this.users.outhMeResponse.user.name);
+      formData.append(' ',this.users.outhMeResponse.user.email);
+      formData.append(' ',this.users.outhMeResponse.phoneNumber );
+      formData.append('bodyCharset','utf-8');
+      formData.append('contentType','text/html');
+
+
+
+
+    this.loginService.performPostMultiPartFromData({},`customers/${this.customerId}/surveyRecommendations/${surveyRecommendationId}/sendHelpWithLeakMail`,formData).subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
         console.log(response);
