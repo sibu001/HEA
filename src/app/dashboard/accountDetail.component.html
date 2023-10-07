@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm-9">
                 <div class="row" style="margin-top:15px">
-                    <div class="col-sm-12">
+                    <div class="col-sm-12 form-padding">
                         <p class="error-message" *ngIf="errorMessage">
                             {{errorMessage?.error?.errorMessage}}
                             <span *ngIf="!errorMessage.error.errorMessage">
@@ -12,13 +12,13 @@
                         </p>
                         <p class="Account">Account Settings</p>
                         <form class="form-horizontal">
-                            <div class="form-group">
+                            <div class="form-group rowPadding borderBottom">
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="Username">Username:</label>
                                 <div class="col-sm-6 col-xs-7">
                                     <input type="text" class="form-control"
                                         id="Username" name="username"
-                                        [(ngModel)]="users.outhMeResponse.user.username">
+                                        [(ngModel)]="userAccountDetails.username">
                                 </div>
                                 <div class="col-sm-4 col-xs-2">
                                     <img src="assets/images/icon_help.svg"
@@ -39,38 +39,38 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group rowPadding borderBottom" >
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="mail">E-mail:</label>
                                 <div class="col-sm-6 col-xs-7">
                                     <input type="text" class="form-control"
                                         id="mail" name="email"
-                                        [(ngModel)]="users.outhMeResponse.user.email">
+                                        [(ngModel)]="userAccountDetails.email">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group rowPadding borderBottom">
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="name">Name:</label>
                                 <div class="col-sm-6 col-xs-7">
                                     <input type="text" class="form-control"
                                         id="name" name="Name"
-                                        [(ngModel)]="users.outhMeResponse.user.name">
+                                        [(ngModel)]="userAccountDetails.name">
                                 </div>
                             </div>
-                            <div class="form-group" *ngIf="users.role!='USERS'">
+                            <!-- <div class="form-group" *ngIf="users.role!='USERS'">
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="name">Status:</label>
                                 <div class="col-sm-6 col-xs-7">
                                     <select class="form-control form-control-sm"
                                         id="status" name="status"
-                                        [(ngModel)]="users.outhMeResponse.user.status">
+                                        [(ngModel)]="userAccountDetails.status">
                                         <option value="0">Active (0)</option>
                                         <option value="10">In registration (10)</option>
                                         <option value="90">Blocked (90)</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="form-group" *ngIf="users.role=='USERS'">
+                            </div> -->
+                            <div class="form-group rowPadding borderBottom" *ngIf="users.role=='USERS'">
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="phone">Phone number:</label>
                                 <div class="col-sm-6 col-xs-7">
@@ -79,7 +79,7 @@
                                         [(ngModel)]="users.outhMeResponse.phoneNumber">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group rowPadding borderBottom">
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="pwd">New password:</label>
                                 <div class="col-sm-6 col-xs-7">
@@ -111,7 +111,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group rowPadding borderBottom">
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="newPwd">New password (repeat):</label>
                                 <div class="col-sm-6 col-xs-7">
@@ -125,15 +125,15 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group" *ngIf="users.role!='USERS'">
+                            <div class="form-group rowPadding borderBottom" *ngIf="users.role!='USERS'">
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="phone">Customer View:</label>
                                 <div class="col-sm-6 col-xs-7">
                                     <select class="form-control form-control-sm"
                                         id="customerViewConfigurationId"
                                         name="customerViewConfiguration"
-                                        [(ngModel)]="users.outhMeResponse.user.customerViewConfigurationId">
-                                        <option value="-1">Standard</option>
+                                        [(ngModel)]="userAccountDetails.customerViewConfigurationId">
+                                        <option value="null">Standard</option>
                                         <option *ngFor="let viewConfiguration of
                                             viewConfigurationList"
                                             [value]="viewConfiguration.viewConfigurationId">
@@ -141,7 +141,23 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group"
+
+
+                            <div class="form-group rowPadding borderBottom" *ngIf="users.role!='USERS'">
+                                <label class="control-label col-sm-2 col-xs-3"
+                                    for="rUI">Customer rUI opening behavior:</label>
+                                <div class="col-sm-6 col-xs-7">
+                                    <select class="form-control form-control-sm"
+                                    id="uiVersionBehavior"
+                                    name="uiVersion"
+                                    [(ngModel)]="userAccountDetails.uiVersionBehavior">
+                                        <option *ngFor="let uiBehaviour of uiBehaviourVersionList"
+                                        [value]="uiBehaviour[1]">{{uiBehaviour[0]}}</option>
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group rowPadding borderBottom"
                                 *ngIf="users.outhMeResponse.calWaterAccount!=null&&users.outhMeResponse.calWaterAccount!=undefined
                                 && users.role=='USERS'">
                                 <label class="control-label col-sm-2 col-xs-3"
@@ -151,7 +167,7 @@
                                             class="a_edit" (click)="edit(3)">Edit</a></p>
                                 </div>
                             </div>
-                            <div class="form-group"
+                            <div class="form-group rowPadding borderBottom"
                                 *ngIf="users.outhMeResponse.purismaAccount!=null&&users.outhMeResponse.purismaAccount!=undefined&&
                                 users.role=='USERS'">
                                 <label class="control-label col-sm-2 col-xs-3"
@@ -161,7 +177,7 @@
                                             class="a_edit" (click)="edit(3)">Edit</a></p>
                                 </div>
                             </div>
-                            <div class="form-group" *ngIf="users.role=='USERS'">
+                            <div class="form-group rowPadding borderBottom" *ngIf="users.role=='USERS'">
                                 <label class="control-label col-sm-2 col-xs-3"
                                     for="address">Address:</label>
                                 <div class="col-sm-6 col-xs-7">
@@ -195,7 +211,6 @@
                         </form>
                     </div>
                 </div>
-                <hr>
                 <div class="row" *ngIf="users.role=='USERS'">
                     <div
                         class="col-sm-12 table-responsive">
@@ -377,7 +392,7 @@
                     <div class="col-sm-6 col-xs-9"
                         style="text-align:right;">
                         <button class="btn btn-primary" type="button"
-                            (click)="postCustomerData()">Save</button>
+                            (click)="save()">Save</button>
                     </div>
                 </div>
             </div>

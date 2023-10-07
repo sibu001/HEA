@@ -106,7 +106,7 @@ ul.saving {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 ul.saving li {
@@ -370,4 +370,9 @@ span.title {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.tooltip-cp .tooltiptext-cp{
+    z-index: 99999999999;
+    bottom: 97%;
 }

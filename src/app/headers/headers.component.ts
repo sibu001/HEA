@@ -116,6 +116,14 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
     // AppUtility.initPendingMessagesService(this.users.userId);
     // AppUtility.multicastPendingMessages(this.users.userId);
     /* for demonstration purposes only */
+
+      this.subscriptions.push(
+        this.loginService.userStateListner.subscribe(
+          (users : Users) => {
+            this.users = users;
+          })
+      );
+
     $('.navbar-toggle').click(function () {
       if ($(this).hasClass('collapsed')) {
         $(this).removeClass('collapsed');

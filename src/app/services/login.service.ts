@@ -4,15 +4,18 @@ import { AppUtility } from 'src/app/utility/app.utility';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 @Injectable()
 export class LoginService {
     private users: Users;
+    public userStateListner : Subject<any> = new Subject<any>();
+
     constructor(private http: HttpClient, private router: Router) {
     }
     public setUser(users: Users) : Users{
         localStorage.setItem('users', JSON.stringify(users));
         this.users = users;
+        this.userStateListner.next(this.users);
         return this.users;
     }
 

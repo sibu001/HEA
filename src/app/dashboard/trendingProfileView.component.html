@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
-                <div class="backcolor">
+                <div class="backcolor" style="overflow: hidden;">
                     <ul class="saving">
                         <li>
                             <a>
@@ -16,6 +16,13 @@
                                 <span class="Trends">My Profile</span>
                             </a>
                         </li>
+                        <li>
+                            <a *ngIf="users.role != 'USERS'" (click)="copyTextToClipBoard(trendingProfile.directLink)" 
+                                class="tooltip-container cursor-pointer tooltip-cp d-flex">  
+                                <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;margin-top: 10px;margin-left: 6px;">
+                                <span class="tooltiptext-cp" >Copy to clipboard the topic link</span>                               
+                            </a> 
+                        </li>
                     </ul>
                 </div>
                 <div class="row responsive">
@@ -25,7 +32,7 @@
                         </p>
                         <ul class="saving" style="font-size: 15px;">
                             <li>
-                                <span class="Trendswithoutline">Trends for</span>
+                                <span class="Trendswithoutline">Resource Use</span>
                             </li>
                             <li *ngFor="let resource of users.trendingProfileResource;index as i">
                                 <span

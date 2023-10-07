@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AppUtility } from '../utility/app.utility';
 import { fromEvent, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { AppConstant } from '../utility/app.constant';
+import { HttpParams } from '@angular/common/http';
 
 declare var $: any;
 declare const plotChartWithParams : any;
@@ -24,6 +26,7 @@ export class TrendingProfileViewComponent implements OnInit {
   resourceTypeNumber = 0;
   typeNumber: number;
   typeName: string;
+  directLink: any;
   profileUnitType: string;
   profileUseType: string;
   profileLookupValue: string;
@@ -64,6 +67,16 @@ export class TrendingProfileViewComponent implements OnInit {
       
       })
     );
+  }
+
+
+  addDirectLinkToTrendingProfile(params : HttpParams){
+    this.loginService.performGetWithParams(`customers/${this.users.outhMeResponse.customerId}/trendingProfile/directLink`,params)
+    .subscribe(response => {
+      const responseData = response.data;
+      this.trendingProfile.directLink = responseData;
+      localStorage.setItem('trendingProfile',JSON.stringify(this.trendingProfile));
+    });
   }
 
   home() {
@@ -126,6 +139,7 @@ export class TrendingProfileViewComponent implements OnInit {
     this.trendingProfile.unitType = this.unitType;
     this.trendingProfile.typeName = this.typeName;
     this.trendingProfile.typeNumber = this.typeNumber;
+    this.trendingProfile.directLink = this.directLink; 
     localStorage.setItem('trendingProfile', JSON.stringify(this.trendingProfile));
     this.getTrendingPart(this.profileResourceType, this.profileUnitType, this.profileLookupValue);
   }
@@ -205,6 +219,16 @@ export class TrendingProfileViewComponent implements OnInit {
             }
           }
         }
+
+        const params : HttpParams = new HttpParams()
+            .append('resourceUse',this.trendingProfile.profileResourceType)
+            .append('unitType', this.trendingProfile.profileUnitType )
+            .append('useType', this.trendingProfile.profileLookupValue );
+            
+            this.addDirectLinkToTrendingProfile(params);
+
+         
+
         document.getElementById('loader').classList.remove('loading');
         this.getTrendingPart(this.profileResourceType, this.profileUnitType, this.profileLookupValue);
       },
@@ -216,7 +240,14 @@ export class TrendingProfileViewComponent implements OnInit {
     );
   }
   getTrendingPart(resourcesUse, unitType, useType) {
-    document.getElementById('loader').classList.add('loading');
+
+    const params : HttpParams = new HttpParams()
+      .append('resourceUse',resourcesUse)
+      .append('unitType', unitType)
+      .append('useType', useType);
+
+    this.addDirectLinkToTrendingProfile(params);
+
     const param = 'resourceType=' + resourcesUse + '&unitType=' + unitType + '&useType=' + useType;
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingProfileChart?' + param).subscribe(
       data => {
@@ -243,6 +274,10 @@ export class TrendingProfileViewComponent implements OnInit {
     );
     this.trendingProfile.profileLookupValue = useType;
     localStorage.setItem('trendingProfile', JSON.stringify(this.trendingProfile));
+  }
+
+  copyTextToClipBoard( text : string ) : void{
+    this.subscriptions.add(AppUtility.copyToClipboardEvent(text));
   }
 
 

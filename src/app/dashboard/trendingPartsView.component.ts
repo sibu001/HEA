@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, Renderer2, ViewChildren, ElementRef, QueryList } from '@angular/core';
+import { Component, OnInit, AfterViewInit, Renderer2, ViewChildren, ElementRef, QueryList, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
@@ -6,17 +6,20 @@ import { ActivatedRoute, ActivationEnd, Router } from '@angular/router';
 import { AppUtility } from '../utility/app.utility';
 import { HttpParams } from '@angular/common/http';
 import { Element } from '@angular/compiler';
+import { Subscription } from 'rxjs';
+import { SubscriptionUtil } from '../utility/subscription-utility';
 declare var $: any;
 @Component({
   selector: 'trendingPartsView',
   templateUrl: './trendingPartsView.component.html',
   styleUrls: ['./trendingPartsView.component.css']
 })
-export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
+export class TrendingPartsViewComponent implements OnInit, AfterViewInit, OnDestroy {
   colors: any = {};
   useType: any[] = [];
   useTypeUse: any[] = [];
   trendingData: any[] = [];
+  directLink: any
   typeNumber: number;
   typeName: string;
   unitType: any[] = [];
@@ -30,6 +33,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     unitType: 'cost',
     useTypes: 'all'
   };
+  subscriptions : Subscription = new Subscription();
   constructor(private location: Location,
     private loginService: LoginService,
     private renderer: Renderer2,
@@ -65,6 +69,16 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
 
   home() {
     this.router.navigate(['/dashboard']);
+  }
+  
+  addDirectLinkToTrendingParts(params : HttpParams){
+    this.loginService.performGetWithParams(`customers/${this.users.outhMeResponse.customerId}/trendingParts/directLink`,params)
+    .subscribe(response => {
+      const responseData = response.data;
+      console.log(responseData);
+     this.trendingParts.directLink = responseData;
+      localStorage.setItem('trendingParts',JSON.stringify(this.trendingParts));
+    });
   }
 
   changesLookupValue(value: any) {
@@ -226,6 +240,7 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     this.trendingParts.unitType = unitType;
     this.trendingParts.useTypes = this.partLookupValue = useType;
     this.trendingParts.customerId = this.users.outhMeResponse.customerId;
+    this.trendingParts.directLink = this.directLink
     // localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
     const param = 'resourceUse=' + resourcesUse + '&unitType=' + unitType + '&useType=' + useType;
     this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/trendingParts?' + param).subscribe(
@@ -254,6 +269,13 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
     );
     this.trendingParts.partLookupValue = useType;
     // localStorage.setItem('trendingParts', JSON.stringify(this.trendingParts));
+
+    const parameter:  HttpParams = new HttpParams()
+      .append('resourceUse',this.trendingParts.activeResource )
+      .append('unitType', this.trendingParts.unitType )
+      .append('useType',  this.trendingParts.useTypes );
+
+    this.addDirectLinkToTrendingParts(parameter);
   }
 
   //  event added to change the date range on the bar graph
@@ -312,5 +334,13 @@ export class TrendingPartsViewComponent implements OnInit, AfterViewInit {
           console.error(error);
         }
       )
+  }
+
+  copyTextToClipBoard( text : string ) : void{
+    this.subscriptions.add(AppUtility.copyToClipboardEvent(text));
+  }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscriptions);
   }
 }

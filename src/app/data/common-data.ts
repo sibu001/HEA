@@ -472,6 +472,14 @@ export class TableColumnData {
         ['D', 'Customer Files']
     ]);
 
+    static readonly UI_VERSION_BEAHAVIOUR : Map<string, string> = new Map<string, string>([
+        ['By default', null],
+        ['In the current tab', AppConstant.UI_VERSION_BEHAVIOR_KEEP_TAB],
+        ['In the new tab', AppConstant.UI_VERSION_BEHAVIOR_NEW_TAB],
+        ['Always use cUI', AppConstant.UI_VERSION_BEHAVIOR_ALWAYS_CUI],
+       
+    ]);
+
 
     static readonly TRENDING_PART_KEYS: Array<TABLECOLUMN> = [
         { key: 'labelTemplate', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },

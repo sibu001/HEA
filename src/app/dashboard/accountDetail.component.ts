@@ -13,7 +13,7 @@ declare var $: any;
 @Component({
   selector: 'accountDetail',
   templateUrl: './accountDetail.component.html',
-  styleUrls: ['../survey/topichistory.component.css']
+  styleUrls: ['./accountDetail.component.css']
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
   @ViewChild('inp1') inp1: ElementRef;
@@ -47,6 +47,9 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   public confirmPassword : string = '';
   public userId : number;
   public confirmPasswordMissMatch : boolean = false;
+  public uiBehaviourVersionList = Array.from(TableColumnData.UI_VERSION_BEAHAVIOUR);
+  public userAccountDetails : any;
+
   constructor(
     private loginService: LoginService,
     private router: Router,
@@ -59,8 +62,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
   ngOnInit() {
     if (this.users.role === 'USERS') {
       this.getCustomerCredentials();
+      this.userAccountDetails = this.users.outhMeResponse.user;
       this.id = this.users.outhMeResponse.id;
-      this.userId = this.users.outhMeResponse.userId;
 
       this.getOptOut();
       this.loadOptOut();
@@ -71,7 +74,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       this.emailSettingsList();
 
     } else {
-      this.users.outhMeResponse = { user: this.users.userData };
+      this.userAccountDetails = this.users.userData;
       this.loadCustomerViewConfiguration();
     }
     
@@ -130,7 +133,6 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       data => {
         const response = JSON.parse(JSON.stringify(data));
         this.customerCredentialsList = response;
-        console.log(response);
         document.getElementById('loader').classList.remove('loading');
       },
       error => {
@@ -140,25 +142,53 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     ));
   }
 
-  postCustomerData() {
+
+
+  save(){
+    if(this.users.role == 'USERS'){
+      this.saveCustomerAccountDetais();
+    }else{
+      this.saveAdminAccountDetails();
+    }
+  } 
+
+  saveAdminAccountDetails() {
     if(!this.saveNewPassword()) return;
-    document.getElementById('loader').classList.add('loading');
-    this.subscriptions.add(this.loginService.performPut(this.users.outhMeResponse, 'customers/' + this.users.outhMeResponse.customerId).subscribe(
-      data => {
-        const response = JSON.parse(JSON.stringify(data));
-        this.scrollTop();
-        document.getElementById('loader').classList.remove('loading');
-        this.users.outhMeResponse = response;
+    const userId = this.users.userData.userId;
+    this.subscriptions.add(this.loginService.performPut(this.users.userData, 'users/' + userId).subscribe(
+      response => {
+        this.users.userData =response;
+        this.users.name = response.name;
+        this.users.username = response.username;
         this.loginService.setUser(this.users);
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['/admin/customer']);  
       },
       error => {
         console.log(JSON.parse(JSON.stringify(error)));
         this.errorMessage = error;
         this.scrollTop();
-        document.getElementById('loader').classList.remove('loading');
       }
     ));
+  }
+
+
+  saveCustomerAccountDetais(){
+
+    if(!this.saveNewPassword()) return;
+    this.subscriptions.add(this.loginService.performPut(this.users.outhMeResponse, 'customers/' + this.users.outhMeResponse.customerId).subscribe(
+      response => {
+        this.users.outhMeResponse = response;
+        this.users.name = response.user.name;
+        this.users.username = response.user.username;
+        this.loginService.setUser(this.users);
+        this.router.navigate(['dashboard']);
+      },
+      error => {
+        this.errorMessage = error;
+        this.scrollTop();
+      }
+    ));
+
   }
 
   loadCustomerViewConfiguration() {

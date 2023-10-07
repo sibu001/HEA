@@ -212,4 +212,12 @@ export class AppConstant {
     
     //  used to target the error field span in the form
     public static readonly SERVER_ERROR_MESSAGE_FIELDS = 'server-error-message-fields';
+
+
+    // used for UI version behaviour for the current loggedIn user 
+    // for more details check, check https://xp-dev.com/trac/HEA/ticket/2402#comment:15 
+    public static readonly UI_VERSION_BEHAVIOR_KEEP_TAB = 'keep_tab'; // always open UI in the current tab, cUI or rUI, depends from a customer's UI;
+    public static readonly UI_VERSION_BEHAVIOR_NEW_TAB = 'new_tab' // if an user's UI different than the rUI - open cUI in the new tab;
+    public static readonly UI_VERSION_BEHAVIOR_ALWAYS_CUI = 'always_cui' // always use rUI for all customers in the current tab.
+
 }

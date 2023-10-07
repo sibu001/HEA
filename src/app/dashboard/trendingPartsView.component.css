@@ -315,3 +315,8 @@ p.rolling.small{
 span.title:hover {
     text-decoration: underline;
 }
+
+.tooltip-cp .tooltiptext-cp{
+    z-index: 99999999999;
+    bottom: 97%;
+}

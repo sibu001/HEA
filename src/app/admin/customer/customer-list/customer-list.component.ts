@@ -399,9 +399,63 @@ export class CustomerListComponent implements OnInit, OnDestroy {
           this.users.theme = customer.customerManagement.customer.customerGroup.theme;
           this.users.recommendationStatusChange = true;
           this.loginService.setUser(this.users);
+          
+          const customerUIVersion = this.users.outhMeResponse.uiVersion;
+          const userUIBehaviour = this.users.userData.uiVersionBehavior;
+
+          // condition added for opening user screen on the behalf of 'customerUIVersion' and 'userUIBehaviour'
+          // for more detail check out, https://xp-dev.com/trac/HEA/ticket/2402#comment:15
+          if(customerUIVersion==AppConstant.classicVersionSelectionValue && userUIBehaviour != AppConstant.UI_VERSION_BEHAVIOR_ALWAYS_CUI ){
+
+            const openNewTab = AppConstant.UI_VERSION_BEHAVIOR_NEW_TAB == userUIBehaviour;
+
+            if(event.routeLink == '/topicshistory'){
+              this.redirectToclassicTopicHitory(this.users.outhMeResponse.user.userId,openNewTab);     
+            }else if(event.routeLink == '/dashboard'){
+              this.redirectToclassicDashboard(this.users.outhMeResponse.user.userId,openNewTab);           
+            }
+            
+            return;
+          }
+
           this.router.navigate([event.routeLink], { queryParams: event.queryParam });
         }));
     }
+  }
+
+  private redirectToclassicTopicHitory(userId : number, openInNewTab : boolean){
+    const redirectionURL = `${window.location.origin}/hea-web/surveyHistoryList.do`;
+    this.sendDataToClassicCUI( redirectionURL, userId, openInNewTab);
+  }
+
+  private redirectToclassicDashboard(userId : number, openInNewTab : boolean){
+    const redirectionURL = `${window.location.origin}/hea-web/trendingHome.do`;
+    this.sendDataToClassicCUI( redirectionURL, userId, openInNewTab);
+  }
+
+
+  private sendDataToClassicCUI(redirectionURL : string , userId : number, openInNewTab : boolean){
+
+    let workingDocument = document;
+
+    if(openInNewTab){
+      const newWindow = window.open('', '_blank');
+      workingDocument = newWindow.document;
+    }
+
+    const form = workingDocument.createElement('form') as HTMLFormElement;
+    form.action = redirectionURL; 
+    form.method = 'post';
+
+    const userIdInput = workingDocument.createElement('input') as HTMLInputElement;
+    userIdInput.type = 'hidden';
+    userIdInput.name = 'userId';
+    userIdInput.value = userId.toString();
+    form.appendChild(userIdInput);
+
+    workingDocument.body.appendChild(form);
+    form.submit();
+
   }
 
   ngOnDestroy(): void {
