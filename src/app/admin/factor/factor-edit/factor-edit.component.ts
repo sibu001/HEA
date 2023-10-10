@@ -170,17 +170,20 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    if (this.factorForm.value.selectAllCity) {
-      this.subscriptions.add(this.systemUtilityService.removeFactorForAllCity(this.id).pipe(skipWhile((item: any) => !item))
-        .subscribe((response: any) => {
-          this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': true } });
-        }));
-    } else {
-      this.subscriptions.add(this.systemUtilityService.deleteFactorById(this.id).pipe(skipWhile((item: any) => !item))
-        .subscribe((response: any) => {
-          this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': true } });
-        }));
+    if(AppUtility.deleteConfirmatonBox()){
+      if (this.factorForm.value.selectAllCity) {
+        this.subscriptions.add(this.systemUtilityService.removeFactorForAllCity(this.id).pipe(skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': true } });
+          }));
+      } else {
+        this.subscriptions.add(this.systemUtilityService.deleteFactorById(this.id).pipe(skipWhile((item: any) => !item))
+          .subscribe((response: any) => {
+            this.router.navigate(['admin/factor/factorList'], { queryParams: { 'force': true } });
+          }));
+      }
     }
+   
   }
 
   save() {

@@ -64,11 +64,14 @@ export class WeatherStationEditComponent implements OnInit, OnDestroy {
   }
   
   delete() {
-    this.subscriptions.add(this.systemUtilityService.deleteWeatherStationById(this.id).pipe(skipWhile((item: any) => !item))
+    if(AppUtility.deleteConfirmatonBox()){
+      this.subscriptions.add(this.systemUtilityService.deleteWeatherStationById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.isForce= true;
         this.router.navigate(['admin/weatherStation/weatherStationList'], { queryParams: { 'force': this.isForce } });
       }));
+    }
+    
   }
 
   save() {

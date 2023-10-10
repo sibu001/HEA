@@ -166,7 +166,7 @@ export class TableColumnData {
         { key: 'paramCode', sort: 'paramCode', isEdit: true, displayName: 'Parameter Code', isUnderline: true },
         { key: 'description', sort: 'description', isEdit: true, displayName: 'Description' },
         { key: 'paramValue', isEdit: true, displayName: 'Parameter Value' },
-        { key: 'format', isEdit: true, displayName: 'Format' },
+        { key: 'format', isEdit: true, displayName: 'Format Type' },
     ];
 
     static readonly WEATHER_STATION_KEYS: Array<TABLECOLUMN> = [

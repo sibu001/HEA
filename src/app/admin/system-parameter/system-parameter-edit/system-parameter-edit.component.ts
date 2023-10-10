@@ -68,10 +68,13 @@ export class SystemParameterEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/systemParameter/systemParameterList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.systemUtilityService.deleteSystemParameterById(this.id).pipe(skipWhile((item: any) => !item))
+    if(AppUtility.deleteConfirmatonBox()){
+      this.subscriptions.add(this.systemUtilityService.deleteSystemParameterById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/systemParameter/systemParameterList'], { queryParams: { 'force': true } });
       }));
+    }
+    
   }
 
   save() {

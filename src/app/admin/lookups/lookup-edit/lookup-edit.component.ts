@@ -84,10 +84,13 @@ export class LookupEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/lookup/lookupList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.systemUtilityService.deleteLookupById(this.id).pipe(skipWhile((item: any) => !item))
+    if(AppUtility.deleteConfirmatonBox()){
+      this.subscriptions.add(this.systemUtilityService.deleteLookupById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/lookup/lookupList'], { queryParams: { 'force': true } });
       }));
+    }
+    
   }
 
   deleteLookupValue(event: any) {

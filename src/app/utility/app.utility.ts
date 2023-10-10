@@ -250,8 +250,9 @@ export class AppUtility {
               dataSource = [...dataList];
               pageIndex = currentIndex;
             } else {
-            if(newFilterSearch)
+            if(newFilterSearch || dataList.length == 0){
                 dataSource = [...dataList];
+            }
             pageIndex = currentIndex -1;
           }}  
           newFilterSearch = false;

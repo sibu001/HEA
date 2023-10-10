@@ -2,10 +2,11 @@ import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/co
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { filter, skipWhile } from 'rxjs/operators';
+import { filter, skipWhile, take } from 'rxjs/operators';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
+import { AppUtility } from 'src/app/utility/app.utility';
 
 @Component({
   selector: 'app-program-group-edit',
@@ -35,7 +36,7 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
     this.scrollTop();
     this.loadCustomerEvent();
     this.setForm(undefined);
-    if (this.id !== undefined) {
+    if (this.id) {
       this.systemService.loadProgramGroupById(Number(this.id));
       this.loadProgramGroupById();
     }
@@ -52,10 +53,11 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.systemService.getProgramGroupById()
       .pipe(filter((item: any) =>item && item.id == this.id))
       .subscribe((programGroup: any) => {
-        if (this.isForce) {
-          this.router.navigate(['admin/program/programGroupEdit'], { queryParams: { 'id': programGroup.id } });
-        }
+        // if (this.isForce) {
+        //   this.router.navigate(['admin/program/programGroupEdit'], { queryParams: { 'id': programGroup.id } });
+        // }
         this.setForm(programGroup);
+        AppUtility.scrollTop();
       }));
   }
   setForm(event: any) {
@@ -82,22 +84,20 @@ export class ProgramGroupEditComponent implements OnInit, OnDestroy {
 
   save() {
     if (this.programGroupForm.valid) {
-      if (this.id !== null && this.id !== undefined) {
-        this.subscriptions.add(this.systemService.updateProgramGroup(this.id, this.programGroupForm.value).pipe(
-          skipWhile((item: any) => !item))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.scrollTop();
-            this.loadProgramGroupById();
-          }));
+       if (this.id !== null && this.id !== undefined) {
+          this.systemService.updateProgramGroup(this.id, this.programGroupForm.value)
       } else {
-        this.subscriptions.add(this.systemService.saveProgramGroup(this.programGroupForm.value).pipe(
-          skipWhile((item: any) => !item))
+
+          this.subscriptions.add(
+          this.systemService.saveProgramGroup( this.programGroupForm.value ) 
+          .pipe(take(1))
           .subscribe((response: any) => {
-            this.isForce = true;
-            this.scrollTop();
+
+            const recordId = response.systemManagement.programGroup.programGroupId;
+            this.id = recordId;
+            AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,recordId);
             this.loadProgramGroupById();
-          }));
+ }));
       }
     } else {
       this.validateAllFormFields(this.programGroupForm);
