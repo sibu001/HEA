@@ -245,7 +245,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       passwordStrengthLevel: [event !== undefined ? event.passwordStrengthLevel : ''],
       passwordChangeDate: [event !== undefined ? AppUtility.getDateFromMilllis(event.passwordChangeDate) : ''],
       sendEmail: [event !== undefined ? event.sendEmail : ''],
-      surveyVersionSetting: [event !== undefined ? event.surveyVersionSetting : ''],
+      surveyVersionSetting: [event !== undefined ? event.surveyVersionSetting : '1'],
       comments: [event !== undefined ? event.comments : ''],
       customerViewConfigurationId: [event !== undefined ? event.customerViewConfigurationId : ''],
       accessToUserPassword: [event !== undefined ? event.accessToUserPassword : ''],

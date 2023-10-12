@@ -195,10 +195,13 @@ export class EventHistoryEditComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/eventHistory/eventHistoryList'], { queryParams: { 'force': this.isForce } });
   }
   delete() {
-    this.subscriptions.add(this.administrativeService.deleteEventHistoryById(this.customerId, this.customerEventId).pipe(skipWhile((item: any) => !item))
+    if(AppUtility.deleteConfirmatonBox()){
+      this.subscriptions.add(this.administrativeService.deleteEventHistoryById(this.customerId, this.customerEventId).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/eventHistory/eventHistoryList'], { queryParams: { 'force': true } });
       }));
+    }
+   
   }
 
   filterForCustomer(){

@@ -157,8 +157,8 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
               <select class="form-control form-control-sm" id="surveyVersionSetting"
-                formControlName="surveyVersionSetting" value='-1'>
-                <option value="-1">Standard</option>
+                formControlName="surveyVersionSetting">
+                <!-- <option value="-1">Standard</option> -->
                 <option *ngFor="let surveyVersion of
                   surveyVersionSettingList" [value]="surveyVersion.id">
                   {{surveyVersion.name}}</option>

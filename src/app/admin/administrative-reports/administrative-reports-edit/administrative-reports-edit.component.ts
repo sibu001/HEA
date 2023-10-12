@@ -63,7 +63,7 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
       reportId: [event !== undefined ? event.reportId : ''],
       reportName: [event !== undefined ? event.reportName : '', Validators.required],
       reportLabel: [event !== undefined ? event.reportLabel : ''],
-      reportType: [event !== undefined ? event.reportType : 'sql'],
+      reportType: [event !== undefined ? event.reportType : 'jrxml'],
       report: [event && event.report ? atob(event.report) : ''],
       reportParams: [event !== undefined ? event.reportParams : []],
       reportFile: [''],
@@ -209,8 +209,9 @@ export class AdministrativeReportsEditComponent implements OnInit, OnDestroy {
     this.subscriptions.add(this.administrativeService.deleteAdministrativeReportById(this.id).pipe(skipWhile((item: any) => !item))
       .pipe(take(1))
       .subscribe((response: any) => {
-        this.back();
-        // this.router.navigate(['admin/administrativeReport/administrativeReportList'], { queryParams: { 'force': true } });
+        this.isForce = true; this.back();
+         // this.router.navigate(['admin/administrativeReport/administrativeReportList'], { queryParams: { 'force': true } });
+        
       }));
   }
 

@@ -260,7 +260,7 @@ export class TableColumnData {
     ];
 
     static readonly TOPIC_DESCRIPTION_KEY: Array<TABLECOLUMN> = [
-        // { key: 'serialNumber', isEdit: true, displayName: '#' },
+        { key: 'id', isEdit: true, displayName: '#' },
         { key: 'surveyCode', sort: 'surveyCode', isEdit: true, displayName: 'Topic Code', isUnderline: true },
         { key: 'label', sort: 'label', isEdit: true, displayName: 'Topic Label' },
         { key: 'reportLabel', sort: 'reportLabel', isEdit: true, displayName: 'Topic Report Label' },

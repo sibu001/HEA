@@ -76,13 +76,16 @@ export class CimisStationEditComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.subscriptions.add(this.systemMeasurementService.deleteCimisStationById(this.id).pipe(skipWhile((item: any) => !item))
+    if(AppUtility.deleteConfirmatonBox()){
+      this.subscriptions.add(this.systemMeasurementService.deleteCimisStationById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/cimisStation/cimisStationList'], { queryParams: { 'force': true } });
       },
       error => {
         this.errorMessage = error;
       }));
+    }
+    
   }
 
   isConnectDateVaild : boolean = true;

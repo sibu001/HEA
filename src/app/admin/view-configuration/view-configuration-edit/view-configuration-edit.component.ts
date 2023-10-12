@@ -88,11 +88,14 @@ export class ViewConfigurationEditComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.subscriptions.add(this.dynamicViewService.deleteDynamicViewById(this.id).pipe(filter((item: any) => item),take(1))
+    if(AppUtility.deleteConfirmatonBox()){
+      this.subscriptions.add(this.dynamicViewService.deleteDynamicViewById(this.id).pipe(filter((item: any) => item),take(1))
       .subscribe((response: any) => {
         this.isForce = true;
         this.back();
       }));
+    }
+    
   }
 
   save() {

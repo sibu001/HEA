@@ -164,10 +164,13 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
 
   delete() {
-    this.subscriptions.add(this.systemMeasurementService.deleteScriptBatchById(this.id).pipe(skipWhile((item: any) => !item))
+    if(AppUtility.deleteConfirmatonBox()){
+      this.subscriptions.add(this.systemMeasurementService.deleteScriptBatchById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.router.navigate(['admin/batchScript/batchScriptList'], { queryParams: { 'force': true } });
       }));
+    }
+    
   }
 
   save() {

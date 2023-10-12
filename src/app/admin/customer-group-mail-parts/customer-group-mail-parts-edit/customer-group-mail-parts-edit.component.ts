@@ -146,11 +146,14 @@ export class CustomerGroupMailPartsEditComponent implements OnInit, OnDestroy {
     }
   }
   delete(): any {
-    this.subscriptions.add(this.mailService.deleteCustomerGroupMailPartById(this.id).pipe(skipWhile((item: any) => !item))
+    if(AppUtility.deleteConfirmatonBox()){
+      this.subscriptions.add(this.mailService.deleteCustomerGroupMailPartById(this.id).pipe(skipWhile((item: any) => !item))
       .subscribe((response: any) => {
         this.isForce = true;
         this.back();
       }));
+    }
+   
   }
 
   back() {
