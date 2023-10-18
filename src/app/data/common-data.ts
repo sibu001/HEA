@@ -409,6 +409,7 @@ export class TableColumnData {
     ];
 
     static readonly KEY_INDICATOR_KEYS: Array<TABLECOLUMN> = [
+        { key: 'keyIndicatorId', sort: 'keyIndicatorId', isEdit: true, displayName: '#'},
         { key: 'keyIndicatorCode', sort: 'keyIndicatorCode', isEdit: true, displayName: 'Key Indicator Code', isUnderline : true },
         { key: 'keyIndicatorName', sort: 'keyIndicatorName', isEdit: true, displayName: 'Key Indicator Name' }, 
     ];
@@ -544,7 +545,7 @@ export class TableColumnData {
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
         { key: 'billingDate', isEdit: true, displayName: 'Billing Date', isDate: true },
         { key: 'value', isEdit: true, displayName: 'Total', isDolar :true },
-        // { key: 'utilGen', isEdit: true, displayName: '3rd Party Gen', isDolar :true  },
+        { key: 'utilGen', isEdit: true, displayName: '3rd Party Gen', isDolar :true  },
     ];
 
     static readonly ELECTRICITY_KEYS: Array<TABLECOLUMN> = [

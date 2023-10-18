@@ -2,7 +2,7 @@ import { UtilityService } from './../services/utility.service';
 import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { fromEvent, Subscription } from 'rxjs';
 import { SubscriptionUtil } from '../utility/subscription-utility';
 import { MatDialog } from '@angular/material';
@@ -10,6 +10,7 @@ import { SurveyDialogboxComponent } from './survey-dialogbox/survey-dialogbox.co
 import { AppConstant } from '../utility/app.constant';
 import { AppUtility } from '../utility/app.utility';
 import { HttpParams } from '@angular/common/http';
+import { element } from '@angular/core/src/render3/instructions';
 
 declare const plotChartWithParams : any;
 declare var $: any;
@@ -81,6 +82,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }, 100);
   }
   ngAfterViewInit() {
+    this.compareOriginalValueInCurrentPaneAnswers();
     if (this.users.currentPaneNumber.survey.surveyDescription.surveyCode === 'Profile' || this.users.currentPaneNumber.currentPane.paneCode === 'prf_onHold') {
       this.hideMenu();
     }
@@ -394,10 +396,10 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
       if (this.users.currentPaneNumber.currentPaneAnswers.length > 0 || this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
         this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
-      } else {
+      }else{
         this.nextPane(this.users.currentPaneNumber);
       }
-      document.getElementById('loader').classList.add('loading');
+       document.getElementById('loader').classList.add('loading');
     
       AppUtility.removeHighlighterFromChart();
   }
@@ -406,14 +408,27 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.users.allSurveyCheck = true;
     this.chartHelpHide = false;
     this.loginService.setUser(this.users);
-    if (this.users.currentPaneNumber.currentPaneBlocks.length > 0) {
+    const compareValuesResult = this.compareValuesCurrentPaneAnswerWithOldPaneAnswer();
+    if (this.users.currentPaneNumber.currentPaneBlocks.length > 0 || (this.users.currentPaneNumber.currentPaneAnswers.length > 0 && compareValuesResult)) {
       this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers, this.users.currentPaneNumber.currentPaneBlocks, id, false, '');
-    } else {
-    this.previousPane(this.users.currentPaneNumber);
+    }else{
+      this.previousPane(this.users.currentPaneNumber);    
     }
     document.getElementById('loader').classList.add('loading');
     AppUtility.removeHighlighterFromChart();
   }
+//Below code is used to compare orignal value and changed value.if it is changed then  return true 
+  compareValuesCurrentPaneAnswerWithOldPaneAnswer(): boolean { 
+    return this.users.currentPaneNumber.currentPaneAnswers.find(element => {
+      if (element.value !== undefined && element.original_rUI_value !== undefined) {
+        const result = element.value != element.original_rUI_value;
+        return result;
+      }
+      return false; // Added to handle the case when either value is undefined
+    }) !== undefined;
+  }
+  
+  
 
   surveyRecommendationList(number: any) {
     this.users.recommendationNo = number;
@@ -428,6 +443,20 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.router.navigate(['/topicshistory']);
     }
   }
+  
+// Below code is used to populate value into another variable so that we can compare it later wether value is changed or not
+  compareOriginalValueInCurrentPaneAnswers() {
+    if (this.users.currentPaneNumber.currentPaneAnswers) {
+      this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
+        if (element.value !== undefined && element.dataField.userDisplay==true) {
+            element.original_rUI_value = element.value;
+        }
+      });
+    }
+  }
+  
+
+
   postSurveyAnswerData(currentPaneAnswers: any, currentPaneBlocks: any, id: any, value: any, event?: any) {
     if ((id === 'change' && value) || id === 'next' || id === 'prev') {
       document.getElementById('loader').classList.add('loading');
@@ -539,6 +568,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.getSessionPendingMessage();
     const currentPaneCode = this.users.currentPaneNumber.currentPane.paneCode;
     this.users.currentPaneNumber = data;
+    this.compareOriginalValueInCurrentPaneAnswers();
     this.loginService.setUser(this.users);
     if (this.users.currentPaneNumber.currentPane != null) {
       // if (currentPaneCode === this.users.currentPaneNumber.currentPane.paneCode) {
@@ -669,6 +699,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
           this.getSessionPendingMessage();
           if (this.users.currentPaneNumber.currentPane != null) {
+            this.compareOriginalValueInCurrentPaneAnswers();
   
             if (this.users.currentPaneNumber.currentPane.paneCode === "rl_scheduledLoads") {
               this.users.currentPaneNumber.currentPaneAnswers.forEach(element => {
@@ -676,7 +707,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                   element.value = "false";
               });
             }
-  
             if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks &&
              ( this.users.surveyLength !== 3 || !this.users.currentPaneNumber.firstPage || this.users.currentPaneNumber.survey.surveyDescription.surveyCode !== 'LeaksIntro')) {
               if (this.users.currentPaneNumber.firstPage) {
@@ -759,6 +789,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else {
               this.removeAllPreviousCanvasElements();
               this.users.currentPaneNumber = response.data;
+              this.compareOriginalValueInCurrentPaneAnswers();
               this.loginService.setUser(this.users);
               if (this.users.currentPaneNumber.survey.surveyDescription.showLeaks) {
                 if (this.users.currentPaneNumber.last) {
