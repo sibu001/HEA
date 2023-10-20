@@ -595,4 +595,50 @@ export class AppUtility {
 
     }
     
+    public static broadCastEnterMessageToSurveyScreen() : void{
+        AppConstant.USER_SCREEN_LOCK = true;
+        AppConstant.adminEnterUserScreen = true;
+        AppConstant.BROAD_CAST_CHANNEL.postMessage(AppConstant.ENTER_SURVEY_SCREEN_MESSAGE);
+    }
+    
+    public static broadCastLeaveMessageToSurveyScreen() : void{
+
+        if(AppConstant.adminEnterUserScreen && AppConstant.USER_SCREEN_LOCK){
+            console.log('lock released by this tab.');
+            AppConstant.adminEnterUserScreen = false;
+            AppConstant.USER_SCREEN_LOCK = false;
+            AppConstant.BROAD_CAST_CHANNEL.postMessage(AppConstant.LEAVE_SURVEY_SCREEN_MESSAGE)
+        }
+
+    }
+
+    public static checkForSurveyScrenLock() : void{
+        console.log('checking for survey lock.');
+        AppConstant.BROAD_CAST_CHANNEL.postMessage(AppConstant.IS_SURVEY_IN_USE);
+    }
+
+    public static broadCastEventListnerForSurveyScreen() : any {
+
+        return AppConstant.BROAD_CAST_CHANNEL.onmessage = (event : any) => {
+
+            console.log(event.data);
+
+            if(event.data == AppConstant.ENTER_SURVEY_SCREEN_MESSAGE){
+                AppConstant.USER_SCREEN_LOCK = true;
+
+            }else if(event.data == AppConstant.LEAVE_SURVEY_SCREEN_MESSAGE){
+                AppConstant.USER_SCREEN_LOCK = false;
+                
+            }else if(event.data == AppConstant.IS_SURVEY_IN_USE){
+                if(AppConstant.USER_SCREEN_LOCK == true && AppConstant.adminEnterUserScreen) {
+                    console.log('lock is ownned by this tab.')
+                    AppConstant.BROAD_CAST_CHANNEL.postMessage(AppConstant.SURVEY_SCREEN_IS_LOCKED);
+                }
+            }else if(event.data == AppConstant.SURVEY_SCREEN_IS_LOCKED){
+                AppConstant.USER_SCREEN_LOCK = true;
+            }
+
+        };
+    }
+    
 }  

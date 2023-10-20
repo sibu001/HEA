@@ -3,8 +3,9 @@ import { Router, CanActivate } from '@angular/router';
 import { Users } from './models/user';
 import { LoginService } from './services/login.service';
 import { AppConstant } from './utility/app.constant';
+import { AppUtility } from './utility/app.utility';
 
-declare var checkTabsLimit : any;
+// declare var checkTabsLimit : any;
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -23,11 +24,11 @@ export class AuthGuard implements CanActivate {
         //  to check for Admin/ staff user.
         if(this.users.role != 'USERS') { 
 
-            if(!checkTabsLimit()){
+            if( AppConstant.USER_SCREEN_LOCK && !AppConstant.adminEnterUserScreen){
+                alert('Cannot open new tab for user screen. Close all other HomeIntel tabs first.');
                 return false;
             }
-
-            AppConstant.adminEnterUserScreen = true;
+            AppUtility.broadCastEnterMessageToSurveyScreen();
         }
 
         return true;

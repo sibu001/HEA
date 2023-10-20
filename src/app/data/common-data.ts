@@ -277,7 +277,7 @@ export class TableColumnData {
     ];
 
     static readonly RECOMMENDATION_KEY: Array<TABLECOLUMN> = [
-        { key: 'takebackCode', isEdit: true, displayName: 'Csode' },
+        { key: 'takebackCode', isEdit: true, displayName: 'Code' },
         { key: 'lookupType', isEdit: true, displayName: 'Type' },
         { key: 'takebackLabelTemplate', isEdit: true, displayName: 'Label' },
     ];

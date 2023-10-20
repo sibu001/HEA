@@ -13,7 +13,7 @@ import { skipWhile } from 'rxjs/operators';
 import { Users } from '../models/user';
 import { AppConstant } from '../utility/app.constant';
 
-declare var checkTabsLimit : any;
+// declare var checkTabsLimit : any;
 
 @Component({
   selector: 'app-redirection',
@@ -52,7 +52,7 @@ export class RedirectionComponent implements OnInit {
 
   ngOnInit() {
 
-    this.isNewTabAllowed = checkTabsLimit();
+    // this.isNewTabAllowed = checkTabsLimit();
     if(!this.isNewTabAllowed) { return; }
 
     if(!this.customerId){

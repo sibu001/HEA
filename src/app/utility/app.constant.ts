@@ -151,7 +151,6 @@ export class AppConstant {
     public static possibleStyles = 'possibleStyles';
     public static availableFontFamilyNames = 'availableFontFamilyNames';
     public static topicSkipPaneLabel = '(This topic was skipped)';
-    public static adminEnterUserScreen = false;
     public static summaryCharts = 'summaryCharts';
 
     public static classicVersionSelectionValue = 'V1';
@@ -220,4 +219,12 @@ export class AppConstant {
     public static readonly UI_VERSION_BEHAVIOR_NEW_TAB = 'new_tab' // if an user's UI different than the rUI - open cUI in the new tab;
     public static readonly UI_VERSION_BEHAVIOR_ALWAYS_CUI = 'always_cui' // always use rUI for all customers in the current tab.
 
+    public static readonly BROAD_CAST_CHANNEL : BroadcastChannel = new BroadcastChannel('rUIChannel');
+    public static readonly ENTER_SURVEY_SCREEN_MESSAGE = 'enter user screen.';
+    public static readonly LEAVE_SURVEY_SCREEN_MESSAGE = 'leave user screen.';
+    public static readonly IS_SURVEY_IN_USE = 'is survey in use ?';
+    public static readonly SURVEY_SCREEN_IS_LOCKED = 'survey screen is locked.';
+
+    public static adminEnterUserScreen = false;
+    public static USER_SCREEN_LOCK : boolean = false;
 }

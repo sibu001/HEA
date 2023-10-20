@@ -48,55 +48,6 @@ function overlib(){
   overLib.call(window,...args);
 }
 
-var allowNewTab = true;
-
-function checkTabsLimit() {
-  const isSurveyInUse = JSON.parse(localStorage.getItem('surveyInUse'));
-  
-  const users = JSON.parse(localStorage.getItem('users'));
-  if(users && users.role == 'USERS') { return true; }
-
-  if (isSurveyInUse && allowNewTab ) {
-      alert('Cannot open new tab for user screen. Close all other HomeIntel tabs first.');
-      return false;
-  }
-
-  localStorage.setItem('surveyInUse', true);
-  allowNewTab = false;
-  return true;
-}
-
-  function decrementTabCounter() {
-  const isSurveyInUse = JSON.parse(localStorage.getItem('surveyInUse'));
-  if (isSurveyInUse && !allowNewTab) {
-      allowNewTab = true;
-      localStorage.setItem('surveyInUse', false);
-  }
-}
-
-window.addEventListener('beforeunload', decrementTabCounter);
-
-
-//  getting used by the classic ui to prevent using classic UI in multiple tabs.
-var sameTabAlert = false;
-window.addEventListener('storage', (e) => 
-					{
-						if(!sameTabAlert && e.key == 'dummy-HEA-APP')
-						{
-							sameTabAlert = true;
-							// var message = 'Another window or tab is working with the same application. Close one of it!';
-							
-							// if(window.pendingMessagesClient != null)
-							// {
-							// 	window.pendingMessagesClient.showNotificationBar(1, message, 10, 60000);
-							// } else
-							// {
-								window.alert(message);
-							// }
-							sameTabAlert = false;
-						}
-					}, false)
-					localStorage.setItem('dummy-HEA-APP', Math.random());
 
 
 function addForceQueryParam() {

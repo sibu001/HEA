@@ -3,6 +3,7 @@ import { Router, CanActivate } from '@angular/router';
 import { Users } from './models/user';
 import { LoginService } from './services/login.service';
 import { AppConstant } from './utility/app.constant';
+import { AppUtility } from './utility/app.utility';
 
 declare var decrementTabCounter : any;
 
@@ -22,8 +23,7 @@ export class RoleGuard implements CanActivate {
         
         // for checking when the user switch from User screen to admin screens first time.
         if(AppConstant.adminEnterUserScreen) { 
-            AppConstant.adminEnterUserScreen = false;
-            decrementTabCounter();
+            AppUtility.broadCastLeaveMessageToSurveyScreen();
         }
 
         return true;
