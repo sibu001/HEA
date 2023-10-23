@@ -7,6 +7,7 @@ import { take } from "rxjs/operators";
 import { isNullOrUndefined } from "util";
 import { PaginateModel } from "../interface/paginate-model";
 import { AdminFilter, ScriptDebugConsoleData } from "../models/filter-object";
+import { Users } from "../models/user";
 import { AllowedMenuList } from "./app.allowedMenuList";
 import { AppConstant } from "./app.constant";
 
@@ -376,6 +377,10 @@ export class AppUtility {
         localStorage.setItem('adminFilter', JSON.stringify(adminFilter));
     }
 
+    // public static saveAuditId(auditId:string){
+
+    // }
+
     public static addCustomIdentifierForReducer(responseObject : any, lastRequestedId : any) : {response : any, id : number}{
         responseObject.id = lastRequestedId;
         return responseObject;
@@ -639,6 +644,18 @@ export class AppUtility {
             }
 
         };
+    }
+
+
+    public static appendAuditIdToCustomerFilter(users : Users) : void {
+
+        if(users.role == "USERS" ) return;
+
+        const auditId : string = users.outhMeResponse.auditId;
+        const adminFilter : AdminFilter =  this.checkForAdminFilter('customerFilter');
+        adminFilter.customerFilter.formValue.auditId = auditId;
+        AppUtility.saveAdminFilter(adminFilter);
+          
     }
     
 }  

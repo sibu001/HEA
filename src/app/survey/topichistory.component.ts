@@ -9,6 +9,7 @@ import { HttpParams } from '@angular/common/http';
 import { AppUtility } from '../utility/app.utility';
 import { AppConstant } from '../utility/app.constant';
 import { SubscriptionUtil } from '../utility/subscription-utility';
+import { AdminFilter } from '../models/filter-object';
 
 @Component({
   selector: 'topic-history',
@@ -18,6 +19,7 @@ import { SubscriptionUtil } from '../utility/subscription-utility';
 export class TopicHistoryComponent implements OnInit, OnDestroy {
   hide = true;
   users: Users = new Users();
+  public adminFilter:AdminFilter;
   public customer : any = { user : { name : ''}, auditId : ''};
   private readonly subscriptions: Subscription = new Subscription();
   subject$ : Subject<any> = new Subject();
@@ -29,6 +31,10 @@ export class TopicHistoryComponent implements OnInit, OnDestroy {
     this.customer = this.users.outhMeResponse;
     this.allowedMenuListforUser = this.users.allowedMenuList;
     this.findCustomer();
+    this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null) {
+      this.adminFilter = new AdminFilter();
+    }
   }
 
   ngOnInit() {
@@ -53,6 +59,7 @@ export class TopicHistoryComponent implements OnInit, OnDestroy {
       }
     }
     AppUtility.scrollTop();
+    AppUtility.appendAuditIdToCustomerFilter(this.users);
   }
 
   checkSkippedSurveys(){

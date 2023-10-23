@@ -12,7 +12,7 @@ import { debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/oper
 import { HttpParams } from '@angular/common/http';
 import { Subject, Subscription } from 'rxjs';
 import { AppConstant } from '../utility/app.constant';
-import { UsageHistoryFilter } from '../models/filter-object';
+import { AdminFilter, UsageHistoryFilter } from '../models/filter-object';
 import { SubscriptionUtil } from '../utility/subscription-utility';
 
 declare const plotChartWithParams : any;
@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   helpHide : any;
   hides = true;
   count = 0;
+  public adminFilter:AdminFilter;
   leakPriceValueSum = 0;
   recommendationPriceValueSum = 0;
   recommendationLength = 0;
@@ -71,6 +72,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.router.navigate(['/surveyView']);
 
     this.findCustomer();
+
+    this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
+    if (this.adminFilter === undefined || this.adminFilter === null) {
+      this.adminFilter = new AdminFilter();
+    }
   }
 
 
@@ -124,6 +130,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     //   this.users.isFirstTime = false;
     //   document.getElementById('dashboard_info').classList.add('show-info');
     // }
+
+    AppUtility.appendAuditIdToCustomerFilter(this.users);
   }
   hideMsg() {
     this.hideMsgs = false;
