@@ -545,7 +545,7 @@ export class TableColumnData {
         { key: 'billingPeriod', isEdit: true, displayName: 'Billing Period' },
         { key: 'billingDate', isEdit: true, displayName: 'Billing Date', isDate: true },
         { key: 'value', isEdit: true, displayName: 'Total', isDolar :true },
-        { key: 'utilGen', isEdit: true, displayName: '3rd Party Gen', isDolar :true  },
+      // { key: 'utilGen', isEdit: true, displayName: '3rd Party Gen', isDolar :true  },
     ];
 
     static readonly ELECTRICITY_KEYS: Array<TABLECOLUMN> = [

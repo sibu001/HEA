@@ -135,16 +135,25 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
 
   checkForDisplayingUtilityAndSolarColumn(){
     const displayExtraColumn = this.dataSource.find(data =>{
-       if(data.pv)
+       if(data.pv !== null )
          return true;
      });
+
+     const displayGenColum = this.dataSource.find(data=>{
+           if(data.utilGen !== null && data.utilGen !== 0)
+               return true;
+          });
  
      if(displayExtraColumn){
        this.keys = [...TableColumnData.ELECTRICITY_CHARGE_KEYS];
        this.keys.push({ key: 'utility', isEdit: true, displayName: 'Utitility', isDolar : true });
        this.keys.push({ key: 'utilityOrig', isEdit: true   , displayName: 'NEM', isDolar : true  });
        this.keys.push({ key: 'pv', isEdit: true, displayName: 'Solar', isDolar : true  });
-     }else{
+     }else if (displayGenColum) {
+      this.keys = [...TableColumnData.ELECTRICITY_CHARGE_KEYS];
+      this.keys.push({key: 'utilGen', isEdit: true, displayName: '3rd Party Gen', isDolar :true  });
+      }
+      else{
        this.keys = TableColumnData.ELECTRICITY_CHARGE_KEYS;
      }
    }
@@ -223,7 +232,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
 
   filterForElectricityList(force: boolean, filter: any){
     this.adminFilter.formValue = this.electricityForm.value;
-    // localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
+    localStorage.setItem('usageHistoryFilter', JSON.stringify(this.adminFilter));
     let userId = null;
     if(this.selectionPrivilege){
       if(this.electricityForm.value.auditId != '' || this.electricityForm.value.customerName != '' || this.selectedCustomer != null )
