@@ -483,6 +483,7 @@ export class TableColumnData {
 
 
     static readonly TRENDING_PART_KEYS: Array<TABLECOLUMN> = [
+        { key: 'trendingPartId', sort: 'trendingPartId', isEdit: true, displayName: '#'},
         { key: 'labelTemplate', sort: 'label', isEdit: true, displayName: 'Label', isUnderline: true },
         { key: 'orderNumber', sort: 'orderNumber', isEdit: true, displayName: 'Order Number' },
         { key: 'explanationTemplate', sort: 'Explanation', isEdit: true, displayName: 'Explanation' },

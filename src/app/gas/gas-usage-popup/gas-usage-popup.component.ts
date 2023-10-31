@@ -69,6 +69,7 @@ export class GasUsagePopupComponent implements OnInit ,AfterViewInit, OnDestroy 
       day : [event !== undefined ? event.day : ''],
       hour : [event !== undefined ? event.hour : ''],
       type : [event !== undefined ? event.type : ''],
+      total: [event !== undefined ? event.value : ''],
       source : [event !== undefined ? event.source : ''],
       split : [event !== undefined ? event.split : false],
       merge : [event !== undefined ? event.merge : false],

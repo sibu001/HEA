@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-lg-9 col-md-9 col-sm-12">
         <h4 class="text-danger" *ngIf='selectedCustomer==null && users.role!=="USERS" ' >Customer selection is mandatory.</h4>
-        <p class="accurate">Electricity Daily Smart Meter</p>
+        <p class="accurate">Electric Daily Smart Meter</p>
         <form class="form-horizontal" [formGroup]='electricityDailySmartMeterForm'>
           <div  *ngIf="selectionPrivilege">
             <div class="row rowPadding borderBottom">

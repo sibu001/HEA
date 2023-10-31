@@ -1,5 +1,5 @@
 <!--CL login Page  -->
-<div class="container-fluid"
+<div class="container-fluid shift-up"
     *ngIf="theme=='HEA'||theme=='CEC'||theme=='CL'||theme=='EF'||theme=='P4P'||theme=='MBL'||theme=='AC'
     ||theme=='HET' ||theme=='MV'||theme=='SNV'
     ||theme=='VT'||theme=='TST'||theme=='CSP'||theme=='RS'||theme=='SCB'">
@@ -131,13 +131,13 @@
             </div>
             <div class="mainLoginBottumCL">
                 <div class="row">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" style="float: left;">
                         <p class="forgotPasswordCL">I
                             <a class="anchor"
                                 [routerLink]="['/forgotpassword']">forgot</a> my
                             password</p>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-6" style="float: right;">
                         <p class="socialImageCL">
                             <!-- (click)="fbLogin()" -->
                             <img alt="facebook" src="assets/images/fb.png" class="fblogin" 

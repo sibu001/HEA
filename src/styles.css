@@ -1634,8 +1634,13 @@ TABLE.survey th {
 
 @media (min-width: 768px)  and (max-width: 901px) {
  .shift-down{
-  margin-top: 118px;
+    margin-top: 118px;
  }
+
+ .shift-up {
+    margin-top: -118px;
+  }
+
 }
 
 /* app-survey a{

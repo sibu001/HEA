@@ -66,6 +66,7 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
     this.systemParameterForm = this.fb.group({
       paramValue: [event !== undefined && event !== null ? event.paramValue : ''],
       description: [event !== undefined && event !== null ? event.description : ''],
+      paramCode:[event !==undefined && event !==null ?event.paramCode : '']
     });
   }
 
@@ -109,7 +110,8 @@ export class SystemParameterListComponent implements OnInit, OnDestroy {
       .set('sortOrders[0].propertyName', (event && event.sort.active ? event.sort.active : 'paramCode'))
       .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction == 'asc' ? 'true' : 'false') : 'true'))
       .set('paramValue', (this.systemParameterForm.value.paramValue !== null && this.systemParameterForm.value.paramValue !== undefined ? this.systemParameterForm.value.paramValue : ''))
-      .set('description', (this.systemParameterForm.value.description !== null ? this.systemParameterForm.value.description : ''));
+      .set('description', (this.systemParameterForm.value.description !== null ? this.systemParameterForm.value.description : ''))
+      .set('paramCodeLike', (this.systemParameterForm.value.paramCode !== null && this.systemParameterForm.value.paramCode !== undefined? this.systemParameterForm.value.paramCode : ''));
     
   this.loadSystemParameter(true, params);
   this.loadSystemParameterCount(true, params);
