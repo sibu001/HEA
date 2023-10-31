@@ -53,7 +53,7 @@ export class forgotpasswordComponent implements OnInit {
       const params = new HttpParams()
       .append('email',this.email)
      
-      this.loginService.performPostWithParam({},'/free'+'/users'+'/password'+'/restoreLink',params)
+      this.loginService.performPostWithParam({},'free'+'/users'+'/password'+'/restoreLink',params)
       .subscribe(
         data =>{
         this.emailSentSuccessfully = true;
