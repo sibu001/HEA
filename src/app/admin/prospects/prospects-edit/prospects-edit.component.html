@@ -35,7 +35,7 @@
         </div>
         <form [formGroup]="prospectsForm" class="form-group form-padding">
           <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">ID</div>
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">ID:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm disableInput" id="registrationId" formControlName="registrationId" disabled>
             </div>
@@ -57,17 +57,24 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('field6').value!==null">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Page:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm disableInput" formControlName="field6" id="field6" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('zip').value!==null">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Zip:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm disableInput" formControlName="zip" id="zip" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('county').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">County:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="county" id="county" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
@@ -89,30 +96,128 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('phone').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Phone:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="phone" id="phone" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('homeType').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Home Type:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="homeType" id="homeType" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('ownership').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Ownership:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="ownership" id="ownership" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('highestBill').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Highest Bill:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="highestBill" id="highestBill" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('summerThermostat').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Summer Thermostat:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="summerThermostat" id="summerThermostat" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('referral').value!==null">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-              Referral
+              Referral:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm disableInput" formControlName="referral" id="referral" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('remoteInfo').value!==null">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Remote Info:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm disableInput" formControlName="remoteInfo" id="remoteInfo" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row borderBottom rowPadding">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Date:</div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('otherText').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">otherText:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm disableInput" formControlName="createdDate" id="createdDate" disabled>
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="otherText" id="otherText" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
           <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">CoachId:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <select id="coachUserId" class="form-control" formControlName="coachUserId">
+                <option value="" selected="selected"></option>
+                <option *ngFor="let coachUser of coachList" [value]="coachUser.userId">
+                  {{coachUser.name}}</option>
+              </select>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Date:</div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" [value]="prospectsForm.get('createdDate').value | date:'MM/dd/yyyy HH:mm:ss'" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('field1').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+             Field 1:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="field1" id="field1" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('field2').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+             Field 2:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="field2" id="field2" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('field3').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+             Field 3:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="field3" id="field3" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('field4').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+             Field 4:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="field4" id="field4" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('field5').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+             Field 5:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="field5" id="field5" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('field7').value!==null">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
              Field 7:
             </div>
@@ -121,8 +226,26 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('field8').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+             Field 8:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="field8" id="field8" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('field9').value!==null">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
+             Field 9:
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="field9" id="field9" disabled>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
 
-          <!-- <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('subscriptionId').value!==null">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Subscription ID:
             </div>
@@ -131,16 +254,16 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div class="row borderBottom rowPadding">
+          <div class="row borderBottom rowPadding" *ngIf="prospectsForm.get('auditId').value!==null">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Audit ID:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              <input type="text" class="form-control form-control-sm disableInput" formControlName="customer"
-                id="customer" disabled>
+              <input type="text" class="form-control form-control-sm disableInput" formControlName="auditId"
+                id="auditId" disabled>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
-          </div> -->
+          </div>
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-0"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">

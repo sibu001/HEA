@@ -205,7 +205,7 @@ export class CustomerGroupEditComponent implements OnInit, OnDestroy {
       immediateLogin: [event !== undefined ? event.immediateLogin : ''],
       allowBilling: [event !== undefined ? event.allowBilling : ''],
       archived: [event !== undefined ? event.archived : ''],
-      dataCheckAlg: [event !== undefined ? event.dataCheckAlg : ''],
+      dataCheckAlg: [event !== undefined ? event.dataCheckAlg : 0],
     });
   }
 

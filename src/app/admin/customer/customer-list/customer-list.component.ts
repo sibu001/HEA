@@ -265,7 +265,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('filter.credentialTypeCode', (this.searchForm.controls['credentialTypeCode'].value !== null ? this.searchForm.controls['credentialTypeCode'].value : ''))
         .set('filter.credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
         .set('filter.coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
-        .set('filter.credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
+        .set('filter.credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''))
+        .set('filter.Notes', (this.searchForm.controls['Notes'].value !== null ? this.searchForm.controls['Notes'].value : ''));
 
         if(isForExportAsCSV){
           params = params.delete('filter.pageSize');
@@ -292,7 +293,8 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('credentialTypeCode', (this.searchForm.controls['credentialTypeCode'].value !== null ? this.searchForm.controls['credentialTypeCode'].value : ''))
         .set('credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
         .set('coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
-        .set('credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''));
+        .set('credentialAccount', (this.searchForm.controls['credentialAccount'].value !== null ? this.searchForm.controls['credentialAccount'].value : ''))
+        .set('filter.Notes', (this.searchForm.controls['Notes'].value !== null ? this.searchForm.controls['Notes'].value : ''));
       // if (event && event.sort.active !== undefined) {
       //   const index = this.keys.findIndex((item: any) => (item.definition === event.sort.active && item.attributeType === 'V'));
       //   if (index !== -1) {
@@ -320,6 +322,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       credentialSubscriptionId: [event !== undefined && event !== null ? event.credentialSubscriptionId : ''],
       energyCoach: [event !== undefined && event !== null ? event.energyCoach : ''],
       credentialAccount: [event !== undefined && event !== null ? event.credentialAccount : ''],
+      Notes: [event !== undefined && event !== null ? event.Notes : ''],
     });
   }
 

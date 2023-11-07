@@ -72,6 +72,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   private expectedDateFormate : string = 'MM/dd/yyyy h:mm:ss';
   public openedUtilityCredential : any;
   private subject : Subject<any> = new Subject();
+  isEditMode: boolean;
 
   public credentialsData = {
     content: [],
@@ -152,6 +153,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.getProgramGroupByCustomerGroupId();
+    });
+
+    this.activateRoute.queryParams.subscribe(params => {
+      this.isEditMode = params.id !== undefined;
     });
   }
   ngAfterViewInit(): void {
@@ -1090,6 +1095,11 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
   }
+
+  // viewMailArchive(){
+  //   // this.router.navigate(['/MailArchiveList'], {queryParams:{'id':'H45035'}});
+  //   this.router.navigate(['/MailArchiveList']);
+  // }
 
 
 }

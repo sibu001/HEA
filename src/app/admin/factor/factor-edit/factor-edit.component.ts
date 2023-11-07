@@ -20,6 +20,7 @@ import { SubscriptionUtil } from 'src/app/utility/subscription-utility';
 export class FactorEditComponent implements OnInit, OnDestroy {
 
   id: any;
+  isEditable: boolean
   factorForm: FormGroup;
   public placeData: Array<any>;
   public comparisonCodeDropdownData: Array<any>;
@@ -45,6 +46,10 @@ export class FactorEditComponent implements OnInit, OnDestroy {
     });
 
     this.scriptDebugConsoleData =  AppUtility.getScriptDebugConsoleData();
+
+    this.activateRoute.queryParams.subscribe(params => {
+        this.isEditable = params.id !== undefined;
+    })
   }
 
   ngOnInit() {

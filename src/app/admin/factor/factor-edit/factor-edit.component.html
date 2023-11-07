@@ -4,7 +4,8 @@
       <div class="col-sm-12 col-md-9 col-lg-9">
         <p class="messages">
           <img class="pointer" alt="dot" src="assets/images/dot03.gif" class="dot">
-          <span class="messageName">New Factor</span>
+          <span class="messageName" *ngIf="!isEditable">New Factor</span>
+          <span class="messageName" *ngIf="isEditable">Edit Factor</span>
         </p>
         <form [formGroup]="factorForm" class="form-group form-padding">
           <div class="row borderBottom rowPadding">
