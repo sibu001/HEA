@@ -1305,7 +1305,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     });
   }
-
+// function for triggering  inner html where type is button and value is Update like check accuray in sloar pv tab
   refreshPaneOnUpdatebutton(){
     setTimeout(() =>{
       Array.from(document.getElementById('surveyData').querySelectorAll('input[type=button][value=Update]'))
