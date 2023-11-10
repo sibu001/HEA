@@ -51,7 +51,7 @@
               *ngIf="surveyAnswerValue.dataField.dataType=='number'&&surveyAnswerValue.dataField.inputType=='select'">{{surveyAnswerValue.value}}</span>
             <div class="form-group"
               *ngIf="(surveyAnswerValue?.dataField?.dataType=='text' || surveyAnswerValue?.dataField?.dataType=='number') &&surveyAnswerValue.dataField.inputType=='text'">
-              <input type="text" [name]="surveyAnswerValue.field" #inputField="ngModel"
+              <input [type]="surveyAnswerValue.dataField.dataType" [name]="surveyAnswerValue.field" #inputField="ngModel"
                 [required]="surveyAnswerValue.dataField.required" class="table_input_responsive form-control"
                 [ngClass]="{'input-field-highlight' : !inputField.valid && surveyForm.submitted}"
                 [id]="surveyAnswerValue.dataFieldId" [(ngModel)]="surveyAnswerValue.value">

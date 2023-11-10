@@ -100,13 +100,14 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }, 1000);
 
     this.highlighterrorFieldlabels();
+    this.refreshPaneOnUpdatebutton();
   }
 
   ngAfterViewChecked(): void{
     this.surveyLengthManage();
     $('#paneBlockTable').mCustomScrollbar(
       { axis:"x",
-        theme:"dark",
+        theme:"dark", 
         scrollbarPosition : "inside"
       });
 
@@ -545,6 +546,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.loginService.setUser(this.users);
                 document.getElementById('loader').classList.remove('loading');
               }
+              this.refreshPaneOnUpdatebutton();
             }
 
           },
@@ -748,7 +750,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             setTimeout(function () {
               self1.chartDataConfiguration();
             }, 500);
-  
+            
             this.helpHides();
             this.progressShow();
           } else {
@@ -766,6 +768,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           }
           this.evaluateJavaScript(response.data);
           this.scrollTop();
+          this.refreshPaneOnUpdatebutton();
           document.getElementById('loader').classList.remove('loading');
         },
         errors => {
@@ -837,6 +840,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               this.progressShow();
               this.evaluateJavaScript(response.data);
             }
+
+            this.refreshPaneOnUpdatebutton();
           } else {
             // this.router.navigate(['/topicshistory']);
             this.gotToTopicHistory();
@@ -1301,4 +1306,20 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     });
   }
 
+  refreshPaneOnUpdatebutton(){
+    setTimeout(() =>{
+      Array.from(document.getElementById('surveyData').querySelectorAll('input[type=button][value=Update]'))
+      .forEach( (updateButton : HTMLElement) =>{
+        this.subscriptons.add(
+          fromEvent(updateButton,'click')
+          .subscribe((event : any) =>{
+            console.log("hyy update button get called"), event;
+            this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers,
+                this.users.currentPaneNumber.currentPaneBlocks,'change',
+                true);
+          })
+        )
+      });
+    }, 1000);
+  }
 }
