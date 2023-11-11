@@ -11,6 +11,7 @@ import { AppConstant } from '../utility/app.constant';
 import { AppUtility } from '../utility/app.utility';
 import { HttpParams } from '@angular/common/http';
 import { element } from '@angular/core/src/render3/instructions';
+import { take } from 'rxjs/operators';
 
 declare const plotChartWithParams : any;
 declare var $: any;
@@ -542,9 +543,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               } else if (id === 'prev') {
                 this.previousPane(response.data);
               } else if (id === 'change') {
-                this.users.currentPaneNumber = response.data;
-                this.loginService.setUser(this.users);
-                document.getElementById('loader').classList.remove('loading');
+                this.refreshCurrentPaneWithAnswerAndChart(response.data);
               }
               this.refreshPaneOnUpdatebutton();
             }
@@ -564,7 +563,27 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.disableButton = false;
       }
     }
-  } 
+  }
+  
+  refreshCurrentPaneWithAnswerAndChart(data : any){
+    this.getSessionPendingMessage();
+    const currentPaneCode = this.users.currentPaneNumber.currentPane.paneCode;
+    this.users.currentPaneNumber = data;
+    this.compareOriginalValueInCurrentPaneAnswers();
+    this.loginService.setUser(this.users);
+
+    setTimeout(() => {
+      this.chartDataConfiguration();
+    }, 500);
+
+    setTimeout(() => {
+      this.evaluateJavaScript(this.users.currentPaneNumber);
+    }, 1000);
+
+    this.helpHides();
+    this.progressShow(); 
+    
+  }
   
   nextPaneWithAnswer(data: any) {
     this.getSessionPendingMessage();
@@ -1312,8 +1331,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       .forEach( (updateButton : HTMLElement) =>{
         this.subscriptons.add(
           fromEvent(updateButton,'click')
+          .pipe(take(1))
           .subscribe((event : any) =>{
-            console.log("hyy update button get called"), event;
             this.postSurveyAnswerData(this.users.currentPaneNumber.currentPaneAnswers,
                 this.users.currentPaneNumber.currentPaneBlocks,'change',
                 true);
