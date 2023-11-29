@@ -46,6 +46,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   matcher = new MyErrorStateMatcher();
   customerForm: FormGroup;
   // passwordForm: FormGroup;
+  showMessageFlag: boolean;
+  showMessagePasswordFlag: boolean;
+  customer : any = { user : { name : ''}, auditId : ''};
+  sendActivationEmailDirectLink: any;
   customerGroupList: any;
   programGroupList: any;
   coachUserList: any;
@@ -153,6 +157,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
       this.getProgramGroupByCustomerGroupId();
+      if(this.id){
+        this.addDirectLinkToSendActivationEmail(this.id);
+      }
     });
 
     this.activateRoute.queryParams.subscribe(params => {
@@ -164,6 +171,9 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnInit() {
     this.users = this.loginService.getUser();
+    // this.customer = JSON.parse(JSON.stringify(this.users.outhMeResponse));
+    // this.users.outhMeResponse = this.customer
+    // localStorage.setItem('users',JSON.stringify(this.users));
 
     this.findPlace(true, '');
     this.loadCustomerGroup();
@@ -192,6 +202,15 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   scrollTop() {
     window.scroll(0, 0);
+  }
+
+  addDirectLinkToSendActivationEmail(customerId: number){
+    this.loginService.performGet(`customers/${customerId}/activationLink`)
+    .subscribe(response => {
+      const responseData = response.data;
+      this.sendActivationEmailDirectLink = responseData;
+      localStorage.setItem('sendActivationEmailDirectLink',JSON.stringify(this.sendActivationEmailDirectLink));
+    });
   }
 
   findPlace(force: boolean, filters: string): any {
@@ -1096,10 +1115,14 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  // viewMailArchive(){
-  //   // this.router.navigate(['/MailArchiveList'], {queryParams:{'id':'H45035'}});
-  //   this.router.navigate(['/MailArchiveList']);
-  // }
-
+  viewMailArchive(){
+    this.router.navigate(['/MailArchiveList']);
+    this.users.outhMeResponse = this.customerData;
+    localStorage.setItem('users',JSON.stringify(this.users));
+  }
+  copyTextToClipBoard( text : string ) : void{
+    this.subscriptions.add(AppUtility.copyToClipboardEvent(text));
+    
+  }
 
 }

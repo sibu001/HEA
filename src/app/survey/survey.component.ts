@@ -102,6 +102,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.highlighterrorFieldlabels();
     this.refreshPaneOnUpdatebutton();
+    this.efficiencyOrElectrificationRedirection();
   }
 
   ngAfterViewChecked(): void{
@@ -546,6 +547,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.refreshCurrentPaneWithAnswerAndChart(response.data);
               }
               this.refreshPaneOnUpdatebutton();
+              this.efficiencyOrElectrificationRedirection();
             }
 
           },
@@ -788,6 +790,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.evaluateJavaScript(response.data);
           this.scrollTop();
           this.refreshPaneOnUpdatebutton();
+          this.efficiencyOrElectrificationRedirection();
           document.getElementById('loader').classList.remove('loading');
         },
         errors => {
@@ -861,6 +864,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             this.refreshPaneOnUpdatebutton();
+            this.efficiencyOrElectrificationRedirection();
           } else {
             // this.router.navigate(['/topicshistory']);
             this.gotToTopicHistory();
@@ -1340,5 +1344,89 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         )
       });
     }, 1000);
+  }
+
+  // condition added to redirect user to efficiency of electrification 
+  // for more details check https://xp-dev.com/trac/HEA/ticket/2415#comment:1
+  private efficiencyOrElectrificationRedirection() : void{
+
+    // only procceed when pand code is 'prf_EEorBE'
+    if(this.users.currentPaneNumber.currentPane.paneCode != "prf_EEorBE"){
+      return;
+    }
+
+    setTimeout(() =>{
+      this.efficiencyRedirection();
+      this.electrificationRedirection();
+    },1000);
+  }
+
+  private efficiencyRedirection() : void {
+    const anchorList = Array.from(document.querySelectorAll("#efficiencyRedirection a"));
+
+    anchorList.forEach((anchor : HTMLElement) =>{
+      this.subscriptons.add(
+        fromEvent(anchor,'click')
+        .pipe(take(1))
+        .subscribe((event) =>{
+          event.preventDefault();
+          //  finding survey with surveyCode HouseholdEnergy
+          this.findPaneBysurveyCode(AppConstant.HOUSEHOLD_SURVEY_CODE);
+
+        })
+      )
+    })
+  }
+
+  private electrificationRedirection() : void {
+    const anchorList = Array.from(document.querySelectorAll("#electrificationRedirection a"));
+
+    anchorList.forEach((anchor : HTMLElement) =>{
+      this.subscriptons.add(
+        fromEvent(anchor,'click')
+        .pipe(take(1))
+        .subscribe((event) =>{
+          event.preventDefault();
+          //  finding survey with surveyCode Electrification
+          this.findPaneBysurveyCode(AppConstant.BENEFICAL_ELECRTIFICATION_SURVEY_CODE);
+        })
+      )
+    })
+  }
+
+
+  private findPaneBysurveyCode(surveyCode : string ) : void {
+
+    const survey : any = this.users.surveyList.find((survey) =>{
+        return survey.surveyDescription.surveyCode == surveyCode;
+    });
+    
+    const firstPane : any = survey.panes[0];
+    const surveyId = survey.surveyId;
+    const paneCode = firstPane.paneCode;
+
+
+    const object = {};
+    const customerId =  this.users.outhMeResponse.customerId;
+    this.loginService.performPostMultiPartData(object, 'customers/' + customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
+      data => {
+        const response = JSON.parse(JSON.stringify(data));
+        console.log(response);
+        document.getElementById('loader').classList.remove('loading');
+        if (response.errorCode == null && response.errorMessage == null) {
+          this.users.currentPaneNumber = response.data;
+          this.users.paneNumber = 0;
+          this.users.isDashboard = false;
+          this.loginService.setUser(this.users);
+          this.ngOnInit();
+          this.ngAfterViewInit();
+        }
+
+      },
+      errors => {
+        console.log(errors);
+        document.getElementById('loader').classList.remove('loading');
+      }
+    );
   }
 }

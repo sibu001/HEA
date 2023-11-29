@@ -190,6 +190,17 @@
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <input type="text" class="form-control form-control-sm" id="username" formControlName="username">
             </div>
+            <div class="col-sm-2 col-xs-2" *ngIf="id!=undefined">
+              <img src="assets/images/icon_help.svg" style="float: right; margin-top:
+                0%;margin-left: 5px;" class="media-object" id="help_btn1" alt="help" (click)="showMessageFlag=!showMessageFlag">
+            </div>
+          </div>
+          <div class="row" id="helpiconcontainresponsive" class="help" *ngIf="showMessageFlag">
+            <div class="col-sm-12 col-xs-12">
+              <p class="demo1" style="margin-top:-40px">This is your user name for this service
+                <span class="hidebuttondemo" (click)="showMessageFlag=!showMessageFlag">hide</span>
+              </p>
+            </div>
           </div>
           <div class="row borderBottom w100 rowPadding" formGroupName="passwordForm" *ngIf="customerGroupCode!=='RYPL'">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
@@ -212,6 +223,17 @@
                   required
                 </span>
               </div>
+            </div>
+            <div class="col-sm-2 col-xs-2" *ngIf="id!=undefined">
+              <img src="assets/images/icon_help.svg" style="float: right; margin-top:
+                0%;margin-left: 5px;" class="media-object" id="help_btn1" alt="help" (click)="showMessagePasswordFlag=!showMessagePasswordFlag">
+            </div>
+          </div>
+          <div class="row" id="helpiconcontainresponsive" class="help" *ngIf="showMessagePasswordFlag">
+            <div class="col-sm-12 col-xs-12">
+              <p class="demo1" style="margin-top:-40px">This is where you can change your password for this service
+                <span class="hidebuttondemo" (click)="showMessagePasswordFlag=!showMessagePasswordFlag">hide</span>
+              </p>
             </div>
           </div>
           <div class="row borderBottom w100 rowPadding" formGroupName="passwordForm" *ngIf="customerGroupCode!=='RYPL'">
@@ -452,9 +474,16 @@
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
 
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12 d-flex align-items-center justify-content-end">
               <input type="checkbox" name="activationMail" formControlName="activationMail" id="activationMail">
               <label class="checkbox">Send activation E-Mail</label>
+              <!-- <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12"> -->
+                <a *ngIf="users.role != 'USERS'" (click)="copyTextToClipBoard(sendActivationEmailDirectLink)" 
+                   class="tooltip-container cursor-pointer tooltip-cp d-flex">  
+                   <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px; margin-top:14px ;margin-left: 20px;">
+                   <span class="tooltiptext-cp" >Copy to clipboard the topic link</span>                               
+                </a>
+              <!-- </div> -->
             </div>
           </div>
           <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
@@ -656,10 +685,10 @@
                   <img src="assets/images/dot03.gif" alt="dot" class="dot pointer"><strong>Email
                     Settings</strong>
                 </p>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6 text-middle"><button type="button" style="margin-top:-14%; margin-left: 80%;" 
+                  class="btn btn-primary" (click)="viewMailArchive()">View Mail Archive</button>
               </div>
-              <!-- <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6 text-middle"><button type="button"
-                class="btn btn-primary" (click)="viewMailArchive()">View Mail Archive</button>
-            </div> -->
+              </div>
             </div>
             <div class="row">
               <div class="col-sm-12">

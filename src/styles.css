@@ -2835,3 +2835,15 @@ app-summary-chart-defination-preview .content-div > img{
   display:block;
   opacity: 1;
 }
+
+@media (min-width: 581px) and (max-width: 768px) {
+  table.jqplot-table-legend {
+    bottom: -40px !important;
+  }
+}
+ /* for 2415 CR-01 */
+@media (max-width : 768px){
+    .smallScreenFullWidth {
+        width : 100% !important;
+    }
+}

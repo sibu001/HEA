@@ -227,4 +227,7 @@ export class AppConstant {
 
     public static adminEnterUserScreen = false;
     public static USER_SCREEN_LOCK : boolean = false;
+
+    public static HOUSEHOLD_SURVEY_CODE = "HouseholdEnergy";
+    public static BENEFICAL_ELECRTIFICATION_SURVEY_CODE = "Electrification";
 }

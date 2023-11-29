@@ -122,3 +122,8 @@ input[formcontrolname="coachUserId"]{
   box-shadow: none !important;
   background-color: #ffff !important;
 }
+.tooltip-cp .tooltiptext-cp{
+  bottom: 85%;
+  left: 41%; 
+  position: absolute;
+  }
