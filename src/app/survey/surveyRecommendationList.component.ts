@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
@@ -8,8 +8,9 @@ import 'rxjs/add/operator/map';
 import * as _ from 'lodash';
 import { SubscriptionUtil } from '../utility/subscription-utility';
 import { AppUtility } from '../utility/app.utility';
-import { Subscription } from 'rxjs';
+import { Subscription, fromEvent } from 'rxjs';
 import { AppConstant } from '../utility/app.constant';
+import { take } from 'rxjs/operators';
 declare var $: any;
 @Component({
   // tslint:disable-next-line: component-selector
@@ -36,6 +37,11 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit,
 
   ngOnInit() {
     this.recommendationList = this.users.recommendationList;
+    fromEvent(window,'beforeunload')
+    .pipe(take(1))
+    .subscribe((event : any) =>{
+      this.ngOnDestroy();
+    });
    }
 
    addDirectLinksToRecommendationList(){

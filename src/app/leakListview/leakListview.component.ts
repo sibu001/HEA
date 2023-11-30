@@ -1,13 +1,14 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
 import { Location } from '@angular/common';
 import { ElementRef, ViewChild, Renderer } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
 import { AppUtility } from '../utility/app.utility';
-import { Subscription } from 'rxjs';
+import { Subscription, fromEvent } from 'rxjs';
 import { SubscriptionUtil } from '../utility/subscription-utility';
 import { AppConstant } from '../utility/app.constant';
+import { take } from 'rxjs/operators';
 
 declare var $: any;
 @Component({
@@ -30,7 +31,11 @@ export class leakListViewComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
- 
+    fromEvent(window,'beforeunload')
+    .pipe(take(1))
+    .subscribe((event : any) =>{
+      this.ngOnDestroy();
+    });
   }
 
   addDirectLinksToLeakList(){

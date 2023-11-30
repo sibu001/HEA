@@ -2847,3 +2847,9 @@ app-summary-chart-defination-preview .content-div > img{
         width : 100% !important;
     }
 }
+.tooltip-cp:hover .tooltiptext-cp{
+  display:block;
+  opacity: 1;
+  max-width: 768px;
+  word-break: break-word;
+}
