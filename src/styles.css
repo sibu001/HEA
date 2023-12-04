@@ -2851,5 +2851,6 @@ app-summary-chart-defination-preview .content-div > img{
   display:block;
   opacity: 1;
   max-width: 768px;
-  word-break: break-word;
+  word-break: break-word; 
+  width: max-content;
 }
