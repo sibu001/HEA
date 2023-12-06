@@ -65,6 +65,7 @@ p.views_leaks {
 .row .number {
   text-align: center;
   margin: 0 auto;
+  margin-left: 50px;
 }
 
 p.resume_topic {
