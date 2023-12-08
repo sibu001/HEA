@@ -5,6 +5,13 @@
                 <div class="backcolor">
                     <h3 class="select_next">
                         <img alt="icon" src="assets/images/right-.svg" class="back_img" (click)="back()">&nbsp;&nbsp;<span class="recommdationheadingcss">Recommendations</span></h3>
+                        <div (click)="copyTextToClipBoard($event,recommendation)">
+                            <a *ngIf="users.role != 'USERS'" 
+                                class="cursor-pointer tooltip-cp d-flex" style="margin-top: 6px;">  
+                                <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;margin-left: 255px;margin-top: -22px;">
+                                <span class="tooltiptext-cp" style="bottom:70px;margin-left:250px;" >Copy to clipboard the topic link</span>                               
+                            </a>
+                        </div>
                     <p class="action">Take action to plug the leaks in your home</p>
                 </div>
             </div>
@@ -86,7 +93,7 @@
                                                 <a *ngIf="users.role != 'USERS'" 
                                                     class="cursor-pointer tooltip-cp d-flex" style="margin-top: 6px;">  
                                                     <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;">
-                                                    <span class="tooltiptext-cp" >Copy to clipboard the topic link</span>                               
+                                                    <span class="tooltiptext-cp" >Copy to clipboard the recommendation link</span>                               
                                                 </a>
                                             </div>
                                         </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, AfterContentInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Users } from 'src/app/models/user';
 import { Router } from '@angular/router';
@@ -15,7 +15,7 @@ declare var $: any;
   templateUrl: './accountDetail.component.html',
   styleUrls: ['./accountDetail.component.css']
 })
-export class AccountDetailComponent implements OnInit, OnDestroy {
+export class AccountDetailComponent implements OnInit, OnDestroy, AfterContentInit {
   @ViewChild('inp1') inp1: ElementRef;
   helpHide: boolean;
   helpHide1: boolean;
@@ -57,6 +57,9 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     private readonly customerService: CustomerService) {
     this.users = this.loginService.getUser();
     this.getPasswordValidationRule();
+  }
+  ngAfterContentInit(): void {
+    console.log("this.password : " +  this.password);
   }
 
   ngOnInit() {

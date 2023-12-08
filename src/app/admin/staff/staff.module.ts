@@ -13,6 +13,7 @@ import { CustomerManagementState } from 'src/app/store/customer-state-management
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemManagementState } from 'src/app/store/system-state-management/state/system.state';
 import { SystemUtilityManagementState } from 'src/app/store/system-utility-state-management/state/system-utility.state';
+import { LoginService } from 'src/app/services/login.service';
 
 @NgModule({
   imports: [
@@ -28,6 +29,6 @@ import { SystemUtilityManagementState } from 'src/app/store/system-utility-state
     ]),
   ],
   declarations: [StaffListComponent, StaffEditComponent],
-  providers: [SystemService, SystemUtilityService, CustomerService]
+  providers: [SystemService, SystemUtilityService, CustomerService, LoginService]
 })
 export class StaffModule { }

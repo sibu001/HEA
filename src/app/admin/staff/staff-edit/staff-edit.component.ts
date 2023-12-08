@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Observable, Subscription } from 'rxjs';
@@ -7,6 +7,8 @@ import { filter, skipWhile, take } from 'rxjs/operators';
 import { MustMatch } from 'src/app/common/password.validator';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
 import { CustomerService } from 'src/app/store/customer-state-management/service/customer.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { SystemUtilityService } from 'src/app/store/system-utility-state-management/service/system-utility.service';
@@ -26,9 +28,11 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   public statusList: any[] = TableColumnData.STATUS_DATA_FOR_STAFF;
   public topicKeys: Array<TableColumnData> = TableColumnData.TOPIC_GROUP_COLUMN_DATA;
   public surveyVersionSettingList: Array<any> = TableColumnData.SURVEY_VERSION_SETTING_DATA;
+  public uiVersionBehaviourList : Array<any> = Array.from(TableColumnData.UI_VERSION_BEAHAVIOUR);
   public viewConfigurationList: any;
   public permanentDelete : boolean = false;
   public dataSource: any;
+  public staffUserData : any;
   public rolesData = {
     content: [],
     totalElements: 0,
@@ -64,12 +68,14 @@ export class StaffEditComponent implements OnInit, OnDestroy {
   regex = '';
   charactersCount = 0;
   passwordIsValid = false;
+  users : Users = new Users();
   private readonly subscriptions: Subscription = new Subscription();
   constructor(
     private readonly fb: FormBuilder,
     private readonly systemService: SystemService,
     private readonly customerService: CustomerService,
     private readonly activateRoute: ActivatedRoute,
+    private readonly loginService: LoginService,
     private readonly router: Router,
     private readonly systemUtilityService : SystemUtilityService,
     private readonly el: ElementRef) {
@@ -83,8 +89,8 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       }
     });
   }
-
   ngOnInit() {
+    this.users = this.loginService.getUser();
     this.setForm(undefined);
     this.combineLatestCustomerEventTypeList();
     this.combineLatestResponseofRole();
@@ -154,7 +160,6 @@ export class StaffEditComponent implements OnInit, OnDestroy {
         ([customerGroupList, userCustomerGroupList]) =>{
 
           const topicGroupSelectionList = [];
-
           if(userCustomerGroupList && this.id){
             this.topicGroupList = [...userCustomerGroupList.list];
             this.topicGroupList.forEach(element => {
@@ -182,15 +187,16 @@ export class StaffEditComponent implements OnInit, OnDestroy {
 
   loadStaffById() {
     this.subscriptions.add(this.customerService.getStaffById()
-    .pipe(filter((item: any) => item && (this.isForce || this.id == item.id)))
+    .pipe(filter((item: any) => item && this.id == item.id))
       .subscribe((staff: any) => {
-        if (this.isForce) {
-          this.router.navigate(['admin/staff/staffEdit'], { queryParams: { 'id': staff.id } });
-          this.combineLatestCustomerEventTypeList();
-          this.isForce = false;
-        }
+        this.staffUserData = staff;
+        this.combineLatestCustomerEventTypeList();
         this.setForm(staff);
         AppUtility.scrollTop();
+        if(this.userId == this.users.userId){
+          this.users.userData = staff;
+          this.loginService.setUser(this.users);
+        }
       }));
   }
 
@@ -243,14 +249,20 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       }, { validator: MustMatch('password', 'confirmPassword') }),
       passwordNeedChange: [event !== undefined ? event.passwordNeedChange : ''],
       passwordStrengthLevel: [event !== undefined ? event.passwordStrengthLevel : ''],
-      passwordChangeDate: [event !== undefined ? AppUtility.getDateFromMilllis(event.passwordChangeDate) : ''],
+      // passwordChangeDate: [event !== undefined ? AppUtility.getDateFromMilllis(event.passwordChangeDate) : ''],
       sendEmail: [event !== undefined ? event.sendEmail : ''],
       surveyVersionSetting: [event !== undefined ? event.surveyVersionSetting : '1'],
       comments: [event !== undefined ? event.comments : ''],
-      customerViewConfigurationId: [event !== undefined ? event.customerViewConfigurationId : ''],
+      customerViewConfigurationId: [event !== undefined ? event.customerViewConfigurationId : 'null'],
       accessToUserPassword: [event !== undefined ? event.accessToUserPassword : ''],
+      uiVersionBehavior: [event !== undefined ? event.uiVersionBehavior : 'null']
+
     });
 
+  }
+
+  public changeMillisToDate( passwordChangeDate : string ){
+    return AppUtility.getDateFromMilllis(passwordChangeDate);
   }
 
   back() {
@@ -267,7 +279,8 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  save() {
+  save() {  
+
     if (this.p.password.value) {
       this.p.password.setValidators([Validators.required,
       Validators.minLength(this.minLength),
@@ -282,33 +295,42 @@ export class StaffEditComponent implements OnInit, OnDestroy {
     if (this.p.password.value && this.p1.valid) {
       this.getValidateNewPassword(this.p.password.value);
     }
-    if (this.staffForm.valid) {
-      if (this.id !== null && this.id !== undefined) {
-        this.saveAndUpdateNewRole();
-        this.saveAndUpdateNewTopicGroup();
-        this.getNewlySelectedAndRemovedCustomerEventTypeList();
-        this.subscriptions.add(this.customerService.updateStaff(this.id, this.staffForm.value)
-        .pipe(take(1))
-          .subscribe((response: any) => {
-            this.forcePreviousPageList = true;
-          }));
-      } else {
-        this.subscriptions.add(this.customerService.saveStaff(this.staffForm.value)
-        .pipe(take(1))
-          .subscribe((response: any) => {
-            this.isForce = true;
-            this.forcePreviousPageList = true;
-            this.id = response.customerManagement.staff.id;
-            this.saveAndUpdateNewRole();
-            this.saveAndUpdateNewTopicGroup();
-            this.loadEventTypeRestrictionsForUserById();
-            this.loadStaffById();
-          }));
-      }
-    } else {
-      // this.validateForm();
-      AppUtility.validateAndHighlightReactiveFrom(this.staffForm);
+
+    if(!AppUtility.validateAndHighlightReactiveFrom(this.staffForm)){
+      return;
     }
+
+    if(this.id){
+      const requestBody = {...this.staffUserData, ...this.staffForm.value }
+
+      this.subscriptions.add(
+        this.customerService.updateStaff(this.id,requestBody)
+        .pipe(take(1))
+        .subscribe((response) =>{
+          this.forcePreviousPageList = true;
+          this.saveAndUpdateNewRole();
+          this.saveAndUpdateNewTopicGroup();
+          this.getNewlySelectedAndRemovedCustomerEventTypeList();
+        })
+      )
+
+      return;
+    }
+
+    this.subscriptions.add(
+      this.customerService.saveStaff(this.staffForm.value)
+      .pipe(take(1))
+      .subscribe((state : any ) =>{
+        this.id = state.customerManagement.staff.id;
+          this.forcePreviousPageList = true;
+          AppUtility.appendIdToURLAfterSave(this.router,this.activateRoute,this.id);
+          this.loadStaffById();
+          // this.saveAndUpdateNewRole();
+          // this.saveAndUpdateNewTopicGroup();
+          // this.getNewlySelectedAndRemovedCustomerEventTypeList();
+      })
+    );
+
   }
 
 
@@ -326,6 +348,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
         console.log(passwordValidation);
       }));
   }
+
   validateForm() {
     for (const key of Object.keys(this.staffForm.controls)) {
       if (this.staffForm.controls[key].invalid && key === 'passwordForm') {

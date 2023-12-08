@@ -3,12 +3,13 @@ import { Location } from '@angular/common';
 import { ElementRef, ViewChild, Renderer } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
-import { Router } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import { AppUtility } from '../utility/app.utility';
 import { Subscription, fromEvent } from 'rxjs';
 import { SubscriptionUtil } from '../utility/subscription-utility';
 import { AppConstant } from '../utility/app.constant';
 import { take } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
 
 declare var $: any;
 @Component({
@@ -20,6 +21,10 @@ export class leakListViewComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('inp') inp: ElementRef;
   users: Users = new Users();
   private customerId : number;
+  myLeaks:any;
+  sortOrder ='DESC';
+  sortField = 'priceValue';
+  pageNumber = '0';
   private subscriptions: Subscription = new Subscription();
   constructor(private location: Location, private router: Router, private loginService: LoginService) {
     this.users = this.loginService.getUser();
@@ -27,6 +32,11 @@ export class leakListViewComponent implements OnInit, AfterViewInit, OnDestroy {
     for (let i = 0; i < this.users.leakList.length; i++) {
       this.users.leakList[i].flag = true;
     }
+    const params : HttpParams = new HttpParams()
+    // .append('sortOrder',this.sortOrder)
+    // .append('sortField', this.sortField )
+    .append('pageNumber', this.pageNumber);
+    this.addDirectLinkToMyLeak(params);
 
   }
 
@@ -50,6 +60,13 @@ export class leakListViewComponent implements OnInit, AfterViewInit, OnDestroy {
     this.loginService.performGet(`${AppConstant.customer}/${this.customerId}/${AppConstant.leaks}/${leakId}/directLink`)
     .subscribe(response => {
       leak.directLink = response.data;
+    });
+  }
+
+  addDirectLinkToMyLeak(params:HttpParams){
+   this.loginService.performGetWithParams(`${AppConstant.customer}/${this.customerId}/${AppConstant.leaks}/directLink`,params)
+    .subscribe(response => {
+      this.myLeaks = response.data;
     });
   }
 

@@ -139,8 +139,9 @@
               Password change date:
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
-              <input type="text" formControlName="passwordChangeDate" class="form-control
-                form-control-sm show-value" disabled>
+              <p>{{changeMillisToDate(staffUserData?.passwordChangeDate)}}</p>
+              <!-- <input type="text" formControlName="passwordChangeDate" class="form-control
+                form-control-sm show-value" disabled> -->
             </div>
           </div>
           <div class="row borderBottom rowPadding">
@@ -189,10 +190,23 @@
             <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
               <select class="form-control form-control-sm" id="customerViewConfigurationId"
                 formControlName="customerViewConfigurationId" value='-1'>
-                <option value='null'>Standard</option>
+                <option value=null>Standard</option>
                 <option *ngFor="let viewConfiguration of
                   viewConfigurationList" [value]="viewConfiguration.viewConfigurationId">
                   {{viewConfiguration.configurationName}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="row borderBottom rowPadding">
+            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+              Customer rUI opening behavior: 
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+              <select class="form-control form-control-sm" id="uiVersionBehavior"
+                formControlName="uiVersionBehavior" value='-1'>
+                <option *ngFor="let uiVersionBehavior of
+                  uiVersionBehaviourList" [value]="uiVersionBehavior[1]">
+                  {{uiVersionBehavior[0]}}</option>
               </select>
             </div>
           </div>

@@ -11,6 +11,7 @@ import { AppUtility } from '../utility/app.utility';
 import { Subscription, fromEvent } from 'rxjs';
 import { AppConstant } from '../utility/app.constant';
 import { take } from 'rxjs/operators';
+import { HttpParams } from '@angular/common/http';
 declare var $: any;
 @Component({
   // tslint:disable-next-line: component-selector
@@ -28,6 +29,11 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit,
   statusColor = '76ba19';
   sortingBy = '-priceValue';
   recommendationPriceValueSum = 0;
+  recommendation:any;
+  pageNumber='0';
+  sortOrder = 'DESC';
+  sortField = 'priceValue';
+  titleSortField = 'recommendation.takebackLabelTemplate'
   private subscriptions : Subscription = new Subscription();
   constructor(private loginService: LoginService, private router: Router, private location: Location) {
     this.users = this.loginService.getUser();
@@ -56,6 +62,14 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit,
     this.loginService.performGet(`${AppConstant.customer}/${this.customerId}/${AppConstant.recommendations}/${recommendationId}/directLink`)
     .subscribe(response => {
       item.directLink = response.data;
+    });
+
+  }
+
+  directLinkToRecommendation(params : HttpParams){
+    this.loginService.performGetWithParams(`customers/${this.customerId}/${AppConstant.recommendations}/directLink`,params)
+    .subscribe(response => {
+      this.recommendation = response.data;
     });
 
   }
@@ -152,6 +166,7 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit,
         this.statusColor = '#76ba19';
         this.savingColor = '#000';
         this.sortingBy = '-priceValue';
+        this.sortOrder = 'DESC'
         this.getLeak();
         break;
       case 2:
@@ -159,12 +174,16 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit,
         this.statusColor = '#76ba19';
         this.savingColor = '#76ba19';
         this.sortingBy = 'recommendation';
+        this.sortOrder = 'ASC';
+        this.getParams(this.titleSortField,this.sortOrder);
         break;
       case 3:
         this.titleColor = '#76ba19';
         this.statusColor = '#000';
         this.savingColor = '#76ba19';
         this.sortingBy = 'status';
+        this.sortOrder = 'ASC';
+        this.getParams(this.sortingBy,this.sortOrder);
         break;
       default:
         break;
@@ -179,6 +198,7 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit,
       array.push(value[0]);
     });
     this.users.recommendationList = array;
+    this.getParams(this.sortField,this.sortOrder)
   }
 
 
@@ -186,6 +206,15 @@ export class surveyRecommendationListComponent implements OnInit, AfterViewInit,
     event.stopPropagation();
     event.preventDefault();
     this.subscriptions.add(AppUtility.copyToClipboardEvent(text));
+  }
+
+  getParams(sortField:string,sortOrder:string){
+    const params : HttpParams = new HttpParams()
+    .append('sortOrder',sortOrder)
+    .append('sortField', sortField )
+    .append('pageNumber', this.pageNumber);
+    this.directLinkToRecommendation(params);
+
   }
 
   ngOnDestroy(): void {
