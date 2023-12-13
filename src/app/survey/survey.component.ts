@@ -1351,7 +1351,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private efficiencyOrElectrificationRedirection() : void{
 
     // only procceed when pand code is 'prf_EEorBE'
-    if(this.users.currentPaneNumber.currentPane.paneCode != "prf_EEorBE"){
+    if(this.users.currentPaneNumber.currentPane.paneCode != "red_EEorBE"){
       return;
     }
 
