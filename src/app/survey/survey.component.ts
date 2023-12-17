@@ -102,7 +102,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.highlighterrorFieldlabels();
     this.refreshPaneOnUpdatebutton();
-    this.efficiencyOrElectrificationRedirection();
   }
 
   ngAfterViewChecked(): void{
@@ -547,7 +546,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.refreshCurrentPaneWithAnswerAndChart(response.data);
               }
               this.refreshPaneOnUpdatebutton();
-              this.efficiencyOrElectrificationRedirection();
             }
 
           },
@@ -790,7 +788,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.evaluateJavaScript(response.data);
           this.scrollTop();
           this.refreshPaneOnUpdatebutton();
-          this.efficiencyOrElectrificationRedirection();
           document.getElementById('loader').classList.remove('loading');
         },
         errors => {
@@ -864,7 +861,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             this.refreshPaneOnUpdatebutton();
-            this.efficiencyOrElectrificationRedirection();
           } else {
             // this.router.navigate(['/topicshistory']);
             this.gotToTopicHistory();
@@ -1244,7 +1240,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     return cssValue;
   }
 
-
+  
    highlightErrorRowCheck(surveyAnswer : any){
     const errorList = this.users.currentPaneNumber.errors;
     
@@ -1346,57 +1342,10 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }, 1000);
   }
 
-  // condition added to redirect user to efficiency of electrification 
-  // for more details check https://xp-dev.com/trac/HEA/ticket/2415#comment:1
-  private efficiencyOrElectrificationRedirection() : void{
+  @HostListener('window:selectSurvey', ['$event'])
+  private findPaneBysurveyCode(event : any ) : void {
 
-    // only procceed when pand code is 'prf_EEorBE'
-    if(this.users.currentPaneNumber.currentPane.paneCode != "red_EEorBE"){
-      return;
-    }
-
-    setTimeout(() =>{
-      this.efficiencyRedirection();
-      this.electrificationRedirection();
-    },1000);
-  }
-
-  private efficiencyRedirection() : void {
-    const anchorList = Array.from(document.querySelectorAll("#efficiencyRedirection a"));
-
-    anchorList.forEach((anchor : HTMLElement) =>{
-      this.subscriptons.add(
-        fromEvent(anchor,'click')
-        .pipe(take(1))
-        .subscribe((event) =>{
-          event.preventDefault();
-          //  finding survey with surveyCode HouseholdEnergy
-          this.findPaneBysurveyCode(AppConstant.HOUSEHOLD_SURVEY_CODE);
-
-        })
-      )
-    })
-  }
-
-  private electrificationRedirection() : void {
-    const anchorList = Array.from(document.querySelectorAll("#electrificationRedirection a"));
-
-    anchorList.forEach((anchor : HTMLElement) =>{
-      this.subscriptons.add(
-        fromEvent(anchor,'click')
-        .pipe(take(1))
-        .subscribe((event) =>{
-          event.preventDefault();
-          //  finding survey with surveyCode Electrification
-          this.findPaneBysurveyCode(AppConstant.BENEFICAL_ELECRTIFICATION_SURVEY_CODE);
-        })
-      )
-    })
-  }
-
-
-  private findPaneBysurveyCode(surveyCode : string ) : void {
-
+    const surveyCode : string = event.detail.surveyCode;
     const survey : any = this.users.surveyList.find((survey) =>{
         return survey.surveyDescription.surveyCode == surveyCode;
     });

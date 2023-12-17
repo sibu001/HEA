@@ -68,3 +68,13 @@ function addForceQueryParam() {
 window.addEventListener('popstate', (event) => {
   addForceQueryParam();
 });
+
+function selectSurvey(){
+  const eventName = 'selectSurvey';
+  const selectSurveyObject = { surveyCode : selectSurvey.arguments[0] };
+  const event = new CustomEvent(eventName, { detail: selectSurveyObject });
+  window.dispatchEvent(event);
+
+  return false;
+
+}
