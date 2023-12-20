@@ -306,4 +306,19 @@ export class ElectricitySmartMeterListComponent implements OnInit , OnDestroy{
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
   }
+
+  validateYearInput(event: Event) {
+    AppUtility.validateInput(event,1,2100);
+  }
+  
+  validateYearChange(event: Event) {
+    AppUtility.validateChange(event, this.electricitySmartMeterForm.controls['year'], 1, 2100);
+  }
+  validateMonthInput(event: Event) {
+    AppUtility.validateInput(event,1,12);
+  }
+  
+  validateMonthChange(event: Event) {
+    AppUtility.validateChange(event, this.electricitySmartMeterForm.controls['month'], 1, 12);
+  }
 }

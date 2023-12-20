@@ -657,5 +657,33 @@ export class AppUtility {
         AppUtility.saveAdminFilter(adminFilter);
           
     }
+
+    public static validateInput(event: Event, min: number, max: number) {
+        const inputElement = event.target as HTMLInputElement;
+        let value = parseInt(inputElement.value, 10);
+      
+        if (isNaN(value) || value < min) {
+          value = null;
+        } else if (value > max) {
+          value = max;
+        }
+      
+        inputElement.value = value ? value.toString() : '';
+      }
+      
+      public static validateChange(event: Event, formControl: AbstractControl, min: number, max: number) {
+        const inputElement = event.target as HTMLInputElement;
+        let value = parseInt(inputElement.value, 10);
+      
+        if (isNaN(value) || value < min) {
+          value = null;
+        } else if (value > max) {
+          value = max;
+        }
+      
+        formControl.setValue(value, { emitEvent: false });
+        inputElement.value = value ? value.toString() : '';
+      }
+      
     
 }  
