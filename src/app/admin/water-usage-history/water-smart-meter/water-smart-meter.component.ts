@@ -267,14 +267,14 @@ export class WaterSmartMeterComponent implements OnInit {
   }
   
   validateYearChange(event: Event) {
-    AppUtility.validateChange(event, this.gasForm.controls['year'], 1, 2100);
+    AppUtility.validateChange(event, this.waterSmartMeterForm.controls['year'], 1, 2100);
   }
   validateMonthInput(event: Event) {
     AppUtility.validateInput(event,1,12);
   }
   
   validateMonthChange(event: Event) {
-    AppUtility.validateChange(event, this.gasForm.controls['month'], 1, 12);
+    AppUtility.validateChange(event, this.waterSmartMeterForm.controls['month'], 1, 12);
   }
 
 }

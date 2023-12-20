@@ -260,13 +260,13 @@ export class WaterComponent implements OnInit, OnDestroy {
   }
   
   validateYearChange(event: Event) {
-    AppUtility.validateChange(event, this.gasForm.controls['year'], 1, 2100);
+    AppUtility.validateChange(event, this.waterForm.controls['year'], 1, 2100);
   }
   validateMonthInput(event: Event) {
     AppUtility.validateInput(event,1,12);
   }
   
   validateMonthChange(event: Event) {
-    AppUtility.validateChange(event, this.gasForm.controls['month'], 1, 12);
+    AppUtility.validateChange(event, this.waterForm.controls['month'], 1, 12);
   }
 }
