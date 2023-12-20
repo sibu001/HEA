@@ -1304,8 +1304,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           return;
         }
 
-        //  return to topic history, if user is not on last survey but all the survey's are completed.
-        this.router.navigate(['/topicshistory']);
+        //  return to Dashboard, if user is not on last survey but all the survey's are completed.
+        this.router.navigate(['/dashboard']);
         return;
       }
     }

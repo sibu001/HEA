@@ -336,6 +336,7 @@ export class TopicDescriptionEditComponent implements OnInit,  OnDestroy {
       htmRightBottomTemplate: [event !== undefined ? event.htmRightBottomTemplate : ''],
       comments: [event !== undefined ? event.comments : ''],
       isRerunTopic: [false],
+      hideInDashboard: [event !== undefined ? event.hideInDashboard : ''],
     });
   }
 

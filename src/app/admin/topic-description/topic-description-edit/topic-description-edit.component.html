@@ -85,7 +85,7 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
-          <div *ngIf='id !== undefined' class="row borderBottom rowPadding">
+          <div *ngIf='id !== undefined && topicForm.value.mandatory == true' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="mandatory">
@@ -164,7 +164,8 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf="topicForm.value.permanent == true" class="row borderBottom rowPadding">
+          <!-- change if check at 'NextPermanentTopics' and 'AllowPublic' as per https://xp-dev.com/trac/HEA/ticket/2063#comment:660 -->
+          <div *ngIf="topicForm.value.mandatory == true" class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Next Permanent
               Topic:</div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
@@ -179,7 +180,7 @@
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
 
-          <div *ngIf='id !== undefined' class="row borderBottom rowPadding">
+          <div *ngIf='id !== undefined && topicForm.value.mandatory==true && topicForm.value.permanent==true' class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <label for="allowPublic">
@@ -190,6 +191,20 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
           </div>
+
+         <!--Added new check box as per https://xp-dev.com/trac/HEA/ticket/2349#comment:31-->
+          <div *ngIf='id !== undefined' class="row borderBottom rowPadding">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12"></div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+              <label for="hideInDashboard">
+                <input type="checkbox" formControlName="hideInDashboard"
+                  id="hideInDashboard">
+                Hide in Dashboard
+              </label>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 col-xs-12"></div>
+          </div>
+
 
           <div class="row borderBottom rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Message for survey unload events:</div>

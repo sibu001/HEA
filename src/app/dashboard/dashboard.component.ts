@@ -218,7 +218,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   getNextSurvey() {
     document.getElementById('loader').classList.add('loading');
-    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/nextSurvey').subscribe(
+    this.loginService.performGetMultiPartData('customers/' + this.users.outhMeResponse.customerId + '/surveys/nextTopic').subscribe(
       data => {
         this.setUpValueInUsageHitoryFilter(this.users.outhMeResponse);
         const response = JSON.parse(JSON.stringify(data));
