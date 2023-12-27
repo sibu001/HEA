@@ -7,7 +7,7 @@
                         <img alt="icon" src="assets/images/right-.svg" class="back_img" (click)="back()">&nbsp;&nbsp;<span
                             class="recommdationheadingcss">My Leaks</span></h3>
                             <div (click)="copyTextToClipBoard(myLeaks)">
-                                <a *ngIf="users.role != 'USERS'" 
+                                <a 
                                     class="cursor-pointer tooltip-cp d-flex" style="margin-top: 6px;">  
                                     <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;margin-left: 155px;margin-top: -22px;">
                                     <span class="tooltiptext-cp" style="bottom:70px;margin-left:150px;" >Copy to clipboard the leaks list link</span>                               

@@ -1424,14 +1424,24 @@ p.text_righttop {
   padding-top: 10px;
 }
 p.pane_help {
-  text-align: right;
   color: #666;
   font-size: 16px;
   font-weight: 400;
-  padding-top: 0px;
-  /* padding-bottom: 7px; */
-  padding-bottom: 0px;
+/* padding-bottom: 7px; */
   margin: 0px;
+  display: flex;
+  justify-content: space-between;
+}
+.leftLabel {
+  width: 95%; /* Adjust width based on your preference */
+  text-align: left;
+  margin-left: 15px;
+}
+
+.rightLabel {
+  width: 95%; /* Adjust width based on your preference */
+  text-align: right;
+  margin: 5px
 }
 p.accurate_space {
   color: #202020;

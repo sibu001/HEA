@@ -42,13 +42,9 @@
             <div id="surveyDataHeader" class="row">
               <hr class="hr_space">
               <div class="col-sm-12 col-xs-12">
-                <p class="pane_help"
-                style="
-    width: 95%;
-    margin: auto;
-"
-                >
-                  {{users.currentPaneNumber.currentPane.label}}&nbsp;
+                <p class="pane_help">
+                <span class="leftLabel">{{users.currentPaneNumber.currentPane.paneLabel}}</span>
+                <span class="rightLabel">{{users.currentPaneNumber.currentPane.label}}</span>
                   <span
                     *ngIf="users.currentPaneNumber.currentPane.htmHelp!=null&&users.currentPaneNumber.currentPane.htmHelp.length>1">
                     <img alt="icon" src="assets/images/icon_help.svg"
@@ -573,7 +569,7 @@
                               </div>
                               </div>
                               <div class="col-sm-1 ">
-                                <div *ngIf="answersList.dataField.helpText!=null"
+                                <div *ngIf="answersList.dataField.helpText!=null && answersList.dataField.helpText!=''"
                                   style="float:right;">
                                   <img alt="icon" src="assets/images/icon_help.svg"
                                     class="media-object" id="help_btn"
@@ -931,6 +927,9 @@
               <table class="surveyChart" style="table-layout:fixed; width:100%">
                     <ng-container class="row chartPortion"
                     *ngIf="users.currentPaneNumber.paneCharts!=null&&users.currentPaneNumber.paneCharts.length>0">
+                    <div [innerHTML]="users.currentPaneNumber.paneCharts[0]?.chart?.htmHeader| safeHtml" class="accurate accurate2 top"
+                    [ngClass]="{ 'disable-contractor-report-link' : users.currentPaneNumber.currentPane.paneCode == 'be_ContractorReportPane'}"
+                    ></div>
                     <!-- <div class="col-lg-12 col-md-12 col-sm-12 border_class"> -->
                       <tr *ngFor="let charts of
                         users.currentPaneNumber.paneCharts">                        <!-- help icon -->
