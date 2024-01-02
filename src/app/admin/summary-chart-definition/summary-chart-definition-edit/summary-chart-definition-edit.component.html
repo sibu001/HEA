@@ -7,7 +7,7 @@
           <span class="messageName">Summary Chart Definition</span>
         </p>
         <div class="form-group form-padding">
-          <form [formGroup]="chartForm" class="">
+          <form [formGroup]="chartForm" (keyup.enter)="save()" class="">
             <div class="row borderBottom rowPadding">
               <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">Chart code:</div>
               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">

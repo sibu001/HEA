@@ -25,7 +25,7 @@
     <div class="modal-body">
       <div class="table-responsive">
         <table class="table table-sm" data-source="data-source" [mfData]="dataObject"
-          #mf="mfDataTable" summary="electricityUsage">
+          #mf="mfDataTable" summary="electricityUsage" (keyup.enter)="save()">
           <!-- <tr style="display: none;">
             <th id="t1"></th>
             <th id="t2"></th>

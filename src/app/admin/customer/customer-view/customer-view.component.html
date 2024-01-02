@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12 col-md-9 col-lg-9 content">
-        <form [formGroup]="customerForm" class="form-group">
+        <form [formGroup]="customerForm" (keyup.enter)="save($event)" class="form-group">
           <div class="row">
             <div class="col-sm-12 error">{{errorMessage}}</div>
             <div class="col-sm-12 col-md-12 col-lg-12 heading">
@@ -344,16 +344,19 @@
           </div>
           <div class="row borderBottom w100 rowPadding">
             <div class="row col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 btnMarginBottom"><button type="button"
-                  class="btn btn-primary" (click)="clearCustomerValueCache()">Clear
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12 btnMarginBottom"><button type="button"
+                  class="btn btn-primary btn-block" (click)="clearCustomerValueCache()">Clear
                   Cache</button>
               </div>
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 btnMarginBottom">
-                <button type="button" class="btn btn-primary" (click)="recalculateCustomerVariable()">Recalculate
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12 btnMarginBottom">
+                <button type="button" class="btn btn-primary btn-block" (click)="recalculateCustomerVariable()">Recalculate
                   Variables</button>
               </div>
-              <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
-                <button type="button" class="btn btn-primary" (click)="reorderCustomerBills()">Reorder Bills</button>
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
+                <button type="button" class="btn btn-primary btn-block" (click)="reorderCustomerBills()">Reorder Bills</button>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12"  *ngIf="users.role === 'ADMIN' || users.role === 'ADMIN_STAFF'">
+                <button type="button" class="btn btn-primary btn-block" (click)="clickHouseSync()">ClickHouse Sync</button>
               </div>
               <div style="padding-left: inherit">
                 <span>
@@ -507,14 +510,21 @@
               </select>
             </div>
           </div>
-          <div class="row borderBottom w100 rowPadding" *ngIf="(id!=undefined&&customerGroupCode!=='RYPL') && (electricityRatePlan && heatingRatePlan)">
+          <div class="row borderBottom w100 rowPadding" *ngIf="(id!=undefined&&customerGroupCode!=='RYPL') && (electricityRatePlan || heatingRatePlan)">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               Rate Plan:
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
-              {{electricityRatePlan?.code}} &nbsp; Since Date: {{electricityRatePlan?.startDate | date:'MM/dd/yyyy'}}
-              ,{{heatingRatePlan?.name}} &nbsp; Since Date: {{heatingRatePlan?.startDate |
-              date:'MM/dd/yyyy'}}
+              <ng-container *ngIf="electricityRatePlan && heatingRatePlan">
+                {{ electricityRatePlan?.code }} &nbsp; Since Date: {{ electricityRatePlan?.startDate | date:'MM/dd/yyyy' }},
+                {{ heatingRatePlan?.name }} &nbsp; Since Date: {{ heatingRatePlan?.startDate | date:'MM/dd/yyyy' }}
+              </ng-container>
+              <ng-container *ngIf="electricityRatePlan && !heatingRatePlan">
+                {{ electricityRatePlan?.code }} &nbsp; Since Date: {{ electricityRatePlan?.startDate | date:'MM/dd/yyyy' }}
+              </ng-container>
+              <ng-container *ngIf="!electricityRatePlan && heatingRatePlan">
+                {{ heatingRatePlan?.name }} &nbsp; Since Date: {{ heatingRatePlan?.startDate | date:'MM/dd/yyyy' }}
+              </ng-container>
             </div>
           </div>
           <div class="row borderBottom w100 rowPadding">
@@ -729,7 +739,7 @@
               <button type="button" class="btn btn-primary" (click)="delete()" *ngIf="id!=undefined && isUserAdmin()">Delete</button>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-4">
-              <button type="submit" class="btn btn-primary" (click)="save()"
+              <button type="submit" class="btn btn-primary" (click)="save($event)"
                 style="float:right; margin-right: -4px;">Save</button>
             </div>
           </div>

@@ -25,6 +25,8 @@ import * as moment from 'moment';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { AppUtility } from 'src/app/utility/app.utility';
+import { AppConstant } from 'src/app/utility/app.constant';
+import { UtilityService } from 'src/app/services/utility.service';
 
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -150,6 +152,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     private readonly router: Router,
     private datePipe: DatePipe,
     private readonly loginService : LoginService,
+    private readonly utilityService: UtilityService,
     private readonly el: ElementRef) {
     AppUtility.removeLoader();
       this.setForm(undefined);
@@ -965,7 +968,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     window.open(url, '_blank');
   }
 
-  save() {
+  save(event:Event) {
     if (this.p.password.value) {
       this.p.password.setValidators([
       Validators.minLength(this.minLength),
@@ -1018,8 +1021,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
             this.isForce = true;
             this.scrollTop();
             this.loadCustomerById();
-            this.router.navigate(['/admin/customer']);
-          }));
+            if(!(event instanceof KeyboardEvent && event.key === 'Enter')){
+              this.router.navigate(['/admin/customer']);
+            }
+            }));
       } else {
         const requestBody = this.customerForm.value;
         if(!requestBody.user.username){
@@ -1123,6 +1128,31 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   copyTextToClipBoard( text : string ) : void{
     this.subscriptions.add(AppUtility.copyToClipboardEvent(text));
     
+  }
+
+  clickHouseSync(){
+      document.getElementById('loader').classList.add('loading');
+      this.loginService.performPost('', AppConstant.customer + '/' + this.id + '/' + AppConstant.clickHouseSync).subscribe(
+        (data:any)=> {
+          console.log(data);
+          if(data && data.data ===true){
+            this.utilityService.showSuccessMessage('Operation success')
+
+          } else {
+            this.utilityService.showErrorMessage('Operation fail');
+          }
+          document.getElementById('loader').classList.remove('loading');
+        },
+        (error) => {
+          if (error && error.error && error.error.errorMessage) {
+            this.utilityService.showErrorMessage(`Operation fail due to: ${error.error.errorMessage}`);
+          } else {
+            this.utilityService.showErrorMessage('Operation fail due to an unknown error');
+          }
+          document.getElementById('loader').classList.remove('loading');
+        }
+      )
+          
   }
 
 }

@@ -230,4 +230,5 @@ export class AppConstant {
 
     public static HOUSEHOLD_SURVEY_CODE = "HouseholdEnergy";
     public static BENEFICAL_ELECRTIFICATION_SURVEY_CODE = "Electrification";
+    public static clickHouseSync = 'clickhouseSyncFromUi';
 }

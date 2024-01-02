@@ -8,7 +8,7 @@
             Account Setting
           </span>
         </p>
-        <form [formGroup]='staffForm' class="form-group
+        <form [formGroup]='staffForm' (keyup.enter)="save()" class="form-group
           form-padding">
           <div class="row borderTop borderBottom rowPadding" *ngIf="id!==undefined&&id!==null">
             <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
