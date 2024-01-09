@@ -497,6 +497,7 @@ ul.standby li {
 img.question {
   width: 34px;
   cursor: pointer;
+  margin-left: 30px;
 }
 
 .help_img {
@@ -666,4 +667,8 @@ select {
 
 .tooltip-cp:hover .tooltiptext-cp {
   z-index: 99999;
+}
+
+.d-flex{
+  z-index: 99;
 }
