@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Users } from './models/user';
 import { LoginService } from './services/login.service';
 import { AppConstant } from './utility/app.constant';
@@ -15,7 +15,14 @@ export class AuthGuard implements CanActivate {
         this.users = this.loginService.getUser();
     }
 
-    canActivate(): boolean {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+
+        //check if url endpoint is recommendationInstruction
+        const urlParts = state.url.split('/');
+        const lastPart = urlParts[urlParts.length - 1]; 
+        if (lastPart === 'recommendationInstruction') {
+            return true;
+          }
         if (!this.loginService.isLoggedIn()) {
           this.router.navigate(['/login']);
             return false;
