@@ -33,8 +33,9 @@ export class DisplayPatternPipe implements PipeTransform {
     }
 
     if(displayPattern.includes(',')){
-      const formattedValue = Math.abs(value) > 999 ? Math.sign(value)*((Math.abs(value)/1000)): Math.sign(value)*Math.abs(value)
-      return formattedValue.toString().replace('.',',');
+      const formattedValue = Math.abs(value) > 999 ? Math.sign(value)*((Math.abs(value))): Math.sign(value)*Math.abs(value)
+      // return formattedValue.toString().replace('.',',');
+      return formattedValue.toLocaleString('en-US');
     }
     
     return value;
