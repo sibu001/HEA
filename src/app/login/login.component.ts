@@ -1,6 +1,6 @@
 import { TopicHistoryComponent } from './../survey/topichistory.component';
 import { HttpParams } from '@angular/common/http';
-import { Component, OnInit, ContentChild, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ContentChild, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
@@ -8,6 +8,8 @@ import { Location } from '@angular/common';
 import { AdminFilter, UsageHistoryFilter } from '../models/filter-object';
 import { AppUtility } from '../utility/app.utility';
 import { AppConstant } from '../utility/app.constant';
+import { Subscription } from 'rxjs';
+import { SubscriptionUtil } from '../utility/subscription-utility';
 
 declare function mobilecheck() : boolean ;
 declare var FB: any;
@@ -16,7 +18,7 @@ declare var FB: any;
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent implements OnInit, AfterViewInit{
+export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   @ViewChild('loginRef') loginElement: ElementRef;
   users: Users = new Users();
   errorMessage: string;
@@ -27,6 +29,11 @@ export class LoginComponent implements OnInit, AfterViewInit{
   buildForSandbox = true; 
   auth2: any;
   redirectedRoute : string;
+  enableFb : string;
+  enableGoogle : string;
+  loginScreenText : any;
+  enableSocialLogin : string;
+  subscription : Subscription = new Subscription();
   @ContentChild('showhideinput') input;
 
   constructor(
@@ -72,6 +79,7 @@ export class LoginComponent implements OnInit, AfterViewInit{
   }
   
   ngAfterViewInit(): void {
+    
 
     // for checking weather the session is expired of user and had to re-login to the applicaiton.
     if (this.users.outhMeResponse) {
@@ -126,6 +134,14 @@ export class LoginComponent implements OnInit, AfterViewInit{
       this.googleInitialize();
 
     }
+
+
+    setTimeout(()=>{
+      this.getLoginScreenText();
+      this.getFbLoginEnable();
+      this.getGoogleLoginEnable();
+      this.getSocialLoginEnable();
+    },2000);
   }
 
   // login() {
@@ -518,4 +534,46 @@ export class LoginComponent implements OnInit, AfterViewInit{
       });
   }
 
+  getFbLoginEnable(){
+    this.loginService.performGet('conf/'+'enableFacebook').subscribe(
+      (data) => {
+            this.enableFb = data.data;
+      }
+
+    );
+  }
+
+  getGoogleLoginEnable(){
+    this.subscription.add(
+      this.loginService.performGet('conf/'+'enableGoogle').subscribe(
+        (data) => {
+              this.enableGoogle = data.data;
+        }
+      )
+    )
+  }
+
+  getLoginScreenText(){
+    this.loginService.performGetMultiPartData('conf/'+'loginScreenText').subscribe(
+      (data) => {
+            this.loginScreenText = data.data;
+      },
+     
+
+    )
+  }
+
+  getSocialLoginEnable(){
+    this.subscription.add(
+      this.loginService.performGet('conf/'+'enableSocial').subscribe(
+        (data) => {
+              this.enableSocialLogin = data.data;
+        }
+      )
+    )
+  }
+
+  ngOnDestroy(): void {
+    SubscriptionUtil.unsubscribe(this.subscription);
+  }
 }

@@ -6,7 +6,7 @@
     <div class="row top">
         <div class="col-sm-3">
             <p class="registrationTextHIresponsive" *ngIf="buildForSandbox">Build
-                for Sandbox</p>
+                for Sand</p>
         </div>
         <div class="col-sm-6">
             <div *ngIf="theme=='HEA'||theme=='CEC'">
@@ -138,12 +138,12 @@
                             password</p>
                     </div>
                     <div class="col-sm-6" style="float: right;">
-                        <p class="socialImageCL">
+                        <p class="socialImageCL" *ngIf = 'enableSocialLogin'>
                             <!-- (click)="fbLogin()" -->
-                            <img alt="facebook" src="assets/images/fb.png" class="fblogin" 
+                            <img *ngIf='enableFb' alt="facebook" src="assets/images/fb.png" class="fblogin" 
                             (click)="login()">
                                 <!-- #loginRef -->
-                                    <img  alt="google" src="assets/images/google.png"
+                                    <img  *ngIf='enableGoogle' alt="google" src="assets/images/google.png"
                                 class="googlelogin" (click)="login()">
                         </p>
                     </div>
@@ -175,8 +175,7 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <p class="registrationTextHI" *ngIf="buildForSandbox">Build for
-                Sandbox</p>
+            <p class="registrationTextHI" *ngIf="buildForSandbox">{{loginScreenText}}</p>
         </div>
     </div>
 
