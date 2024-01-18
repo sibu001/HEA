@@ -1,7 +1,7 @@
 import { TopicHistoryComponent } from './../survey/topichistory.component';
 import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, ContentChild, ViewChild, ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Users } from 'src/app/models/user';
 import { LoginService } from './../services/login.service';
 import { Location } from '@angular/common';
@@ -75,6 +75,17 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   ngOnInit() {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        console.log('NavigationEnd event in YourComponent:', event);
+
+        // ticket 2415 comment 22
+        this.getFbLoginEnable();
+        this.getGoogleLoginEnable();
+        this.getLoginScreenText();
+        this.getSocialLoginEnable();
+      }
+    });
 
   }
   
@@ -134,14 +145,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
       this.googleInitialize();
 
     }
-
-
-    setTimeout(()=>{
-      this.getLoginScreenText();
-      this.getFbLoginEnable();
-      this.getGoogleLoginEnable();
-      this.getSocialLoginEnable();
-    },2000);
   }
 
   // login() {
