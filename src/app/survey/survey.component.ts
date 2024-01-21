@@ -1,5 +1,5 @@
 import { UtilityService } from './../services/utility.service';
-import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit, OnDestroy, AfterViewChecked, Renderer2, NgZone } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -516,6 +516,12 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           data => {
             setTimeout(() => this.highlighterrorFieldlabels(),50); 
             const response = JSON.parse(JSON.stringify(data));
+
+            if(response.data.firstPage){
+              this.getAllSurvey();
+            }
+
+
             this.paneblockRowErrorNotation = [];
             if (response.data.errors != null) {
               if (response.data.currentPane.paneCode === 'pv_EditPVConfigs') {
@@ -710,6 +716,12 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/nextPane').subscribe(
         data => {
           const response = JSON.parse(JSON.stringify(data));
+
+          if(response.data.firstPage){
+            this.getAllSurvey();
+          }
+
+          
           const currentPaneCode = this.users.currentPaneNumber.currentPane.paneCode;
           this.removeAllPreviousCanvasElements();
           this.users.currentPaneNumber = response.data;
@@ -1346,18 +1358,17 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private findPaneBysurveyCode(event : any ) : void {
 
     const surveyCode : string = event.detail.surveyCode;
-    const survey : any = this.users.surveyList.find((survey) =>{
-        return survey.surveyDescription.surveyCode == surveyCode;
-    });
-    
-    const firstPane : any = survey.panes[0];
-    const surveyId = survey.surveyId;
-    const paneCode = firstPane.paneCode;
+    // const survey : any = this.users.surveyList.find((survey) =>{
+    //     return survey.surveyDescription.surveyCode == surveyCode;
+    // });
+    // const firstPane : any = survey.panes[0];
+    // const surveyId = survey.surveyId;
+    // const paneCode = firstPane.paneCode;
 
 
     const object = {};
     const customerId =  this.users.outhMeResponse.customerId;
-    this.loginService.performPostMultiPartData(object, 'customers/' + customerId + '/surveys/' + surveyCode + '/' + surveyId + '/panes/' + paneCode).subscribe(
+    this.loginService.performPostMultiPartData(object, 'customers/' + customerId + '/surveys/' + surveyCode).subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
         console.log(response);

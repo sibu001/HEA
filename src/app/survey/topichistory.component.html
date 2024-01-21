@@ -77,7 +77,7 @@
                                             <a class="topic_point"
                                                 (click)="goToTopicPage(userSurveyList.surveyId,paneList.paneCode,userSurveyList.surveyDescription.surveyCode,j)">{{paneList.label}}</a>
                                             &nbsp;&nbsp;
-                                            <a *ngIf="users.role != 'USERS'" (click)="copyTextToClipBoard(userSurveyList.directLink)" 
+                                            <a *ngIf="users.role != 'USERS'" (click)="copyTextToClipBoard(paneList.directLink)" 
                                                 class="cursor-pointer tooltip-cp d-flex">  
                                                 <img alt="icon" src="assets/images/copy-icon.png" style="height: 15px;">
                                                 <span class="tooltiptext-cp" >Copy to clipboard the topic link</span>                               
