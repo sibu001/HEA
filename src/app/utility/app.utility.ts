@@ -435,6 +435,11 @@ export class AppUtility {
         return confirm('Are you sure you want to delete?');
     }   
 
+
+    public static liveServerAlertText() : boolean{
+        return confirm('Note to administrators: This is a compute-intensive task and will impact system performance for our users. Click Cancel, then rerun in the Sandbox. Click OK to run anyway.');
+    }   
+
     // Note*** provide chunks in sequence
     public static endPointGenerator(chunks : Array<string | number>): string{
         return chunks.join('/');

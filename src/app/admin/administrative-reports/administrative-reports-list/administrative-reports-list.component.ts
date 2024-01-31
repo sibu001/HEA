@@ -7,6 +7,7 @@ import { filter, skipWhile } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { AdminFilter } from 'src/app/models/filter-object';
+import { LoginService } from 'src/app/services/login.service';
 import { AdministrativeService } from 'src/app/store/administrative-state-management/service/administrative.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { AppConstant } from 'src/app/utility/app.constant';
@@ -22,6 +23,7 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
   id: any;
   public keys: Array<TABLECOLUMN> = TableColumnData.ADMIN_REPORT_KEYS;
   public dataSource: any;
+  public liveOrNot : string;
   public totalElement = 0;
   public reportData = {
     content: [],
@@ -38,6 +40,7 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
   constructor(public fb: FormBuilder,
     private readonly administrativeService: AdministrativeService,
     private readonly router: Router,
+    private readonly loginService: LoginService,
     private readonly systemService: SystemService,
     private readonly activateRoute: ActivatedRoute) {
     this.adminFilter = JSON.parse(localStorage.getItem('adminFilter'));
@@ -56,6 +59,7 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
 
     this.getAdministrativeReportCount();
     this.getAdminstrativeReportData();
+    this.checkLiveServer();
   }
 
   loadReportType() {
@@ -75,7 +79,14 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
   }
 
   callReport(event: any): any {
+    if(this.liveOrNot === "live" && (event.row.reportId == 48 || event.row.reportId == 50)){
+      const cnf = AppUtility.liveServerAlertText();
+      if(cnf){
+        this.router.navigate(['admin/administrativeReport/administrativeReportCall'], { queryParams: { id: event.row.reportId } });
+      }
+    }else{
     this.router.navigate(['admin/administrativeReport/administrativeReportCall'], { queryParams: { id: event.row.reportId } });
+    }
   }
 
   setUpForm(event: any) {
@@ -139,6 +150,16 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
     
     this.loadAdministrativeReportCount(isSearch, params);
     this.loadAdminstrativeReportData(isSearch,params);
+  }
+
+  checkLiveServer(){
+
+    this.loginService.performGet('conf/'+'server').subscribe(
+      (data) => {
+       this.liveOrNot = data.data;
+       console.log(data);
+      }
+    )
   }
 
   ngOnDestroy(): void {

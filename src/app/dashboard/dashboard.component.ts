@@ -22,6 +22,7 @@ declare const plotChartWithParams : any;
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  liveOrNot : string;
   helpHide : any;
   hides = true;
   count = 0;
@@ -132,6 +133,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // }
 
     AppUtility.appendAuditIdToCustomerFilter(this.users);
+    this.checkLiveServer();
   }
   hideMsg() {
     this.hideMsgs = false;
@@ -652,6 +654,29 @@ selectedSuggestion(event : any){
 
   this.ngOnInit();
 
+}
+
+checkAndShowAlert(reportList: any):void{
+  if(this.liveOrNot === 'live' && reportList.reportType == 'monthlyEnergy'){
+       const confirm = AppUtility.liveServerAlertText();
+      if(confirm){
+        window.open(reportList.reportLink, '_blank');
+      }
+  }
+  else{
+    window.open(reportList.reportLink, '_blank');
+  }
+}
+
+
+checkLiveServer(){
+
+  this.loginService.performGet('conf/'+'server').subscribe(
+    (data) => {
+     this.liveOrNot = data.data;
+     console.log(data);
+    }
+  )
 }
 
 }

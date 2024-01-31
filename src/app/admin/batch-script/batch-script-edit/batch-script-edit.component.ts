@@ -6,6 +6,7 @@ import { filter, skipWhile, take } from 'rxjs/operators';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
 import { ScriptDebugConsoleData } from 'src/app/models/filter-object';
+import { LoginService } from 'src/app/services/login.service';
 import { SystemMeasurementService } from 'src/app/store/system-measurement-management/service/system-measurement.service';
 import { SystemService } from 'src/app/store/system-state-management/service/system.service';
 import { TopicService } from 'src/app/store/topic-state-management/service/topic.service';
@@ -47,6 +48,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   calculationTypeList: any[];
   isForce = false;
   topicData: any;
+  liveOrNot: string;
   private readonly subscriptions: Subscription = new Subscription();
   scriptDebugConsoleData : ScriptDebugConsoleData;
   constructor(private readonly formBuilder: FormBuilder,
@@ -55,6 +57,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
     private readonly router: Router,
     private readonly systemService: SystemService,
     private readonly topicService: TopicService,
+    private readonly loginService: LoginService,
     private readonly el: ElementRef) {
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
@@ -76,6 +79,7 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
       this.loadBatchScriptById();
     }
     AppUtility.scrollTop();
+    this.checkLiveServer();
   }
 
   loadBatchPeriodList(): any {
@@ -157,11 +161,22 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
   }
 
   runNow() {
-    this.subscriptions.add(
+    if (this.liveOrNot === 'live') {
+      const confirmed = AppUtility.liveServerAlertText();
+      if (confirmed) {
+        this.processScriptBatch();
+      }
+    } else if (this.liveOrNot === 'sandbox') {
+      this.processScriptBatch();
+    }
+  }
+
+  processScriptBatch(){
+      this.subscriptions.add(
       this.systemMeasurementService.processScriptBatch(this.id)
       .pipe(take(1))
       .subscribe((data) =>{ AppUtility.scrollTop();}));
-  }
+}
 
   delete() {
     if(AppUtility.deleteConfirmatonBox()){
@@ -289,6 +304,16 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptions);
+  }
+
+  checkLiveServer(){
+
+    this.loginService.performGet('conf/'+'server').subscribe(
+      (data) => {
+       this.liveOrNot = data.data;
+       console.log(data);
+      }
+    )
   }
 }
 
