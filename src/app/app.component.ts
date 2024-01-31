@@ -39,8 +39,7 @@ export class AppComponent {
           .subscribe((response : any) =>{
             this.users = this.loginService.getUser();
 
-            if( ( this.users.userData && response.userId == this.users.userData.userId) 
-              || ( this.users.outhMeResponse && response.userId == this.users.outhMeResponse.userId )){
+            if( this.users.userData && response.userId == this.users.userData.userId ){
               return;
             }
 
