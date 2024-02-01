@@ -2854,3 +2854,66 @@ app-summary-chart-defination-preview .content-div > img{
   word-break: break-word; 
   width: max-content;
 }
+
+
+body{
+  position: relative;
+}
+
+body>div.ui-dialog.ui-widget.ui-widget-content{
+  z-index: 1100 !important;
+  position: relative;
+}
+
+body>div.ui-widget-overlay.ui-front{
+  z-index: 1050 !important;
+}
+
+/* body>.ui-draggable .ui-dialog-titlebar {
+  padding: 0.4em 1em;
+  position: relative;
+} */
+
+body>div.ui-dialog .ui-dialog-titlebar {
+  /* padding: 5px 12px; */
+  padding: 0.4em 1em;
+  background: #76ba19;
+  color: #fff;
+  border-radius: 10px;
+  cursor: move;
+  position: relative; 
+}
+
+body>div.ui-dialog .ui-dialog-titlebar-close {
+  position: absolute;
+  right: 0.3em;
+  top: 50%;
+  width: 20px;
+  margin: -10px 0 0 0;
+  padding: 1px;
+  height: 20px;
+}
+
+body>div.ui-dialog.ui-widget .ui-dialog-titlebar {
+  /* padding: 0.4em 1em; */
+  padding: 8px 20px;
+  margin-top: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+body>div.ui-widget-overlay {
+  position: fixed;
+}
+
+body>div.ui-dialog .ui-dialog-buttonpane.ui-dialog-buttonpane {
+  text-align: right;
+}
+
+body>div.ui-widget button {
+  color: #76ba19 !important;
+}
+
+body>.ui-dialog.ui-widget .ui-dialog-content {
+  padding: 1em 0.5em;
+}

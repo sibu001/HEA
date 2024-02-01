@@ -655,7 +655,7 @@ selectedSuggestion(event : any){
   this.ngOnInit();
 
 }
-
+// for better understanding check-https://xp-dev.com/trac/HEA/ticket/1204#comment:16
 checkAndShowAlert(reportList: any):void{
   if(this.liveOrNot === 'live' && reportList.reportType == 'monthlyEnergy'){
        const confirm = AppUtility.liveServerAlertText();
@@ -668,7 +668,7 @@ checkAndShowAlert(reportList: any):void{
   }
 }
 
-
+// check server is live or sandbox
 checkLiveServer(){
 
   this.loginService.performGet('conf/'+'server').subscribe(

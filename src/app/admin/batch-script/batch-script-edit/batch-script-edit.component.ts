@@ -159,7 +159,8 @@ export class BatchScriptEditComponent implements OnInit, OnDestroy {
     this.scriptDebugConsoleData.surveyDescriptionId = this.batchScriptForm.value.surveyDescriptionId;
     AppUtility.setScriptDebugConsoleData(this.scriptDebugConsoleData); 
   }
-
+  
+//for better understanding check-https://xp-dev.com/trac/HEA/ticket/1204#comment:16
   runNow() {
     if (this.liveOrNot === 'live') {
       const confirmed = AppUtility.liveServerAlertText();

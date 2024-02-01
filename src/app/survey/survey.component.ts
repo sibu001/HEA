@@ -1,5 +1,5 @@
 import { UtilityService } from './../services/utility.service';
-import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit, OnDestroy, AfterViewChecked, Renderer2, NgZone } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, HostListener, OnInit, OnDestroy, AfterViewChecked } from '@angular/core';
 import { Users } from 'src/app/models/user';
 import { LoginService } from 'src/app/services/login.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -68,6 +68,20 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.progressShow();
   }
 
+  //function to add script tag in the DOM dynamically.
+  evaluateScript(footerContent : string ) : string{
+    const $tempDiv = $('<div>').clone();
+    $tempDiv.html(footerContent);
+
+    const $scriptTags = $tempDiv.find('script');
+    $scriptTags.each((index,$scriptTag) => {
+      const script = $('<script>');
+      script.html($scriptTag.innerHTML);
+      $('head').append(script);
+    });
+    return footerContent;
+}
+
   ngOnDestroy(): void {
     SubscriptionUtil.unsubscribe(this.subscriptons);
   }
@@ -102,6 +116,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     this.highlighterrorFieldlabels();
     this.refreshPaneOnUpdatebutton();
+    this.evaluateScript(this.users.currentPaneNumber.currentPane.htmFooter);
   }
 
   ngAfterViewChecked(): void{
@@ -390,7 +405,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.users.allSurveyCheck = true;
     this.loginService.setUser(this.users);
     this.inputErrorMessage = undefined;
-
     for (const answers of this.users.currentPaneNumber.currentPaneAnswers){
       if(answers.value != null)
       answers.value = answers.value + "";
@@ -516,12 +530,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           data => {
             setTimeout(() => this.highlighterrorFieldlabels(),50); 
             const response = JSON.parse(JSON.stringify(data));
-
-            if(response.data.firstPage){
-              this.getAllSurvey();
-            }
-
-
             this.paneblockRowErrorNotation = [];
             if (response.data.errors != null) {
               if (response.data.currentPane.paneCode === 'pv_EditPVConfigs') {
@@ -538,6 +546,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               }, 1000);
               setTimeout(function () {
                 self.chartDataConfiguration();
+                self.evaluateScript(self.users.currentPaneNumber.currentPane.htmFooter);
               }, 500);    
 
               // eval(this.users.currentPaneNumber.currentPane.paneCharts.chart.freeChartConfigurationJS);
@@ -716,12 +725,6 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.loginService.performPostMultiPartDataPost(object, 'customers/' + this.users.outhMeResponse.customerId + '/surveys/nextPane').subscribe(
         data => {
           const response = JSON.parse(JSON.stringify(data));
-
-          if(response.data.firstPage){
-            this.getAllSurvey();
-          }
-
-          
           const currentPaneCode = this.users.currentPaneNumber.currentPane.paneCode;
           this.removeAllPreviousCanvasElements();
           this.users.currentPaneNumber = response.data;
@@ -780,6 +783,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             const self1 = this;
             setTimeout(function () {
               self1.chartDataConfiguration();
+              self1.evaluateScript(this.users.currentPaneNumber.currentPane.htmFooter);
             }, 500);
             
             this.helpHides();
@@ -865,6 +869,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               }, 500);
               setTimeout(function () {
                 self.chartDataConfiguration();
+                self.evaluateScript(self.users.currentPaneNumber.currentPane.htmFooter);
               }, 500);
               this.scrollTop();
               this.helpHides();
@@ -1361,6 +1366,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // const survey : any = this.users.surveyList.find((survey) =>{
     //     return survey.surveyDescription.surveyCode == surveyCode;
     // });
+    
     // const firstPane : any = survey.panes[0];
     // const surveyId = survey.surveyId;
     // const paneCode = firstPane.paneCode;

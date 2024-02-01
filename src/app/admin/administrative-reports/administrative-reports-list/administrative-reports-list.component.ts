@@ -78,6 +78,7 @@ export class AdministrativeReportsListComponent implements OnInit, OnDestroy {
     this.router.navigate(['admin/administrativeReport/administrativeReportEdit'], { queryParams: { id: event.id } });
   }
 
+  //for better understanding check-https://xp-dev.com/trac/HEA/ticket/1204#comment:16
   callReport(event: any): any {
     if(this.liveOrNot === "live" && (event.row.reportId == 48 || event.row.reportId == 50)){
       const cnf = AppUtility.liveServerAlertText();
