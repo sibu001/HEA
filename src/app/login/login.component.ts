@@ -192,7 +192,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
   //   }
   // }
 
-
+  resetErrorMessage() {
+    this.errorMessage = '';
+  }
+  
   login(){
 
     if (this.users.username === undefined || this.users.username.length === 0) {
@@ -217,8 +220,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
         (error) => {
           const response = JSON.parse(JSON.stringify(error));
           console.log(response);
-          if(response.status == '400')
-            this.errorMessage = "Invalid credentials";
+          if(response.status == '401')
+            this.errorMessage = response.error.errorMessage;
           else
           if (response.error.error_description) {
             this.errorMessage = response.error.error_description;

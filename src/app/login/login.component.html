@@ -83,7 +83,7 @@
                             <input type="email" class="form-control" id="email"
                                 placeholder="enter username" autocomplete="off"
                                 name="email" [(ngModel)]="users.username"
-                                (keyup.enter)="login()">
+                                (keyup.enter)="login()" (input) = "resetErrorMessage()">
                         </div>
                         <div class="col-sm-2"></div>
                     </div>
@@ -94,7 +94,7 @@
                                 class="form-control" id="pwd"
                                 placeholder="enter password" name="pwd"
                                 [(ngModel)]="users.password" autocomplete="off"
-                                (keyup.enter)="login()" #inp />
+                                (keyup.enter)="login()" (input) = "resetErrorMessage()" #inp />
                             <div class="pll">
                                 <a (click)="toggleShow()" *ngIf="show">
                                     <img alt="eye" src="assets/images/eyes_img1.png"
