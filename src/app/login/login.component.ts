@@ -225,7 +225,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy{
           else
           if (response.error.error_description) {
             this.errorMessage = response.error.error_description;
-          } else {
+          } else if(response.status == '400'){
+            this.errorMessage = 'Invalid credentials';
+          }
+          else {
             this.errorMessage = response.statusText;
           }
           this.users.username = '';
