@@ -2,8 +2,8 @@ import { AfterViewChecked, AfterViewInit, Component, ElementRef, OnDestroy, OnIn
 import { FormBuilder, FormControl, FormGroup, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject, Subscription } from 'rxjs';
-import { filter, map, skipWhile } from 'rxjs/operators';
+import { Subject, Subscription, of, throwError } from 'rxjs';
+import { catchError, filter, map, skipWhile } from 'rxjs/operators';
 import { GoogleMapComponent } from 'src/app/common/google-map/google-map.component';
 import { TableColumnData } from 'src/app/data/common-data';
 import { TABLECOLUMN } from 'src/app/interface/table-column.interface';
@@ -54,6 +54,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   sendActivationEmailDirectLink: any;
   customerGroupList: any;
   programGroupList: any;
+  customerGroupId : any;
+  nextRoundRobinCoachDetails:any;
   coachUserList: any;
   customerGroupCode: any;
   customerData: any;
@@ -159,7 +161,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.getPasswordValidationRule();
     this.activateRoute.queryParams.subscribe(params => {
       this.id = params['id'];
-      this.getProgramGroupByCustomerGroupId();
+    // this.getProgramGroupByCustomerGroupId();
       if(this.id){
         this.addDirectLinkToSendActivationEmail(this.id);
       }
@@ -259,6 +261,8 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         this.setForm(customer);
         this.loadProgramGroupByCustomerGroupId(customer.customerGroupId);
+        this.getProgramGroupByCustomerGroupId(customer.customerGroupId,customer.programGroupId);
+        this.loadEnergyCoachByCustomerGroupId(customer.customerGroupId);
       }));
   }
 
@@ -303,41 +307,99 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.subscriptions.add(this.systemService.getCustomerGroupList().pipe(skipWhile((item: any) => !item))
       .subscribe((customerGroupList: any) => {
         this.customerGroupList = customerGroupList;
-        if(!this.id){
-          this.customerForm.get('customerGroupId').patchValue(this.customerGroupList[0].customerGroupId);
-          this.customerForm.get('customerGroup').setValue(this.customerGroupList[0]);
-        } 
+        // if(!this.id){
+        //   this.customerForm.get('customerGroupId').patchValue(this.customerGroupList[0].customerGroupId);
+        //   this.customerForm.get('customerGroup').setValue(this.customerGroupList[0]);
+        // } 
       }));
-    this.subscriptions.add(this.systemService.getCoachUserList().pipe(skipWhile((item: any) => !item))
+    if(!this.id){
+      this.subscriptions.add(this.systemService.getCoachUserList().pipe(skipWhile((item: any) => !item))
       .subscribe((coachUserList: any) => {
         this.coachUserList = coachUserList.list;
       }));
+    }
+   
     // this.subscriptions.add(this.systemService.getProgramGroupList().pipe(skipWhile((item: any) => !item))
     //   .subscribe((programGroupList: any) => {
     //     this.programGroupList = programGroupList;
     //   }));
 
   }
+// this function change energy coach list accoding to customerGroup
+//https://xp-dev.com/trac/HEA/ticket/2424#comment:14
+  loadEnergyCoachByCustomerGroupId(customerGroupId : number){
+  this.loginService.performGet(`users?filter.withRole=COACH&filter.customerGroupIdRestriction=${customerGroupId}`).subscribe(
+      (data:any)=>{
+        if(this.customerData && this.customerData.coachUser){
+          const id = data.list.some(coach=>coach.id===this.customerData.coachUser.id);
+        if(!id){
+          data.list.push(this.customerData.coachUser);
+          
+        }
+        }
+        this.coachUserList = data.list; 
+        this.checkEnergyCoach();
+      }
+    )
+  }
 
   loadProgramGroupByCustomerGroupId(customerGroupId : number){
     this.systemService.loadPlaceListByCustomerGroupId(customerGroupId);
   } 
 
-  getProgramGroupByCustomerGroupId(){
-    this.subscriptions.add(
-      this.systemService.getProgramGroupByCustomerGroupId()
+  // getProgramGroupByCustomerGroupId(){
+  //   this.subscriptions.add(
+  //     this.systemService.getProgramGroupByCustomerGroupId()
+  //     .subscribe(
+  //       programGroupList =>{
+  //         if (programGroupList && programGroupList.length != 0 ) {
+  //           this.isProgramGroup = true;
+  //           this.customerForm.get('programGroupId').setValue("");
+  //         }else{
+  //           this.isProgramGroup= false;
+  //         }
+  //         this.programGroupList = programGroupList;
+  //       }
+  //     )
+  //   )
+  // }
+
+// this function load programGroup according to customerGroupId
+  getProgramGroupByCustomerGroupId(customerGroupId:any,programGroupId:any){
+   this.loginService.performGet(`${AppConstant.customerGroups}/${customerGroupId}/${AppConstant.programGroups}`)
       .subscribe(
         programGroupList =>{
-          if (programGroupList && programGroupList.length != 0 ) {
-            this.isProgramGroup = true;
+          if(programGroupId!==null && programGroupId!==undefined && programGroupId!==''){
+            if (programGroupList && programGroupList.length > 0 ) {
+              const isPresent = programGroupList.some(item=>item.programGroupId==programGroupId);
+              if(isPresent){
+                this.isProgramGroup = true;
+                this.customerForm.get('programGroupId').setValue(programGroupId);
+              }else{
+                this.loginService.performGet(`${AppConstant.programGroups}/${programGroupId}`).subscribe(
+                  data=>{
+                     programGroupList.push(data);
+                     this.customerForm.get('programGroupId').setValue(programGroupId);
+                     this.isProgramGroup=true;
+                  }
+                )
+               
+              }
+             
+            }else{
+              this.isProgramGroup= false;
+            }
+          }else if(programGroupList && programGroupList.length> 0 ){
+            this.isProgramGroup=true;
             this.customerForm.get('programGroupId').setValue("");
           }else{
-            this.isProgramGroup= false;
+            this.isProgramGroup=false;
           }
+         
           this.programGroupList = programGroupList;
         }
       )
-    )
+    
   }
 
   // setPasswordForm() {
@@ -351,7 +413,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     this.customerForm = this.formBuilder.group({
       id: [event !== undefined ? event.id : ''],
       customerId: [event !== undefined ? event.customerId : ''],
-      customerGroupId: [event !== undefined ? event.customerGroupId : 1],
+      customerGroupId: [event !== undefined ? event.customerGroupId : 9],
       programGroupId: [event !== undefined ? event.programGroupId : ''],
       userId: [event !== undefined ? event.userId : ''],
       coachUserId: [event !== undefined && event.coachUserId ? event.coachUserId : ''],
@@ -930,7 +992,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         if (i !== -1) {
           this.customerForm.value.customerGroup = this.customerGroupList[i];
           // if(this.id) {this.customerService.saveUserCustomerGroup(this.id,this.customerGroupList[i].customerGroupId)}
-          this.loadProgramGroupByCustomerGroupId(this.customerGroupList[i].customerGroupId)
+          this.loadProgramGroupByCustomerGroupId(this.customerGroupList[i].customerGroupId);
+          this.loadEnergyCoachByCustomerGroupId(this.customerGroupList[i].customerGroupId);
+          this.getProgramGroupByCustomerGroupId(this.customerGroupList[i].customerGroupId,this.customerData ? this.customerData.programGroupId : null);
+         
         } else {
           this.customerForm.value.customerGroup = '';
         }
@@ -948,6 +1013,17 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         break;
     }
     console.log(event.target.value);
+  }
+// this function is used to check weather the fetched energy coach(via use round robin) is present in energy coach list .if not then push 
+//https://xp-dev.com/trac/HEA/ticket/2424#comment:16
+  checkEnergyCoach(){
+    if(this.energyCoach!==null && this.energyCoach!==undefined && this.energyCoach!==''){
+      const check = this.coachUserList.some(coach=>coach.id===this.nextRoundRobinCoachDetails.id);
+      if(!check){
+        this.coachUserList.push(this.nextRoundRobinCoachDetails);
+      }
+    }
+
   }
 
   delete() {
@@ -1134,7 +1210,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       document.getElementById('loader').classList.add('loading');
       this.loginService.performPost('', AppConstant.customer + '/' + this.id + '/' + AppConstant.clickHouseSync).subscribe(
         (data:any)=> {
-          console.log(data);
           if(data && data.data ===true){
             this.utilityService.showSuccessMessage('Operation success')
 
@@ -1154,5 +1229,61 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       )
           
   }
+// For more details see https://xp-dev.com/trac/HEA/ticket/2424#comment:9
+//Note- Here we can use any function useRoundRobin OR assignNextCoach OR POST /customers/{customerId}/nextRoundRobinCoach.Please read above ticket from comment 9 for deatil
+  useRoundRobin(){
+    const customerGroupId= this.customerForm.get('customerGroupId').value;
+      this.loginService.performPost('',`${AppConstant.customerGroups}/${customerGroupId}/nextRoundRobinCoach`).subscribe(
+        data=>{
+          if(data && data.data){
+           const coachExist = this.coachUserList.some(coach=>coach.id===data.data.id);
+           if(coachExist){
+            this.selectedId(data.data.id);
+            this.energyCoach = data.data.name;
+            this.nextRoundRobinCoachDetails = data.data;
+           }else{
+            this.coachUserList.push(data.data);
+             this.selectedId(data.data.id);
+             this.energyCoach = data.data.name;
+             this.nextRoundRobinCoachDetails = data.data;
+       }
+          }
+        }
+      )
+  }
+
+  selectedId(id:any){
+  this.customerForm.get('coachUserId').setValue(id);
+  }
+  
+// for more detail https://xp-dev.com/trac/HEA/ticket/2424#comment:9
+// assignNextCoach(){
+//   if(this.id){
+//     this.loginService.performPost('',`${AppConstant.customer}/${this.id}/assignNextCoach`).subscribe(
+//      data=>{
+//        const coachExist = this.coachUserList.some(coach=>coach.id===data.data.coachUser.id);
+//        if(coachExist){
+//         this.selectedId(data.data.coachUser.id);
+//         this.energyCoach = data.data.coachUser.name;
+//        }else{
+//         this.coachUserList.push(data.data.coachUser);
+//         this.selectedId(data.data.coachUser.id);
+//         this.energyCoach = data.data.coachUser.name;
+//        }
+//        }
+//     )
+//    }else{
+//      const customerGroupId= this.customerForm.get('customerGroupId').value;
+//       this.loginService.performPost('',`${AppConstant.customerGroups}/${customerGroupId}/nextRoundRobinCoach`).subscribe(
+//         data=>{
+//           if(data && data.data){
+//             this.selectedId(data.data.id);
+//            this.energyCoach = data.data.name;
+//           }
+//         }
+//       )
+//    }
+// }
+
 
 }

@@ -76,6 +76,9 @@
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2 col-xs-3" style="height: 34px">
               <label> {{energyCoach}} </label>
+              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-8" *ngIf = "users.role=='ADMIN' &&(energyCoach==undefined || energyCoach==null|| energyCoach=='')">
+                <button type="button" class="btn btn-primary" (click)="useRoundRobin()">Use Round Robin</button>
+              </div>
             </div>
           </div>
           <div class="row borderBottom w100 rowPadding" formGroupName="user">
@@ -516,16 +519,19 @@
             </div>
             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
               <ng-container *ngIf="electricityRatePlan && heatingRatePlan">
-                {{ electricityRatePlan?.code }} &nbsp; Since Date: {{ electricityRatePlan?.startDate | date:'MM/dd/yyyy' }},
-                {{ heatingRatePlan?.name }} &nbsp; Since Date: {{ heatingRatePlan?.startDate | date:'MM/dd/yyyy' }}
+                {{ (electricityRatePlan.code === electricityRatePlan.name) ? electricityRatePlan.code : (electricityRatePlan?.code + ', '+electricityRatePlan?.name) }} &nbsp; Since Date: {{ electricityRatePlan?.startDate | date:'MM/dd/yyyy' }},
+                {{ (heatingRatePlan.code === heatingRatePlan.name) ? heatingRatePlan.code : (heatingRatePlan?.code + ', '+heatingRatePlan?.name) }} &nbsp; Since Date: {{ heatingRatePlan?.startDate | date:'MM/dd/yyyy' }}
               </ng-container>
               <ng-container *ngIf="electricityRatePlan && !heatingRatePlan">
-                {{ electricityRatePlan?.code }} &nbsp; Since Date: {{ electricityRatePlan?.startDate | date:'MM/dd/yyyy' }}
+                {{ (electricityRatePlan.code === electricityRatePlan.name) ? electricityRatePlan.code : (electricityRatePlan?.code + ', '+electricityRatePlan?.name) }} &nbsp; Since Date: {{ electricityRatePlan?.startDate | date:'MM/dd/yyyy' }}
               </ng-container>
               <ng-container *ngIf="!electricityRatePlan && heatingRatePlan">
-                {{ heatingRatePlan?.name }} &nbsp; Since Date: {{ heatingRatePlan?.startDate | date:'MM/dd/yyyy' }}
+                {{ (heatingRatePlan.code === heatingRatePlan.name) ? heatingRatePlan.code : (heatingRatePlan?.code + ', '+heatingRatePlan?.name) }} &nbsp; Since Date: {{ heatingRatePlan?.startDate | date:'MM/dd/yyyy' }}
               </ng-container>
             </div>
+            
+            
+            
           </div>
           <div class="row borderBottom w100 rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
