@@ -385,12 +385,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.loginService.performGet(`${AppConstant.programGroups}/${programGroupId}`).subscribe(
                   data=>{
                     if(this.count==0){
-                      console.log("count zero wale check mme ",this.count);
                      programGroupList.push(data);
                      this.customerForm.get('programGroupId').setValue(programGroupId);
                      this.isProgramGroup=true;
                     }else{
-                      console.log("value change nahi hui",this.count);
                       this.isProgramGroup=true;
                       this.customerForm.get('programGroupId').setValue('');
                     }
