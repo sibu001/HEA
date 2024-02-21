@@ -68,6 +68,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   weatherStation: any;
   userId:number;
   helpHide: boolean;
+  count = 0;
   updateWithUtilityAddressFlag : boolean = false;
   placeCode: Array<any>;
   statusData: Array<any> = TableColumnData.STATUS_DATA;
@@ -237,7 +238,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   loadCustomerById() {
-    this.subscriptions.add(this.customerService.getCustomerById().pipe(skipWhile((item: any) => !item))
+    this.subscriptions.add(this.customerService.getCustomerById().pipe(filter((customer: any) => customer && customer.id==this.id))
       .subscribe((customer: any) => {
         this.setUpValueInUsageHitoryFilter(customer);
         this.setUpdateWithUtilityAddressFlag(customer);
@@ -374,13 +375,26 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
               const isPresent = programGroupList.some(item=>item.programGroupId==programGroupId);
               if(isPresent){
                 this.isProgramGroup = true;
-                this.customerForm.get('programGroupId').setValue(programGroupId);
+                if(this.count==0){
+                  this.customerForm.get('programGroupId').setValue(programGroupId);
+                }else{
+                  this.customerForm.get('programGroupId').setValue('');
+                }
+                
               }else{
                 this.loginService.performGet(`${AppConstant.programGroups}/${programGroupId}`).subscribe(
                   data=>{
+                    if(this.count==0){
+                      console.log("count zero wale check mme ",this.count);
                      programGroupList.push(data);
                      this.customerForm.get('programGroupId').setValue(programGroupId);
                      this.isProgramGroup=true;
+                    }else{
+                      console.log("value change nahi hui",this.count);
+                      this.isProgramGroup=true;
+                      this.customerForm.get('programGroupId').setValue('');
+                    }
+                     
                   }
                 )
                
@@ -388,6 +402,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
              
             }else{
               this.isProgramGroup= false;
+              this.count++;
             }
           }else if(programGroupList && programGroupList.length> 0 ){
             this.isProgramGroup=true;
