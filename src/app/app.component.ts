@@ -64,8 +64,8 @@ export class AppComponent implements OnInit{
    }
 
    ngOnInit(): void {
-   if(window.location.origin === 'http://localhost:4200'|| window.location.origin==='https://sandbox.hea.com/hea-web/'
-   || window.location.origin==='http://sandbox.hea.com/hea-web/'){
+   if(window.location.origin === 'http://localhost:4200'|| window.location.origin==='https://sandbox.hea.com'
+   || window.location.origin==='http://sandbox.hea.com'){
     timer(100).subscribe(() => {
       this.router.events.pipe(
         filter(event => event instanceof NavigationEnd),
