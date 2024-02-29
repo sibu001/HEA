@@ -1,11 +1,12 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute, ActivationEnd, NavigationEnd, Router } from '@angular/router';
-import { fromEvent, pipe } from 'rxjs';
+import { fromEvent, pipe, timer } from 'rxjs';
 import { filter, take } from 'rxjs/operators';
 import { Users } from './models/user';
 import { LoginService } from './services/login.service';
 import { AppUtility } from './utility/app.utility';
 import { AppConstant } from './utility/app.constant';
+import { WeglotService } from './services/weglot.service';
 
 declare var sameTabAlert : boolean;
 
@@ -13,7 +14,7 @@ declare var sameTabAlert : boolean;
   selector: 'app-root',
   templateUrl: './app.component.html',
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'app';
   public isNewTabAllowed : boolean = true;
   users : Users = new Users();
@@ -21,6 +22,7 @@ export class AppComponent {
   // to remove the highlighter of the chart while navigating to other screen.
   constructor( private router : Router, 
       private readonly loginService : LoginService,
+      private weglotService: WeglotService,
       private readonly activatedRoute : ActivatedRoute){
       AppUtility.broadCastEventListnerForSurveyScreen();
       AppUtility.checkForSurveyScrenLock();
@@ -60,6 +62,21 @@ export class AppComponent {
       this.onWindowUnload(event);
     });
    }
+
+   ngOnInit(): void {
+   if(window.location.origin === 'http://localhost:4200'|| window.location.origin==='https://sandbox.hea.com/hea-web/'
+   || window.location.origin==='http://sandbox.hea.com/hea-web/'){
+    timer(100).subscribe(() => {
+      this.router.events.pipe(
+        filter(event => event instanceof NavigationEnd),
+        take(1)
+      ).subscribe(() => {
+       this.weglotService.watchForNavigationEnd();
+      });
+    });
+  }  
+}
+
 
   onWindowUnload(event: any) {
       AppUtility.broadCastLeaveMessageToSurveyScreen();

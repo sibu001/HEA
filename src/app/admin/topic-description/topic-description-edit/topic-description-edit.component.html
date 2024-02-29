@@ -341,11 +341,11 @@
               <button type="button" *ngIf="id" class="btn btn-primary" (click)="delete()">Delete</button>
               <button type="button" class="btn btn-primary" *ngIf="id"
                 (click)="ReInitTopic()"> Reinit topics </button>
-              <label for="isRerunTopic" class="label-margin-bottom" *ngIf="id">
+              <!-- <label for="isRerunTopic" class="label-margin-bottom" *ngIf="id">
                 <input type="checkbox" formControlName='isRerunTopic'
                   id='isRerunTopic'>
                   Require users to rerun topic
-              </label>
+              </label> -->
               <button type="button" class="btn btn-primary" *ngIf="id"
                 (click)="copy()">
                 Copy

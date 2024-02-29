@@ -1031,10 +1031,13 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 //https://xp-dev.com/trac/HEA/ticket/2424#comment:16
   checkEnergyCoach(){
     if(this.energyCoach!==null && this.energyCoach!==undefined && this.energyCoach!==''){
-      const check = this.coachUserList.some(coach=>coach.id===this.nextRoundRobinCoachDetails.id);
-      if(!check){
-        this.coachUserList.push(this.nextRoundRobinCoachDetails);
+      if(this.nextRoundRobinCoachDetails!==undefined && this.nextRoundRobinCoachDetails!==null){
+        const check = this.coachUserList.some(coach=>coach.id===this.nextRoundRobinCoachDetails.id);
+        if(!check){
+          this.coachUserList.push(this.nextRoundRobinCoachDetails);
+        } 
       }
+     
     }
 
   }
