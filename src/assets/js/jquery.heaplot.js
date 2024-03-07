@@ -1439,7 +1439,7 @@ function getMessage(code, args, defaultMessage)
 {
 	var message = defaultMessage;
 	var isLocal = '';
-	if(location.hostname=='localhost'|| location.hostname == 'sandbox.hea.com') isLocal = 'hea-web';
+	if(location.hostname=='localhost') isLocal = 'hea-web';
 	
 	$.ajax({
 		type: "GET",
