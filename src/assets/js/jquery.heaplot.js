@@ -8,6 +8,20 @@ overLib = overlib;
  * with less code and to keep most default configuration/style options centralized.
  */
 
+function translateLabel(label)
+{
+	if(label == null || label == '' || !(typeof getMessage === "function") || $('html').attr('lang') == 'en')
+	{
+		return label;
+	} else
+	{
+		label = getMessage('charts.label.' + label.toLowerCase().replaceAll(' ', '_'), null, label);
+	}
+	
+	return label;
+}
+
+
 function getRatio() {
 	var div = $("<div id='testdiv' style='height: 1in; left: -100%; position: absolute; top: -100%; width: 1in;'></div>");
 	div.appendTo($("body"));
@@ -350,7 +364,7 @@ function findTickIntervalBase(max, min, numTicks) {
 			plotThreeNorms1 = this.normingBar(div1, {
 				you: value,
 				norm: normData.n1,
-				normLabel: normData.n1Label,
+				normLabel: translateLabel(normData.n1Label),
 				unit: normData.unit,
 				decimalPlaces: normData.decimalPlaces,
 				max: maxNorm
@@ -361,7 +375,7 @@ function findTickIntervalBase(max, min, numTicks) {
 			plotThreeNorms2 = this.normingBar(div2, {
 				you: value,
 				norm: normData.n2,
-				normLabel: normData.n2Label,
+				normLabel: translateLabel(normData.n2Label),
 				unit: normData.unit,
 				decimalPlaces: normData.decimalPlaces,
 				max: maxNorm
@@ -595,7 +609,7 @@ function findTickIntervalBase(max, min, numTicks) {
 						yaxis: {
 							min: 0,
 							max: options.maxY,
-							label: options.yAxisLabel?options.yAxisLabel:'',
+							label: translateLabel(options.yAxisLabel?options.yAxisLabel:''),
 							labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
 							labelOptions: {
 								angle: 270,
@@ -719,7 +733,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				plotThreeNorms1 = this.normingBar('chartThreeNorms1', {
 					you: normData.you,
 					norm: normData.n1,
-					normLabel: normData.n1Label,
+					normLabel: translateLabel(normData.n1Label),
 					unit: normData.unit,
 					decimalPlaces: normData.decimalPlaces,
 					max: maxNorm
@@ -731,7 +745,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				plotThreeNorms2 = this.normingBar(n2DivName, {
 					you: normData.you,
 					norm: normData.n2,
-					normLabel: normData.n2Label,
+					normLabel: translateLabel(normData.n2Label),
 					unit: normData.unit,
 					decimalPlaces: normData.decimalPlaces,
 					max: maxNorm
@@ -751,7 +765,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				plotThreeNorms3 = this.normingBar(n3DivName, {
 					you: normData.you,
 					norm: normData.n3,
-					normLabel: normData.n3Label,
+					normLabel: translateLabel(normData.n3Label),
 					unit: normData.unit,
 					decimalPlaces: normData.decimalPlaces,
 					max: maxNorm
@@ -1007,7 +1021,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				max: max,
 				ticks: [
 					[-10, ' '],
-					[data.you, 'You: ' + _formatWithUnit(formattedValue, data.unit)],
+					[data.you, translateLabel('You') + ': '  + _formatWithUnit(formattedValue, data.unit)],
 					[max, ' ']
 				],
 				rendererOptions: { tickRenderer: $.jqplot.CanvasAxisTickRenderer },
@@ -1164,7 +1178,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				},
 				yaxis: {
 					min: 0,
-					label: options.yAxisLabel,
+					label: translateLabel(options.yAxisLabel),
 					labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
 					labelOptions: options.compact ? { show: false } : {
 						angle: 270,
@@ -1315,7 +1329,7 @@ function findTickIntervalBase(max, min, numTicks) {
 				},
 				yaxis: {
 					min: 0,
-					label: options.yAxisLabel,
+					label: translateLabel( options.yAxisLabel),
 					labelRenderer: $.jqplot.CanvasAxisLabelRenderer,
 					labelOptions: {
 						angle: 270,
@@ -1420,3 +1434,44 @@ function findTickIntervalBase(max, min, numTicks) {
 	 } 
 
 })(jQuery);
+
+function getMessage(code, args, defaultMessage)
+{
+	var message = defaultMessage;
+	var isLocal = '';
+	if(location.hostname=='localhost'|| location.hostname == 'sandbox.hea.com') isLocal = 'hea-web';
+	
+	$.ajax({
+		type: "GET",
+		url: `${isLocal}/free/messages/getMessage`,
+        data: { code: code, args: args, defaultMessage:defaultMessage },
+		async: false
+	}).done(function( data ) 
+	{
+		if(data.data != null)
+        {
+			message = data.data;
+        }
+	});
+	
+	return message;
+}
+
+function getMessages(messageRequests)
+{
+	$.ajax({
+		type: "POST",
+		url: "free/messages/getMessages",
+        data: messageRequests,
+		async: false
+	}).done(function( data ) 
+	{
+		if(data.data != null)
+        {
+			messageResponses = data.data;
+        }
+	});
+	
+	return messageResponses;
+}
+

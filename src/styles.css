@@ -2917,3 +2917,7 @@ body>div.ui-widget button {
 body>.ui-dialog.ui-widget .ui-dialog-content {
   padding: 1em 0.5em;
 }
+
+#chartSeasonalStack TABLE.jqplot-table-legend {
+  bottom: -20px !important;
+}
