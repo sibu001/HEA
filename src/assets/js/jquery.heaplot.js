@@ -1439,11 +1439,16 @@ function getMessage(code, args, defaultMessage)
 {
 	var message = defaultMessage;
 	var isLocal = '';
-	if(location.hostname=='localhost') isLocal = 'hea-web';
+	if(location.origin=='http://localhost:4200' || location.origin=='https://sandbox.hea.com'
+	|| location.origin=='http://sandbox.hea.com' ) {
+		isLocal = 'hea-web';
+       }
+
+	   var baseUrl = `${location.origin}/${isLocal}`;
 	
 	$.ajax({
 		type: "GET",
-		url: `${isLocal}/free/messages/getMessage`,
+		url: `${baseUrl}/free/messages/getMessage`,
         data: { code: code, args: args, defaultMessage:defaultMessage },
 		async: false
 	}).done(function( data ) 
