@@ -162,7 +162,7 @@
                             <li class="Reports_title" *ngFor="let reportList of
                                 myReportsList">
                                 <a class="anchorTagTitle" target="_blank"
-                                    (click)="checkAndShowAlert(reportList)">{{reportList.reportLabel}}</a>
+                                (click)="checkAndShowAlert(reportList.reportLink)">{{reportList.reportLabel}}</a>
                             </li>
                         </ul>
                     </div>
@@ -309,7 +309,7 @@
                             <li class="Reports_title" *ngFor="let reportList of
                                 myReportsList">
                                 <a class="anchorTagTitle" target="_blank"
-                                    href="{{reportList.reportLink}}">{{reportList.reportLabel}}</a>
+                                (click)="checkAndShowAlert(reportList.reportLink)">{{reportList.reportLabel}}</a>
                             </li>
                         </ul>
                     </div>

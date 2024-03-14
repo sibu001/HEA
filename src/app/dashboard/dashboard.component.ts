@@ -656,15 +656,15 @@ selectedSuggestion(event : any){
 
 }
 // for better understanding check-https://xp-dev.com/trac/HEA/ticket/1204#comment:16
-checkAndShowAlert(reportList: any):void{
-  if(this.liveOrNot === 'live' && reportList.reportType == 'monthlyEnergy'){
+checkAndShowAlert(reportLink: string):void{
+  if(this.liveOrNot === 'live' && reportLink.includes('monthlyEnergy') && this.users.role != 'USERS'){
        const confirm = AppUtility.liveServerAlertText();
       if(confirm){
-        window.open(reportList.reportLink, '_blank');
+        window.open(reportLink, '_blank');
       }
   }
   else{
-    window.open(reportList.reportLink, '_blank');
+    window.open(reportLink, '_blank');
   }
 }
 
