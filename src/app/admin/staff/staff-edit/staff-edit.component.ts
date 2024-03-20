@@ -193,7 +193,7 @@ export class StaffEditComponent implements OnInit, OnDestroy {
         this.combineLatestCustomerEventTypeList();
         this.setForm(staff);
         AppUtility.scrollTop();
-        if(this.userId == this.users.userId){
+        if(this.userId == staff.userId){
           this.users.userData = staff;
           this.loginService.setUser(this.users);
         }
@@ -255,7 +255,8 @@ export class StaffEditComponent implements OnInit, OnDestroy {
       comments: [event !== undefined ? event.comments : ''],
       customerViewConfigurationId: [event !== undefined ? event.customerViewConfigurationId : 'null'],
       accessToUserPassword: [event !== undefined ? event.accessToUserPassword : ''],
-      uiVersionBehavior: [event !== undefined ? event.uiVersionBehavior : 'null']
+      uiVersionBehavior: [event !== undefined ? event.uiVersionBehavior : 'null'],
+      calendarLink: [event !== undefined ? event.calendarLink : '']
 
     });
 

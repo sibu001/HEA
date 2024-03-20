@@ -352,7 +352,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy, AfterContentIn
     if(this.password){
       const self = this;
       setTimeout(() => {
-        self.subscriptions.add(self.customerService.setNewPassword(self.userId, self.password)
+        self.subscriptions.add(self.customerService.setNewPassword(this.userAccountDetails.userId, self.password)
         .pipe(skipWhile((item: any) => !item))
         .subscribe((passwordValidation: any) => {
           console.log(passwordValidation);

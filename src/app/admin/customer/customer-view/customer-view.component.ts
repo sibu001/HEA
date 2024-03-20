@@ -1302,4 +1302,14 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
 // }
 
 
+propertyIQ(){
+  this.loginService.performGet(`customers/${this.id}/propertyIQLink`).subscribe(
+    data=>{
+       if (data && data.data) {
+        window.open(data.data, '_blank');
+      }
+    }
+  )
+}
+
 }
