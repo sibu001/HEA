@@ -1307,6 +1307,7 @@ propertyIQ(){
     data=>{
        if (data && data.data) {
         window.open(data.data, '_blank');
+        this.copyTextToClipBoard(`${this.customerData.street1}, ${this.customerData.postalCode} ${this.customerData.city}, ${this.customerData.state}`);
       }
     }
   )
