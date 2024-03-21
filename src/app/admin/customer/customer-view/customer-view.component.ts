@@ -1318,7 +1318,7 @@ propertyLink() {
   if (this.propertyIQLink && this.customerData) {
     const addressString = `${this.customerData.street1}, ${this.customerData.postalCode} ${this.customerData.city}, ${this.customerData.state}`;
     window.open(this.propertyIQLink, '_blank');
-    navigator.clipboard.writeText(addressString);
+    (navigator as any).clipboard.writeText(addressString);
   }
 }
 
