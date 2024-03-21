@@ -127,3 +127,23 @@ input[formcontrolname="coachUserId"]{
   left: 41%; 
   position: absolute;
   }
+
+  .button-container {
+    display: flex;
+  }
+  
+  .button-container button {
+    margin-right: 10px; /* Adjust as needed */
+  }
+
+  @media (max-width: 450px) {
+    .btnMarginBottom {
+      margin-bottom: 10px;
+    }
+    .btn.btn-block {
+      white-space: normal;
+      text-align: center;
+    }
+  }
+  
+  

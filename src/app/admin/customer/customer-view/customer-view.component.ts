@@ -82,6 +82,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   public openedUtilityCredential : any;
   private subject : Subject<any> = new Subject();
   isEditMode: boolean;
+  propertyIQLink:any;
 
   public credentialsData = {
     content: [],
@@ -190,6 +191,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
       this.loadCustomerById();
       this.getEmailSettings();
       this.loadOptOut(this.id);
+      this.propertyIQ();
       const self = this;
       setTimeout(() =>{
         self.loadWeatherStationId(self.id);
@@ -1306,11 +1308,19 @@ propertyIQ(){
   this.loginService.performGet(`customers/${this.id}/propertyIQLink`).subscribe(
     data=>{
        if (data && data.data) {
-        window.open(data.data, '_blank');
-        this.copyTextToClipBoard(`${this.customerData.street1}, ${this.customerData.postalCode} ${this.customerData.city}, ${this.customerData.state}`);
+         this.propertyIQLink = data.data;
       }
     }
   )
 }
+
+propertyLink() {
+  if (this.propertyIQLink && this.customerData) {
+    const addressString = `${this.customerData.street1}, ${this.customerData.postalCode} ${this.customerData.city}, ${this.customerData.state}`;
+    window.open(this.propertyIQLink, '_blank');
+    navigator.clipboard.writeText(addressString);
+  }
+}
+
 
 }

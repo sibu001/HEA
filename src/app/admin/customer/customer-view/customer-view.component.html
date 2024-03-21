@@ -133,17 +133,19 @@
               </div>
             </div>
           </div>
-          <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
-            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4 heading">
-              <Strong>Address</Strong>
+          <div class="row borderBottom w100 rowPadding" *ngIf="id != undefined">
+            <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12 heading">
+              <strong>Address</strong>
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-8">
-              <button type="button" class="btn btn-primary" (click)="openAddressOnGoogleMap()">View in Google
-                Maps</button>
-                <span style="padding: 0 5px;"></span><!-- Add some padding between buttons -->
-                <button type="button" class="btn btn-primary" (click)="propertyIQ()">PropertyIQ</button>
+            <div class="col-sm-8 col-md-8 col-lg-8 col-xs-12">
+              <div class="button-container">
+                <button type="button" class="btn btn-primary" (click)="openAddressOnGoogleMap()">View in Google Maps</button>
+                <button type="button" class="btn btn-primary" (click)="propertyLink()">PropertyIQ</button>
+              </div>
             </div>
           </div>
+          
+          
           <div class="row borderBottom w100 rowPadding" *ngIf="id!=undefined">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-12">
               City:
@@ -348,31 +350,29 @@
             </strong>
           </div>
           <div class="row borderBottom w100 rowPadding">
-            <div class="row col-sm-12 col-md-12 col-lg-12 col-xs-12">
-              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12 btnMarginBottom"><button type="button"
-                  class="btn btn-primary btn-block" (click)="clearCustomerValueCache()">Clear
-                  Cache</button>
+            <div class="col-xs-12">
+              <div class="row">
+                <div class="col-sm-3 col-xs-6 btnMarginBottom">
+                  <button type="button" class="btn btn-primary btn-block" (click)="clearCustomerValueCache()">Clear Cache</button>
+                </div>
+                <div class="col-sm-3 col-xs-6 btnMarginBottom">
+                  <button type="button" class="btn btn-primary btn-block" (click)="recalculateCustomerVariable()">Recalculate Variables</button>
+                </div>
+                <div class="col-sm-3 col-xs-6 btnMarginBottom">
+                  <button type="button" class="btn btn-primary btn-block" (click)="reorderCustomerBills()">Reorder Bills</button>
+                </div>
+                <div class="col-sm-3 col-xs-6" *ngIf="users.role === 'ADMIN' || users.role === 'ADMIN_STAFF'">
+                  <button type="button" class="btn btn-primary btn-block" (click)="clickHouseSync()">ClickHouse Sync</button>
+                </div>
               </div>
-              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12 btnMarginBottom">
-                <button type="button" class="btn btn-primary btn-block" (click)="recalculateCustomerVariable()">Recalculate
-                  Variables</button>
-              </div>
-              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12">
-                <button type="button" class="btn btn-primary btn-block" (click)="reorderCustomerBills()">Reorder Bills</button>
-              </div>
-              <div class="col-sm-3 col-md-3 col-lg-3 col-xs-12"  *ngIf="users.role === 'ADMIN' || users.role === 'ADMIN_STAFF'">
-                <button type="button" class="btn btn-primary btn-block" (click)="clickHouseSync()">ClickHouse Sync</button>
-              </div>
-              <div style="padding-left: inherit">
-                <span>
-                  <em>
-                    Note: admin email will be sent when Rescrape, Update or
-                    Recalculate functions are completed.
-                  </em>
-                </span>
+              <div class="row">
+                <div class="col-xs-12" style="padding-left: inherit;">
+                  <span>
+                    <em>Note: admin email will be sent when Rescrape, Update, or Recalculate functions are completed.</em>
+                  </span>
+                </div>
               </div>
             </div>
-
           </div>
           <div class="row borderBottom w100 rowPadding">
             <div class="col-sm-4 col-md-4 col-lg-4 col-xs-4">
