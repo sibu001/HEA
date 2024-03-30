@@ -52,6 +52,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   showMessagePasswordFlag: boolean;
   customer : any = { user : { name : ''}, auditId : ''};
   sendActivationEmailDirectLink: any;
+  customerEmail:any;
   customerGroupList: any;
   programGroupList: any;
   customerGroupId : any;
@@ -83,6 +84,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
   private subject : Subject<any> = new Subject();
   isEditMode: boolean;
   propertyIQLink:any;
+  showFixButton:boolean=false;
 
   public credentialsData = {
     content: [],
@@ -174,6 +176,7 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
   ngAfterViewInit(): void {
+    this.checkName();
   }
 
   ngOnInit() {
@@ -1321,6 +1324,37 @@ propertyLink() {
     (navigator as any).clipboard.writeText(addressString);
   }
 }
+fixName() { 
+  //const customerName = this.customerData.user.name;
+  const customerName = this.customerForm.get('user.name').value;
+  
+  if (customerName.includes(",")) {
+    const params = new HttpParams().set('name', customerName);
+    this.loginService.performGetWithParams(`customers/formatName`, params).subscribe(
+      (data: any) => {
+        if (data && data.data) {
+          this.customerForm.get('user.name').setValue(data.data);
+          this.showFixButton = false;
+        } else {
+          console.error('Error: Formatted name is not provided in the API response.');
+        }
+      },
+      (error) => {
+        console.error('Error occurred while fetching formatted name:', error);
+      }
+    );
+  }
+}
+
+  checkName(){
+     setTimeout(()=>{
+      const customer = this.customerForm.get('user.name').value;
+      if(customer.includes(",")){
+      this.showFixButton = true;
+}
+     },3000)
+    
+  }
 
 
 }

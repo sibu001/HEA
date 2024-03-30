@@ -1362,7 +1362,14 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   @HostListener('window:selectSurvey', ['$event'])
   private findPaneBysurveyCode(event : any ) : void {
 
-    const surveyCode : string = event.detail.surveyCode;
+   // const surveyCode : string = event.detail.surveyCode;
+    const[surveyCode,paneCode=null] = event.detail.surveyCode;
+    const object = {};
+    const customerId =  this.users.outhMeResponse.customerId;
+    const apiCall = paneCode !== null ?
+    this.loginService.performPost(object, `customers/${customerId}/surveys/${surveyCode}/panes/${paneCode}`) :
+    this.loginService.performPostMultiPartData(object, 'customers/' + customerId + '/surveys/' + surveyCode);
+    
     // const survey : any = this.users.surveyList.find((survey) =>{
     //     return survey.surveyDescription.surveyCode == surveyCode;
     // });
@@ -1371,10 +1378,8 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     // const surveyId = survey.surveyId;
     // const paneCode = firstPane.paneCode;
 
-
-    const object = {};
-    const customerId =  this.users.outhMeResponse.customerId;
-    this.loginService.performPostMultiPartData(object, 'customers/' + customerId + '/surveys/' + surveyCode).subscribe(
+   
+    apiCall.subscribe(
       data => {
         const response = JSON.parse(JSON.stringify(data));
         console.log(response);

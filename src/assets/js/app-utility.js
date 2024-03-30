@@ -69,12 +69,19 @@ window.addEventListener('popstate', (event) => {
   addForceQueryParam();
 });
 
-function selectSurvey(){
+// function selectSurvey(){
+//   const eventName = 'selectSurvey';
+//   const selectSurveyObject = { surveyCode : selectSurvey.arguments[0] };
+//   const event = new CustomEvent(eventName, { detail: selectSurveyObject });
+//   window.dispatchEvent(event);
+
+//   return false;
+//  }
+
+function selectSurvey(...surveyCode) {
   const eventName = 'selectSurvey';
-  const selectSurveyObject = { surveyCode : selectSurvey.arguments[0] };
+  const selectSurveyObject = { surveyCode };
   const event = new CustomEvent(eventName, { detail: selectSurveyObject });
   window.dispatchEvent(event);
-
   return false;
-
 }

@@ -471,7 +471,7 @@
                                   style="margin-top:0px;">{{answersList.dataField.label}}</h3>
                                 <p class="demo" *ngIf="answersList.helpHide"
                                   id="helpiconcontaindesktop">
-                                  {{answersList.dataField.helpText}}
+                                  <span [innerHTML]="answersList.dataField.helpText"></span>
                                   <span class="hidebuttondemo"
                                     (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                                 </p>
@@ -1386,7 +1386,7 @@
                           style="margin-top:0px;">{{answersList.dataField.label}}</h3>
                         <p class="demo" *ngIf="answersList.helpHide"
                           id="helpiconcontaindesktop">
-                          {{answersList.dataField.helpText}}
+                          <span [innerHTML]="answersList.dataField.helpText"></span>
                           <span class="hidebuttondemo"
                             (click)="answersList.helpHide=!answersList.helpHide">hide</span>
                         </p>
