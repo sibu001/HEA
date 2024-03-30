@@ -176,7 +176,6 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
   ngAfterViewInit(): void {
-    this.checkName();
   }
 
   ngOnInit() {
@@ -248,6 +247,10 @@ export class CustomerViewComponent implements OnInit, OnDestroy, AfterViewInit {
         this.setUpValueInUsageHitoryFilter(customer);
         this.setUpdateWithUtilityAddressFlag(customer);
         this.customerData = customer;
+        const name = this.customerData.user.name
+        if(name.includes(",")){
+          this.showFixButton = true
+        }
         if (this.isForce) {
           this.router.navigate(['admin/customer/customerEdit'], { queryParams: { 'id': customer.customerId } });
         }
@@ -1346,15 +1349,6 @@ fixName() {
   }
 }
 
-  checkName(){
-     setTimeout(()=>{
-      const customer = this.customerForm.get('user.name').value;
-      if(customer.includes(",")){
-      this.showFixButton = true;
-}
-     },3000)
-    
-  }
 
 
 }
