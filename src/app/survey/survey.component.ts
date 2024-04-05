@@ -283,34 +283,52 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.plotChartWithParams(paneCharts.chart.freeChartConfigurationJS, this.users.currentPaneNumber.currentPane.paneCode, 
             paneCharts.chart.series);
 
-          if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
-          const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
-          const news = scriptTag.replace('<script>', '');
-          $('#content').bind(
-            // tslint:disable-next-line: no-eval
-            eval(news)
-          );
-        }
-        if (paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">') != -1) {
-          const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
-          const news = scriptTag.replace('<script type="text/javascript" language="javascript">', '');
-          $('#content').bind(
-            // tslint:disable-next-line: no-eval
-            eval(news)
-          );
-        }
+        //     if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) { 
+        //   const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
+        //   const news = scriptTag.replace('<script>', '');
+        //   $('#content').bind(
+        //     // tslint:disable-next-line: no-eval
+        //     eval(news)
+        //   );
+        // }
+        // if (paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">') != -1) {
+        //   const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
+        //   const news = scriptTag.replace('<script type="text/javascript" language="javascript">', '');
+        //   $('#content').bind(
+        //     // tslint:disable-next-line: no-eval
+        //     eval(news)
+        //   );
+        // }
+        $(paneCharts.chart.freeChartDiv).find('script').each(function() {
+          // Get the content of the script tag
+          const scriptContent = $(this).text();
+          try {
+              eval(scriptContent);
+          } catch (error) {
+              console.error('Error executing script:', error);
+          }
+      });
       }
     }
 
-    if (this.users.currentPaneNumber.currentPane.htmPageText != null) {
-      if (this.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
-        const scriptTag = this.users.currentPaneNumber.currentPane.htmPageText.substring(this.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
-          this.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
-        const news = scriptTag.replace('<script type="text/javascript">', '');
-        // tslint:disable-next-line: no-eval
-        eval(news);
-      }
+    // if (this.users.currentPaneNumber.currentPane.htmPageText != null) {
+    //   if (this.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
+    //     const scriptTag = this.users.currentPaneNumber.currentPane.htmPageText.substring(this.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
+    //       this.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
+    //     const news = scriptTag.replace('<script type="text/javascript">', '');
+    //     // tslint:disable-next-line: no-eval
+    //     eval(news);
+    //   }
+    // }
+
+     if (this.users.currentPaneNumber.currentPane.htmPageText != null) {
+      const $html = $('<div>' + this.users.currentPaneNumber.currentPane.htmPageText + '</div>');
+      $html.find('script').each(function() {
+        const scriptContent = $(this).text();
+        eval(scriptContent);
+      });
     }
+      
   }
 
   @HostListener('window:resize', ['$event'])
@@ -354,35 +372,53 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 
                 self.globalM = 0;
                 self.globalK = 0;
-                if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
-                  const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
-                  const news = scriptTag.replace('<script>', '');
-                  $('#content').bind(
-                    // tslint:disable-next-line: no-eval
-                    eval(news)
-                  );
-                }
-                if (paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">') != -1) {
-                  const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
-                  const news = scriptTag.replace('<script type="text/javascript" language="javascript">', '');
-                  $('#content').bind(
-                    // tslint:disable-next-line: no-eval
-                    eval(news)
-                  );
-                }
+                // if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) {
+                //   const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
+                //   const news = scriptTag.replace('<script>', '');
+                //   $('#content').bind(
+                //     // tslint:disable-next-line: no-eval
+                //     eval(news)
+                //   );
+                // }
+                // if (paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">') != -1) {
+                //   const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script type="text/javascript" language="javascript">'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
+                //   const news = scriptTag.replace('<script type="text/javascript" language="javascript">', '');
+                //   $('#content').bind(
+                //     // tslint:disable-next-line: no-eval
+                //     eval(news)
+                //   );
+                // }
+
+                $(paneCharts.chart.freeChartDiv).find('script').each(function() {
+                  const scriptContent = $(this).text();
+                  try {
+                      eval(scriptContent);
+                  } catch (error) {
+                      console.error('Error executing script:', error);
+                  }
+              });
               }
             }, 300);
           }
         }
+        // if (self.users.currentPaneNumber.currentPane.htmPageText != null) {
+        //   if (self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
+        //     const scriptTag = self.users.currentPaneNumber.currentPane.htmPageText.substring(self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
+        //       self.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
+        //     const news = scriptTag.replace('<scripsetValueInModel type="text/javascript">', '');
+        //     // tslint:disable-next-line: no-eval
+        //     eval(news);
+        //   }
+        // }
+
         if (self.users.currentPaneNumber.currentPane.htmPageText != null) {
-          if (self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">') != -1) {
-            const scriptTag = self.users.currentPaneNumber.currentPane.htmPageText.substring(self.users.currentPaneNumber.currentPane.htmPageText.indexOf('<script type="text/javascript">'),
-              self.users.currentPaneNumber.currentPane.htmPageText.indexOf('// ]]></script>'));
-            const news = scriptTag.replace('<scripsetValueInModel type="text/javascript">', '');
-            // tslint:disable-next-line: no-eval
-            eval(news);
-          }
+          const $html = $('<div>' + self.users.currentPaneNumber.currentPane.htmPageText + '</div>');
+          $html.find('script').each(function() {
+            const scriptContent = $(this).text();
+            eval(scriptContent);
+          });
         }
+        
       }, 1500);
     }
   }
