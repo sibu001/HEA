@@ -262,6 +262,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
         .set('customerViewConfigurationId', (this.searchForm.controls['customerView'].value !== null ? this.searchForm.controls['customerView'].value : ''))
         .set('filter.user.status', (this.searchForm.controls['status'].value !== null ? this.searchForm.controls['status'].value : ''))
         .set('filter.eventOrAlertCode', (this.searchForm.controls['alertCode'].value !== null ? this.searchForm.controls['alertCode'].value : ''))
+        .set('filter.notEventOrAlertCode', (this.searchForm.controls['notEventOrAlertCode'].value !== null ? this.searchForm.controls['notEventOrAlertCode'].value : ''))
         .set('filter.credentialTypeCode', (this.searchForm.controls['credentialTypeCode'].value !== null ? this.searchForm.controls['credentialTypeCode'].value : ''))
         .set('filter.credentialSubscriptionId', (this.searchForm.controls['credentialSubscriptionId'].value !== null ? this.searchForm.controls['credentialSubscriptionId'].value : ''))
         .set('filter.coachUserId', (this.searchForm.controls['energyCoach'].value !== null ? this.searchForm.controls['energyCoach'].value : ''))
@@ -318,6 +319,7 @@ export class CustomerListComponent implements OnInit, OnDestroy {
       customerView: [event !== undefined && event !== null ? event.customerView : '-1'],
       status: [event !== undefined && event !== null ? event.status : ''],
       alertCode: [event !== undefined && event !== null ? event.alertCode : ''],
+      notEventOrAlertCode: [event !== undefined && event !== null ? event.notEventOrAlertCode : ''],
       credentialTypeCode: [event !== undefined && event !== null ? event.credentialTypeCode : ''],
       credentialSubscriptionId: [event !== undefined && event !== null ? event.credentialSubscriptionId : ''],
       energyCoach: [event !== undefined && event !== null ? event.energyCoach : ''],

@@ -283,7 +283,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.plotChartWithParams(paneCharts.chart.freeChartConfigurationJS, this.users.currentPaneNumber.currentPane.paneCode, 
             paneCharts.chart.series);
 
-        //     if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) { 
+            //     if (paneCharts.chart.freeChartDiv.indexOf('<script>') != -1) { 
         //   const scriptTag = paneCharts.chart.freeChartDiv.substring(paneCharts.chart.freeChartDiv.indexOf('<script>'), paneCharts.chart.freeChartDiv.indexOf('</script>'));
         //   const news = scriptTag.replace('<script>', '');
         //   $('#content').bind(
@@ -299,7 +299,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         //     eval(news)
         //   );
         // }
-        $(paneCharts.chart.freeChartDiv).find('script').each(function() {
+        $(document.createElement('div')).html(paneCharts.chart.freeChartDiv).find('script').each(function() {
           // Get the content of the script tag
           const scriptContent = $(this).text();
           try {
@@ -307,7 +307,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           } catch (error) {
               console.error('Error executing script:', error);
           }
-      });
+        }); 
       }
     }
 
@@ -389,7 +389,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 //   );
                 // }
 
-                $(paneCharts.chart.freeChartDiv).find('script').each(function() {
+                $(document.createElement('div')).html(paneCharts.chart.freeChartDiv).find('script').each(function() {
                   const scriptContent = $(this).text();
                   try {
                       eval(scriptContent);
@@ -414,10 +414,12 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (self.users.currentPaneNumber.currentPane.htmPageText != null) {
           const $html = $('<div>' + self.users.currentPaneNumber.currentPane.htmPageText + '</div>');
           $html.find('script').each(function() {
-            const scriptContent = $(this).text();
-            eval(scriptContent);
+              const scriptContent = $(this).text();
+              const news = scriptContent.replace('<scripsetValueInModel type="text/javascript">', '');
+              eval(news);
           });
-        }
+      }
+      
         
       }, 1500);
     }
