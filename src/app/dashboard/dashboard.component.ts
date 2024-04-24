@@ -7,6 +7,10 @@ import { LoginService } from './../services/login.service';
 declare var $: any;
 import 'rxjs/add/observable/of';
 import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { saveAs } from 'file-saver';
+import * as html2pdf from 'html2pdf.js';
 import * as _ from 'lodash';
 import { debounceTime, distinctUntilChanged, filter, skipWhile } from 'rxjs/operators';
 import { HttpParams } from '@angular/common/http';
@@ -58,6 +62,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(private router: Router,
     private loginService: LoginService,
     private readonly customerService: CustomerService,
+    private http: HttpClient,
   ) {
     AppUtility.removeLoader();
     this.users = this.loginService.getUser();
@@ -86,7 +91,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     AppUtility.removeAllPreviousCanvasElements();
 
     // for re-initialization after selecting different customer
@@ -674,9 +678,202 @@ checkLiveServer(){
   this.loginService.performGet('conf/'+'server').subscribe(
     (data) => {
      this.liveOrNot = data.data;
-     console.log(data);
     }
   )
+}
+
+initializeShowEyeIcon() {
+  for (let i = 0; i < this.myReportsList.length; i++) {
+      this.myReportsList[i].showEyeIcon = false;
+  }
+}
+
+pdfIconClicked(report:any){
+  this.initializeShowEyeIcon();
+  report.showEyeIcon = true;
+  this.loginService.performGet(`userreports/html2pdf`).subscribe(
+    data=>{
+      if(data.data.useHtml2PdfRocket){
+       this.useHtml2PdfJs(report); 
+       //this.useHtml2PdfRocket(report);
+      }else if(data.data.useHtml2PdfJs){
+          this.useHtml2PdfJs(report); 
+      }else if(data.data.useHtml2PdfRocket && data.data.useHtml2PdfJs ){
+        this.useHtml2PdfRocket(report);
+      }else{
+        this.useHtml2PdfRocket(report);
+      }
+    }
+  )
+}
+
+useHtml2PdfJs(report:any) {
+  let link = report.reportLink;
+  link = this.modifyReportLink(link);
+  const url = link;
+  const specificPart = url.substring(url.indexOf('userReportLink'));
+
+this.loginService.performGetForBlob(`${specificPart}`, { responseType: 'blob' }).subscribe(
+  (data: HttpResponse<Blob>)=>{
+    const reader = new FileReader();
+    reader.onload = () => {
+      const htmlContent: string = reader.result as string;
+      this.html2PDFUtilityCreateIframePDF(htmlContent,report);
+    };
+    reader.readAsText(data.body);
+  }
+)
+}
+
+
+
+
+private html2PDFUtilityCreateIframePDF(iframeSrc : string, report : any) : void {
+
+  // added loader for better user interface.
+  AppUtility.showLoader();
+
+  // creating temprory HTML Document 
+  const parser = new DOMParser();
+  const parsedDocument : Document = parser.parseFromString(iframeSrc,'text/html');
+
+  const origin = location.host.startsWith("localhost")  || location.host.startsWith("sandbox") ?  
+    AppConstant.classicVersionPrefixSandbox : AppConstant.classicVersionPrefixLive;
+
+  // rewriting the src for the all the script tags(CDN only), only prefix it with origin so that they can be found on the server.
+  Array.from(parsedDocument.querySelectorAll('script'))
+  .filter(script => script.getAttribute('src') && script.getAttribute('src').startsWith("."))
+  .forEach(script =>{
+      const src = script.getAttribute('src');
+      script.setAttribute('src', `${origin}${src.substring(1)}`);
+  })
+
+  // rewriting the herf for the all the link tags(CDN only), only prefix it with origin so that they can be found on the server.
+  Array.from(parsedDocument.querySelectorAll('link'))
+  .filter(link => link.getAttribute('href') && link.getAttribute('href').startsWith("."))
+  .forEach(link =>{
+      const src = link.getAttribute('href');
+      link.setAttribute('href', `${origin}${src.substring(1)}`);
+  })
+
+  // getting the new formatted content in iframeSrc variable.
+  iframeSrc = parsedDocument.documentElement.outerHTML;
+
+  // creating an Iframe to load all the formatted content so that complete PDF can be generated. 
+  const iframe : HTMLIFrameElement = document.createElement('iframe');
+  iframe.classList.add('visible-hidden');
+  const auditId = this.users.outhMeResponse.auditId;
+
+  // appending Iframe to the DOM.
+  document.body.appendChild(iframe);
+  
+  // callback to be called when the Iframe fully loaded.
+  iframe.onload = function(){
+
+    // injecting the formatted content in the iframe. 
+    iframe.contentDocument.write(iframeSrc);
+    iframe.contentDocument.close();
+
+    // // Apply CSS for page breaks
+    if(report.reportLabel!=='Natural Gas Regression' && report.reportLabel!=='Electric Regression'){
+    const style = iframe.contentDocument.createElement('style');
+    style.textContent = `
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+    }
+  `;
+    iframe.contentDocument.head.appendChild(style);
+  }
+    const pageBreakStyle = iframe.contentDocument.createElement('style');
+// pageBreakStyle.textContent = `
+//   @media screen {
+//     .sectiondivider { page-break-after: avoid; !important; }
+//   }
+// `;
+// iframe.contentDocument.head.appendChild(pageBreakStyle);
+
+    // Find all elements that should trigger page breaks
+    // const pageBreakElements = iframe.contentDocument.querySelectorAll('.sectiondivider');
+
+    // // Add a page break after each element
+    // pageBreakElements.forEach(element => {
+    //   element.classList.remove('sectiondivider'); // Remove class to avoid multiple breaks
+    //   const wrapper = iframe.contentDocument.createElement('div');
+    //   wrapper.appendChild(element.cloneNode(true)); // Clone element to avoid removing it from original position
+    //   wrapper.classList.add('sectiondivider');
+    //   iframe.contentDocument.body.appendChild(wrapper);
+    // });
+    // passing PDF configuration for library use.
+    const options = report.reportLabel === 'Natural Gas Regression' || report.reportLabel === 'Electric Regression'
+    ? {
+        margin: [0, 0.5, 0.5, 0],
+        filename: `${report.reportLabel}- ${auditId}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2,imageTimeout : 2000 },
+        jsPDF: { unit: 'in', format: 'a3', orientation: 'l' }
+      }
+    : {
+        margin:1,
+        filename: `${report.reportLabel}- ${auditId}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2,imageTimeout : 2000},
+        jsPDF: { unit: 'mm', format: 'a3', orientation: 'p' }
+
+      };
+    
+    setTimeout(() => {
+
+      //  due to some reason adding all the script tag to the body.
+      Array.from(iframe.contentDocument.querySelectorAll('style, link'))
+        .forEach(ele => iframe.contentDocument.body.appendChild(ele));
+        console.log('baba',iframe.contentDocument.body);
+      html2pdf().set(options).from(iframe.contentDocument.body).save();
+      
+      // removing the IFrame from the DOM after use.
+      document.body.removeChild(iframe);
+
+      // removing the loadet as process in completed.
+      AppUtility.removeLoader();
+    },6000);
+    report.showEyeIcon = false;
+
+  }
+  
+}
+
+modifyReportLink(link: string): string {
+  let modifiedLink = link.includes('?') ? link.replace('?', '?formAction=report&') : link + '?formAction=report';
+  modifiedLink += '&prepareForm=true';
+  return modifiedLink;
+}
+
+useHtml2PdfRocket(report: any) {
+  if (!report || !this.users || !this.users.outhMeResponse) {
+      return;
+  }
+   this.initializeShowEyeIcon();
+   report.showEyeIcon = true;
+  let modifiedLink = report.reportLink;
+  modifiedLink = this.modifyReportLink(modifiedLink);
+
+  //file name for the PDF
+  const fileName = `${report.reportLabel}- ${this.users.outhMeResponse.auditId}.pdf`;
+  const urlPram = report.reportLabel == 'Natural Gas Regression'|| report.reportLabel == 'Electric Regression'?encodeURIComponent(`MarginLeft=5&MarginRight=5&UseLandscape=true`):encodeURIComponent(`MarginLeft=10`);
+  const apiUrl = `userreports/html2pdf/rocket?fileName=${fileName}&pdfApiParams=${urlPram}&url=${encodeURIComponent(modifiedLink)}`;
+  this.loginService.performGetForBlob(apiUrl).subscribe(
+      (response: HttpResponse<Blob>) => {
+          const file = new Blob([response.body], { type: 'application/pdf' });
+          const fileURL = URL.createObjectURL(file);
+          saveAs(fileURL, fileName);
+          report.showEyeIcon = false; 
+      },
+      (error) => {
+          console.error('Error fetching PDF:', error);
+      }
+  );
 }
 
 }

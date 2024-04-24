@@ -668,3 +668,8 @@ span.hidebuttondemo{
 ul.demo{
   margin-top: 15px;
 }
+
+.eye-icon {
+  width: 20px; 
+  height: 20px;
+}

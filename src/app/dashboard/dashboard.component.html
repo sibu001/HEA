@@ -163,6 +163,10 @@
                                 myReportsList">
                                 <a class="anchorTagTitle" target="_blank"
                                 (click)="checkAndShowAlert(reportList.reportLink)">{{reportList.reportLabel}}</a>
+                                <ng-container *ngIf="!reportList.reportLabel.includes('(CSV)')">
+                                <img src="assets/images/ico_pdf.gif" alt="PDF Icon" (click)="useHtml2PdfRocket(reportList)" *ngIf="!reportList.showEyeIcon"/>
+                                <img src="assets/images/eyes_img1.png" alt="Eye Icon" class="eye-icon" *ngIf="reportList.showEyeIcon" />
+                                 </ng-container>
                             </li>
                         </ul>
                     </div>
