@@ -45,7 +45,13 @@ export class Transformer {
                             (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB')) : '';
                     } else if (dataKey[i].pattern === '$#,##0') {
                         dataSourceObj[dataKey[i].definition] = columnValue.value !== null ? ('$' + (Number(parseFloat(columnValue.value).toFixed(0)).toLocaleString('en-GB'))) : '';
-                    } else {
+                    } else if(dataKey[i].key && /<a\s+(?:[^>]*?\s+)?href="([^"]*)"/.test(dataKey[i].key)){
+                        const parser = new DOMParser();
+                        const parsedHtml = parser.parseFromString(columnValue.value, 'text/html');
+                        const anchorText = parsedHtml.body.textContent || columnValue.value; // Use the anchor text if available, or the original HTML string
+                        dataKey[i].isUnderline = true;
+                        dataSourceObj[dataKey[i].definition] = anchorText;
+                    }else {
                         dataSourceObj[dataKey[i].definition] = columnValue.value;
                     }
                     i++;

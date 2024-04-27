@@ -329,8 +329,31 @@ export class CustomerListComponent implements OnInit, OnDestroy {
   }
 
   goToEditCustomer(event: any): void {
-    this.router.navigate(['admin/customer/customerEdit'], { queryParams: { id: event.customerId } });
+    if(event.col.label==='Links'){
+      this.subscriptions.add(this.customerService.loadCustomerById(event.customerId).pipe(skipWhile((item: any) => !item))
+        .subscribe((customer: any) => {
+          this.users.outhMeResponse = customer.customerManagement.customer;
+          this.users.theme = customer.customerManagement.customer.customerGroup.theme;
+          this.users.recommendationStatusChange = true;
+          this.loginService.setUser(this.users);
+          
+          const customerUIVersion = this.users.outhMeResponse.uiVersion;
+          const userUIBehaviour = this.users.userData.uiVersionBehavior;
+          if(customerUIVersion==AppConstant.classicVersionSelectionValue && userUIBehaviour!= AppConstant.UI_VERSION_BEHAVIOR_ALWAYS_CUI ){
+             const openNewTab = AppConstant.UI_VERSION_BEHAVIOR_NEW_TAB == userUIBehaviour;
+             this.redirectToclassicDashboard(this.users.outhMeResponse.user.userId,openNewTab);           
+            
+            return;
+          }
+
+          this.router.navigate(['/dashboard'], { queryParams: event.queryParam });
+        }));
+    }
+    else{
+       this.router.navigate(['admin/customer/customerEdit'], { queryParams: { id: event.customerId } });
+    }
   }
+
 
   addNewCustomer() {
     this.router.navigate(['admin/customer/customerEdit']);
