@@ -12,6 +12,7 @@ import { AppUtility } from '../utility/app.utility';
 import { HttpParams } from '@angular/common/http';
 import { element } from '@angular/core/src/render3/instructions';
 import { take } from 'rxjs/operators';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 declare const plotChartWithParams : any;
 declare var $: any;
@@ -49,6 +50,7 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   private slidermap = new Map();
   constructor(private loginService: LoginService, 
     private router: Router, 
+    private sanitizer: DomSanitizer,
     private utilityService: UtilityService,
     private matDialog : MatDialog
     ) {
@@ -1437,5 +1439,18 @@ export class SurveyComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         document.getElementById('loader').classList.remove('loading');
       }
     );
+  }
+
+  preprocessHtml(htmlContent: string): SafeHtml {
+    // Decode HTML entities
+    const decodedHtml = this.decodeHtmlEntities(htmlContent);
+    const processedHtml = decodedHtml.replace(/(href=")(?!(https?:\/\/))(.*?)"/gi, '$1http://$3"');
+    return this.sanitizer.bypassSecurityTrustHtml(processedHtml);
+  }
+  
+  decodeHtmlEntities(html: string): string {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
   }
 }

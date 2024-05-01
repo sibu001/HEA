@@ -55,8 +55,7 @@
             <div class="row" *ngIf="qusHide">
               <div class="col-sm-1"></div>
               <div class="col-sm-10 questionHelp">
-                <div [innerHTML]="users.currentPaneNumber.currentPane.htmHelp |
-                  safeHtml">
+                <div [innerHTML]=preprocessHtml(users.currentPaneNumber.currentPane.htmHelp)>
                 </div>
                 <span class="hidebuttondemo" (click)="qusHide=!qusHide">hide</span>
               </div>

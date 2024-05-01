@@ -98,14 +98,11 @@
         <div class="col-md-12">
           <div class="row center-ele">
             <div class="col-md-10 questionHelp" *ngIf="surveyAnswerValue.helpHide">
-              <p class="demo" id="helpiconcontaindesktop">
-                {{surveyAnswerValue.dataField.helpText}}
-                <span class="hidebuttondemo"
-                  (click)="surveyAnswerValue.helpHide=!surveyAnswerValue.helpHide">hide</span>
-              </p>
+              <p class="demo" id="helpiconcontaindesktop" [innerHTML]="surveyAnswerValue.dataField.helpText | safeHtml"></p>
+              <span class="hidebuttondemo" (click)="surveyAnswerValue.helpHide=!surveyAnswerValue.helpHide">hide</span>
             </div>
           </div>
-        </div>
+        </div>        
       </ng-container>
     </div>
   </div>
