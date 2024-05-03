@@ -320,9 +320,10 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
 
     this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
       data=>{
-        if(!data.data && data.data){
-          this.getDataFromStore();
+        if(data){
+          this.getDataFromStore(); 
         }
+        
       }
     )
 }

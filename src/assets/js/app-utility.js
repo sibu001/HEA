@@ -90,7 +90,7 @@ function selectSurvey(...surveyCode) {
 $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
   // Check if the request URL does not already start with 'hea-web/' or 'http'
   if (!options.url.startsWith('hea-web/') && !options.url.startsWith('http') && !options.url.startsWith('https') ) {
-      options.url = 'hea-web/' + options.url;
+      options.url = '../hea-web/' + options.url;
   }
 });
   

@@ -237,7 +237,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
     this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
       data=>{
         if(data){
-          this.ngOnInit();
+          this.getDataFromStore();
         }
          
       }
