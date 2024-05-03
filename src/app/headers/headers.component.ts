@@ -113,7 +113,9 @@ export class HeadersComponent implements OnInit, AfterViewInit, OnDestroy, After
   }
 
   ngOnInit(): void {
-    //AppUtility.initPendingMessagesService(this.users.userId);
+    setTimeout(()=>{
+      AppUtility.initPendingMessagesService(this.users.userId);
+    },1000);
     // AppUtility.multicastPendingMessages(this.users.userId);
     /* for demonstration purposes only */
 

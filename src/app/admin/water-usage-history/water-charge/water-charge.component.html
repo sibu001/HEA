@@ -59,7 +59,8 @@
               <img src="assets/images/dot03.gif" alt="dot" class="dot">&nbsp;Values</p>
             <app-table [keys]="keys" [isSearch]="false" [isPaginate]=true [data]="dataSource" [isHideAdd]=true [pageSize]="pageSize"
               [totalElement]="totalElements"  [disableLastButton]=true [disableNextButton]=disableNextButton (changePageEvent)='search($event,true)'
-              (goToEditEvent)='goToEditWater()'>
+              (goToEditEvent)='goToEditWater()' (fixGaps)='fixGap($event)'
+              [showFixButton]="isValueNull">
             </app-table>
           </div>
         </form>

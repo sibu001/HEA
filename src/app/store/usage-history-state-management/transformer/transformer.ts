@@ -16,7 +16,8 @@ export class UsageHistoryTransformer {
         const dataSourceList: any = [];
         src.data.forEach(element => {
             let dataSourceObject: any = {};
-            element.value = element.value.toFixed(4);
+            // element.value = element.value.toFixed(4);
+            element.value = element.value==null?element.value:element.value.toFixed(4);
             dataSourceObject = element;
             dataSourceObject.billingPeriod = new DatePipe('en-US').transform(new Date(element.startDate), 'MMM d, y') + ' - ' + new DatePipe('en-US').transform(new Date(element.endDate), 'MMM d, y');
             dataSourceList.push(dataSourceObject);

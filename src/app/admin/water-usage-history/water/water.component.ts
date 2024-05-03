@@ -35,6 +35,7 @@ export class WaterComponent implements OnInit, OnDestroy {
   };
   totalElements : any;
   selectedCustomer = null;
+  isValueNull:boolean = false;
   disableNextButton = false
   currentIndex = 0
   selectionPrivilege : boolean  = false;
@@ -191,6 +192,12 @@ export class WaterComponent implements OnInit, OnDestroy {
   getDataFromStore(){
     this.subscriptions.add(this.usageHistoryService.getWaterList().pipe(skipWhile((item: any) => !item))
     .subscribe( (waterList: any) => {
+
+      waterList.data.forEach(data=>{
+        if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
+           this.isValueNull = true;
+        }
+      })
       if(waterList.data.length == AppConstant.pageSize){
         this.data.content = waterList.data;
         this.totalElements = this.data.totalElements
@@ -210,6 +217,29 @@ export class WaterComponent implements OnInit, OnDestroy {
         this.newFilterSearch = false;
     }));
   }
+// ticket- 2441 comment 13/21
+  fixGap(event:any){
+    let userId: any = null;
+    this.dataSource.forEach(data => {
+        if (data.userId) {
+            userId = data.userId;
+            return;
+        }
+    });
+    
+     const params = new HttpParams()
+    .set('prevUsageHistoryId',event.prevId)
+    .set('nextUsageHistoryId',event.nextId);
+
+    this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
+      data=>{
+        if(data){
+          this.ngOnInit();
+        }
+         
+      }
+    )
+}
 
   search(event: any, isSearch: boolean, forced ?: boolean): void {
     this.adminFilter.page = event;
@@ -227,10 +257,11 @@ export class WaterComponent implements OnInit, OnDestroy {
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
       .set('type','water  ')
+      .set('addDummyGaps','true')       // ticket- 2441 comment 13/21
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-        .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
+        .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'startDate'))
         .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
         .set('year', (this.waterForm.value.year !== null ? this.waterForm.value.year : ''))
       .set('month', (this.waterForm.value.month !== null ? this.waterForm.value.month : ''));

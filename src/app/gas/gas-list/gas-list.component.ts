@@ -1,6 +1,6 @@
 import { UtilityService } from './../../services/utility.service';
 import { HttpParams } from '@angular/common/http';
-import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
@@ -31,6 +31,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
   selectedCustomer : any;
   totalElements = 0;
   disableNextButton = false;
+  isValueNull:boolean = false;
   currentIndex : number;
   @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef; 
   selectionPrivilege : boolean  = false;
@@ -206,6 +207,12 @@ export class GasListComponent implements OnInit ,OnDestroy{
                 data[AppConstant.ASTRIC] = "*";
             return data;
           });
+           //ticket- 2441 comment 13/21
+          gasList.data.forEach(data=>{
+            if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
+               this.isValueNull = true;
+            }
+          })
 
           if(gasList.data.length == AppConstant.pageSize){
             this.totalElements = this.usageHistoryData.totalElements;
@@ -227,8 +234,28 @@ export class GasListComponent implements OnInit ,OnDestroy{
           AppUtility.scrollToTableTop(this.tableScrollPoint);
         }));
   } 
+// ticket- 2441 comment 13/21
+  fixGap(event:any){
+    let userId: any = null;
+    this.dataSource.forEach(data => {
+        if (data.userId) {
+            userId = data.userId;
+            return; // Exit the loop once a userId is found
+        }
+    });
+    
+     const params = new HttpParams()
+    .set('prevUsageHistoryId',event.prevId)
+    .set('nextUsageHistoryId',event.nextId);
 
+    this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
+      data=>{
+          this.getDataFromStore();
+      }
+    )
+}
   search(event: any, isSearch: boolean,forced ?: boolean): void {
+    this.isValueNull = false;
     this.adminFilter.page = event;
     if(event)
       this.currentIndex = event.pageIndex;
@@ -245,10 +272,11 @@ export class GasListComponent implements OnInit ,OnDestroy{
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
       .set('type','gas')
+      .set('addDummyGaps','true')  // ticket- 2441 comment 13/21
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-        .set('sortOrders[0].propertyName', ((event && event.sort && event.sort.active) ? event.sort.active : 'year'))
+        .set('sortOrders[0].propertyName', ((event && event.sort && event.sort.active) ? event.sort.active : 'startDate'))
         .set('sortOrders[0].asc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
         .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
       .set('month', (this.gasForm.value.month !== null ? this.gasForm.value.month : ''));
@@ -262,7 +290,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
   get f() { return this.gasForm.controls; }
 
   showPopUp(event: any): any {
-    if (this.users.role == 'ADMIN') {
+    if (this.users.role == 'ADMIN' && event.value!=null && event.billingDate!=null) {
       const dialogRef = this.dialog.open(GasUsagePopupComponent, {
         width: '70vw',
         height: '70vh',

@@ -31,6 +31,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
   adminFilter : UsageHistoryFilter;
   pageIndex : any;
   disableNextButton = false;
+  isValueNull:boolean = false;
   public data = {
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
@@ -193,6 +194,12 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
     this.subscriptions.add(this.usageHistoryService.getWaterList().pipe(skipWhile((item: any) => !item))
     .subscribe(
     (waterList: any) => {
+
+      waterList.data.forEach(data=>{
+        if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
+           this.isValueNull = true;
+        }
+      })
       if(waterList.data.length == AppConstant.pageSize){
         this.data.content = waterList.data;
         this.totalElements = this.data.totalElements;
@@ -214,6 +221,29 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
     }));
   }
 
+  fixGap(event:any){
+    let userId: any = null;
+    this.dataSource.forEach(data => {
+        if (data.userId) {
+            userId = data.userId;
+            return;
+        }
+    });
+    
+     const params = new HttpParams()
+    .set('prevUsageHistoryId',event.prevId)
+    .set('nextUsageHistoryId',event.nextId);
+
+    this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
+      data=>{
+        if(data){
+          this.ngOnInit();
+        }
+         
+      }
+    )
+}
+
   search(event: any, isSearch: boolean, forced ?: boolean): void {
     this.adminFilter.page = event;
     if(event)
@@ -231,10 +261,11 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
       Number(event.pageIndex) + '' : 0);
     let params = new HttpParams()
       .set('type','waterCharge')
+      .set('addDummyGaps','true')
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
-        .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
+        .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'startDate'))
         .set('sortOrders[0].asc', (event && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
         .set('year', (this.waterForm.value.year !== null ? this.waterForm.value.year : ''))
       .set('month', (this.waterForm.value.month !== null ? this.waterForm.value.month : ''));

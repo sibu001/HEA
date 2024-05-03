@@ -36,6 +36,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   keys = TableColumnData.ELECTRICITY_CHARGE_KEYS;
   newFilterSearch = false;
   selectionPrivilege : boolean = false;
+  isValueNull:boolean = false;
   subject$ = new Subject();
   @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef;
   constructor(private loginService: LoginService,
@@ -111,6 +112,12 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
         return data;
       });
 
+      gasList.data.forEach(data=>{
+        if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
+           this.isValueNull = true;
+        }
+      })
+
       if(gasList.data.length == AppConstant.pageSize){
         this.usageHistoryData.content = gasList.data;
         this.totalElements = this.usageHistoryData.totalElements;
@@ -174,11 +181,12 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('type', 'electricityCharge')
+      .set('addDummyGaps','true')        // ticket- 2441 comment 13/21
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       // .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
+      .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'startDate'))
       .set('sortOrders[0].asc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
       .set('year', (this.electricityForm.value.year !== null ? this.electricityForm.value.year : ''))
       .set('month', (this.electricityForm.value.month !== null ? this.electricityForm.value.month : ''));
@@ -282,7 +290,7 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   }
 
   showPopUp(event: any): any {
-    if (this.users.role == 'ADMIN') {
+    if (this.users.role == 'ADMIN' &&(!event.dummy && event.id!=null && event.billingDate!=null && event.value!=null)) {
       const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
         width: '70vw',
         height: '70vh',
@@ -323,4 +331,26 @@ export class ElectricityChargeListComponent implements OnInit , OnDestroy{
   validateMonthChange(event: Event) {
     AppUtility.validateChange(event, this.electricityForm.controls['month'], 1, 12);
   }
+// ticket- 2441 comment 13/21
+  fixGap(event:any){
+    let userId: any = null;
+    this.dataSource.forEach(data => {
+        if (data.userId) {
+            userId = data.userId;
+            return; 
+        }
+    });
+    if(userId){
+      const params = new HttpParams()
+    .set('prevUsageHistoryId',event.prevId)
+    .set('nextUsageHistoryId',event.nextId);
+
+    this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
+      data=>{
+        this.getDataFromStore();
+      }
+    )
+    }
+     
+}
 }

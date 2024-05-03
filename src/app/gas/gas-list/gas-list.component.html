@@ -76,9 +76,10 @@
               <img src="assets/images/dot03.gif" alt="dot" class="dot" />&nbsp;Values
             </p>
             <app-table [keys]="keys" [isPaginate]="true" [isHideAdd]=true
-              (goToEditEvent)='showPopUp($event)' [isSearch]="false" [pageSize]="pageSize"
+              (goToEditEvent)='showPopUp($event)' (fixGaps)='fixGap($event)'[isSearch]="false" [pageSize]="pageSize"
               [data]="dataSource" [pageIndex]="pageIndex" [disableLastButton]=true
               [totalElement]="totalElements" [disableNextButton]="disableNextButton"
+              [showFixButton]="isValueNull"
               (changePageEvent)="search($event,false)">
             </app-table>
           </div>

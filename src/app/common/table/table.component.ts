@@ -26,6 +26,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
 import { fromEvent, Subscription } from 'rxjs';
 import { distinctUntilChanged, debounceTime, take } from 'rxjs/operators';
 import { AppConstant } from 'src/app/utility/app.constant';
+import { Users } from 'src/app/models/user';
+import { LoginService } from 'src/app/services/login.service';
 
 export interface UserData {
   id: string;
@@ -67,6 +69,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() isPaginate = false;
   @Input() isHideAdd = false;
   @Input() showDeleteButton = false;
+  @Input() showFixButton: boolean = false;
   // @Input() showCSVExportButton = false;
   @Input() suggestionList = [];
   @Input() isFilePreview = false;
@@ -107,6 +110,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Output() buttonListEvent: EventEmitter<any> = new EventEmitter();
   @Output() handleLinkEvent: EventEmitter<any> = new EventEmitter();
   @Output() handleInLineEditEvent: EventEmitter<any> = new EventEmitter();
+  @Output() fixGaps: EventEmitter<any> = new EventEmitter();
   @Output() handleInLineSaveEvent: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('paginator') paginator : ElementRef;
@@ -119,6 +123,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   showRowInput = false;
   page = new Page();
   url: string;
+  users : Users = new Users();
   totalLength: number;
   pageIndexNumber = 0;
   pageEvent: PageEvent;
@@ -133,6 +138,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   isExpansionDetailRow = (i: number, row: Object) => row.hasOwnProperty('detailRow');
   constructor(
     private ElByClassName: ElementRef,
+    private readonly loginService : LoginService,
     private changeDetectorRefs: ChangeDetectorRef,  
     private formBuilder: FormBuilder
   ) { }
@@ -145,6 +151,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   }
 
   ngOnInit() {
+    this.users = this.loginService.getUser();
     this.changeDetectorRefs.detectChanges();
     const list = document.getElementsByClassName('mat-paginator-range-label');
     if (list.length > 0) {
@@ -418,6 +425,20 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
       this.goToEditEvent.emit(event);
     }
   }
+
+  fixGap(event: any, col: any) {
+    this.fixGaps.emit(event);
+  }
+
+
+  // checkDollar(){
+  //   if(this.showFixButton){
+  //    this.keys.forEach((key)=>{
+  //     console.log('kkkk',key.isDolar)
+  //     key.isDolar = false;
+  //    })
+  //   }
+  // }
 
   deleteRow(event: any) {
       this.deleteEvent.emit(event);

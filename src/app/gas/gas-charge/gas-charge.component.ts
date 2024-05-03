@@ -1,5 +1,5 @@
 import { HttpParams } from '@angular/common/http';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef,OnDestroy, OnInit,ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
@@ -34,6 +34,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   disableNextButton = false;
   keys = TableColumnData.GAS_CHARGE_KEYS;
   currentIndex = 0;
+  isValueNull:boolean = false;
   totalElements : any;
   newFilterSearch = false;
   pageSize = AppConstant.pageSize;
@@ -123,6 +124,12 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
               data[AppConstant.ASTRIC] = "*";
           return data;
         });
+          // ticket- 2441 comment 13/21
+        gasList.data.forEach(data=>{
+          if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
+             this.isValueNull = true;
+          }
+        })
         
         if(gasList.data.length == AppConstant.pageSize){
           this.usageHistoryData.content = gasList.data;
@@ -161,11 +168,12 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
       Number(event.pageIndex) + '' : 0);
     const params = new HttpParams()
       .set('type', 'gasCharge')
+      .set('addDummyGaps','true')          // ticket- 2441 comment 13/21
       .set('pageSize', event && event.pageSize !== undefined ? event.pageSize + '' : AppConstant.pageSize)
       .set('startRow', (event && event.pageIndex !== undefined && event.pageSize && !isSearch ?
         (event.pageIndex * event.pageSize) + '' : '0'))
       .set('formAction', (event && event.sort.active !== undefined ? 'sort' : ''))
-      .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'year'))
+      .set('sortOrders[0].propertyName', (event && event.sort && event.sort.active !== undefined && event.sort.active !== '' ? event.sort.active : 'startDate'))
       .set('sortOrders[0].asc', (event && event.sort && event.sort.direction !== undefined ? (event.sort.direction === 'asc' ? 'true' : 'false') : 'false'))
     .set('year', (this.gasForm.value.year !== null ? this.gasForm.value.year : ''))
       .set('month', (this.gasForm.value.month !== null ? this.gasForm.value.month : ''));
@@ -179,7 +187,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   get f() { return this.gasForm.controls; }
 
   showPopUp(event : any): any {
-    if (this.users.role == 'ADMIN') {
+    if (this.users.role == 'ADMIN' && event.value!=null) {
       const dialogRef = this.dialog.open(GasUsagePopupComponent, {
         width: '70vw',
         height: '70vh',
@@ -295,4 +303,27 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   validateMonthChange(event: Event) {
     AppUtility.validateChange(event, this.gasForm.controls['month'], 1, 12);
   }
+
+  // ticket- 2441 comment 13/21
+  fixGap(event:any){
+    let userId: any = null;
+    this.dataSource.forEach(data => {
+        if (data.userId) {
+            userId = data.userId;
+            return; 
+        }
+    });
+    
+     const params = new HttpParams()
+    .set('prevUsageHistoryId',event.prevId)
+    .set('nextUsageHistoryId',event.nextId);
+
+    this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
+      data=>{
+        if(!data.data && data.data){
+          this.getDataFromStore();
+        }
+      }
+    )
+}
 }
