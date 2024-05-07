@@ -41,6 +41,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   keys = TableColumnData.ELECTRICITY_KEYS;
   newFilterSearch = false;
   totalElements : any;
+  searchParams:any;
   pageSize = AppConstant.pageSize;
   @ViewChild('tableScrollPoint') tableScrollPoint : ElementRef;
   constructor(private loginService: LoginService,
@@ -122,7 +123,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
          // ticket- 2441 comment 13/21
         gasList.data.forEach(data=>{
           if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
-             this.isValueNull = true;
+             data.value = AppConstant.SHOW_FILL_GAPS;
           }
         })
 
@@ -193,6 +194,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
       params.set('auditId', this.electricityForm.value.auditId !== null ? this.electricityForm.value.auditId : '');
       params.set('customerName', this.electricityForm.value.customerName !== null ? this.electricityForm.value.customerName : '');
     }
+    this.searchParams = params;
     this.filterForElectricityList(true, params);
   }
 
@@ -285,7 +287,7 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   get f() { return this.electricityForm.controls; }
 
   showPopUp(event : any): any {
-    if (this.selectionPrivilege &&(!event.dummy && event.id!=null && event.billingDate!=null && event.value!=null)) {
+    if (this.selectionPrivilege && event.value!=AppConstant.SHOW_FILL_GAPS && event.billingDate!=null && event.value!=null) {
     const dialogRef = this.dialog.open(ElectricityUsagePopupComponent, {
       width: '70vw',
       height: '70vh',
@@ -323,21 +325,16 @@ export class ElectricityUsageListComponent implements OnInit , OnDestroy{
   }
   // ticket- 2441 comment 13/21
   fixGap(event:any){
-    let userId: any = null;
-    this.dataSource.forEach(data => {
-        if (data.userId) {
-            userId = data.userId;
-            return; 
-        }
-    });
-    if(userId){
+    const force:boolean=true;
+    const userId = this.selectedCustomer.userId;
+    if(userId && event.prevId && event.nextId){
       const params = new HttpParams()
     .set('prevUsageHistoryId',event.prevId)
     .set('nextUsageHistoryId',event.nextId);
 
     this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
       data=>{
-        this.getDataFromStore();
+        this.getEletricityList(force,userId,this.searchParams);
       }
     )
     }

@@ -35,7 +35,7 @@ export class WaterComponent implements OnInit, OnDestroy {
   };
   totalElements : any;
   selectedCustomer = null;
-  isValueNull:boolean = false;
+  searchParams:any;
   disableNextButton = false
   currentIndex = 0
   selectionPrivilege : boolean  = false;
@@ -195,7 +195,7 @@ export class WaterComponent implements OnInit, OnDestroy {
 
       waterList.data.forEach(data=>{
         if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
-           this.isValueNull = true;
+           data.value = AppConstant.SHOW_FILL_GAPS;
         }
       })
       if(waterList.data.length == AppConstant.pageSize){
@@ -219,14 +219,9 @@ export class WaterComponent implements OnInit, OnDestroy {
   }
 // ticket- 2441 comment 13/21
   fixGap(event:any){
-    let userId: any = null;
-    this.dataSource.forEach(data => {
-        if (data.userId) {
-            userId = data.userId;
-            return;
-        }
-    });
-    
+    const force:boolean=true;
+    const userId = this.selectedCustomer.userId;
+    if (userId && event.prevId && event.nextId) {
      const params = new HttpParams()
     .set('prevUsageHistoryId',event.prevId)
     .set('nextUsageHistoryId',event.nextId);
@@ -234,11 +229,12 @@ export class WaterComponent implements OnInit, OnDestroy {
     this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
       data=>{
         if(data){
-          this.getDataFromStore();
+          this.getWaterList(force,userId,this.searchParams);
         }
          
       }
     )
+}
 }
 
   search(event: any, isSearch: boolean, forced ?: boolean): void {
@@ -269,6 +265,7 @@ export class WaterComponent implements OnInit, OnDestroy {
      params =  params.set('auditId', this.waterForm.value.auditId !== null ? this.waterForm.value.auditId : '')
       .set('customerName', this.waterForm.value.customerName !== null ? this.waterForm.value.customerName : '');
     }
+    this.searchParams = params;
     this.findWaterList(isSearch,params);
   }
   goToEditWater(): any { }

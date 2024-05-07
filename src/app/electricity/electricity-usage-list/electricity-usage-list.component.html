@@ -73,7 +73,6 @@
               [isSearch]="false" [pageIndex]="pageIndex" [disableLastButton]=true [disableNextButton]="disableNextButton"
               (goToEditEvent)='showPopUp($event)' [data]="dataSource"
               [totalElement]="totalElements"
-              [showFixButton]="isValueNull"
               (fixGaps)='fixGap($event)'
               (changePageEvent)="search($event,false)">
             </app-table>

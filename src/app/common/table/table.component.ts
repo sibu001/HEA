@@ -69,7 +69,7 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
   @Input() isPaginate = false;
   @Input() isHideAdd = false;
   @Input() showDeleteButton = false;
-  @Input() showFixButton: boolean = false;
+ // @Input() showFixButton: boolean = false;
   // @Input() showCSVExportButton = false;
   @Input() suggestionList = [];
   @Input() isFilePreview = false;
@@ -430,15 +430,6 @@ export class TableComponent implements OnInit, OnChanges, AfterViewInit, AfterVi
     this.fixGaps.emit(event);
   }
 
-
-  // checkDollar(){
-  //   if(this.showFixButton){
-  //    this.keys.forEach((key)=>{
-  //     console.log('kkkk',key.isDolar)
-  //     key.isDolar = false;
-  //    })
-  //   }
-  // }
 
   deleteRow(event: any) {
       this.deleteEvent.emit(event);

@@ -31,7 +31,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
   adminFilter : UsageHistoryFilter;
   pageIndex : any;
   disableNextButton = false;
-  isValueNull:boolean = false;
+  searchParams:any;
   public data = {
     content: [],
     totalElements: Number.MAX_SAFE_INTEGER,
@@ -197,7 +197,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
 
       waterList.data.forEach(data=>{
         if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
-           this.isValueNull = true;
+           data.value = AppConstant.SHOW_FILL_GAPS;
         }
       })
       if(waterList.data.length == AppConstant.pageSize){
@@ -222,22 +222,17 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
   }
 
   fixGap(event:any){
-    let userId: any = null;
-    this.dataSource.forEach(data => {
-        if (data.userId) {
-            userId = data.userId;
-            return;
-        }
-    });
+    const force=true;
+    const userId = this.selectedCustomer.userId
     
      const params = new HttpParams()
     .set('prevUsageHistoryId',event.prevId)
     .set('nextUsageHistoryId',event.nextId);
 
-    this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
+    this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/water`,params).subscribe(
       data=>{
         if(data){
-          this.getDataFromStore();
+          this.getWaterList(force,userId,this.searchParams);
         }
          
       }
@@ -273,6 +268,7 @@ export class WaterChargeComponent implements OnInit , OnDestroy{
      params =  params.set('auditId', this.waterForm.value.auditId !== null ? this.waterForm.value.auditId : '')
       .set('customerName', this.waterForm.value.customerName !== null ? this.waterForm.value.customerName : '');
     }
+    this.searchParams = params;
     this.findWaterList(isSearch,params);
   }
   goToEditWater(): any { }

@@ -31,7 +31,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
   selectedCustomer : any;
   totalElements = 0;
   disableNextButton = false;
-  isValueNull:boolean = false;
+  searchParam:any;
   currentIndex : number;
   @ViewChild('tableScrollPoint') public tableScrollPoint : ElementRef; 
   selectionPrivilege : boolean  = false;
@@ -201,7 +201,6 @@ export class GasListComponent implements OnInit ,OnDestroy{
     this.usageHistoryService.getGasList().pipe(
       skipWhile((item: any) => !item),
       ).subscribe((gasList: any) => {
-
           gasList.data = gasList.data.map((data)=>{
             if(data.dummy || data.merge || data.split)
                 data[AppConstant.ASTRIC] = "*";
@@ -210,7 +209,7 @@ export class GasListComponent implements OnInit ,OnDestroy{
            //ticket- 2441 comment 13/21
           gasList.data.forEach(data=>{
             if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
-               this.isValueNull = true;
+               data.value = AppConstant.SHOW_FILL_GAPS;
             }
           })
 
@@ -235,27 +234,27 @@ export class GasListComponent implements OnInit ,OnDestroy{
         }));
   } 
 // ticket- 2441 comment 13/21
-  fixGap(event:any){
-    let userId: any = null;
-    this.dataSource.forEach(data => {
-        if (data.userId) {
-            userId = data.userId;
-            return; // Exit the loop once a userId is found
-        }
-    });
-    
-     const params = new HttpParams()
-    .set('prevUsageHistoryId',event.prevId)
-    .set('nextUsageHistoryId',event.nextId);
-
-    this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
-      data=>{
-          this.getDataFromStore();
-      }
-    )
+fixGap(event: any) {
+  const force: boolean = true;
+  const userId = this.selectedCustomer.userId;
+  if (userId && event.prevId && event.nextId) {
+      const params = new HttpParams()
+          .set('prevUsageHistoryId', event.prevId)
+          .set('nextUsageHistoryId', event.nextId);
+      this.loginService.performPostWithParam('', `users/${userId}/fixUsageHistoryGap/${event.type}`, params).subscribe(
+          data => {
+              this.getGasList(force, userId, this.searchParam);
+          },
+          error => {
+              console.error('An error occurred while fixing the usage history gap:', error);
+          }
+      );
+  } else {
+      console.warn('User ID or event IDs are missing. Unable to fix the usage history gap.');
+  }
 }
+
   search(event: any, isSearch: boolean,forced ?: boolean): void {
-    this.isValueNull = false;
     this.adminFilter.page = event;
     if(event)
       this.currentIndex = event.pageIndex;
@@ -284,13 +283,14 @@ export class GasListComponent implements OnInit ,OnDestroy{
      params =  params.set('auditId', this.gasForm.value.auditId !== null ? this.gasForm.value.auditId : '')
       .set('customerName', this.gasForm.value.customerName !== null ? this.gasForm.value.customerName : '');
     }
+    this.searchParam = params;
     this.findGasList(true, params);
   }
 
   get f() { return this.gasForm.controls; }
 
   showPopUp(event: any): any {
-    if (this.users.role == 'ADMIN' && event.value!=null && event.billingDate!=null) {
+    if (this.users.role == 'ADMIN' && event.value!=AppConstant.SHOW_FILL_GAPS && event.billingDate!=null && event.value!=null) {
       const dialogRef = this.dialog.open(GasUsagePopupComponent, {
         width: '70vw',
         height: '70vh',

@@ -96,18 +96,18 @@
                         col.type!='alert' && col.type!='link' &&
                         !col.isDate && !col.isAction && col.type!=='checkbox' && !col.isSurvey">
                          <!-- class="div-wh-100"> -->
-                        <div *ngIf="col.isDolar && row[col.key] !== null" 
+                        <div *ngIf="col.isDolar && row[col.key] !=null && row[col.key] !='showFillGaps'" 
                         [ngClass]="{'edit-button-center' : col.type==='textArea'&&row['isInlineEdit'] }">
                              ${{row[col.key]}}
                         </div>
-                        <div *ngIf="!col.isDolar" style="display:inline;" 
+                        <div *ngIf="!col.isDolar && row[col.key] !='showFillGaps'" style="display:inline;" 
                         [ngClass]="{'edit-button-center' : col.type==='textArea'&&row['isInlineEdit'] }">
                             {{row[col.key]}}
                         </div>
                         <button class="btn btn-xs btn-warning" type="button"
-                        *ngIf="showFixButton && row[col.key] === null && col.key === 'value' && (users.role=='ADMIN'||users.role=='ADMIN_STAFF')"
+                        *ngIf="row[col.key]=='showFillGaps' && col.key === 'value' && (users.role=='ADMIN'||users.role=='ADMIN_STAFF')"
                         (click)="fixGap(row, col)">
-                  Fill Gaps
+                  Fill Gaps  
                 </button>                              
                         <button class="btn btn-primary edited" type="submit"
                             *ngIf="col.type==='textArea'&&row['isInlineEdit']"

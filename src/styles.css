@@ -2921,3 +2921,10 @@ body>.ui-dialog.ui-widget .ui-dialog-content {
 #chartSeasonalStack TABLE.jqplot-table-legend {
   bottom: -20px !important;
 }
+
+div[id^="notification-message-"] {
+  /* Styles for elements with IDs starting with 'notification-message-' */
+  z-index: 100000 !important;
+  margin-top: -80px !important;
+  margin-left: 14% !important;
+}

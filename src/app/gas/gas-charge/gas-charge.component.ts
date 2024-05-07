@@ -34,7 +34,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   disableNextButton = false;
   keys = TableColumnData.GAS_CHARGE_KEYS;
   currentIndex = 0;
-  isValueNull:boolean = false;
+  searchParams:any;
   totalElements : any;
   newFilterSearch = false;
   pageSize = AppConstant.pageSize;
@@ -127,7 +127,7 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
           // ticket- 2441 comment 13/21
         gasList.data.forEach(data=>{
           if((data.value==null && data.id==null && data.dummy && data.billingDate==null) && (data.prevId!=null && data.nextId!=null)){
-             this.isValueNull = true;
+             data.value = AppConstant.SHOW_FILL_GAPS;
           }
         })
         
@@ -181,13 +181,14 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
       params.set('auditId', this.gasForm.value.auditId !== null ? this.gasForm.value.auditId : '');
       params.set('customerName', this.gasForm.value.customerName !== null ? this.gasForm.value.customerName : '');
     }
+    this.searchParams = params;
     this.findGasList(true, params);
   }
 
   get f() { return this.gasForm.controls; }
 
   showPopUp(event : any): any {
-    if (this.users.role == 'ADMIN' && event.value!=null) {
+    if (this.users.role == 'ADMIN' && event.value!=AppConstant.SHOW_FILL_GAPS && event.billingDate!=null && event.value!=null) {
       const dialogRef = this.dialog.open(GasUsagePopupComponent, {
         width: '70vw',
         height: '70vh',
@@ -305,26 +306,23 @@ export class GasChargeComponent implements OnInit ,OnDestroy {
   }
 
   // ticket- 2441 comment 13/21
-  fixGap(event:any){
-    let userId: any = null;
-    this.dataSource.forEach(data => {
-        if (data.userId) {
-            userId = data.userId;
-            return; 
-        }
-    });
-    
-     const params = new HttpParams()
-    .set('prevUsageHistoryId',event.prevId)
-    .set('nextUsageHistoryId',event.nextId);
-
-    this.loginService.performPostWithParam('',`users/${userId}/fixUsageHistoryGap/${event.type}`,params).subscribe(
-      data=>{
-        if(data){
-          this.getDataFromStore(); 
-        }
-        
-      }
-    )
-}
+  fixGap(event: any) {
+    const force: boolean = true;
+    const userId = this.selectedCustomer.userId;
+    if (userId && event.prevId && event.nextId) {
+        const params = new HttpParams()
+            .set('prevUsageHistoryId', event.prevId)
+            .set('nextUsageHistoryId', event.nextId);
+        this.loginService.performPostWithParam('', `users/${userId}/fixUsageHistoryGap/gas`, params).subscribe(
+            data => {
+                this.getGasList(force, userId, this.searchParams);
+            },
+            error => {
+                console.error('An error occurred while fixing the usage history gap:', error);
+            }
+        );
+    } else {
+        console.warn('User ID or event IDs are missing. Unable to fix the usage history gap.');
+    }
+  }
 }

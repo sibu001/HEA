@@ -75,7 +75,6 @@
                             [disableNextButton]="disableNextButton"
                             [data]="dataSource" [pageIndex]="pageIndex" [pageSize]="pageSize" 
                             [totalElement]="totalElements"
-                            [showFixButton]="isValueNull"
                             (fixGaps)='fixGap($event)'
                             (goToEditEvent)='showPopUp($event)'
                             (changePageEvent)="search($event,false)">
